@@ -13,8 +13,6 @@ namespace titon\modules\dispatchers;
 
 use \titon\core\App;
 use \titon\core\Prototype;
-use \titon\core\Registry;
-use \titon\log\Error;
 use \titon\log\Exception;
 use \titon\modules\dispatchers\DispatcherInterface;
 use \titon\utility\Inflector;
@@ -23,7 +21,7 @@ use \titon\utility\Inflector;
  * Dispatcher Class
  *
  * @package		Titon
- * @subpackage	Titon.Modules
+ * @subpackage	Titon.Modules.Dispatchers
  * @abstract
  */
 abstract class DispatcherAbstract extends Prototype implements DispatcherInterface {
@@ -45,7 +43,7 @@ abstract class DispatcherAbstract extends Prototype implements DispatcherInterfa
     public $View;
 
     /**
-     * Store the configuration and load the controller and view objects.
+     * Store the configuration and load the Controller and View objects.
      *
      * @access public
      * @param array $config
@@ -69,7 +67,7 @@ abstract class DispatcherAbstract extends Prototype implements DispatcherInterfa
     }
 
 	/**
-	 * Attempts to determine a controller path and load the controller. If found, returns the object.
+	 * Attempts to determine a Controller path and load the Controller. If found, returns the instance.
 	 *
 	 * @access public
 	 * @return object|null
@@ -78,7 +76,7 @@ abstract class DispatcherAbstract extends Prototype implements DispatcherInterfa
         $path = $this->routedPath(CONTROLLERS);
 
         if (file_exists($path)) {
-            require_once $path;
+            include_once $path;
 
             $class = App::toNamespace($path);
 
@@ -97,7 +95,7 @@ abstract class DispatcherAbstract extends Prototype implements DispatcherInterfa
 	}
 
 	/**
-	 * Attempts to determine a view path and load the view. If found, returns the object, else returns the AppView.
+	 * Attempts to determine a View path and load the View. If found, returns the instance, else returns the AppView.
 	 *
 	 * @access public
 	 * @return object|null
@@ -107,7 +105,7 @@ abstract class DispatcherAbstract extends Prototype implements DispatcherInterfa
 
         // Use created class if it exists
         if (file_exists($path)) {
-            require_once $path;
+            include_once $path;
 
             $class = App::toNamespace($path);
 

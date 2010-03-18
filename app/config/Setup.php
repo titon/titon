@@ -11,6 +11,7 @@ namespace app\config;
 
 use \titon\core\Environment;
 use \titon\system\Dispatch;
+use \titon\system\Hook;
 
 /**
  * Overwrite the default dispatcher with a custom dispatcher.
@@ -20,10 +21,7 @@ use \titon\system\Dispatch;
 switch (Environment::detect()) {
 	case 'production':
 
-		Dispatch::setup(array(
-			'container' => '*',
-			'controller' => '*'
-		), function($params) {
+		Dispatch::setup(function($params) {
 			return new \titon\modules\dispatchers\front\Front($params);
 		});
 		

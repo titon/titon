@@ -14,10 +14,7 @@
 
 namespace titon\system;
 
-use \titon\core\App;
 use \titon\core\Environment;
-use \titon\core\Registry;
-use \titon\log\Error;
 use \titon\log\Exception;
 use \titon\router\Router;
 use \titon\utility\Inflector;
@@ -97,12 +94,12 @@ class Dispatch {
      * Method to apply custom dispatchers to specific container or controller scopes.
      *
      * @access public
+     * @param Closure $Dispatcher
      * @param array $scope
-     * @param Closure $dispatcher
      * @return void
      * @static
      */
-    public static function setup(array $scope, Closure $dispatcher) {
+    public static function setup(Closure $Dispatcher, array $scope = array()) {
 		$scope = $scope + array('container' => '*', 'controller' => '*');
 
 		if ($scope['container'] != '*') {
@@ -113,7 +110,7 @@ class Dispatch {
 			$scope['controller'] = Inflector::underscore($scope['controller']);
 		}
 
-		self::$__mapping[$scope['container'] .'.'. $scope['controller']] = $dispatcher;
+		self::$__mapping[$scope['container'] .'.'. $scope['controller']] = $Dispatcher;
     }
 
 }

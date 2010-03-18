@@ -16,9 +16,6 @@ class Pages extends \app\AppController {
 	 */
 	public function index() {
         $this->View->set('pageTitle', 'Example Controller');
-        //$this->View->render(false);
-
-		//$this->Response->contentBody('Disabled view rendering until fixed.')->respond();
 	}
 
 }

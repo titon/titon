@@ -11,9 +11,11 @@
 
 namespace titon\system;
 
-use \titon\core\Registry;
+use \titon\core\App;
 use \titon\log\Exception;
 use \titon\router\Router;
+use \titon\modules\hooks\HookInterface;
+use \Closure;
 
 /**
  * Hook Class
@@ -30,7 +32,7 @@ class Hook {
      * @var array
      * @static
      */
-    private static $__events = array('preDispatch', 'postDispatch', 'initialize', 'preProcess', 'postProcess', 'preRender', 'postRender');
+    private static $__events = array('preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
 
     /**
      * Hooks with their respective module, class and namespace, that will be executed.
@@ -50,13 +52,22 @@ class Hook {
      */
     private static $__scopes = array();
 
+	/**
+	 * Hook objects that have been registered through a Closure.
+	 *
+	 * @access private
+	 * @var array
+	 * @static
+	 */
+	private static $__objectMap = array();
+
     /**
      * Cycles through the hooks for the specified event, and executes the related method.
      * If a scope is defined, and the hook doesn't match the scope, it will be bypassed.
      *
      * @access public
      * @param string $event
-     * @param object $Object    - Object passed by reference: Controller, Engine, etc
+     * @param object $Object    - Object passed by reference: Controller, View, etc
      * @return void
      * @static
      */
@@ -64,15 +75,9 @@ class Hook {
         if (!empty(self::$__hooks[$event])) {
             $route = Router::current();
 
-            foreach (self::$__hooks[$event] as &$hook) {
+            foreach (self::$__hooks[$event] as $slug => &$hook) {
                 if ($hook['executed'] === true) {
                     continue;
-                }
-
-                if (isset($hook['function'])) {
-                    $slug = $hook['function'];
-                } else {
-                    $slug = $hook['namespace'];
                 }
 
                 // Check to see if the hook is restricted to a certain scope
@@ -86,16 +91,13 @@ class Hook {
                     }
                 }
 
-                if (!empty($hook['namespace'])) {
-                    $obj = Registry::factory(array('namespace' => $hook['namespace']));
+                if (isset(self::$__objectMap[$slug])) {
+                    $obj = self::$__objectMap[$slug];
 
-                    if (method_exists($obj, $hook['method'])) {
-                        $obj->{$hook['method']}($Object);
-                    }
-
-                } else if (!empty($hook['function'])) {
-                    if (function_exists($hook['function'])) {
-                        $hook['function']($Object);
+					if ($obj instanceof Closure) {
+						$obj($Object);
+					} else if (method_exists($obj, $event)) {
+                        $obj->{$event}($Object);
                     }
                 }
 
@@ -112,7 +114,7 @@ class Hook {
      * @return array
      */
     public static function listHooks($event = '') {
-        return (empty(self::$__hooks[$event]) ? self::$__hooks : self::$__hooks[$event]);
+        return empty(self::$__hooks[$event]) ? self::$__hooks : self::$__hooks[$event];
     }
 
     /**
@@ -123,7 +125,7 @@ class Hook {
      * @return array
      */
     public static function listScopes($event = '') {
-        return (empty(self::$__scopes[$event]) ? self::$__scopes : self::$__scopes[$event]);
+        return empty(self::$__scopes[$event]) ? self::$__scopes : self::$__scopes[$event];
     }
 
     /**
@@ -131,25 +133,21 @@ class Hook {
      * Can drill down the hook to only execute during a certain scope (controller, action).
      *
      * @access public
-     * @param string $class
+	 * @param HookInterface $Hook
      * @param array $scope
      * @return void
      * @static
      */
-    public static function register($class, array $scope = array()) {
-        $options = self::__prepare(array(
-            'class' => $class,
-            'module' => 'Hook'
-        ));
+    public static function register(HookInterface $Hook, array $scope = array()) {
+        if ($Hook) {
+			$class = App::toDotNotation(get_class($Hook));
+			self::$__objectMap[$class] = $Hook;
 
-        if (!empty($options['namespace'])) {
             foreach (self::$__events as $event) {
-
-                $options['method'] = $event;
-                self::$__hooks[$event][] = $options;
+                self::$__hooks[$event][$class] = array('executed' => false);
 
                 if (!empty($scope)) {
-                    self::$__scopes[$event][$options['namespace']] = $scope + array(
+                    self::$__scopes[$event][$class] = $scope + array(
                         'container' => '*',
                         'controller' => '*',
                         'action' => '*'
@@ -164,137 +162,49 @@ class Hook {
      * Can drill down the hook to only execute during a certain scope (controller, action).
      *
      * @access public
-     * @param string $event
-     * @param string $function
+	 * @param Closure $Function
+     * @param array $events
      * @param array $scope
      * @return void
      * @static
      */
-    public static function registerFunction($event, $function, array $scope = array()) {
-        if (!in_array($event, self::$__events)) {
-            throw new Exception('The '. $event .' event is not a supported hook event.');
-        }
+    public static function registerFunction(Closure $Function, array $events = array(), array $scope = array()) {
+		if ($Function) {
+			if (empty($events)) {
+				$events = self::$__events;
+			}
 
-        self::$__hooks[$event][] = array(
-            'function' => (string) $function,
-            'executed' => false
-        );
+			$slug = time();
+			self::$__objectMap[$slug] = $Function;
 
-        if (!empty($scope)) {
-            self::$__scopes[$event][$function] = $scope + array(
-                'container' => '*',
-                'controller' => '*',
-                'action' => '*'
-            );
-        }
+			foreach ($events as $event) {
+				self::$__hooks[$event][$slug] = array('executed' => false);
+
+				if (!empty($scope)) {
+					self::$__scopes[$event][$slug] = $scope + array(
+						'container' => '*',
+						'controller' => '*',
+						'action' => '*'
+					);
+				}
+			}
+		}
     }
 
     /**
-     * Register a class and method to be called at certain events.
-     * Can drill down the hook to only execute during a certain scope (controller, action).
+     * Remove a certain hook and scope from the registered list.
      *
      * @access public
      * @param string $event
-     * @param array $options
-     * @param array $scope
+     * @param string $slug
      * @return void
      * @static
      */
-    public static function registerMethod($event, array $options, array $scope = array()) {
-        $options = self::__prepare($options);
-
-        if (!in_array($event, self::$__events)) {
-            throw new Exception('The '. $event .' event is not a supported hook event.');
-        }
-
-        self::$__hooks[$event][] = $options;
-
-        if (!empty($scope)) {
-            self::$__scopes[$event][$options['namespace']] = $scope + array(
-                'container' => '*',
-                'controller' => '*',
-                'action' => '*'
-            );
-        }
-    }
-
-    /**
-     * Remove a certain class/method hook and scope from the registered list.
-     *
-     * @access public
-     * @param string $event
-     * @param array $options
-     * @return void
-     * @static
-     */
-    public static function remove($event, array $options = array()) {
-        if (!empty(self::$__hooks[$event])) {
-            $key = null;
-            $slug = $options['namespace'];
-            
-            if (empty($options['method'])) {
-                $options['method'] = $event;
-            }
-
-            foreach (self::$__hooks[$event] as $index => $hook) {
-                if (($options['module'] == $hook['module']) && ($options['class'] == $hook['class']) && ($options['method'] == $hook['method'])) {
-                    $key = $index;
-                    break;
-                }
-            }
-
-            unset(self::$__hooks[$event][$key]);
+    public static function remove($event, $slug) {
+        if (isset(self::$__events[$event])) {
+            unset(self::$__hooks[$event][$slug]);
             unset(self::$__scopes[$event][$slug]);
         }
-    }
-
-    /**
-     * Remove a certain function hook and scope from the registered list.
-     *
-     * @access public
-     * @param string $event
-     * @param string $function
-     * @return void
-     * @static
-     */
-    public static function removeFunction($event, $function) {
-        if (!empty(self::$__hooks[$event])) {
-            $key = null;
-
-            foreach (self::$__hooks[$event] as $index => $hook) {
-                if ((isset($hook['function'])) && ($function == $hook['function'])) {
-                    $key = $index;
-                    break;
-                }
-            }
-
-            unset(self::$__hooks[$event][$key]);
-            unset(self::$__scopes[$event][$function]);
-        }
-    }
-
-    /**
-     * Prepare the hook with all the required credentials.
-     *
-     * @access private
-     * @param array $options
-     * @return array
-     * @static
-     */
-    private static function __prepare($options) {
-        $defaults = array('class' => '', 'module' => '', 'method' => '', 'namespace' => '', 'executed' => false);
-        $options = $options + $defaults;
-
-        if (empty($options['namespace'])) {
-            throw new Exception('Namespace is required to register hooks.');
-        }
-
-        if (empty($options['method']) && !empty($options['function'])) {
-            $options['method'] = $options['function'];
-            unset($options['function']);
-        }
-
-        return $options;
     }
 
 }

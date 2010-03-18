@@ -14,7 +14,7 @@ namespace titon\modules\dispatchers;
  * Dispatcher Interface
  *
  * @package		Titon
- * @subpackage	Titon.Modules
+ * @subpackage	Titon.Modules.Dispatchers
  */
 interface DispatcherInterface {
 
