@@ -1,6 +1,6 @@
 <?php
 /**
- * The Dispatch is the outermost script (Front Controller) of the application and handles the HTTP request and response cycle.
+ * The Dispatch is the outermost script of the application and handles the HTTP request and response cycle.
  * Once it receives the HTTP request, it determines the correct Dispatcher module to use, parses the current Route,
  * traverses the Controller and Container path, and then finally dispatches and outputs the HTTP response.
  *
@@ -15,11 +15,13 @@
 namespace titon\system;
 
 use \titon\core\App;
+use \titon\core\Environment;
 use \titon\core\Registry;
 use \titon\log\Error;
 use \titon\log\Exception;
 use \titon\router\Router;
 use \titon\utility\Inflector;
+use \Closure;
 
 /**
  * Dispatch Class
@@ -73,7 +75,14 @@ class Dispatch {
         if ($dispatch) {
             $Dispatcher = $dispatch($params);
         } else {
-            $Dispatcher = new \titon\modules\dispatchers\front\Front($params);
+			switch (Environment::detect()) {
+				case 'development':
+					$Dispatcher = new \titon\modules\dispatchers\front\FrontDev($params);
+				break;
+				default:
+					$Dispatcher = new \titon\modules\dispatchers\front\Front($params);
+				break;
+			}
         }
 
         if ($Dispatcher instanceof \titon\modules\dispatchers\DispatcherInterface) {
@@ -81,34 +90,30 @@ class Dispatch {
             exit();
         }
 
-        throw new Exception(sprintf('%s Dispatcher must implement the \titon\modules\dispatchers\DispatcherInterface', $dispatch));
+        throw new Exception(sprintf('%s Dispatcher must implement the \titon\modules\dispatchers\DispatcherInterface.', $dispatch));
     }
 
     /**
      * Method to apply custom dispatchers to specific container or controller scopes.
      *
      * @access public
-     * @param array $config
+     * @param array $scope
      * @param Closure $dispatcher
      * @return void
      * @static
      */
-    public static function setup(array $config, Closure $dispatcher) {
-        if (!empty($config)) {
-            foreach ($config as $scope) {
-                $scope = $scope + array('container' => '*', 'controller' => '*');
+    public static function setup(array $scope, Closure $dispatcher) {
+		$scope = $scope + array('container' => '*', 'controller' => '*');
 
-                if ($scope['container'] != '*') {
-                    $scope['container'] = Inflector::underscore($scope['container']);
-                }
+		if ($scope['container'] != '*') {
+			$scope['container'] = Inflector::underscore($scope['container']);
+		}
 
-                if ($scope['controller'] != '*') {
-                    $scope['controller'] = Inflector::underscore($scope['controller']);
-                }
+		if ($scope['controller'] != '*') {
+			$scope['controller'] = Inflector::underscore($scope['controller']);
+		}
 
-                self::$__mapping[$scope['container'] .'.'. $scope['controller']] = $dispatcher;
-            }
-        }
+		self::$__mapping[$scope['container'] .'.'. $scope['controller']] = $dispatcher;
     }
 
 }

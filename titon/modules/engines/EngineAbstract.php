@@ -99,9 +99,9 @@ abstract class EngineAbstract extends Prototype implements EngineInterface {
      * @return string|null
      */
     public function flash(array $params = array()) {
-        if ($this->hasObject('Session')) {
-            $message = $this->Session->get('App.flash');
-            $this->Session->set('App.flash', '');
+        if ($this->View->hasObject('Session')) {
+            $message = $this->View->Session->get('App.flash');
+            $this->View->Session->set('App.flash', '');
         } else {
             $message = Set::extract($_SESSION, 'App.flash');
             $_SESSION = Set::remove($_SESSION, 'App.flash');

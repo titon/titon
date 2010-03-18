@@ -9,13 +9,6 @@
  */
 
 /**
- * Compare the PHP version so that the application is running in 5.3!
- */
-if (version_compare(PHP_VERSION, '5.3.0') == -1) {
-	trigger_error('Titon: Application requires PHP 5.3.x to run correctly, please upgrade your environment. You are using '. PHP_VERSION .'.', E_USER_ERROR);
-}
-
-/**
  * Require files to load constants and global functions.
  */
 require_once FRAMEWORK .'Paths.php';

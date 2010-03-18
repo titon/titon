@@ -148,7 +148,7 @@ class Html extends HelperAbstract {
             $slug = 'html-4-strict';
         }
 
-        $this->Engine->configure(array('doctype' => $slug));
+        $this->View->configure(array('doctype' => $slug));
         return $docTypes[$slug] ."\n";
     }
 

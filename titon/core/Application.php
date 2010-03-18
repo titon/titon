@@ -170,7 +170,7 @@ class App {
 
 	/**
 	 * Includes files into the application. Attemps to include a file based on namespace or given path.
-     * Primarily used for locating modules, use default include/require for other files.
+     * Relies heavily on the defined include paths.
 	 *
 	 * @access public
 	 * @param string $slug
@@ -179,17 +179,13 @@ class App {
 	 */
 	public static function import($slug) {
         $path = static::toPath($slug);
-        
-        if (file_exists($path)) {
-            include_once $path;
+        $namespace = static::toNamespace($path);
 
-            $namespace = static::toNamespace($path);
-            static::$__imported[] = static::toDotNotation($namespace);
+		include_once $path;
+		
+		static::$__imported[] = static::toDotNotation($namespace);
 
-            return $namespace;
-        } else {
-            throw new Exception(sprintf('%s could not be located for importing.', basename($path)));
-        }
+		return $namespace;
 	}
 
 	/**
@@ -231,7 +227,7 @@ class App {
             $namespace = str_replace('.', NS, $path);
         } else {
             $path = substr($path, 0, strrpos($path, '.'));
-            $namespace = str_replace(DS, NS, str_replace(SUBROOT, '', $path));
+            $namespace = str_replace(DS, NS, str_replace(ROOT, '', $path));
         }
 
         if (substr($namespace, 0, 1) != NS) {

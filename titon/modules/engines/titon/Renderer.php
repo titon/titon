@@ -44,7 +44,25 @@ class Renderer extends EngineAbstract {
             throw new Exception(sprintf('The include template %s does not exist.', basename($path)));
         }
 
-        return $this->__render($path, $variables);
+        return $this->render($path, $variables);
+    }
+
+	/**
+     * Primary function to render a template. It enables output buffering, extracts the variables, includes the template, and returns the output.
+     *
+     * @access public
+     * @param string $tplPath
+     * @param array $variables
+     * @return mixed
+     */
+    public function render($tplPath, array $variables = array()) {
+		$variables['view'] = $this->View;
+
+        extract($variables, EXTR_SKIP);
+        ob_start();
+
+        include $tplPath;
+        return ob_get_clean();
     }
 
     /**
@@ -65,7 +83,7 @@ class Renderer extends EngineAbstract {
 
         // Render view
         if ($this->View->checkPath(View::TYPE_TPL)) {
-            $this->_content = $this->__render($template, $data);
+            $this->_content = $this->render($template, $data);
             $this->_rendered = true;
         } else {
             throw new Exception(sprintf('View template %s does not exist.', str_replace(TEMPLATES, '', $template)));
@@ -74,7 +92,7 @@ class Renderer extends EngineAbstract {
         // Render wrapper
         if (!empty($this->_wrapper) && $this->_wrapped == false) {
             if ($wrapper = $this->View->checkPath(View::TYPE_WRAPPER)) {
-                $this->_content = $this->__render($wrapper, $data);
+                $this->_content = $this->render($wrapper, $data);
                 $this->_wrapped = true;
             }
         }
@@ -82,29 +100,11 @@ class Renderer extends EngineAbstract {
         // Render layout
         if (!empty($this->_layout)) {
             if ($layout = $this->View->checkPath(View::TYPE_LAYOUT)) {
-                $this->_content = $this->__render($layout, $data);
+                $this->_content = $this->render($layout, $data);
             }
         }
 
         return $this->_content;
-    }
-
-    /**
-     * Primary function to render a template. It enables output buffering, extracts the variables, includes the template, and returns the output.
-     *
-     * @access private
-     * @param string $tplPath
-     * @param array $variables
-     * @return mixed
-     */
-    private function __render($tplPath, array $variables = array()) {
-        extract($variables, EXTR_SKIP);
-        ob_start();
-
-        include $tplPath;
-        $output = ob_get_clean();
-
-        return $output;
     }
 
 }
