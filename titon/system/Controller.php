@@ -19,6 +19,8 @@ namespace titon\system;
 
 use \titon\core\Prototype;
 use \titon\log\Exception;
+use \titon\router\Router;
+use \titon\utility\Inflector;
 use \titon\utility\Set;
 
 /**
@@ -87,6 +89,46 @@ class Controller extends Prototype {
 
         return call_user_func_array(array(&$this, $action), $args);
     }
+
+	/**
+	 * Allows you to throw up an error page. The error template is derived from the $action passed.
+	 *
+	 * @access public
+	 * @param string $action
+	 * @param array $args
+	 * @return void
+	 */
+	public function error($action, array $args = array()) {
+		if (!isset($args['pageTitle'])) {
+			switch ($action) {
+				case is_numeric($action):
+					$args['pageTitle'] = $action;
+
+					if ($title = $this->Response->statusCode($action)) {
+						$args['pageTitle'] .= ' - '. $title;
+
+						$this->Response->status($action);
+					}
+				break;
+				default:
+					$args['pageTitle'] = Inflector::normalize($action);
+				break;
+			}
+		}
+
+		// Build arguments
+		$args['referrer'] = $this->Request->referrer();
+		$args['url'] = 'todo'; //Router::construct(Router::current());
+
+		$this->View->set($args);
+		$this->View->configure(array(
+			'error' => true,
+			'layout' => 'error',
+			'template' => $action
+		));
+
+		return;
+	}
 
     /**
      * Set the flash message to be used in the view. Will use the Session class if its loaded.

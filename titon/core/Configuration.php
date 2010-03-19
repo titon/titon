@@ -141,9 +141,9 @@ class Config {
 			$key = 'Debug.level';
 
             if ($value == 0) {
-                Debugger::errorReporting(Debugger::ERROR_REPORTING_OFF);
+                Debugger::errorReporting(Debugger::ERRORS_OFF);
             } else {
-                Debugger::errorReporting(Debugger::ERROR_REPORTING_ON);
+                Debugger::errorReporting(Debugger::ERRORS_ON);
             }
 		}
 		

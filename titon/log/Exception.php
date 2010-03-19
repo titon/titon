@@ -25,18 +25,23 @@ class Exception extends \Exception {
 	 * Is also the registered handler for dealing with uncaught exceptions.
 	 *
 	 * @access public
+	 * @param Exception $Exception
 	 * @return void
 	 */
-	public function log() {
-		$trace = $this->getTrace();
+	public function log($Exception) {
+		if (!$Exception) {
+			$Exception = $this;
+		}
+		
+		$trace = $Exception->getTrace();
 		$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] .'()';
-		$response = $method .': '. $this->getMessage();
+		$response = $method .': '. $Exception->getMessage();
 
-        if ($code = $this->getCode()) {
+        if ($code = $Exception->getCode()) {
             $response .= ' (Code: '. $code .')';
         }
 
-		Debugger::instance()->error($this->getCode(), $response, $this->getFile(), $this->getLine());
+		Debugger::error($Exception->getCode(), $response, $Exception->getFile(), $Exception->getLine());
 	}
 	
 }

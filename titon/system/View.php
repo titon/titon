@@ -47,7 +47,8 @@ class View extends Prototype {
 		'template'	=> array(),
 		'render'	=> true,
 		'layout'	=> 'default',
-		'wrapper'	=> null
+		'wrapper'	=> null,
+		'error'		=> false
 	);
 
     /**
@@ -139,12 +140,12 @@ class View extends Prototype {
             break;
 
             case self::TYPE_ERROR:
-                $output = 'private'. DS .'errors'. DS . (string)$this->_config['template'] .'.tpl';
+                $output = 'private'. DS .'errors'. DS . (string)$this->getConfig('template') .'.tpl';
             break;
 
             case self::TYPE_TPL:
             default:
-                $template = $this->_config['template'];
+                $template = $this->getConfig('template');
                 $ext = null;
 
                 if (empty($template['container'])) {
@@ -291,7 +292,7 @@ class View extends Prototype {
         }
 
         // Get content type automatically
-        if (isset($this->_config['template']['ext'])) {
+        if (is_array($this->_config['template']) && isset($this->_config['template']['ext'])) {
             $this->_config['type'] = $this->_config['template']['ext'];
         } else if (empty($this->_config['type'])) {
             $this->_config['type'] = 'html';

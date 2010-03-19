@@ -202,5 +202,30 @@ class Http extends Prototype {
 
         return;
 	}
+
+	/**
+	 * Return all the standard types of HTTP headers.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function headerTypes() {
+		return $this->_headerTypes;
+	}
+
+	/**
+	 * Get a single status code, or all status codes.
+	 *
+	 * @access public
+	 * @param string $code
+	 * @return string
+	 */
+	public function statusCode($code) {
+		if ($code === true) {
+			return $this->_statusCodes;
+		}
+
+		return isset($this->_statusCodes[$code]) ? $this->_statusCodes[$code] : null;
+	}
     
 }

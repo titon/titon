@@ -53,11 +53,11 @@ class Benchmark {
      * @static
      */
     public static function display($slug = null) {
-        if (empty(self::$__benchmarks[$slug])) {
+        if (empty(static::$__benchmarks[$slug])) {
             return false;
         }
 
-        $benchmark = self::$__benchmarks[$slug];
+        $benchmark = static::$__benchmarks[$slug];
         $time = ($benchmark['endTime'] - $benchmark['startTime']);
         $memory = ($benchmark['endMemory'] - $benchmark['startMemory']);
 
@@ -79,9 +79,9 @@ class Benchmark {
 	 */
 	public static function get($slug = null) {
 		if (empty($slug)) {
-			$benchmarks = self::$__benchmarks;
-		} else if (isset(self::$__benchmarks[$slug])) {
-			$benchmarks = array(self::$__benchmarks[$slug]);
+			$benchmarks = static::$__benchmarks;
+		} else if (isset(static::$__benchmarks[$slug])) {
+			$benchmarks = array(static::$__benchmarks[$slug]);
 		}
 
 		if (!empty($benchmarks)) {
@@ -108,8 +108,8 @@ class Benchmark {
 	 * @static
 	 */
 	public static function start($slug = 'benchmark') {
-		if (Config::get('debug') != 0) {
-			self::$__benchmarks[$slug] = array(
+		if (Config::get('debug') > 0) {
+			static::$__benchmarks[$slug] = array(
 				'startTime'		=> microtime(true),
 				'startMemory'	=> memory_get_usage(),
 			);
@@ -126,21 +126,21 @@ class Benchmark {
 	 * @static
 	 */
 	public static function stop($slug = 'benchmark', $log = self::DONT_LOG) {
-		if (Config::get('debug') != 0) {
-			if (empty(self::$__benchmarks[$slug])) {
+		if (Config::get('debug') > 0) {
+			if (empty(static::$__benchmarks[$slug])) {
 				return false;
 			}
 
-			self::$__benchmarks[$slug] = array(
+			static::$__benchmarks[$slug] = array(
 				'endTime'	=> microtime(true),
 				'endMemory'	=> memory_get_usage()
-			) + self::$__benchmarks[$slug];
+			) + static::$__benchmarks[$slug];
 
-            if ($log === self::DO_LOG) {
-                Logger::debug(self::display($slug));
+            if ($log === static::DO_LOG) {
+                Logger::debug(static::display($slug));
             }
 
-			return self::$__benchmarks[$slug];
+			return static::$__benchmarks[$slug];
 		}
 	}
 

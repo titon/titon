@@ -87,7 +87,7 @@ class Logger {
      * @static
      */
     public static function alert($message) {
-        self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::ALERT);
+        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::ALERT);
     }
 
     /**
@@ -99,7 +99,7 @@ class Logger {
      * @static
      */
     public static function critical($message) {
-        self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::CRITICAL);
+        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::CRITICAL);
     }
 
     /**
@@ -111,7 +111,7 @@ class Logger {
      * @static
      */
     public static function debug($message) {
-        self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::DEBUG);
+        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::DEBUG);
     }
 
     /**
@@ -123,7 +123,7 @@ class Logger {
      * @static
      */
     public static function info($message) {
-        self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::INFO);
+        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::INFO);
     }
 
     /**
@@ -135,7 +135,7 @@ class Logger {
      * @static
      */
     public static function notice($message) {
-        self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::NOTICE);
+        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::NOTICE);
     }
 
     /**
@@ -147,7 +147,7 @@ class Logger {
      * @static
      */
     public static function warning($message) {
-        self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::WARNING);
+        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::WARNING);
     }
 
     /**
@@ -163,19 +163,19 @@ class Logger {
 	public static function write($message, $level = 0) {
 		if (!empty($message)) {
             switch ($level) {
-                case self::CRITICAL:$type = 'Critical'; break;
-                case self::ALERT:   $type = 'Alert'; break;
-                case self::WARNING: $type = 'Warning'; break;
-                case self::NOTICE:  $type = 'Notice'; break;
-                case self::INFO:    $type = 'Info'; break;
-                case self::DEBUG:   $type = 'Debug'; break;
+                case static::CRITICAL:$type = 'Critical'; break;
+                case static::ALERT:   $type = 'Alert'; break;
+                case static::WARNING: $type = 'Warning'; break;
+                case static::NOTICE:  $type = 'Notice'; break;
+                case static::INFO:    $type = 'Info'; break;
+                case static::DEBUG:   $type = 'Debug'; break;
                 default:            $type = 'Internal'; break;
             }
 
-            if ($level == self::DEBUG) {
-                $file = self::DEBUG_LOG;
+            if ($level == static::DEBUG) {
+                $file = static::DEBUG_LOG;
             } else {
-                $file = self::ERROR_LOG;
+                $file = static::ERROR_LOG;
                 $message = '['. $type .'] '. $message;
             }
 
@@ -183,7 +183,7 @@ class Logger {
 			fwrite($log, $message ."\n");
 			fclose($log);
 
-            if ($level >= self::WARNING) {
+            if ($level >= static::WARNING) {
                 if ($email = Config::get('Debug.email')) {
                     mail($email, '[Titon Error] '. $type, $message);
                 }

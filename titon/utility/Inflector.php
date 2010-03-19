@@ -72,7 +72,7 @@ class Inflector {
 	public static function normalize($string, $callback = 'ucwords') {
 		$string = strtolower(str_replace('_', ' ', $string));
 
-        if ($callback) {
+        if ($callback && function_exists($callback)) {
             $string = $callback($string);
         }
         

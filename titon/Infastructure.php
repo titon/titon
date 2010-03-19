@@ -26,7 +26,6 @@ require_once FRAMEWORK .'core'. DS .'Prototype.php';
 require_once FRAMEWORK .'core'. DS .'Registry.php';
 require_once FRAMEWORK .'router'. DS .'Router.php';
 require_once FRAMEWORK .'log'. DS .'Debugger.php';
-require_once FRAMEWORK .'log'. DS .'Error.php';
 require_once FRAMEWORK .'log'. DS .'Exception.php';
 require_once FRAMEWORK .'system'. DS .'Dispatch.php';
 require_once FRAMEWORK .'system'. DS .'Controller.php';

@@ -15,7 +15,6 @@ namespace titon\core;
 
 use \titon\core\Environment;
 use \titon\log\Debugger;
-use \titon\log\Error;
 use \titon\log\Exception;
 use \titon\router\Router;
 

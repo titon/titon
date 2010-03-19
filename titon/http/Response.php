@@ -211,7 +211,7 @@ class Response extends Http {
     public function status($code) {
         if (is_numeric($code)) {
             if (!isset($this->_statusCodes[$code])) {
-                throw new Exception(sprintf('The status code %s is not supported.', $code));
+                throw new Exception(sprintf('The status code %d is not supported.', $code));
             }
             
             $this->__response['status'] = $code;

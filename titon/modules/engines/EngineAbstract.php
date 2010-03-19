@@ -18,7 +18,6 @@ namespace titon\modules\engines;
 
 use \titon\core\Config;
 use \titon\core\Prototype;
-use \titon\log\Error;
 use \titon\log\Exception;
 use \titon\modules\engines\EngineInterface;
 use \titon\router\Router;
