@@ -198,28 +198,45 @@ class Http extends Prototype {
 	}
 
 	/**
+	 * Return all the supported content types.
+	 *
+	 * @access public
+	 * @param string $type
+	 * @return array
+	 */
+	public function getContentTypes($type = null) {
+		return isset($this->_contentTypes[$type]) ? $this->_contentTypes[$type] : $this->_contentTypes;
+	}
+
+	/**
 	 * Return all the standard types of HTTP headers.
 	 *
 	 * @access public
 	 * @return array
 	 */
-	public function headerTypes() {
+	public function getHeaderTypes() {
 		return $this->_headerTypes;
+	}
+
+	/**
+	 * Return all the supported method types.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getMethods() {
+		return $this->_methodTypes;
 	}
 
 	/**
 	 * Get a single status code, or all status codes.
 	 *
 	 * @access public
-	 * @param string $code
+	 * @param int $code
 	 * @return string
 	 */
-	public function statusCode($code) {
-		if ($code === true) {
-			return $this->_statusCodes;
-		}
-
-		return isset($this->_statusCodes[$code]) ? $this->_statusCodes[$code] : null;
+	public function getStatusCodes($code = null) {
+		return isset($this->_statusCodes[$code]) ? $this->_statusCodes[$code] : $this->_statusCodes;
 	}
     
 }

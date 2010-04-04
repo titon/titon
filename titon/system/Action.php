@@ -12,6 +12,7 @@
 namespace titon\system;
 
 use \titon\core\Prototype;
+use \titon\log\Exception;
 
 /**
  * Action Class
@@ -24,23 +25,20 @@ class Action extends Prototype {
     /**
      * Controller object.
      *
-     * @access public
+     * @access protected
      * @var Controller
      */
-    public $Controller;
+    protected $Controller;
 
     /**
-     * Store the parent Controller. Overwrite the default __construct().
+     * Store the parent Controller.
      *
      * @access public
      * @param Controller $Controller
      * @return void
      */
-    public function __construct(Controller $Controller) {
-        parent::__construct();
-        
+    public function setController(Controller $Controller) {
         $this->Controller = $Controller;
-        $this->run();
     }
 
     /**

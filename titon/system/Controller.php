@@ -20,6 +20,7 @@ namespace titon\system;
 use \titon\core\Prototype;
 use \titon\log\Exception;
 use \titon\router\Router;
+use \titon\system\Action;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
 
@@ -34,10 +35,10 @@ class Controller extends Prototype {
     /**
      * View object.
      *
-     * @access public
+     * @access protected
      * @var View
      */
-    public $View;
+    protected $View;
 
 	/**
 	 * Configure the Controller and store the View object.
@@ -64,6 +65,20 @@ class Controller extends Prototype {
         // Setup the View object
         $this->View = $View;
         $this->View->render(array('template' => $template));
+	}
+
+	/**
+	 * Trigger a custom Action class.
+	 *
+	 * @access public
+	 * @param Action $Action
+	 * @return void
+	 */
+	final public function action(Action $Action) {
+		$Action->setController($this);
+		$Action->run();
+
+		return;
 	}
 
     /**

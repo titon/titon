@@ -126,7 +126,7 @@ class Request extends Http {
 	 */
 	public function accepts($type = 'html') {
 		if (!isset($this->_contentTypes[$type])) {
-			$type = 'html';
+			throw new Exception(sprintf('The content type %s is not supported.', $type));
 		}
 
 		$contentType = $this->_contentTypes[$type];
@@ -344,7 +344,7 @@ class Request extends Http {
 	 * @return mixed|null
 	 */
 	public function param($key) {
-		return (isset($this->params['params'][$key]) ? $this->params['params'][$key] : null);
+		return isset($this->params[$key]) ? $this->params[$key] : null;
 	}
 
     /**
@@ -356,17 +356,6 @@ class Request extends Http {
     public function protocol() {
         return (strtolower($this->env('HTTPS')) == 'on' ? 'https' : 'http');
     }
-
-    /**
-	 * Grabs the value from a named param, parsed from the router.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return mixed|null
-	 */
-	public function queryParam($key) {
-		return (isset($this->params['query'][$key]) ? $this->params['query'][$key] : null);
-	}
 
 	/**
 	 * Get the referring URL. Will strip the hostname if it comes from the same domain.
@@ -382,7 +371,7 @@ class Request extends Http {
 		} else {
             $host = $this->env('HTTP_HOST');
             
-			if (strpos($referrer, $host)) {
+			if (strpos($referrer, $host) != false) {
 				$referrer = str_replace($this->protocol() .'://'. $host, '', $referrer);
 			}
 
