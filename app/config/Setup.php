@@ -27,3 +27,9 @@ switch (Environment::detect()) {
 		
 	break;
 }
+
+
+// Testing the Optimizer hook
+$optimizer = new \titon\modules\hooks\optimizer\Optimizer();
+$optimizerCommand = new \titon\modules\hooks\optimizer\OptimizerCommand($optimizer);
+Hook::register($optimizerCommand);

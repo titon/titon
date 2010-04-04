@@ -14,7 +14,7 @@ namespace titon\system;
 use \titon\core\App;
 use \titon\log\Exception;
 use \titon\router\Router;
-use \titon\modules\hooks\HookInterface;
+use \titon\modules\hooks\HookCommandInterface;
 use \Closure;
 
 /**
@@ -35,7 +35,7 @@ class Hook {
     private static $__events = array('preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
 
     /**
-     * Hooks with their respective module, class and namespace, that will be executed.
+     * Hooks that will be executed.
      *
      * @access private
      * @var array
@@ -53,7 +53,7 @@ class Hook {
     private static $__scopes = array();
 
 	/**
-	 * Hook objects that have been registered through a Closure.
+	 * Hook objects that have been registered.
 	 *
 	 * @access private
 	 * @var array
@@ -93,12 +93,7 @@ class Hook {
 
                 if (isset(self::$__objectMap[$slug])) {
                     $obj = self::$__objectMap[$slug];
-
-					if ($obj instanceof Closure) {
-						$obj($Object);
-					} else if (method_exists($obj, $event)) {
-                        $obj->{$event}($Object);
-                    }
+					$obj->{$event}($Object);
                 }
 
                 $hook['executed'] = true;
@@ -133,64 +128,28 @@ class Hook {
      * Can drill down the hook to only execute during a certain scope (controller, action).
      *
      * @access public
-	 * @param HookInterface $Hook
+	 * @param HookCommandInterface $Hook
      * @param array $scope
      * @return void
      * @static
      */
-    public static function register(HookInterface $Hook, array $scope = array()) {
-        if ($Hook) {
-			$class = App::toDotNotation(get_class($Hook));
-			self::$__objectMap[$class] = $Hook;
+    public static function register(HookCommandInterface $Hook, array $scope = array()) {
+		$class = App::toDotNotation(get_class($Hook));
+		self::$__objectMap[$class] = $Hook;
 
-            foreach (self::$__events as $event) {
-                self::$__hooks[$event][$class] = array('executed' => false);
+		foreach (self::$__events as $event) {
+			self::$__hooks[$event][$class] = array('executed' => false);
 
-                if (!empty($scope)) {
-                    self::$__scopes[$event][$class] = $scope + array(
-                        'container' => '*',
-                        'controller' => '*',
-                        'action' => '*'
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Register a stand alone function to be called at certain events.
-     * Can drill down the hook to only execute during a certain scope (controller, action).
-     *
-     * @access public
-	 * @param Closure $Function
-     * @param array $events
-     * @param array $scope
-     * @return void
-     * @static
-     */
-    public static function registerFunction(Closure $Function, array $events = array(), array $scope = array()) {
-		if ($Function) {
-			if (empty($events)) {
-				$events = self::$__events;
-			}
-
-			$slug = time();
-			self::$__objectMap[$slug] = $Function;
-
-			foreach ($events as $event) {
-				self::$__hooks[$event][$slug] = array('executed' => false);
-
-				if (!empty($scope)) {
-					self::$__scopes[$event][$slug] = $scope + array(
-						'container' => '*',
-						'controller' => '*',
-						'action' => '*'
-					);
-				}
+			if (!empty($scope)) {
+				self::$__scopes[$event][$class] = $scope + array(
+					'container' => '*',
+					'controller' => '*',
+					'action' => '*'
+				);
 			}
 		}
     }
-
+	
     /**
      * Remove a certain hook and scope from the registered list.
      *

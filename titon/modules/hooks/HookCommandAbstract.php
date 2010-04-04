@@ -1,6 +1,6 @@
 <?php
 /**
- * The Hook class has no real functionality, but is merely convenience to not write out all the callbacks.
+ * The Hook Command loads the external object as well as defining skeleton callbacks.
  *
  * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
  * @link		http://titonphp.com
@@ -10,16 +10,36 @@
 namespace titon\modules\hooks;
 
 use \titon\modules\hooks\HookInterface;
+use \titon\modules\hooks\HookCommandInterface;
 use \titon\system\Controller;
 use \titon\system\View;
 
 /**
- * Hook Interface
+ * Hook Command Abstract
  *
  * @package		Titon
  * @subpackage	Titon.Modules.Hooks
  */
-abstract class HookAbstract implements HookInterface {
+abstract class HookCommandAbstract implements HookCommandInterface {
+
+	/**
+	 * Hook Command object.
+	 *
+	 * @access protected
+	 * @var Hook
+	 */
+	protected $Hook;
+
+	/**
+	 * Store the Hook through the constructor.
+	 *
+	 * @access public
+	 * @param HookInterface $Hook
+	 * @return void
+	 */
+	public function __construct(HookInterface $Hook) {
+		$this->Hook = $Hook;
+	}
 
 	/**
 	 * Executed at the beginning of the dispatch cycle.
