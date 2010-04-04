@@ -82,10 +82,6 @@ class Request extends Http {
 	 * @return void
 	 */
 	public function initialize() {
-        if ($this->_initialized) {
-            return;
-        }
-
         parent::initialize();
 
         // Store data

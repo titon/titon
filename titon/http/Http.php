@@ -166,12 +166,6 @@ class Http extends Prototype {
      * @return void
      */
     public function initialize() {
-        if ($this->_initialized) {
-            return;
-        }
-
-        $this->initialized();
-
         if (function_exists('apache_response_headers')) {
 			$this->httpHeaders = apache_response_headers() + $this->httpHeaders;
 		}

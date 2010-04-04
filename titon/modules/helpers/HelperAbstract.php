@@ -41,12 +41,7 @@ abstract class HelperAbstract extends Prototype implements HelperInterface {
 	 * @return void
 	 */
     public function initialize(View $View) {
-        if ($this->_initialized) {
-            return;
-        }
-        
         $this->View = $View;
-        $this->initialized();
     }
 
     /**

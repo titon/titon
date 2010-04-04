@@ -43,15 +43,7 @@ class Prototype {
      * @access protected
      * @var array
      */
-    protected $_config = array();
-
-    /**
-     * Has the object been built and triggered with initialize().
-     *
-     * @access protected
-     * @var boolean
-     */
-    protected $_initialized = false;
+    protected $_config = array('initialized' => false);
 
     /**
      * Classes that have been instantiated when called using getObject().
@@ -274,20 +266,6 @@ class Prototype {
     }
 
     /**
-     * Sets the object to initialized if ran through a callback.
-     *
-     * @access public
-     * @return void
-     */
-    public function initialized() {
-        if ($this->_initialized) {
-            return;
-        }
-        
-        $this->_initialized = true;
-    }
-
-    /**
      * A dummy function for no operation.
      *
      * @access public
@@ -344,10 +322,17 @@ class Prototype {
     final protected function _callback($method) {
         if (is_string($method) && !empty($this->_classes)) {
             foreach ($this->_classes as $class => $options) {
-                
+                if ($method == 'initialize' && $this->{$options['alias']}->getConfig('initialized')) {
+					continue;
+				}
+				
                 if ($options['callback'] == true) {
                     if (method_exists($this->{$options['alias']}, $method)) {
                         $this->{$options['alias']}->{$method}($this);
+
+						if ($method == 'initialize') {
+							$this->{$options['alias']}->configure(array('initialized' => true));
+						}
                     }
                 }
             }

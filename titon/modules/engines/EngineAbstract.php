@@ -121,12 +121,6 @@ abstract class EngineAbstract extends Prototype implements EngineInterface {
      * @return void
      */
     public function initialize(View $View) {
-        if ($this->_initialized) {
-            return;
-        } else {
-            $this->initialized();
-        }
-        
         $this->View = $View;
         $this->_layout = $this->View->getConfig('layout');
         $this->_wrapper = $this->View->getConfig('wrapper');

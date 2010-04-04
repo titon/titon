@@ -48,16 +48,6 @@ class Response extends Http {
      */
     private $__headers = array();
 
-	/**
-	 * Loads the current HTTP response headers.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-        parent::initialize();
-	}
-
     /**
      * Set the content body for the response.
      *
