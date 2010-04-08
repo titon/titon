@@ -10,8 +10,7 @@
 
 namespace titon\modules\hooks\optimizer;
 
-use \titon\core\Prototype;
-use \titon\modules\hooks\HookInterface;
+use \titon\modules\hooks\HookAbstract;
 
 /**
  * Optimizer Class
@@ -19,7 +18,7 @@ use \titon\modules\hooks\HookInterface;
  * @package     Titon
  * @subpackage  Titon.Modules.Hooks.Optimizer
  */
-class Optimizer extends Prototype implements HookInterface {
+class Optimizer extends HookAbstract {
 
 	/**
 	 * Default settings.
