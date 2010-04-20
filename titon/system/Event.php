@@ -1,7 +1,7 @@
 <?php
 /**
- * Provides a way to hook into the application without having to edit the core files.
- * Hooks allow you to define methods or classes that are triggered at certain events within the dispatch cycle,
+ * Provides a way to register functionality to listen and execute within the application without having to edit the core files.
+ * Events allow you to define methods or classes that are triggered at certain events within the dispatch cycle,
  * thus allowing you to alter or add to the existing request.
  *
  * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
@@ -14,16 +14,16 @@ namespace titon\system;
 use \titon\core\App;
 use \titon\log\Exception;
 use \titon\router\Router;
-use \titon\modules\hooks\HookCommandInterface;
+use \titon\modules\events\EventListenerInterface;
 use \Closure;
 
 /**
- * Hook Class
+ * Event Class
  *
- * @package		Titon
+ * @package     Titon
  * @subpackage	Titon.System
  */
-class Hook {
+class Event {
 
     /**
      * Defined list of allowed events.
@@ -35,13 +35,13 @@ class Hook {
     private static $__events = array('preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
 
     /**
-     * Hooks that will be executed.
+     * Events that will be executed.
      *
      * @access private
      * @var array
      * @static
      */
-    private static $__hooks = array();
+    private static $__listeners = array();
 
     /**
      * Certain classes that have been restricted to only execute during a certain scope.
@@ -52,18 +52,18 @@ class Hook {
      */
     private static $__scopes = array();
 
-	/**
-	 * Hook objects that have been registered.
-	 *
-	 * @access private
-	 * @var array
-	 * @static
-	 */
-	private static $__objectMap = array();
+    /**
+     * Events objects that have been registered.
+     *
+     * @access private
+     * @var array
+     * @static
+     */
+    private static $__objectMap = array();
 
     /**
-     * Cycles through the hooks for the specified event, and executes the related method.
-     * If a scope is defined, and the hook doesn't match the scope, it will be bypassed.
+     * Cycles through the listenerss for the specified event, and executes the related method.
+     * If a scope is defined, and the listener doesn't match the scope, it will be bypassed.
      *
      * @access public
      * @param string $event
@@ -72,15 +72,15 @@ class Hook {
      * @static
      */
     public static function execute($event, $Object = null) {
-        if (!empty(self::$__hooks[$event])) {
+        if (!empty(self::$__listeners[$event])) {
             $route = Router::current();
 
-            foreach (self::$__hooks[$event] as $slug => &$hook) {
-                if ($hook['executed'] === true) {
+            foreach (self::$__listeners[$event] as $slug => &$listener) {
+                if ($listener['executed'] === true) {
                     continue;
                 }
 
-                // Check to see if the hook is restricted to a certain scope
+                // Check to see if the event is restricted to a certain scope
                 if (isset(self::$__scopes[$event][$slug])) {
                     $scope = self::$__scopes[$event][$slug];
 
@@ -96,20 +96,20 @@ class Hook {
 					$obj->{$event}($Object);
                 }
 
-                $hook['executed'] = true;
+                $listener['executed'] = true;
             }
         }
     }
 
     /**
-     * Return all registered hooks, or event specific hooks.
+     * Return all registered listeners.
      *
      * @access public
      * @param string $event
      * @return array
      */
-    public static function listHooks($event = '') {
-        return empty(self::$__hooks[$event]) ? self::$__hooks : self::$__hooks[$event];
+    public static function listListeners($event = '') {
+        return empty(self::$__listeners[$event]) ? self::$__listeners : self::$__listeners[$event];
     }
 
     /**
@@ -124,21 +124,21 @@ class Hook {
     }
 
     /**
-     * Register a Hook (predefined class) to be called at certain events.
-     * Can drill down the hook to only execute during a certain scope (controller, action).
+     * Register an EventListener (predefined class) to be called at certain events.
+     * Can drill down the event to only execute during a certain scope (controller, action).
      *
      * @access public
-	 * @param HookCommandInterface $Hook
+	 * @param EventListenerInterface $listener
      * @param array $scope
      * @return void
      * @static
      */
-    public static function register(HookCommandInterface $Hook, array $scope = array()) {
-		$class = App::toDotNotation(get_class($Hook));
-		self::$__objectMap[$class] = $Hook;
+    public static function register(EventListenerInterface $listener, array $scope = array()) {
+		$class = App::toDotNotation(get_class($listener));
+		self::$__objectMap[$class] = $listener;
 
 		foreach (self::$__events as $event) {
-			self::$__hooks[$event][$class] = array('executed' => false);
+			self::$__listeners[$event][$class] = array('executed' => false);
 
 			if (!empty($scope)) {
 				self::$__scopes[$event][$class] = $scope + array(
@@ -151,7 +151,7 @@ class Hook {
     }
 	
     /**
-     * Remove a certain hook and scope from the registered list.
+     * Remove a certain event and scope from the registered list.
      *
      * @access public
      * @param string $event
@@ -161,7 +161,7 @@ class Hook {
      */
     public static function remove($event, $slug) {
         if (isset(self::$__events[$event])) {
-            unset(self::$__hooks[$event][$slug]);
+            unset(self::$__listeners[$event][$slug]);
             unset(self::$__scopes[$event][$slug]);
         }
     }

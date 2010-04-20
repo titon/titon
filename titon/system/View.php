@@ -193,7 +193,7 @@ class View extends Prototype {
 	 * @return void
 	 */
 	public function initialize() {
-        $this->_callback('initialize');
+        $this->triggerHook('initialize');
     }
 
     /**
@@ -233,7 +233,7 @@ class View extends Prototype {
 	 * @return void
 	 */
     public function preRender() {
-        $this->_callback('preRender');
+        $this->triggerHook('preRender');
     }
 
     /**
@@ -243,7 +243,7 @@ class View extends Prototype {
 	 * @return void
 	 */
     public function postRender() {
-        $this->_callback('postRender');
+        $this->triggerHook('postRender');
     }
 
     /**

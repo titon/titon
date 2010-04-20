@@ -11,33 +11,33 @@
 /**
  * Require files to load constants and global functions.
  */
-require_once FRAMEWORK .'Paths.php';
-require_once FRAMEWORK .'Bootstrap.php';
+require FRAMEWORK .'Paths.php';
+require FRAMEWORK .'Bootstrap.php';
 
 /**
  * Require core internals that operate the application.
  */
-require_once FRAMEWORK .'utility'. DS .'Inflector.php';
-require_once FRAMEWORK .'utility'. DS .'Set.php';
-require_once FRAMEWORK .'core'. DS .'Application.php';
-require_once FRAMEWORK .'core'. DS .'Configuration.php';
-require_once FRAMEWORK .'core'. DS .'Environment.php';
-require_once FRAMEWORK .'core'. DS .'Prototype.php';
-require_once FRAMEWORK .'core'. DS .'Registry.php';
-require_once FRAMEWORK .'router'. DS .'Router.php';
-require_once FRAMEWORK .'log'. DS .'Debugger.php';
-require_once FRAMEWORK .'log'. DS .'Exception.php';
-require_once FRAMEWORK .'system'. DS .'Dispatch.php';
-require_once FRAMEWORK .'system'. DS .'Controller.php';
-require_once FRAMEWORK .'system'. DS .'Hook.php';
+require FRAMEWORK .'utility'. DS .'Inflector.php';
+require FRAMEWORK .'utility'. DS .'Set.php';
+require FRAMEWORK .'core'. DS .'Application.php';
+require FRAMEWORK .'core'. DS .'Configuration.php';
+require FRAMEWORK .'core'. DS .'Environment.php';
+require FRAMEWORK .'core'. DS .'Prototype.php';
+require FRAMEWORK .'core'. DS .'Registry.php';
+require FRAMEWORK .'router'. DS .'Router.php';
+require FRAMEWORK .'log'. DS .'Debugger.php';
+require FRAMEWORK .'log'. DS .'Exception.php';
+require FRAMEWORK .'system'. DS .'Dispatch.php';
+require FRAMEWORK .'system'. DS .'Controller.php';
+require FRAMEWORK .'system'. DS .'Event.php';
 
 /**
  * Require custom config and settings from the application.
  */
-require_once CONFIG .'Environments.php';
-require_once CONFIG .'Setup.php';
-require_once CONFIG .'Routes.php';
-require_once CONFIG .'Bootstrap.php';
+require CONFIG .'Environments.php';
+require CONFIG .'Setup.php';
+require CONFIG .'Routes.php';
+require CONFIG .'Bootstrap.php';
 
 /**
  * Initialize the application objects.

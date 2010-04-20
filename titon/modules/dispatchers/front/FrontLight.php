@@ -2,7 +2,7 @@
 /**
  * FrontDev is used as the default dispatching mechanism, sometimes referred to as a Front Controller.
  * The class is a duplicate of the base Front dispatcher, but is a lightweight version by stripping
- * out all benchmarking and hooks.
+ * out all benchmarking and events.
  *
  * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
  * @link		http://titonphp.com

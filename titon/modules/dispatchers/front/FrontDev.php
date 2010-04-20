@@ -13,7 +13,7 @@ namespace titon\modules\dispatchers\front;
 
 use \titon\log\Benchmark;
 use \titon\modules\dispatchers\DispatcherAbstract;
-use \titon\system\Hook;
+use \titon\system\Event;
 
 /**
  * Front Dispatcher Class
@@ -31,7 +31,7 @@ class FrontDev extends DispatcherAbstract {
 	 */
 	public function run() {
 		Benchmark::start('Dispatcher');
-        Hook::execute('preDispatch');
+        Event::execute('preDispatch');
 
 		Benchmark::start('Controller');
 
@@ -41,12 +41,12 @@ class FrontDev extends DispatcherAbstract {
 		Benchmark::start('Action');
 
 			$this->Controller->preProcess();
-            Hook::execute('preProcess', $this->Controller);
+            Event::execute('preProcess', $this->Controller);
 
 			$this->Controller->dispatch();
 
             $this->Controller->postProcess();
-            Hook::execute('postProcess', $this->Controller);
+            Event::execute('postProcess', $this->Controller);
 
 		Benchmark::stop('Action');
 		Benchmark::start('View');
@@ -54,16 +54,16 @@ class FrontDev extends DispatcherAbstract {
 			if ($this->View->getConfig('render') === true) {
                 $this->View->initialize();
                 $this->View->preRender();
-                Hook::execute('preRender', $this->View);
+                Event::execute('preRender', $this->View);
 
                 $this->View->run();
                 $this->View->postRender();
-                Hook::execute('postRender', $this->View);
+                Event::execute('postRender', $this->View);
 			}
 
 		Benchmark::stop('View');
 
-        Hook::execute('postDispatch');
+        Event::execute('postDispatch');
 		Benchmark::stop('Dispatcher');
 	}
 

@@ -1,23 +1,23 @@
 <?php
 /**
- * The OptimizerCommand defines the callbacks which in turn trigger the primary Optimizer class.
+ * The Optimizer Listener defines the callbacks which in turn trigger the primary Optimizer class.
  *
  * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
  * @link		http://titonphp.com
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\hooks\optimizer;
+namespace titon\modules\events\optimizer;
 
-use \titon\modules\hooks\HookCommandAbstract;
+use \titon\modules\events\EventListenerAbstract;
 
 /**
- * Optimizer Command Class
+ * Optimizer Listener Class
  *
  * @package     Titon
- * @subpackage  Titon.Modules.Hooks.Optimizer
+ * @subpackage  Titon.Modules.Events.Optimizer
  */
-class OptimizerCommand extends HookCommandAbstract {
+class OptimizerListener extends EventListenerAbstract {
 
 	/**
 	 * Enable Gzip and GC based on parent configuration.
@@ -26,8 +26,8 @@ class OptimizerCommand extends HookCommandAbstract {
 	 * @return void
 	 */
     public function preDispatch() {
-		$this->Hook->enableGzipCompression();
-		$this->Hook->enableGarbageCollection();
+		$this->Event->enableGzipCompression();
+		$this->Event->enableGarbageCollection();
     }
 
 	/**
@@ -37,7 +37,7 @@ class OptimizerCommand extends HookCommandAbstract {
 	 * @return void
 	 */
 	public function postDispatch() {
-		$this->Hook->disableGarbageCollection();
+		$this->Event->disableGarbageCollection();
     }
 
 }

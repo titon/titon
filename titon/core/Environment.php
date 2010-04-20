@@ -11,6 +11,7 @@
 namespace titon\core;
 
 use \titon\core\Config;
+use \titon\utility\Inflector;
 
 /**
  * Environment Class
@@ -104,11 +105,18 @@ class Environment {
 	 * @static
 	 */
 	public static function initialize() {
-		$current = static::$__environments[static::detect()];
+        $setup = static::detect();
+		$current = static::$__environments[$setup];
 		
 		foreach ($current as $key => $value) {
 			Config::set($key, $value);
 		}
+
+        $path = CONFIG .'environments'. DS . Inflector::filename($setup);
+
+        if (file_exists($path)) {
+            include $path;
+        }
 	}
 	
 	/**

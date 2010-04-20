@@ -313,13 +313,13 @@ class Prototype {
     }
 
     /**
-     * Cycle through all loaded objects and trigger the defined callback method.
+     * Cycle through all loaded objects and trigger the defined hook method.
      *
-     * @access protected
+     * @access public
      * @param string $method
      * @return void
      */
-    final protected function _callback($method) {
+    final public function triggerHook($method) {
         if (is_string($method) && !empty($this->_classes)) {
             foreach ($this->_classes as $class => $options) {
                 if ($method == 'initialize' && $this->{$options['alias']}->getConfig('initialized')) {

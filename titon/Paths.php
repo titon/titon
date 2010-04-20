@@ -36,8 +36,8 @@ define('ADAPTERS', MODULES .'adapters'. DS);
 define('DISPATCHERS', MODULES .'dispatchers'. DS);
 define('DRIVERS', MODULES .'drivers'. DS);
 define('ENGINES', MODULES .'engines'. DS);
+define('EVENTS', MODULES .'events'. DS);
 define('HELPERS', MODULES .'helpers'. DS);
-define('HOOKS', MODULES .'hooks'. DS);
 
 /**
  * Vendors directory constants.

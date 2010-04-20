@@ -1,45 +1,34 @@
 <?php
 /**
- * The Hook Command loads the external object as well as defining skeleton callbacks.
+ * A required interface for all Event Listeners to implement.
  *
  * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
  * @link		http://titonphp.com
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\hooks;
+namespace titon\modules\events;
 
-use \titon\modules\hooks\HookInterface;
-use \titon\modules\hooks\HookCommandInterface;
+use \titon\modules\events\EventInterface;
 use \titon\system\Controller;
 use \titon\system\View;
 
 /**
- * Hook Command Abstract
+ * Event Listener Interface
  *
  * @package		Titon
- * @subpackage	Titon.Modules.Hooks
+ * @subpackage	Titon.Modules.Events
  */
-abstract class HookCommandAbstract implements HookCommandInterface {
-
+interface EventListenerInterface {
+	
 	/**
-	 * Hook Command object.
-	 *
-	 * @access protected
-	 * @var Hook
-	 */
-	protected $Hook;
-
-	/**
-	 * Store the Hook through the constructor.
-	 *
+	 * Store the Event through the constructor.
+	 * 
 	 * @access public
-	 * @param HookInterface $Hook
+	 * @param EventInterface $Event
 	 * @return void
 	 */
-	public function __construct(HookInterface $Hook) {
-		$this->Hook = $Hook;
-	}
+	public function __construct(EventInterface $Event);
 
 	/**
 	 * Executed at the beginning of the dispatch cycle.
@@ -47,8 +36,7 @@ abstract class HookCommandAbstract implements HookCommandInterface {
 	 * @access public
 	 * @return void
 	 */
-    public function preDispatch() {
-	}
+    public function preDispatch();
 
 	/**
 	 * Executed at the very end of the dispatch cycle.
@@ -56,8 +44,7 @@ abstract class HookCommandAbstract implements HookCommandInterface {
 	 * @access public
 	 * @return void
 	 */
-	public function postDispatch() {
-	}
+	public function postDispatch();
 
 	/**
 	 * Executed before the action gets processed.
@@ -66,8 +53,7 @@ abstract class HookCommandAbstract implements HookCommandInterface {
 	 * @param Controller $Controller
 	 * @return void
 	 */
-	public function preProcess(Controller $Controller) {
-	}
+	public function preProcess(Controller $Controller);
 
 	/**
 	 * Executed after the action gets processed.
@@ -76,8 +62,7 @@ abstract class HookCommandAbstract implements HookCommandInterface {
 	 * @param Controller $Controller
 	 * @return void
 	 */
-	public function postProcess(Controller $Controller) {
-	}
+	public function postProcess(Controller $Controller);
 
 	/**
 	 * Executed before the template gets rendered.
@@ -86,8 +71,7 @@ abstract class HookCommandAbstract implements HookCommandInterface {
 	 * @param View $View
 	 * @return void
 	 */
-	public function preRender(View $View) {
-	}
+	public function preRender(View $View);
 
 	/**
 	 * Executed after the template gets rendered.
@@ -96,7 +80,6 @@ abstract class HookCommandAbstract implements HookCommandInterface {
 	 * @param View $View
 	 * @return void
 	 */
-	public function postRender(View $View) {
-	}
-
+	public function postRender(View $View);
+    
 }

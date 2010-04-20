@@ -1,20 +1,20 @@
 <?php
 /**
- * A skeleton interface for all Hooks to implement to be set into commands.
+ * A skeleton interface for all Events to implement to be set into listeners.
  *
  * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
  * @link		http://titonphp.com
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\hooks;
+namespace titon\modules\events;
 
 /**
- * Hook Interface
+ * Event Interface
  *
  * @package		Titon
- * @subpackage	Titon.Modules.Hooks
+ * @subpackage	Titon.Modules.Events
  */
-interface HookInterface {
+interface EventInterface {
 	
 }

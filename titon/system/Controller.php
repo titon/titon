@@ -181,7 +181,7 @@ class Controller extends Prototype {
 	 * @return void
 	 */
 	public function initialize() {
-        $this->_callback('initialize');
+        $this->triggerHook('initialize');
     }
 
     /**
@@ -191,7 +191,7 @@ class Controller extends Prototype {
 	 * @return void
 	 */
 	public function preProcess() {
-        $this->_callback('preProcess');
+        $this->triggerHook('preProcess');
     }
 
 	/**
@@ -201,7 +201,7 @@ class Controller extends Prototype {
 	 * @return void
 	 */
 	public function postProcess() {
-        $this->_callback('postProcess');
+        $this->triggerHook('postProcess');
     }
 	
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * The Optimizer is a Hook that triggers the garbage collector and Gzip compression.
+ * The Optimizer is an Event that triggers the garbage collector and Gzip compression.
  * Extremely powerful for applications with heavy memory use and page loading times.
  *
  * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
@@ -8,17 +8,17 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\hooks\optimizer;
+namespace titon\modules\events\optimizer;
 
-use \titon\modules\hooks\HookAbstract;
+use \titon\modules\events\EventAbstract;
 
 /**
  * Optimizer Class
  *
  * @package     Titon
- * @subpackage  Titon.Modules.Hooks.Optimizer
+ * @subpackage  Titon.Modules.Events.Optimizer
  */
-class Optimizer extends HookAbstract {
+class Optimizer extends EventAbstract {
 
 	/**
 	 * Default settings.

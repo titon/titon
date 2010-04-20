@@ -1,33 +1,45 @@
 <?php
 /**
- * A required interface for all Hook Commands to implement.
+ * The Event Listener loads the external object as well as defining skeleton callbacks.
  *
  * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
  * @link		http://titonphp.com
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\hooks;
+namespace titon\modules\events;
 
+use \titon\modules\events\EventInterface;
+use \titon\modules\events\EventListenerInterface;
 use \titon\system\Controller;
 use \titon\system\View;
 
 /**
- * Hook Command Interface
+ * Event Listener Abstract
  *
  * @package		Titon
- * @subpackage	Titon.Modules.Hooks
+ * @subpackage	Titon.Modules.Events
  */
-interface HookCommandInterface {
-	
+abstract class EventListenerAbstract implements EventListenerInterface {
+
 	/**
-	 * Store the Hook through the constructor.
-	 * 
+	 * Event object.
+	 *
+	 * @access protected
+	 * @var Event
+	 */
+	protected $Event;
+
+	/**
+	 * Store the Event through the constructor.
+	 *
 	 * @access public
-	 * @param HookInterface $Hook
+	 * @param EventInterface $Event
 	 * @return void
 	 */
-	public function __construct(HookInterface $Hook);
+	public function __construct(EventInterface $Event) {
+		$this->Event = $Event;
+	}
 
 	/**
 	 * Executed at the beginning of the dispatch cycle.
@@ -35,7 +47,8 @@ interface HookCommandInterface {
 	 * @access public
 	 * @return void
 	 */
-    public function preDispatch();
+    public function preDispatch() {
+	}
 
 	/**
 	 * Executed at the very end of the dispatch cycle.
@@ -43,7 +56,8 @@ interface HookCommandInterface {
 	 * @access public
 	 * @return void
 	 */
-	public function postDispatch();
+	public function postDispatch() {
+	}
 
 	/**
 	 * Executed before the action gets processed.
@@ -52,7 +66,8 @@ interface HookCommandInterface {
 	 * @param Controller $Controller
 	 * @return void
 	 */
-	public function preProcess(Controller $Controller);
+	public function preProcess(Controller $Controller) {
+	}
 
 	/**
 	 * Executed after the action gets processed.
@@ -61,7 +76,8 @@ interface HookCommandInterface {
 	 * @param Controller $Controller
 	 * @return void
 	 */
-	public function postProcess(Controller $Controller);
+	public function postProcess(Controller $Controller) {
+	}
 
 	/**
 	 * Executed before the template gets rendered.
@@ -70,7 +86,8 @@ interface HookCommandInterface {
 	 * @param View $View
 	 * @return void
 	 */
-	public function preRender(View $View);
+	public function preRender(View $View) {
+	}
 
 	/**
 	 * Executed after the template gets rendered.
@@ -79,6 +96,7 @@ interface HookCommandInterface {
 	 * @param View $View
 	 * @return void
 	 */
-	public function postRender(View $View);
-    
+	public function postRender(View $View) {
+	}
+
 }
