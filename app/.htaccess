@@ -2,6 +2,6 @@
 	RewriteEngine On
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
-	RewriteCond $1 !^(index\.php|images|robots\.txt)
+	RewriteCond $1 !^(index\.php|robots\.txt)
 	RewriteRule ^(.*)$ index.php/$1 [L,QSA]
 </IfModule>

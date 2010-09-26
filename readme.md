@@ -1,10 +1,10 @@
 # Titon #
 
-A PHP 5.3 micro framework that attempts to be extremely lightweight and fast, all the while being highly configurable. Many design principles have been implemented into the core infrastructure, some of which include:
+A PHP 5.3 micro framework that attempts to be extremely lightweight and fast, all the while being highly configurable. Many design principles have been implemented into the core infrastructure. Titon is a very experimental framework hoping to make heavy use of lambda functions and prototypal architecture, ala Javascript.
 
 ### Features ###
 
-Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, Decorator, Factory), Dependency Injection, ORM, System Hooks... Just to name a few.
+Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, Decorator, Factory), Dependency Injection, ORM, System Hooks, Events and Event Listeners, Benchmarks, Inline Callbacks.
 
 ### Folder Structure ###
 
@@ -33,14 +33,13 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 					js/
 					img/
 				Bootstrap.php
-				Index.php
 			admin/
 				***
 		temp/
 			cache/
 			session/
-			Debug.log
-			Error.log
+			debug.log
+			error.log
 		AppController.php
 		AppModel.php
 		AppView.php
@@ -52,10 +51,10 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			dispatchers/
 			drivers/
 			engines/
-			listeners/
 			helpers/
-			shells/
+			listeners/
 			packages/
+			shells/
 	vendors/
 
 ### Components ###
@@ -63,9 +62,9 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Adapter - Handles the case of adapting a specific class to another class.
 * Behavior - Defines a behavior pattern for a model.
 * Dispatcher - Handles the dispatch cycle in the MVC paradigm.
-* Driver - Allows the model to access different types of databases; describes the schema.
+* Driver - Allows the model to access different types of databases; describes the schema. Only works with Titon's model system.
 * Engine - Handles the rendering of the view templates.
-* Listener - Objects to be triggered at specific events to hook into the system.
 * Helper - Provides additional functionality to the view layer.
-* Shell - Handles CLI execution and tasks.
+* Listener - Objects that listen and wait to be triggered at specific events in the system.
 * Package - A combination of component types into a single related entity.
+* Shell - Handles CLI execution and tasks.
