@@ -1,16 +1,14 @@
 
-<?php echo $view->Html->docType('html', null, 5); ?>
+<!DOCTYPE html>
 <html>
 <head>
-    <title><?php echo $view->pageTitle(); ?></title>
-    <?php // Meta
-    echo $view->Html->meta('content-type');
-    echo $view->Html->meta('author', 'Titan PHP Framework - Miles Johnson');
-    echo $view->Html->meta('description', 'Titan - The lightweight modular PHP 5.3 micro framework!');
-	echo $view->stylesheets(); ?>
+    <title><?php echo $this->pageTitle(); ?></title>
+	<meta http-equiv="content-type" content="text/html; charset=<?php echo $this->charset(); ?>">
+	<meta name="description" content="Titon: The PHP 5.3 Micro Framework">
+    <?php echo $this->Html->stylesheets(); ?>
 </head>
 <body>
     <?php echo $this->content(); ?>
-	<?php echo $view->scripts(); ?>
+	<?php echo $this->Html->scripts(); ?>
 </body>
 </html>

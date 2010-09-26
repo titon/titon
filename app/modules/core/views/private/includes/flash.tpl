@@ -1,2 +1,1 @@
-
-<div id="flashMessage"><?php echo $message; ?></div>
+<div id="flash"><?php echo $message; ?></div>

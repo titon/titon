@@ -1,39 +1,39 @@
 <?php
 /**
- * A Controller class that acts as a gateway between the client controller and the system controller.
- * Allows the client controllers to inheriet base functionality, as well as share functionality between other controllers.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
+ * @copyright	Copyright 2009-2010, Titon
+ * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
 namespace app;
 
-use \titon\core\Registry;
+use \titon\source\core\Registry;
 
 /**
- * Application Controller Class
+ * A Controller class that acts as a gateway between the client controller and the system controller.
+ * Allows the client controllers to inheriet base functionality, as well as share functionality between other controllers.
  *
  * @package		Titon
  * @subpackage	App
  */
-class AppController extends \titon\system\Controller {
+class AppController extends \titon\source\system\Controller {
 
-    /**
-     * Construct the Request and Response objects. Allows you to overwrite or remove for high customization.
-     *
-     * @access public
-     * @return void
-     */
-    public function construct() {
-        $this->attachObject('Request', function() {
-            return Registry::factory('titon.http.Request');
-        });
+	/**
+	 * Construct the Request and Response objects. Allows you to overwrite or remove for high customization.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function construct() {
+		$this->attachObject('Request', function() {
+			return Registry::factory('titon.http.Request');
+		});
 
-        $this->attachObject('Response', function() {
-            return Registry::factory('titon.http.Response');
-        });
-    }
+		$this->attachObject('Response', function() {
+			return Registry::factory('titon.http.Response');
+		});
+	}
 
 }
