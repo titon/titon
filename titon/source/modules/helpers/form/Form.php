@@ -454,7 +454,7 @@ class Form extends HelperAbstract {
         ), $attributes);
 
         if (!empty($attributes['action'])) {
-            $attributes['action'] = Router::construct(Router::detect($attributes['action']));
+            $attributes['action'] = Router::build(Router::detect($attributes['action']));
         }
 
         $output = $this->tag('form_open', $this->attributes($attributes));

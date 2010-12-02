@@ -31,7 +31,7 @@ define('SUBROOT', dirname(ROOT) . DS);
  * Define the paths for the titon source, components and vendors directories.
  */
 define('FRAMEWORK', SUBROOT .'titon'. DS .'source'. DS);
-define('COMPONENTS', SUBROOT .'titon'. DS .'components'. DS);
+define('LIBRARY', SUBROOT .'titon'. DS .'library'. DS);
 define('VENDORS', SUBROOT .'vendors'. DS);
 
 /**
@@ -53,4 +53,4 @@ set_include_path(
 /**
  * Dispatch the request.
  */
-\titon\source\system\Dispatch::initialize();
+//\titon\source\system\Dispatch::initialize();

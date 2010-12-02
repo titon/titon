@@ -133,7 +133,7 @@ class Controller extends Prototype {
 
 		// Build arguments
 		$args['referrer'] = $this->Request->referrer();
-		$args['url'] = 'todo'; //Router::construct(Router::current());
+		$args['url'] = 'todo'; //Router::build();
 
 		$this->View->set($args);
 		$this->View->configure(array(

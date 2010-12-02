@@ -34,12 +34,12 @@ require FRAMEWORK .'system'. DS .'Event.php';
 /**
  * Require custom config and settings from the application.
  */
-require CONFIG .'Environments.php';
+/*require CONFIG .'Environments.php';
 require CONFIG .'Setup.php';
 require CONFIG .'Routes.php';
-require CONFIG .'Bootstrap.php';
+require CONFIG .'Bootstrap.php';*/
 
 /**
  * Initialize the application objects.
  */
-\titon\core\App::initialize();
+//\titon\core\App::initialize();

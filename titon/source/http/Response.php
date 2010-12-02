@@ -151,7 +151,7 @@ class Response extends Http {
 	 */
 	public function redirect($url, $code = 302) {
         if (is_array($url)) {
-            $url = Router::construct($url);
+            $url = Router::build($url);
         }
         
 		$this->status($code)

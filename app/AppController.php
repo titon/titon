@@ -21,18 +21,19 @@ use \titon\source\core\Registry;
 class AppController extends \titon\source\system\Controller {
 
 	/**
-	 * Construct the Request and Response objects. Allows you to overwrite or remove for high customization.
+	 * Construct the Request and Response objects.
+	 * Allows you to overwrite or remove for high customization.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function construct() {
-		$this->attachObject('Request', function() {
-			return Registry::factory('titon.http.Request');
+		$this->attachObject('request', function() {
+			return Registry::factory('titon.source.net.Request');
 		});
 
-		$this->attachObject('Response', function() {
-			return Registry::factory('titon.http.Response');
+		$this->attachObject('response', function() {
+			return Registry::factory('titon.source.net.Response');
 		});
 	}
 

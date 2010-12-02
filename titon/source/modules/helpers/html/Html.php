@@ -72,7 +72,7 @@ class Html extends HelperAbstract {
      */
     public function anchor($title, $url, array $attributes = array()) {
         if ($route = Router::detect($url)) {
-            $url = Router::construct($route);
+            $url = Router::build($route);
         }
 
         $attributes['href'] = $url;

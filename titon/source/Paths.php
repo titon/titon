@@ -10,17 +10,22 @@
 /**
  * App directory constants.
  */
-define('ACTIONS', APP .'actions'. DS);
+define('APP_CONFIG', ROOT .'config'. DS);
+define('APP_LIBRARY', ROOT .'library'. DS);
+define('APP_MODULES', ROOT .'modules'. DS);
+define('APP_TEMP', ROOT .'TEMP'. DS);
+
+/*define('ACTIONS', APP .'actions'. DS);
 define('CONFIG', APP .'config'. DS);
 define('CONTROLLERS', APP .'controllers'. DS);
 define('MODELS', APP .'models'. DS);
 define('TEMP', APP .'temp'. DS);
 define('TEMPLATES', APP .'templates'. DS);
-define('VIEWS', APP .'views'. DS);
+define('VIEWS', APP .'views'. DS);*/
 
 /**
  * Webroot directory constants.
- */
+ *
 define('WEBROOT', ROOT .'web'. DS);
 define('CSS', WEBROOT .'css'. DS);
 define('CSSR', 'css/');
@@ -31,7 +36,7 @@ define('IMGR', 'images/');
 
 /**
  * Modules directory constants.
- */
+ 
 define('ADAPTERS', MODULES .'adapters'. DS);
 define('DISPATCHERS', MODULES .'dispatchers'. DS);
 define('DRIVERS', MODULES .'drivers'. DS);
@@ -41,6 +46,6 @@ define('HELPERS', MODULES .'helpers'. DS);
 
 /**
  * Vendors directory constants.
- */
+ 
 define('COMPONENTS', VENDORS .'components'. DS);
-define('SHELLS', VENDORS .'shells'. DS);
+define('SHELLS', VENDORS .'shells'. DS);*/
