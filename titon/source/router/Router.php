@@ -88,9 +88,7 @@ class Router {
 		}
 
 		$params = self::defaults();
-		$params['ext'] = null;
 		$params['query'] = self::segment('query');
-		$params['params'] = array();
 
 		if (empty($url)) {
 			$url = self::segment('route');

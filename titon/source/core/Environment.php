@@ -1,23 +1,19 @@
 <?php
 /**
- * A hub that allows you to store different environment settings, which can be detected and initialized on runtime.
- * Furthermore it stores the current settings for the environment ($_ENV and $_SERVER).
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\core;
-
-use \titon\core\Config;
-use \titon\utility\Inflector;
+namespace titon\source\core;
 
 /**
- * Environment Class
+ * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
  * @package		Titon
- * @subpackage	Titon.Core
+ * @subpackage	Core
  */
 class Environment {
 
@@ -26,113 +22,82 @@ class Environment {
 	 *
 	 * @access private
 	 * @var string
-	 * @static
 	 */
-	private static $__default = 'development';
+	private $__default = 'development';
 
 	/**
-	 * Holds the list of possible environments and configuration.
+	 * Holds the list of possible environment configurations.
 	 *
 	 * @access private
 	 * @var array
-	 * @static
 	 */
-	private static $__environments = array(
-		'development' => array(
-			'Hosts'                 => array('localhost', '127.0.0.1'),
-			'App.name'              => 'Titon',
-			'App.salt'              => '',
-			'App.encoding'          => 'UTF-8',
-			'Debug.level'           => 2,
-			'Debug.email'           => '',
-			'Cache.enabled'         => false,
-			'Cache.expires'         => '+1 hour',
-			'Locale.current'        => 'en_US',
-			'Locale.default'        => 'en_US',
-			'Locale.timezone'       => 'America/Los_Angeles', // http://us.php.net/manual/en/timezones.php
-            'Locale.offset'         => '-8'
-		)
-	);
+	private $__environments = array();
 
 	/**
 	 * Relate hostnames to environment configurations.
 	 *
 	 * @access private
 	 * @var array
-	 * @static
 	 */
-	private static $__hostMapping = array(
+	private $__hostMapping = array(
 		'localhost' => 'development',
 		'127.0.0.1' => 'development'
 	);
 
-	/**
-	 * Disable the class to enforce static methods.
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function __construct() { }
-	
-	/**
-	 * Return the current environment name, based on hostname.
-	 *
-	 * @access public
-	 * @return string
-	 * @static
-	 */
-	public static function detect() {
-        return isset(static::$__hostMapping[$_SERVER['HTTP_HOST']]) ? static::$__hostMapping[$_SERVER['HTTP_HOST']] : static::getDefault();
-	}
-    
-	/**
-	 * Get the default environment.
-	 *
-	 * @access public
-	 * @return string
-	 * @static
-	 */
-	public static function getDefault() {
-		return static::$__default;
-	}
-	
 	/**
 	 * Initialize the environment by applying the configuration.
 	 * Load the environment variables into the class; strtolower() all keys first.
 	 *
 	 * @access public
 	 * @return void
-	 * @static
 	 */
-	public static function initialize() {
-        $setup = static::detect();
-		$current = static::$__environments[$setup];
-		
-		foreach ($current as $key => $value) {
-			Config::set($key, $value);
+	public function __construct() {
+		$config = $this->__environments[$this->detect()];
+
+		foreach ($config as $key => $value) {
+			$app->config->set($key, $value);
 		}
 
-        $path = CONFIG .'environments'. DS . Inflector::filename($setup);
+		$path = CONFIG .'environments'. DS . Inflector::filename($setup);
 
-        if (file_exists($path)) {
-            include $path;
-        }
+		if (file_exists($path)) {
+			include $path;
+		}
 	}
-	
+
 	/**
-	 * Set the default environment, must exist in the $__environments.
+	 * Return the current environment name, based on hostname.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function detect() {
+		return $this->__hostMapping[$_SERVER['HTTP_HOST']] ?: $this->getDefault();
+	}
+
+	/**
+	 * Get the default environment.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getDefault() {
+		return $this->__default;
+	}
+
+	/**
+	 * Set the default environment, must exist in the $__environments array.
 	 *
 	 * @access public
 	 * @param string $name
 	 * @return void
-	 * @static
 	 */
-	public static function setDefault($name) {
-		if (isset(static::$__environments[$name])) {
-			static::$__default = $name;
-		}	
+	public function setDefault($name) {
+		if (isset($this->__environments[$name])) {
+			$this->__default = $name;
+		}
 	}
-	
+
 	/**
 	 * Add an environment and its settings to the application.
 	 *
@@ -140,18 +105,17 @@ class Environment {
 	 * @param string $name
 	 * @param array $options
 	 * @return void
-	 * @static
 	 */
-	public static function setup($name, array $options = array()) {
-		if (isset(static::$__environments[$name])) {
-			static::$__environments[$name] = $options + static::$__environments[$name];
+	public function setup($name, array $options = array()) {
+		if (isset($this->__environments[$name])) {
+			$this->__environments[$name] = $options + $this->__environments[$name];
 		} else {
-			static::$__environments[$name] = $options;
+			$this->__environments[$name] = $options;
 		}
 
-		if (!empty(static::$__environments[$name]['Hosts'])) {
-			foreach (static::$__environments[$name]['Hosts'] as $host) {
-				static::$__hostMapping[$host] = $name;
+		if (!empty($this->__environments[$name]['hosts'])) {
+			foreach ($this->__environments[$name]['hosts'] as $host) {
+				$this->__hostMapping[$host] = $name;
 			}
 		}
 	}

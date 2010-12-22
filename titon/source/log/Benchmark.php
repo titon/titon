@@ -111,7 +111,7 @@ class Benchmark {
 		if (Config::get('debug') > 0) {
 			static::$__benchmarks[$slug] = array(
 				'startTime'		=> microtime(true),
-				'startMemory'	=> memory_get_usage(),
+				'startMemory'	=> memory_get_usage(true),
 			);
 		}
 	}
@@ -133,7 +133,7 @@ class Benchmark {
 
 			static::$__benchmarks[$slug] = array(
 				'endTime'	=> microtime(true),
-				'endMemory'	=> memory_get_usage()
+				'endMemory'	=> memory_get_usage(true)
 			) + static::$__benchmarks[$slug];
 
             if ($log === static::DO_LOG) {

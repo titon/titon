@@ -45,65 +45,12 @@ class App {
 	public static $globals = array();
 
 	/**
-	 * Files that have been included into the current scope through the use of import().
-	 *
-	 * @access private
-	 * @var array
-	 * @static
-	 */
-	private static $__imported = array();
-
-	/**
 	 * Disable the class to enforce static methods.
 	 *
 	 * @access private
 	 * @return void
 	 */
 	private function __construct() { }
-	
-	/**
-	 * Method that deals with autoloading classes. Attemps to import file based on namespace.
-	 *
-	 * @access public
-	 * @param string $class
-	 * @return void
-	 * @static
-	 */
-	public static function autoload($class) {
-		if (class_exists($class, false) || interface_exists($class, false)) {
-            return;
-        }
-
-		static::$__imported[] = static::toDotNotation($class);
-        
-        include_once static::toPath($class, 'php', false);
-	}
-
-    /**
-	 * Strips the base namespace to return the base class name.
-	 * Example: \namespace\to\MyClass = MyClass
-	 *
-	 * @access public
-	 * @param string $namespace
-	 * @param string $sep
-	 * @return string
-	 * @static
-	 */
-	public static function baseClass($namespace, $sep = NS) {
-		return trim(strrchr($namespace, $sep), $sep);
-	}
-
-    /**
-	 * Returns a namespace with only the base path, and not the class name.
-	 *
-	 * @access public
-	 * @param string $namespace
-	 * @param string $sep
-	 * @return string
-	 */
-	public static function baseNamespace($namespace, $sep = NS) {
-		return substr($namespace, 0, strrpos($namespace, $sep));
-	}
 
     /**
      * Get the currently defined charset for the application.
@@ -123,9 +70,6 @@ class App {
 	 * @static
 	 */
 	public static function initialize() {
-        // Try and autoload from include_paths first
-		spl_autoload_register();
-		spl_autoload_register('\titon\core\App::autoload');
 
         // Initialize core components
 		Environment::initialize();
@@ -168,26 +112,6 @@ class App {
 	}
 
 	/**
-	 * Includes files into the application. Attemps to include a file based on namespace or given path.
-     * Relies heavily on the defined include paths.
-	 *
-	 * @access public
-	 * @param string $slug
-	 * @return void
-	 * @static
-	 */
-	public static function import($slug) {
-        $path = static::toPath($slug);
-        $namespace = static::toNamespace($path);
-
-		include_once $path;
-		
-		static::$__imported[] = static::toDotNotation($namespace);
-
-		return $namespace;
-	}
-
-	/**
 	 * Get the currently used locale for the application.
 	 *
 	 * @access public
@@ -196,76 +120,6 @@ class App {
 	 */
 	public static function locale() {
         return Config::get('Locale.current') ?: Config::get('Locale.default');
-	}
-
-    /**
-     * Converts a namespace into a dot notated path.
-     * Example: \namespace\to\MyClass = namespace.to.MyClass
-     *
-     * @access public
-     * @param string $namespace
-     * @return string
-     * @static
-     */
-    public static function toDotNotation($namespace) {
-        return trim(str_replace(NS, '.', $namespace), NS);
-    }
-
-	/**
-	 * Converts a path or dot notation path to a namespace. Does not append file extension.
-	 * Example: /root/path/to/file.php = \path\to\File
-     * Example: path.to.File = \path\to\File
-	 *
-	 * @access public
-	 * @param string $path
-	 * @return string
-	 * @static
-	 */
-	public static function toNamespace($path) {
-        if (strpos($path, DS) === false) {
-            $namespace = str_replace('.', NS, $path);
-        } else {
-            $path = substr($path, 0, strrpos($path, '.'));
-            $namespace = str_replace(DS, NS, str_replace(ROOT, '', $path));
-        }
-
-        if (substr($namespace, 0, 1) != NS) {
-            $namespace = NS. $namespace;
-        }
-
-        return $namespace;
-	}
-
-	/**
-	 * Converts a namespace to an absolute path. Does not append file extension.
-	 * Example: \path\to\MyClass = /root/path/to/MyClass.php
-	 *
-	 * @access public
-	 * @param string $namespace
-	 * @param string $ext
-     * @param boolean $root - Should we append the root path?
-	 * @return string
-	 * @static
-	 */
-	public static function toPath($namespace, $ext = 'php', $root = ROOT) {
-        if (strpos($namespace, NS) === false) {
-            $namespace = static::toNamespace($namespace);
-        }
-
-		$namespace = trim($namespace, NS);
-		$paths = explode(NS, $namespace);
-		$class = array_pop($paths);
-		$path  = implode(DS, $paths) . DS . str_replace('_', DS, $class);
-
-		if ($ext) {
-			$path .= '.'. $ext;
-		}
-
-        if ($root) {
-            $path = $root . $path;
-        }
-
-        return $path;
 	}
 
 }
