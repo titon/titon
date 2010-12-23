@@ -69,7 +69,7 @@ class Loader {
 
 		// Remove ext for file paths
 		if ($sep === DS) {
-			$class = substr($class, 0, strrpos($class, '.'));
+			$class = $this->stripExt($class);
 		}
 
 		return $class;
@@ -118,13 +118,13 @@ class Loader {
 	 * @return boolean
 	 */
 	public function import($path) {
-		$path = $this->toPath($path);
+		$path = $this->toPath($path, 'php', ROOT);
 		$notation = $this->toNotation($path);
 
 		if (isset($this->__imported[$notation])) {
 			return true;
 
-		} else if (file_exists($path)) {
+		} else if (is_file($path)) {
 			$this->__imported[] = $notation;
 
 			include_once $path;
@@ -154,6 +154,21 @@ class Loader {
 	}
 
 	/**
+	 * Strip off the extension if it exists.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @return string
+	 */
+	public function stripExt($path) {
+		if (strpos($path, '.') !== false) {
+			$path = substr($path, 0, strrpos($path, '.'));
+		}
+
+		return $path;
+	}
+
+	/**
 	 * Converts a path to a namespace path.
 	 *
 	 * @access public
@@ -161,28 +176,17 @@ class Loader {
 	 * @return string
 	 */
 	public function toNamespace($path) {
-		$path = $this->ds($path);
-		$hasDS = (strpos($path, DS) !== false);
-		$hasDot = (strpos($path, '.') !== false);
-
-		// From a notation
-		if ($hasDot && !$hasDS) {
-			$namespace = str_replace('.', NS, $path);
-
-		// From a filepath or namespace
+		if (strpos($path, DS) === false && strpos($path, NS) === false) {
+			$path = str_replace('.', NS, $path);
 		} else {
-			if ($hasDot) {
-				$path = substr($path, 0, strrpos($path, '.'));
-			}
-
-			$namespace = str_replace(DS, NS, $path);
+			$path = str_replace(DS, NS, $this->ds($this->stripExt($path)));
 		}
 
-		if (substr($namespace, 0, 1) != NS) {
-			$namespace = NS . $namespace;
+		if (substr($path, 0, 1) != NS) {
+			$path = NS . $path;
 		}
 
-		return $namespace;
+		return $path;
 	}
 
 	/**
@@ -193,11 +197,11 @@ class Loader {
 	 * @return string
 	 */
 	public function toNotation($path) {
-		if (strpos($path, NS) === false) {
-			$path = $this->toNamespace($path);
+		if (strpos($path, DS) !== false || strpos($path, NS) !== false) {
+			$path = str_replace(DS, '.', $this->ds($this->stripExt($path)));
 		}
 
-		return str_replace(NS, '.', trim($path, NS));
+		return trim($path, '.');
 	}
 
 	/**
@@ -209,13 +213,9 @@ class Loader {
 	 * @param mixed $root
 	 * @return string
 	 */
-	public function toPath($path, $ext = 'php', $root = ROOT) {
-		if (strpos($path, NS) === false) {
-			$path = $this->toNamespace($path);
-		}
-
-		$path = trim($path, NS);
-		$dirs = explode(NS, $path);
+	public function toPath($path, $ext = 'php', $root = false) {
+		$path = $this->toNotation($path);
+		$dirs = explode('.', $path);
 		$file = array_pop($dirs);
 		$path = implode(DS, $dirs) . DS . str_replace('_', DS, $file);
 

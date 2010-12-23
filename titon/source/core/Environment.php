@@ -9,6 +9,8 @@
 
 namespace titon\source\core;
 
+use titon\source\utility\Inflector;
+
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
@@ -46,7 +48,6 @@ class Environment {
 
 	/**
 	 * Initialize the environment by applying the configuration.
-	 * Load the environment variables into the class; strtolower() all keys first.
 	 *
 	 * @access public
 	 * @return void
@@ -61,7 +62,7 @@ class Environment {
 		$path = CONFIG .'environments'. DS . Inflector::filename($setup);
 
 		if (file_exists($path)) {
-			include $path;
+			include_once $path;
 		}
 	}
 
