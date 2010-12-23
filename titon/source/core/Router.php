@@ -1,22 +1,22 @@
 <?php
 /**
- * The Router determines the current routing request, based on the URL address and environment.
- * Stores the current route, its parsed segments, the base URL and more.
- * Additionally, it will construct a URL based on an array of options, or deconstruct a URL into an array of options.
- * Lastly, you can define custom slugs or routes to be used for internal routing mechanisms.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\router;
+namespace titon\source\core;
 
 /**
- * Routing Class
+ * The Router determines the current routing request, based on the URL address and environment.
+ * Stores the current route, its parsed segments and the base URL.
+ * Additionally, it will construct a URL based on an array of options, or deconstruct a URL into an array of options.
+ * You can also define custom slugs or routes to be used for internal routing mechanisms.
  *
  * @package		Titon
- * @subpackage	Titon.Router
+ * @subpackage	Core
  */
 class Router {
 
@@ -25,36 +25,32 @@ class Router {
 	 *
 	 * @access private
 	 * @var array
-	 * @static
 	 */
-	private static $__current = array();
+	private $__current = array();
 
 	/**
 	 * An array of all paths that have been analyzed. Used for fast lookups.
 	 *
 	 * @access private
 	 * @var array
-	 * @static
 	 */
-	private static $__mapped = array();
+	private $__mapped = array();
 
 	/**
 	 * Manually defined aesthetic routes that re-route internally.
 	 *
 	 * @access private
 	 * @var array
-	 * @static
 	 */
-	private static $__routes = array();
+	private $__routes = array();
 
 	/**
 	 * The current URL broken up into multiple segments: protocol, host, route, query, base
 	 *
 	 * @access private
 	 * @var array
-	 * @static
 	 */
-	private static $__segments = array();
+	private $__segments = array();
 
 	/**
 	 * Manually defined slugs that re-route to an internal controller and action.
@@ -62,17 +58,32 @@ class Router {
 	 *
 	 * @access private
 	 * @var array
-	 * @static
 	 */
-	private static $__slugs = array();
+	private $__slugs = array();
 
 	/**
-	 * Disable the class to enforce static methods.
+	 * Parses the current URL into multiple segments as well as parses the current route into an application path.
 	 *
-	 * @access private
+	 * @access public
 	 * @return void
 	 */
-	private function __construct() { }
+	public function __construct() {
+		list($base, $route) = explode('index.php', $_SERVER['PHP_SELF']);
+
+		if (empty($route)) {
+			$route = '/';
+		}
+
+		$this->__segments = array(
+			'protocol'  => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://',
+			'host'      => $_SERVER['HTTP_HOST'],
+			'base'      => $base,
+			'route'     => $route,
+			'query'     => $_GET
+		);
+
+		$this->__current = $this->analyze($route);
+	}
 
 	/**
 	 * Analyze a string (a route found in the address bar) into an array that maps to the correct module, controller and action.
@@ -80,18 +91,17 @@ class Router {
 	 * @access public
 	 * @param string $url
 	 * @return array
-	 * @static
 	 */
-	public static function analyze($url = '') {
-		if (isset(self::$__mapped[$url])) {
-			return self::$__mapped[$url];
+	public function analyze($url = '') {
+		if (isset($this->__mapped[$url])) {
+			return $this->__mapped[$url];
 		}
 
-		$params = self::defaults();
-		$params['query'] = self::segment('query');
+		$params = $this->defaults();
+		$params['query'] = $this->segment('query');
 
 		if (empty($url)) {
-			$url = self::segment('route');
+			$url = $this->segment('route');
 		}
 
 		if ($url === '/') {
@@ -153,7 +163,7 @@ class Router {
 			}
 		}
 
-		self::$__mapped[$url] = $params;
+		$this->__mapped[$url] = $params;
 
 		return $params;
 	}
@@ -163,10 +173,9 @@ class Router {
 	 *
 	 * @access public
 	 * @return string
-	 * @static
 	 */
-	public static function base() {
-		return self::segment('base');
+	public function base() {
+		return $this->segment('base');
 	}
 
 	/**
@@ -175,18 +184,17 @@ class Router {
 	 * @access public
 	 * @param array $route
 	 * @return string
-	 * @static
 	 */
-	public static function build($route = '') {
+	public function build($route = '') {
 		if (!is_array($route)) {
 			return (string)$route;
 			
 		} else if (empty($rout)) {
-			$route = self::current();
+			$route = $this->current();
 		}
 
-		$route = self::defaults($route);
-		$path = self::base();
+		$route = $this->defaults($route);
+		$path = $this->base();
 
 		if ($route['module'] != 'core') {
 			$path .= $route['module'] .'/';
@@ -217,10 +225,9 @@ class Router {
 	 *
 	 * @access public
 	 * @return string
-	 * @static
 	 */
-	public static function current() {
-		return self::$__current;
+	public function current() {
+		return $this->__current;
 	}
 
 	/**
@@ -230,9 +237,8 @@ class Router {
 	 * @access public
 	 * @param array $data
 	 * @return array
-	 * @static
 	 */
-	public static function defaults(array $data = array()) {
+	public function defaults(array $data = array()) {
 		$data = $data + array(
 			'ext' => '',
 			'query' => array(),
@@ -264,48 +270,22 @@ class Router {
 	 *      - array('slug' => 'slugName', 'id' => 5) // Merges with slugName's array and appends the id index
 	 *      - array('controller' => 'main', 'action' => 'index') // Merges with default values and returns
 	 * @return string|array
-	 * @static
 	 */
-	public static function detect($url) {
+	public function detect($url) {
 		if (is_array($url)) {
 			if (isset($url['slug'])) {
 				$slug = $url['slug'];
 				unset($url['slug']);
 
-				if ($route = self::slug($slug)) {
+				if ($route = $this->slug($slug)) {
 					return ($url + $route);
 				}
 			} else {
-				return ($url + Router::current());
+				return ($url + $this->current());
 			}
 		}
 
-		return self::slug($url);
-	}
-
-	/**
-	 * Parses the current URL into multiple segments as well as parses the current route into an application path.
-	 *
-	 * @access public
-	 * @return void
-	 * @static
-	 */
-	public static function initialize() {
-		list($base, $route) = explode('index.php', $_SERVER['PHP_SELF']);
-
-		if (empty($route)) {
-			$route = '/';
-		}
-
-		self::$__segments = array(
-			'protocol'  => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://',
-			'host'      => $_SERVER['HTTP_HOST'],
-			'base'      => $base,
-			'route'     => $route,
-			'query'     => $_GET
-		);
-
-		self::$__current = self::analyze($route);
+		return $this->slug($url);
 	}
 
 	/**
@@ -315,9 +295,8 @@ class Router {
 	 * @param string $url
 	 * @param string|array $route
 	 * @return void
-	 * @static
 	 */
-	public static function map($url, $route = array()) {
+	public function map($url, $route = array()) {
 		// @todo
 	}
 
@@ -328,14 +307,13 @@ class Router {
 	 * @param string $key
 	 * @param string|array $route
 	 * @return void
-	 * @static
 	 */
-	public static function mapSlug($key, $route = array()) {
+	public function mapSlug($key, $route = array()) {
 		if (is_array($route)) {
-			$route = self::defaults($route);
+			$route = $this->defaults($route);
 		}
 
-		self::$__slugs[(string)$key] = $route;
+		$this->__slugs[$key] = $route;
 	}
 
 	/**
@@ -344,11 +322,10 @@ class Router {
 	 * @access public
 	 * @param mixed $key
 	 * @return string|array
-	 * @static
 	 */
-	public static function segment($key = false) {
+	public function segment($key = false) {
 		if ($key === true) {
-			$segments = self::$__segments;
+			$segments = $this->__segments;
 
 			if (!empty($segments['base'])) {
 				$segments['base'] = '/'. trim($segments['base'], '/');
@@ -360,11 +337,11 @@ class Router {
 
 			return implode('', $segments);
 
-		} else if (isset(self::$__segments[$key])) {
-			return self::$__segments[$key];
+		} else if (isset($this->__segments[$key])) {
+			return $this->__segments[$key];
 		}
 
-		return self::$__segments;
+		return $this->__segments;
 	}
 
 	/**
@@ -373,10 +350,9 @@ class Router {
 	 * @access public
 	 * @param string $key
 	 * @return array
-	 * @static
 	 */
-	public static function slug($key) {
-		return isset(self::$__slugs[$key]) ? self::$__slugs[$key] : null;
+	public function slug($key) {
+		return $this->__slugs[$key] ?: null;
 	}
 
 }

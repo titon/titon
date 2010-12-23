@@ -10,6 +10,7 @@
 namespace titon\source\core;
 
 use \titon\source\log\Debugger;
+use \titon\source\utility\Inflector;
 
 /**
  * Stores the current configuration options for the application.
@@ -66,11 +67,37 @@ class Config {
 	 *
 	 * @access public
 	 * @param string $file
+	 * @param string $ext
 	 * @return void
 	 */
-	public function load($file, $reader = self::INI_READER) {
-		// @todo - Use loader to determine path
-		// @todo - Create readers to import data
+	public function load($file, $ext = self::INI_READER) {
+		$path = CONFIG .'sets'. DS . Inflector::filename($file, $ext);
+
+		if (is_file($path)) {
+			switch ($reader) {
+				case self::XML_READER:
+					$reader = new \titon\source\core\readers\XmlReader($path);
+				break;
+				case self::PHP_READER:
+					$reader = new \titon\source\core\readers\PhpReader($path);
+				break;
+				case self::YAML_READER:
+					$reader = new \titon\source\core\readers\YamlReader($path);
+				break;
+				case self::JSON_READER:
+					$reader = new \titon\source\core\readers\JsonReader($path);
+				break;
+				case self::INI_READER:
+				default:
+					$reader = new \titon\source\core\readers\IniReader($path);
+				break;
+			}
+
+			$this->__config = $reader->toArray() + $this->__config;
+			
+		} else {
+			throw new Exception('Configuration file does not exist.');
+		}
 	}
 
 	/**
