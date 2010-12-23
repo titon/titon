@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\utility;
+namespace titon\source\utility;
 
 use \titon\locale\L10n;
 

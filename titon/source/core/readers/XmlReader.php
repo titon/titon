@@ -29,7 +29,7 @@ class XmlReader extends ReaderAbstract {
 	 * @return void
 	 */
 	public function __construct($path) {
-		$data = simplexml_load_file($path);
+		$data = @simplexml_load_file($path);
 
 		if ($data !== false) {
 			$this->_config = $data;
@@ -51,38 +51,44 @@ class XmlReader extends ReaderAbstract {
 		}
 
 		if ($xml->count() === 0) {
-			return array((string)$xml);
+			return (string)$xml;
 		}
 
 		$array = array();
-		
-		foreach ($xml->children() as $element => $node) {
-			$totalElement = count($xml->{$element});
 
-			if (!isset($array[$element])) {
-				$array[$element] = array();
-			}
+		// Has children
+		foreach ($xml->children() as $element => $node) {
+			$total = count($xml->{$element});
+			$attributes = $node->attributes();
 
 			// Has attributes
-			if ($attributes = $node->attributes()) {
-				$data = (count($node) > 0) ? $this->toArray($node) : (string)$node;
+			if (count($attributes) > 0) {
 				$attr = array();
-
 				foreach ($attributes as $key => $value) {
 					$attr[$key] = (string)$value;
 				}
 
-				if ($totalElement > 1) {
-					$array[$element][] = $data;
-				} else {
-					$array[$element] = $data;
-				}
+				// Single node
+				if ($node->count() === 0) {
+					$array[$element] = array(
+						'value' => (string)$node,
+						'_attributes' => $attr
+					);
 
-				$array[$element]['_attributes'] = $attr;
+				// Multiple nodes
+				} else {
+					if ($total > 1) {
+						$array[$element][] = $this->toArray($node);
+					} else {
+						$array[$element] = $this->toArray($node);
+					}
+
+					$array[$element]['_attributes'] = $attr;
+				}
 
 			// Just a value
 			} else {
-				if ($totalElement > 1) {
+				if ($total > 1) {
 					$array[$element][] = $this->toArray($node);
 				} else {
 					$array[$element] = $this->toArray($node);

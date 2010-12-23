@@ -10,6 +10,7 @@
 namespace titon\source\core;
 
 use \titon\source\log\Debugger;
+use \titon\source\log\Exception;
 use \titon\source\utility\Inflector;
 
 /**
@@ -57,8 +58,8 @@ class Config {
 	 * @param string $key
 	 * @return mixed
 	 */
-	public function get($key) {
-		return $this->__config[$key] ?: null;
+	public function get($key = null) {
+		return $this->__config[$key] ?: $this->__config;
 	}
 
 	/**
@@ -74,7 +75,7 @@ class Config {
 		$path = CONFIG .'sets'. DS . Inflector::filename($file, $ext);
 
 		if (is_file($path)) {
-			switch ($reader) {
+			switch ($ext) {
 				case self::XML_READER:
 					$reader = new \titon\source\core\readers\XmlReader($path);
 				break;

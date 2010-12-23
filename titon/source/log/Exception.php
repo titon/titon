@@ -8,9 +8,9 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\log;
+namespace titon\source\log;
 
-use \titon\log\Debugger;
+use \titon\source\log\Debugger;
 
 /**
  * Exception Handler Class
