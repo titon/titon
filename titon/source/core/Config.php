@@ -9,6 +9,11 @@
 
 namespace titon\source\core;
 
+use \titon\source\core\readers\IniReader;
+use \titon\source\core\readers\PhpReader;
+use \titon\source\core\readers\XmlReader;
+use \titon\source\core\readers\JsonReader;
+use \titon\source\core\readers\YamlReader;
 use \titon\source\log\Debugger;
 use \titon\source\log\Exception;
 use \titon\source\utility\Inflector;
@@ -77,20 +82,20 @@ class Config {
 		if (is_file($path)) {
 			switch ($ext) {
 				case self::XML_READER:
-					$reader = new \titon\source\core\readers\XmlReader($path);
+					$reader = new XmlReader($path);
 				break;
 				case self::PHP_READER:
-					$reader = new \titon\source\core\readers\PhpReader($path);
+					$reader = new PhpReader($path);
 				break;
 				case self::YAML_READER:
-					$reader = new \titon\source\core\readers\YamlReader($path);
+					$reader = new YamlReader($path);
 				break;
 				case self::JSON_READER:
-					$reader = new \titon\source\core\readers\JsonReader($path);
+					$reader = new JsonReader($path);
 				break;
 				case self::INI_READER:
 				default:
-					$reader = new \titon\source\core\readers\IniReader($path);
+					$reader = new IniReader($path);
 				break;
 			}
 
