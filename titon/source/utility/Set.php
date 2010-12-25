@@ -12,7 +12,7 @@ namespace titon\source\utility;
 /**
  * Manipulates, manages and processes multiple types of result sets, primarily objects and arrays.
  *
- * @package		titon.source.utility
+ * @package	titon.source.utility
  */
 class Set {
 

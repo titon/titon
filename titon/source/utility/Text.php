@@ -12,7 +12,7 @@ namespace titon\source\utility;
 /**
  * String Manipulation. Specific methods that deal with string manipulation, truncation, formation, etc.
  *
- * @package		titon.source.utility
+ * @package	titon.source.utility
  */
 class Text {
 

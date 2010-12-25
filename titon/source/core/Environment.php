@@ -14,8 +14,8 @@ use titon\source\utility\Inflector;
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
- * @package		Titon
- * @subpackage	Core
+ * @package	titon.source.core
+ * @uses	Inflector
  */
 class Environment {
 

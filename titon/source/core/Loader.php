@@ -13,8 +13,7 @@ namespace titon\source\core;
  * Handles the autoloading, importing and including of files within the system.
  * Provides convenience functions for inflecting notation paths, namespace paths and file system paths.
  *
- * @package		Titon
- * @subpackage	Core
+ * @package	titon.source.core
  */
 class Loader {
 

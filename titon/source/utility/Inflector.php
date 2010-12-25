@@ -12,7 +12,7 @@ namespace titon\source\utility;
 /**
  * String and grammar inflection. Converts strings to a certain format. Camel cased, singular, plural etc.
  *
- * @package		titon.source.utility
+ * @package	titon.source.utility
  */
 class Inflector {
 

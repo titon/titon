@@ -15,8 +15,7 @@ namespace titon\source\core;
  * Additionally, it will construct a URL based on an array of options, or deconstruct a URL into an array of options.
  * You can also define custom slugs or routes to be used for internal routing mechanisms.
  *
- * @package		Titon
- * @subpackage	Core
+ * @package	titon.source.core
  */
 class Router {
 

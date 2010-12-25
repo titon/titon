@@ -17,14 +17,18 @@ use \titon\source\core\readers\YamlReader;
 use \titon\source\log\Debugger;
 use \titon\source\log\Exception;
 use \titon\source\utility\Inflector;
+use \titon\source\utility\Set;
 
 /**
  * Stores the current configuration options for the application.
  * Configuration can be loaded from multiple sources including environment, bootstrappings and internal system classes.
  * Various readers can be used to import specific configuration files.
  *
- * @package		Titon
- * @subpackage	Core
+ * @package	titon.source.core
+ * @uses	Inflector
+ * @uses	Set
+ * @uses	Debugger
+ * @uses	Exception
  */
 class Config {
 
@@ -53,7 +57,7 @@ class Config {
 	 * @return boolean
 	 */
 	public function check($key) {
-		return isset($this->__config[$key]);
+		return Set::exists($this->__config, $key);
 	}
 
 	/**
@@ -64,7 +68,11 @@ class Config {
 	 * @return mixed
 	 */
 	public function get($key = null) {
-		return $this->__config[$key] ?: $this->__config;
+		if ($key === null) {
+			return $this->__config;
+		} else {
+			return Set::extract($this->__config, $key);
+		}
 	}
 
 	/**
@@ -98,8 +106,12 @@ class Config {
 					$reader = new IniReader($path);
 				break;
 			}
+			
+			if (!isset($this->__config[$file])) {
+				$this->__config[$file] = array();
+			}
 
-			$this->__config = $reader->toArray() + $this->__config;
+			$this->__config[$file] = $reader->toArray() + $this->__config[$file];
 			
 		} else {
 			throw new Exception('Configuration file does not exist.');
@@ -116,11 +128,11 @@ class Config {
 	 * @return void
 	 */
 	public function set($key, $value) {
-		if ($key === 'debug') {
+		if ($key === 'debug.level') {
 			Debugger::errorReporting(((int)$value > 0));
 		}
 
-		$this->__config[$key] = $value;
+		$this->__config = Set::insert($this->__config, $key, $value);
 	}
 
 }
