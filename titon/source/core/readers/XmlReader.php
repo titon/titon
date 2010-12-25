@@ -22,7 +22,7 @@ use \titon\source\log\Exception;
 class XmlReader extends ReaderAbstract {
 
 	/**
-	 * Include the file and parse using SimpleXML
+	 * Include the file and parse using SimpleXML.
 	 *
 	 * @access public
 	 * @param string $path

@@ -1,21 +1,28 @@
 <?php
 /**
- * Array, Object, Set Management. Manipulates and processes multiple types of result sets, primarily objects and arrays.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\utility;
+namespace titon\source\utility;
 
 /**
- * Set Class
+ * Manipulates, manages and processes multiple types of result sets, primarily objects and arrays.
  *
- * @package		Titon
- * @subpackage	Titon.Utility
+ * @package		titon.source.utility
  */
 class Set {
+
+	/**
+	 * Traversing constants.
+	 */
+	const EXTRACT = 1;
+	const EXISTS = 2;
+	const INSERT = 3;
+	const REMOVE = 4;
 
 	/**
 	 * Determines the total depth of a multi-dimensional array or object.
@@ -31,7 +38,7 @@ class Set {
 		if (empty($set)) {
 			return 0;
 		} else if (is_object($set)) {
-			$set = static::toArray($set);
+			$set = self::toArray($set);
 		}
 
 		$depth = 1;
@@ -55,7 +62,7 @@ class Set {
 		} else {
 			foreach ($set as $value) {
 				if (is_array($value)) {
-					$count = static::depth($value) + 1;
+					$count = self::depth($value) + 1;
 
 					if ($count > $depth) {
 						$depth = $count;
@@ -81,7 +88,7 @@ class Set {
 			return false;
 		}
 
-		return static::__traverse($set, $path, 'exists');
+		return self::traverse(self::EXISTS, $set, $path);
 	}
 
 	/**
@@ -98,9 +105,10 @@ class Set {
 		}
 
 		$data = array();
+
 		if (!empty($set)) {
 			foreach ($set as $key => $value) {
-				$data = static::__traverse($data, $key, 'insert', $value);
+				$data = self::traverse(self::INSERT, $data, $key, $value);
 			}
 		}
 
@@ -127,8 +135,9 @@ class Set {
 		}
 
 		$data = array();
+
 		foreach ($paths as $path) {
-			$data[$path] = static::__traverse($set, $path, 'extract');
+			$data[$path] = self::traverse(self::EXTRACT, $set, $path);
 		}
 
 		if (count($data) == 1) {
@@ -155,7 +164,7 @@ class Set {
 
 		if ($recursive === true) {
 			foreach ($set as $key => &$value) {
-				$value = static::filter($value, $recursive);
+				$value = self::filter($value, $recursive);
 			}
 		}
 
@@ -183,12 +192,13 @@ class Set {
 		}
 
 		$data = array();
+
 		foreach ($set as $key => $value) {
 			if (is_array($value)) {
 				if (empty($value)) {
 					$data[$path . $key] = null;
 				} else {
-					$data += static::flatten($value, $path . $key);
+					$data += self::flatten($value, $path . $key);
 				}
 			} else {
 				$data[$path . $key] = $value;
@@ -212,8 +222,8 @@ class Set {
 		if (!is_array($set)) {
 			return $set;
 		}
-	
-		return static::__traverse($set, $path, 'insert', $insert);
+
+		return self::traverse(self::INSERT, $set, $path, $insert);
 	}
 
 	/**
@@ -233,19 +243,19 @@ class Set {
 
 		foreach ($set as $key => $value) {
 			if (!is_string($value)) {
-                return false;
-            }
+				return false;
+			}
 
 			if ($strict === true) {
 				if (is_string($value) && is_numeric($value)) {
-                    return false;
-                }
+					return false;
+				}
 			}
 		}
 
 		return true;
 	}
-	
+
 	/**
 	 * Checks to see if all values in the array are numeric, returns false if not.
 	 *
@@ -292,13 +302,15 @@ class Set {
 
 		if (is_array($set)) {
 			foreach ($set as $key => &$value) {
-				$value = static::map($value, $function, $args);
+				$value = self::map($value, $function, $args);
 			}
+
 			return $set;
-		} else {
-			array_unshift($args, $set);
-			return call_user_func_array($function, $args);
 		}
+
+		array_unshift($args, $set);
+
+		return call_user_func_array($function, $args);
 	}
 
 	/**
@@ -338,9 +350,11 @@ class Set {
 				foreach ($sets[$i] as $key => $value) {
 					if (isset($set[$key])) {
 						if (is_array($value) && is_array($set[$key])) {
-							$set[$key] = static::merge($set[$key], $value);
+							$set[$key] = self::merge($set[$key], $value);
+
 						} else if (is_int($key)) {
 							array_push($set, $value);
+
 						} else {
 							$set[$key] = $value;
 						}
@@ -350,7 +364,7 @@ class Set {
 				}
 			}
 		}
-		
+
 		return $set;
 	}
 
@@ -368,7 +382,7 @@ class Set {
 		if (!is_array($set1) || !is_array($set2)) {
 			return;
 		}
-	
+
 		return array_merge($set1, array_intersect_key($set2, $set1));
 	}
 
@@ -389,6 +403,7 @@ class Set {
 			for ($i = (int)$start; $i <= (int)$stop; $i += (int)$step) {
 				$array[$i] = $i;
 			}
+
 		} else if ($stop < $start) {
 			for ($i = (int)$start; $i >= (int)$stop; $i -= (int)$step) {
 				$array[$i] = $i;
@@ -412,7 +427,7 @@ class Set {
 			return $set;
 		}
 
-		return static::__traverse($set, $path, 'remove');
+		return self::traverse(self::REMOVE, $set, $path);
 	}
 
 	/**
@@ -431,11 +446,14 @@ class Set {
 		}
 
 		$data = array();
+
 		foreach ($set as $key => $value) {
 			if (is_array($value)) {
-				$data[$key] = static::reverse($value, $truncate);
+				$data[$key] = self::reverse($value, $truncate);
+
 			} else if (is_int($key) && !empty($value)) {
 				$data[$value] = '';
+
 			} else {
 				if ($truncate === true && !empty($value)) {
 					$data[$key] = $value;
@@ -460,9 +478,9 @@ class Set {
 			return $object;
 		}
 
-        return array_map(array(__CLASS__, 'toArray'), get_object_vars($object));
+		return array_map(array(__CLASS__, 'toArray'), get_object_vars($object));
 	}
-	
+
 	/**
 	 * Transforms a multi/single-dimensional array into a mirrored object.
 	 *
@@ -471,12 +489,12 @@ class Set {
 	 * @return object
 	 * @static
 	 */
-	public static function toObject($array) { 
+	public static function toObject($array) {
 		if (is_object($array) || !is_array($array)) {
 			return $array;
 		}
-        
-        return (object)array_map(array(__CLASS__, 'toObject'), $array);
+
+		return (object)array_map(array(__CLASS__, 'toObject'), $array);
 	}
 
 	/**
@@ -489,9 +507,11 @@ class Set {
 	 */
 	public static function transform($set) {
 		if (is_object($set)) {
-			return static::toArray($set);
+			return self::toArray($set);
+
 		} else if (is_array($set)) {
-			return static::toObject($set);
+			return self::toObject($set);
+
 		} else {
 			return $set;
 		}
@@ -501,46 +521,64 @@ class Set {
 	 * Primary method used for all Set traversal and manipulation.
 	 * Used to insert, remove and extract keys/values from the array, determined by the given dot notated path.
 	 *
-	 * @access private
+	 * @access public
+	 * @param int $command
 	 * @param array $set
-	 * @param string $path		- Determined path
-	 * @param array $command	- Commands to run on the dispatched array
-	 * @param mixed $param		- Value to use when inserting into the set
+	 * @param string $path
+	 * @param mixed $value
 	 * @return array
 	 * @static
 	 */
-	private static function __traverse($set, $path, $command = 'insert', $param = null) {
+	public static function traverse($command, $set, $path, $value = null) {
 		if (!is_array($set) || empty($path)) {
 			return $set;
 		}
-	
-		$__set =& $set;
-		$paths = explode('.', $path);
 
-		foreach ($paths as $key => $path) {
-			if ($key === (count($paths) - 1)) {
-				switch ($command) {
-					case 'insert':
-						$__set[$path] = $param;
-					break;
-					case 'remove':
-                        if (isset($__set[$path])) {
-                            unset($__set[$path]);
-                        }
-					break;
-					case 'exists':
-                        return isset($__set[$path]);
-					break;
-					case 'extract':
-						return isset($__set[$path]) ? $__set[$path] : null;
-					break;
+		$search =& $set;
+		$paths = explode('.', $path);
+		$total = count($paths);
+
+		while ($total > 0) {
+			$key = $paths[0];
+
+			// Within the last path
+			if ($total == 1) {
+				if ($command == self::INSERT) {
+					$search[$key] = $value;
+
+				} else if ($command == self::REMOVE) {
+					unset($search[$key]);
+					
+				} else if ($command == self::EXISTS) {
+					return isset($search[$key]);
+					
+				} else if ($command == self::EXTRACT) {
+					return $search[$key] ?: null;
 				}
+
+			// Break out of unexistent paths early
+			} else if (!is_array($search[$key]) && $command !== self::INSERT) {
+				if ($command == self::EXISTS) {
+					return false;
+					
+				} else if ($command == self::EXTRACT) {
+					return null;
+
+				} else {
+					return $set;
+				}
+
+			// Merge references
 			} else {
-				$__set =& $__set[$path];
+				$search =& $search[$key];
 			}
+
+			array_shift($paths);
+			$total--;
 		}
 
+		unset($search);
 		return $set;
 	}
-	
+
 }

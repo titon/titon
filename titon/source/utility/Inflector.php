@@ -1,34 +1,31 @@
 <?php
 /**
- * String and grammar inflection. Converts strings to a certain format. Camel cased, singular, plural etc.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 namespace titon\source\utility;
 
-use \titon\locale\L10n;
-
 /**
- * Inflector Class
- * 
- * @package		Titon
- * @subpackage	Titon.Utility
- */ 
+ * String and grammar inflection. Converts strings to a certain format. Camel cased, singular, plural etc.
+ *
+ * @package		titon.source.utility
+ */
 class Inflector {
-	
+
 	/**
 	 * Inflect a word to a camel case form with the first letter being capitalized.
-	 * Example: Non-Camel Case'd String = NonCamelCasedString
+	 * Example: Non-Camel Cased String = NonCamelCasedString
 	 *
 	 * @access public
 	 * @param string $string
 	 * @return string
 	 * @static
 	 */
-	public static function camelize($string) { 
+	public static function camelize($string) {
 		return str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $string)))));
 	}
 
@@ -43,9 +40,9 @@ class Inflector {
 	 * @access static
 	 */
 	public static function filename($string, $ext = 'php') {
-		return ucfirst(static::camelize($string)) .'.'. $ext;
+		return ucfirst(self::camelize($string)) .'.'. $ext;
 	}
-	
+
 	/**
 	 * Inflect a word to a model name. Singular camel cased form.
 	 * Example: People = Person
@@ -55,10 +52,10 @@ class Inflector {
 	 * @return string
 	 * @static
 	 */
-	public static function modelize($string) { 
-		return static::camelize(static::singularize($string));
+	public static function modelize($string) {
+		return self::camelize(self::singularize($string));
 	}
-	
+
 	/**
 	 * Inflect a word to a normal human readable string. Can uppercase the first letter of all words or the first word.
 	 * Example: non_human_readable_word = Non human readable word
@@ -72,13 +69,13 @@ class Inflector {
 	public static function normalize($string, $callback = 'ucwords') {
 		$string = strtolower(str_replace('_', ' ', $string));
 
-        if ($callback && function_exists($callback)) {
-            $string = $callback($string);
-        }
-        
+		if ($callback && function_exists($callback)) {
+			$string = $callback($string);
+		}
+
 		return $string;
 	}
-	
+
 	/**
 	 * Inflect a form to its pluralized form. Applies special rules to determine uninflected, irregular or regular forms.
 	 * Example: Person = People
@@ -88,10 +85,10 @@ class Inflector {
 	 * @return string
 	 * @static
 	 */
-	public static function pluralize($string) { 
-		return L10n::pluralize($string);
+	public static function pluralize($string) {
+		//return L10n::pluralize($string);
 	}
-	
+
 	/**
 	 * Inflect a form to its pluralized form. Applies special rules to determine uninflected, irregular or regular forms.
 	 * Example: People = Person
@@ -102,9 +99,9 @@ class Inflector {
 	 * @static
 	 */
 	public static function singularize($string) {
-		return L10n::singularize($string);
+		//return L10n::singularize($string);
 	}
-	
+
 	/**
 	 * Inflect a word to a URL friendly slug. Removes all punctuation and replaces spaces with dashes.
 	 * Example: Some non-slugged word = Some-Non_slugged-Word
@@ -114,12 +111,13 @@ class Inflector {
 	 * @return string
 	 * @static
 	 */
-	public static function slugify($string) { 
+	public static function slugify($string) {
 		$string = preg_replace('/[^-A-Za-z0-9\s]+/', '', $string);
 		$string = str_replace(' ', '-', ucwords(str_replace('-', '_', $string)));
+		
 		return $string;
 	}
-	
+
 	/**
 	 * Inflect a word for a database table name. Formatted as plural and camel case with the first word lowercase.
 	 * Example: User Profile = userProfiles
@@ -129,10 +127,10 @@ class Inflector {
 	 * @return string
 	 * @access static
 	 */
-	public static function tableize($string) { 
-		return lcfirst(static::camelize(static::pluralize($string)));
+	public static function tableize($string) {
+		return lcfirst(self::camelize(self::pluralize($string)));
 	}
-	
+
 	/**
 	 * Inflect a word to an underscore form that strips all punctuation and special characters and converts spaces to underscores.
 	 * Example: Non-Underscore'd String = nonunderscored_string
@@ -142,7 +140,7 @@ class Inflector {
 	 * @return string
 	 * @static
 	 */
-	public static function underscore($string) { 
+	public static function underscore($string) {
 		return strtolower(preg_replace('/(\w)([A-Z]{1})/', '$1_$2', preg_replace('/[^_A-Za-z0-9\s]+/', '', $string)));
 	}
 
