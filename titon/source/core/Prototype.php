@@ -15,15 +15,18 @@ use \titon\utility\Set;
 use \Closure;
 
 /**
-* The Prototype class is the base for all classes that need dependency or functionality from other classes.
-* It allows you to attach classes to the parent class, while encapsulating the attaching class in a Closure,
-* enabling the objects to only be instantiated when triggered; also known as, lazy loading.
-*
-* Additionally, all child classes will inherit the $_config property, allowing any configuration settings to be
-* automatically passed and set through the constructor (which is done dynamically through the Registry and App classes).
-*
-* @package	titon.source.core
-*/
+ * The Prototype class is the base for all classes that need dependency or functionality from other classes.
+ * It allows you to attach classes to the parent class, while encapsulating the attaching class in a Closure,
+ * enabling the objects to only be instantiated when triggered; also known as, lazy loading.
+ *
+ * Additionally, all child classes will inherit the $_config property, allowing any configuration settings to be
+ * automatically passed and set through the constructor (which is done dynamically through the Registry and App classes).
+ *
+ * @package	titon.source.core
+ * @uses	Exception
+ * @uses	Inflector
+ * @uses	Set
+ */
 class Prototype {
 
 	/**
@@ -197,7 +200,7 @@ class Prototype {
 		$options = $options + array(
 			'alias' => null,
 			'source' => null,
-			'persist' => false,
+			'persist' => true,
 			'callback' => true
 		);
 
@@ -301,18 +304,20 @@ class Prototype {
 
 			$this->_classes[$class]['source'] = $app->loader->toNotation(get_class($object));
 
-		} else if (!empty($options['source'])) {
-			$namespace = $app->loader->toNamespace($options['source']);
-			$object = new $namespace();
+		// Create manually
+		} else {
+			// Persist in registry
+			if ($options['persist']) {
+				$object = $app->registry->factory($options['source']);
+				
+			} else {
+				$namespace = $app->loader->toNamespace($options['source']);
+
+				$object = new $namespace();
+			}
 		}
 
-		// Persist
-		// @todo persist?
-		if ($options['persist']) {
-			$this->_loaded[$class] =& $app->registry->store($object);
-		} else {
-			$this->_loaded[$class] =& $object;
-		}
+		$this->_loaded[$class] =& $object;
 
 		return $this->_loaded[$class];
 	}
@@ -361,7 +366,7 @@ class Prototype {
 	 * Return the object as an array.
 	 *
 	 * @access public
-	 * @return string
+	 * @return array
 	 */
 	public function toArray() {
 		return Set::toArray($this);
