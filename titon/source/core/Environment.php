@@ -59,7 +59,7 @@ class Environment {
 			$app->config->set($key, $value);
 		}
 
-		$path = CONFIG .'environments'. DS . Inflector::filename($setup);
+		$path = APP_CONFIG .'environments'. DS . Inflector::filename($setup);
 
 		if (file_exists($path)) {
 			include_once $path;

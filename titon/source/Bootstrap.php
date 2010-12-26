@@ -1,11 +1,10 @@
 <?php
 /**
- * A bootstrap that loads convenience functions for the user.
- * The functions reference core libraries for easier usage.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright		Copyright 2009, Titon (A PHP Micro Framework)
- * @link			http://titonphp.com
- * @license			http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 /**
@@ -15,7 +14,7 @@
  * @return void
  */
 function __autoload($class) {
-    \titon\core\App::autoload($class);
+	$app->loader->autoload($class);
 }
 
 /**
@@ -25,11 +24,11 @@ function __autoload($class) {
  * @return array|string
  */
 function debug() {
-	if (\titon\core\Config::get('debug') > 0) {
+	if (error_reporting() > 0) {
 		$vars = func_get_args();
 		$calledFrom = debug_backtrace();
 
-        echo '<div class="TitonDebug">';
+		echo '<div class="TitonDebug">';
 		echo '<b>' . trim(str_replace(ROOT, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
 
 		if (!empty($vars)) {
@@ -37,8 +36,8 @@ function debug() {
 				echo '<pre>'. print_r($var, true) .'</pre>';
 			}
 		}
-        
-        echo '</div>';
+
+		echo '</div>';
 	}
 }
 
@@ -49,11 +48,11 @@ function debug() {
  * @return array|string
  */
 function dump() {
-	if (\titon\core\Config::get('debug') > 0) {
+	if (error_reporting() > 0) {
 		$vars = func_get_args();
 		$calledFrom = debug_backtrace();
 
-        echo '<div class="TitonDebug">';
+		echo '<div class="TitonDebug">';
 		echo '<b>' . trim(str_replace(ROOT, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
 
 		if (!empty($vars)) {
@@ -64,24 +63,6 @@ function dump() {
 			}
 		}
 
-        echo '</div>';
+		echo '</div>';
 	}
-}
-
-/**
- * Convenience function for accessing the environment.
- *
- * @param string|array $var
- * @return string|array
- */
-function env($var) {
-	if ($value = getenv($key)) {
-		return $value;
-	} else if (isset($_SERVER[$key])) {
-		return $_SERVER[$key];
-	} else if (isset($_ENV[$key])) {
-		return $_ENV[$key];
-	}
-
-	return null;
 }

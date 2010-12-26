@@ -85,7 +85,7 @@ class Config {
 	 * @return void
 	 */
 	public function load($file, $ext = self::INI_READER) {
-		$path = CONFIG .'sets'. DS . Inflector::filename($file, $ext);
+		$path = APP_CONFIG .'sets'. DS . Inflector::filename($file, $ext);
 
 		if (is_file($path)) {
 			switch ($ext) {

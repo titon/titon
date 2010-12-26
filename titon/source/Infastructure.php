@@ -1,11 +1,10 @@
 <?php
 /**
- * Includes all required core files for the framework, and loads all the application core settings files.
- * Once included, initializes required objects and defines basic setup.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright		Copyright 2009, Titon (A PHP Micro Framework)
- * @link			http://titonphp.com
- * @license			http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 /**
@@ -20,11 +19,12 @@ require FRAMEWORK .'Bootstrap.php';
 require FRAMEWORK .'utility'. DS .'Inflector.php';
 require FRAMEWORK .'utility'. DS .'Set.php';
 require FRAMEWORK .'core'. DS .'Application.php';
-require FRAMEWORK .'core'. DS .'Configuration.php';
+require FRAMEWORK .'core'. DS .'Config.php';
 require FRAMEWORK .'core'. DS .'Environment.php';
+require FRAMEWORK .'core'. DS .'Loader.php';
 require FRAMEWORK .'core'. DS .'Prototype.php';
 require FRAMEWORK .'core'. DS .'Registry.php';
-require FRAMEWORK .'router'. DS .'Router.php';
+require FRAMEWORK .'core'. DS .'Router.php';
 require FRAMEWORK .'log'. DS .'Debugger.php';
 require FRAMEWORK .'log'. DS .'Exception.php';
 require FRAMEWORK .'system'. DS .'Dispatch.php';
@@ -32,14 +32,13 @@ require FRAMEWORK .'system'. DS .'Controller.php';
 require FRAMEWORK .'system'. DS .'Event.php';
 
 /**
- * Require custom config and settings from the application.
+ * Initialize the application.
  */
-/*require CONFIG .'Environments.php';
-require CONFIG .'Setup.php';
-require CONFIG .'Routes.php';
-require CONFIG .'Bootstrap.php';*/
+$app = new \titon\source\core\Application();
 
 /**
- * Initialize the application objects.
+ * Require custom config and settings from the application.
  */
-//\titon\core\App::initialize();
+require CONFIG .'Environments.php';
+require CONFIG .'Setup.php';
+require CONFIG .'Routes.php';

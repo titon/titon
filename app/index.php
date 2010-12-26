@@ -17,7 +17,7 @@ if (version_compare(PHP_VERSION, '5.3.0') == -1) {
 /**
  * Convenience constants for the directory, path and namespace separators.
  */
-define('DS', DIRECTORY_SEPARATOR);
+define('DS', '/');
 define('PS', PATH_SEPARATOR);
 define('NS', '\\');
 
@@ -28,16 +28,17 @@ define('ROOT', __DIR__ . DS);
 define('SUBROOT', dirname(ROOT) . DS);
 
 /**
- * Define the paths for the titon source, components and vendors directories.
+ * Define the paths for the titon source, libraries and vendors directories.
  */
-define('FRAMEWORK', SUBROOT .'titon'. DS .'source'. DS);
-define('LIBRARY', SUBROOT .'titon'. DS .'library'. DS);
+define('TITON', SUBROOT .'titon'. DS);
+define('FRAMEWORK', TITON .'source'. DS);
+define('LIBRARY', TITON .'library'. DS);
 define('VENDORS', SUBROOT .'vendors'. DS);
 
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.
  */
-if (!file_exists(FRAMEWORK)) {
+if (!is_file(FRAMEWORK)) {
 	trigger_error('Titon: Application failed to load the core libraries. Please check your paths and configuration.', E_USER_ERROR);
 }
 
@@ -46,11 +47,11 @@ include_once FRAMEWORK .'Infastructure.php';
 /**
  * Set the include paths for all important files.
  */
-set_include_path(
-	implode(PS, array(get_include_path(), ROOT, SUBROOT, FRAMEWORK, COMPONENTS, VENDORS))
-);
+$app->loader->includePaths(array(
+	ROOT, SUBROOT, TITON, FRAMEWORK, LIBRARY, VENDORS
+));
 
 /**
  * Dispatch the request.
  */
-//\titon\source\system\Dispatch::initialize();
+$app->dispatcher->run();

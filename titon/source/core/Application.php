@@ -108,6 +108,8 @@ class Application {
 
 		// Initialize static classes
 		Debugger::initialize();
+
+		$this->loadBootstraps();
 	}
 
 	/**
@@ -179,6 +181,20 @@ class Application {
 	 */
 	public function getModules($list = true) {
 		return ($list) ? array_keys($this->__modules) : $this->__modules;
+	}
+
+	/**
+	 * Include the module bootstrap files.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function loadBootstraps() {
+		foreach (scandir(APP_MODULES) as $module) {
+			if (is_file(APP_MODULES . $module . DS .'Bootstrap.php')) {
+				include_once APP_MODULES . $module . DS .'Bootstrap.php';
+			}
+		}
 	}
 
 	/**

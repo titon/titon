@@ -1,10 +1,10 @@
 <?php
 /**
- * Defined constants for all the pathing required in the application. All paths end in a trailing slash.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright		Copyright 2009, Titon (A PHP Micro Framework)
- * @link			http://titonphp.com
- * @license			http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 /**
@@ -15,37 +15,15 @@ define('APP_LIBRARY', ROOT .'library'. DS);
 define('APP_MODULES', ROOT .'modules'. DS);
 define('APP_TEMP', ROOT .'TEMP'. DS);
 
-/*define('ACTIONS', APP .'actions'. DS);
-define('CONFIG', APP .'config'. DS);
-define('CONTROLLERS', APP .'controllers'. DS);
-define('MODELS', APP .'models'. DS);
-define('TEMP', APP .'temp'. DS);
-define('TEMPLATES', APP .'templates'. DS);
-define('VIEWS', APP .'views'. DS);*/
-
 /**
- * Webroot directory constants.
- *
-define('WEBROOT', ROOT .'web'. DS);
-define('CSS', WEBROOT .'css'. DS);
-define('CSSR', 'css/');
-define('JS', WEBROOT .'js'. DS);
-define('JSR', 'js/');
-define('IMG', WEBROOT .'images'. DS);
-define('IMGR', 'images/');
-
-/**
- * Modules directory constants.
- 
-define('ADAPTERS', MODULES .'adapters'. DS);
-define('DISPATCHERS', MODULES .'dispatchers'. DS);
-define('DRIVERS', MODULES .'drivers'. DS);
-define('ENGINES', MODULES .'engines'. DS);
-define('EVENTS', MODULES .'events'. DS);
-define('HELPERS', MODULES .'helpers'. DS);
-
-/**
- * Vendors directory constants.
- 
-define('COMPONENTS', VENDORS .'components'. DS);
-define('SHELLS', VENDORS .'shells'. DS);*/
+ * Library directory constants.
+ */
+define('LIB_ADAPTERS', LIBRARY .'adapters'. DS);
+define('LIB_BEHAVIORS', LIBRARY .'behaviors'. DS);
+define('LIB_DISPATCHERS', LIBRARY .'dispatchers'. DS);
+define('LIB_DRIVERS', LIBRARY .'drivers'. DS);
+define('LIB_ENGINES', LIBRARY .'engines'. DS);
+define('LIB_HELPERS', LIBRARY .'helpers'. DS);
+define('LIB_LISTENERS', LIBRARY .'listeners'. DS);
+define('LIB_PACKAGES', LIBRARY .'packages'. DS);
+define('LIB_SHELLS', LIBRARY .'shells'. DS);
