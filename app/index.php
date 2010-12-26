@@ -14,6 +14,8 @@ if (version_compare(PHP_VERSION, '5.3.0') == -1) {
 	trigger_error(sprintf('Titon: Application requires PHP 5.3.x to run correctly, please upgrade your environment. You are using %s.', PHP_VERSION), E_USER_ERROR);
 }
 
+declare(encoding='UTF-8');
+
 /**
  * Convenience constants for the directory, path and namespace separators.
  */
@@ -38,14 +40,14 @@ define('VENDORS', SUBROOT .'vendors'. DS);
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.
  */
-if (!is_file(FRAMEWORK)) {
+if (!is_dir(FRAMEWORK)) {
 	trigger_error('Titon: Application failed to load the core libraries. Please check your paths and configuration.', E_USER_ERROR);
 }
 
-include_once FRAMEWORK .'Infastructure.php';
+include_once FRAMEWORK .'Infrastructure.php';
 
 /**
- * Set the include paths for all important files.
+ * Set the include paths.
  */
 $app->loader->includePaths(array(
 	ROOT, SUBROOT, TITON, FRAMEWORK, LIBRARY, VENDORS
