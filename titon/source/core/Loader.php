@@ -44,14 +44,10 @@ class Loader {
 	public function __construct() {
 		spl_autoload_extensions('.php');
 		spl_autoload_register();
-		spl_autoload_register('\titon\source\core\Loader::autoload');
+		spl_autoload_register(array($this, 'autoload'));
 
 		// Add default loader
 		$this->addLoader('default', function($class) {
-			if (class_exists($class, false) || interface_exists($class, false)) {
-				return true;
-			}
-
 			return $app->loader->import($class);
 		});
 	}
@@ -77,6 +73,10 @@ class Loader {
 	 * @return void
 	 */
 	public function autoload($class) {
+		if (class_exists($class, false) || interface_exists($class, false)) {
+			return;
+		}
+			
 		foreach ($this->__loaders as $loader) {
 			if ($loader($class)) {
 				break;
@@ -152,13 +152,13 @@ class Loader {
 			return true;
 		}
 
-		foreach (array(SUBROOT, ROOT) as $root) {
+		foreach (array(SUBROOT, ROOT, VENDORS) as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
-			if (is_file($path)) {
+			if (is_file($source)) {
 				$this->__imported[] = $notation;
 
-				include_once $path;
+				include_once $source;
 				return true;
 			}
 		}
