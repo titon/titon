@@ -9,6 +9,8 @@
 
 namespace titon\source\core;
 
+use \Closure;
+
 /**
  * Handles the autoloading, importing and including of files within the system.
  * Provides convenience functions for inflecting notation paths, namespace paths and file system paths.
@@ -16,6 +18,14 @@ namespace titon\source\core;
  * @package	titon.source.core
  */
 class Loader {
+
+	/**
+	 * Collection of loader detection closures.
+	 *
+	 * @access private
+	 * @var array
+	 */
+	private $__loaders = array();
 
 	/**
 	 * Files that have been included into the current scope through the use of import() or autoload().
@@ -35,24 +45,43 @@ class Loader {
 		spl_autoload_extensions('.php');
 		spl_autoload_register();
 		spl_autoload_register('\titon\source\core\Loader::autoload');
+
+		// Add default loader
+		$this->addLoader('default', function($class) {
+			if (class_exists($class, false) || interface_exists($class, false)) {
+				return true;
+			}
+
+			return $app->loader->import($class);
+		});
 	}
 
 	/**
 	 * Primary method that deals with autoloading classes.
-	 * Attemps to import file based on namespace or file path.
+	 * Defines a closure that is triggered to attempt to include a file.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param Closure $loader
+	 * @return void
+	 */
+	public function addLoader($key, Closure $loader) {
+		$this->__loaders[$key] = $loader;
+	}
+
+	/**
+	 * Cycle through all the defined loaders until the file is included.
 	 *
 	 * @access public
 	 * @param string $class
 	 * @return void
 	 */
 	public function autoload($class) {
-		if (class_exists($class, false) || interface_exists($class, false)) {
-			return;
+		foreach ($this->__loaders as $loader) {
+			if ($loader($class)) {
+				break;
+			}
 		}
-
-		include_once $this->toPath($class, 'php', false);
-
-		$this->__imported[] = $this->toNotation($class);
 	}
 
 	/**
@@ -117,17 +146,21 @@ class Loader {
 	 * @return boolean
 	 */
 	public function import($path) {
-		$path = $this->toPath($path, 'php', ROOT);
 		$notation = $this->toNotation($path);
 
 		if (isset($this->__imported[$notation])) {
 			return true;
+		}
 
-		} else if (is_file($path)) {
-			$this->__imported[] = $notation;
+		foreach (array(SUBROOT, ROOT) as $root) {
+			$source = $this->toPath($path, 'php', $root);
 
-			include_once $path;
-			return true;
+			if (is_file($path)) {
+				$this->__imported[] = $notation;
+
+				include_once $path;
+				return true;
+			}
 		}
 
 		return false;
@@ -150,6 +183,17 @@ class Loader {
 		}
 		
 		set_include_path(implode(PS, $current));
+	}
+
+	/**
+	 * Delete an auto loader.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return void
+	 */
+	public function removeLoader($key) {
+		unset($this->__loaders[$key]);
 	}
 
 	/**
