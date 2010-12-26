@@ -16,8 +16,8 @@ use \titon\source\log\Exception;
  * A reader that loads its configuration from a PHP file.
  * The PHP file must contain a return statement that returns an array.
  *
- * @package		Titon
- * @subpackage	Core.Readers
+ * @package	titon.source.core.readers
+ * @link	http://php.net/manual/en/function.include.php
  */
 class PhpReader extends ReaderAbstract {
 

@@ -12,8 +12,7 @@ namespace titon\source\core\readers;
 /**
  * Interface for all Config Readers.
  *
- * @package		Titon
- * @subpackage	Core.Readers
+ * @package	titon.source.core.readers
  */
 interface ReaderInterface {
 

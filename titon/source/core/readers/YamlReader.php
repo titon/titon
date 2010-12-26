@@ -16,8 +16,8 @@ use \titon\source\log\Exception;
  * A reader that loads its configuration from an YAML file.
  * Must have the PECL YAML module installed.
  *
- * @package		Titon
- * @subpackage	Core.Readers
+ * @package	titon.source.core.readers
+ * @link	http://php.net/yaml
  */
 class YamlReader extends ReaderAbstract {
 

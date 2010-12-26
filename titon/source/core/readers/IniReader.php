@@ -15,8 +15,8 @@ use \titon\source\log\Exception;
 /**
  * A reader that loads its configuration from an INI file.
  *
- * @package		Titon
- * @subpackage	Core.Readers
+ * @package	titon.source.core.readers
+ * @link	http://php.net/parse_ini_file
  */
 class IniReader extends ReaderAbstract {
 

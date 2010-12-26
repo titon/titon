@@ -14,8 +14,7 @@ use \titon\source\core\readers\ReaderInterface;
 /**
  * Interface for all Config Readers.
  *
- * @package		Titon
- * @subpackage	Core.Readers
+ * @package titon.source.core.readers
  */
 abstract class ReaderAbstract implements ReaderInterface {
 
