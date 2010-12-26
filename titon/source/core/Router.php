@@ -223,10 +223,11 @@ class Router {
 	 * Return the current analyzed route as an array of values.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return string
 	 */
-	public function current() {
-		return $this->__current;
+	public function current($key = null) {
+		return $this->__current[$key] ?: $this->__current;
 	}
 
 	/**

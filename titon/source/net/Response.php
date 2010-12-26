@@ -1,90 +1,77 @@
 <?php
 /**
- * @todo
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\http;
+namespace titon\source\net;
 
-use \titon\http\Http;
-use \titon\log\Exception;
+use \titon\source\log\Exception;
+use \titon\source\net\Http;
 
 /**
- * Response Class
+ * The Response object handles the collection and output of data to the browser. It stores a list of HTTP headers,
+ * the content body, the content type and associated status code to print out.
  *
- * @package		Titon
- * @subpackage	Titon.Http
+ * @package	titon.source.net
  */
 class Response extends Http {
 
-    /**
-     * Configuration for the Response object.
-     *
-     * @access protected
-     * @var array
-     */
-    protected $_config = array('buffer' => 8192);
+	/**
+	 * Configuration for the Response object.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_config = array('buffer' => 8192);
 
-    /**
-     * The content body, content type and status code for the output response.
-     *
-     * @access private
-     * @var array
-     */
-    private $__response = array(
-        'type' => null,
-        'body' => null,
-        'status' => 302
-    );
+	/**
+	 * The body content to be outputted.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private $__body = null;
 
-    /**
-     * Manually defined headers to output in the response.
-     *
-     * @access private
-     * @var array
-     */
-    private $__headers = array();
+	/**
+	 * Manually defined headers to output in the response.
+	 *
+	 * @access private
+	 * @var array
+	 */
+	private $__headers = array();
 
-    /**
-     * Set the content body for the response.
-     *
-     * @access public
-     * @param string $body
-     * @return object
-     */
-    public function contentBody($body = '') {
-        $this->__response['body'] = $body;
-        
-        return $this;
-    }
+	/**
+	 * The content type to output.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private $__type = null;
 
-    /**
-     * Set the content type for the response.
-     *
-     * @access public
-     * @param string $type
-     * @return object
-     */
-    public function contentType($type = '') {
-        if (strpos($type, '/') === false) {
-            if (!isset($this->_contentTypes[$type])) {
-                throw new Exception(sprintf('The content type %s is not supported.', $type));
-            }
+	/**
+	 * HTTP status code to output.
+	 *
+	 * @access private
+	 * @var int
+	 */
+	private $__status = 302;
 
-            if (is_array($this->_contentTypes[$type])) {
-                $type = $this->_contentTypes[$type][0];
-            } else {
-                $type = $this->_contentTypes[$type];
-            }
-        }
+	/**
+	 * Set the content body for the response.
+	 *
+	 * @access public
+	 * @param string $body
+	 * @return object
+	 */
+	public function body($body = '') {
+		$this->__body = $body;
 
-        $this->__response['type'] = $type;
-
-        return $this;
-    }
+		return $this;
+	}
 
 	/**
 	 * Forces the clients browser not to cache the results of the current request.
@@ -95,7 +82,7 @@ class Response extends Http {
 	public function disableCache() {
 		$this->headers(array(
 			'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
-			'Last-Modified' => gmdate(static::DATE_FORMAT) .' GMT',
+			'Last-Modified' => gmdate(self::DATE_FORMAT) .' GMT',
 			'Cache-Control' => 'no-store, no-cache, must-revalidate',
 			'Pragma' => 'no-cache'
 		));
@@ -105,41 +92,41 @@ class Response extends Http {
 		return $this;
 	}
 
-    /**
+	/**
 	 * Sets an HTTP header into a list awaiting to be written in the response.
 	 *
 	 * @access public
 	 * @param string $header
 	 * @param string $value
-     * @param boolean $replace
+	 * @param boolean $replace
 	 * @return object
 	 */
 	public function header($header, $value, $replace = true) {
-        $this->headers[] = array(
-            'header'    => $header,
-            'value'     => $value,
-            'replace'   => $replace
-        );
+		$this->__headers[] = array(
+			'header'    => $header,
+			'value'     => $value,
+			'replace'   => $replace
+		);
 
 		return $this;
 	}
 
-    /**
-     * Pass an array to set multiple headers. Allows for basic support.
-     *
-     * @access public
-     * @param array $headers
-     * @return object
-     */
-    public function headers(array $headers = array()) {
-        if (is_array($headers)) {
+	/**
+	 * Pass an array to set multiple headers. Allows for basic support.
+	 *
+	 * @access public
+	 * @param array $headers
+	 * @return object
+	 */
+	public function headers(array $headers = array()) {
+		if (is_array($headers)) {
 			foreach ($headers as $header => $value) {
 				$this->header($header, $value);
 			}
 		}
 
 		return $this;
-    }
+	}
 
 	/**
 	 * Redirect to another URL with an HTTP header. Can pass along an HTTP status code.
@@ -150,14 +137,12 @@ class Response extends Http {
 	 * @return void
 	 */
 	public function redirect($url, $code = 302) {
-        if (is_array($url)) {
-            $url = Router::build($url);
-        }
-        
 		$this->status($code)
-			->header('Location', $url, true)
-			->contentBody(null)
+			->header('Location', $app->router->build($url))
+			->body(null)
 			->respond();
+
+		exit();
 	}
 
 	/**
@@ -167,47 +152,76 @@ class Response extends Http {
 	 * @return void
 	 */
 	public function respond() {
-        header(sprintf('%s %s %s', static::HTTP_11, $this->__response['status'], $this->_statusCodes[$this->__response['status']]));
-        
-        // Content type
-        if (!empty($this->__response['type'])) {
-            header('Content-Type: '. $this->__response['type']);
-        }
+		header(sprintf('%s %s %s',
+			self::HTTP_11,
+			$this->__status,
+			$this->getStatusCode($this->__status)
+		));
 
-        // HTTP headers
-        if (!empty($this->__headers)) {
-            foreach ($this->__headers as $header) {
-                header($header['header'] .': '. $header['value'], $header['replace']);
-            }
-        }
+		// Content type
+		if (!empty($this->__type)) {
+			header('Content-Type: '. $this->__type);
+		}
 
-        // Body
-        if (!empty($this->__response['body'])) {
-            $body = str_split($this->__response['body'], $this->_config['buffer']);
+		// HTTP headers
+		if (!empty($this->__headers)) {
+			foreach ($this->__headers as $header) {
+				header($header['header'] .': '. $header['value'], $header['replace']);
+			}
+		}
 
-            foreach ($body as $chunk) {
-                echo $chunk;
-            }
-        }
+		// Body
+		if (!empty($this->__body)) {
+			$body = str_split($this->__body, $this->_config['buffer']);
+
+			foreach ($body as $chunk) {
+				echo $chunk;
+			}
+		}
 	}
 
-    /**
-     * Set the status code to use for the current response.
-     *
-     * @access public
-     * @param int $code
-     * @return object
-     */
-    public function status($code) {
-        if (is_numeric($code)) {
-            if (!isset($this->_statusCodes[$code])) {
-                throw new Exception(sprintf('The status code %d is not supported.', $code));
-            }
-            
-            $this->__response['status'] = $code;
-        }
-        
-        return $this;
-    }
+	/**
+	 * Set the status code to use for the current response.
+	 *
+	 * @access public
+	 * @param int $code
+	 * @return object
+	 */
+	public function status($code = 302) {
+		if (!$this->getStatusCode($code)) {
+			throw new Exception(sprintf('The status code %d is not supported.', $code));
+		}
+
+		$this->__status = $code;
+
+		return $this;
+	}
+
+	/**
+	 * Set the content type for the response.
+	 *
+	 * @access public
+	 * @param string $type
+	 * @return object
+	 */
+	public function type($type = '') {
+		if (strpos($type, '/') === false) {
+			$contentType = $this->getContentType($type);
+
+			if ($contentType === null) {
+				throw new Exception(sprintf('The content type %s is not supported.', $type));
+			}
+
+			if (is_array($contentType)) {
+				$type = $contentType[0];
+			} else {
+				$type = $contentType;
+			}
+		}
+
+		$this->__type = $type;
+
+		return $this;
+	}
 
 }
