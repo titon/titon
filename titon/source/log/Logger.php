@@ -1,158 +1,122 @@
 <?php
 /**
+ * Titon: The PHP 5.3 Micro Framework
+ *
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
+ */
+
+namespace titon\source\log;
+
+/**
  * A simple class that handles the logging of errors and debug messages to the filesystem.
  * Logs are categorized based on threat level, which determines the location of where it is to be written.
  * There are two files in which the logger uses: debug.log and error.log, both of which are located in the app/temp.
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
- */
-
-namespace titon\log;
-
-use \titon\core\Config;
-use \titon\log\Debugger;
-
-/**
- * Logger Class
- *
- * @package		Titon
- * @subpackage	Titon.Log
+ * @package	titon.source.log
  */
 class Logger {
 
-    /**
-	 * Name of the error log.
-	 *
-	 * @var string
+	/**
+	 * Log filenames.
 	 */
 	const ERROR_LOG = 'error.log';
-
-	/**
-	 * Name of the dump/debug log.
-	 *
-	 * @var string
-	 */
 	const DEBUG_LOG = 'debug.log';
 
-    /**
-     * Level for critical items.
-     *
-     * @var string
-     */
-    const CRITICAL = 1;
-    
-    /**
-     * Level for alerted items.
-     * 
-     * @var string
-     */
-    const ALERT = 2;
+	/**
+	 * Types of logging threat levels.
+	 */
+	const CRITICAL = 1;
+	const ALERT = 2;
+	const WARNING = 3;
+	const NOTICE = 4;
+	const INFO = 5;
+	const DEBUG = 6;
 
-    /**
-     * Level for warned items.
-     *
-     * @var string
-     */
-    const WARNING = 3;
+	/**
+	 * Disable the class to enforce static methods.
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function __construct() { }
 
-    /**
-     * Level for notice messages.
-     *
-     * @var string
-     */
-    const NOTICE = 4;
+	/**
+	 * Wrapper function to log alerted errors.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function alert($message) {
+		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::ALERT);
+	}
 
-    /**
-     * Level for informational messages.
-     *
-     * @var string
-     */
-    const INFO = 5;
+	/**
+	 * Wrapper function to log critical errors.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function critical($message) {
+		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::CRITICAL);
+	}
 
-    /**
-     * Level for debug items.
-     *
-     * @var string
-     */
-    const DEBUG = 6;
+	/**
+	 * Wrapper function to log debug messages.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function debug($message) {
+		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::DEBUG);
+	}
 
-    /**
-     * Wrapper function to log alerted errors.
-     *
-     * @access public
-     * @param string $message
-     * @return void
-     * @static
-     */
-    public static function alert($message) {
-        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::ALERT);
-    }
+	/**
+	 * Wrapper function to log informational messages.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function info($message) {
+		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::INFO);
+	}
 
-    /**
-     * Wrapper function to log critical errors.
-     *
-     * @access public
-     * @param string $message
-     * @return void
-     * @static
-     */
-    public static function critical($message) {
-        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::CRITICAL);
-    }
+	/**
+	 * Wrapper function to log notices.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function notice($message) {
+		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::NOTICE);
+	}
 
-    /**
-     * Wrapper function to log debug messages.
-     *
-     * @access public
-     * @param string $message
-     * @return void
-     * @static
-     */
-    public static function debug($message) {
-        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::DEBUG);
-    }
+	/**
+	 * Wrapper function to log warnings.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function warning($message) {
+		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::WARNING);
+	}
 
-    /**
-     * Wrapper function to log informational messages.
-     *
-     * @access public
-     * @param string $message
-     * @return void
-     * @static
-     */
-    public static function info($message) {
-        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::INFO);
-    }
-
-    /**
-     * Wrapper function to log notices.
-     *
-     * @access public
-     * @param string $message
-     * @return void
-     * @static
-     */
-    public static function notice($message) {
-        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::NOTICE);
-    }
-
-    /**
-     * Wrapper function to log warnings.
-     *
-     * @access public
-     * @param string $message
-     * @return void
-     * @static
-     */
-    public static function warning($message) {
-        static::write('['. date('d-M-Y H:i:s') .'] '. $message, static::WARNING);
-    }
-
-    /**
+	/**
 	 * Writes a message to the error or debug log, depending on the threat level.
-	 * Additionally, it will send you an email with the error message if Debug.email is defined.
+	 * Additionally, it will send you an email with the error message if debug.email is defined.
 	 *
 	 * @access public
 	 * @param string $message
@@ -162,32 +126,36 @@ class Logger {
 	 */
 	public static function write($message, $level = 0) {
 		if (!empty($message)) {
-            switch ($level) {
-                case static::CRITICAL:$type = 'Critical'; break;
-                case static::ALERT:   $type = 'Alert'; break;
-                case static::WARNING: $type = 'Warning'; break;
-                case static::NOTICE:  $type = 'Notice'; break;
-                case static::INFO:    $type = 'Info'; break;
-                case static::DEBUG:   $type = 'Debug'; break;
-                default:            $type = 'Internal'; break;
-            }
+			switch ($level) {
+				case self::CRITICAL:	$type = 'Critical'; break;
+				case self::ALERT:		$type = 'Alert'; break;
+				case self::WARNING:		$type = 'Warning'; break;
+				case self::NOTICE:		$type = 'Notice'; break;
+				case self::INFO:		$type = 'Info'; break;
+				case self::DEBUG:		$type = 'Debug'; break;
+				default:
+					$type = 'Internal';
+				break;
+			}
 
-            if ($level == static::DEBUG) {
-                $file = static::DEBUG_LOG;
-            } else {
-                $file = static::ERROR_LOG;
-                $message = '['. $type .'] '. $message;
-            }
+			if ($level == self::DEBUG) {
+				$file = self::DEBUG_LOG;
+			} else {
+				$file = self::ERROR_LOG;
+				$message = '['. $type .'] '. $message;
+			}
 
 			$log = fopen(TEMP . $file, 'ab');
 			fwrite($log, $message ."\n");
 			fclose($log);
 
-            if ($level >= static::WARNING) {
-                if ($email = Config::get('Debug.email')) {
-                    mail($email, '[Titon Error] '. $type, $message);
-                }
-            }
+			if ($level >= self::WARNING) {
+				$email = $app->config->get('debug.email');
+
+				if (!empty($email)) {
+					mail($email, '[Titon Error] '. $type, $message);
+				}
+			}
 		}
 	}
 

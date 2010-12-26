@@ -1,115 +1,108 @@
 <?php
 /**
+ * Titon: The PHP 5.3 Micro Framework
+ *
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
+ */
+
+namespace titon\source\log;
+
+use \titon\source\log\Logger;
+
+/**
  * Delivers the functionality to start, stop and log benchmarks.
  * Benchmarks store the time difference and memory usage between two blocks during runtime.
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
- */
-
-namespace titon\log;
-
-use \titon\core\Config;
-use \titon\log\Logger;
-
-/**
- * Benchmark Class
- *
- * @package		Titon
- * @subpackage	Titon.Log
+ * @package	titon.source.log
  */
 class Benchmark {
 
-    /**
-     * Log the benchmark. Argument setting for stop().
-     *
-     * @var boolean
-     */
-    const DO_LOG = true;
-
-    /**
-     * Do not log the benchmark. Argument setting for stop().
-     *
-     * @var boolean
-     */
-    const DONT_LOG = false;
-
-    /**
+	/**
 	 * User and system initiated benchmarking tests.
 	 *
 	 * @access private
 	 * @var array
-     * @static
+	 * @static
 	 */
 	private static $__benchmarks = array();
 
-    /**
-     * Outputs and formats a benchmark directly as a string.
-     *
-     * @access public
-     * @param string $slug
-     * @return string
-     * @static
-     */
-    public static function display($slug = null) {
-        if (empty(static::$__benchmarks[$slug])) {
-            return false;
-        }
+	/**
+	 * Disable the class to enforce static methods.
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function __construct() { }
 
-        $benchmark = static::$__benchmarks[$slug];
-        $time = ($benchmark['endTime'] - $benchmark['startTime']);
-        $memory = ($benchmark['endMemory'] - $benchmark['startMemory']);
-
-        $result  = 'Benchmark ['. $slug .']: ';
-        $result .= 'Time: '. number_format($time, 4) .' / ';
-        $result .= 'Memory: '. $memory .' (Max: '. memory_get_peak_usage() .')';
-
-        return $result;
-    }
-
-    /**
-	 * Grab a list of all benchmarks or a single benchmark and return an array.
-     * Will calculate the averages of the time and memory if $calculate is true.
+	/**
+	 * Outputs and formats a benchmark directly as a string.
 	 *
 	 * @access public
-	 * @param string $slug
+	 * @param string $key
+	 * @return string
+	 * @static
+	 */
+	public static function display($key = null) {
+		if (empty(self::$__benchmarks[$key])) {
+			return false;
+		}
+
+		$benchmark = self::$__benchmarks[$key];
+		$time = ($benchmark['endTime'] - $benchmark['startTime']);
+		$memory = ($benchmark['endMemory'] - $benchmark['startMemory']);
+
+		$result  = 'Benchmark ['. $key .']: ';
+		$result .= 'Time: '. number_format($time, 4) .' / ';
+		$result .= 'Memory: '. $memory .' (Max: '. memory_get_peak_usage() .')';
+
+		return $result;
+	}
+
+	/**
+	 * Grab a list of all benchmarks or a single benchmark and return an array.
+	 * Will calculate the averages of the time and memory if $calculate is true.
+	 *
+	 * @access public
+	 * @param string $key
 	 * @return array
 	 * @static
 	 */
-	public static function get($slug = null) {
-		if (empty($slug)) {
-			$benchmarks = static::$__benchmarks;
-		} else if (isset(static::$__benchmarks[$slug])) {
-			$benchmarks = array(static::$__benchmarks[$slug]);
+	public static function get($key = null) {
+		if (empty($key)) {
+			$benchmarks = self::$__benchmarks;
+			
+		} else if (isset(self::$__benchmarks[$key])) {
+			$benchmarks = array(self::$__benchmarks[$key]);
 		}
 
 		if (!empty($benchmarks)) {
-            $peakMemory = memory_get_peak_usage();
+			$peakMemory = memory_get_peak_usage();
 
-            foreach ($benchmarks as &$bm) {
-                $bm['avgTime'] = (isset($bm['endTime']) ? ($bm['endTime'] - $bm['startTime']) : null);
-                $bm['avgMemory'] = (isset($bm['endMemory']) ? ($bm['endMemory'] - $bm['startMemory']) : null);
-                $bm['peakMemory'] = $peakMemory;
-            }
+			foreach ($benchmarks as &$bm) {
+				$bm['avgTime'] = isset($bm['endTime']) ? ($bm['endTime'] - $bm['startTime']) : null;
+				$bm['avgMemory'] = isset($bm['endMemory']) ? ($bm['endMemory'] - $bm['startMemory']) : null;
+				$bm['peakMemory'] = $peakMemory;
+			}
 
-			return ($slug) ? $benchmarks[0] : $benchmarks;
+			return ($key) ? $benchmarks[0] : $benchmarks;
 		}
 
 		return null;
 	}
 
-    /**
+	/**
 	 * Start the benchmarking process by logging the micro seconds and memory usage.
 	 *
 	 * @access public
-	 * @param string $slug
+	 * @param string $key
 	 * @return void
 	 * @static
 	 */
-	public static function start($slug = 'benchmark') {
-		if (Config::get('debug') > 0) {
-			static::$__benchmarks[$slug] = array(
+	public static function start($key = 'benchmark') {
+		if ($app->config->get('debug.level') > 0) {
+			self::$__benchmarks[$key] = array(
 				'startTime'		=> microtime(true),
 				'startMemory'	=> memory_get_usage(true),
 			);
@@ -120,27 +113,27 @@ class Benchmark {
 	 * Stop the benchmarking process by logging the micro seconds and memory usage and then outputting the results.
 	 *
 	 * @access public
-	 * @param string $slug
-     * @param boolean $log
+	 * @param string $key
+	 * @param boolean $log
 	 * @return string|mixed
 	 * @static
 	 */
-	public static function stop($slug = 'benchmark', $log = self::DONT_LOG) {
-		if (Config::get('debug') > 0) {
-			if (empty(static::$__benchmarks[$slug])) {
+	public static function stop($key = 'benchmark', $log = false) {
+		if ($app->config->get('debug.level') > 0) {
+			if (empty(self::$__benchmarks[$key])) {
 				return false;
 			}
 
-			static::$__benchmarks[$slug] = array(
+			self::$__benchmarks[$key] = array(
 				'endTime'	=> microtime(true),
 				'endMemory'	=> memory_get_usage(true)
-			) + static::$__benchmarks[$slug];
+			) + self::$__benchmarks[$key];
 
-            if ($log === static::DO_LOG) {
-                Logger::debug(static::display($slug));
-            }
+			if ($log) {
+				Logger::debug(self::display($key));
+			}
 
-			return static::$__benchmarks[$slug];
+			return self::$__benchmarks[$key];
 		}
 	}
 
