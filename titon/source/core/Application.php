@@ -1,125 +1,235 @@
 <?php
 /**
- * The App class contains all methods that manipulate and power the application, or add quick convenience.
- * It contains a statically defined architecture for the locations of specific modules and libraries.
- * The locate() and import() methods are used to include specific classes into the current scope, or find the correct namespace.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * All $_POST and superglobal data is stored within this object, and is supplied elsewhere by reference.
- *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\core;
+namespace titon\source\core;
 
-use \titon\core\Environment;
-use \titon\log\Debugger;
-use \titon\log\Exception;
-use \titon\router\Router;
+use \titon\source\core\Config;
+use \titon\source\core\Environment;
+use \titon\source\core\Loader;
+use \titon\source\core\Registry;
+use \titon\source\core\Router;
+use \titon\source\log\Debugger;
+use \titon\source\log\Exception;
 
 /**
- * Application Class
+ * The application class contains all core classes that manipulate and power the application, or add quick convenience.
+ * It also manages the location and installation of controllers and modules, to speed up the lookup process of its sub-classes.
  *
- * @package		Titon
- * @subpackage	Titon.Core
+ * @package	titon.source.core
+ * @uses	Config
+ * @uses	Environment
+ * @uses	Loader
+ * @uses	Registry
+ * @uses	Router
+ * @uses	Debugger
+ * @uses	Exception
  */
-class App {
+class Application {
 
-    /**
-	 * An array of cleaned $_POST and $_FILES data for the current request.
+	/**
+	 * Core config class.
+	 *
+	 * @see Config
+	 * @access public
+	 * @var object
+	 */
+	public $config;
+
+	/**
+	 * Core environment class.
+	 *
+	 * @see Environment
+	 * @access public
+	 * @var object
+	 */
+	public $environment;
+
+	/**
+	 * Core loader class.
+	 *
+	 * @see Loader
+	 * @access public
+	 * @var object
+	 */
+	public $loader;
+
+	/**
+	 * Core registry class.
+	 *
+	 * @see Registry
+	 * @access public
+	 * @var object
+	 */
+	public $registry;
+
+	/**
+	 * Core router class.
+	 *
+	 * @see Router
+	 * @access public
+	 * @var object
+	 */
+	public $router;
+
+	/**
+	 * List of added modules.
 	 *
 	 * @access public
 	 * @var array
-     * @static
 	 */
-	public static $data = array();
+	private $__modules = array();
 
 	/**
-	 * Super global arrays: GET, POST, FILES, SERVER, ENV.
+	 * Default routed module.
 	 *
 	 * @access public
-	 * @var array
-     * @static
+	 * @var string
 	 */
-	public static $globals = array();
+	private $__defaultModule = 'core';
 
 	/**
-	 * Disable the class to enforce static methods.
+	 * Initialize all the core classes.
 	 *
 	 * @access private
 	 * @return void
 	 */
-	private function __construct() { }
+	public function __construct() {
+		$this->config = new Config();
+		$this->environment = new Environment();
+		$this->loader = new Loader();
+		$this->registry = new Registry();
+		$this->router = new Router();
 
-    /**
-     * Get the currently defined charset for the application.
-     *
-     * @access public
-     * @return string
-     */
-    public static function charset() {
-        return Config::get('App.encoding') ?: 'UTF-8';
-    }
-	
+		// Initialize static classes
+		Debugger::initialize();
+	}
+
 	/**
-	 * Initialize all classes required for runtime. Master initialize method.
+	 * Add a controller to a module.
 	 *
 	 * @access public
+	 * @param string $module
+	 * @param string $controller
 	 * @return void
-	 * @static
 	 */
-	public static function initialize() {
+	public function addController($module, $controller) {
+		$this->__modules[$module]['controllers'][] = $controller;
+	}
 
-        // Initialize core components
-		Environment::initialize();
-		Debugger::initialize();
-		Router::initialize();
-
-        // Get super globals
-        $get = $_GET;
-        $post = $_POST;
-        $files = array();
-
-        if (!empty($_FILES)) {
-            foreach ($_FILES as $model => $data) {
-                foreach ($data as $meta => $values) {
-                    $keys = array_keys($values);
-                    $files[$model][$keys[0]][$meta] = $values[$keys[0]];
-                }
-            }
-        }
-
-        // Clear magic quotes, just in case
-        if (get_magic_quotes_gpc() > 0) {
-            $stripSlashes = function($data) {
-                return (is_array($data) ? array_map($stripSlashes, $data) : stripslashes($data));
-            };
-
-            $get = $stripSlashes($get);
-            $post = $stripSlashes($post);
-            $files = $stripSlashes($files);
-        }
-
-        static::$data = array_merge_recursive($post, $files);
-		static::$globals = array(
-			'_GET' => $get,
-			'_POST'	=> $post,
-			'_FILES' => $files,
-            '_SERVER' => $_SERVER,
-            '_ENV' => $_ENV
+	/**
+	 * Add a module to the application for fast lookup.
+	 *
+	 * @access public
+	 * @param string $module
+	 * @param array $controllers
+	 * @return void
+	 */
+	public function addModule($module, array $controllers = array()) {
+		$this->__modules[$module] = array(
+			'index' => $module,
+			'controllers' => $controllers
 		);
 	}
 
 	/**
-	 * Get the currently used locale for the application.
+	 * Get the currently defined charset for the application.
 	 *
 	 * @access public
 	 * @return string
-	 * @static
 	 */
-	public static function locale() {
-        return Config::get('Locale.current') ?: Config::get('Locale.default');
+	public function charset() {
+		return $this->config->get('app.encoding') ?: 'UTF-8';
+	}
+
+	/**
+	 * Return all controllers, or a modules controllers.
+	 *
+	 * @access public
+	 * @param string $module
+	 * @return array
+	 */
+	public function getControllers($module = null) {
+		if (isset($this->__modules[$module])) {
+			return $this->__modules[$module]['controllers'];
+		}
+
+		$controllers = array();
+
+		if (!empty($this->__modules)) {
+			foreach ($this->__modules as $module => $data) {
+				$controllers[$module] = $data['controllers'];
+			}
+		}
+
+		return $controllers;
+	}
+
+	/**
+	 * Return a list of added modules.
+	 *
+	 * @access public
+	 * @param boolean $list
+	 * @return array
+	 */
+	public function getModules($list = true) {
+		return ($list) ? array_keys($this->__modules) : $this->__modules;
+	}
+
+	/**
+	 * Grabs the defined project name.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function name() {
+		return $this->config->get('app.name') ?: '';
+	}
+
+	/**
+	 * Get the currently defined salt for the application.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function salt() {
+		return $this->config->get('app.salt') ?: '';
+	}
+
+	/**
+	 * Set the default routing module. Defaults to core.
+	 *
+	 * @access public
+	 * @param string $module
+	 * @return void
+	 */
+	public function setDefaultModule($module) {
+		$module = mb_strtolower($module);
+
+		if (isset($this->__modules[$module])) {
+			$this->__defaultModule = $module;
+		} else {
+			throw new Exception(sprintf('Can not set default module as %s does not exist.', $module));
+		}
+	}
+
+	/**
+	 * Set which controller should be the module index.
+	 *
+	 * @access public
+	 * @param string $module
+	 * @param string $index
+	 * @return void
+	 */
+	public function setModuleIndex($module, $index) {
+		if (!empty($index)) {
+			$this->__modules[$module]['index'] = $index;
+		}
 	}
 
 }

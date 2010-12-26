@@ -9,7 +9,7 @@
 
 namespace titon\source\core;
 
-use \titon\log\Exception;
+use \titon\source\log\Exception;
 
 /**
  * The Registry acts a central hub where any part of the application can access a single instance of a stored object.

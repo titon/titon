@@ -9,9 +9,9 @@
 
 namespace titon\source\core;
 
-use \titon\log\Exception;
-use \titon\utility\Inflector;
-use \titon\utility\Set;
+use \titon\source\log\Exception;
+use \titon\source\utility\Inflector;
+use \titon\source\utility\Set;
 use \Closure;
 
 /**
