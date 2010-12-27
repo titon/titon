@@ -51,6 +51,15 @@ class Application {
 	public $environment;
 
 	/**
+	 * Core event class.
+	 *
+	 * @see Event
+	 * @access public
+	 * @var object
+	 */
+	public $event;
+
+	/**
 	 * Core loader class.
 	 *
 	 * @see Loader
@@ -102,6 +111,7 @@ class Application {
 	public function __construct() {
 		$this->config = new Config();
 		$this->environment = new Environment();
+		$this->event = new Event();
 		$this->loader = new Loader();
 		$this->registry = new Registry();
 		$this->router = new Router();
