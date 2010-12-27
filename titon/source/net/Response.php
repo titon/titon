@@ -74,6 +74,24 @@ class Response extends Http {
 	}
 
 	/**
+	 * Force the clients browser to cache the current request.
+	 * 
+	 * @access public
+	 * @param int|string $expires
+	 * @return object
+	 */
+	public function cache($expires = '+24 hours') {
+		$expires = is_int($expires) ? $expires : strtotime($expires);
+
+		$this->headers(array(
+			'Expires' => gmdate(self::DATE_FORMAT, $expires) .' GMT',
+			'Cache-Control' => 'max-age='. ($expires - time())
+		));
+
+		return $this;
+	}
+
+	/**
 	 * Forces the clients browser not to cache the results of the current request.
 	 *
 	 * @access public
@@ -83,11 +101,13 @@ class Response extends Http {
 		$this->headers(array(
 			'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
 			'Last-Modified' => gmdate(self::DATE_FORMAT) .' GMT',
-			'Cache-Control' => 'no-store, no-cache, must-revalidate',
+			'Cache-Control' => array(
+				'no-store, no-cache, must-revalidate',
+				'post-check=0, pre-check=0',
+				'max-age=0'
+			),
 			'Pragma' => 'no-cache'
 		));
-
-		$this->header('Cache-Control', 'post-check=0, pre-check=0', false);
 
 		return $this;
 	}
@@ -121,7 +141,13 @@ class Response extends Http {
 	public function headers(array $headers = array()) {
 		if (is_array($headers)) {
 			foreach ($headers as $header => $value) {
-				$this->header($header, $value);
+				if (is_array($value)) {
+					foreach ($value as $h => $v) {
+						$this->header($h, $v);
+					}
+				} else {
+					$this->header($header, $value);
+				}
 			}
 		}
 
