@@ -152,7 +152,7 @@ class Loader {
 			return true;
 		}
 
-		foreach (array(SUBROOT, ROOT, VENDORS) as $root) {
+		foreach (array(ROOT, APP, VENDORS) as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
 			if (is_file($source)) {

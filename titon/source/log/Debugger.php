@@ -215,8 +215,8 @@ class Debugger {
 			return '[Internal]';
 		}
 
-		if (strpos($path, ROOT) !== false) {
-			$path = str_replace(ROOT, '[App]', $path);
+		if (strpos($path, APP) !== false) {
+			$path = str_replace(APP, '[App]', $path);
 
 		} else if (strpos($path, FRAMEWORK) !== false) {
 			$path = str_replace(FRAMEWORK, '[Titon]', $path);

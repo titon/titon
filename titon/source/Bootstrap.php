@@ -29,7 +29,7 @@ function debug() {
 		$calledFrom = debug_backtrace();
 
 		echo '<div class="TitonDebug">';
-		echo '<b>' . trim(str_replace(ROOT, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
+		echo '<b>' . trim(str_replace(APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
 
 		if (!empty($vars)) {
 			foreach ($vars as $var) {
@@ -53,7 +53,7 @@ function dump() {
 		$calledFrom = debug_backtrace();
 
 		echo '<div class="TitonDebug">';
-		echo '<b>' . trim(str_replace(ROOT, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
+		echo '<b>' . trim(str_replace(APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
 
 		if (!empty($vars)) {
 			foreach ($vars as $var) {

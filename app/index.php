@@ -26,16 +26,16 @@ define('NS', '\\');
 /**
  * Define the public html root (ROOT) and the directory containing the titon/vendors folder (SUBROOT).
  */
-define('ROOT', __DIR__ . DS);
-define('SUBROOT', dirname(ROOT) . DS);
+define('APP', __DIR__ . DS);
+define('ROOT', dirname(ROOT) . DS);
 
 /**
  * Define the paths for the titon source, libraries and vendors directories.
  */
-define('TITON', SUBROOT .'titon'. DS);
+define('TITON', ROOT .'titon'. DS);
 define('FRAMEWORK', TITON .'source'. DS);
 define('LIBRARY', TITON .'library'. DS);
-define('VENDORS', SUBROOT .'vendors'. DS);
+define('VENDORS', ROOT .'vendors'. DS);
 
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.

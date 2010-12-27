@@ -10,10 +10,10 @@
 /**
  * App directory constants.
  */
-define('APP_CONFIG', ROOT .'config'. DS);
-define('APP_LIBRARY', ROOT .'library'. DS);
-define('APP_MODULES', ROOT .'modules'. DS);
-define('APP_TEMP', ROOT .'TEMP'. DS);
+define('APP_CONFIG', APP .'config'. DS);
+define('APP_LIBRARY', APP .'library'. DS);
+define('APP_MODULES', APP .'modules'. DS);
+define('APP_TEMP', APP .'TEMP'. DS);
 
 /**
  * Library directory constants.
