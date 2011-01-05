@@ -7,13 +7,18 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+define('FRAMEWORK', TITON .'source'. DS);
+define('CONSOLE', TITON .'console'. DS);
+define('LIBRARY', TITON .'library'. DS);
+define('VENDORS', TITON .'vendors'. DS);
+
 /**
  * App directory constants.
  */
 define('APP_CONFIG', APP .'config'. DS);
 define('APP_LIBRARY', APP .'library'. DS);
 define('APP_MODULES', APP .'modules'. DS);
-define('APP_TEMP', APP .'TEMP'. DS);
+define('APP_TEMP', APP .'temp'. DS);
 
 /**
  * Library directory constants.

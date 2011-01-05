@@ -24,33 +24,26 @@ define('PS', PATH_SEPARATOR);
 define('NS', '\\');
 
 /**
- * Define the public html root (ROOT) and the directory containing the titon/vendors folder (SUBROOT).
+ * Define the folders that contain the app and titon files.
  */
 define('APP', __DIR__ . DS);
 define('ROOT', dirname(ROOT) . DS);
-
-/**
- * Define the paths for the titon source, libraries and vendors directories.
- */
 define('TITON', ROOT .'titon'. DS);
-define('FRAMEWORK', TITON .'source'. DS);
-define('LIBRARY', TITON .'library'. DS);
-define('VENDORS', ROOT .'vendors'. DS);
 
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.
  */
-if (!is_dir(FRAMEWORK)) {
+if (!is_dir(TITON .'source')) {
 	trigger_error('Titon: Application failed to load the core libraries. Please check your paths and configuration.', E_USER_ERROR);
 }
 
-include_once FRAMEWORK .'Infrastructure.php';
+include_once TITON .'source'. DS .'Infrastructure.php';
 
 /**
  * Set the include paths.
  */
 $app->loader->includePaths(array(
-	ROOT, SUBROOT, TITON, FRAMEWORK, LIBRARY, VENDORS
+	APP, ROOT, TITON, FRAMEWORK, LIBRARY, VENDORS
 ));
 
 /**
