@@ -306,7 +306,8 @@ class Router {
 	 * @access public
 	 * @param string $key
 	 * @param string|array $route
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function mapSlug($key, $route = array()) {
 		if (is_array($route)) {
@@ -314,6 +315,8 @@ class Router {
 		}
 
 		$this->__slugs[$key] = $route;
+
+		return $this;
 	}
 
 	/**

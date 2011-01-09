@@ -170,7 +170,8 @@ class Prototype {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return void
+	 * @return this
+	 * @chainable
 	 * @final
 	 */
 	final public function allowObject($classes) {
@@ -181,6 +182,8 @@ class Prototype {
 		foreach ($classes as $class) {
 			unset($this->_restricted[$class]);
 		}
+
+		return $this;
 	}
 
 	/**
@@ -189,7 +192,8 @@ class Prototype {
 	 * @access public
 	 * @param string|array $options
 	 * @param Closure $object
-	 * @return void
+	 * @return this
+	 * @chainable
 	 * @final
 	 */
 	final public function attachObject($options, Closure $object = null) {
@@ -215,6 +219,8 @@ class Prototype {
 		if ($object !== null && $object instanceof Closure) {
 			$this->__objectMap[$options['alias']] = $object;
 		}
+
+		return $this;
 	}
 
 	/**
@@ -346,7 +352,8 @@ class Prototype {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return void
+	 * @return this
+	 * @chainable
 	 * @final
 	 */
 	final public function restrictObject($classes) {
@@ -357,6 +364,8 @@ class Prototype {
 		foreach ($classes as $class){
 			$this->_restricted[$class] = $class;
 		}
+
+		return $this;
 	}
 
 	/**

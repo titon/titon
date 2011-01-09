@@ -59,10 +59,13 @@ class Loader {
 	 * @access public
 	 * @param string $key
 	 * @param Closure $loader
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function addLoader($key, Closure $loader) {
 		$this->__loaders[$key] = $loader;
+
+		return $this;
 	}
 
 	/**
@@ -171,7 +174,8 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string|array $paths
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function includePath($paths) {
 		$current = array(get_include_path());
@@ -183,6 +187,8 @@ class Loader {
 		}
 		
 		set_include_path(implode(PS, $current));
+
+		return $this;
 	}
 
 	/**
@@ -190,10 +196,13 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function removeLoader($key) {
 		unset($this->__loaders[$key]);
+
+		return $this;
 	}
 
 	/**

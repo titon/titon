@@ -99,7 +99,8 @@ class Environment {
 	 * @access public
 	 * @param string $name
 	 * @param array $hosts
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function setup($name, array $hosts) {
 		$this->__environments[] = $name;
@@ -107,6 +108,8 @@ class Environment {
 		foreach ($hosts as $host) {
 			$this->__hostMapping[$host] = $name;
 		}
+
+		return $this;
 	}
 
 }

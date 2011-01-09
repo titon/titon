@@ -65,7 +65,8 @@ class Config {
 	 * @access public
 	 * @param string $file
 	 * @param ReaderInterface $reader
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function load($file, ReaderInterface $reader) {
 		$file = Inflector::filename($file, $reader->extension());
@@ -84,6 +85,8 @@ class Config {
 		} else {
 			throw new Exception(sprintf('Configuration file %s does not exist.', $file));
 		}
+
+		return $this;
 	}
 
 	/**
@@ -93,7 +96,8 @@ class Config {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function set($key, $value) {
 		if ($key === 'debug.level') {
@@ -101,6 +105,8 @@ class Config {
 		}
 
 		$this->__config = Set::insert($this->__config, $key, $value);
+
+		return $this;
 	}
 
 }

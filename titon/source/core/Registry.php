@@ -54,7 +54,8 @@ class Registry {
 	 * @access public
 	 * @param string $key
 	 * @param array $config
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function configure($key, array $config = array()) {
 		if (isset($this->__configs[$key])) {
@@ -62,6 +63,8 @@ class Registry {
 		} else {
 			$this->__configs[$key] = $config;
 		}
+
+		return $this;
 	}
 
 	/**
@@ -106,16 +109,17 @@ class Registry {
 			}
 
 			return $this->store(new $namespace($config));
-		} else {
-			throw new Exception(sprintf('Class %s could not be instantiated into the registry.', $key));
 		}
+
+		throw new Exception(sprintf('Class %s could not be instantiated into the registry.', $key));
 	}
 
 	/**
 	 * Flush the registry by removing all stored objects.
 	 *
 	 * @access public
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function flush() {
 		$this->__configs = array();
@@ -123,6 +127,8 @@ class Registry {
 		foreach ($this->__registered as $key => $object) {
 			unset($this->__registered[$key]);
 		}
+
+		return $this;
 	}
 
 	/**
