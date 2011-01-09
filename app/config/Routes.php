@@ -8,8 +8,3 @@
  */
 
 namespace app\config;
-
-/**
- * Define custom routes using regular or literal expressions.
- * The routes will then be routed internally to the correct module, controller and container.
- */

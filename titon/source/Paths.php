@@ -19,6 +19,7 @@ define('APP_CONFIG', APP .'config'. DS);
 define('APP_LIBRARY', APP .'library'. DS);
 define('APP_MODULES', APP .'modules'. DS);
 define('APP_TEMP', APP .'temp'. DS);
+define('APP_VIEWS', APP .'views'. DS);
 
 /**
  * Library directory constants.

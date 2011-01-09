@@ -14,3 +14,6 @@ namespace app\modules\core;
  * if the current request directs to this module. The bootstrap can be used to quickly configure the module and its controllers,
  * models, and whatever logic it may have. You may also place custom global functions here specific to this module.
  */
+
+$app->addModule('core', array('Core'))
+	->setDefaultModule('core');

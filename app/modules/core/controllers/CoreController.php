@@ -9,17 +9,19 @@
 
 namespace app\modules\core\controllers;
 
+use \app\AppController;
+
 /**
  * By default the framework will determine which controller is the "index" controller of a module
  * by matching the module name with the controller name: core module -> core controller.
  */
-class CoreController extends \app\AppController {
+class CoreController extends AppController {
 
 	/**
 	 * The index() action is called automatically as the index page of a controller.
 	 */
 	public function index() {
-		$this->View->set('pageTitle', 'Titon: Controller');
+		$this->view->set('pageTitle', 'Titon: Controller');
 	}
 
 }
