@@ -107,7 +107,7 @@ class Registry {
 
 			return $this->store(new $namespace($config));
 		} else {
-			throw new Exception(sprintf('Class "%s" could not be instantiated into the registry.', $key));
+			throw new Exception(sprintf('Class %s could not be instantiated into the registry.', $key));
 		}
 	}
 
@@ -149,7 +149,7 @@ class Registry {
 		}
 
 		if (!$key) {
-			$key = $app->loader->toNotation(get_class($object));
+			$key = get_class($object);
 		}
 
 		$this->__registered[$key] = $object;

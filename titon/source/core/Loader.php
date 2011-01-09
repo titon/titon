@@ -123,7 +123,7 @@ class Loader {
 	 * @return boolean
 	 */
 	public function check($key) {
-		return in_array($this->toNotation($key), $this->__imported);
+		return in_array($key, $this->__imported);
 	}
 
 	/**
@@ -146,9 +146,9 @@ class Loader {
 	 * @return boolean
 	 */
 	public function import($path) {
-		$notation = $this->toNotation($path);
+		$namespace = $this->toNamespace($path);
 
-		if (isset($this->__imported[$notation])) {
+		if (isset($this->__imported[$namespace])) {
 			return true;
 		}
 
@@ -156,7 +156,7 @@ class Loader {
 			$source = $this->toPath($path, 'php', $root);
 
 			if (is_file($source)) {
-				$this->__imported[] = $notation;
+				$this->__imported[] = $namespace;
 
 				include_once $source;
 				return true;
@@ -219,32 +219,11 @@ class Loader {
 	 * @return string
 	 */
 	public function toNamespace($path) {
-		if (strpos($path, DS) === false && strpos($path, NS) === false) {
-			$path = str_replace('.', NS, $path);
-		} else {
+		if (strpos($path, DS) !== false && strpos($path, NS) === false) {
 			$path = str_replace(DS, NS, $this->ds($this->stripExt($path)));
 		}
 
-		if (substr($path, 0, 1) != NS) {
-			$path = NS . $path;
-		}
-
 		return $path;
-	}
-
-	/**
-	 * Converts a path to a dot notated path.
-	 *
-	 * @access public
-	 * @param string $path
-	 * @return string
-	 */
-	public function toNotation($path) {
-		if (strpos($path, DS) !== false || strpos($path, NS) !== false) {
-			$path = str_replace(DS, '.', $this->ds($this->stripExt($path)));
-		}
-
-		return trim($path, '.');
 	}
 
 	/**
@@ -257,8 +236,8 @@ class Loader {
 	 * @return string
 	 */
 	public function toPath($path, $ext = 'php', $root = false) {
-		$path = $this->toNotation($path);
-		$dirs = explode('.', $path);
+		$path = $this->ds($path);
+		$dirs = explode(DS, $path);
 		$file = array_pop($dirs);
 		$path = implode(DS, $dirs) . DS . str_replace('_', DS, $file);
 
