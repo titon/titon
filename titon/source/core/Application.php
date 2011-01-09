@@ -22,65 +22,65 @@ use \titon\source\log\Exception;
  * It also manages the location and installation of controllers and modules, to speed up the lookup process of its sub-classes.
  *
  * @package	titon.source.core
- * @uses	Config
- * @uses	Environment
- * @uses	Loader
- * @uses	Registry
- * @uses	Router
- * @uses	Debugger
- * @uses	Exception
+ * @uses	titon\source\core\Config
+ * @uses	titon\source\core\Environment
+ * @uses	titon\source\core\Loader
+ * @uses	titon\source\core\Registry
+ * @uses	titon\source\core\Router
+ * @uses	titon\source\log\Debugger
+ * @uses	titon\source\log\Exception
  */
 class Application {
 
 	/**
-	 * Core config class.
+	 * Config class instance.
 	 *
-	 * @see Config
+	 * @see titon\source\core\Config
 	 * @access public
 	 * @var object
 	 */
 	public $config;
 
 	/**
-	 * Core environment class.
+	 * Environment class instance.
 	 *
-	 * @see Environment
+	 * @see titon\source\core\Environment
 	 * @access public
 	 * @var object
 	 */
 	public $environment;
 
 	/**
-	 * Core event class.
+	 * Event class instance.
 	 *
-	 * @see Event
+	 * @see titon\source\core\Event
 	 * @access public
 	 * @var object
 	 */
 	public $event;
 
 	/**
-	 * Core loader class.
+	 * Loader class instance.
 	 *
-	 * @see Loader
+	 * @see titon\source\core\Loader
 	 * @access public
 	 * @var object
 	 */
 	public $loader;
 
 	/**
-	 * Core registry class.
+	 * Registry class instance.
 	 *
-	 * @see Registry
+	 * @see titon\source\core\Registry
 	 * @access public
 	 * @var object
 	 */
 	public $registry;
 
 	/**
-	 * Core router class.
+	 * Router class instance.
 	 *
-	 * @see Router
+	 * @see titon\source\core\Router
 	 * @access public
 	 * @var object
 	 */
@@ -119,6 +119,7 @@ class Application {
 		// Initialize static classes
 		Debugger::initialize();
 
+		// Load module bootstraps
 		$this->loadBootstraps();
 	}
 
@@ -128,10 +129,13 @@ class Application {
 	 * @access public
 	 * @param string $module
 	 * @param string $controller
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function addController($module, $controller) {
 		$this->__modules[$module]['controllers'][] = $controller;
+
+		return $this;
 	}
 
 	/**
@@ -140,13 +144,16 @@ class Application {
 	 * @access public
 	 * @param string $module
 	 * @param array $controllers
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function addModule($module, array $controllers = array()) {
 		$this->__modules[$module] = array(
 			'index' => $module,
 			'controllers' => $controllers
 		);
+
+		return $this;
 	}
 
 	/**
@@ -232,7 +239,8 @@ class Application {
 	 *
 	 * @access public
 	 * @param string $module
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function setDefaultModule($module) {
 		$module = mb_strtolower($module);
@@ -242,6 +250,8 @@ class Application {
 		} else {
 			throw new Exception(sprintf('Can not set default module as %s does not exist.', $module));
 		}
+
+		return $this;
 	}
 
 	/**
@@ -250,12 +260,15 @@ class Application {
 	 * @access public
 	 * @param string $module
 	 * @param string $index
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function setModuleIndex($module, $index) {
 		if (!empty($index)) {
 			$this->__modules[$module]['index'] = $index;
 		}
+
+		return $this;
 	}
 
 }
