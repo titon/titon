@@ -29,22 +29,18 @@ class AppView extends \titon\source\system\View {
 	public function construct() {
 		// Inherit the referenced Request and Response from the Controller
 		$this->attachObject('request', function() {
-			return Registry::factory('titon.source.net.Request');
+			return $app->registry->factory('titon\source\net\Request');
 		});
 
 		$this->attachObject('response', function() {
-			return Registry::factory('titon.source.net.Response');
+			return $app->registry->factory('titon\source\net\Response');
 		});
 
 		// Attach an engine if it doesn't exist
-		$this->attachObject('engine', function() {
-			return Registry::factory('titon.source.library.engines.titon.Renderer');
-		});
+		$this->setEngine($app->registry->factory('titon\library\engines\titon\Renderer'));
 
 		// Attach helpers
-		$this->attachObject('html', function() {
-			return Registry::factory('titon.source.library.helpers.html.Html');
-		});
+		$this->addHelper('html', $app->registry->factory('titon\library\helpers\html\Html'));
 	}
 
 }

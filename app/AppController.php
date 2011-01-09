@@ -9,7 +9,7 @@
 
 namespace app;
 
-use \titon\source\core\Registry;
+use \titon\source\system\Controller;
 
 /**
  * A Controller class that acts as a gateway between the client controller and the system controller.
@@ -18,7 +18,7 @@ use \titon\source\core\Registry;
  * @package		Titon
  * @subpackage	App
  */
-class AppController extends \titon\source\system\Controller {
+class AppController extends Controller {
 
 	/**
 	 * Construct the Request and Response objects.
@@ -29,11 +29,11 @@ class AppController extends \titon\source\system\Controller {
 	 */
 	public function construct() {
 		$this->attachObject('request', function() {
-			return Registry::factory('titon.source.net.Request');
+			return $app->registry->factory('titon\source\net\Request');
 		});
 
 		$this->attachObject('response', function() {
-			return Registry::factory('titon.source.net.Response');
+			return $app->registry->factory('titon\source\net\Response');
 		});
 	}
 
