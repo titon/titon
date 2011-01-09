@@ -17,23 +17,32 @@ use \titon\source\log\Exception;
  * Must have the PECL YAML module installed.
  *
  * @package	titon.source.core.readers
+ * @uses	titon\source\log\Exception
+ * 
  * @link	http://php.net/yaml
  */
 class YamlReader extends ReaderAbstract {
 
 	/**
-	 * Include the file and parse.
+	 * File type extension.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_extension = 'yaml';
+
+	/**
+	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 */
-	public function __construct($path) {
+	public function read() {
 		if (!function_exists('yaml_parse_file')) {
 			throw new Exception('YAML PECL extension must be installed to use the YamlReader.');
 
 		} else {
-			$data = yaml_parse_file($path);
+			$data = yaml_parse_file($this->_path);
 
 			if (is_array($data)) {
 				$this->_config = $data;

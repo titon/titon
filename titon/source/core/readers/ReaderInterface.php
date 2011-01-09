@@ -17,6 +17,31 @@ namespace titon\source\core\readers;
 interface ReaderInterface {
 
 	/**
+	 * Return the file type extension for the reader.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function extension();
+
+	/**
+	 * Parse the file contents.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function read();
+
+	/**
+	 * Set the path to the file.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @return void
+	 */
+	public function setPath($path);
+
+	/**
 	 * The reader must return the loaded config file as an array.
 	 *
 	 * @access public

@@ -17,19 +17,28 @@ use \titon\source\log\Exception;
  * Must have the SimpleXML module installed.
  *
  * @package	titon.source.core.readers
+ * @uses	titon\source\log\Exception
+ * 
  * @link	http://php.net/simplexml
  */
 class XmlReader extends ReaderAbstract {
 
 	/**
-	 * Include the file and parse using SimpleXML.
+	 * File type extension.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_extension = 'xml';
+
+	/**
+	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 */
-	public function __construct($path) {
-		$data = @simplexml_load_file($path);
+	public function read() {
+		$data = @simplexml_load_file($this->_path);
 
 		if ($data !== false) {
 			$this->_config = $data;

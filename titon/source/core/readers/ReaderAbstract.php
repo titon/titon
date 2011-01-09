@@ -27,6 +27,45 @@ abstract class ReaderAbstract implements ReaderInterface {
 	protected $_config = array();
 
 	/**
+	 * File type extension.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_extension;
+
+	/**
+	 * Path to the configuration file.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_path;
+
+	/**
+	 * Return the file type extension for the reader.
+	 *
+	 * @access public
+	 * @return string
+	 * @final
+	 */
+	final public function extension() {
+		return $this->_extension;
+	}
+
+	/**
+	 * Set the path to the file.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @return void
+	 * @final
+	 */
+	final public function setPath($path) {
+		$this->_path = $path;
+	}
+
+	/**
 	 * The reader must return the loaded config file as an array.
 	 *
 	 * @access public

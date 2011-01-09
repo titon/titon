@@ -16,19 +16,28 @@ use \titon\source\log\Exception;
  * A reader that loads its configuration from an INI file.
  *
  * @package	titon.source.core.readers
+ * @uses	titon\source\log\Exception
+ * 
  * @link	http://php.net/parse_ini_file
  */
 class IniReader extends ReaderAbstract {
 
 	/**
-	 * Grab the file contents and parse the INI file.
+	 * File type extension.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_extension = 'ini';
+
+	/**
+	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 */
-	public function __construct($path) {
-		$data = parse_ini_file($path, true, INI_SCANNER_NORMAL);
+	public function read() {
+		$data = parse_ini_file($this->_path, true, INI_SCANNER_NORMAL);
 
 		if (is_array($data)) {
 			$this->_config = $data;

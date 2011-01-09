@@ -9,11 +9,7 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\readers\IniReader;
-use \titon\source\core\readers\PhpReader;
-use \titon\source\core\readers\XmlReader;
-use \titon\source\core\readers\JsonReader;
-use \titon\source\core\readers\YamlReader;
+use \titon\source\core\readers\ReaderInterface;
 use \titon\source\log\Debugger;
 use \titon\source\log\Exception;
 use \titon\source\utility\Inflector;
@@ -25,21 +21,12 @@ use \titon\source\utility\Set;
  * Various readers can be used to import specific configuration files.
  *
  * @package	titon.source.core
- * @uses	Inflector
- * @uses	Set
- * @uses	Debugger
- * @uses	Exception
+ * @uses	titon\source\utility\Inflector
+ * @uses	titon\source\utility\Set
+ * @uses	titon\source\log\Debugger
+ * @uses	titon\source\log\Exception
  */
 class Config {
-
-	/**
-	 * Types of readers available for configuration importing.
-	 */
-	const XML_READER = 'xml';
-	const INI_READER = 'ini';
-	const PHP_READER = 'php';
-	const YAML_READER = 'yaml';
-	const JSON_READER = 'json';
 
 	/**
 	 * Current loaded configuration.
@@ -68,11 +55,7 @@ class Config {
 	 * @return mixed
 	 */
 	public function get($key = null) {
-		if ($key === null) {
-			return $this->__config;
-		} else {
-			return Set::extract($this->__config, $key);
-		}
+		return ($key === null) ? $this->__config : Set::extract($this->__config, $key);
 	}
 
 	/**
@@ -81,31 +64,16 @@ class Config {
 	 *
 	 * @access public
 	 * @param string $file
-	 * @param string $ext
+	 * @param ReaderInterface $reader
 	 * @return void
 	 */
-	public function load($file, $ext = self::INI_READER) {
-		$path = APP_CONFIG .'sets'. DS . Inflector::filename($file, $ext);
+	public function load($file, ReaderInterface $reader) {
+		$file = Inflector::filename($file, $reader->extension());
+		$path = APP_CONFIG .'sets'. DS . $file;
 
 		if (is_file($path)) {
-			switch ($ext) {
-				case self::XML_READER:
-					$reader = new XmlReader($path);
-				break;
-				case self::PHP_READER:
-					$reader = new PhpReader($path);
-				break;
-				case self::YAML_READER:
-					$reader = new YamlReader($path);
-				break;
-				case self::JSON_READER:
-					$reader = new JsonReader($path);
-				break;
-				case self::INI_READER:
-				default:
-					$reader = new IniReader($path);
-				break;
-			}
+			$reader->setPath($path);
+			$reader->read();
 			
 			if (!isset($this->__config[$file])) {
 				$this->__config[$file] = array();
@@ -114,7 +82,7 @@ class Config {
 			$this->__config[$file] = $reader->toArray() + $this->__config[$file];
 			
 		} else {
-			throw new Exception('Configuration file does not exist.');
+			throw new Exception(sprintf('Configuration file %s does not exist.', $file));
 		}
 	}
 

@@ -17,19 +17,28 @@ use \titon\source\log\Exception;
  * Must have the JSON module installed.
  *
  * @package	titon.source.core.readers
+ * @uses	titon\source\log\Exception
+ * 
  * @link	http://php.net/json_decode
  */
 class JsonReader extends ReaderAbstract {
 
 	/**
-	 * Grab the file contents and parse the JSON file.
+	 * File type extension.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_extension = 'json';
+
+	/**
+	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 */
-	public function __construct($path) {
-		$data = json_decode(file_get_contents($path), true);
+	public function read() {
+		$data = json_decode(file_get_contents($this->_path), true);
 
 		if (is_array($data)) {
 			$this->_config = $data;

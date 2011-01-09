@@ -17,19 +17,28 @@ use \titon\source\log\Exception;
  * The PHP file must contain a return statement that returns an array.
  *
  * @package	titon.source.core.readers
+ * @uses	titon\source\log\Exception
+ * 
  * @link	http://php.net/manual/en/function.include.php
  */
 class PhpReader extends ReaderAbstract {
 
 	/**
-	 * Include the file directly into the configuration.
+	 * File type extension.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_extension = 'php';
+
+	/**
+	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 */
-	public function __construct($path) {
-		$data = include_once $path;
+	public function read() {
+		$data = include_once $this->_path;
 		
 		if (is_array($data)) {
 			$this->_config = $data;
