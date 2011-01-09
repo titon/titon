@@ -23,9 +23,9 @@ use \Closure;
  * automatically passed and set through the constructor (which is done dynamically through the Registry and App classes).
  *
  * @package	titon.source.core
- * @uses	Exception
- * @uses	Inflector
- * @uses	Set
+ * @uses	titon\source\log\Exception
+ * @uses	titon\source\utility\Inflector
+ * @uses	titon\source\utility\Set
  */
 class Prototype {
 
@@ -43,7 +43,7 @@ class Prototype {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array('initialized' => false);
+	protected $_config = array();
 
 	/**
 	 * Classes that have been instantiated when called using getObject().
@@ -79,7 +79,7 @@ class Prototype {
 	 */
 	public function __construct(array $config = array()) {
 		if (!empty($config)) {
-			$this->_config = $config + $this->_config;
+			$this->_config = $this->_config + array('initialized' => false);
 		}
 
 		if (!empty($this->_classes)) {
@@ -205,7 +205,7 @@ class Prototype {
 		);
 
 		if (empty($options['alias'])) {
-			throw new Exception('You must define an alias to reference the passed object.');
+			throw new Exception('You must define an alias to reference the attached object.');
 		} else {
 			$options['alias'] = Inflector::variable($options['alias']);
 		}
@@ -302,18 +302,15 @@ class Prototype {
 		if (isset($this->__objectMap[$class])) {
 			$object = $this->__objectMap[$class]();
 
-			$this->_classes[$class]['source'] = $app->loader->toNotation(get_class($object));
+			$this->_classes[$class]['source'] = get_class($object);
 
 		// Create manually
 		} else {
 			// Persist in registry
 			if ($options['persist']) {
 				$object = $app->registry->factory($options['source']);
-				
 			} else {
-				$namespace = $app->loader->toNamespace($options['source']);
-
-				$object = new $namespace();
+				$object = new $options['source']();
 			}
 		}
 
@@ -363,16 +360,6 @@ class Prototype {
 	}
 
 	/**
-	 * Return the object as an array.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function toArray() {
-		return Set::toArray($this);
-	}
-
-	/**
 	 * Return the classname when called as a string.
 	 *
 	 * @access public
@@ -393,16 +380,18 @@ class Prototype {
 	final public function triggerCallback($method) {
 		if (is_string($method) && !empty($this->_classes)) {
 			foreach ($this->_classes as $class => $options) {
-				if ($method == 'initialize' && $this->{$options['alias']}->getConfig('initialized')) {
-					continue;
-				}
-
 				if ($options['callback'] === true) {
-					if (method_exists($this->{$options['alias']}, $method)) {
-						$this->{$options['alias']}->{$method}($this);
+					$object = $this->getObject($options['alias']);
+
+					if ($method == 'initialize' && $object->getConfig('initialized')) {
+						continue;
+					}
+					
+					if (method_exists($object, $method)) {
+						$object->{$method}($this);
 
 						if ($method == 'initialize') {
-							$this->{$options['alias']}->configure(array('initialized' => true));
+							$object->configure(array('initialized' => true));
 						}
 					}
 				}
