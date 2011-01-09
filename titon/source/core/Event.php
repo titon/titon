@@ -96,11 +96,11 @@ class Event {
 	 * @access public
 	 * @param ListenerInterface $listener
 	 * @param array $scope
-	 * @return void
+	 * @return this
+	 * @chainable
 	 */
 	public function register(ListenerInterface $listener, array $scope = array()) {
-		$class = $app->loader->toNotation(get_class($listener));
-
+		$class = get_class($listener);
 		$this->__objectMap[$class] = $listener;
 
 		foreach ($this->__events as $event) {
@@ -114,26 +114,29 @@ class Event {
 				)
 			);
 		}
+
+		return $this;
 	}
 
 	/**
 	 * Remove a certain event and scope from the registered list.
 	 *
 	 * @access public
-	 * @param string $event
 	 * @param string $class
-	 * @return boolean
+	 * @param string $event
+	 * @return this
+	 * @chainable
 	 */
-	public function remove($event, $class) {
-		if (isset($this->__events[$event])) {
-			$class = $app->loader->toNotation($class);
-
+	public function remove($class, $event = null) {
+		if (!$event) {
+			foreach ($this->__listeners as $event => $listeners) {
+				unset($this->__listeners[$event][$class]);
+			}
+		} else {
 			unset($this->__listeners[$event][$class]);
-
-			return true;
 		}
 
-		return false;
+		return $this;
 	}
 
 }
