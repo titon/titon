@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-define('FRAMEWORK', TITON .'source'. DS);
+define('SOURCE', TITON .'source'. DS);
 define('CONSOLE', TITON .'console'. DS);
 define('LIBRARY', TITON .'library'. DS);
 define('VENDORS', TITON .'vendors'. DS);

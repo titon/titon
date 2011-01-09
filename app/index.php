@@ -43,7 +43,7 @@ include_once TITON .'source'. DS .'Infrastructure.php';
  * Set the include paths.
  */
 $app->loader->includePaths(array(
-	APP, ROOT, TITON, FRAMEWORK, LIBRARY, VENDORS
+	APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
 ));
 
 /**

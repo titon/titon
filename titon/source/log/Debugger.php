@@ -218,8 +218,8 @@ class Debugger {
 		if (strpos($path, APP) !== false) {
 			$path = str_replace(APP, '[App]', $path);
 
-		} else if (strpos($path, FRAMEWORK) !== false) {
-			$path = str_replace(FRAMEWORK, '[Titon]', $path);
+		} else if (strpos($path, SOURCE) !== false) {
+			$path = str_replace(SOURCE, '[Titon]', $path);
 
 		} else if (strpos($path, LIBRARY) !== false) {
 			$path = str_replace(LIBRARY, '[Library]', $path);
