@@ -15,7 +15,7 @@ use titon\source\utility\Inflector;
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
  * @package	titon.source.core
- * @uses	Inflector
+ * @uses	titon\source\utility\Inflector
  */
 class Environment {
 
@@ -53,13 +53,7 @@ class Environment {
 	 * @return void
 	 */
 	public function __construct() {
-		$config = $this->__environments[$this->detect()];
-
-		foreach ($config as $key => $value) {
-			$app->config->set($key, $value);
-		}
-
-		$path = APP_CONFIG .'environments'. DS . Inflector::filename($setup);
+		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->detect());
 
 		if (file_exists($path)) {
 			include_once $path;
@@ -94,30 +88,24 @@ class Environment {
 	 * @return void
 	 */
 	public function setDefault($name) {
-		if (isset($this->__environments[$name])) {
+		if (in_array($name, $this->__environments)) {
 			$this->__default = $name;
 		}
 	}
 
 	/**
-	 * Add an environment and its settings to the application.
+	 * Add an environment and its hosts to the application.
 	 *
 	 * @access public
 	 * @param string $name
-	 * @param array $options
+	 * @param array $hosts
 	 * @return void
 	 */
-	public function setup($name, array $options = array()) {
-		if (isset($this->__environments[$name])) {
-			$this->__environments[$name] = $options + $this->__environments[$name];
-		} else {
-			$this->__environments[$name] = $options;
-		}
+	public function setup($name, array $hosts) {
+		$this->__environments[] = $name;
 
-		if (!empty($this->__environments[$name]['hosts'])) {
-			foreach ($this->__environments[$name]['hosts'] as $host) {
-				$this->__hostMapping[$host] = $name;
-			}
+		foreach ($hosts as $host) {
+			$this->__hostMapping[$host] = $name;
 		}
 	}
 
