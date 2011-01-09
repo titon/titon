@@ -17,6 +17,7 @@ use \titon\source\net\Http;
  * It extracts and cleans the GET, POST and FILES data from the current HTTP request.
  * 
  * @package	titon.source.net
+ * @uses	titon\source\log\Exception
  */
 class Request extends Http {
 
@@ -61,14 +62,6 @@ class Request extends Http {
 	public $query = array();
 
 	/**
-	 * Request configuration.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_config = array('extract' => true);
-
-	/**
 	 * The accepted charset types, based on the Accept-Charset header.
 	 *
 	 * @access private
@@ -106,9 +99,7 @@ class Request extends Http {
 	 * @access public
 	 * @return void
 	 */
-	public function construct() {
-		parent::construct();
-
+	public function __construct() {
 		$get = $_GET;
 		$post = $_POST;
 		$files = array();
@@ -141,32 +132,30 @@ class Request extends Http {
 		$this->query = $app->router->current('query');
 
 		// Store accept HTTP headers
-		if ($this->_config['extract']) {
-			foreach (array('Accept', 'Accept-Language', 'Accept-Charset') as $acception) {
-				$accept = $this->env($acception);
+		foreach (array('Accept', 'Accept-Language', 'Accept-Charset') as $acception) {
+			$accept = $this->env($acception);
 
-				if ($accept !== null) {
-					$accept = explode(',', $accept);
+			if ($accept !== null) {
+				$accept = explode(',', $accept);
 
-					foreach ($accept as $type) {
-						if (strpos($type, ';') !== false) {
-							list($type, $quality) = explode(';', $type);
-						} else {
-							$quality = 1;
-						}
+				foreach ($accept as $type) {
+					if (strpos($type, ';') !== false) {
+						list($type, $quality) = explode(';', $type);
+					} else {
+						$quality = 1;
+					}
 
-						$data = array(
-							'type' => $type,
-							'quality' => str_replace('q=', '', $quality)
-						);
+					$data = array(
+						'type' => $type,
+						'quality' => str_replace('q=', '', $quality)
+					);
 
-						if ($acception == 'Accept-Language') {
-							$this->__locales[] = $data;
-						} else if ($acception == 'Accept-Charset') {
-							$this->__charsets[] = $data;
-						} else {
-							$this->__types[] = $data;
-						}
+					if ($acception == 'Accept-Language') {
+						$this->__locales[] = $data;
+					} else if ($acception == 'Accept-Charset') {
+						$this->__charsets[] = $data;
+					} else {
+						$this->__types[] = $data;
 					}
 				}
 			}
@@ -253,15 +242,19 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function clientIp() {
-		if ($address = $this->env('HTTP_CLIENT_IP')) {
+		$address = $this->env('HTTP_CLIENT_IP');
+		
+		if (!empty($address)) {
 			return $address;
-
-		} else if ($address = $this->env('HTTP_X_FORWARDED_FOR')) {
-			return $address;
-
 		} else {
-			return $this->env('REMOTE_ADDR');
+			$address = $this->env('HTTP_X_FORWARDED_FOR');
+
+			if (!empty($address)) {
+				return $address;
+			}
 		}
+
+		return $this->env('REMOTE_ADDR');
 	}
 
 	/**

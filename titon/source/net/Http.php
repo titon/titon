@@ -9,14 +9,12 @@
 
 namespace titon\source\net;
 
-use \titon\source\core\Prototype;
-
 /**
  * A primary HTTP base class that provides functionality for common HTTP status codes and content types.
  *
  * @package titon.source.net
  */
-class Http extends Prototype {
+class Http {
 
 	/**
 	 * Valid format for HTTP datetimes.

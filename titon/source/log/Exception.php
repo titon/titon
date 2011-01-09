@@ -16,6 +16,7 @@ use \titon\source\log\Debugger;
  * When an exception is thrown it outputs an error in development, and logs an error in production.
  *
  * @package	titon.source.log
+ * @uses	titon\source\log\Debugger
  */
 class Exception extends \Exception {  
 

@@ -16,6 +16,7 @@ use \titon\source\log\Logger;
  * Benchmarks store the time difference and memory usage between two blocks during runtime.
  *
  * @package	titon.source.log
+ * @uses	titon\source\log\Logger
  */
 class Benchmark {
 
@@ -49,13 +50,10 @@ class Benchmark {
 			return false;
 		}
 
-		$benchmark = self::$__benchmarks[$key];
-		$time = ($benchmark['endTime'] - $benchmark['startTime']);
-		$memory = ($benchmark['endMemory'] - $benchmark['startMemory']);
-
-		$result  = 'Benchmark ['. $key .']: ';
-		$result .= 'Time: '. number_format($time, 4) .' / ';
-		$result .= 'Memory: '. $memory .' (Max: '. memory_get_peak_usage() .')';
+		$benchmark = self::get($key);
+		$result  = 'Benchmark ['. $key .'] - ';
+		$result .= 'Time: '. number_format($benchmark['avgTime'], 4) .' - ';
+		$result .= 'Memory: '. $benchmark['avgMemory'] .' (Max: '. $benchmark['peakMemory'] .')';
 
 		return $result;
 	}

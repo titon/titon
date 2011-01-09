@@ -17,6 +17,8 @@ use \titon\source\log\Logger;
  * Errors are displayed with a custom backtrace as well as logged to the filesystem (if passed to the Logger).
  *
  * @package titon.source.log
+ * @uses	titon\source\log\Exception
+ * @uses	titon\source\log\Logger
  */
 class Debugger {
 

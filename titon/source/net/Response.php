@@ -65,7 +65,8 @@ class Response extends Http {
 	 *
 	 * @access public
 	 * @param string $body
-	 * @return object
+	 * @return this
+	 * @chainable
 	 */
 	public function body($body = '') {
 		$this->__body = $body;
@@ -78,7 +79,8 @@ class Response extends Http {
 	 * 
 	 * @access public
 	 * @param int|string $expires
-	 * @return object
+	 * @return this
+	 * @chainable
 	 */
 	public function cache($expires = '+24 hours') {
 		$expires = is_int($expires) ? $expires : strtotime($expires);
@@ -95,7 +97,8 @@ class Response extends Http {
 	 * Forces the clients browser not to cache the results of the current request.
 	 *
 	 * @access public
-	 * @return object
+	 * @return this
+	 * @chainable
 	 */
 	public function disableCache() {
 		$this->headers(array(
@@ -119,7 +122,8 @@ class Response extends Http {
 	 * @param string $header
 	 * @param string $value
 	 * @param boolean $replace
-	 * @return object
+	 * @return this
+	 * @chainable
 	 */
 	public function header($header, $value, $replace = true) {
 		$this->__headers[] = array(
@@ -136,7 +140,8 @@ class Response extends Http {
 	 *
 	 * @access public
 	 * @param array $headers
-	 * @return object
+	 * @return this
+	 * @chainable
 	 */
 	public function headers(array $headers = array()) {
 		if (is_array($headers)) {
@@ -211,7 +216,8 @@ class Response extends Http {
 	 *
 	 * @access public
 	 * @param int $code
-	 * @return object
+	 * @return this
+	 * @chainable
 	 */
 	public function status($code = 302) {
 		if (!$this->getStatusCode($code)) {
@@ -228,7 +234,8 @@ class Response extends Http {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return object
+	 * @return this
+	 * @chainable
 	 */
 	public function type($type = '') {
 		if (strpos($type, '/') === false) {
