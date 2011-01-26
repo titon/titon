@@ -41,7 +41,7 @@ class XmlReader extends ReaderAbstract {
 		$data = @simplexml_load_file($this->_path);
 
 		if ($data !== false) {
-			$this->_config = $data;
+			$this->configure($data);
 		} else {
 			throw new Exception('Reader failed to parse XML configuration.');
 		}

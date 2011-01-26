@@ -9,6 +9,7 @@
 
 namespace titon\source\core\readers;
 
+use \titon\source\core\Object;
 use \titon\source\core\readers\ReaderInterface;
 
 /**
@@ -16,15 +17,7 @@ use \titon\source\core\readers\ReaderInterface;
  *
  * @package titon.source.core.readers
  */
-abstract class ReaderAbstract implements ReaderInterface {
-
-	/**
-	 * Array of loaded configurations.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_config = array();
+abstract class ReaderAbstract extends Object implements ReaderInterface {
 
 	/**
 	 * File type extension.

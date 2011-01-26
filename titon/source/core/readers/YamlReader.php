@@ -45,7 +45,7 @@ class YamlReader extends ReaderAbstract {
 			$data = yaml_parse_file($this->_path);
 
 			if (is_array($data)) {
-				$this->_config = $data;
+				$this->configure($data);
 			} else {
 				throw new Exception('Reader failed to parse YAML configuration.');
 			}

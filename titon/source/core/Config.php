@@ -37,17 +37,6 @@ class Config {
 	private $__config = array();
 
 	/**
-	 * Checks to see if a key exists within the current configuration.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function check($key) {
-		return Set::exists($this->__config, $key);
-	}
-
-	/**
 	 * Grab a value from the current configuration.
 	 *
 	 * @access public
@@ -56,6 +45,17 @@ class Config {
 	 */
 	public function get($key = null) {
 		return ($key === null) ? $this->__config : Set::extract($this->__config, $key);
+	}
+
+	/**
+	 * Checks to see if a key exists within the current configuration.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function has($key) {
+		return Set::exists($this->__config, $key);
 	}
 
 	/**

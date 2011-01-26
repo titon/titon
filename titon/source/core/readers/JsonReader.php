@@ -41,7 +41,7 @@ class JsonReader extends ReaderAbstract {
 		$data = json_decode(file_get_contents($this->_path), true);
 
 		if (is_array($data)) {
-			$this->_config = $data;
+			$this->configure($data);
 		} else {
 			throw new Exception('Reader failed to decode JSON configuration.');
 		}

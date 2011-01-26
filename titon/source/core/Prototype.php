@@ -9,6 +9,7 @@
 
 namespace titon\source\core;
 
+use \titon\source\core\Object;
 use \titon\source\log\Exception;
 use \titon\source\utility\Inflector;
 use \titon\source\utility\Set;
@@ -19,15 +20,12 @@ use \Closure;
  * It allows you to attach classes to the parent class, while encapsulating the attaching class in a Closure,
  * enabling the objects to only be instantiated when triggered; also known as, lazy loading.
  *
- * Additionally, all child classes will inherit the $_config property, allowing any configuration settings to be
- * automatically passed and set through the constructor (which is done dynamically through the Registry and App classes).
- *
  * @package	titon.source.core
  * @uses	titon\source\log\Exception
  * @uses	titon\source\utility\Inflector
  * @uses	titon\source\utility\Set
  */
-class Prototype {
+class Prototype extends Object {
 
 	/**
 	 * Classes and their options / namespaces to load for dependencies.
@@ -36,14 +34,6 @@ class Prototype {
 	 * @var array
 	 */
 	protected $_classes = array();
-
-	/**
-	 * An array of configuration settings for the current parent class.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_config = array();
 
 	/**
 	 * Classes that have been instantiated when called using getObject().
@@ -70,18 +60,13 @@ class Prototype {
 	private $__objectMap = array();
 
 	/**
-	 * Merges the custom configuration with the defaults. Parses the $_classes and builds up the options,
-	 * but does not instantiate the object until called. Finally executes construct().
+	 * Parses the $_classes and attaches any defined classes.
 	 *
 	 * @access public
 	 * @param array $config
 	 * @return void
 	 */
 	public function __construct(array $config = array()) {
-		if (!empty($config)) {
-			$this->_config = $this->_config + array('initialized' => false);
-		}
-
 		if (!empty($this->_classes)) {
 			foreach ($this->_classes as $class => $options) {
 				if (is_string($options)) {
@@ -96,7 +81,7 @@ class Prototype {
 			}
 		}
 
-		$this->construct();
+		parent::__construct($config);
 	}
 
 	/**
@@ -133,36 +118,6 @@ class Prototype {
 	 */
 	final public function __unset($class) {
 		return $this->detachObject($class);
-	}
-
-	/**
-	 * Serialize the classes and configuration.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function __sleep() {
-		return array('_classes', '_config');
-	}
-
-	/**
-	 * Reconstruct the class once unserialized.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function __wakeup() {
-		$this->construct();
-	}
-
-	/**
-	 * Magic method for Prototype::toString().
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function __toString() {
-		return $this->toString();
 	}
 
 	/**
@@ -224,35 +179,13 @@ class Prototype {
 	}
 
 	/**
-	 * Update the configuration during runtime. Can also be configured using Registry::configure() where applicable.
-	 *
-	 * @see Registry::configure()
-	 * @access public
-	 * @param array $config
-	 * @return void
-	 * @final
-	 */
-	final public function configure(array $config = array()) {
-		$this->_config = $config + $this->_config;
-	}
-
-	/**
-	 * Defines all attachments or dependencies and is executed during __construct().
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function construct() {
-		return;
-	}
-
-	/**
 	 * Remove an object permanently from the $_loaded, $_classes and $__objectMap properties.
 	 *
 	 * @access public
 	 * @param string $class
 	 * @param boolean $deleteMap
-	 * @return boolean
+	 * @return this
+	 * @chainable
 	 * @final
 	 */
 	final public function detachObject($class, $deleteMap = true) {
@@ -262,23 +195,9 @@ class Prototype {
 			if ($deleteMap) {
 				unset($this->__objectMap[$class]);
 			}
-
-			return true;
 		}
 
-		return false;
-	}
-
-	/**
-	 * Return the current configuration (single or all) from the class.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return array
-	 * @final
-	 */
-	final public function getConfig($key = null) {
-		return Set::extract($this->_config, $key);
+		return $this;
 	}
 
 	/**
@@ -338,16 +257,6 @@ class Prototype {
 	}
 
 	/**
-	 * A dummy function for no operation.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function noop() {
-		return;
-	}
-
-	/**
 	 * Restrict a class from being used within the current scope, or until the class is allowed again.
 	 *
 	 * @access public
@@ -369,16 +278,6 @@ class Prototype {
 	}
 
 	/**
-	 * Return the classname when called as a string.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function toString() {
-		return get_class($this);
-	}
-
-	/**
 	 * Cycle through all loaded objects and trigger the defined hook method.
 	 *
 	 * @access public
@@ -389,19 +288,11 @@ class Prototype {
 	final public function triggerCallback($method) {
 		if (is_string($method) && !empty($this->_classes)) {
 			foreach ($this->_classes as $class => $options) {
-				if ($options['callback'] === true) {
+				if ($options['callback']) {
 					$object = $this->getObject($options['alias']);
 
-					if ($method == 'initialize' && $object->getConfig('initialized')) {
-						continue;
-					}
-					
 					if (method_exists($object, $method)) {
 						$object->{$method}($this);
-
-						if ($method == 'initialize') {
-							$object->configure(array('initialized' => true));
-						}
 					}
 				}
 			}

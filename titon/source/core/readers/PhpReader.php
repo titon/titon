@@ -41,7 +41,7 @@ class PhpReader extends ReaderAbstract {
 		$data = include_once $this->_path;
 		
 		if (is_array($data)) {
-			$this->_config = $data;
+			$this->configure($data);
 		} else {
 			throw new Exception('Reader failed to import PHP configuration.');
 		}

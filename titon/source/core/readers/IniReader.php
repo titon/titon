@@ -40,7 +40,7 @@ class IniReader extends ReaderAbstract {
 		$data = parse_ini_file($this->_path, true, INI_SCANNER_NORMAL);
 
 		if (is_array($data)) {
-			$this->_config = $data;
+			$this->configure($data);
 		} else {
 			throw new Exception('Reader failed to parse INI configuration.');
 		}

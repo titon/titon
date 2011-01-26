@@ -53,7 +53,7 @@ class Environment {
 	 * @return void
 	 */
 	public function __construct() {
-		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->detect());
+		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current());
 
 		if (file_exists($path)) {
 			include_once $path;
@@ -66,7 +66,7 @@ class Environment {
 	 * @access public
 	 * @return string
 	 */
-	public function detect() {
+	public function current() {
 		return $this->__hostMapping[$_SERVER['HTTP_HOST']] ?: $this->getDefault();
 	}
 

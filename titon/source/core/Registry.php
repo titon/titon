@@ -38,17 +38,6 @@ class Registry {
 	private $__registered = array();
 
 	/**
-	 * Checks to see if an object has been registered (instantiated).
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function check($key) {
-		return (isset($this->__registered[$key]) && is_object($this->__registered[$key]));
-	}
-
-	/**
 	 * Defines an array of configuration that should be loaded into a class when its instantiated.
 	 *
 	 * @access public
@@ -129,6 +118,17 @@ class Registry {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Checks to see if an object has been registered (instantiated).
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function has($key) {
+		return (isset($this->__registered[$key]) && is_object($this->__registered[$key]));
 	}
 
 	/**
