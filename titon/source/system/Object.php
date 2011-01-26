@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\source\system;
 
 /**
  * Primary class for all framework classes to extend. All child classes will inherit the $_config property,
  * allowing any configuration settings to be automatically passed and set through the constructor.
  *
- * @package	titon.source.core
+ * @package	titon.source.system
  */
 class Object {
 

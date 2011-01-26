@@ -9,6 +9,7 @@
 
 namespace titon\source\core;
 
+use \titon\source\core\Core;
 use \titon\source\log\Exception;
 
 /**
@@ -18,7 +19,7 @@ use \titon\source\log\Exception;
  * @package	titon.source.core
  * @uses	Exception
  */
-class Registry {
+class Registry extends Core {
 
 	/**
 	 * Configuration settings that are automatically loaded into classes upon instantiation.
@@ -86,10 +87,10 @@ class Registry {
 			return $this->__registered[$key];
 		}
 
-		$namespace = $app->loader->toNamespace($key);
+		$namespace = $this->app->loader->toNamespace($key);
 
 		if (!class_exists($namespace)) {
-			$app->loader->import($key);
+			$this->app->loader->import($key);
 		}
 
 		if (class_exists($namespace)) {

@@ -10,6 +10,7 @@
 namespace titon\source\core;
 
 use \titon\source\core\Config;
+use \titon\source\core\Dispatch;
 use \titon\source\core\Environment;
 use \titon\source\core\Loader;
 use \titon\source\core\Registry;
@@ -23,6 +24,7 @@ use \titon\source\log\Exception;
  *
  * @package	titon.source.core
  * @uses	titon\source\core\Config
+ * @uses	titon\source\core\Dispatch
  * @uses	titon\source\core\Environment
  * @uses	titon\source\core\Loader
  * @uses	titon\source\core\Registry
@@ -40,6 +42,15 @@ class Application {
 	 * @var object
 	 */
 	public $config;
+
+	/**
+	 * Dispatch class instance.
+	 *
+	 * @see titon\source\core\Dispatch
+	 * @access public
+	 * @var object
+	 */
+	public $dispatch;
 
 	/**
 	 * Environment class instance.
@@ -109,18 +120,13 @@ class Application {
 	 * @return void
 	 */
 	public function __construct() {
-		$this->config = new Config();
-		$this->environment = new Environment();
-		$this->event = new Event();
-		$this->loader = new Loader();
-		$this->registry = new Registry();
-		$this->router = new Router();
-
-		// Initialize static classes
-		Debugger::initialize();
-
-		// Load module bootstraps
-		$this->loadBootstraps();
+		$this->config = new Config($this);
+		$this->dispatch = new Dispatch($this);
+		$this->environment = new Environment($this);
+		$this->event = new Event($this);
+		$this->loader = new Loader($this);
+		$this->registry = new Registry($this);
+		$this->router = new Router($this);
 	}
 
 	/**

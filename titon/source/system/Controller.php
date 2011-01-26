@@ -9,7 +9,7 @@
  
 namespace titon\source\system;
 
-use \titon\source\core\Prototype;
+use \titon\source\system\Prototype;
 use \titon\source\log\Exception;
 use \titon\source\system\Action;
 use \titon\source\system\View;

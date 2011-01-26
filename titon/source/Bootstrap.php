@@ -13,9 +13,9 @@
  * @param string $class
  * @return void
  */
-function __autoload($class) {
-	$app->loader->autoload($class);
-}
+//function __autoload($class) {
+	//$app->loader->autoload($class);
+//}
 
 /**
  * Outputs/Debugs multiple variables and shows where it was called from.

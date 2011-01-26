@@ -9,6 +9,7 @@
 
 namespace titon\source\core;
 
+use \titon\source\core\Core;
 use \titon\source\core\readers\ReaderInterface;
 use \titon\source\log\Debugger;
 use \titon\source\log\Exception;
@@ -26,7 +27,7 @@ use \titon\source\utility\Set;
  * @uses	titon\source\log\Debugger
  * @uses	titon\source\log\Exception
  */
-class Config {
+class Config extends Core {
 
 	/**
 	 * Current loaded configuration.

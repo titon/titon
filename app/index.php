@@ -27,7 +27,7 @@ define('NS', '\\');
  * Define the folders that contain the app and titon files.
  */
 define('APP', __DIR__ . DS);
-define('ROOT', dirname(ROOT) . DS);
+define('ROOT', dirname(APP) . DS);
 define('TITON', ROOT .'titon'. DS);
 
 /**
@@ -42,11 +42,11 @@ include_once TITON .'source'. DS .'Infrastructure.php';
 /**
  * Set the include paths.
  */
-$app->loader->includePaths(array(
+$app->loader->includePath(array(
 	APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
 ));
 
 /**
  * Dispatch the request.
  */
-$app->dispatcher->run();
+$app->dispatch->run();

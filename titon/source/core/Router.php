@@ -9,6 +9,9 @@
 
 namespace titon\source\core;
 
+use \titon\source\core\Application;
+use \titon\source\core\Core;
+
 /**
  * The Router determines the current routing request, based on the URL address and environment.
  * Stores the current route, its parsed segments and the base URL.
@@ -17,7 +20,7 @@ namespace titon\source\core;
  *
  * @package	titon.source.core
  */
-class Router {
+class Router extends Core {
 
 	/**
 	 * The current route broken up into its parts.
@@ -64,9 +67,12 @@ class Router {
 	 * Parses the current URL into multiple segments as well as parses the current route into an application path.
 	 *
 	 * @access public
+	 * @param $app
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct(Application $app) {
+		parent::__construct($app);
+		
 		list($base, $route) = explode('index.php', $_SERVER['PHP_SELF']);
 
 		if (empty($route)) {

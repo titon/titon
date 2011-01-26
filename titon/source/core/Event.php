@@ -9,6 +9,7 @@
 
 namespace titon\source\core;
 
+use \titon\source\core\Core;
 use \titon\source\library\listeners\ListenerInterface;
 
 /**
@@ -18,7 +19,7 @@ use \titon\source\library\listeners\ListenerInterface;
  *
  * @package	titon.source.core
  */
-class Event {
+class Event extends Core {
 
 	/**
 	 * Defined list of allowed events.
@@ -55,7 +56,7 @@ class Event {
 	 */
 	public function execute($event, $object = null) {
 		if (!empty($this->__listeners[$event])) {
-			$route = $app->router->current();
+			$route = $this->app->router->current();
 
 			foreach ($this->__listeners[$event] as &$listener) {
 				if ($listener['executed'] === true) {

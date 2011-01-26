@@ -9,7 +9,9 @@
 
 namespace titon\source\core;
 
-use titon\source\utility\Inflector;
+use \titon\source\core\Application;
+use \titon\source\core\Core;
+use \titon\source\utility\Inflector;
 
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
@@ -17,7 +19,7 @@ use titon\source\utility\Inflector;
  * @package	titon.source.core
  * @uses	titon\source\utility\Inflector
  */
-class Environment {
+class Environment extends Core {
 
 	/**
 	 * Sets the default environment; defaults to development.
@@ -50,9 +52,12 @@ class Environment {
 	 * Initialize the environment by applying the configuration.
 	 *
 	 * @access public
+	 * @param $app
 	 * @return void
 	 */
-	public function __construct() {
+	public function __construct(Application $app) {
+		parent::__construct($app);
+		
 		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current());
 
 		if (file_exists($path)) {

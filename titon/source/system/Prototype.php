@@ -7,9 +7,9 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\source\system;
 
-use \titon\source\core\Object;
+use \titon\source\system\Object;
 use \titon\source\log\Exception;
 use \titon\source\utility\Inflector;
 use \titon\source\utility\Set;
@@ -20,7 +20,7 @@ use \Closure;
  * It allows you to attach classes to the parent class, while encapsulating the attaching class in a Closure,
  * enabling the objects to only be instantiated when triggered; also known as, lazy loading.
  *
- * @package	titon.source.core
+ * @package	titon.source.system
  * @uses	titon\source\log\Exception
  * @uses	titon\source\utility\Inflector
  * @uses	titon\source\utility\Set
