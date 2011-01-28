@@ -38,10 +38,7 @@ require SOURCE .'system'. DS .'Controller.php';
  */
 $app = new \titon\source\core\Application();
 
-global $app;
-
 //$app->loadBootstraps();
-
 //Debugger::initialize();
 
 /**
