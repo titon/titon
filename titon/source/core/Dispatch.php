@@ -9,7 +9,6 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\Core;
 use \titon\library\dispatchers\front\Front;
 use \titon\library\dispatchers\front\FrontDev;
 use \titon\source\library\dispatchers\DispatcherInterface;
@@ -25,7 +24,7 @@ use \titon\source\utility\Inflector;
  *
  * @package	titon.source.core
  */
-class Dispatch extends Core {
+class Dispatch {
 
     /**
      * Mapped scopes to custom dispatchers.

@@ -8,16 +8,6 @@
  */
 
 /**
- * Fallback method if the app autoloader isn't called.
- *
- * @param string $class
- * @return void
- */
-//function __autoload($class) {
-	//$app->loader->autoload($class);
-//}
-
-/**
  * Outputs/Debugs multiple variables and shows where it was called from.
  * 
  * @param mixed $var, $var, $var...

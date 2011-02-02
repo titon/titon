@@ -9,7 +9,6 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\Core;
 use \titon\source\core\readers\ReaderInterface;
 use \titon\source\log\Debugger;
 use \titon\source\log\Exception;
@@ -22,12 +21,12 @@ use \titon\source\utility\Set;
  * Various readers can be used to import specific configuration files.
  *
  * @package	titon.source.core
- * @uses	titon\source\utility\Inflector
- * @uses	titon\source\utility\Set
  * @uses	titon\source\log\Debugger
  * @uses	titon\source\log\Exception
+ * @uses	titon\source\utility\Inflector
+ * @uses	titon\source\utility\Set
  */
-class Config extends Core {
+class Config {
 
 	/**
 	 * Current loaded configuration.
@@ -45,7 +44,7 @@ class Config extends Core {
 	 * @return mixed
 	 */
 	public function get($key = null) {
-		return ($key === null) ? $this->__config : Set::extract($this->__config, $key);
+		return Set::extract($this->__config, $key);
 	}
 
 	/**

@@ -9,6 +9,7 @@
 
 namespace titon\source\system;
 
+use \titon\source\Titon;
 use \titon\source\system\Object;
 use \titon\source\log\Exception;
 use \titon\source\utility\Inflector;
@@ -21,6 +22,7 @@ use \Closure;
  * enabling the objects to only be instantiated when triggered; also known as, lazy loading.
  *
  * @package	titon.source.system
+ * @uses	titon\source\Titon
  * @uses	titon\source\log\Exception
  * @uses	titon\source\utility\Inflector
  * @uses	titon\source\utility\Set
@@ -74,7 +76,7 @@ class Prototype extends Object {
 				}
 
 				if (empty($options['alias'])) {
-					$options['alias'] = is_string($class) ? $class : $app->loader->baseClass($options['source']);
+					$options['alias'] = is_string($class) ? $class : Titon::loader()->baseClass($options['source']);
 				}
 
 				$this->attachObject($options);
@@ -233,7 +235,7 @@ class Prototype extends Object {
 		} else {
 			// Persist in registry
 			if ($options['persist']) {
-				$object = $app->registry->factory($options['source']);
+				$object = Titon::registry()->factory($options['source']);
 			} else {
 				$object = new $options['source']();
 			}

@@ -9,8 +9,6 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\Application;
-use \titon\source\core\Core;
 use \titon\source\utility\Inflector;
 
 /**
@@ -19,7 +17,7 @@ use \titon\source\utility\Inflector;
  * @package	titon.source.core
  * @uses	titon\source\utility\Inflector
  */
-class Environment extends Core {
+class Environment {
 
 	/**
 	 * Sets the default environment; defaults to development.
@@ -52,12 +50,9 @@ class Environment extends Core {
 	 * Initialize the environment by applying the configuration.
 	 *
 	 * @access public
-	 * @param $app
 	 * @return void
 	 */
-	public function __construct(Application $app) {
-		parent::__construct($app);
-		
+	public function __construct() {
 		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current());
 
 		if (file_exists($path)) {

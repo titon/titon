@@ -9,6 +9,7 @@
  
 namespace titon\source\system;
 
+use \titon\source\Titon;
 use \titon\source\system\Prototype;
 use \titon\source\log\Exception;
 use \titon\source\system\Action;
@@ -26,6 +27,7 @@ use \titon\source\system\View;
  * external classes to use their functionality and trigger specific callbacks.
  *
  * @package	titon.source.system
+ * @uses	titon\source\Titon
  */
 class Controller extends Prototype {
 
@@ -118,7 +120,7 @@ class Controller extends Prototype {
 		}
 
 		$args['referrer'] = $this->request->referrer();
-		$args['url'] = $app->router->segment(true);
+		$args['url'] = Titon::router()->segment(true);
 
 		$this->view->set($args);
 		$this->view->configure(array(

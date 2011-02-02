@@ -9,6 +9,7 @@
 
 namespace titon\source\log;
 
+use \titon\source\Titon;
 use \titon\source\log\Exception;
 use \titon\source\log\Logger;
 
@@ -17,6 +18,7 @@ use \titon\source\log\Logger;
  * Errors are displayed with a custom backtrace as well as logged to the filesystem (if passed to the Logger).
  *
  * @package titon.source.log
+ * @uses	titon\source\Titon
  * @uses	titon\source\log\Exception
  * @uses	titon\source\log\Logger
  */
@@ -80,7 +82,7 @@ class Debugger {
 	public static function error($number, $message, $file = null, $line = null, $context = null) {
 		self::$__errors[] = compact($number, $message, $file, $line);
 
-		if ($app->config->get('debug.level') > 0) {
+		if (Titon::config()->get('debug.level') > 0) {
 			self::__output($number, $message, $file, $line, $context);
 		} else {
 			Logger::write(sprintf('[%s] %s: %s in %s on line %s.', date('d-M-Y H:i:s'), self::errorType($number), $message, $file, $line));
@@ -149,7 +151,7 @@ class Debugger {
 	* @static
 	*/
 	public static function initialize() {
-		if (!$app->config->get('debug')) {
+		if (!Titon::config()->get('debug')) {
 			self::errorReporting(true);
 		}
 

@@ -9,12 +9,15 @@
 
 namespace titon\source\log;
 
+use \titon\source\Titon;
+
 /**
  * A simple class that handles the logging of errors and debug messages to the filesystem.
  * Logs are categorized based on threat level, which determines the location of where it is to be written.
  * There are two files in which the logger uses: debug.log and error.log, both of which are located in the app/temp.
  *
  * @package	titon.source.log
+ * @uses	titon\source\Titon
  */
 class Logger {
 
@@ -150,7 +153,7 @@ class Logger {
 			fclose($log);
 
 			if ($level >= self::WARNING) {
-				$email = $app->config->get('debug.email');
+				$email = Titon::config()->get('debug.email');
 
 				if (!empty($email)) {
 					mail($email, '[Titon Error] '. $type, $message);

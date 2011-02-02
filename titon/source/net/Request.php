@@ -9,6 +9,7 @@
  
 namespace titon\source\net;
 
+use \titon\source\Titon;
 use \titon\source\log\Exception;
 use \titon\source\net\Http;
 
@@ -17,6 +18,7 @@ use \titon\source\net\Http;
  * It extracts and cleans the GET, POST and FILES data from the current HTTP request.
  * 
  * @package	titon.source.net
+ * @uses	titon\source\Titon
  * @uses	titon\source\log\Exception
  */
 class Request extends Http {
@@ -129,7 +131,7 @@ class Request extends Http {
 		$this->files = $files;
 		$this->get = $get;
 		$this->post = $post;
-		$this->query = $app->router->current('query');
+		$this->query = Titon::router()->current('query');
 
 		// Store accept HTTP headers
 		foreach (array('Accept', 'Accept-Language', 'Accept-Charset') as $acception) {

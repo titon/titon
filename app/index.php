@@ -40,13 +40,6 @@ if (!is_dir(TITON .'source')) {
 include_once TITON .'source'. DS .'Infrastructure.php';
 
 /**
- * Set the include paths.
- */
-$app->loader->includePath(array(
-	APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
-));
-
-/**
  * Dispatch the request.
  */
-$app->dispatch->run();
+\titon\source\Titon::dispatch()->run();

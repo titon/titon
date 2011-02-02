@@ -9,6 +9,7 @@
 
 namespace app;
 
+use \titon\source\Titon;
 use \titon\source\core\Registry;
 
 /**
@@ -29,18 +30,18 @@ class AppView extends \titon\source\system\View {
 	public function construct() {
 		// Inherit the referenced Request and Response from the Controller
 		$this->attachObject('request', function() {
-			return $app->registry->factory('titon\source\net\Request');
+			return Titon::registry()->factory('titon\source\net\Request');
 		});
 
 		$this->attachObject('response', function() {
-			return $app->registry->factory('titon\source\net\Response');
+			return Titon::registry()->factory('titon\source\net\Response');
 		});
 
 		// Attach an engine if it doesn't exist
-		$this->setEngine($app->registry->factory('titon\library\engines\titon\Renderer'));
+		$this->setEngine(Titon::registry()->factory('titon\library\engines\titon\Renderer'));
 
 		// Attach helpers
-		$this->addHelper('html', $app->registry->factory('titon\library\helpers\html\Html'));
+		$this->addHelper('html', Titon::registry()->factory('titon\library\helpers\html\Html'));
 	}
 
 }

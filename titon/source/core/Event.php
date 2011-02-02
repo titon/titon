@@ -9,7 +9,7 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\Core;
+use \titon\source\Titon;
 use \titon\source\library\listeners\ListenerInterface;
 
 /**
@@ -18,8 +18,9 @@ use \titon\source\library\listeners\ListenerInterface;
  * thus allowing you to alter or add to the existing request.
  *
  * @package	titon.source.core
+ * @uses	titon\source\Titon
  */
-class Event extends Core {
+class Event {
 
 	/**
 	 * Defined list of allowed events.
@@ -56,7 +57,7 @@ class Event extends Core {
 	 */
 	public function execute($event, $object = null) {
 		if (!empty($this->__listeners[$event])) {
-			$route = $this->app->router->current();
+			$route = Titon::router()->current();
 
 			foreach ($this->__listeners[$event] as &$listener) {
 				if ($listener['executed'] === true) {
@@ -91,7 +92,7 @@ class Event extends Core {
 	}
 
 	/**
-	 * Register an EventListener (predefined class) to be called at certain events.
+	 * Register an event listener (predefined class) to be called at certain events.
 	 * Can drill down the event to only execute during a certain scope.
 	 *
 	 * @access public

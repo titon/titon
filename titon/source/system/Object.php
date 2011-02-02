@@ -23,7 +23,7 @@ class Object {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array();
+	protected $_config = array('initialize' => true);
 
 	/**
 	 * Merges the custom configuration with the defaults.
@@ -35,7 +35,7 @@ class Object {
 	 */
 	public function __construct(array $config = array()) {
 		if (!empty($config)) {
-			$this->_config = array('initialize' => true) + $this->_config;
+			$this->_config = $config + $this->_config;
 		}
 
 		if ($this->_config['initialize']) {

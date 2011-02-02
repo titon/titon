@@ -12,14 +12,16 @@
  */
 require TITON .'source'. DS .'Paths.php';
 require TITON .'source'. DS .'Bootstrap.php';
+require TITON .'source'. DS .'Titon.php';
 
 /**
  * Require core internals that operate the application.
  */
 require SOURCE .'utility'. DS .'Inflector.php';
 require SOURCE .'utility'. DS .'Set.php';
+require SOURCE .'log'. DS .'Debugger.php';
+require SOURCE .'log'. DS .'Exception.php';
 require SOURCE .'core'. DS .'Application.php';
-require SOURCE .'core'. DS .'Core.php';
 require SOURCE .'core'. DS .'Config.php';
 require SOURCE .'core'. DS .'Dispatch.php';
 require SOURCE .'core'. DS .'Environment.php';
@@ -27,19 +29,13 @@ require SOURCE .'core'. DS .'Event.php';
 require SOURCE .'core'. DS .'Loader.php';
 require SOURCE .'core'. DS .'Registry.php';
 require SOURCE .'core'. DS .'Router.php';
-require SOURCE .'log'. DS .'Debugger.php';
-require SOURCE .'log'. DS .'Exception.php';
 require SOURCE .'system'. DS .'Object.php';
 require SOURCE .'system'. DS .'Prototype.php';
-require SOURCE .'system'. DS .'Controller.php';
 
 /**
- * Initialize the application.
+ * Initialize Titon.
  */
-$app = new \titon\source\core\Application();
-
-//$app->loadBootstraps();
-//Debugger::initialize();
+\titon\source\Titon::initialize();
 
 /**
  * Require custom config and settings from the application.

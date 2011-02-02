@@ -9,7 +9,7 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\Core;
+use \titon\source\Titon;
 use \titon\source\log\Exception;
 
 /**
@@ -17,9 +17,10 @@ use \titon\source\log\Exception;
  * It registers all objects into the class to store in memory and be re-useable later at any given time.
  *
  * @package	titon.source.core
- * @uses	Exception
+ * @uses	titon\source\Titon
+ * @uses	titon\source\log\Exception
  */
-class Registry extends Core {
+class Registry {
 
 	/**
 	 * Configuration settings that are automatically loaded into classes upon instantiation.
@@ -87,10 +88,10 @@ class Registry extends Core {
 			return $this->__registered[$key];
 		}
 
-		$namespace = $this->app->loader->toNamespace($key);
+		$namespace = Titon::loader()->toNamespace($key);
 
 		if (!class_exists($namespace)) {
-			$this->app->loader->import($key);
+			Titon::loader()->import($key);
 		}
 
 		if (class_exists($namespace)) {

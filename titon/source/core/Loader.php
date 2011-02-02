@@ -9,8 +9,6 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\Application;
-use \titon\source\core\Core;
 use \Closure;
 
 /**
@@ -19,7 +17,7 @@ use \Closure;
  *
  * @package	titon.source.core
  */
-class Loader extends Core {
+class Loader {
 
 	/**
 	 * Collection of loader detection closures.
@@ -41,21 +39,16 @@ class Loader extends Core {
 	 * Define autoloader and attempt to autoload from include_paths first.
 	 *
 	 * @access public
-	 * @param $app
 	 * @return void
 	 */
-	public function __construct(Application $app) {
-		parent::__construct($app);
-		
+	public function __construct() {
 		spl_autoload_extensions('.php');
 		spl_autoload_register();
 		spl_autoload_register(array($this, 'autoload'));
 
 		// Add default loader
-		$loader = $this;
-		
-		$this->addLoader('default', function($class) use ($loader) {
-			return $loader->import($class);
+		$this->addLoader('default', function($class) {
+			return Titon::loader()->import($class);
 		});
 	}
 
@@ -162,7 +155,7 @@ class Loader extends Core {
 			return true;
 		}
 
-		foreach (array(ROOT, APP, VENDORS) as $root) {
+		foreach (array(ROOT, APP, TITON, SOURCE, VENDORS, LIBRARY) as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
 			if (is_file($source)) {

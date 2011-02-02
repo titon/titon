@@ -9,6 +9,7 @@
 
 namespace app;
 
+use \titon\source\Titon;
 use \titon\source\system\Controller;
 
 /**
@@ -27,13 +28,13 @@ class AppController extends Controller {
 	 * @access public
 	 * @return void
 	 */
-	public function construct() {
+	public function initialize() {
 		$this->attachObject('request', function() {
-			return $app->registry->factory('titon\source\net\Request');
+			return Titon::registry()->factory('titon\source\net\Request');
 		});
 
 		$this->attachObject('response', function() {
-			return $app->registry->factory('titon\source\net\Response');
+			return Titon::registry()->factory('titon\source\net\Response');
 		});
 	}
 

@@ -9,6 +9,7 @@
 
 namespace titon\source\net;
 
+use \titon\source\Titon;
 use \titon\source\log\Exception;
 use \titon\source\net\Http;
 
@@ -17,6 +18,7 @@ use \titon\source\net\Http;
  * the content body, the content type and associated status code to print out.
  *
  * @package	titon.source.net
+ * @uses	titon\source\Titon
  */
 class Response extends Http {
 
@@ -169,7 +171,7 @@ class Response extends Http {
 	 */
 	public function redirect($url, $code = 302) {
 		$this->status($code)
-			->header('Location', $app->router->build($url))
+			->header('Location', Titon::router()->build($url))
 			->body(null)
 			->respond();
 

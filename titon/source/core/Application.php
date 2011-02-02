@@ -9,93 +9,20 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\Config;
-use \titon\source\core\Dispatch;
-use \titon\source\core\Environment;
-use \titon\source\core\Loader;
-use \titon\source\core\Registry;
-use \titon\source\core\Router;
+use \titon\source\Titon;
 use \titon\source\log\Debugger;
 use \titon\source\log\Exception;
 
 /**
- * The application class contains all core classes that manipulate and power the application, or add quick convenience.
- * It also manages the location and installation of controllers and modules, to speed up the lookup process of its sub-classes.
+ * The class manages the location and installation of controllers and modules,
+ * to speed up the lookup process of its sub-classes.
  *
  * @package	titon.source.core
- * @uses	titon\source\core\Config
- * @uses	titon\source\core\Dispatch
- * @uses	titon\source\core\Environment
- * @uses	titon\source\core\Loader
- * @uses	titon\source\core\Registry
- * @uses	titon\source\core\Router
+ * @uses	titon\source\Titon
  * @uses	titon\source\log\Debugger
  * @uses	titon\source\log\Exception
  */
 class Application {
-
-	/**
-	 * Config class instance.
-	 *
-	 * @see titon\source\core\Config
-	 * @access public
-	 * @var object
-	 */
-	public $config;
-
-	/**
-	 * Dispatch class instance.
-	 *
-	 * @see titon\source\core\Dispatch
-	 * @access public
-	 * @var object
-	 */
-	public $dispatch;
-
-	/**
-	 * Environment class instance.
-	 *
-	 * @see titon\source\core\Environment
-	 * @access public
-	 * @var object
-	 */
-	public $environment;
-
-	/**
-	 * Event class instance.
-	 *
-	 * @see titon\source\core\Event
-	 * @access public
-	 * @var object
-	 */
-	public $event;
-
-	/**
-	 * Loader class instance.
-	 *
-	 * @see titon\source\core\Loader
-	 * @access public
-	 * @var object
-	 */
-	public $loader;
-
-	/**
-	 * Registry class instance.
-	 *
-	 * @see titon\source\core\Registry
-	 * @access public
-	 * @var object
-	 */
-	public $registry;
-
-	/**
-	 * Router class instance.
-	 *
-	 * @see titon\source\core\Router
-	 * @access public
-	 * @var object
-	 */
-	public $router;
 
 	/**
 	 * List of added modules.
@@ -112,22 +39,6 @@ class Application {
 	 * @var string
 	 */
 	private $__defaultModule = 'core';
-
-	/**
-	 * Initialize all the core classes.
-	 *
-	 * @access private
-	 * @return void
-	 */
-	public function __construct() {
-		$this->config = new Config($this);
-		$this->dispatch = new Dispatch($this);
-		$this->environment = new Environment($this);
-		$this->event = new Event($this);
-		$this->loader = new Loader($this);
-		$this->registry = new Registry($this);
-		$this->router = new Router($this);
-	}
 
 	/**
 	 * Add a controller to a module.
@@ -169,7 +80,7 @@ class Application {
 	 * @return string
 	 */
 	public function charset() {
-		return $this->config->get('app.encoding') ?: 'UTF-8';
+		return Titon::config()->get('app.encoding') ?: 'UTF-8';
 	}
 
 	/**
@@ -227,7 +138,7 @@ class Application {
 	 * @return string
 	 */
 	public function name() {
-		return $this->config->get('app.name') ?: '';
+		return Titon::config()->get('app.name') ?: '';
 	}
 
 	/**
@@ -237,7 +148,7 @@ class Application {
 	 * @return string
 	 */
 	public function salt() {
-		return $this->config->get('app.salt') ?: '';
+		return Titon::config()->get('app.salt') ?: '';
 	}
 
 	/**
@@ -249,7 +160,7 @@ class Application {
 	 * @chainable
 	 */
 	public function setDefaultModule($module) {
-		$module = mb_strtolower($module);
+		$module = strtolower($module);
 
 		if (isset($this->__modules[$module])) {
 			$this->__defaultModule = $module;

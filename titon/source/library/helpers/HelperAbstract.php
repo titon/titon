@@ -9,6 +9,7 @@
 
 namespace titon\source\library\helpers;
 
+use \titon\source\Titon;
 use \titon\source\core\Prototype;
 use \titon\source\library\helpers\HelperInterface;
 use \titon\source\system\View;
@@ -18,6 +19,7 @@ use \titon\source\system\View;
  * Defines methods and properties for HTML tags and attribute generation.
  *
  * @package	titon.source.library.helpers
+ * @uses	titon\source\Titon
  * @abstract
  */
 abstract class HelperAbstract extends Prototype implements HelperInterface {
@@ -64,7 +66,7 @@ abstract class HelperAbstract extends Prototype implements HelperInterface {
 				}
 
 				if ($escape === true) {
-					$value = htmlentities($value, ENT_COMPAT, $app->charset());
+					$value = htmlentities($value, ENT_COMPAT, Titon::app()->charset());
 				}
 
 				$parsed .= ' '. strtolower($key) .'="'. $value .'"';

@@ -9,6 +9,8 @@
 
 namespace app\config;
 
+use \titon\source\Titon;
+
 /**
  * Environments
  *
@@ -16,19 +18,18 @@ namespace app\config;
  * The specific environment configuration file is loaded based on the current hostname.
  */
 
-$app->environment
+Titon::env()
 	->setup('development', array('localhost', '127.0.0.1'))
-
-	// Set the default environment to use if an environment is found without a matching host.
 	->setDefault('development');
 
 /**
  * Configuration
  *
  * Define configuration values that should be global and persist across all environments.
+ * Place environment specific config within the environment specific file.
  */
 
-$app->config
+Titon::config()
 	->set('app', array(
 		'name' => 'Titon',
 		'salt' => '66c63d989368170aff46040ab2353923',

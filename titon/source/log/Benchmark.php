@@ -9,6 +9,7 @@
 
 namespace titon\source\log;
 
+use \titon\source\Titon;
 use \titon\source\log\Logger;
 
 /**
@@ -16,6 +17,7 @@ use \titon\source\log\Logger;
  * Benchmarks store the time difference and memory usage between two blocks during runtime.
  *
  * @package	titon.source.log
+ * @uses	titon\source\Titon
  * @uses	titon\source\log\Logger
  */
 class Benchmark {
@@ -99,7 +101,7 @@ class Benchmark {
 	 * @static
 	 */
 	public static function start($key = 'benchmark') {
-		if ($app->config->get('debug.level') > 0) {
+		if (Titon::config()->get('debug.level') > 0) {
 			self::$__benchmarks[$key] = array(
 				'startTime'		=> microtime(true),
 				'startMemory'	=> memory_get_usage(true),
@@ -117,7 +119,7 @@ class Benchmark {
 	 * @static
 	 */
 	public static function stop($key = 'benchmark', $log = false) {
-		if ($app->config->get('debug.level') > 0) {
+		if (Titon::config()->get('debug.level') > 0) {
 			if (empty(self::$__benchmarks[$key])) {
 				return false;
 			}
