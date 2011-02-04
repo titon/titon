@@ -74,12 +74,12 @@ class Application {
 	}
 
 	/**
-	 * Get the currently defined charset for the application.
+	 * Get the currently defined encoding for the application.
 	 *
 	 * @access public
 	 * @return string
 	 */
-	public function charset() {
+	public function encoding() {
 		return Titon::config()->get('app.encoding') ?: 'UTF-8';
 	}
 

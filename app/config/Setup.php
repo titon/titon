@@ -18,7 +18,7 @@ use \titon\source\Titon;
  * The specific environment configuration file is loaded based on the current hostname.
  */
 
-Titon::env()
+Titon::environment()
 	->setup('development', array('localhost', '127.0.0.1'))
 	->setDefault('development');
 

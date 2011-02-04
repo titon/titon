@@ -60,10 +60,11 @@ class Titon {
 	 *
 	 * @access public
 	 * @param string $key
+	 * @param array $args
 	 * @return object
 	 * @static
 	 */
-	public static function __callStatic($key) {
+	public static function __callStatic($key, $args = array()) {
 		return self::get($key);
 	}
 
@@ -91,6 +92,10 @@ class Titon {
 	 * @static
 	 */
 	public static function initialize() {
+		// Start up error reporting
+		Debugger::initialize();
+
+		// Install core objects
 		self::install('app', new Application(), true);
 		self::install('config', new Config(), true);
 		self::install('dispatch', new Dispatch(), true);
@@ -98,15 +103,12 @@ class Titon {
 		self::install('loader', new Loader(), true);
 		self::install('registry', new Registry(), true);
 		self::install('router', new Router(), true);
-		self::install('env', new Environment(), true);
+		self::install('environment', new Environment(), true);
 
 		// Set include paths
 		self::loader()->includePath(array(
 			APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
 		));
-
-		// Initialize static classes
-		Debugger::initialize();
 	}
 
 	/**
