@@ -30,14 +30,6 @@ class Loader {
 	private $__loaders = array();
 
 	/**
-	 * Files that have been included into the current scope through the use of import() or autoload().
-	 *
-	 * @access private
-	 * @var array
-	 */
-	private $__imported = array();
-
-	/**
 	 * Define autoloader and attempt to autoload from include_paths first.
 	 *
 	 * @access public
@@ -65,7 +57,7 @@ class Loader {
 	 * @chainable
 	 */
 	public function addLoader($key, Closure $loader) {
-		$this->__loaders[$key] = $loader;
+		$this->__loaders[(string)$key] = $loader;
 
 		return $this;
 	}
@@ -121,17 +113,6 @@ class Loader {
 	}
 
 	/**
-	 * Check to see if a specific file has been imported.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function check($key) {
-		return in_array($key, $this->__imported);
-	}
-
-	/**
 	 * Converts OS directory separators to the standard forward slash.
 	 *
 	 * @access public
@@ -153,16 +134,10 @@ class Loader {
 	public function import($path) {
 		$namespace = $this->toNamespace($path);
 
-		if (isset($this->__imported[$namespace])) {
-			return true;
-		}
-
 		foreach (array(ROOT, APP, TITON, SOURCE, VENDORS, LIBRARY) as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
 			if (is_file($source)) {
-				$this->__imported[] = $namespace;
-
 				include_once $source;
 				return true;
 			}
@@ -202,7 +177,7 @@ class Loader {
 	 * @chainable
 	 */
 	public function removeLoader($key) {
-		unset($this->__loaders[$key]);
+		unset($this->__loaders[(string)$key]);
 
 		return $this;
 	}

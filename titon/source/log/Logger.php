@@ -148,7 +148,7 @@ class Logger {
 				$message = '['. $type .'] '. $message;
 			}
 
-			$log = fopen(TEMP . $file, 'ab');
+			$log = fopen(APP_TEMP . $file, 'ab');
 			fwrite($log, $message ."\n");
 			fclose($log);
 

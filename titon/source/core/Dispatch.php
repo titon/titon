@@ -9,6 +9,7 @@
 
 namespace titon\source\core;
 
+use \titon\source\Titon;
 use \titon\library\dispatchers\front\Front;
 use \titon\library\dispatchers\front\FrontDev;
 use \titon\source\library\dispatchers\DispatcherInterface;
@@ -42,7 +43,8 @@ class Dispatch {
      * @return void
      */
     public function run() {
-        $params = $this->app->router->current();
+
+        /*$params = Titon::router()->current();
         $dispatch = null;
 
         if (!empty($this->__mapping)) {
@@ -81,7 +83,7 @@ class Dispatch {
         }
 
 		$dispatcher->run();
-		exit();
+		exit();*/
     }
 
     /**

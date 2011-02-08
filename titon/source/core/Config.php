@@ -37,6 +37,16 @@ class Config {
 	private $__config = array();
 
 	/**
+	 * Get the currently defined encoding for the application.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function encoding() {
+		return $this->get('app.encoding') ?: 'UTF-8';
+	}
+
+	/**
 	 * Grab a value from the current configuration.
 	 *
 	 * @access public
@@ -87,6 +97,26 @@ class Config {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Grabs the defined project name.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function name() {
+		return $this->get('app.name');
+	}
+
+	/**
+	 * Get the currently defined salt for the application.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function salt() {
+		return $this->get('app.salt');
 	}
 
 	/**

@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
+use \titon\source\Titon;
+
 /**
  * Compare the PHP version so that the application is running in 5.3!
  */
@@ -42,4 +44,6 @@ include_once TITON .'source'. DS .'Infrastructure.php';
 /**
  * Dispatch the request.
  */
-\titon\source\Titon::dispatch()->run();
+Titon::startup();
+Titon::dispatch()->run();
+Titon::shutdown();

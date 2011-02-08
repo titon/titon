@@ -9,8 +9,6 @@
 
 namespace titon\source\core;
 
-use \titon\source\Titon;
-use \titon\source\log\Debugger;
 use \titon\source\log\Exception;
 
 /**
@@ -18,8 +16,6 @@ use \titon\source\log\Exception;
  * to speed up the lookup process of its sub-classes.
  *
  * @package	titon.source.core
- * @uses	titon\source\Titon
- * @uses	titon\source\log\Debugger
  * @uses	titon\source\log\Exception
  */
 class Application {
@@ -38,7 +34,7 @@ class Application {
 	 * @access public
 	 * @var string
 	 */
-	private $__defaultModule = 'core';
+	private $__default = 'core';
 
 	/**
 	 * Add a controller to a module.
@@ -50,7 +46,7 @@ class Application {
 	 * @chainable
 	 */
 	public function addController($module, $controller) {
-		$this->__modules[$module]['controllers'][] = $controller;
+		$this->__modules[$module][] = $controller;
 
 		return $this;
 	}
@@ -65,22 +61,9 @@ class Application {
 	 * @chainable
 	 */
 	public function addModule($module, array $controllers = array()) {
-		$this->__modules[$module] = array(
-			'index' => $module,
-			'controllers' => $controllers
-		);
+		$this->__modules[$module] = $controllers;
 
 		return $this;
-	}
-
-	/**
-	 * Get the currently defined encoding for the application.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function encoding() {
-		return Titon::config()->get('app.encoding') ?: 'UTF-8';
 	}
 
 	/**
@@ -91,64 +74,41 @@ class Application {
 	 * @return array
 	 */
 	public function getControllers($module = null) {
-		if (isset($this->__modules[$module])) {
-			return $this->__modules[$module]['controllers'];
-		}
+		return isset($this->__modules[$module]) ? $this->__modules[$module] : $this->__modules;
+	}
 
-		$controllers = array();
-
-		if (!empty($this->__modules)) {
-			foreach ($this->__modules as $module => $data) {
-				$controllers[$module] = $data['controllers'];
-			}
-		}
-
-		return $controllers;
+	/**
+	 * Return the default module.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getDefaultModule() {
+		return $this->__default;
 	}
 
 	/**
 	 * Return a list of added modules.
 	 *
 	 * @access public
-	 * @param boolean $list
 	 * @return array
 	 */
-	public function getModules($list = true) {
-		return ($list) ? array_keys($this->__modules) : $this->__modules;
+	public function getModules() {
+		return array_keys($this->__modules);
 	}
 
 	/**
-	 * Include the module bootstrap files.
+	 * Bootstrap the application.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function loadBootstraps() {
+	public function initialize() {
 		foreach (scandir(APP_MODULES) as $module) {
 			if (is_file(APP_MODULES . $module . DS .'Bootstrap.php')) {
 				include_once APP_MODULES . $module . DS .'Bootstrap.php';
 			}
 		}
-	}
-
-	/**
-	 * Grabs the defined project name.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function name() {
-		return Titon::config()->get('app.name') ?: '';
-	}
-
-	/**
-	 * Get the currently defined salt for the application.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function salt() {
-		return Titon::config()->get('app.salt') ?: '';
 	}
 
 	/**
@@ -160,29 +120,10 @@ class Application {
 	 * @chainable
 	 */
 	public function setDefaultModule($module) {
-		$module = strtolower($module);
-
 		if (isset($this->__modules[$module])) {
-			$this->__defaultModule = $module;
+			$this->__default = $module;
 		} else {
 			throw new Exception(sprintf('Can not set default module as %s does not exist.', $module));
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Set which controller should be the module index.
-	 *
-	 * @access public
-	 * @param string $module
-	 * @param string $index
-	 * @return this
-	 * @chainable
-	 */
-	public function setModuleIndex($module, $index) {
-		if (!empty($index)) {
-			$this->__modules[$module]['index'] = $index;
 		}
 
 		return $this;

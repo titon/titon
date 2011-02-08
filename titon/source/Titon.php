@@ -92,10 +92,6 @@ class Titon {
 	 * @static
 	 */
 	public static function initialize() {
-		// Start up error reporting
-		Debugger::initialize();
-
-		// Install core objects
 		self::install('app', new Application(), true);
 		self::install('config', new Config(), true);
 		self::install('dispatch', new Dispatch(), true);
@@ -104,11 +100,9 @@ class Titon {
 		self::install('registry', new Registry(), true);
 		self::install('router', new Router(), true);
 		self::install('environment', new Environment(), true);
-
-		// Set include paths
-		self::loader()->includePath(array(
-			APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
-		));
+		
+		// Start up error reporting
+		Debugger::initialize();
 	}
 
 	/**
@@ -127,6 +121,31 @@ class Titon {
 		if ($lock) {
 			self::$__locked[] = $key;
 		}
+	}
+
+	/**
+	 * Startup the framework.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public static function startup() {
+		self::loader()->includePath(array(
+			APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
+		));
+
+		self::environment()->initialize();
+		self::app()->initialize();
+	}
+
+	/**
+	 * Shutdown the framework.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public static function shutdown() {
+		exit();
 	}
 
 	/**

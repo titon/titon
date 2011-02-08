@@ -20,7 +20,7 @@ use \titon\source\Titon;
 
 Titon::environment()
 	->setup('development', array('localhost', '127.0.0.1'))
-	->setDefault('development');
+	->fallback('development');
 
 /**
  * Configuration

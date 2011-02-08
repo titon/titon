@@ -10,12 +10,14 @@
 namespace titon\source\core;
 
 use \titon\source\utility\Inflector;
+use \titon\source\log\Exception;
 
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
  * @package	titon.source.core
  * @uses	titon\source\utility\Inflector
+ * @uses	titon\source\log\Exception
  */
 class Environment {
 
@@ -47,36 +49,18 @@ class Environment {
 	);
 
 	/**
-	 * Initialize the environment by applying the configuration.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function __construct() {
-		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current());
-
-		if (file_exists($path)) {
-			include_once $path;
-		}
-	}
-
-	/**
 	 * Return the current environment name, based on hostname.
 	 *
 	 * @access public
 	 * @return string
 	 */
 	public function current() {
-		return $this->__hostMapping[$_SERVER['HTTP_HOST']] ?: $this->getDefault();
-	}
+		$host = $_SERVER['HTTP_HOST'];
 
-	/**
-	 * Get the default environment.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getDefault() {
+		if (isset($this->__hostMapping[$host])) {
+			return $this->__hostMapping[$host];
+		}
+
 		return $this->__default;
 	}
 
@@ -85,11 +69,30 @@ class Environment {
 	 *
 	 * @access public
 	 * @param string $name
+	 * @return this
+	 * @chainable
+	 */
+	public function fallback($name) {
+		if (!in_array($name, $this->__environments)) {
+			throw new Exception(sprintf('Environment %s does not exist.', $name));
+		}
+
+		$this->__default = $name;
+
+		return $this;
+	}
+
+	/**
+	 * Initialize the environment by including the configuration.
+	 *
+	 * @access public
 	 * @return void
 	 */
-	public function setDefault($name) {
-		if (in_array($name, $this->__environments)) {
-			$this->__default = $name;
+	public function initialize() {
+		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current());
+
+		if (is_file($path)) {
+			include_once $path;
 		}
 	}
 

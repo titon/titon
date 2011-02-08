@@ -151,15 +151,15 @@ class Debugger {
 	* @static
 	*/
 	public static function initialize() {
-		if (!Titon::config()->get('debug')) {
+		if (!Titon::config()->get('debug.level')) {
 			self::errorReporting(true);
 		}
 
 		ini_set('log_errors', true);
 		ini_set('report_memleaks', true);
-		ini_set('error_log', TEMP . Logger::ERROR_LOG);
+		ini_set('error_log', APP_TEMP . Logger::ERROR_LOG);
 
-		set_error_handler(array(__NAMESPACE__ .'Debugger', 'error'), E_ALL | E_STRICT);
+		set_error_handler(array(__NAMESPACE__ . NS .'Debugger', 'error'), E_ALL | E_STRICT);
 		set_exception_handler(array(new Exception(), 'log'));
 	}
 
@@ -218,6 +218,8 @@ class Debugger {
 		if (empty($path)) {
 			return '[Internal]';
 		}
+
+		$path = Titon::loader()->ds($path);
 
 		if (strpos($path, APP) !== false) {
 			$path = str_replace(APP, '[App]', $path);
