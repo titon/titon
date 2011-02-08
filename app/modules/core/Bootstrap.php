@@ -18,5 +18,5 @@ use \titon\source\Titon;
  */
 
 Titon::app()
-	->addModule('core', array('Core'))
+	->addModule('core', array('index'))
 	->setDefaultModule('core');

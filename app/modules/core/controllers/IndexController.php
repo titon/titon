@@ -15,7 +15,7 @@ use \app\AppController;
  * By default the framework will determine which controller is the "index" controller of a module
  * by matching the module name with the controller name: core module -> core controller.
  */
-class CoreController extends AppController {
+class IndexController extends AppController {
 
 	/**
 	 * The index() action is called automatically as the index page of a controller.

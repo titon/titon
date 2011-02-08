@@ -9,6 +9,9 @@
 
 namespace titon\source\core;
 
+use \titon\source\Titon;
+use \titon\source\core\routes\Route;
+
 /**
  * The Router determines the current routing request, based on the URL address and environment.
  * Stores the current route, its parsed segments and the base URL.
@@ -61,37 +64,13 @@ class Router {
 	private $__slugs = array();
 
 	/**
-	 * Parses the current URL into multiple segments as well as parses the current route into an application path.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function __construct() {
-		list($base, $route) = explode('index.php', $_SERVER['PHP_SELF']);
-
-		if (empty($route)) {
-			$route = '/';
-		}
-
-		$this->__segments = array(
-			'protocol'  => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://',
-			'host'      => $_SERVER['HTTP_HOST'],
-			'base'      => $base,
-			'route'     => $route,
-			'query'     => $_GET
-		);
-
-		$this->__current = $this->analyze($route);
-	}
-
-	/**
 	 * Analyze a string (a route found in the address bar) into an array that maps to the correct module, controller and action.
 	 *
 	 * @access public
 	 * @param string $url
-	 * @return array
+	 * @return Route
 	 */
-	public function analyze($url = '') {
+	public function analyze($url) {
 		if (isset($this->__mapped[$url])) {
 			return $this->__mapped[$url];
 		}
@@ -99,12 +78,8 @@ class Router {
 		$params = $this->defaults();
 		$params['query'] = $this->segment('query');
 
-		if (empty($url)) {
-			$url = $this->segment('route');
-		}
-
 		if ($url === '/') {
-			return $params;
+			return new Route('/', $params);
 		}
 
 		$url = trim($url, '/');
@@ -114,7 +89,11 @@ class Router {
 		};
 
 		// Module
-		if (is_dir(APP_MODULES . $parts[0])) {
+		$modules = Titon::app()->getModules();
+		
+		if (in_array($parts[0], $modules)) {
+			$controllers = Titon::app()->getControllers($parts[0]);
+			
 			$params['module'] = $inflect($parts[0]);
 
 			if (count($parts) == 1) {
@@ -178,29 +157,28 @@ class Router {
 	}
 
 	/**
-	 * Combine an array route into a string URL path. Injects arguments and query parameters.
+	 * Takes a route in array format and processes it down into a single string that represents an interal URL path.
 	 *
 	 * @access public
 	 * @param array $route
 	 * @return string
 	 */
-	public function build($route = '') {
-		if (!is_array($route)) {
-			return (string)$route;
-			
-		} else if (empty($route)) {
-			$route = $this->current();
-		}
-
+	public function build(array $route) {
 		$route = $this->defaults($route);
 		$path = $this->base();
 
-		if ($route['module'] != 'core') {
+		if ($route['module'] != Titon::app()->getDefaultModule()) {
 			$path .= $route['module'] .'/';
 		}
 
-		$path .= $route['controller'] .'/'. $route['action'];
-		$path .= !empty($route['ext']) ? '.'. $route['ext'] .'/' : '/';
+		$path .= $route['controller'] .'/';
+
+		if (!empty($route['ext'])) {
+			$path .= $route['action'] .'.'. $route['ext'] .'/';
+			
+		} else if ($route['action'] != 'index' || !empty($route['params'])) {
+			$path .= $route['action'] .'/';
+		}
 
 		if (!empty($route['params'])) {
 			$path .= implode('/', $route['params']) .'/';
@@ -246,11 +224,11 @@ class Router {
 		);
 
 		if (empty($data['module'])) {
-			$data['module'] = 'core';
+			$data['module'] = Titon::app()->getDefaultModule();
 		}
 
 		if (empty($data['controller'])) {
-			$data['controller'] = 'core';
+			$data['controller'] = 'index';
 		}
 
 		if (empty($data['action'])) {
@@ -286,6 +264,30 @@ class Router {
 		}
 
 		return $this->slug($url);
+	}
+
+	/**
+	 * Parses the current URL into multiple segments as well as parses the current route into an application path.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		list($base, $route) = explode('index.php', $_SERVER['PHP_SELF']);
+
+		if (empty($route)) {
+			$route = '/';
+		}
+
+		$this->__segments = array(
+			'protocol'  => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://',
+			'host'      => $_SERVER['HTTP_HOST'],
+			'base'      => $base,
+			'route'     => $route,
+			'query'     => $_GET
+		);
+
+		$this->__current = $this->analyze($route);
 	}
 
 	/**

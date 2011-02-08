@@ -136,6 +136,7 @@ class Titon {
 
 		self::environment()->initialize();
 		self::app()->initialize();
+		self::router()->initialize();
 	}
 
 	/**
