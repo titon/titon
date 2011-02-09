@@ -79,42 +79,42 @@ class Router {
 		$params['query'] = $this->segment('query');
 
 		if ($url === '/') {
-			return new Route('/', $params);
+			return $params;
 		}
 
 		$url = trim($url, '/');
 		$parts = explode('/', $url);
+		$modules = Titon::app()->getModules();
+		$controllers = Titon::app()->getControllers();
 		$inflect = function($string) {
 			return str_replace('-', '_', preg_replace('/[^a-z\-_]+/i', '', $string));
 		};
 
-		// Module
-		$modules = Titon::app()->getModules();
-		
+		// If the module is found within the URL and has been bootstrapped
 		if (in_array($parts[0], $modules)) {
-			$controllers = Titon::app()->getControllers($parts[0]);
-			
 			$params['module'] = $inflect($parts[0]);
+			unset($parts[0]);
 
-			if (count($parts) == 1) {
-				$params['controller'] = $params['module'];
-			} else {
+			// If parts isn't empty, was controller listed within the module?
+			if (!empty($parts) && in_array($parts[1], $controllers[$params['module']])) {
 				$params['controller'] = $inflect($parts[1]);
 				unset($parts[1]);
 			}
 
-		// Controller
+		// If the module is not in the URL, fallback to default
+		// Since no module, first path must be a controller
 		} else {
 			$params['controller'] = $inflect($parts[0]);
+			unset($parts[0]);
 		}
 
-		unset($parts[0]);
-
+		// Parse out the action, query params, named params, and arguments
 		if (!empty($parts)) {
-			// Action
+
+			// Use as action if not a query param or has an extension
 			$action = array_shift($parts);
 
-			if (is_string($action) && strpos($action, ':') === false) {
+			if (strpos($action, ':') === false) {
 				if (strpos($action, '.') !== false) {
 					list($action, $ext) = explode('.', $action);
 					$params['ext'] = $inflect($ext);
@@ -125,14 +125,12 @@ class Router {
 				array_unshift($parts, $action);
 			}
 
-			// Query
+			// If the part contains a colon, its a query param, else action argument
 			foreach ($parts as $index => $part) {
-				// Params
 				if (strpos($part, ':') !== false) {
 					list($key, $value) = explode(':', $part);
 					$params['query'][$key] = $value;
 
-				// Arguments
 				} else {
 					$params['params'][] = $part;
 				}
@@ -164,8 +162,13 @@ class Router {
 	 * @return string
 	 */
 	public function build(array $route) {
+		$defaults = $this->defaults();
 		$route = $this->defaults($route);
 		$path = $this->base();
+
+		if ($defaults === $route) {
+			return $path;
+		}
 
 		if ($route['module'] != Titon::app()->getDefaultModule()) {
 			$path .= $route['module'] .'/';
@@ -198,18 +201,17 @@ class Router {
 	}
 
 	/**
-	 * Return the current analyzed route as an array of values.
+	 * Return the current analyzed route object.
 	 *
 	 * @access public
-	 * @param string $key
 	 * @return string
 	 */
-	public function current($key = null) {
-		return $this->__current[$key] ?: $this->__current;
+	public function current() {
+		return $this->__current;
 	}
 
 	/**
-	 * Maps the default routes and determines the controller and container.
+	 * Maps the default routes and determines the controller and module.
 	 * Can be merged with a dynamic route to map missing segments.
 	 *
 	 * @access public
