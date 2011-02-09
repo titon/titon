@@ -11,6 +11,7 @@ namespace titon\source\core;
 
 use \titon\source\Titon;
 use \titon\source\core\routes\Route;
+use \titon\source\core\routes\RouteInterface;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -82,29 +83,34 @@ class Router {
 			return $params;
 		}
 
+		// Remove base path if it exists
+		$base = $this->base();
+		$baseLength = strlen($base);
+
+		if (substr($url, 0, $baseLength) == $base) {
+			$url = substr($url, $baseLength);
+		}
+
 		$url = trim($url, '/');
 		$parts = explode('/', $url);
 		$modules = Titon::app()->getModules();
 		$controllers = Titon::app()->getControllers();
-		$inflect = function($string) {
-			return str_replace('-', '_', preg_replace('/[^a-z\-_]+/i', '', $string));
-		};
 
 		// If the module is found within the URL and has been bootstrapped
 		if (in_array($parts[0], $modules)) {
-			$params['module'] = $inflect($parts[0]);
+			$params['module'] = $this->inflect($parts[0]);
 			unset($parts[0]);
 
 			// If parts isn't empty, was controller listed within the module?
 			if (!empty($parts) && in_array($parts[1], $controllers[$params['module']])) {
-				$params['controller'] = $inflect($parts[1]);
+				$params['controller'] = $this->inflect($parts[1]);
 				unset($parts[1]);
 			}
 
 		// If the module is not in the URL, fallback to default
 		// Since no module, first path must be a controller
 		} else {
-			$params['controller'] = $inflect($parts[0]);
+			$params['controller'] = $this->inflect($parts[0]);
 			unset($parts[0]);
 		}
 
@@ -117,10 +123,10 @@ class Router {
 			if (strpos($action, ':') === false) {
 				if (strpos($action, '.') !== false) {
 					list($action, $ext) = explode('.', $action);
-					$params['ext'] = $inflect($ext);
+					$params['ext'] = $ext;
 				}
 
-				$params['action'] = $inflect($action);
+				$params['action'] = $this->inflect($action);
 			} else {
 				array_unshift($parts, $action);
 			}
@@ -164,40 +170,65 @@ class Router {
 	public function build(array $route) {
 		$defaults = $this->defaults();
 		$route = $this->defaults($route);
-		$path = $this->base();
 
 		if ($defaults === $route) {
-			return $path;
+			return $this->base();
 		}
 
+		$path = array();
+		$path[] = trim($this->base(), '/');
+
+		// Module, controller, action
 		if ($route['module'] != Titon::app()->getDefaultModule()) {
-			$path .= $route['module'] .'/';
+			$path[] = $route['module'];
 		}
 
-		$path .= $route['controller'] .'/';
+		$path[] = $route['controller'];
 
 		if (!empty($route['ext'])) {
-			$path .= $route['action'] .'.'. $route['ext'] .'/';
+			$path[] = $route['action'] .'.'. $route['ext'];
 			
 		} else if ($route['action'] != 'index' || !empty($route['params'])) {
-			$path .= $route['action'] .'/';
+			$path[] = $route['action'];
 		}
 
+		unset($route['module'], $route['controller'], $route['action'], $route['ext']);
+
+		// Gather the params and query
+		if (!empty($route)) {
+			foreach ($route as $key => $value) {
+				if ($key === 'params' || $key === 'query' || $key === '#') {
+					continue;
+
+				} else if (is_numeric($key)) {
+					$route['params'][$key] = $value;
+
+				} else if (is_string($key)) {
+					$route['query'][$key] = $value;
+				}
+
+				unset($route[$key]);
+			}
+		}
+
+		// Action arguments / parameters
 		if (!empty($route['params'])) {
-			$path .= implode('/', $route['params']) .'/';
+			$path[] = implode('/', $route['params']);
 		}
 
 		if (!empty($route['query'])) {
 			foreach ($route['query'] as $key => $value) {
-				$path .= str_replace(' ', '', $key) .':'. urlencode($value) .'/';
+				$path[] = str_replace(' ', '', $key) .':'. urlencode($value);
 			}
 		}
 
 		if (!empty($route['#'])) {
-			$path .= '#'. $route['#'];
+			$path[] = '#'. $route['#'];
 		}
 
-		return $path;
+		unset($route);
+
+		return '/'. implode('/', $path);
 	}
 
 	/**
@@ -246,26 +277,37 @@ class Router {
 	 *
 	 * @access public
 	 * @param string|array $url
-	 *      - 'slugName' // Returns the defined array for the slug
-	 *      - array('slug' => 'slugName', 'id' => 5) // Merges with slugName's array and appends the id index
-	 *      - array('controller' => 'main', 'action' => 'index') // Merges with default values and returns
 	 * @return string|array
 	 */
 	public function detect($url) {
 		if (is_array($url)) {
 			if (isset($url['slug'])) {
 				$slug = $url['slug'];
+				$route = $this->slug($slug);
+				
 				unset($url['slug']);
 
-				if ($route = $this->slug($slug)) {
-					return ($url + $route);
+				if (!empty($route)) {
+					$url = $url + $route;
 				}
 			} else {
-				return ($url + $this->current());
+				// @todo
 			}
 		}
 
 		return $this->slug($url);
+	}
+
+	/**
+	 * Inflects a URL segment to it's proper internal format.
+	 * Dashes are replaced with underscores, non alpha-numeric are removed.
+	 *
+	 * @access public
+	 * @param string $string
+	 * @return string
+	 */
+	public function inflect($string) {
+		return str_replace('-', '_', preg_replace('/[^a-z\-_]+/i', '', $string));
 	}
 
 	/**
@@ -293,15 +335,18 @@ class Router {
 	}
 
 	/**
-	 * Add a custom defined route that matches to an internal destination.
+	 * Add a custom defined route object that matches to an internal destination.
 	 *
 	 * @access public
-	 * @param string $url
-	 * @param string|array $route
-	 * @return void
+	 * @param string $key
+	 * @param RouteInterface $route
+	 * @return this
+	 * @chainable
 	 */
-	public function map($url, $route = array()) {
-		// @todo
+	public function map($key, RouteInterface $route) {
+		$this->__routes[$key] = $route;
+
+		return $this;
 	}
 
 	/**
