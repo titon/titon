@@ -7,9 +7,9 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core\readers;
+namespace titon\library\readers\core;
 
-use \titon\source\core\readers\ReaderAbstract;
+use \titon\source\library\readers\ReaderAbstract;
 use \titon\source\log\Exception;
 
 /**

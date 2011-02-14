@@ -7,21 +7,20 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core\readers;
+namespace titon\library\readers\core;
 
-use \titon\source\core\readers\ReaderAbstract;
+use \titon\source\library\readers\ReaderAbstract;
 use \titon\source\log\Exception;
 
 /**
- * A reader that loads its configuration from a PHP file.
- * The PHP file must contain a return statement that returns an array.
+ * A reader that loads its configuration from an INI file.
  *
  * @package	titon.source.core.readers
  * @uses	titon\source\log\Exception
  * 
- * @link	http://php.net/manual/en/function.include.php
+ * @link	http://php.net/parse_ini_file
  */
-class PhpReader extends ReaderAbstract {
+class IniReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
@@ -29,7 +28,7 @@ class PhpReader extends ReaderAbstract {
 	 * @access protected
 	 * @var string
 	 */
-	protected $_extension = 'php';
+	protected $_extension = 'ini';
 
 	/**
 	 * Parse the file contents.
@@ -38,12 +37,12 @@ class PhpReader extends ReaderAbstract {
 	 * @return void
 	 */
 	public function read() {
-		$data = include_once $this->_path;
-		
+		$data = parse_ini_file($this->_path, true, INI_SCANNER_NORMAL);
+
 		if (is_array($data)) {
 			$this->configure($data);
 		} else {
-			throw new Exception('Reader failed to import PHP configuration.');
+			throw new Exception('Reader failed to parse INI configuration.');
 		}
 	}
 

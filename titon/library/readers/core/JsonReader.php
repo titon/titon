@@ -7,20 +7,21 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core\readers;
+namespace titon\library\readers\core;
 
-use \titon\source\core\readers\ReaderAbstract;
+use \titon\source\library\readers\ReaderAbstract;
 use \titon\source\log\Exception;
 
 /**
- * A reader that loads its configuration from an INI file.
+ * A reader that loads its configuration from a JSON file.
+ * Must have the JSON module installed.
  *
  * @package	titon.source.core.readers
  * @uses	titon\source\log\Exception
  * 
- * @link	http://php.net/parse_ini_file
+ * @link	http://php.net/json_decode
  */
-class IniReader extends ReaderAbstract {
+class JsonReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
@@ -28,7 +29,7 @@ class IniReader extends ReaderAbstract {
 	 * @access protected
 	 * @var string
 	 */
-	protected $_extension = 'ini';
+	protected $_extension = 'json';
 
 	/**
 	 * Parse the file contents.
@@ -37,12 +38,12 @@ class IniReader extends ReaderAbstract {
 	 * @return void
 	 */
 	public function read() {
-		$data = parse_ini_file($this->_path, true, INI_SCANNER_NORMAL);
+		$data = json_decode(file_get_contents($this->_path), true);
 
 		if (is_array($data)) {
 			$this->configure($data);
 		} else {
-			throw new Exception('Reader failed to parse INI configuration.');
+			throw new Exception('Reader failed to decode JSON configuration.');
 		}
 	}
 

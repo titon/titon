@@ -9,7 +9,7 @@
 
 namespace titon\source\core;
 
-use \titon\source\core\readers\ReaderInterface;
+use \titon\source\library\readers\ReaderInterface;
 use \titon\source\log\Debugger;
 use \titon\source\log\Exception;
 use \titon\source\utility\Inflector;
@@ -43,7 +43,7 @@ class Config {
 	 * @return string
 	 */
 	public function encoding() {
-		return $this->get('app.encoding') ?: 'UTF-8';
+		return $this->get('App.encoding') ?: 'UTF-8';
 	}
 
 	/**
@@ -106,7 +106,7 @@ class Config {
 	 * @return string
 	 */
 	public function name() {
-		return $this->get('app.name');
+		return $this->get('App.name');
 	}
 
 	/**
@@ -116,7 +116,7 @@ class Config {
 	 * @return string
 	 */
 	public function salt() {
-		return $this->get('app.salt');
+		return $this->get('App.salt');
 	}
 
 	/**
@@ -130,7 +130,7 @@ class Config {
 	 * @chainable
 	 */
 	public function set($key, $value) {
-		if ($key === 'debug.level') {
+		if ($key === 'Debug.level') {
 			Debugger::errorReporting(((int)$value > 0));
 		}
 

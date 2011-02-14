@@ -7,21 +7,21 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core\readers;
+namespace titon\library\readers\core;
 
-use \titon\source\core\readers\ReaderAbstract;
+use \titon\source\library\readers\ReaderAbstract;
 use \titon\source\log\Exception;
 
 /**
- * A reader that loads its configuration from a JSON file.
- * Must have the JSON module installed.
+ * A reader that loads its configuration from a PHP file.
+ * The PHP file must contain a return statement that returns an array.
  *
  * @package	titon.source.core.readers
  * @uses	titon\source\log\Exception
  * 
- * @link	http://php.net/json_decode
+ * @link	http://php.net/manual/en/function.include.php
  */
-class JsonReader extends ReaderAbstract {
+class PhpReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
@@ -29,7 +29,7 @@ class JsonReader extends ReaderAbstract {
 	 * @access protected
 	 * @var string
 	 */
-	protected $_extension = 'json';
+	protected $_extension = 'php';
 
 	/**
 	 * Parse the file contents.
@@ -38,12 +38,12 @@ class JsonReader extends ReaderAbstract {
 	 * @return void
 	 */
 	public function read() {
-		$data = json_decode(file_get_contents($this->_path), true);
-
+		$data = include_once $this->_path;
+		
 		if (is_array($data)) {
 			$this->configure($data);
 		} else {
-			throw new Exception('Reader failed to decode JSON configuration.');
+			throw new Exception('Reader failed to import PHP configuration.');
 		}
 	}
 

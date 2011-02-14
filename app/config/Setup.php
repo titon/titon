@@ -30,12 +30,12 @@ Titon::environment()
  */
 
 Titon::config()
-	->set('app', array(
+	->set('App', array(
 		'name' => 'Titon',
 		'salt' => '66c63d989368170aff46040ab2353923',
 		'encoding' => 'UTF-8'
 	))
-	->set('debug', array(
+	->set('Debug', array(
 		'level' => 2,
 		'email' => ''
 	));
