@@ -553,7 +553,7 @@ class Set {
 					return isset($search[$key]);
 					
 				} else if ($command == self::EXTRACT) {
-					return $search[$key] ?: null;
+					return isset($search[$key]) ? $search[$key] : null;
 				}
 
 			// Break out of unexistent paths early

@@ -88,7 +88,7 @@ class Event {
 	 * @return array
 	 */
 	public function listeners($event = null) {
-		return $this->__listeners[$event] ?: $this->__listeners;
+		return isset($this->__listeners[$event]) ? $this->__listeners[$event] : $this->__listeners;
 	}
 
 	/**

@@ -404,7 +404,7 @@ class Router {
 	 * @return array
 	 */
 	public function slug($key) {
-		return $this->__slugs[$key] ?: null;
+		return isset($this->__slugs[$key]) ? $this->__slugs[$key] : null;
 	}
 
 }

@@ -392,7 +392,7 @@ class Request extends Http {
 	 * @return mixed|null
 	 */
 	public function param($key, $default = null) {
-		return $this->query[$key] ?: $default;
+		return isset($this->query[$key]) ? $this->query[$key] : $default;
 	}
 
 	/**

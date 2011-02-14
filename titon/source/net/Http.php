@@ -171,7 +171,7 @@ class Http {
 	 * @return string
 	 */
 	public function getContentType($type = null) {
-		return $this->_contentTypes[$type] ?: null;
+		return isset($this->_contentTypes[$type]) ? $this->_contentTypes[$type] : null;
 	}
 
 	/**
@@ -212,7 +212,7 @@ class Http {
 	 * @return string
 	 */
 	public function getStatusCode($code = null) {
-		return $this->_statusCodes[$code] ?: null;
+		return isset($this->_statusCodes[$code]) ? $this->_statusCodes[$code] : null;
 	}
 
 	/**
