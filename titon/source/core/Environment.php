@@ -106,7 +106,9 @@ class Environment {
 	 * @chainable
 	 */
 	public function setup($name, array $hosts) {
-		$this->__environments[] = $name;
+		if (!in_array($name, $this->__environments)) {
+			$this->__environments[] = $name;
+		}
 
 		foreach ($hosts as $host) {
 			$this->__hostMapping[$host] = $name;

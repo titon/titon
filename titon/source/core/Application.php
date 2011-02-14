@@ -12,7 +12,7 @@ namespace titon\source\core;
 use \titon\source\log\Exception;
 
 /**
- * The class manages the location and installation of controllers and modules,
+ * This class manages the location and installation of controllers and modules,
  * to speed up the lookup process of its sub-classes.
  *
  * @package	titon.source.core

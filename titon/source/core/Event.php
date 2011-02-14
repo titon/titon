@@ -108,7 +108,7 @@ class Event {
 		foreach ($this->__events as $event) {
 			$this->__listeners[$event][$class] = array(
 				'executed' => false,
-				'listener' => $class,
+				'source' => $class,
 				'scope' => $scope + array(
 					'module' => '*',
 					'controller' => '*',
