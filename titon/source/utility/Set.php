@@ -557,7 +557,7 @@ class Set {
 				}
 
 			// Break out of unexistent paths early
-			} else if (!is_array($search[$key]) && $command !== self::INSERT) {
+			} else if (isset($search[$key]) && !is_array($search[$key]) && $command !== self::INSERT) {
 				if ($command == self::EXISTS) {
 					return false;
 					
