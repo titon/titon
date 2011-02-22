@@ -72,10 +72,14 @@ abstract class RouteAbstract implements RouteInterface {
 	 * @param array $patterns
 	 * @return void
 	 */
-	public function __construct($path, array $route, array $patterns = array()) {
+	public function __construct($path, array $route = array(), array $patterns = array()) {
 		$this->_path = $path;
+
+		// Set default routing paths
 		$this->_route = Titon::router()->defaults($route);
-		$this->_patterns = $patterns;
+
+		// Store patterns
+		$this->_patterns = $this->_patterns + $patterns;
 
 		// Compile when class is built
 		$this->compile();
@@ -92,9 +96,8 @@ abstract class RouteAbstract implements RouteInterface {
 			return $this->_compiled;
 		}
 		
-		$compiled = str_replace('/', '\/', rtrim($this->_path, '/'));
+		$compiled = str_replace(array('/', '.'), array('\/', '\.'), rtrim($this->_path, '/'));
 
-		// Find any defined patterns if static is set to false: #, *, :
 		if (!$this->isStatic()) {
 			preg_match_all('/([\{|\(|\[|\<])([a-z]+)([\}|\)|\]|\>])/i', $this->_path, $matches, PREG_SET_ORDER);
 
@@ -130,7 +133,7 @@ abstract class RouteAbstract implements RouteInterface {
 		}
 
 		// Append a wildcard to the end incase of parameters or arguments
-		$compiled .= self::PATTERN_WILDCARD;
+		$compiled .= '\/?'; //self::PATTERN_WILDCARD;
 
 		// Save the compiled regex
 		$this->_compiled = '/^'. $compiled .'$/i';
@@ -159,7 +162,7 @@ abstract class RouteAbstract implements RouteInterface {
 	}
 
 	/**
-	 * Attempt to match the class against a passed URL.
+	 * Attempt to match the object against a passed URL.
 	 * If a match is found, extract pattern values and parameters.
 	 *
 	 * @acccess public
@@ -169,36 +172,62 @@ abstract class RouteAbstract implements RouteInterface {
 	public function match($url) {
 		if ($this->_path == $url) {
 			return true;
-		} else {
-			$result = preg_match($this->compile(), $url, $matches);
+		}
 
-			if ($result) {
-				$route = array_shift($matches);
-				
-				// Get pattern values
-				if (!empty($matches) && !empty($this->_patterns)) {
-					foreach ($this->_patterns as $key) {
-						$this->_route[$key] = array_shift($matches);
+		if (preg_match($this->compile(), $url, $matches)) {
+			$modules = Titon::app()->getModules();
+			$controllers = Titon::app()->getControllers();
+			$url = array_shift($matches);
+
+			// Get pattern values
+			if (!empty($matches) && !empty($this->_params)) {
+				foreach ($this->_params as $key) {
+					switch ($key) {
+						case 'module':
+							// Is it a module? Check against the installed modules.
+							if (in_array($matches[0], $modules)) {
+								$this->_route['module'] = array_shift($matches);
+							}
+						break;
+						case 'controller':
+							// Is it a controller? Check within the modules controllers.
+							if (in_array($matches[0], $controllers[$this->_route['module']])) {
+								$this->_route['controller'] = array_shift($matches);
+
+							// If not a controller, maybe it's actually a module?
+							} else if (in_array($matches[0], $modules)) {
+								$this->_route['module'] = array_shift($matches);
+
+								if (!empty($matches)) {
+									$this->_route['controller'] = array_shift($matches);
+								}
+							}
+						break;
+						default:
+							$this->_route[$key] = array_shift($matches);
+						break;
 					}
 				}
-
-				// Detect arguments and parameters
-				if (!empty($matches[0]) && $matches[0] != '/') {
-					$parts = explode('/', $matches[0]);
-
-					foreach ($parts as $index => $part) {
-						if (strpos($part, ':') !== false) {
-							list($key, $value) = explode(':', $part);
-							$this->_route['query'][$key] = $value;
-
-						} else {
-							$this->_route['params'][] = $part;
-						}
-					}
-				}
-
-				return true;
 			}
+
+			// Detect query string and parameters
+			if (!empty($matches[0]) && $matches[0] != '/') {
+				$parts = explode('/', trim($matches[0], '/'));
+
+				foreach ($parts as $index => $part) {
+					if (strpos($part, ':') !== false) {
+						list($key, $value) = explode(':', $part);
+						$this->_route['query'][$key] = $value;
+
+					} else {
+						$this->_route['params'][] = $part;
+					}
+				}
+
+				unset($matches);
+			}
+
+			return true;
 		}
 
 		return false;

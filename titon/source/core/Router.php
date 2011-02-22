@@ -10,7 +10,7 @@
 namespace titon\source\core;
 
 use \titon\source\Titon;
-use \titon\source\core\routes\Route;
+use \titon\library\routes\core\Route;
 use \titon\source\core\routes\RouteInterface;
 
 /**
@@ -29,7 +29,7 @@ class Router {
 	 * @access private
 	 * @var array
 	 */
-	private $__current = array();
+	private $__current = null;
 
 	/**
 	 * An array of all paths that have been analyzed. Used for fast lookups.
@@ -63,92 +63,6 @@ class Router {
 	 * @var array
 	 */
 	private $__slugs = array();
-
-	/**
-	 * Analyze a string (a route found in the address bar) into an array that maps to the correct module, controller and action.
-	 *
-	 * @access public
-	 * @param string $url
-	 * @return Route
-	 */
-	public function analyze($url) {
-		if (isset($this->__mapped[$url])) {
-			return $this->__mapped[$url];
-		}
-
-		$params = $this->defaults();
-		$params['query'] = $this->segment('query');
-
-		if ($url === '/') {
-			return $params;
-		}
-
-		// Remove base path if it exists
-		$base = $this->base();
-		$baseLength = strlen($base);
-
-		if (substr($url, 0, $baseLength) == $base) {
-			$url = substr($url, $baseLength);
-		}
-
-		$url = trim($url, '/');
-		$parts = explode('/', $url);
-		$modules = Titon::app()->getModules();
-		$controllers = Titon::app()->getControllers();
-
-		// If the module is found within the URL and has been bootstrapped
-		if (in_array($parts[0], $modules)) {
-			$params['module'] = $this->inflect($parts[0]);
-			unset($parts[0]);
-
-			// If parts isn't empty, was controller listed within the module?
-			if (!empty($parts) && in_array($parts[1], $controllers[$params['module']])) {
-				$params['controller'] = $this->inflect($parts[1]);
-				unset($parts[1]);
-			}
-
-		// If the module is not in the URL, fallback to default
-		// Since no module, first path must be a controller
-		} else {
-			$params['controller'] = $this->inflect($parts[0]);
-			unset($parts[0]);
-		}
-
-		// Parse out the action, query params, named params, and arguments
-		if (!empty($parts)) {
-
-			// Use as action if not a query param or has an extension
-			$action = array_shift($parts);
-
-			if (strpos($action, ':') === false) {
-				if (strpos($action, '.') !== false) {
-					list($action, $ext) = explode('.', $action);
-					$params['ext'] = $ext;
-				}
-
-				$params['action'] = $this->inflect($action);
-			} else {
-				array_unshift($parts, $action);
-			}
-
-			// If the part contains a colon, its a query param, else action argument
-			foreach ($parts as $index => $part) {
-				if (strpos($part, ':') !== false) {
-					list($key, $value) = explode(':', $part);
-					$params['query'][$key] = $value;
-
-				} else {
-					$params['params'][] = $part;
-				}
-
-				unset($parts[$index]);
-			}
-		}
-
-		$this->__mapped[$url] = $params;
-
-		return $params;
-	}
 
 	/**
 	 * Return the base URL if the app was not placed in the root directory.
@@ -201,7 +115,7 @@ class Router {
 					continue;
 
 				} else if (is_numeric($key)) {
-					$route['params'][$key] = $value;
+					$route['params'][] = $value;
 
 				} else if (is_string($key)) {
 					$route['query'][$key] = $value;
@@ -232,7 +146,7 @@ class Router {
 	}
 
 	/**
-	 * Return the current analyzed route object.
+	 * Return the current matched route object.
 	 *
 	 * @access public
 	 * @return string
@@ -299,39 +213,39 @@ class Router {
 	}
 
 	/**
-	 * Inflects a URL segment to it's proper internal format.
-	 * Dashes are replaced with underscores, non alpha-numeric are removed.
-	 *
-	 * @access public
-	 * @param string $string
-	 * @return string
-	 */
-	public function inflect($string) {
-		return str_replace('-', '_', preg_replace('/[^a-z\-_]+/i', '', $string));
-	}
-
-	/**
-	 * Parses the current URL into multiple segments as well as parses the current route into an application path.
+	 * Parses the current URL into multiple segments, maps the default routing objects and attempts to match.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
-		list($base, $route) = explode('index.php', $_SERVER['PHP_SELF']);
+		list($base, $url) = explode('index.php', $_SERVER['PHP_SELF']);
 
-		if (empty($route)) {
-			$route = '/';
+		if (empty($url)) {
+			$url = '/';
 		}
 
+		// Store the current URL and query as router segments
 		$this->__segments = array(
 			'protocol'  => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://',
 			'host'      => $_SERVER['HTTP_HOST'],
 			'base'      => $base,
-			'route'     => $route,
+			'route'     => $url,
 			'query'     => $_GET
 		);
 
-		$this->__current = $this->analyze($route);
+		// Map default internal routes
+		$this->map('controllerActionExt', new Route('/{controller}/{action}.{ext}'));
+		$this->map('controllerAction', new Route('/{controller}/{action}'));
+		$this->map('controller', new Route('/{controller}'));
+		$this->map('moduleControllerActionExt', new Route('/{module}/{controller}/{action}.{ext}'));
+		$this->map('moduleControllerAction', new Route('/{module}/{controller}/{action}'));
+		$this->map('moduleController', new Route('/{module}/{controller}'));
+		$this->map('module', new Route('/{module}'));
+		$this->map('root', new Route('/'));
+
+		// Match the current URL to a route
+		$this->__current = $this->match($url);
 	}
 
 	/**
@@ -366,6 +280,19 @@ class Router {
 		$this->__slugs[$key] = $route;
 
 		return $this;
+	}
+
+	public function match($url) {
+		foreach ($this->__routes as $key => $route) {
+			if ($route->match($url)) {
+				$this->__current = $route;
+				break;
+			}
+		}
+
+		if (!$this->__current) {
+			$this->__current = new Route();
+		}
 	}
 
 	/**
