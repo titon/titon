@@ -34,7 +34,7 @@ class Application {
 	 * @access public
 	 * @var string
 	 */
-	private $__default = 'core';
+	private $__default = 'pages';
 
 	/**
 	 * Add a controller to a module.

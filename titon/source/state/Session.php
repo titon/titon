@@ -167,7 +167,7 @@ class Session {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return boolean
+	 * @return bool
 	 */
 	public function check($key) {
 		return Set::exists($_SESSION, $key);
@@ -319,7 +319,7 @@ class Session {
 	 * Regenerate the current session and apply a new session ID.
 	 *
 	 * @access public
-	 * @param boolean $delete
+	 * @param bool $delete
 	 * @return int
 	 */
 	public function regenerate($delete = true) {
@@ -334,7 +334,7 @@ class Session {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return boolean
+	 * @return bool
 	 */
 	public function remove($key) {
 		$_SESSION = Set::remove($_SESSION, $key);
@@ -346,7 +346,7 @@ class Session {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return boolean
+	 * @return bool
 	 */
 	public function set($key, $value) {
 		$_SESSION = Set::insert($_SESSION, $key, $value);

@@ -88,6 +88,14 @@ class Request extends Http {
 	private $__method = 'get';
 
 	/**
+	 * Is current HTTP connection secure?
+	 *
+	 * @access private
+	 * @var boolean
+	 */
+	private $__secure = null;
+
+	/**
 	 * The accepted content types, based on the Accept header.
 	 *
 	 * @access private
@@ -172,7 +180,7 @@ class Request extends Http {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return boolean
+	 * @return bool
 	 */
 	public function accepts($type = 'html') {
 		$contentType = $this->getContentType($type);
@@ -199,7 +207,7 @@ class Request extends Http {
 	 *
 	 * @access public
 	 * @param string $charset
-	 * @return boolean
+	 * @return bool
 	 */
 	public function acceptsCharset($charset = 'utf-8') {
 		if (empty($charset)) {
@@ -221,7 +229,7 @@ class Request extends Http {
 	 *
 	 * @access public
 	 * @param string $language
-	 * @return boolean
+	 * @return bool
 	 */
 	public function acceptsLang($language = 'en') {
 		if (empty($language)) {
@@ -263,7 +271,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with AJAX.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isAjax() {
 		return (strtolower($this->env('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest');
@@ -273,7 +281,7 @@ class Request extends Http {
 	 * Returns true if the interface environment is CGI.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isCGI() {
 		return (substr(PHP_SAPI, 0, 3) === 'cgi');
@@ -283,7 +291,7 @@ class Request extends Http {
 	 * Returns true if the interface environment is CLI (command line).
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isCLI() {
 		return (substr(PHP_SAPI, 0, 3) === 'cli');
@@ -293,7 +301,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a DELETE method.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isDelete() {
 		return $this->isMethod('delete');
@@ -303,7 +311,7 @@ class Request extends Http {
 	 * Returns true if the page was requested through Flash.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isFlash() {
 		return (bool)preg_match('/^(Shockwave|Adobe) Flash/', $this->userAgent(self::USERAGENT_MINIMAL));
@@ -313,7 +321,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a GET method.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isGet() {
 		return $this->isMethod('get');
@@ -323,7 +331,7 @@ class Request extends Http {
 	 * Returns true if the interface environment is IIS.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isIIS() {
 		return (substr(PHP_SAPI, 0, 5) === 'isapi');
@@ -334,7 +342,7 @@ class Request extends Http {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isMethod($type = 'post') {
 		return (strtolower($type) == $this->__method);
@@ -344,7 +352,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a mobile device.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isMobile() {
 		$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|';
@@ -358,7 +366,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a POST method.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPost() {
 		return $this->isMethod('post');
@@ -368,20 +376,44 @@ class Request extends Http {
 	 * Returns true if the page was requested with a PUT method.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isPut() {
 		return $this->isMethod('put');
 	}
 
 	/**
+	 * Is the page being requested through a secure connection.
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function isSecure() {
+		if ($this->__secure == null) {
+			$this->__secure = ($this->env('HTTPS') == 'on' || $this->env('SERVER_PORT') == 443);
+		}
+
+		return $this->__secure;
+	}
+
+	/**
 	 * Returns true if the page was requested through SSL.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return bool
 	 */
 	public function isSSL() {
 		return $this->env('HTTPS');
+	}
+
+	/**
+	 * The current HTTP request method.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function method() {
+		return $this->__method;
 	}
 
 	/**
@@ -444,7 +476,7 @@ class Request extends Http {
 	 * @link http://php.net/get_browser
 	 * @link http://php.net/manual/misc.configuration.php#ini.browscap
 	 * @access public
-	 * @param boolean $explicit
+	 * @param bool $explicit
 	 * @return array|string
 	 */
 	public function userAgent($explicit = true) {

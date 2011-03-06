@@ -268,7 +268,7 @@ class Html extends HelperAbstract {
      * @access public
      * @param string $source
      * @param string $content
-     * @param boolean $escape
+     * @param bool $escape
      * @return string
      */
     public function script($source, $content = null, $escape = true) {

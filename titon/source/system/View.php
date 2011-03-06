@@ -47,7 +47,7 @@ class View extends Prototype {
      *
      * @access public
      * @param string $type
-     * @param boolean $absolute
+     * @param bool $absolute
      * @param string $path
      * @return string
      */
@@ -104,7 +104,7 @@ class View extends Prototype {
      *
      * @access public
      * @param string $type
-     * @return boolean
+     * @return bool
      */
     public function checkPath($type = self::TYPE_TPL) {
         $path = $this->buildPath($type);
@@ -227,7 +227,7 @@ class View extends Prototype {
 	 * @access public
 	 * @param string|array $keys
 	 * @param mixed $value
-	 * @return boolean
+	 * @return bool
 	 */
 	final public function set($keys, $value = null) {
 		if (!is_array($keys)) {

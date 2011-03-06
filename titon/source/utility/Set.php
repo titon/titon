@@ -30,7 +30,7 @@ class Set {
 	 *
 	 * @access public
 	 * @param array|object $set
-	 * @param boolean $recursive
+	 * @param bool $recursive
 	 * @return int
 	 * @static
 	 */
@@ -153,7 +153,7 @@ class Set {
 	 *
 	 * @access public
 	 * @param array $set
-	 * @param boolean $recursive
+	 * @param bool $recursive
 	 * @return mixed|array
 	 * @static
 	 */
@@ -232,8 +232,8 @@ class Set {
 	 *
 	 * @access public
 	 * @param array $set
-	 * @param boolean $strict
-	 * @return boolean
+	 * @param bool $strict
+	 * @return bool
 	 * @static
 	 */
 	public static function isAlpha($set, $strict = true) {
@@ -261,7 +261,7 @@ class Set {
 	 *
 	 * @access public
 	 * @param array $set
-	 * @return boolean
+	 * @return bool
 	 * @static
 	 */
 	public static function isNumeric($set) {
@@ -319,7 +319,7 @@ class Set {
 	 * @access public
 	 * @param array $set1
 	 * @param array $set2
-	 * @return boolean
+	 * @return bool
 	 * @static
 	 */
 	public static function matches($set1, $set2) {
@@ -436,7 +436,7 @@ class Set {
 	 *
 	 * @access public
 	 * @param array $set
-	 * @param boolean $truncate
+	 * @param bool $truncate
 	 * @return array
 	 * @static
 	 */

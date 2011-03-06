@@ -12,7 +12,7 @@ namespace titon\source\library\readers;
 /**
  * Interface for all Config Readers.
  *
- * @package	titon.source.core.readers
+ * @package	titon.source.library.readers
  */
 interface ReaderInterface {
 

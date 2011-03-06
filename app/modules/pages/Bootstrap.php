@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace app\modules\core;
+namespace app\modules\pages;
 
 use \titon\source\Titon;
 
@@ -18,5 +18,4 @@ use \titon\source\Titon;
  */
 
 Titon::app()
-	->addModule('core', array('index'))
-	->setDefaultModule('core');
+	->addModule('pages', array('index'));

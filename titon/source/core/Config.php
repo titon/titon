@@ -62,7 +62,7 @@ class Config {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has($key) {
 		return Set::exists($this->__config, $key);

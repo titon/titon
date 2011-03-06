@@ -10,7 +10,4 @@
 namespace app\config;
 
 use \titon\source\Titon;
-use \titon\source\core\routes\Route;
-
-Titon::router()
-	->map('news', new Route('/news', array('module' => 'core', 'controller' => 'index', 'action' => 'index')));
+use \titon\library\routes\core\Route;

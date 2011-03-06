@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace app\modules\core\controllers;
+namespace app\modules\pages\controllers;
 
 use \app\AppController;
 
 /**
  * By default the framework will determine which controller is the "index" controller of a module
- * by matching the module name with the controller name: core module -> core controller.
+ * by matching the module name with the controller name: pages module -> index controller.
  */
 class IndexController extends AppController {
 

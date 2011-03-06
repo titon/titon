@@ -103,7 +103,7 @@ class Prototype extends Object {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return boolean
+	 * @return bool
 	 * @final
 	 */
 	final public function __isset($class) {
@@ -115,7 +115,7 @@ class Prototype extends Object {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return boolean
+	 * @return bool
 	 * @final
 	 */
 	final public function __unset($class) {
@@ -185,7 +185,7 @@ class Prototype extends Object {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @param boolean $deleteMap
+	 * @param bool $deleteMap
 	 * @return this
 	 * @chainable
 	 * @final
@@ -251,7 +251,7 @@ class Prototype extends Object {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return boolean
+	 * @return bool
 	 * @final
 	 */
 	final public function hasObject($class) {

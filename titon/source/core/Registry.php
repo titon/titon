@@ -64,7 +64,7 @@ class Registry {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return boolean
+	 * @return bool
 	 */
 	public function delete($key) {
 		if (isset($this->__registered[$key])) {
@@ -127,7 +127,7 @@ class Registry {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return boolean
+	 * @return bool
 	 */
 	public function has($key) {
 		return (isset($this->__registered[$key]) && is_object($this->__registered[$key]));

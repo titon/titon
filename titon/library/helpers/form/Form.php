@@ -746,7 +746,7 @@ class Form extends HelperAbstract {
      * @access protected
      * @param array $options
      * @param mixed $selected
-     * @param boolean $grouped
+     * @param bool $grouped
      * @return string
      */
     protected function _options(array $options = array(), $selected = null, $grouped = false) {

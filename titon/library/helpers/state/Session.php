@@ -48,7 +48,7 @@ class Session extends HelperAbstract {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return boolean
+	 * @return bool
 	 */
 	public function check($key) {
         return $this->Session->check($key);

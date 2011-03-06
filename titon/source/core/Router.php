@@ -9,8 +9,8 @@
 
 namespace titon\source\core;
 
-use \titon\source\Titon;
 use \titon\library\routes\core\Route;
+use \titon\source\Titon;
 use \titon\source\core\routes\RouteInterface;
 
 /**
@@ -24,7 +24,15 @@ use \titon\source\core\routes\RouteInterface;
 class Router {
 
 	/**
-	 * The current route broken up into its parts.
+	 * Base folder structure if the application was placed within a directory.
+	 *
+	 * @access private
+	 * @var string
+	 */
+	private $__base = '';
+
+	/**
+	 * The matched route object.
 	 *
 	 * @access private
 	 * @var array
@@ -71,7 +79,7 @@ class Router {
 	 * @return string
 	 */
 	public function base() {
-		return $this->segment('base');
+		return $this->__base;
 	}
 
 	/**
@@ -82,10 +90,9 @@ class Router {
 	 * @return string
 	 */
 	public function build(array $route) {
-		$defaults = $this->defaults();
 		$route = $this->defaults($route);
 
-		if ($defaults === $route) {
+		if ($this->defaults() === $route) {
 			return $this->base();
 		}
 
@@ -93,10 +100,7 @@ class Router {
 		$path[] = trim($this->base(), '/');
 
 		// Module, controller, action
-		if ($route['module'] != Titon::app()->getDefaultModule()) {
-			$path[] = $route['module'];
-		}
-
+		$path[] = $route['module'];
 		$path[] = $route['controller'];
 
 		if (!empty($route['ext'])) {
@@ -166,7 +170,7 @@ class Router {
 	public function defaults(array $data = array()) {
 		$data = $data + array(
 			'ext' => '',
-			'query' => array(),
+			'query' => $this->segment('query'),
 			'params' => array()
 		);
 
@@ -202,10 +206,10 @@ class Router {
 				unset($url['slug']);
 
 				if (!empty($route)) {
-					$url = $url + $route;
+					return ($url + $route);
 				}
 			} else {
-				// @todo
+				return $this->defaults($url);
 			}
 		}
 
@@ -219,25 +223,25 @@ class Router {
 	 * @return void
 	 */
 	public function initialize() {
-		list($base, $url) = explode('index.php', $_SERVER['PHP_SELF']);
+		list($base, $path) = explode('index.php', $_SERVER['PHP_SELF']);
 
-		if (empty($url)) {
-			$url = '/';
+		if (empty($path)) {
+			$path = '/';
+		}
+
+		if (!empty($base)) {
+			$this->__base = rtrim($base, '/');
 		}
 
 		// Store the current URL and query as router segments
-		$this->__segments = array(
-			'protocol'  => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https://' : 'http://',
-			'host'      => $_SERVER['HTTP_HOST'],
-			'base'      => $base,
-			'route'     => $url,
-			'query'     => $_GET
-		);
+		$this->__segments = array_merge(parse_url($_SERVER['REQUEST_URI']), array(
+			'scheme' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http',
+			'query' => $_GET,
+			'host' => $_SERVER['HTTP_HOST'],
+			'path' => $path
+		));
 
 		// Map default internal routes
-		$this->map('controllerActionExt', new Route('/{controller}/{action}.{ext}'));
-		$this->map('controllerAction', new Route('/{controller}/{action}'));
-		$this->map('controller', new Route('/{controller}'));
 		$this->map('moduleControllerActionExt', new Route('/{module}/{controller}/{action}.{ext}'));
 		$this->map('moduleControllerAction', new Route('/{module}/{controller}/{action}'));
 		$this->map('moduleController', new Route('/{module}/{controller}'));
@@ -282,17 +286,21 @@ class Router {
 		return $this;
 	}
 
+	/**
+	 * Attempt to match an internal route.
+	 *
+	 * @access public
+	 * @param string $url
+	 * @return Route
+	 */
 	public function match($url) {
 		foreach ($this->__routes as $key => $route) {
 			if ($route->match($url)) {
-				$this->__current = $route;
-				break;
+				return $route;
 			}
 		}
 
-		if (!$this->__current) {
-			$this->__current = new Route();
-		}
+		return null;
 	}
 
 	/**
@@ -304,17 +312,18 @@ class Router {
 	 */
 	public function segment($key = false) {
 		if ($key === true) {
-			$segments = $this->__segments;
-
-			if (!empty($segments['base'])) {
-				$segments['base'] = '/'. trim($segments['base'], '/');
-			}
+			$segments = $this->segment();
+			
+			$url  = $segments['scheme'] .'://';
+			$url .= $segments['host'];
+			$url .= $this->base();
+			$url .= $segments['path'];
 
 			if (!empty($segments['query'])) {
-				$segments['query'] = http_build_query($segments['query']);
+				$url .= '?'. http_build_query($segments['query']);
 			}
-
-			return implode('', $segments);
+			
+			return $url;
 
 		} else if (isset($this->__segments[$key])) {
 			return $this->__segments[$key];

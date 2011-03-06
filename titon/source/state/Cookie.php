@@ -74,7 +74,7 @@ class Cookie {
      *
      * @access public
      * @param string $key
-     * @return boolean
+     * @return bool
      */
 	public function delete($key = null) {
         return setcookie($this->namespace .'['. $key .']', '', time(), $this->path, $this->domain, $this->secure);
@@ -101,7 +101,7 @@ class Cookie {
      * @access public
      * @param string $key
      * @param array $meta
-     * @return boolean
+     * @return bool
      */
 	public function remove($key, array $meta = array()) {
         if (!empty($key)) {
@@ -126,7 +126,7 @@ class Cookie {
      * @param string $key
      * @param string $value
      * @param array $meta
-     * @return boolean
+     * @return bool
      */
 	public function set($key, $value, array $meta = array()) {
 		if (!empty($key) && !empty($value)) {

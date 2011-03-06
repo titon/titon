@@ -129,7 +129,7 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string $path
-	 * @return boolean
+	 * @return bool
 	 */
 	public function import($path) {
 		$namespace = $this->toNamespace($path);

@@ -95,7 +95,7 @@ class Debugger {
 	* Enable or disable error reporting dynamically during runtime.
 	*
 	* @access public
-	* @param boolean $enabled
+	* @param bool $enabled
 	* @return void
 	* @static
 	*/
