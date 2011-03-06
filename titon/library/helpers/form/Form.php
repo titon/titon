@@ -75,7 +75,7 @@ class Form extends HelperAbstract {
 	 * Configure the class with the current date settings, instead of calling them multiple times.
 	 *
 	 * @access public
-     * @param obj $Engine
+     * @param object $Engine
 	 * @return void
 	 */
     public function initialize($Engine) {

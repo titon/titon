@@ -34,7 +34,7 @@ class Session extends HelperAbstract {
 	 * Initialize the core Session class, if it was not within the Controller.
 	 *
 	 * @access public
-     * @param obj $Engine
+     * @param object $Engine
 	 * @return void
 	 */
     public function initialize($Engine) {
