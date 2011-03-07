@@ -191,7 +191,7 @@ abstract class RouteAbstract implements RouteInterface {
 							if (isset($this->_patterns[$match[2]])) {
 								$compiled = str_replace($match[0], $this->_patterns[$match[2]], $compiled);
 							} else {
-								throw new Exception(sprintf('Pattern %s does not exist for route %s', $match[2], $this->_path));
+								throw new Exception(sprintf('Pattern %s does not exist for route %s.', $match[2], $this->_path));
 							}
 						break;
 					}
@@ -259,7 +259,7 @@ abstract class RouteAbstract implements RouteInterface {
 								
 							// Doesn't match a controller or module, remove.
 							} else {
-								throw new Exception(sprintf('Controller %s was not found within the %s module', $matches[0], $this->_route['module']));
+								throw new Exception(sprintf('Controller %s was not found within the %s module.', $matches[0], $this->_route['module']));
 							}
 						break;
 						default:

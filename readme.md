@@ -13,17 +13,15 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			environments/
 				Development.php
 				Production.php
-			routes/
 			sets/
-			Environments.php
 			Routes.php
 			Setup.php
+		library/
 		modules/
-			core/
+			pages/
 				actions/
-				components/
-				config/
 				controllers/
+				library/
 				models/
 				views/
 					private/
@@ -40,12 +38,19 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			session/
 			debug.log
 			error.log
+		views/
+			private/
+			public/
+		web/
+			css/
+			js/
+			img/
 		AppController.php
 		AppModel.php
 		AppView.php
 	titon/
-		source/
-		components/
+		console/
+		library/
 			adapters/
 			behaviors/
 			dispatchers/
@@ -54,10 +59,13 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			helpers/
 			listeners/
 			packages/
+			readers/
+			routes/
 			shells/
-	vendors/
+		source/
+		vendors/
 
-### Components ###
+### Library ###
 
 * Adapter - Handles the case of adapting a specific class to another class.
 * Behavior - Defines a behavior pattern for a model.
@@ -66,5 +74,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Engine - Handles the rendering of the view templates.
 * Helper - Provides additional functionality to the view layer.
 * Listener - Objects that listen and wait to be triggered at specific events in the system.
-* Package - A combination of component types into a single related entity.
+* Package - A combination of library types into a single related entity.
+* Readers - Handles the loading of configuration file types: xml, json, yaml, etc
+* Routes - Maps URLs to internal destinations.
 * Shell - Handles CLI execution and tasks.
