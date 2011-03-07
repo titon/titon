@@ -56,14 +56,6 @@ class Request extends Http {
 	public $post = array();
 
 	/**
-	 * Named and query params for the current request.
-	 *
-	 * @access public
-	 * @var array
-	 */
-	public $query = array();
-
-	/**
 	 * The accepted charset types, based on the Accept-Charset header.
 	 *
 	 * @access private
@@ -139,7 +131,6 @@ class Request extends Http {
 		$this->files = $files;
 		$this->get = $get;
 		$this->post = $post;
-		//$this->query = Titon::router()->current()->param('query');
 
 		// Store accept HTTP headers
 		foreach (array('Accept', 'Accept-Language', 'Accept-Charset') as $acception) {
@@ -183,7 +174,7 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function accepts($type = 'html') {
-		$contentType = $this->getContentType($type);
+		$contentType = $this->getContentTypes($type);
 
 		if ($contentType === null) {
 			throw new Exception(sprintf('The content type %s is not supported.', $type));
@@ -252,19 +243,13 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function clientIp() {
-		$address = $this->env('HTTP_CLIENT_IP');
-		
-		if (!empty($address)) {
-			return $address;
-		} else {
-			$address = $this->env('HTTP_X_FORWARDED_FOR');
-
-			if (!empty($address)) {
+		foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
+			if (($address = $this->env($key)) != null) {
 				return $address;
 			}
 		}
 
-		return $this->env('REMOTE_ADDR');
+		return null;
 	}
 
 	/**
@@ -345,7 +330,7 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isMethod($type = 'post') {
-		return (strtolower($type) == $this->__method);
+		return (strtolower($type) == $this->method());
 	}
 
 	/**
@@ -359,7 +344,7 @@ class Request extends Http {
 		$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
 		$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
 
-		return (bool)preg_match('/('. $mobiles .')/i', $this->userAgent(self::USERAGENT_MINIMAL));
+		return (bool)preg_match('/('. $mobiles .')/i', $this->userAgent(false));
 	}
 
 	/**
@@ -397,16 +382,6 @@ class Request extends Http {
 	}
 
 	/**
-	 * Returns true if the page was requested through SSL.
-	 *
-	 * @access public
-	 * @return bool
-	 */
-	public function isSSL() {
-		return $this->env('HTTPS');
-	}
-
-	/**
 	 * The current HTTP request method.
 	 *
 	 * @access public
@@ -417,24 +392,13 @@ class Request extends Http {
 	}
 
 	/**
-	 * Grabs the value from a named param, parsed from the router.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return mixed|null
-	 */
-	public function param($key, $default = null) {
-		return isset($this->query[$key]) ? $this->query[$key] : $default;
-	}
-
-	/**
 	 * Get the current protocol for the current request: HTTP or HTTPS
 	 *
 	 * @access public
 	 * @return string
 	 */
 	public function protocol() {
-		return (strtolower($this->env('HTTPS')) == 'on' ? 'https' : 'http');
+		return Titon::router()->segment('scheme');
 	}
 
 	/**
@@ -482,7 +446,7 @@ class Request extends Http {
 	public function userAgent($explicit = true) {
 		$agent = $this->env('HTTP_USER_AGENT');
 
-		if ($explicit === true && function_exists('get_browser')) {
+		if ($explicit && function_exists('get_browser')) {
 			$browser = get_browser($agent, true);
 
 			return array(

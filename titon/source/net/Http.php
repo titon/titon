@@ -9,12 +9,14 @@
 
 namespace titon\source\net;
 
+use \titon\source\system\Object;
+
 /**
  * A primary HTTP base class that provides functionality for common HTTP status codes and content types.
  *
  * @package titon.source.net
  */
-class Http {
+class Http extends Object {
 
 	/**
 	 * Valid format for HTTP datetimes.
@@ -164,24 +166,14 @@ class Http {
 	}
 
 	/**
-	 * Get a single content type.
+	 * Get a single content type, or all content types.
 	 *
 	 * @access public
 	 * @param string $type
 	 * @return string
 	 */
-	public function getContentType($type = null) {
-		return isset($this->_contentTypes[$type]) ? $this->_contentTypes[$type] : null;
-	}
-
-	/**
-	 * Return all the supported content types.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function getContentTypes() {
-		return $this->_contentTypes;
+	public function getContentTypes($type = null) {
+		return isset($this->_contentTypes[$type]) ? $this->_contentTypes[$type] : $this->_contentTypes;
 	}
 
 	/**
@@ -200,29 +192,19 @@ class Http {
 	 * @access public
 	 * @return array
 	 */
-	public function getMethods() {
+	public function getMethodTypes() {
 		return $this->_methodTypes;
 	}
 
 	/**
-	 * Get a single status code.
+	 * Get a single status code, or all status codes.
 	 *
 	 * @access public
 	 * @param int $code
 	 * @return string
 	 */
-	public function getStatusCode($code = null) {
-		return isset($this->_statusCodes[$code]) ? $this->_statusCodes[$code] : null;
-	}
-
-	/**
-	 * Get all status codes.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function getStatusCodes() {
-		return $this->_statusCodes;
+	public function getStatusCodes($code = null) {
+		return isset($this->_statusCodes[$code]) ? $this->_statusCodes[$code] : $this->_statusCodes;
 	}
 
 }

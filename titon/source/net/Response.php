@@ -188,7 +188,7 @@ class Response extends Http {
 		header(sprintf('%s %s %s',
 			self::HTTP_11,
 			$this->__status,
-			$this->getStatusCode($this->__status)
+			$this->getStatusCodes($this->__status)
 		));
 
 		// Content type
@@ -222,7 +222,7 @@ class Response extends Http {
 	 * @chainable
 	 */
 	public function status($code = 302) {
-		if (!$this->getStatusCode($code)) {
+		if (!$this->getStatusCodes($code)) {
 			throw new Exception(sprintf('The status code %d is not supported.', $code));
 		}
 
@@ -241,7 +241,7 @@ class Response extends Http {
 	 */
 	public function type($type = '') {
 		if (strpos($type, '/') === false) {
-			$contentType = $this->getContentType($type);
+			$contentType = $this->getContentTypes($type);
 
 			if ($contentType === null) {
 				throw new Exception(sprintf('The content type %s is not supported.', $type));

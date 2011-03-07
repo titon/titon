@@ -107,7 +107,7 @@ class Controller extends Prototype {
 			if (is_numeric($action)) {
 				$args['pageTitle'] = $action;
 
-				$title = $this->response->getStatusCode($action);
+				$title = $this->response->getStatusCodes($action);
 
 				if ($title !== null) {
 					$args['pageTitle'] .= ' - '. $title;
