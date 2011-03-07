@@ -139,7 +139,7 @@ class Request extends Http {
 		$this->files = $files;
 		$this->get = $get;
 		$this->post = $post;
-		$this->query = Titon::router()->current('query');
+		$this->query = Titon::router()->current()->param('query');
 
 		// Store accept HTTP headers
 		foreach (array('Accept', 'Accept-Language', 'Accept-Charset') as $acception) {

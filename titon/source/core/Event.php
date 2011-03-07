@@ -65,7 +65,7 @@ class Event {
 				}
 
 				foreach (array('module', 'controller', 'action') as $action) {
-					if (($listener['scope'][$action] !== $route[$action]) || ($listener['scope'][$action] !== '*')) {
+					if (($listener['scope'][$action] !== $route->param($action)) || ($listener['scope'][$action] !== '*')) {
 						continue;
 					}
 				}

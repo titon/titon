@@ -10,7 +10,6 @@
 namespace titon\source\library\routes;
 
 use \titon\source\Titon;
-use \titon\source\core\Registry;
 use \titon\source\library\routes\RouteInterface;
 use \titon\source\log\Exception;
 
@@ -340,6 +339,17 @@ abstract class RouteAbstract implements RouteInterface {
 	 */
 	public function match($url) {
 		return ($this->isMatch($url) && $this->isMethod() && $this->isSecure());
+	}
+
+	/**
+	 * Grab a param from the route.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return string|null
+	 */
+	public function param($key = null) {
+		return isset($this->_route[$key]) ? $this->_route[$key] : $this->_route;
 	}
 
 }
