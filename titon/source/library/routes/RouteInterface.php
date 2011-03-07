@@ -12,7 +12,7 @@ namespace titon\source\library\routes;
 /**
  * Interface for all Routers.
  *
- * @package	titon.source.library.readers
+ * @package	titon.source.library.routes
  */
 interface RouteInterface {
 

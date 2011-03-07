@@ -153,7 +153,7 @@ class Logger {
 			fclose($log);
 
 			if ($level >= self::WARNING) {
-				$email = Titon::config()->get('debug.email');
+				$email = Titon::config()->get('Debug.email');
 
 				if (!empty($email)) {
 					mail($email, '[Titon Error] '. $type, $message);

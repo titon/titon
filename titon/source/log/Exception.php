@@ -28,7 +28,7 @@ class Exception extends \Exception {
 	 * @param Exception $exc
 	 * @return void
 	 */
-	public function log(\Exception $exception) {
+	public function log(\Exception $exception = null) {
 		if (!$exception) {
 			$exception = $this;
 		}

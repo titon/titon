@@ -166,8 +166,9 @@ abstract class RouteAbstract implements RouteInterface {
 		if ($this->isCompiled()) {
 			return $this->_compiled;
 		}
-		
-		$compiled = str_replace(array('/', '.'), array('\/', '\.'), rtrim($this->_path, '/'));
+
+		$path = ($this->_path != '/') ? rtrim($this->_path, '/') : $this->_path;
+		$compiled = str_replace(array('/', '.'), array('\/', '\.'), $path);
 
 		if (!$this->isStatic()) {
 			preg_match_all('/([\{|\(|\[|\<])([a-z]+)([\}|\)|\]|\>])/i', $this->_path, $matches, PREG_SET_ORDER);
@@ -250,14 +251,14 @@ abstract class RouteAbstract implements RouteInterface {
 							// Is it a module? Check against the installed modules.
 							if (in_array($matches[0], $modules)) {
 								$this->_route['module'] = array_shift($matches);
+							} else {
+								throw new Exception(sprintf('Module %s has not been installed.', $matches[0]));
 							}
 						break;
 						case 'controller':
 							// Is it a controller? Check within the modules controllers.
 							if (in_array($matches[0], $controllers[$this->_route['module']])) {
 								$this->_route['controller'] = array_shift($matches);
-								
-							// Doesn't match a controller or module, remove.
 							} else {
 								throw new Exception(sprintf('Controller %s was not found within the %s module.', $matches[0], $this->_route['module']));
 							}

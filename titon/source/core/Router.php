@@ -11,7 +11,8 @@ namespace titon\source\core;
 
 use \titon\library\routes\core\Route;
 use \titon\source\Titon;
-use \titon\source\core\routes\RouteInterface;
+use \titon\source\library\routes\RouteInterface;
+use \titon\source\log\Exception;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -20,6 +21,7 @@ use \titon\source\core\routes\RouteInterface;
  * You can also define custom slugs or routes to be used for internal routing mechanisms.
  *
  * @package	titon.source.core
+ * @uses	titon\source\log\Exception
  */
 class Router {
 
@@ -246,10 +248,10 @@ class Router {
 		$this->map('moduleControllerAction', new Route('/{module}/{controller}/{action}'));
 		$this->map('moduleController', new Route('/{module}/{controller}'));
 		$this->map('module', new Route('/{module}'));
-		$this->map('root', new Route('/'));
+		$this->map('root', new Route('/'), array(), array('static' => true));
 
 		// Match the current URL to a route
-		$this->__current = $this->match($url);
+		$this->__current = $this->match($path);
 	}
 
 	/**
@@ -294,13 +296,15 @@ class Router {
 	 * @return Route
 	 */
 	public function match($url) {
-		foreach ($this->__routes as $key => $route) {
-			if ($route->match($url)) {
-				return $route;
+		try {
+			foreach ($this->__routes as $key => $route) {
+				if ($route->match($url)) {
+					return $route;
+				}
 			}
+		} catch (Exception $e) {
+			$e->log();
 		}
-
-		return null;
 	}
 
 	/**

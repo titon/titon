@@ -101,7 +101,7 @@ class Benchmark {
 	 * @static
 	 */
 	public static function start($key = 'benchmark') {
-		if (Titon::config()->get('debug.level') > 0) {
+		if (Titon::config()->get('Debug.level') > 0) {
 			self::$__benchmarks[$key] = array(
 				'startTime'		=> microtime(true),
 				'startMemory'	=> memory_get_usage(true),
@@ -119,7 +119,7 @@ class Benchmark {
 	 * @static
 	 */
 	public static function stop($key = 'benchmark', $log = false) {
-		if (Titon::config()->get('debug.level') > 0) {
+		if (Titon::config()->get('Debug.level') > 0) {
 			if (empty(self::$__benchmarks[$key])) {
 				return false;
 			}

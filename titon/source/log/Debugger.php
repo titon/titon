@@ -25,12 +25,12 @@ use \titon\source\log\Logger;
 class Debugger {
 
 	/**
-	* Complete list of all internal errors types.
-	*
-	* @access public
-	* @var array
-	* @static
-	*/
+	 * Complete list of all internal errors types.
+	 *
+	 * @access public
+	 * @var array
+	 * @static
+	 */
 	public static $errorTypes = array(
 		E_ERROR				=> 'Error',
 		E_WARNING			=> 'Warning',
@@ -51,60 +51,36 @@ class Debugger {
 	);
 
 	/**
-	* Errors received during the current request.
-	*
-	* @access private
-	* @var array
-	* @static
-	*/
+	 * Errors received during the current request.
+	 *
+	 * @access private
+	 * @var array
+	 * @static
+	 */
 	private static $__errors = array();
 
 	/**
-	* Disable the class to enforce static methods.
-	*
-	* @access private
-	* @return void
-	*/
+	 * Disable the class to enforce static methods.
+	 *
+	 * @access private
+	 * @return void
+	 */
 	private function __construct() { }
 
 	/**
-	* Overwrite the error_handler. When in development output errors, throw exceptions in production.
-	*
-	* @access public
-	* @param int $number
-	* @param string $message
-	* @param string $file
-	* @param int $line
-	* @param string $context
-	* @return void
-	* @static
-	*/
-	public static function error($number, $message, $file = null, $line = null, $context = null) {
-		self::$__errors[] = compact($number, $message, $file, $line);
-
-		if (Titon::config()->get('debug.level') > 0) {
-			self::__output($number, $message, $file, $line, $context);
-		} else {
-			Logger::write(sprintf('[%s] %s: %s in %s on line %s.', date('d-M-Y H:i:s'), self::errorType($number), $message, $file, $line));
-		}
-
-		return true;
-	}
-
-	/**
-	* Enable or disable error reporting dynamically during runtime.
-	*
-	* @access public
-	* @param bool $enabled
-	* @return void
-	* @static
-	*/
-	public static function errorReporting($enabled = true) {
+	 * Enable or disable error reporting dynamically during runtime.
+	 *
+	 * @access public
+	 * @param bool $enabled
+	 * @return void
+	 * @static
+	 */
+	public static function enable($enabled = true) {
 		if (!is_bool($enabled)) {
 			$enabled = true;
 		}
 
-		if ($enabled === true) {
+		if ($enabled) {
 			ini_set('error_reporting', E_ALL | E_STRICT);
 		} else {
 			ini_set('error_reporting', 0);
@@ -116,45 +92,61 @@ class Debugger {
 	}
 
 	/**
-	* Determine the type of error received.
-	*
-	* @access public
-	* @param int $code
-	* @return string
-	* @static
-	*/
-	public static function errorType($code = null) {
-		if (isset(self::$errorTypes[$code])) {
-			return self::$errorTypes[$code];
+	 * Overwrite the error_handler. When in development output errors, throw exceptions in production.
+	 *
+	 * @access public
+	 * @param int $number
+	 * @param string $message
+	 * @param string $file
+	 * @param int $line
+	 * @param string $context
+	 * @return void
+	 * @static
+	 */
+	public static function error($number, $message, $file = null, $line = null, $context = null) {
+		self::$__errors[] = compact($number, $message, $file, $line);
+
+		if (error_reporting() > 0) {
+			self::__output($number, $message, $file, $line, $context);
+		} else {
+			Logger::write(sprintf('[%s] %s: %s in %s on line %s.', date('d-M-Y H:i:s'), self::errorType($number), $message, $file, $line));
 		}
 
-		return 'Uncaught Exception';
+		return true;
 	}
 
 	/**
-	* Export a formatted variable to be used.
-	*
-	* @access public
-	* @param mixed $var
-	* @return mixed
-	* @static
-	*/
+	 * Determine the type of error received.
+	 *
+	 * @access public
+	 * @param int $code
+	 * @return string
+	 * @static
+	 */
+	public static function errorType($code = null) {
+		return isset(self::$errorTypes[$code]) ? self::$errorTypes[$code] : 'Uncaught Exception';
+	}
+
+	/**
+	 * Export a formatted variable to be used.
+	 *
+	 * @access public
+	 * @param mixed $var
+	 * @return mixed
+	 * @static
+	 */
 	public static function export($var = null) {
 		return var_export($var, true);
 	}
 
 	/**
-	* Initialize the error/exception/debug handling depending on environment.
-	*
-	* @access public
-	* @return void
-	* @static
-	*/
+	 * Initialize the error/exception/debug handling depending on environment.
+	 *
+	 * @access public
+	 * @return void
+	 * @static
+	 */
 	public static function initialize() {
-		if (!Titon::config()->get('debug.level')) {
-			self::errorReporting(true);
-		}
-
 		ini_set('log_errors', true);
 		ini_set('report_memleaks', true);
 		ini_set('error_log', APP_TEMP . Logger::ERROR_LOG);
@@ -164,13 +156,13 @@ class Debugger {
 	}
 
 	/**
-	* Parse the backtrace's arguments array and format correctly for a return.
-	*
-	* @access public
-	* @param mixed $arg
-	* @return mixed
-	* @static
-	*/
+	 * Parse the backtrace's arguments array and format correctly for a return.
+	 *
+	 * @access public
+	 * @param mixed $arg
+	 * @return mixed
+	 * @static
+	 */
 	public static function parseArg($arg, $end = false) {
 		switch (true) {
 			case is_numeric($arg):
@@ -180,7 +172,6 @@ class Debugger {
 				return ($arg === true) ? 'true' : 'false';
 			break;
 			case is_string($arg):
-				//return '"'. substr(htmlentities($arg), 0, 15) .'..."';
 				return "'". htmlentities($arg) ."'";
 			break;
 			case is_array($arg):
@@ -207,13 +198,13 @@ class Debugger {
 	}
 
 	/**
-	* Parse the file path to remove absolute path and replace with constant name.
-	*
-	* @access public
-	* @param string $path
-	* @return string
-	* @static
-	*/
+	 * Parse the file path to remove absolute path and replace with constant name.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @return string
+	 * @static
+	 */
 	public static function parseFile($path) {
 		if (empty($path)) {
 			return '[Internal]';
@@ -221,29 +212,25 @@ class Debugger {
 
 		$path = Titon::loader()->ds($path);
 
-		if (strpos($path, APP) !== false) {
-			$path = str_replace(APP, '[App]', $path);
+		foreach(array('app', 'source', 'library', 'vendors', 'titon', 'root') as $constant) {
+			$location = Titon::loader()->ds(constant(strtoupper($constant)));
 
-		} else if (strpos($path, SOURCE) !== false) {
-			$path = str_replace(SOURCE, '[Titon]', $path);
-
-		} else if (strpos($path, LIBRARY) !== false) {
-			$path = str_replace(LIBRARY, '[Library]', $path);
-
-		} else if (strpos($path, VENDORS) !== false) {
-			$path = str_replace(VENDORS, '[Vendors]', $path);
+			if (strpos($path, $location) !== false) {
+				$path = str_replace($location, '['. $constant .']', $path);
+				break;
+			}
 		}
 
 		return $path;
 	}
 
 	/**
-	* Create a custom backtraced array based on the debug_backtrace() output.
-	*
-	* @access public
-	* @return array
-	* @static
-	*/
+	 * Create a custom backtraced array based on the debug_backtrace() output.
+	 *
+	 * @access public
+	 * @return array
+	 * @static
+	 */
 	public static function trace() {
 		$backtrace = debug_backtrace();
 		$response = array();
@@ -271,7 +258,7 @@ class Debugger {
 						}
 					}
 
-					$current['args'] = $args; //implode(', ', $args);
+					$current['args'] = $args;
 
 					$response[] = $current + array(
 						'line'	=> null,
@@ -289,17 +276,17 @@ class Debugger {
 	}
 
 	/**
-	* Renders a formatted error message to the view accompanied by a stack trace.
-	*
-	* @access public
-	* @param string $error
-	* @param string $message
-	* @param string $file
-	* @param int $line
-	* @param mixed $context
-	* @return string
-	* @static
-	*/
+	 * Renders a formatted error message to the view accompanied by a stack trace.
+	 *
+	 * @access public
+	 * @param string $error
+	 * @param string $message
+	 * @param string $file
+	 * @param int $line
+	 * @param mixed $context
+	 * @return string
+	 * @static
+	 */
 	private static function __output($number, $message, $file, $line, $context = null) {
 		$append = count(self::$__errors);
 		$backtrace = self::trace();
@@ -309,19 +296,19 @@ class Debugger {
 			return "document.getElementById('". $id ."').style.display = (document.getElementById('". $id ."').style.display == 'none' ? '". $display ."' : 'none');";
 		};
 
-		$output  = '<div id="TitonDebugError_'. $append .'">';
-		$output .= '<b><a href="#debug" onclick="'. $toggle('TitonStackTrace_'. $append) .' return false;">'. self::errorType($number) .'</a>:</b> '. $message .' on ';
+		$output  = '<div id="TitonDebugError-'. $append .'">';
+		$output .= '<b><a href="#debug" onclick="'. $toggle('TitonStackTrace-'. $append) .' return false;">'. self::errorType($number) .'</a>:</b> '. $message .' ';
 		$output .= '<b><acronym title="'. $file .'">'. self::parseFile($file) .'</acronym></b> ('. $line .')<br><br>';
 
 		if (!empty($backtrace)) {
-			$output .= '<div id="TitonStackTrace_'. $append .'" style="display: none">';
+			$output .= '<div id="TitonStackTrace-'. $append .'" style="display: none">';
 			$output .= '<table cellpadding="0" cellspacing="0" style="border: none">';
 
 			foreach ($backtrace as $stack => $trace) {
 				$output .= '<tr><td>';
 
 				if (!empty($trace['args'])) {
-					$output .= '<a href="#debug" onclick="'. $toggle('TitonMethodArgs_'. $stack .'_'. $append, true) .' return false;">'. $trace['method'] .'</a>';
+					$output .= '<a href="#debug" onclick="'. $toggle('TitonMethodArgs-'. $stack .'-'. $append, true) .' return false;">'. $trace['method'] .'</a>';
 				} else {
 					$output .= $trace['method'];
 				}
@@ -334,7 +321,7 @@ class Debugger {
 				$output .= '</td></tr>';
 
 				if (!empty($trace['args'])) {
-					$output .= '<tr id="TitonMethodArgs_'. $stack .'_'. $append .'" style="display: none">';
+					$output .= '<tr id="TitonMethodArgs-'. $stack .'-'. $append .'" style="display: none">';
 					$output .= '<td colspan="2"><br><b>Arguments:</b><ol>';
 
 					foreach ($trace['args'] as $arg) {

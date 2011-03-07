@@ -131,7 +131,7 @@ class Config {
 	 */
 	public function set($key, $value) {
 		if ($key === 'Debug.level') {
-			Debugger::errorReporting(((int)$value > 0));
+			Debugger::enable(((int)$value > 0));
 		}
 
 		$this->__config = Set::insert($this->__config, $key, $value);
