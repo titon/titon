@@ -10,7 +10,6 @@
 namespace titon\source\core;
 
 use \titon\library\routes\core\Route;
-use \titon\source\Titon;
 use \titon\source\library\routes\RouteInterface;
 use \titon\source\log\Exception;
 
@@ -177,7 +176,7 @@ class Router {
 		);
 
 		if (empty($data['module'])) {
-			$data['module'] = Titon::app()->getDefaultModule();
+			$data['module'] = 'pages';
 		}
 
 		if (empty($data['controller'])) {

@@ -242,8 +242,8 @@ abstract class RouteAbstract implements RouteInterface {
 
 			// Get pattern values
 			if (!empty($matches) && !empty($this->_tokens)) {
-				$modules = Titon::app()->getModules();
-				$controllers = Titon::app()->getControllers();
+				$modules = Titon::app()->modules();
+				$controllers = Titon::app()->controllers();
 
 				foreach ($this->_tokens as $token) {
 					switch ($token) {

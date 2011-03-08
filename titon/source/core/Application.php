@@ -29,72 +29,14 @@ class Application {
 	private $__modules = array();
 
 	/**
-	 * Default routed module.
-	 *
-	 * @access public
-	 * @var string
-	 */
-	private $__default = 'pages';
-
-	/**
-	 * Add a controller to a module.
-	 *
-	 * @access public
-	 * @param string $module
-	 * @param string $controller
-	 * @return this
-	 * @chainable
-	 */
-	public function addController($module, $controller) {
-		$this->__modules[$module][] = $controller;
-
-		return $this;
-	}
-
-	/**
-	 * Add a module to the application for fast lookup.
-	 *
-	 * @access public
-	 * @param string $module
-	 * @param array $controllers
-	 * @return this
-	 * @chainable
-	 */
-	public function addModule($module, array $controllers = array()) {
-		$this->__modules[$module] = $controllers;
-
-		return $this;
-	}
-
-	/**
 	 * Return all controllers, or a modules controllers.
 	 *
 	 * @access public
 	 * @param string $module
 	 * @return array
 	 */
-	public function getControllers($module = null) {
+	public function controllers($module = null) {
 		return isset($this->__modules[$module]) ? $this->__modules[$module] : $this->__modules;
-	}
-
-	/**
-	 * Return the default module.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getDefaultModule() {
-		return $this->__default;
-	}
-
-	/**
-	 * Return a list of added modules.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function getModules() {
-		return array_keys($this->__modules);
 	}
 
 	/**
@@ -112,18 +54,43 @@ class Application {
 	}
 
 	/**
-	 * Set the default routing module. Defaults to core.
+	 * Return a list of added modules.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function modules() {
+		return array_keys($this->__modules);
+	}
+
+	/**
+	 * Add a module (and controllers) to the application for fast lookup.
 	 *
 	 * @access public
 	 * @param string $module
+	 * @param string|array $controllers
 	 * @return this
 	 * @chainable
 	 */
-	public function setDefaultModule($module) {
-		if (isset($this->__modules[$module])) {
-			$this->__default = $module;
-		} else {
-			throw new Exception(sprintf('Can not set default module as %s does not exist.', $module));
+	public function setup($module, $controllers = array()) {
+		$module = (string)$module;
+		
+		if (!isset($this->__modules[$module])) {
+			$this->__modules[$module] = array();
+		}
+
+		if (!empty($controllers)) {
+			if (!is_array($controllers)) {
+				$controllers = array($controllers);
+			}
+
+			foreach ($controllers as $controller) {
+				if (!empty($controller)) {
+					$this->__modules[$module][] = (string)$controller;
+				}
+			}
+
+			$this->__modules[$module] = array_unique($this->__modules[$module]);
 		}
 
 		return $this;
