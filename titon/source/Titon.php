@@ -130,13 +130,11 @@ class Titon {
 	 * @return void
 	 */
 	public static function startup() {
-		self::loader()->includePath(array(
-			APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
-		));
-
-		self::environment()->initialize();
-		self::app()->initialize();
-		self::router()->initialize();
+		foreach (self::$__memory as &$object) {
+			if (method_exists($object, 'initialize')) {
+				$object->initialize();
+			}
+		}
 	}
 
 	/**

@@ -44,6 +44,11 @@ class Loader {
 		$this->addLoader('default', function($class) {
 			return Titon::loader()->import($class);
 		});
+
+		// Set default include paths
+		$this->includePath(array(
+			APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
+		));
 	}
 
 	/**
