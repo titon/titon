@@ -62,6 +62,9 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			readers/
 			routes/
 			shells/
+			storage/
+			translaters/
+			transporters/
 		source/
 		vendors/
 
@@ -78,3 +81,6 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Readers - Handles the loading of configuration file types: xml, json, yaml, etc
 * Routes - Maps URLs to internal destinations.
 * Shell - Handles CLI execution and tasks.
+* Storage - Provides different methods of caching data.
+* Translater - Handles the translation of certain filetypes to be used by the locale message system.
+* Transporter - Handles the different type of email transporting (SMTP, etc).
