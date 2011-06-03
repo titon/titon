@@ -16,7 +16,7 @@ use \titon\log\Exception;
  * The Registry acts a central hub where any part of the application can access a single instance of a stored object.
  * It registers all objects into the class to store in memory and be re-useable later at any given time.
  *
- * @package	titon.source.core
+ * @package	titon.core
  * @uses	titon\Titon
  * @uses	titon\log\Exception
  */

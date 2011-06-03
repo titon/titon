@@ -12,7 +12,7 @@ namespace titon\utility;
 /**
  * String and grammar inflection. Converts strings to a certain format. Camel cased, singular, plural etc.
  *
- * @package	titon.source.utility
+ * @package	titon.utility
  */
 class Inflector {
 
@@ -36,11 +36,18 @@ class Inflector {
 	 * @access public
 	 * @param string $string
 	 * @param string $ext
+	 * @param boolean $capitalize
 	 * @return string
-	 * @access static
+	 * @static
 	 */
-	public static function filename($string, $ext = 'php') {
-		return ucfirst(self::camelize($string)) .'.'. $ext;
+	public static function filename($string, $ext = 'php', $capitalize = true) {
+		$path = self::camelize($string);
+		
+		if ($capitalize) {
+			$path = ucfirst($path);
+		}
+		
+		return $path .'.'. $ext;
 	}
 
 	/**
@@ -125,7 +132,7 @@ class Inflector {
 	 * @access public
 	 * @param string $string
 	 * @return string
-	 * @access static
+	 * @static
 	 */
 	public static function tableize($string) {
 		return lcfirst(self::camelize(self::pluralize($string)));

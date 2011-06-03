@@ -23,7 +23,7 @@ use \titon\log\Exception;
 /**
  * The primary framework class contains all core classes that manipulate and power the application, or add quick convenience.
  *
- * @package	titon.source.system
+ * @package	titon.system
  * @uses	titon\Titon
  */
 class Titon {

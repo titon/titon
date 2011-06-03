@@ -17,7 +17,7 @@ use \titon\libs\listeners\ListenerInterface;
  * Events allow you to define methods or classes that are triggered at certain events within the dispatch cycle,
  * thus allowing you to alter or add to the existing request.
  *
- * @package	titon.source.core
+ * @package	titon.core
  * @uses	titon\Titon
  */
 class Event {

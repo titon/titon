@@ -19,7 +19,7 @@ use \titon\log\Exception;
  * Additionally, it will construct a URL based on an array of options, or deconstruct a URL into an array of options.
  * You can also define custom slugs or routes to be used for internal routing mechanisms.
  *
- * @package	titon.source.core
+ * @package	titon.core
  * @uses	titon\log\Exception
  */
 class Router {

@@ -23,7 +23,7 @@ use \titon\utility\Inflector;
  * You may use the setup() method to define the use of different dispatchers for specific controller and
  * module scopes. The setup() method should be used within the applications setup center.
  *
- * @package	titon.source.core
+ * @package	titon.core
  */
 class Dispatch {
 

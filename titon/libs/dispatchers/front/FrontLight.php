@@ -9,9 +9,9 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\dispatchers\front;
+namespace titon\libs\dispatchers\front;
 
-use \titon\modules\dispatchers\DispatcherAbstract;
+use \titon\libs\dispatchers\DispatcherAbstract;
 
 /**
  * Front Dispatcher Class

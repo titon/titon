@@ -32,10 +32,6 @@ define('APP', __DIR__ . DS);
 define('ROOT', dirname(APP) . DS);
 define('TITON', ROOT .'titon'. DS);
 
-echo APP .'<br>';
-echo ROOT .'<br>';
-echo TITON .'<br>';
-
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.
  */

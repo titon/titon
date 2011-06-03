@@ -12,7 +12,7 @@ namespace titon\libs\dispatchers;
 /**
  * A required interface for all custom Dispatchers to implement.
  *
- * @package	titon.source.library.dispatchers
+ * @package	titon.library.dispatchers
  */
 interface DispatcherInterface {
 

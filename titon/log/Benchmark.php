@@ -16,7 +16,7 @@ use \titon\log\Logger;
  * Delivers the functionality to start, stop and log benchmarks.
  * Benchmarks store the time difference and memory usage between two blocks during runtime.
  *
- * @package	titon.source.log
+ * @package	titon.log
  * @uses	titon\Titon
  * @uses	titon\log\Logger
  */

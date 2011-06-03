@@ -20,7 +20,7 @@ use \titon\utility\Set;
  * Configuration can be loaded from multiple sources including environment, bootstrappings and internal system classes.
  * Various readers can be used to import specific configuration files.
  *
- * @package	titon.source.core
+ * @package	titon.core
  * @uses	titon\log\Debugger
  * @uses	titon\log\Exception
  * @uses	titon\utility\Inflector

@@ -15,7 +15,7 @@ use \titon\system\View;
  * A required interface for all Helpers to implement.
  * Defines the callbacks and the arguments that are available to the Helper.
  *
- * @package	titon.source.library.helpers;
+ * @package	titon.library.helpers;
  */
 interface HelperInterface {
 

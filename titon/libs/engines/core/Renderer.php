@@ -8,10 +8,10 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\engines\titon;
+namespace titon\libs\engines\titon;
 
 use \titon\log\Exception;
-use \titon\modules\engines\EngineAbstract;
+use \titon\libs\engines\EngineAbstract;
 use \titon\system\View;
 
 /**

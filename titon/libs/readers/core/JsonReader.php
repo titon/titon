@@ -16,7 +16,7 @@ use \titon\log\Exception;
  * A reader that loads its configuration from a JSON file.
  * Must have the JSON module installed.
  *
- * @package	titon.source.core.readers
+ * @package	titon.core.readers
  * @uses	titon\log\Exception
  * 
  * @link	http://php.net/json_decode

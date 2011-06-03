@@ -26,7 +26,7 @@ use \titon\system\View;
  * Furthermore, the Controller inherits all functionality from the Prototype class, allowing you to attach
  * external classes to use their functionality and trigger specific callbacks.
  *
- * @package	titon.source.system
+ * @package	titon.system
  * @uses	titon\Titon
  */
 class Controller extends Prototype {

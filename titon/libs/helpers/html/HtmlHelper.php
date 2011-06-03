@@ -9,11 +9,11 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\helpers\html;
+namespace titon\libs\helpers\html;
 
 use \titon\core\App;
-use \titon\modules\helpers\HelperAbstract;
-use \titon\router\Router;
+use \titon\core\Router;
+use \titon\libs\helpers\HelperAbstract;
 use \titon\utility\Encrypt;
 
 /**
@@ -22,7 +22,7 @@ use \titon\utility\Encrypt;
  * @package		Titon
  * @subpackage	Titon.Modules.Helpers
  */
-class Html extends HelperAbstract {
+class HtmlHelper extends HelperAbstract {
 
     /**
      * A list of all breadcrumbs in the trail, with the title, url and attributes.

@@ -15,7 +15,7 @@ use \titon\log\Exception;
  * This class manages the location and installation of controllers and modules,
  * to speed up the lookup process of its sub-classes.
  *
- * @package	titon.source.core
+ * @package	titon.core
  * @uses	titon\log\Exception
  */
 class Application {

@@ -16,7 +16,7 @@ use \titon\log\Exception;
  * A reader that loads its configuration from a PHP file.
  * The PHP file must contain a return statement that returns an array.
  *
- * @package	titon.source.core.readers
+ * @package	titon.core.readers
  * @uses	titon\log\Exception
  * 
  * @link	http://php.net/manual/en/function.include.php

@@ -13,7 +13,7 @@ namespace titon\base;
  * Primary class for all framework classes to extend. All child classes will inherit the $_config property,
  * allowing any configuration settings to be automatically passed and set through the constructor.
  *
- * @package	titon.source.system
+ * @package	titon.base
  */
 class Base {
 

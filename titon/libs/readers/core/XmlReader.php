@@ -16,7 +16,7 @@ use \titon\log\Exception;
  * A reader that loads its configuration from an XML file.
  * Must have the SimpleXML module installed.
  *
- * @package	titon.source.core.readers
+ * @package	titon.core.readers
  * @uses	titon\log\Exception
  * 
  * @link	http://php.net/simplexml

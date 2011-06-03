@@ -8,11 +8,11 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\helpers\html;
+namespace titon\libs\helpers\html;
 
 use \titon\core\App;
-use \titon\modules\helpers\HelperAbstract;
-use \titon\router\Router;
+use \titon\core\Router;
+use \titon\libs\helpers\HelperAbstract;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
 
@@ -22,7 +22,7 @@ use \titon\utility\Set;
  * @package		Titon
  * @subpackage	Titon.Modules.Helpers
  */
-class Form extends HelperAbstract {
+class FormHelper extends HelperAbstract {
 
     /**
      * Forms generated for the current request. Logs the form, fields and labels data.

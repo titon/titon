@@ -18,7 +18,7 @@ use \titon\system\View;
  * The Helper class acts as the base for all children helpers to extend.
  * Defines methods and properties for HTML tags and attribute generation.
  *
- * @package	titon.source.library.helpers
+ * @package	titon.library.helpers
  * @uses	titon\Titon
  * @abstract
  */

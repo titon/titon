@@ -15,7 +15,7 @@ use \titon\log\Exception;
 /**
  * A reader that loads its configuration from an INI file.
  *
- * @package	titon.source.core.readers
+ * @package	titon.core.readers
  * @uses	titon\log\Exception
  * 
  * @link	http://php.net/parse_ini_file

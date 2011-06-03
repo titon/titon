@@ -8,7 +8,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\engines;
+namespace titon\libs\engines;
 
 use \titon\system\View;
 

@@ -8,9 +8,9 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\helpers\state;
+namespace titon\libs\helpers\state;
 
-use \titon\modules\helpers\HelperAbstract;
+use \titon\libs\helpers\HelperAbstract;
 
 /**
  * Session Helper
@@ -18,7 +18,7 @@ use \titon\modules\helpers\HelperAbstract;
  * @package		Titon
  * @subpackage	Titon.Modules.Helpers
  */
-class Session extends HelperAbstract {
+class SessionHelper extends HelperAbstract {
 
     /**
 	 * Classes important for this object to operate properly.

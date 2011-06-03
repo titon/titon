@@ -17,7 +17,7 @@ use \titon\net\Http;
  * The Response object handles the collection and output of data to the browser. It stores a list of HTTP headers,
  * the content body, the content type and associated status code to print out.
  *
- * @package	titon.source.net
+ * @package	titon.net
  * @uses	titon\Titon
  */
 class Response extends Http {

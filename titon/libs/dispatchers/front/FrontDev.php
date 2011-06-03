@@ -9,10 +9,10 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\dispatchers\front;
+namespace titon\libs\dispatchers\front;
 
 use \titon\log\Benchmark;
-use \titon\modules\dispatchers\DispatcherAbstract;
+use \titon\libs\dispatchers\DispatcherAbstract;
 use \titon\system\Event;
 
 /**

@@ -17,7 +17,7 @@ use \titon\net\Http;
  * The Request object is the primary source of data and state management for the environment.
  * It extracts and cleans the GET, POST and FILES data from the current HTTP request.
  * 
- * @package	titon.source.net
+ * @package	titon.net
  * @uses	titon\Titon
  * @uses	titon\log\Exception
  */

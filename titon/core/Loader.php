@@ -16,7 +16,7 @@ use \Closure;
  * Handles the autoloading, importing and including of files within the system.
  * Provides convenience functions for inflecting notation paths, namespace paths and file system paths.
  *
- * @package	titon.source.core
+ * @package	titon.core
  * @uses	titon\Titon
  */
 class Loader {

@@ -14,7 +14,7 @@ use \titon\base\Base;
 /**
  * A primary HTTP base class that provides functionality for common HTTP status codes and content types.
  *
- * @package titon.source.net
+ * @package titon.net
  */
 class Http extends Base {
 

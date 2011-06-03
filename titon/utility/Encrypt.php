@@ -13,7 +13,7 @@ namespace titon\utility;
  * Encyrption and Decryption. Applies encryption techniques and algorythms to specific strings and data.
  * Has the ability to decrypt certain strings according to the specific algorythm.
  *
- * @package	titon.source.utility
+ * @package	titon.utility
  */
 class Encrypt {
 

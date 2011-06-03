@@ -9,7 +9,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\modules\dispatchers;
+namespace titon\libs\dispatchers;
 
 use \titon\base\Prototype;
 use \titon\core\App;

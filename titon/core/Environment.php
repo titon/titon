@@ -15,7 +15,7 @@ use \titon\log\Exception;
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
- * @package	titon.source.core
+ * @package	titon.core
  * @uses	titon\utility\Inflector
  * @uses	titon\log\Exception
  */

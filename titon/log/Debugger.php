@@ -17,7 +17,7 @@ use \titon\log\Logger;
  * Custom system to manage all internal and user created errors and thrown/uncaught exceptions.
  * Errors are displayed with a custom backtrace as well as logged to the filesystem (if passed to the Logger).
  *
- * @package titon.source.log
+ * @package titon.log
  * @uses	titon\Titon
  * @uses	titon\log\Exception
  * @uses	titon\log\Logger

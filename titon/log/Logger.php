@@ -16,7 +16,7 @@ use \titon\Titon;
  * Logs are categorized based on threat level, which determines the location of where it is to be written.
  * There are two files in which the logger uses: debug.log and error.log, both of which are located in the app/temp.
  *
- * @package	titon.source.log
+ * @package	titon.log
  * @uses	titon\Titon
  */
 class Logger {

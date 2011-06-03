@@ -15,7 +15,7 @@ use \titon\log\Debugger;
  * Custom built exception handler that extends the base PHP exception class.
  * When an exception is thrown it outputs an error in development, and logs an error in production.
  *
- * @package	titon.source.log
+ * @package	titon.log
  * @uses	titon\log\Debugger
  */
 class Exception extends \Exception {  

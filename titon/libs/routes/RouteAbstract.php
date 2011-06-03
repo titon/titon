@@ -18,7 +18,7 @@ use \titon\log\Exception;
  * module, controller, action, extension, arguments and query parameters. A route can be used to mask a certain URL to
  * another internal destination.
  *
- * @package	titon.source.library.routes
+ * @package	titon.library.routes
  * @uses	titon\Titon
  * @uses	titon\log\Exception
  */

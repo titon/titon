@@ -18,7 +18,7 @@ use \titon\system\Controller;
  * An Action object gives you the flexibility of re-using actions and specific logic across multiple
  * Controllers, encapsulating additional methods within the Action process, and defining its own attachments.
  *
- * @package	titon.source.system
+ * @package	titon.system
  */
 class Action extends Prototype {
 
