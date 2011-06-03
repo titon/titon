@@ -47,7 +47,7 @@ class Loader {
 
 		// Set default include paths
 		$this->includePath(array(
-			APP, ROOT, TITON, SOURCE, LIBRARY, VENDORS
+			APP, ROOT, TITON, LIBRARY, VENDORS
 		));
 	}
 

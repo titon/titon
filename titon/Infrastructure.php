@@ -10,9 +10,9 @@
 /**
  * Require files to load constants and global functions.
  */
-require TITON .'source'. DS .'Paths.php';
-require TITON .'source'. DS .'Bootstrap.php';
-require TITON .'source'. DS .'Titon.php';
+require TITON .'paths.php';
+require TITON .'bootstrap.php';
+require TITON .'Titon.php';
 
 /**
  * Require core internals that operate the application.
@@ -40,5 +40,5 @@ require SOURCE .'system'. DS .'Prototype.php';
 /**
  * Require custom config and settings from the application.
  */
-require APP_CONFIG .'Setup.php';
-require APP_CONFIG .'Routes.php';
+require APP_CONFIG .'setup.php';
+require APP_CONFIG .'routes.php';

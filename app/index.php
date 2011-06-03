@@ -35,11 +35,11 @@ define('TITON', ROOT .'titon'. DS);
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.
  */
-if (!is_dir(TITON .'source')) {
+if (!is_file(TITON)) {
 	trigger_error('Titon: Application failed to load the core libraries. Please check your paths and configuration.', E_USER_ERROR);
 }
 
-include_once TITON .'source'. DS .'Infrastructure.php';
+include_once TITON .'infrastructure.php';
 
 /**
  * Dispatch the request.

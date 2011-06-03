@@ -92,11 +92,11 @@ class Titon {
 	 * @static
 	 */
 	public static function initialize() {
+		self::install('loader', new Loader(), true);
 		self::install('app', new Application(), true);
 		self::install('config', new Config(), true);
 		self::install('dispatch', new Dispatch(), true);
 		self::install('event', new Event(), true);
-		self::install('loader', new Loader(), true);
 		self::install('registry', new Registry(), true);
 		self::install('router', new Router(), true);
 		self::install('environment', new Environment(), true);
