@@ -64,7 +64,7 @@ class Registry {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return bool
+	 * @return boolean
 	 */
 	public function delete($key) {
 		if (isset($this->_registered[$key])) {
@@ -81,9 +81,10 @@ class Registry {
 	 * @access public
 	 * @param string $key
 	 * @param array $config
+	 * @param boolean $store
 	 * @return object
 	 */
-	public function factory($key, array $config = array()) {
+	public function factory($key, array $config = array(), $store = true) {
 		if (isset($this->_registered[$key])) {
 			return $this->_registered[$key];
 		}
@@ -99,7 +100,13 @@ class Registry {
 				$config = $config + $this->_configs[$key];
 			}
 
-			return $this->store(new $namespace($config));
+			$object = new $namespace($config);
+			
+			if ($store) {
+				return $this->store($object);
+			}
+			
+			return $object;
 		}
 
 		throw new Exception(sprintf('Class %s could not be instantiated into the registry.', $key));

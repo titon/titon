@@ -85,13 +85,13 @@ class Config {
 		if (is_file($path)) {
 			$reader->setPath($path);
 			$reader->read();
-			
+
 			if (!isset($this->_config[$file])) {
 				$this->_config[$file] = array();
 			}
 
 			$this->_config[$file] = $reader->toArray() + $this->_config[$file];
-			
+
 		} else {
 			throw new Exception(sprintf('Configuration file %s does not exist.', $file));
 		}

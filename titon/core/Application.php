@@ -47,8 +47,10 @@ class Application {
 	 */
 	public function initialize() {
 		foreach (scandir(APP_MODULES) as $module) {
-			if (is_file(APP_MODULES . $module . DS .'bootstrap.php')) {
-				include_once APP_MODULES . $module . DS .'bootstrap.php';
+			$path = APP_MODULES . $module . DS .'bootstrap.php';
+			
+			if (is_file($path)) {
+				include_once $path;
 			}
 		}
 	}
@@ -74,7 +76,7 @@ class Application {
 	 */
 	public function setup($module, $controllers = array()) {
 		$module = (string)$module;
-		
+
 		if (!isset($this->_modules[$module])) {
 			$this->_modules[$module] = array();
 		}

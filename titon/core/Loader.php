@@ -78,7 +78,7 @@ class Loader {
 		if (class_exists($class, false) || interface_exists($class, false)) {
 			return;
 		}
-			
+
 		foreach ($this->_loaders as $loader) {
 			if ($loader($class)) {
 				break;
@@ -167,7 +167,7 @@ class Loader {
 		} else {
 			$current[] = $paths;
 		}
-		
+
 		set_include_path(implode(PS, $current));
 
 		return $this;

@@ -56,27 +56,29 @@ class Event {
 	 * @return void
 	 */
 	public function execute($event, $object = null) {
-		if (!empty($this->_listeners[$event])) {
-			$route = Titon::router()->current();
+		if (empty($this->_listeners[$event])) {
+			return;
+		}
+		
+		$route = Titon::router()->current();
 
-			foreach ($this->_listeners[$event] as &$listener) {
-				if ($listener['executed'] === true) {
+		foreach ($this->_listeners[$event] as &$listener) {
+			if ($listener['executed'] === true) {
+				continue;
+			}
+
+			foreach (array('module', 'controller', 'action') as $action) {
+				if (($listener['scope'][$action] !== $route->param($action)) || ($listener['scope'][$action] !== '*')) {
 					continue;
 				}
-
-				foreach (array('module', 'controller', 'action') as $action) {
-					if (($listener['scope'][$action] !== $route->param($action)) || ($listener['scope'][$action] !== '*')) {
-						continue;
-					}
-				}
-
-				if (isset($this->_objectMap[$listener['source']])) {
-					$obj = $this->_objectMap[$listener['source']];
-					$obj->{$event}($object);
-				}
-
-				$listener['executed'] = true;
 			}
+
+			if (isset($this->_objectMap[$listener['source']])) {
+				$obj = $this->_objectMap[$listener['source']];
+				$obj->{$event}($object);
+			}
+
+			$listener['executed'] = true;
 		}
 	}
 

@@ -172,7 +172,7 @@ class Prototype extends Base {
 		}
 
 		$this->_classes[$options['alias']] = $options;
-		
+
 		if ($object !== null && $object instanceof Closure) {
 			$this->__objectMap[$options['alias']] = $object;
 		}
@@ -287,7 +287,7 @@ class Prototype extends Base {
 	 * @return void
 	 * @final
 	 */
-	final public function triggerCallback($method) {
+	final public function triggerObjects($method) {
 		if (is_string($method) && !empty($this->_classes)) {
 			foreach ($this->_classes as $class => $options) {
 				if ($options['callback']) {

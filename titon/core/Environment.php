@@ -45,7 +45,8 @@ class Environment {
 	 */
 	protected $_hostMapping = array(
 		'localhost' => 'development',
-		'127.0.0.1' => 'development'
+		'127.0.0.1' => 'development',
+		'::1' => 'development'
 	);
 
 	/**

@@ -106,7 +106,7 @@ class Router {
 
 		if (!empty($route['ext'])) {
 			$path[] = $route['action'] .'.'. $route['ext'];
-			
+
 		} else if ($route['action'] != 'index' || !empty($route['params'])) {
 			$path[] = $route['action'];
 		}
@@ -203,7 +203,7 @@ class Router {
 			if (isset($url['slug'])) {
 				$slug = $url['slug'];
 				$route = $this->slug($slug);
-				
+
 				unset($url['slug']);
 
 				if (!empty($route)) {
@@ -316,7 +316,7 @@ class Router {
 	public function segment($key = false) {
 		if ($key === true) {
 			$segments = $this->segment();
-			
+
 			$url  = $segments['scheme'] .'://';
 			$url .= $segments['host'];
 			$url .= $this->base();
@@ -325,7 +325,7 @@ class Router {
 			if (!empty($segments['query'])) {
 				$url .= '?'. http_build_query($segments['query']);
 			}
-			
+
 			return $url;
 
 		} else if (isset($this->_segments[$key])) {

@@ -101,7 +101,7 @@ class Base {
 		if (is_array($key)) {
 			$this->_config = $key + $this->_config;
 		} else {
-			$this->_config[(string)$key] = $value;
+			$this->_config[$key] = $value;
 		}
 
 		return $this;
