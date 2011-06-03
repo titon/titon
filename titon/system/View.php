@@ -2,7 +2,7 @@
 
 namespace titon\system;
 
-use \titon\core\Prototype;
+use \titon\base\Prototype;
 use \titon\log\Exception;
 use \titon\utility\Inflector;
 

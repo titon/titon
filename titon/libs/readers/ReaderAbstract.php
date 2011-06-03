@@ -7,17 +7,17 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\library\readers;
+namespace titon\libs\readers;
 
-use \titon\source\system\Object;
-use \titon\source\library\readers\ReaderInterface;
+use \titon\base\Base;
+use \titon\libs\readers\ReaderInterface;
 
 /**
  * Interface for all Config Readers.
  *
  * @package titon.source.library.readers
  */
-abstract class ReaderAbstract extends Object implements ReaderInterface {
+abstract class ReaderAbstract extends Base implements ReaderInterface {
 
 	/**
 	 * File type extension.

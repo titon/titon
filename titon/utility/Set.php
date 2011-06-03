@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\utility;
+namespace titon\utility;
 
 /**
  * Manipulates, manages and processes multiple types of result sets, primarily objects and arrays.

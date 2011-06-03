@@ -7,16 +7,16 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
-use \titon\source\log\Exception;
+use \titon\log\Exception;
 
 /**
  * This class manages the location and installation of controllers and modules,
  * to speed up the lookup process of its sub-classes.
  *
  * @package	titon.source.core
- * @uses	titon\source\log\Exception
+ * @uses	titon\log\Exception
  */
 class Application {
 

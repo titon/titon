@@ -9,7 +9,7 @@
 
 namespace app\modules\pages;
 
-use \titon\source\Titon;
+use \titon\Titon;
 
 /**
  * Each module contains its own specific bootstrap file. This bootstrap is automatically included within the dispatch cycle

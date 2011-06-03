@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
  
-namespace titon\source\system;
+namespace titon\system;
 
-use \titon\source\Titon;
-use \titon\source\system\Prototype;
-use \titon\source\log\Exception;
-use \titon\source\system\Action;
-use \titon\source\system\View;
+use \titon\Titon;
+use \titon\base\Prototype;
+use \titon\log\Exception;
+use \titon\system\Action;
+use \titon\system\View;
 
 /**
  * The Controller (MVC) acts as the median between the request and response within the dispatch cycle.
@@ -27,7 +27,7 @@ use \titon\source\system\View;
  * external classes to use their functionality and trigger specific callbacks.
  *
  * @package	titon.source.system
- * @uses	titon\source\Titon
+ * @uses	titon\Titon
  */
 class Controller extends Prototype {
 

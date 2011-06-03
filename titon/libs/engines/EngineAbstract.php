@@ -16,11 +16,11 @@
 
 namespace titon\modules\engines;
 
+use \titon\base\Prototype;
 use \titon\core\Config;
-use \titon\core\Prototype;
 use \titon\log\Exception;
-use \titon\modules\engines\EngineInterface;
-use \titon\router\Router;
+use \titon\libs\engines\EngineInterface;
+use \titon\core\Router;
 use \titon\system\View;
 
 /**

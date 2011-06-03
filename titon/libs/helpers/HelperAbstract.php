@@ -7,19 +7,19 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\library\helpers;
+namespace titon\libs\helpers;
 
-use \titon\source\Titon;
-use \titon\source\core\Prototype;
-use \titon\source\library\helpers\HelperInterface;
-use \titon\source\system\View;
+use \titon\Titon;
+use \titon\base\Prototype;
+use \titon\libs\helpers\HelperInterface;
+use \titon\system\View;
 
 /**
  * The Helper class acts as the base for all children helpers to extend.
  * Defines methods and properties for HTML tags and attribute generation.
  *
  * @package	titon.source.library.helpers
- * @uses	titon\source\Titon
+ * @uses	titon\Titon
  * @abstract
  */
 abstract class HelperAbstract extends Prototype implements HelperInterface {

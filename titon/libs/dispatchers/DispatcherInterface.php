@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\library\dispatchers;
+namespace titon\libs\dispatchers;
 
 /**
  * A required interface for all custom Dispatchers to implement.

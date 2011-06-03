@@ -7,16 +7,16 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\log;
+namespace titon\log;
 
-use \titon\source\log\Debugger;
+use \titon\log\Debugger;
 
 /**
  * Custom built exception handler that extends the base PHP exception class.
  * When an exception is thrown it outputs an error in development, and logs an error in production.
  *
  * @package	titon.source.log
- * @uses	titon\source\log\Debugger
+ * @uses	titon\log\Debugger
  */
 class Exception extends \Exception {  
 

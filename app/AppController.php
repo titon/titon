@@ -9,8 +9,8 @@
 
 namespace app;
 
-use \titon\source\Titon;
-use \titon\source\system\Controller;
+use \titon\Titon;
+use \titon\system\Controller;
 
 /**
  * A Controller class that acts as a gateway between the client controller and the system controller.
@@ -30,11 +30,11 @@ class AppController extends Controller {
 	 */
 	public function initialize() {
 		$this->attachObject('request', function() {
-			return Titon::registry()->factory('titon\source\net\Request');
+			return Titon::registry()->factory('titon\net\Request');
 		});
 
 		$this->attachObject('response', function() {
-			return Titon::registry()->factory('titon\source\net\Response');
+			return Titon::registry()->factory('titon\net\Response');
 		});
 	}
 

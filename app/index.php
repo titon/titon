@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-use \titon\source\Titon;
+use \titon\Titon;
 
 /**
  * Compare the PHP version so that the application is running in 5.3!
@@ -32,10 +32,14 @@ define('APP', __DIR__ . DS);
 define('ROOT', dirname(APP) . DS);
 define('TITON', ROOT .'titon'. DS);
 
+echo APP .'<br>';
+echo ROOT .'<br>';
+echo TITON .'<br>';
+
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.
  */
-if (!is_file(TITON)) {
+if (!is_file(TITON .'infrastructure.php')) {
 	trigger_error('Titon: Application failed to load the core libraries. Please check your paths and configuration.', E_USER_ERROR);
 }
 

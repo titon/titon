@@ -16,6 +16,6 @@ namespace app;
  * @package		Titon
  * @subpackage	App
  */
-class AppModel extends \titon\source\data\Model {
+class AppModel extends \titon\data\Model {
 
 }

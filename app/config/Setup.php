@@ -9,7 +9,7 @@
 
 namespace app\config;
 
-use \titon\source\Titon;
+use \titon\Titon;
 
 /**
  * Environments

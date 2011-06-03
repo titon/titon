@@ -7,10 +7,10 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
-use \titon\source\Titon;
-use \titon\source\library\listeners\ListenerInterface;
+use \titon\Titon;
+use \titon\libs\listeners\ListenerInterface;
 
 /**
  * Provides a way to register functionality to listen and execute within the application without having to edit the core files.
@@ -18,7 +18,7 @@ use \titon\source\library\listeners\ListenerInterface;
  * thus allowing you to alter or add to the existing request.
  *
  * @package	titon.source.core
- * @uses	titon\source\Titon
+ * @uses	titon\Titon
  */
 class Event {
 

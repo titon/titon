@@ -7,9 +7,9 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\log;
+namespace titon\log;
 
-use \titon\source\Titon;
+use \titon\Titon;
 
 /**
  * A simple class that handles the logging of errors and debug messages to the filesystem.
@@ -17,7 +17,7 @@ use \titon\source\Titon;
  * There are two files in which the logger uses: debug.log and error.log, both of which are located in the app/temp.
  *
  * @package	titon.source.log
- * @uses	titon\source\Titon
+ * @uses	titon\Titon
  */
 class Logger {
 

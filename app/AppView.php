@@ -9,8 +9,8 @@
 
 namespace app;
 
-use \titon\source\Titon;
-use \titon\source\core\Registry;
+use \titon\Titon;
+use \titon\core\Registry;
 
 /**
  * The application view acts as the gateway between the controller logic and the templates.
@@ -19,7 +19,7 @@ use \titon\source\core\Registry;
  * @package		Titon
  * @subpackage	App
  */
-class AppView extends \titon\source\system\View {
+class AppView extends \titon\system\View {
 
 	/**
 	 * Construct the Engine and Helper object(s). Allows you to overwrite or remove for high customization.
@@ -30,11 +30,11 @@ class AppView extends \titon\source\system\View {
 	public function construct() {
 		// Inherit the referenced Request and Response from the Controller
 		$this->attachObject('request', function() {
-			return Titon::registry()->factory('titon\source\net\Request');
+			return Titon::registry()->factory('titon\net\Request');
 		});
 
 		$this->attachObject('response', function() {
-			return Titon::registry()->factory('titon\source\net\Response');
+			return Titon::registry()->factory('titon\net\Response');
 		});
 
 		// Attach an engine if it doesn't exist

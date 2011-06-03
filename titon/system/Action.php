@@ -7,11 +7,11 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\system;
+namespace titon\system;
 
-use \titon\source\core\Prototype;
-use \titon\source\log\Exception;
-use \titon\source\system\Controller;
+use \titon\base\Prototype;
+use \titon\log\Exception;
+use \titon\system\Controller;
 
 /**
  * The Action is a sub-routine of the Controller parent and is packaged as a stand-alone object instead of a method.

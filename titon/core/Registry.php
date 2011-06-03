@@ -7,18 +7,18 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
-use \titon\source\Titon;
-use \titon\source\log\Exception;
+use \titon\Titon;
+use \titon\log\Exception;
 
 /**
  * The Registry acts a central hub where any part of the application can access a single instance of a stored object.
  * It registers all objects into the class to store in memory and be re-useable later at any given time.
  *
  * @package	titon.source.core
- * @uses	titon\source\Titon
- * @uses	titon\source\log\Exception
+ * @uses	titon\Titon
+ * @uses	titon\log\Exception
  */
 class Registry {
 

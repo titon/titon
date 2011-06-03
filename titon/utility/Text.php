@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\utility;
+namespace titon\utility;
 
 /**
  * String Manipulation. Specific methods that deal with string manipulation, truncation, formation, etc.

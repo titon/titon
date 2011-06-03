@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\system;
+namespace titon\base;
 
-use \titon\source\Titon;
-use \titon\source\system\Object;
-use \titon\source\log\Exception;
-use \titon\source\utility\Inflector;
-use \titon\source\utility\Set;
+use \titon\Titon;
+use \titon\base\Base;
+use \titon\log\Exception;
+use \titon\utility\Inflector;
+use \titon\utility\Set;
 use \Closure;
 
 /**
@@ -22,12 +22,12 @@ use \Closure;
  * enabling the objects to only be instantiated when triggered; also known as, lazy loading.
  *
  * @package	titon.source.system
- * @uses	titon\source\Titon
- * @uses	titon\source\log\Exception
- * @uses	titon\source\utility\Inflector
- * @uses	titon\source\utility\Set
+ * @uses	titon\Titon
+ * @uses	titon\log\Exception
+ * @uses	titon\utility\Inflector
+ * @uses	titon\utility\Set
  */
-class Prototype extends Object {
+class Prototype extends Base {
 
 	/**
 	 * Classes and their options / namespaces to load for dependencies.

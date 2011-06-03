@@ -7,11 +7,11 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\library\routes;
+namespace titon\libs\routes;
 
-use \titon\source\Titon;
-use \titon\source\library\routes\RouteInterface;
-use \titon\source\log\Exception;
+use \titon\Titon;
+use \titon\libs\routes\RouteInterface;
+use \titon\log\Exception;
 
 /**
  * Represents the skeleton for an individual route. A route matches an internal URL that gets analyzed into multiple parts:
@@ -19,8 +19,8 @@ use \titon\source\log\Exception;
  * another internal destination.
  *
  * @package	titon.source.library.routes
- * @uses	titon\source\Titon
- * @uses	titon\source\log\Exception
+ * @uses	titon\Titon
+ * @uses	titon\log\Exception
  */
 abstract class RouteAbstract implements RouteInterface {
 
@@ -35,7 +35,7 @@ abstract class RouteAbstract implements RouteInterface {
 	 * Request object.
 	 *
 	 * @access public
-	 * @var titon\source\net\Request
+	 * @var titon\net\Request
 	 */
 	public $request;
 
@@ -153,7 +153,7 @@ abstract class RouteAbstract implements RouteInterface {
 		$this->compile();
 
 		// Grab the Request object
-		$this->request = Titon::registry()->factory('titon\source\net\Request');
+		$this->request = Titon::registry()->factory('titon\net\Request');
 	}
 
 	/**

@@ -7,24 +7,24 @@
  * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
  */
 
-namespace titon\source;
+namespace titon;
 
-use \titon\source\core\Application;
-use \titon\source\core\Config;
-use \titon\source\core\Dispatch;
-use \titon\source\core\Environment;
-use \titon\source\core\Event;
-use \titon\source\core\Loader;
-use \titon\source\core\Registry;
-use \titon\source\core\Router;
-use \titon\source\log\Debugger;
-use \titon\source\log\Exception;
+use \titon\core\Application;
+use \titon\core\Config;
+use \titon\core\Dispatch;
+use \titon\core\Environment;
+use \titon\core\Event;
+use \titon\core\Loader;
+use \titon\core\Registry;
+use \titon\core\Router;
+use \titon\log\Debugger;
+use \titon\log\Exception;
 
 /**
  * The primary framework class contains all core classes that manipulate and power the application, or add quick convenience.
  *
  * @package	titon.source.system
- * @uses	titon\source\Titon
+ * @uses	titon\Titon
  */
 class Titon {
 

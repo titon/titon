@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
-use \titon\source\library\readers\ReaderInterface;
-use \titon\source\log\Debugger;
-use \titon\source\log\Exception;
-use \titon\source\utility\Inflector;
-use \titon\source\utility\Set;
+use \titon\libs\readers\ReaderInterface;
+use \titon\log\Debugger;
+use \titon\log\Exception;
+use \titon\utility\Inflector;
+use \titon\utility\Set;
 
 /**
  * Stores the current configuration options for the application.
@@ -21,10 +21,10 @@ use \titon\source\utility\Set;
  * Various readers can be used to import specific configuration files.
  *
  * @package	titon.source.core
- * @uses	titon\source\log\Debugger
- * @uses	titon\source\log\Exception
- * @uses	titon\source\utility\Inflector
- * @uses	titon\source\utility\Set
+ * @uses	titon\log\Debugger
+ * @uses	titon\log\Exception
+ * @uses	titon\utility\Inflector
+ * @uses	titon\utility\Set
  */
 class Config {
 

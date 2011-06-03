@@ -9,21 +9,21 @@
 
 namespace app\config\environments;
 
-use \titon\source\system\Dispatch;
-use \titon\source\system\Event;
+use \titon\system\Dispatch;
+use \titon\system\Event;
 
 /**
  * Overwrite the default dispatcher with a custom dispatcher.
  * Can also restrict the dispatcher to a specific scope.
  */
 Dispatch::setup(function($params) {
-    return new \titon\source\components\dispatchers\front\Front($params);
+    return new \titon\components\dispatchers\front\Front($params);
 });
 
 /**
  * Can register listeners to be triggered at certain events.
  */
-$optimizer = new \titon\source\components\listeners\optimizer\Optimizer();
-$OptimizerListener = new \titon\source\components\events\listeners\OptimizerListener($optimizer);
+$optimizer = new \titon\components\listeners\optimizer\Optimizer();
+$OptimizerListener = new \titon\components\events\listeners\OptimizerListener($optimizer);
 
 Event::register($OptimizerListener);

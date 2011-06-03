@@ -7,18 +7,18 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\log;
+namespace titon\log;
 
-use \titon\source\Titon;
-use \titon\source\log\Logger;
+use \titon\Titon;
+use \titon\log\Logger;
 
 /**
  * Delivers the functionality to start, stop and log benchmarks.
  * Benchmarks store the time difference and memory usage between two blocks during runtime.
  *
  * @package	titon.source.log
- * @uses	titon\source\Titon
- * @uses	titon\source\log\Logger
+ * @uses	titon\Titon
+ * @uses	titon\log\Logger
  */
 class Benchmark {
 

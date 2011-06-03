@@ -7,16 +7,16 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\net;
+namespace titon\net;
 
-use \titon\source\system\Object;
+use \titon\base\Base;
 
 /**
  * A primary HTTP base class that provides functionality for common HTTP status codes and content types.
  *
  * @package titon.source.net
  */
-class Http extends Object {
+class Http extends Base {
 
 	/**
 	 * Valid format for HTTP datetimes.

@@ -7,9 +7,9 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
-use \titon\source\Titon;
+use \titon\Titon;
 use \Closure;
 
 /**
@@ -17,7 +17,7 @@ use \Closure;
  * Provides convenience functions for inflecting notation paths, namespace paths and file system paths.
  *
  * @package	titon.source.core
- * @uses	titon\source\Titon
+ * @uses	titon\Titon
  */
 class Loader {
 
@@ -139,7 +139,7 @@ class Loader {
 	public function import($path) {
 		$namespace = $this->toNamespace($path);
 
-		foreach (array(ROOT, APP, TITON, SOURCE, VENDORS, LIBRARY) as $root) {
+		foreach (array(ROOT, APP, TITON, VENDORS, LIBRARY) as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
 			if (is_file($source)) {

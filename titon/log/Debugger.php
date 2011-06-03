@@ -7,20 +7,20 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\log;
+namespace titon\log;
 
-use \titon\source\Titon;
-use \titon\source\log\Exception;
-use \titon\source\log\Logger;
+use \titon\Titon;
+use \titon\log\Exception;
+use \titon\log\Logger;
 
 /**
  * Custom system to manage all internal and user created errors and thrown/uncaught exceptions.
  * Errors are displayed with a custom backtrace as well as logged to the filesystem (if passed to the Logger).
  *
  * @package titon.source.log
- * @uses	titon\source\Titon
- * @uses	titon\source\log\Exception
- * @uses	titon\source\log\Logger
+ * @uses	titon\Titon
+ * @uses	titon\log\Exception
+ * @uses	titon\log\Logger
  */
 class Debugger {
 
@@ -212,7 +212,7 @@ class Debugger {
 
 		$path = Titon::loader()->ds($path);
 
-		foreach(array('app', 'source', 'library', 'vendors', 'titon', 'root') as $constant) {
+		foreach(array('app', 'library', 'vendors', 'titon', 'root') as $constant) {
 			$location = Titon::loader()->ds(constant(strtoupper($constant)));
 
 			if (strpos($path, $location) !== false) {

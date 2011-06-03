@@ -7,17 +7,17 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
-use \titon\source\utility\Inflector;
-use \titon\source\log\Exception;
+use \titon\utility\Inflector;
+use \titon\log\Exception;
 
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
  * @package	titon.source.core
- * @uses	titon\source\utility\Inflector
- * @uses	titon\source\log\Exception
+ * @uses	titon\utility\Inflector
+ * @uses	titon\log\Exception
  */
 class Environment {
 

@@ -7,11 +7,11 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
-use \titon\library\routes\core\Route;
-use \titon\source\library\routes\RouteInterface;
-use \titon\source\log\Exception;
+use \titon\libs\routes\core\Route;
+use \titon\libs\routes\RouteInterface;
+use \titon\log\Exception;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -20,7 +20,7 @@ use \titon\source\log\Exception;
  * You can also define custom slugs or routes to be used for internal routing mechanisms.
  *
  * @package	titon.source.core
- * @uses	titon\source\log\Exception
+ * @uses	titon\log\Exception
  */
 class Router {
 

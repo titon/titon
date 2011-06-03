@@ -9,5 +9,5 @@
 
 namespace app\config;
 
-use \titon\source\Titon;
+use \titon\Titon;
 use \titon\library\routes\core\Route;

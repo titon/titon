@@ -11,10 +11,10 @@
 
 namespace titon\modules\dispatchers;
 
+use \titon\base\Prototype;
 use \titon\core\App;
-use \titon\core\Prototype;
 use \titon\log\Exception;
-use \titon\modules\dispatchers\DispatcherInterface;
+use \titon\libs\dispatchers\DispatcherInterface;
 use \titon\utility\Inflector;
 
 /**

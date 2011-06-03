@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
-use \titon\source\Titon;
-use \titon\library\dispatchers\front\Front;
-use \titon\library\dispatchers\front\FrontDev;
-use \titon\source\library\dispatchers\DispatcherInterface;
-use \titon\source\utility\Inflector;
+use \titon\Titon;
+use \titon\libs\dispatchers\front\Front;
+use \titon\libs\dispatchers\front\FrontDev;
+use \titon\libs\dispatchers\DispatcherInterface;
+use \titon\utility\Inflector;
 
 /**
  * The dispatch handles the HTTP request and response cycle. Once it receives the HTTP request,

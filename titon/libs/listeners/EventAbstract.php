@@ -9,7 +9,7 @@
 
 namespace titon\modules\events;
 
-use \titon\core\Prototype;
+use \titon\base\Prototype;
 use \titon\modules\events\EventInterface;
 
 /**

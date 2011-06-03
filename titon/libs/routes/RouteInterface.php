@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\library\routes;
+namespace titon\libs\routes;
 
 /**
  * Interface for all Routers.

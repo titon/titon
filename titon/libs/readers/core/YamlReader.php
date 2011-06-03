@@ -7,17 +7,17 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\library\readers\core;
+namespace titon\libs\readers\core;
 
-use \titon\source\library\readers\ReaderAbstract;
-use \titon\source\log\Exception;
+use \titon\libs\readers\ReaderAbstract;
+use \titon\log\Exception;
 
 /**
  * A reader that loads its configuration from an YAML file.
  * Must have the PECL YAML module installed.
  *
  * @package	titon.source.core.readers
- * @uses	titon\source\log\Exception
+ * @uses	titon\log\Exception
  * 
  * @link	http://php.net/yaml
  */

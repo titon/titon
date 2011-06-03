@@ -7,19 +7,19 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
  
-namespace titon\source\net;
+namespace titon\net;
 
-use \titon\source\Titon;
-use \titon\source\log\Exception;
-use \titon\source\net\Http;
+use \titon\Titon;
+use \titon\log\Exception;
+use \titon\net\Http;
 
 /**
  * The Request object is the primary source of data and state management for the environment.
  * It extracts and cleans the GET, POST and FILES data from the current HTTP request.
  * 
  * @package	titon.source.net
- * @uses	titon\source\Titon
- * @uses	titon\source\log\Exception
+ * @uses	titon\Titon
+ * @uses	titon\log\Exception
  */
 class Request extends Http {
 

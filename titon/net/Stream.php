@@ -1,6 +1,6 @@
 <?php
 
-namespace \titon\source\net;
+namespace \titon\net;
 
 class Stream {
 

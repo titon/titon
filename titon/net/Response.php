@@ -7,18 +7,18 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\net;
+namespace titon\net;
 
-use \titon\source\Titon;
-use \titon\source\log\Exception;
-use \titon\source\net\Http;
+use \titon\Titon;
+use \titon\log\Exception;
+use \titon\net\Http;
 
 /**
  * The Response object handles the collection and output of data to the browser. It stores a list of HTTP headers,
  * the content body, the content type and associated status code to print out.
  *
  * @package	titon.source.net
- * @uses	titon\source\Titon
+ * @uses	titon\Titon
  */
 class Response extends Http {
 

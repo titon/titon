@@ -13,10 +13,11 @@
 require TITON .'paths.php';
 require TITON .'bootstrap.php';
 require TITON .'Titon.php';
+require TITON .'core'. DS .'Loader.php';
 
 /**
  * Require core internals that operate the application.
- */
+ *
 require SOURCE .'utility'. DS .'Inflector.php';
 require SOURCE .'utility'. DS .'Set.php';
 require SOURCE .'log'. DS .'Debugger.php';
@@ -30,12 +31,12 @@ require SOURCE .'core'. DS .'Loader.php';
 require SOURCE .'core'. DS .'Registry.php';
 require SOURCE .'core'. DS .'Router.php';
 require SOURCE .'system'. DS .'Object.php';
-require SOURCE .'system'. DS .'Prototype.php';
+require SOURCE .'system'. DS .'Prototype.php';*/
 
 /**
  * Initialize Titon.
  */
-\titon\source\Titon::initialize();
+\titon\Titon::initialize();
 
 /**
  * Require custom config and settings from the application.

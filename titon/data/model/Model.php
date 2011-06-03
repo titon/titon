@@ -2,7 +2,7 @@
 
 namespace titon\data;
 
-use \titon\core\Prototype;
+use \titon\base\Prototype;
 
 class Model extends Prototype {
 
