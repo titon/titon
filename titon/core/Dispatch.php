@@ -30,10 +30,10 @@ class Dispatch {
     /**
      * Mapped scopes to custom dispatchers.
      *
-     * @access private
+     * @access protected
      * @var array
      */
-    private $__mapping = array();
+    protected $_mapping = array();
 
     /**
      * Initialize dispatch and detects if a custom dispatcher should be used within the current scope.
@@ -105,7 +105,7 @@ class Dispatch {
 			$scope['controller'] = Inflector::underscore($scope['controller']);
 		}
 
-		$this->__mapping[$scope['module'] .'.'. $scope['controller']] = $dispatcher;
+		$this->_mapping[$scope['module'] .'.'. $scope['controller']] = $dispatcher;
     }
 
 }

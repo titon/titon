@@ -31,10 +31,10 @@ class Config {
 	/**
 	 * Current loaded configuration.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__config = array();
+	protected $_config = array();
 
 	/**
 	 * Get the currently defined encoding for the application.
@@ -54,7 +54,7 @@ class Config {
 	 * @return mixed
 	 */
 	public function get($key = null) {
-		return Set::extract($this->__config, $key);
+		return Set::extract($this->_config, $key);
 	}
 
 	/**
@@ -65,7 +65,7 @@ class Config {
 	 * @return bool
 	 */
 	public function has($key) {
-		return Set::exists($this->__config, $key);
+		return Set::exists($this->_config, $key);
 	}
 
 	/**
@@ -86,11 +86,11 @@ class Config {
 			$reader->setPath($path);
 			$reader->read();
 			
-			if (!isset($this->__config[$file])) {
-				$this->__config[$file] = array();
+			if (!isset($this->_config[$file])) {
+				$this->_config[$file] = array();
 			}
 
-			$this->__config[$file] = $reader->toArray() + $this->__config[$file];
+			$this->_config[$file] = $reader->toArray() + $this->_config[$file];
 			
 		} else {
 			throw new Exception(sprintf('Configuration file %s does not exist.', $file));
@@ -134,7 +134,7 @@ class Config {
 			Debugger::enable(((int)$value > 0));
 		}
 
-		$this->__config = Set::insert($this->__config, $key, $value);
+		$this->_config = Set::insert($this->_config, $key, $value);
 
 		return $this;
 	}

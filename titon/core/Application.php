@@ -23,10 +23,10 @@ class Application {
 	/**
 	 * List of added modules.
 	 *
-	 * @access public
+	 * @access protected
 	 * @var array
 	 */
-	private $__modules = array();
+	protected $_modules = array();
 
 	/**
 	 * Return all controllers, or a modules controllers.
@@ -36,7 +36,7 @@ class Application {
 	 * @return array
 	 */
 	public function controllers($module = null) {
-		return isset($this->__modules[$module]) ? $this->__modules[$module] : $this->__modules;
+		return isset($this->_modules[$module]) ? $this->_modules[$module] : $this->_modules;
 	}
 
 	/**
@@ -47,8 +47,8 @@ class Application {
 	 */
 	public function initialize() {
 		foreach (scandir(APP_MODULES) as $module) {
-			if (is_file(APP_MODULES . $module . DS .'Bootstrap.php')) {
-				include_once APP_MODULES . $module . DS .'Bootstrap.php';
+			if (is_file(APP_MODULES . $module . DS .'bootstrap.php')) {
+				include_once APP_MODULES . $module . DS .'bootstrap.php';
 			}
 		}
 	}
@@ -60,7 +60,7 @@ class Application {
 	 * @return array
 	 */
 	public function modules() {
-		return array_keys($this->__modules);
+		return array_keys($this->_modules);
 	}
 
 	/**
@@ -75,8 +75,8 @@ class Application {
 	public function setup($module, $controllers = array()) {
 		$module = (string)$module;
 		
-		if (!isset($this->__modules[$module])) {
-			$this->__modules[$module] = array();
+		if (!isset($this->_modules[$module])) {
+			$this->_modules[$module] = array();
 		}
 
 		if (!empty($controllers)) {
@@ -86,11 +86,11 @@ class Application {
 
 			foreach ($controllers as $controller) {
 				if (!empty($controller)) {
-					$this->__modules[$module][] = (string)$controller;
+					$this->_modules[$module][] = (string)$controller;
 				}
 			}
 
-			$this->__modules[$module] = array_unique($this->__modules[$module]);
+			$this->_modules[$module] = array_unique($this->_modules[$module]);
 		}
 
 		return $this;

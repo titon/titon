@@ -27,51 +27,51 @@ class Router {
 	/**
 	 * Base folder structure if the application was placed within a directory.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
-	private $__base = '';
+	protected $_base = '';
 
 	/**
 	 * The matched route object.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__current = null;
+	protected $_current = null;
 
 	/**
 	 * An array of all paths that have been analyzed. Used for fast lookups.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__mapped = array();
+	protected $_mapped = array();
 
 	/**
 	 * Manually defined aesthetic routes that re-route internally.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__routes = array();
+	protected $_routes = array();
 
 	/**
 	 * The current URL broken up into multiple segments: protocol, host, route, query, base
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__segments = array();
+	protected $_segments = array();
 
 	/**
 	 * Manually defined slugs that re-route to an internal controller and action.
 	 * Primarily used to permanently define a route (array format) destination as a re-useable string.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__slugs = array();
+	protected $_slugs = array();
 
 	/**
 	 * Return the base URL if the app was not placed in the root directory.
@@ -80,7 +80,7 @@ class Router {
 	 * @return string
 	 */
 	public function base() {
-		return $this->__base;
+		return $this->_base;
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Router {
 	 * @return string
 	 */
 	public function current() {
-		return $this->__current;
+		return $this->_current;
 	}
 
 	/**
@@ -231,11 +231,11 @@ class Router {
 		}
 
 		if (!empty($base)) {
-			$this->__base = rtrim($base, '/');
+			$this->_base = rtrim($base, '/');
 		}
 
 		// Store the current URL and query as router segments
-		$this->__segments = array_merge(parse_url($_SERVER['REQUEST_URI']), array(
+		$this->_segments = array_merge(parse_url($_SERVER['REQUEST_URI']), array(
 			'scheme' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http',
 			'query' => $_GET,
 			'host' => $_SERVER['HTTP_HOST'],
@@ -250,7 +250,7 @@ class Router {
 		$this->map('root', new Route('/'), array(), array('static' => true));
 
 		// Match the current URL to a route
-		$this->__current = $this->match($path);
+		$this->_current = $this->match($path);
 	}
 
 	/**
@@ -263,7 +263,7 @@ class Router {
 	 * @chainable
 	 */
 	public function map($key, RouteInterface $route) {
-		$this->__routes[$key] = $route;
+		$this->_routes[$key] = $route;
 
 		return $this;
 	}
@@ -282,7 +282,7 @@ class Router {
 			$route = $this->defaults($route);
 		}
 
-		$this->__slugs[$key] = $route;
+		$this->_slugs[$key] = $route;
 
 		return $this;
 	}
@@ -296,7 +296,7 @@ class Router {
 	 */
 	public function match($url) {
 		try {
-			foreach ($this->__routes as $key => $route) {
+			foreach ($this->_routes as $key => $route) {
 				if ($route->match($url)) {
 					return $route;
 				}
@@ -328,11 +328,11 @@ class Router {
 			
 			return $url;
 
-		} else if (isset($this->__segments[$key])) {
-			return $this->__segments[$key];
+		} else if (isset($this->_segments[$key])) {
+			return $this->_segments[$key];
 		}
 
-		return $this->__segments;
+		return $this->_segments;
 	}
 
 	/**
@@ -343,7 +343,7 @@ class Router {
 	 * @return array
 	 */
 	public function slug($key) {
-		return isset($this->__slugs[$key]) ? $this->__slugs[$key] : null;
+		return isset($this->_slugs[$key]) ? $this->_slugs[$key] : null;
 	}
 
 }

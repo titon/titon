@@ -24,10 +24,10 @@ class Loader {
 	/**
 	 * Collection of loader detection closures.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__loaders = array();
+	protected $_loaders = array();
 
 	/**
 	 * Define autoloader and attempt to autoload from include_paths first.
@@ -62,7 +62,7 @@ class Loader {
 	 * @chainable
 	 */
 	public function addLoader($key, Closure $loader) {
-		$this->__loaders[(string)$key] = $loader;
+		$this->_loaders[(string)$key] = $loader;
 
 		return $this;
 	}
@@ -79,7 +79,7 @@ class Loader {
 			return;
 		}
 			
-		foreach ($this->__loaders as $loader) {
+		foreach ($this->_loaders as $loader) {
 			if ($loader($class)) {
 				break;
 			}
@@ -182,7 +182,7 @@ class Loader {
 	 * @chainable
 	 */
 	public function removeLoader($key) {
-		unset($this->__loaders[(string)$key]);
+		unset($this->_loaders[(string)$key]);
 
 		return $this;
 	}

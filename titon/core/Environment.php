@@ -24,26 +24,26 @@ class Environment {
 	/**
 	 * Sets the default environment; defaults to development.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
-	private $__default = 'development';
+	protected $_default = 'development';
 
 	/**
 	 * Holds the list of possible environment configurations.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__environments = array();
+	protected $_environments = array();
 
 	/**
 	 * Relate hostnames to environment configurations.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__hostMapping = array(
+	protected $_hostMapping = array(
 		'localhost' => 'development',
 		'127.0.0.1' => 'development'
 	);
@@ -57,11 +57,11 @@ class Environment {
 	public function current() {
 		$host = $_SERVER['HTTP_HOST'];
 
-		if (isset($this->__hostMapping[$host])) {
-			return $this->__hostMapping[$host];
+		if (isset($this->_hostMapping[$host])) {
+			return $this->_hostMapping[$host];
 		}
 
-		return $this->__default;
+		return $this->_default;
 	}
 
 	/**
@@ -73,11 +73,11 @@ class Environment {
 	 * @chainable
 	 */
 	public function fallback($name) {
-		if (!in_array($name, $this->__environments)) {
+		if (!in_array($name, $this->_environments)) {
 			throw new Exception(sprintf('Environment %s does not exist.', $name));
 		}
 
-		$this->__default = $name;
+		$this->_default = $name;
 
 		return $this;
 	}
@@ -89,7 +89,7 @@ class Environment {
 	 * @return void
 	 */
 	public function initialize() {
-		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current());
+		$path = APP_CONFIG .'environments'. DS . $this->current() .'.php';
 
 		if (is_file($path)) {
 			include_once $path;
@@ -106,12 +106,12 @@ class Environment {
 	 * @chainable
 	 */
 	public function setup($name, array $hosts) {
-		if (!in_array($name, $this->__environments)) {
-			$this->__environments[] = $name;
+		if (!in_array($name, $this->_environments)) {
+			$this->_environments[] = $name;
 		}
 
 		foreach ($hosts as $host) {
-			$this->__hostMapping[$host] = $name;
+			$this->_hostMapping[$host] = $name;
 		}
 
 		return $this;

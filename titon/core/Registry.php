@@ -25,19 +25,19 @@ class Registry {
 	/**
 	 * Configuration settings that are automatically loaded into classes upon instantiation.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__configs = array();
+	protected $_configs = array();
 
 	/**
 	 * Objects that have been registered into memory. The array index is represented by the namespace convention,
 	 * where as the array value would be the matching instantiated object.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__registered = array();
+	protected $_registered = array();
 
 	/**
 	 * Defines an array of configuration that should be loaded into a class when its instantiated.
@@ -49,10 +49,10 @@ class Registry {
 	 * @chainable
 	 */
 	public function configure($key, array $config = array()) {
-		if (isset($this->__configs[$key])) {
-			$this->__configs[$key] = $config + $this->__configs[$key];
+		if (isset($this->_configs[$key])) {
+			$this->_configs[$key] = $config + $this->_configs[$key];
 		} else {
-			$this->__configs[$key] = $config;
+			$this->_configs[$key] = $config;
 		}
 
 		return $this;
@@ -67,8 +67,8 @@ class Registry {
 	 * @return bool
 	 */
 	public function delete($key) {
-		if (isset($this->__registered[$key])) {
-			unset($this->__registered[$key]);
+		if (isset($this->_registered[$key])) {
+			unset($this->_registered[$key]);
 			return true;
 		}
 
@@ -84,8 +84,8 @@ class Registry {
 	 * @return object
 	 */
 	public function factory($key, array $config = array()) {
-		if (isset($this->__registered[$key])) {
-			return $this->__registered[$key];
+		if (isset($this->_registered[$key])) {
+			return $this->_registered[$key];
 		}
 
 		$namespace = Titon::loader()->toNamespace($key);
@@ -95,8 +95,8 @@ class Registry {
 		}
 
 		if (class_exists($namespace)) {
-			if (isset($this->__configs[$key])) {
-				$config = $config + $this->__configs[$key];
+			if (isset($this->_configs[$key])) {
+				$config = $config + $this->_configs[$key];
 			}
 
 			return $this->store(new $namespace($config));
@@ -113,10 +113,10 @@ class Registry {
 	 * @chainable
 	 */
 	public function flush() {
-		$this->__configs = array();
+		$this->_configs = array();
 
-		foreach ($this->__registered as $key => $object) {
-			unset($this->__registered[$key]);
+		foreach ($this->_registered as $key => $object) {
+			unset($this->_registered[$key]);
 		}
 
 		return $this;
@@ -130,7 +130,7 @@ class Registry {
 	 * @return bool
 	 */
 	public function has($key) {
-		return (isset($this->__registered[$key]) && is_object($this->__registered[$key]));
+		return (isset($this->_registered[$key]) && is_object($this->_registered[$key]));
 	}
 
 	/**
@@ -140,7 +140,7 @@ class Registry {
 	 * @return array
 	 */
 	public function listing() {
-		return array_keys($this->__registered);
+		return array_keys($this->_registered);
 	}
 
 	/**
@@ -160,7 +160,7 @@ class Registry {
 			$key = get_class($object);
 		}
 
-		$this->__registered[$key] = $object;
+		$this->_registered[$key] = $object;
 
 		return $object;
 	}

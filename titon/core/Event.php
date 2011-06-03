@@ -25,10 +25,10 @@ class Event {
 	/**
 	 * Defined list of allowed events.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__events = array('preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
+	protected $_events = array('preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
 
 	/**
 	 * Listeners that will be executed.
@@ -36,15 +36,15 @@ class Event {
 	 * @access private
 	 * @var array
 	 */
-	private $__listeners = array();
+	protected $_listeners = array();
 
 	/**
 	 * Listener object mapping.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__objectMap = array();
+	protected $_objectMap = array();
 
 	/**
 	 * Cycles through the listenerss for the specified event, and executes the related method.
@@ -56,10 +56,10 @@ class Event {
 	 * @return void
 	 */
 	public function execute($event, $object = null) {
-		if (!empty($this->__listeners[$event])) {
+		if (!empty($this->_listeners[$event])) {
 			$route = Titon::router()->current();
 
-			foreach ($this->__listeners[$event] as &$listener) {
+			foreach ($this->_listeners[$event] as &$listener) {
 				if ($listener['executed'] === true) {
 					continue;
 				}
@@ -70,8 +70,8 @@ class Event {
 					}
 				}
 
-				if (isset($this->__objectMap[$listener['source']])) {
-					$obj = $this->__objectMap[$listener['source']];
+				if (isset($this->_objectMap[$listener['source']])) {
+					$obj = $this->_objectMap[$listener['source']];
 					$obj->{$event}($object);
 				}
 
@@ -88,7 +88,7 @@ class Event {
 	 * @return array
 	 */
 	public function listeners($event = null) {
-		return isset($this->__listeners[$event]) ? $this->__listeners[$event] : $this->__listeners;
+		return isset($this->_listeners[$event]) ? $this->_listeners[$event] : $this->_listeners;
 	}
 
 	/**
@@ -103,10 +103,10 @@ class Event {
 	 */
 	public function register(ListenerInterface $listener, array $scope = array()) {
 		$class = get_class($listener);
-		$this->__objectMap[$class] = $listener;
+		$this->_objectMap[$class] = $listener;
 
-		foreach ($this->__events as $event) {
-			$this->__listeners[$event][$class] = array(
+		foreach ($this->_events as $event) {
+			$this->_listeners[$event][$class] = array(
 				'executed' => false,
 				'source' => $class,
 				'scope' => $scope + array(
@@ -131,11 +131,11 @@ class Event {
 	 */
 	public function remove($class, $event = null) {
 		if (!$event) {
-			foreach ($this->__listeners as $event => $listeners) {
-				unset($this->__listeners[$event][$class]);
+			foreach ($this->_listeners as $event => $listeners) {
+				unset($this->_listeners[$event][$class]);
 			}
 		} else {
-			unset($this->__listeners[$event][$class]);
+			unset($this->_listeners[$event][$class]);
 		}
 
 		return $this;
