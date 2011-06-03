@@ -10,6 +10,7 @@
 namespace titon;
 
 use \titon\core\Application;
+use \titon\core\Cache;
 use \titon\core\Config;
 use \titon\core\Dispatch;
 use \titon\core\Environment;
@@ -94,6 +95,7 @@ class Titon {
 	public static function initialize() {
 		self::install('loader', new Loader(), true);
 		self::install('app', new Application(), true);
+		self::install('cache', new Cache(), true);
 		self::install('config', new Config(), true);
 		self::install('dispatch', new Dispatch(), true);
 		self::install('event', new Event(), true);
