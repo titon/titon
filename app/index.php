@@ -39,11 +39,11 @@ echo TITON .'<br>';
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.
  */
-if (!is_file(TITON .'infrastructure.php')) {
-	trigger_error('Titon: Application failed to load the core libraries. Please check your paths and configuration.', E_USER_ERROR);
+if (!is_file(TITON .'bootstrap.php')) {
+	trigger_error('Titon: Framework bootstrap failed to load the core libraries. Please check your paths and configuration.', E_USER_ERROR);
 }
 
-include_once TITON .'infrastructure.php';
+include_once TITON .'bootstrap.php';
 
 /**
  * Dispatch the request.

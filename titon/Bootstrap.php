@@ -8,51 +8,53 @@
  */
 
 /**
- * Outputs/Debugs multiple variables and shows where it was called from.
- * 
- * @param mixed $var, $var, $var...
- * @return array|string
+ * Titon constants.
  */
-function debug() {
-	if (error_reporting() > 0) {
-		$vars = func_get_args();
-		$calledFrom = debug_backtrace();
-
-		echo '<div class="TitonDebug">';
-		echo '<b>' . trim(str_replace(APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
-
-		if (!empty($vars)) {
-			foreach ($vars as $var) {
-				echo '<pre>'. print_r($var, true) .'</pre>';
-			}
-		}
-
-		echo '</div>';
-	}
-}
+define('CONSOLE', TITON .'console'. DS);
+define('LIBRARY', TITON .'libs'. DS);
+define('VENDORS', TITON .'vendors'. DS);
 
 /**
- * Works exactly like debug() except uses var_dump() in place of print_r().
- *
- * @param mixed $var, $var, $var...
- * @return array|string
+ * App directory constants.
  */
-function dump() {
-	if (error_reporting() > 0) {
-		$vars = func_get_args();
-		$calledFrom = debug_backtrace();
+define('APP_CONFIG', APP .'config'. DS);
+define('APP_LIBRARY', APP .'libs'. DS);
+define('APP_MODULES', APP .'modules'. DS);
+define('APP_TEMP', APP .'temp'. DS);
+define('APP_VIEWS', APP .'views'. DS);
 
-		echo '<div class="TitonDebug">';
-		echo '<b>' . trim(str_replace(APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
+/**
+ * Library directory constants.
+ */
+define('LIB_ADAPTERS', LIBRARY .'adapters'. DS);
+define('LIB_BEHAVIORS', LIBRARY .'behaviors'. DS);
+define('LIB_DISPATCHERS', LIBRARY .'dispatchers'. DS);
+define('LIB_DRIVERS', LIBRARY .'drivers'. DS);
+define('LIB_ENGINES', LIBRARY .'engines'. DS);
+define('LIB_HELPERS', LIBRARY .'helpers'. DS);
+define('LIB_LISTENERS', LIBRARY .'listeners'. DS);
+define('LIB_PACKAGES', LIBRARY .'packages'. DS);
+define('LIB_READERS', LIBRARY .'readers'. DS);
+define('LIB_ROUTES', LIBRARY .'routes'. DS);
+define('LIB_SHELLS', LIBRARY .'shells'. DS);
+define('LIB_STORAGE', LIBRARY .'storage'. DS);
+define('LIB_TRANSLATERS', LIBRARY .'translaters'. DS);
+define('LIB_TRANSPORTERS', LIBRARY .'transporters'. DS);
 
-		if (!empty($vars)) {
-			foreach ($vars as $var) {
-				echo '<pre>';
-				var_dump($var);
-				echo '</pre>';
-			}
-		}
+/**
+ * Include the necessary classes to initialize the framework.
+ */
+include_once TITON .'functions.php';
+include_once TITON .'Titon.php';
+include_once TITON .'core'. DS .'Loader.php';
 
-		echo '</div>';
-	}
-}
+/**
+ * Initialize Titon.
+ */
+\titon\Titon::initialize();
+
+/**
+ * Include custom configuration and settings from the application.
+ */
+include_once APP_CONFIG .'setup.php';
+include_once APP_CONFIG .'routes.php';
