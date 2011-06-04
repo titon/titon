@@ -9,6 +9,7 @@
 
 namespace titon\base;
 
+use \titon\utility\Set;
 use \Closure;
 
 /**

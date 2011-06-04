@@ -32,5 +32,5 @@ $_SERVER['HTTP_HOST'] = 'localhost';
 $_SERVER['PHP_SELF'] = '/index.php';
 $_SERVER['REQUEST_URI'] = '/';
 
-\titon\source\Titon::initialize();
-\titon\source\Titon::startup();
+\titon\Titon::initialize();
+\titon\Titon::startup();
