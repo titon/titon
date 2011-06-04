@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\source\core;
+namespace titon\core;
 
 /**
  * @package	tests.titon.source.core

@@ -20,24 +20,10 @@ define('TITON', ROOT .'titon'. DS);
 /**
  * Include include_onced scripts.
  */
-include_once TITON .'source'. DS .'Titon.php';
-include_once TITON .'source'. DS .'Paths.php';
-include_once TITON .'source'. DS .'Bootstrap.php';
-include_once TITON .'source'. DS .'Titon.php';
-include_once SOURCE .'utility'. DS .'Inflector.php';
-include_once SOURCE .'utility'. DS .'Set.php';
-include_once SOURCE .'log'. DS .'Debugger.php';
-include_once SOURCE .'log'. DS .'Exception.php';
-include_once SOURCE .'core'. DS .'Application.php';
-include_once SOURCE .'core'. DS .'Config.php';
-include_once SOURCE .'core'. DS .'Dispatch.php';
-include_once SOURCE .'core'. DS .'Environment.php';
-include_once SOURCE .'core'. DS .'Event.php';
-include_once SOURCE .'core'. DS .'Loader.php';
-include_once SOURCE .'core'. DS .'Registry.php';
-include_once SOURCE .'core'. DS .'Router.php';
-include_once SOURCE .'system'. DS .'Object.php';
-include_once SOURCE .'system'. DS .'Prototype.php';
+include_once TITON .'bootstrap.php';
+include_once TITON .'functions.php';
+include_once TITON .'Titon.php';
+include_once TITON .'core'. DS .'Loader.php';
 
 /**
  * Start class with fake environment.
