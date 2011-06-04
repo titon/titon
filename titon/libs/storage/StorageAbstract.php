@@ -61,4 +61,34 @@ abstract class StorageAbstract extends Base implements StorageInterface {
 		return (int) $timestamp;
 	}
 	
+	/**
+	 * Serialize the data if the configuration is true.
+	 * 
+	 * @access public
+	 * @param mixed $value
+	 * @return string
+	 */
+	public function serialize($value) {
+		if ($this->config('serialize')) {
+			$value = serialize($value);
+		}
+		
+		return $value;
+	}
+	
+	/**
+	 * Unerialize the data if it is valid and the configuration is true.
+	 * 
+	 * @access public
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public function unserialize($value) {
+		if ($value && $this->config('serialize')) {
+			$value = unserialize($value);
+		}
+		
+		return $value;
+	}
+	
 }

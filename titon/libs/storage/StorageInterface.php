@@ -57,8 +57,9 @@ interface StorageInterface {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value 
+	 * @param mixed $expires
 	 * @return boolean
 	 */
-	public function set($key, $value);
+	public function set($key, $value, $expires);
 	
 }

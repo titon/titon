@@ -14,13 +14,16 @@ use \titon\log\Exception;
 
 /**
  * A storage engine for the Memcache module, using the Memcached class; requires pecl/memcached. 
- * This class should be instantiated as follows through the Cache::setup() method.
+ * This engine can be installed using the Cache::setup() method.
  * 
  *		new MemcachedStorage(array(
  *			'id' => 'default',
  *			'servers' => 'localhost:11211',
  *			'compress' => true
  *		));
+ * 
+ * A sample configuration can be found above, and the following options are available: 
+ * id, servers (array or string), compress, serialize, prefix, expires.
  *
  * @package	titon.libs.storage.cache
  * @uses	titon\log\Exception
@@ -46,8 +49,8 @@ class MemcachedStorage extends StorageAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		if (!class_exists('\Memcached')) {
-			throw new Exception('Memcached module does not exist.');
+		if (!extension_loaded('memcache')) {
+			throw new Exception('Memcache extension does not exist.');
 		}
 		
 		$config = $this->config();
@@ -108,14 +111,8 @@ class MemcachedStorage extends StorageAbstract {
 		if (is_array($key)) {
 			return $this->connection->getMulti($key, null, Memcached::GET_PRESERVE_ORDER);
 		}
-		
-		$value = $this->connection->get($key);
-		
-		if ($value && $this->config('serialize')) {
-			$value = unserialize($value);
-		}
-		
-		return $value;
+
+		return $this->unserialize($this->connection->get($key));
 	}
 	
 	/**
@@ -154,11 +151,7 @@ class MemcachedStorage extends StorageAbstract {
 			return $this->connection->setMulti($key, $this->expires($expires));
 		}
 		
-		if ($this->config('serialize')) {
-			$value = serialize($value);
-		}
-		
-		return $this->connection->set($key, $value, $this->expires($expires));
+		return $this->connection->set($key, $this->serialize($value), $this->expires($expires));
 	}
 	
 }

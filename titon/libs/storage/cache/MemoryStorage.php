@@ -47,12 +47,8 @@ class MemoryStorage extends StorageAbstract {
 	 */
 	public function get($key) {
 		$value = $this->has($key) ? $this->_cache[$key] : null;
-		
-		if ($value && $this->config('serialize')) {
-			$value = unserialize($value);
-		}
-		
-		return $value;
+
+		return $this->unserialize($value);
 	}
 	
 	/**
@@ -87,16 +83,19 @@ class MemoryStorage extends StorageAbstract {
 	 * Set data to the cache. If serialize is true, the data will be serialized.
 	 * 
 	 * @access public
-	 * @param string $key
+	 * @param string|array $key
 	 * @param mixed $value 
+	 * @param mixed $expires
 	 * @return boolean
 	 */
-	public function set($key, $value) {
-		if ($this->config('serialize')) {
-			$value = serialize($value);
+	public function set($key, $value = null, $expires = null) {
+		if (is_array($key)) {
+			foreach ($key as $k => $v) {
+				$this->set($k, $v);
+			}
+		} else {
+			$this->_cache[$key] = $this->serialize($value);
 		}
-		
-		$this->_cache[$key] = $value;
 		
 		return true;
 	}
