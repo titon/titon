@@ -10,6 +10,7 @@
 namespace titon\libs\storage\cache;
 
 use \titon\libs\storage\StorageAbstract;
+use \titon\log\Exception;
 
 /**
  * A storage engine for the Memcache module, using the Memcached class; requires pecl/memcached. 
@@ -22,6 +23,8 @@ use \titon\libs\storage\StorageAbstract;
  *		));
  *
  * @package	titon.libs.storage.cache
+ * @uses	titon\log\Exception
+ * 
  * @link	http://pecl.php.net/package/memcached
  */
 class MemcachedStorage extends StorageAbstract {

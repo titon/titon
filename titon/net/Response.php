@@ -33,45 +33,45 @@ class Response extends Http {
 	/**
 	 * The body content to be outputted.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
-	private $__body = null;
+	protected $_body = null;
 
 	/**
 	 * Manually defined headers to output in the response.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__headers = array();
+	protected $_headers = array();
 
 	/**
 	 * The content type to output.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
-	private $__type = null;
+	protected $_type = null;
 
 	/**
 	 * HTTP status code to output.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var int
 	 */
-	private $__status = 302;
+	protected $_status = 302;
 
 	/**
 	 * Set the content body for the response.
 	 *
 	 * @access public
 	 * @param string $body
-	 * @return this
+	 * @return Response
 	 * @chainable
 	 */
-	public function body($body = '') {
-		$this->__body = $body;
+	public function body($body = null) {
+		$this->_body = $body;
 
 		return $this;
 	}
@@ -81,7 +81,7 @@ class Response extends Http {
 	 * 
 	 * @access public
 	 * @param int|string $expires
-	 * @return this
+	 * @return Response
 	 * @chainable
 	 */
 	public function cache($expires = '+24 hours') {
@@ -96,42 +96,20 @@ class Response extends Http {
 	}
 
 	/**
-	 * Forces the clients browser not to cache the results of the current request.
-	 *
-	 * @access public
-	 * @return this
-	 * @chainable
-	 */
-	public function disableCache() {
-		$this->headers(array(
-			'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
-			'Last-Modified' => gmdate(self::DATE_FORMAT) .' GMT',
-			'Cache-Control' => array(
-				'no-store, no-cache, must-revalidate',
-				'post-check=0, pre-check=0',
-				'max-age=0'
-			),
-			'Pragma' => 'no-cache'
-		));
-
-		return $this;
-	}
-
-	/**
-	 * Sets an HTTP header into a list awaiting to be written in the response.
+	 * Add an HTTP header into the list awaiting to be written in the response.
 	 *
 	 * @access public
 	 * @param string $header
 	 * @param string $value
 	 * @param bool $replace
-	 * @return this
+	 * @return Response
 	 * @chainable
 	 */
 	public function header($header, $value, $replace = true) {
-		$this->__headers[] = array(
-			'header'    => $header,
-			'value'     => $value,
-			'replace'   => $replace
+		$this->_headers[] = array(
+			'header' => $header,
+			'value' => $value,
+			'replace' => $replace
 		);
 
 		return $this;
@@ -142,21 +120,43 @@ class Response extends Http {
 	 *
 	 * @access public
 	 * @param array $headers
-	 * @return this
+	 * @return Response
 	 * @chainable
 	 */
 	public function headers(array $headers = array()) {
 		if (is_array($headers)) {
 			foreach ($headers as $header => $value) {
 				if (is_array($value)) {
-					foreach ($value as $h => $v) {
-						$this->header($h, $v);
+					foreach ($value as $v) {
+						$this->header($header, $v);
 					}
 				} else {
 					$this->header($header, $value);
 				}
 			}
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Forces the clients browser not to cache the results of the current request.
+	 *
+	 * @access public
+	 * @return Response
+	 * @chainable
+	 */
+	public function noCache() {
+		$this->headers(array(
+			'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+			'Last-Modified' => gmdate(self::DATE_FORMAT) .' GMT',
+			'Cache-Control' => array(
+				'no-store, no-cache, must-revalidate',
+				'post-check=0, pre-check=0',
+				'max-age=0'
+			),
+			'Pragma' => 'no-cache'
+		));
 
 		return $this;
 	}
@@ -187,25 +187,25 @@ class Response extends Http {
 	public function respond() {
 		header(sprintf('%s %s %s',
 			self::HTTP_11,
-			$this->__status,
-			$this->getStatusCodes($this->__status)
+			$this->_status,
+			$this->statusCodes($this->_status)
 		));
 
 		// Content type
-		if (!empty($this->__type)) {
-			header('Content-Type: '. $this->__type);
+		if (!empty($this->_type)) {
+			header('Content-Type: '. $this->_type);
 		}
 
 		// HTTP headers
-		if (!empty($this->__headers)) {
-			foreach ($this->__headers as $header) {
+		if (!empty($this->_headers)) {
+			foreach ($this->_headers as $header) {
 				header($header['header'] .': '. $header['value'], $header['replace']);
 			}
 		}
 
 		// Body
-		if (!empty($this->__body)) {
-			$body = str_split($this->__body, $this->_config['buffer']);
+		if (!empty($this->_body)) {
+			$body = str_split($this->_body, $this->config('buffer'));
 
 			foreach ($body as $chunk) {
 				echo $chunk;
@@ -218,15 +218,15 @@ class Response extends Http {
 	 *
 	 * @access public
 	 * @param int $code
-	 * @return this
+	 * @return Response
 	 * @chainable
 	 */
 	public function status($code = 302) {
-		if (!$this->getStatusCodes($code)) {
+		if (!$this->statusCodes($code)) {
 			throw new Exception(sprintf('The status code %d is not supported.', $code));
 		}
 
-		$this->__status = $code;
+		$this->_status = $code;
 
 		return $this;
 	}
@@ -236,12 +236,12 @@ class Response extends Http {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return this
+	 * @return Response
 	 * @chainable
 	 */
-	public function type($type = '') {
+	public function type($type = null) {
 		if (strpos($type, '/') === false) {
-			$contentType = $this->getContentTypes($type);
+			$contentType = $this->contentTypes($type);
 
 			if ($contentType === null) {
 				throw new Exception(sprintf('The content type %s is not supported.', $type));
@@ -254,7 +254,7 @@ class Response extends Http {
 			}
 		}
 
-		$this->__type = $type;
+		$this->_type = $type;
 
 		return $this;
 	}

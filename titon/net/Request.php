@@ -58,42 +58,34 @@ class Request extends Http {
 	/**
 	 * The accepted charset types, based on the Accept-Charset header.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__charsets = array();
+	protected $_charsets = array();
 
 	/**
 	 * The accepted language / locale types, based on the Accept-Language header.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__locales = array();
+	protected $_locales = array();
 
 	/**
 	 * The current HTTP method used.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
-	private $__method = 'get';
-
-	/**
-	 * Is current HTTP connection secure?
-	 *
-	 * @access private
-	 * @var boolean
-	 */
-	private $__secure = null;
+	protected $_method = 'get';
 
 	/**
 	 * The accepted content types, based on the Accept header.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 */
-	private $__types = array();
+	protected $_types = array();
 
 	/**
 	 * Loads the $_POST, $_FILES data, configures the query params and populates the accepted headers fields.
@@ -101,7 +93,7 @@ class Request extends Http {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct() {
+	public function initialize() {
 		$get = $_GET;
 		$post = $_POST;
 		$files = array();
@@ -152,18 +144,18 @@ class Request extends Http {
 					);
 
 					if ($acception == 'Accept-Language') {
-						$this->__locales[] = $data;
+						$this->_locales[] = $data;
 					} else if ($acception == 'Accept-Charset') {
-						$this->__charsets[] = $data;
+						$this->_charsets[] = $data;
 					} else {
-						$this->__types[] = $data;
+						$this->_types[] = $data;
 					}
 				}
 			}
 		}
 
 		// Get method
-		$this->__method = strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
+		$this->_method = strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
 	}
 
 	/**
@@ -174,7 +166,7 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function accepts($type = 'html') {
-		$contentType = $this->getContentTypes($type);
+		$contentType = $this->contentTypes($type);
 
 		if ($contentType === null) {
 			throw new Exception(sprintf('The content type %s is not supported.', $type));
@@ -184,7 +176,7 @@ class Request extends Http {
 			$contentType = array($contentType);
 		}
 
-		foreach ($this->__acceptTypes as $aType) {
+		foreach ($this->_acceptTypes as $aType) {
 			if (in_array(strtolower($aType['type']), $contentType)) {
 				return true;
 			}
@@ -205,7 +197,7 @@ class Request extends Http {
 			$charset = 'utf-8';
 		}
 
-		foreach ($this->__acceptCharsets as $set) {
+		foreach ($this->_acceptCharsets as $set) {
 			if (strtolower($charset) == strtolower($set['type'])) {
 				return true;
 			}
@@ -227,7 +219,7 @@ class Request extends Http {
 			$language = 'en';
 		}
 
-		foreach ($this->__acceptLangs as $lang) {
+		foreach ($this->_acceptLangs as $lang) {
 			if (strpos(strtolower($lang['type']), strtolower($language)) !== false) {
 				return true;
 			}
@@ -243,7 +235,7 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function clientIp() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->lazyLoad(_FUNCTION_, function($self) {
 			foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
 				if (($address = $self->env($key)) != null) {
 					return $address;
@@ -301,7 +293,9 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isFlash() {
-		return (bool)preg_match('/^(Shockwave|Adobe) Flash/', $this->userAgent(self::USERAGENT_MINIMAL));
+		return $this->lazyLoad(_FUNCTION_, function($self) {
+			return (bool)preg_match('/^(Shockwave|Adobe) Flash/', $self->userAgent(false));
+		});
 	}
 
 	/**
@@ -342,7 +336,7 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isMobile() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->lazyLoad(_FUNCTION_, function($self) {
 			$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|';
 			$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
 			$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
@@ -378,7 +372,7 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isSecure() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->lazyLoad(_FUNCTION_, function($self) {
 			return ($self->env('HTTPS') == 'on' || $self->env('SERVER_PORT') == 443);
 		});
 	}
@@ -390,7 +384,7 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function method() {
-		return $this->__method;
+		return $this->_method;
 	}
 
 	/**
@@ -410,7 +404,7 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function referrer() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->lazyLoad(_FUNCTION_, function($self) {
 			$referrer = $self->env('HTTP_REFERER');
 
 			if (empty($referrer)) {
@@ -443,12 +437,13 @@ class Request extends Http {
 	 *
 	 * @link http://php.net/get_browser
 	 * @link http://php.net/manual/misc.configuration.php#ini.browscap
+	 * 
 	 * @access public
 	 * @param bool $explicit
 	 * @return array|string
 	 */
 	public function userAgent($explicit = true) {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->lazyLoad(_FUNCTION_, function($self) {
 			$agent = $self->env('HTTP_USER_AGENT');
 
 			if ($explicit && function_exists('get_browser')) {

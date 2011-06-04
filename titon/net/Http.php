@@ -12,14 +12,14 @@ namespace titon\net;
 use \titon\base\Base;
 
 /**
- * A primary HTTP base class that provides functionality for common HTTP status codes and content types.
+ * Primary HTTP base class that provides functionality for common HTTP status codes and content types.
  *
  * @package titon.net
  */
 class Http extends Base {
 
 	/**
-	 * Valid format for HTTP datetimes.
+	 * Valid format for HTTP timestamps.
 	 */
 	const DATE_FORMAT = 'D, d M Y H:i:s T';
 
@@ -40,7 +40,7 @@ class Http extends Base {
 	 * @var string
 	 */
 	protected $_contentTypes = array(
-		'ai'            => 'application/postscript',
+		'ai'			=> 'application/postscript',
 		'amf'			=> 'application/x-amf',
 		'atom'			=> 'application/atom+xml',
 		'css'			=> 'text/css',
@@ -54,11 +54,11 @@ class Http extends Base {
 		'json'			=> 'application/json',
 		'pdf'			=> 'application/pdf',
 		'rss'			=> 'application/rss+xml',
-		'swf'           => 'application/x-shockwave-flash',
+		'swf'			=> 'application/x-shockwave-flash',
 		'tar'			=> 'application/x-tar',
 		'text'			=> 'text/plain',
 		'txt'			=> 'text/plain',
-		'vcf'           => 'text/x-vcard',
+		'vcf'			=> 'text/x-vcard',
 		'xhtml'			=> array('application/xhtml+xml', 'application/xhtml', 'text/xhtml'),
 		'xhtml-mobile'	=> 'application/vnd.wap.xhtml+xml',
 		'xml'			=> array('application/xml', 'text/xml'),
@@ -101,46 +101,46 @@ class Http extends Base {
 	 * @var array
 	 */
 	protected $_statusCodes = array(
-		100	=> 'Continue',
-		101	=> 'Switching Protocols',
-		200	=> 'OK',
-		201	=> 'Created',
-		202	=> 'Accepted',
-		203	=> 'Non-Authoritative Information',
-		204	=> 'No Content',
-		205	=> 'Reset Content',
-		206	=> 'Partial Content',
-		300	=> 'Multiple Choices',
-		301	=> 'Moved Permanently',
-		302	=> 'Found',
-		303	=> 'See Other',
-		304	=> 'Not Modified',
-		305	=> 'Use Proxy',
-		307	=> 'Temporary Redirect',
-		400	=> 'Bad Request',
+		100 => 'Continue',
+		101 => 'Switching Protocols',
+		200 => 'OK',
+		201 => 'Created',
+		202 => 'Accepted',
+		203 => 'Non-Authoritative Information',
+		204 => 'No Content',
+		205 => 'Reset Content',
+		206 => 'Partial Content',
+		300 => 'Multiple Choices',
+		301 => 'Moved Permanently',
+		302 => 'Found',
+		303 => 'See Other',
+		304 => 'Not Modified',
+		305 => 'Use Proxy',
+		307 => 'Temporary Redirect',
+		400 => 'Bad Request',
 		401 => 'Unauthorized',
-		402	=> 'Payment Required',
-		403	=> 'Forbidden',
-		404	=> 'Not Found',
-		405	=> 'Method Not Allowed',
-		406	=> 'Not Acceptable',
-		407	=> 'Proxy Authentication Required',
-		408	=> 'Request Timeout',
-		409	=> 'Conflict',
-		410	=> 'Gone',
-		411	=> 'Length Required',
-		412	=> 'Precondition Failed',
-		413	=> 'Request Entity Too Large',
-		414	=> 'Request-URI Too Large',
-		415	=> 'Unsupported Media Type',
-		416	=> 'Requested Range Not Satisfiable',
-		417	=> 'Expectation Failed',
-		500	=> 'Internal Server Error',
-		501	=> 'Not Implemented',
-		502	=> 'Bad Gateway',
-		503	=> 'Service Unavailable',
-		504	=> 'Gateway Timeout',
-		505	=> 'HTTP Version Not Supported'
+		402 => 'Payment Required',
+		403 => 'Forbidden',
+		404 => 'Not Found',
+		405 => 'Method Not Allowed',
+		406 => 'Not Acceptable',
+		407 => 'Proxy Authentication Required',
+		408 => 'Request Timeout',
+		409 => 'Conflict',
+		410 => 'Gone',
+		411 => 'Length Required',
+		412 => 'Precondition Failed',
+		413 => 'Request Entity Too Large',
+		414 => 'Request-URI Too Large',
+		415 => 'Unsupported Media Type',
+		416 => 'Requested Range Not Satisfiable',
+		417 => 'Expectation Failed',
+		500 => 'Internal Server Error',
+		501 => 'Not Implemented',
+		502 => 'Bad Gateway',
+		503 => 'Service Unavailable',
+		504 => 'Gateway Timeout',
+		505 => 'HTTP Version Not Supported'
 	);
 
 	/**
@@ -170,9 +170,9 @@ class Http extends Base {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return string
+	 * @return string|array
 	 */
-	public function getContentTypes($type = null) {
+	public function contentTypes($type = null) {
 		return isset($this->_contentTypes[$type]) ? $this->_contentTypes[$type] : $this->_contentTypes;
 	}
 
@@ -182,7 +182,7 @@ class Http extends Base {
 	 * @access public
 	 * @return array
 	 */
-	public function getHeaderTypes() {
+	public function headerTypes() {
 		return $this->_headerTypes;
 	}
 
@@ -192,7 +192,7 @@ class Http extends Base {
 	 * @access public
 	 * @return array
 	 */
-	public function getMethodTypes() {
+	public function methodTypes() {
 		return $this->_methodTypes;
 	}
 
@@ -201,9 +201,9 @@ class Http extends Base {
 	 *
 	 * @access public
 	 * @param int $code
-	 * @return string
+	 * @return string|array
 	 */
-	public function getStatusCodes($code = null) {
+	public function statusCodes($code = null) {
 		return isset($this->_statusCodes[$code]) ? $this->_statusCodes[$code] : $this->_statusCodes;
 	}
 
