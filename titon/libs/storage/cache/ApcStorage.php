@@ -45,7 +45,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function flush() {
-		return apc_clear_cache();
+		return apc_clear_cache('user');
 	}
 	
 	/**
@@ -105,6 +105,9 @@ class ApcStorage extends StorageAbstract {
 			foreach ($key as $k => $v) {
 				$this->set($k, $v, $expires);
 			}
+			
+			return true;
+			
 		} else {
 			$expires = ($this->expires($expires) - time()) / 60;
 			

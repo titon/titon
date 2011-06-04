@@ -40,7 +40,9 @@ abstract class StorageAbstract extends Base implements StorageInterface {
 		'compress' => false,
 		'persistent' => true,
 		'expires' => '+1 day',
-		'prefix' => ''
+		'prefix' => '',
+		'username' => '',
+		'password' => ''
 	);
 	
 	/**
