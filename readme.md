@@ -48,9 +48,13 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 		AppController.php
 		AppModel.php
 		AppView.php
+	tests/
 	titon/
+		base/
 		console/
-		library/
+		core/
+		data/
+		libs/
 			adapters/
 			behaviors/
 			dispatchers/
@@ -65,10 +69,15 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			storage/
 			translaters/
 			transporters/
-		source/
+		locale/
+		log/
+		net/
+		state/
+		system/
+		utility/
 		vendors/
 
-### Library ###
+### Libraries ###
 
 * Adapter - Handles the case of adapting a specific class to another class.
 * Behavior - Defines a behavior pattern for a model.
