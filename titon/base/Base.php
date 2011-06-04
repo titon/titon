@@ -9,6 +9,8 @@
 
 namespace titon\base;
 
+use \Closure;
+
 /**
  * Primary class for all framework classes to extend. All child classes will inherit the $_config property,
  * allowing any configuration settings to be automatically passed and set through the constructor.
@@ -24,6 +26,14 @@ class Base {
 	 * @var array
 	 */
 	protected $_config = array('initialize' => true);
+	
+	/**
+	 * Store the methods return value after lazy loading.
+	 * 
+	 * @access protected
+	 * @var array
+	 */
+	protected $_lazyLoaded = array();
 
 	/**
 	 * Merges the custom configuration with the defaults.
@@ -37,8 +47,12 @@ class Base {
 		if (!empty($config)) {
 			$this->_config = $config + $this->_config;
 		}
+		
+		if (!isset($this->_config['initialize'])) {
+			$this->_config['initialize'] = true;
+		}
 
-		if ($this->_config['initialize']) {
+		if ($this->config('initialize')) {
 			$this->initialize();
 		}
 	}
@@ -50,7 +64,7 @@ class Base {
 	 * @return array
 	 */
 	public function __sleep() {
-		return array('_config');
+		return array('_config', '_lazyLoaded');
 	}
 
 	/**
@@ -60,7 +74,7 @@ class Base {
 	 * @return void
 	 */
 	public function __wakeup() {
-		if ($this->_config['initialize']) {
+		if ($this->config('initialize')) {
 			$this->initialize();
 		}
 	}
@@ -115,6 +129,24 @@ class Base {
 	 */
 	public function initialize() {
 		return;
+	}
+	
+	/**
+	 * Lazy load the data when executed. If the data has already been loaded, return that instead.
+	 * 
+	 * @access public
+	 * @param string $method
+	 * @param Closure $value
+	 * @return mixed 
+	 */
+	public function lazyLoad($method, Closure $callback) {
+		if (isset($this->_lazyLoaded[$method])) {
+			return $this->_lazyLoaded[$method];
+		}
+		
+		$this->_lazyLoaded[$method] = $callback($this);
+		
+		return $this->_lazyLoaded[$method];
 	}
 
 	/**

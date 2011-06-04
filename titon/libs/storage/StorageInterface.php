@@ -20,8 +20,7 @@ interface StorageInterface {
 	 * Empty the cache.
 	 * 
 	 * @access public
-	 * @return StorageInterface
-	 * @chainable
+	 * @return boolean
 	 */
 	public function flush();
 	
@@ -58,8 +57,7 @@ interface StorageInterface {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value 
-	 * @return StorageInterface
-	 * @chainable
+	 * @return boolean
 	 */
 	public function set($key, $value);
 	

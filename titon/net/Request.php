@@ -243,13 +243,15 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function clientIp() {
-		foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
-			if (($address = $this->env($key)) != null) {
-				return $address;
+		return $this->lazyLoad(__FUNCTION__, function($self) {
+			foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
+				if (($address = $self->env($key)) != null) {
+					return $address;
+				}
 			}
-		}
 
-		return null;
+			return null;
+		});
 	}
 
 	/**
@@ -340,11 +342,13 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isMobile() {
-		$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|';
-		$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
-		$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
+		return $this->lazyLoad(__FUNCTION__, function($self) {
+			$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|';
+			$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
+			$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
 
-		return (bool)preg_match('/('. $mobiles .')/i', $this->userAgent(false));
+			return (bool)preg_match('/('. $mobiles .')/i', $self->userAgent(false));
+		});
 	}
 
 	/**
@@ -374,11 +378,9 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isSecure() {
-		if ($this->__secure == null) {
-			$this->__secure = ($this->env('HTTPS') == 'on' || $this->env('SERVER_PORT') == 443);
-		}
-
-		return $this->__secure;
+		return $this->lazyLoad(__FUNCTION__, function($self) {
+			return ($self->env('HTTPS') == 'on' || $self->env('SERVER_PORT') == 443);
+		});
 	}
 
 	/**
@@ -408,19 +410,21 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function referrer() {
-		$referrer = $this->env('HTTP_REFERER');
+		return $this->lazyLoad(__FUNCTION__, function($self) {
+			$referrer = $self->env('HTTP_REFERER');
 
-		if (empty($referrer)) {
-			return;
-		}
+			if (empty($referrer)) {
+				return;
+			}
 
-		$host = $this->env('HTTP_HOST');
+			$host = $self->env('HTTP_HOST');
 
-		if (strpos($referrer, $host) != false) {
-			$referrer = str_replace($this->protocol() .'://'. $host, '', $referrer);
-		}
+			if (strpos($referrer, $host) !== false) {
+				$referrer = str_replace($self->protocol() .'://'. $host, '', $referrer);
+			}
 
-		return trim($referrer);
+			return trim($referrer);
+		});
 	}
 
 	/**
@@ -444,22 +448,24 @@ class Request extends Http {
 	 * @return array|string
 	 */
 	public function userAgent($explicit = true) {
-		$agent = $this->env('HTTP_USER_AGENT');
+		return $this->lazyLoad(__FUNCTION__, function($self) {
+			$agent = $self->env('HTTP_USER_AGENT');
 
-		if ($explicit && function_exists('get_browser')) {
-			$browser = get_browser($agent, true);
+			if ($explicit && function_exists('get_browser')) {
+				$browser = get_browser($agent, true);
 
-			return array(
-				'browser' => $browser['browser'],
-				'version' => $browser['version'],
-				'parent'  => $browser['parent'],
-				'cookies' => $browser['cookies'],
-				'agent' => $agent,
-				'os' => $browser['platform']
-			);
-		}
+				return array(
+					'browser' => $browser['browser'],
+					'version' => $browser['version'],
+					'parent'  => $browser['parent'],
+					'cookies' => $browser['cookies'],
+					'agent' => $agent,
+					'os' => $browser['platform']
+				);
+			}
 
-		return $agent;
+			return $agent;
+		});
 	}
 
 }

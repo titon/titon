@@ -30,13 +30,12 @@ class MemoryStorage extends StorageAbstract {
 	 * Empty the cache.
 	 * 
 	 * @access public
-	 * @return MemoryStorage
-	 * @chainable
+	 * @return boolean
 	 */
 	public function flush() {
 		$this->_cache = array();
 		
-		return $this;
+		return true;
 	}
 	
 	/**
@@ -90,8 +89,7 @@ class MemoryStorage extends StorageAbstract {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value 
-	 * @return MemoryStorage
-	 * @chainable
+	 * @return boolean
 	 */
 	public function set($key, $value) {
 		if ($this->config('serialize')) {
@@ -100,7 +98,7 @@ class MemoryStorage extends StorageAbstract {
 		
 		$this->_cache[$key] = $value;
 		
-		return $this;
+		return true;
 	}
 	
 }

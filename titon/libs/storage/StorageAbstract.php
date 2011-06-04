@@ -9,6 +9,7 @@
 
 namespace titon\libs\storage;
 
+use \titon\base\Base;
 use \titon\libs\storage\StorageInterface;
 
 /**
@@ -19,11 +20,45 @@ use \titon\libs\storage\StorageInterface;
 abstract class StorageAbstract extends Base implements StorageInterface {
 	
 	/**
+	 * The third-party class instance.
+	 * 
+	 * @access public
+	 * @var object
+	 */
+	public $connection;
+	
+	/**
 	 * Default storage configuration.
 	 * 
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array('serialize' => true);
+	protected $_config = array(
+		'id' => '',
+		'servers' => array(),
+		'serialize' => false,
+		'compress' => false,
+		'persistent' => true,
+		'expires' => '+1 day',
+		'prefix' => ''
+	);
+	
+	/**
+	 * Convert the expires date into a valid UNIX timestamp.
+	 * 
+	 * @access public
+	 * @param mixed $timestamp
+	 * @return int 
+	 */
+	public function expires($timestamp) {
+		if ($timestamp === null) {
+			$timestamp = strtotime($this->config('expires'));
+			
+		} else if (is_string($timestamp)) {
+			$timestamp = strtotime($timestamp);
+		}
+		
+		return (int) $timestamp;
+	}
 	
 }
