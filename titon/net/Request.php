@@ -235,7 +235,7 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function clientIp() {
-		return $this->lazyLoad(_FUNCTION_, function($self) {
+		return $this->lazyLoad(__FUNCTION__, function($self) {
 			foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
 				if (($address = $self->env($key)) != null) {
 					return $address;
@@ -293,7 +293,7 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isFlash() {
-		return $this->lazyLoad(_FUNCTION_, function($self) {
+		return $this->lazyLoad(__FUNCTION__, function($self) {
 			return (bool)preg_match('/^(Shockwave|Adobe) Flash/', $self->userAgent(false));
 		});
 	}
@@ -336,7 +336,7 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isMobile() {
-		return $this->lazyLoad(_FUNCTION_, function($self) {
+		return $this->lazyLoad(__FUNCTION__, function($self) {
 			$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|';
 			$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
 			$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
@@ -372,7 +372,7 @@ class Request extends Http {
 	 * @return bool
 	 */
 	public function isSecure() {
-		return $this->lazyLoad(_FUNCTION_, function($self) {
+		return $this->lazyLoad(__FUNCTION__, function($self) {
 			return ($self->env('HTTPS') == 'on' || $self->env('SERVER_PORT') == 443);
 		});
 	}
@@ -404,7 +404,7 @@ class Request extends Http {
 	 * @return string
 	 */
 	public function referrer() {
-		return $this->lazyLoad(_FUNCTION_, function($self) {
+		return $this->lazyLoad(__FUNCTION__, function($self) {
 			$referrer = $self->env('HTTP_REFERER');
 
 			if (empty($referrer)) {
@@ -443,7 +443,7 @@ class Request extends Http {
 	 * @return array|string
 	 */
 	public function userAgent($explicit = true) {
-		return $this->lazyLoad(_FUNCTION_, function($self) {
+		return $this->lazyLoad(__FUNCTION__ . $explicit, function($self) {
 			$agent = $self->env('HTTP_USER_AGENT');
 
 			if ($explicit && function_exists('get_browser')) {
