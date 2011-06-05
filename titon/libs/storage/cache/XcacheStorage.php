@@ -29,24 +29,17 @@ use \titon\log\Exception;
  * @link	http://xcache.lighttpd.net/
  */
 class XcacheStorage extends StorageAbstract {
-		
+
 	/**
-	 * Validate that APC is installed.
+	 * Decrement a value within the cache.
 	 * 
 	 * @access public
-	 * @return void
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
 	 */
-	public function initialize() {
-		if (!extension_loaded('xcache')) {
-			throw new Exception('Xcache extension does not exist.');
-		}
-
-		if ($this->config('compress')) {
-			ini_set('xcache.optimizer', true);
-		}
-		
-		ini_set('xcache.admin.user', $this->config('username'));
-		ini_set('xcache.admin.pass', $this->config('password'));
+	public function decrement($key, $step = 1) {
+		return xcache_dec($key, (int) $step);
 	}
 		
 	/**
@@ -102,6 +95,37 @@ class XcacheStorage extends StorageAbstract {
 	 */
 	public function has($key) {
 		return xcache_isset($key);
+	}
+
+	/**
+	 * Increment a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function increment($key, $step = 1) {
+		return xcache_inc($key, (int) $step);
+	}
+		
+	/**
+	 * Validate that APC is installed.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		if (!extension_loaded('xcache')) {
+			throw new Exception('Xcache extension does not exist.');
+		}
+
+		if ($this->config('compress')) {
+			ini_set('xcache.optimizer', true);
+		}
+		
+		ini_set('xcache.admin.user', $this->config('username'));
+		ini_set('xcache.admin.pass', $this->config('password'));
 	}
 	
 	/**

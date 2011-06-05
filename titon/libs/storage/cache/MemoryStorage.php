@@ -25,6 +25,24 @@ class MemoryStorage extends StorageAbstract {
 	 * @var array
 	 */
 	protected $_cache = array();
+
+	/**
+	 * Decrement a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function decrement($key, $step = 1) {
+		if ($this->has($key)) {
+			$this->set($key, ($this->get($key) - (int) $step));
+		} else {
+			$this->set($key, (0 - (int) $step));
+		}
+		
+		return true;
+	}
 	
 	/**
 	 * Empty the cache.
@@ -60,6 +78,24 @@ class MemoryStorage extends StorageAbstract {
 	 */
 	public function has($key) {
 		return isset($this->_cache[$key]);
+	}
+
+	/**
+	 * Increment a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function increment($key, $step = 1) {
+		if ($this->has($key)) {
+			$this->set($key, ($this->get($key) + (int) $step));
+		} else {
+			$this->set($key, (0 + (int) $step));
+		}
+		
+		return true;
 	}
 	
 	/**

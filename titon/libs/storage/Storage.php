@@ -17,6 +17,16 @@ namespace titon\libs\storage;
 interface Storage {
 	
 	/**
+	 * Decrement a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function decrement($key, $step);
+	
+	/**
 	 * Empty the cache.
 	 * 
 	 * @access public
@@ -41,6 +51,16 @@ interface Storage {
 	 * @return boolean
 	 */
 	public function has($key);
+	
+	/**
+	 * Increment a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function increment($key, $step);
 	
 	/**
 	 * Remove the item if it exists and return true, else return false.

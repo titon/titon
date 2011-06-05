@@ -41,6 +41,66 @@ class MemcachedStorage extends StorageAbstract {
 	 * Default Memcache server weight.
 	 */
 	const WEIGHT = 0;
+
+	/**
+	 * Decrement a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function decrement($key, $step = 1) {
+		return $this->connection->decrement($key, (int) $step);
+	}
+		
+	/**
+	 * Empty the cache.
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function flush() {
+		return $this->connection->flush();
+	}
+	
+	/**
+	 * Get data from the cache if it exists. If serialize is true, the data will be unserialized.
+	 * 
+	 * @access public
+	 * @param string|array $key
+	 * @return mixed
+	 */
+	public function get($key) {
+		if (is_array($key)) {
+			return $this->connection->getMulti($key, null, Memcached::GET_PRESERVE_ORDER);
+		}
+
+		return $this->unserialize($this->connection->get($key));
+	}
+	
+	/**
+	 * Check if the item exists within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function has($key) {
+		return $this->get($key);
+	}
+
+	/**
+	 * Increment a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function increment($key, $step = 1) {
+		return $this->connection->increment($key, (int) $step);
+	}
 	
 	/**
 	 * Initialize the Memcached instance and set all relevant options.
@@ -88,42 +148,6 @@ class MemcachedStorage extends StorageAbstract {
 
 			$this->connection->addServer($host, (int) $port, (int) $weight);
 		}
-	}
-		
-	/**
-	 * Empty the cache.
-	 * 
-	 * @access public
-	 * @return boolean
-	 */
-	public function flush() {
-		return $this->connection->flush();
-	}
-	
-	/**
-	 * Get data from the cache if it exists. If serialize is true, the data will be unserialized.
-	 * 
-	 * @access public
-	 * @param string|array $key
-	 * @return mixed
-	 */
-	public function get($key) {
-		if (is_array($key)) {
-			return $this->connection->getMulti($key, null, Memcached::GET_PRESERVE_ORDER);
-		}
-
-		return $this->unserialize($this->connection->get($key));
-	}
-	
-	/**
-	 * Check if the item exists within the cache.
-	 * 
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function has($key) {
-		return $this->get($key);
 	}
 	
 	/**

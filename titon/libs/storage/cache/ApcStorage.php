@@ -22,20 +22,17 @@ use \titon\log\Exception;
  * @link	http://pecl.php.net/package/apc
  */
 class ApcStorage extends StorageAbstract {
-		
+
 	/**
-	 * Validate that APC is installed.
+	 * Decrement a value within the cache.
 	 * 
 	 * @access public
-	 * @return void
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
 	 */
-	public function initialize() {
-		if (!extension_loaded('apc')) {
-			throw new Exception('APC extension does not exist.');
-		}
-		
-		// Always use serialization with APC
-		$this->configure('serialize', true);
+	public function decrement($key, $step = 1) {
+		return apc_dec($key, (int) $step);
 	}
 		
 	/**
@@ -78,6 +75,33 @@ class ApcStorage extends StorageAbstract {
 	 */
 	public function has($key) {
 		return apc_exists($key);
+	}
+	
+	/**
+	 * Increment a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function increment($key, $step = 1) {
+		return apc_inc($key, (int) $step);
+	}
+	
+	/**
+	 * Validate that APC is installed.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		if (!extension_loaded('apc')) {
+			throw new Exception('APC extension does not exist.');
+		}
+		
+		// Always use serialization with APC
+		$this->configure('serialize', true);
 	}
 	
 	/**
