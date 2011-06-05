@@ -10,8 +10,8 @@
 namespace titon\system;
 
 use \titon\base\Prototype;
-use \titon\log\Exception;
 use \titon\system\Controller;
+use \titon\system\SystemException;
 
 /**
  * The Action is a sub-routine of the Controller parent and is packaged as a stand-alone object instead of a method.
@@ -49,7 +49,7 @@ class Action extends Prototype {
 	 * @return void
 	 */
 	public function run() {
-		throw new Exception('You must define the run() method within your Action.');
+		throw new SystemException('You must define the run() method within your Action.');
 	}
 
 }

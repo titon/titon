@@ -10,7 +10,7 @@
 namespace titon\core;
 
 use \titon\Titon;
-use \titon\log\Exception;
+use \titon\core\CoreException;
 
 /**
  * The Registry acts a central hub where any part of the application can access a single instance of a stored object.
@@ -18,7 +18,7 @@ use \titon\log\Exception;
  *
  * @package	titon.core
  * @uses	titon\Titon
- * @uses	titon\log\Exception
+ * @uses	titon\core\CoreException
  */
 class Registry {
 
@@ -109,7 +109,7 @@ class Registry {
 			return $object;
 		}
 
-		throw new Exception(sprintf('Class %s could not be instantiated into the registry.', $key));
+		throw new CoreException(sprintf('Class %s could not be instantiated into the registry.', $key));
 	}
 
 	/**
@@ -160,7 +160,7 @@ class Registry {
 	 */
 	public function store($object, $key = null) {
 		if (!is_object($object)) {
-			throw new Exception('The object passed must be instantiated.');
+			throw new CoreException('The object passed must be instantiated.');
 		}
 
 		if (!$key) {

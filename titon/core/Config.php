@@ -9,9 +9,9 @@
 
 namespace titon\core;
 
+use \titon\core\CoreException;
 use \titon\libs\readers\ReaderInterface;
 use \titon\log\Debugger;
-use \titon\log\Exception;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
 
@@ -21,8 +21,8 @@ use \titon\utility\Set;
  * Various readers can be used to import specific configuration files.
  *
  * @package	titon.core
+ * @uses	titon\core\CoreException
  * @uses	titon\log\Debugger
- * @uses	titon\log\Exception
  * @uses	titon\utility\Inflector
  * @uses	titon\utility\Set
  */
@@ -93,7 +93,7 @@ class Config {
 			$this->_config[$file] = $reader->toArray() + $this->_config[$file];
 
 		} else {
-			throw new Exception(sprintf('Configuration file %s does not exist.', $file));
+			throw new CoreException(sprintf('Configuration file %s does not exist.', $file));
 		}
 
 		return $this;

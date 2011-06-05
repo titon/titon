@@ -10,8 +10,8 @@
 namespace titon\net;
 
 use \titon\Titon;
-use \titon\log\Exception;
 use \titon\net\Http;
+use \titon\net\NetException;
 
 /**
  * The Request object is the primary source of data and state management for the environment.
@@ -19,7 +19,7 @@ use \titon\net\Http;
  * 
  * @package	titon.net
  * @uses	titon\Titon
- * @uses	titon\log\Exception
+ * @uses	titon\net\NetException
  */
 class Request extends Http {
 
@@ -169,7 +169,7 @@ class Request extends Http {
 		$contentType = $this->contentTypes($type);
 
 		if ($contentType === null) {
-			throw new Exception(sprintf('The content type %s is not supported.', $type));
+			throw new NetException(sprintf('The content type %s is not supported.', $type));
 		}
 
 		if (!is_array($contentType)) {

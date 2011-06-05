@@ -9,15 +9,15 @@
 
 namespace titon\core;
 
+use \titon\core\CoreException;
 use \titon\utility\Inflector;
-use \titon\log\Exception;
 
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
  * @package	titon.core
+ * @uses	titon\core\CoreException
  * @uses	titon\utility\Inflector
- * @uses	titon\log\Exception
  */
 class Environment {
 
@@ -75,7 +75,7 @@ class Environment {
 	 */
 	public function fallback($name) {
 		if (!in_array($name, $this->_environments)) {
-			throw new Exception(sprintf('Environment %s does not exist.', $name));
+			throw new CoreException(sprintf('Environment %s does not exist.', $name));
 		}
 
 		$this->_default = $name;

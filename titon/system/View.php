@@ -3,8 +3,8 @@
 namespace titon\system;
 
 use \titon\base\Prototype;
-use \titon\log\Exception;
 use \titon\utility\Inflector;
+use \titon\system\SystemException;
 
 /**
  * View Class
@@ -205,7 +205,7 @@ class View extends Prototype {
         
         // Check for engine
         if (!$this->hasObject('Engine')) {
-            throw new Exception('You must have an Engine Module loaded to render the page.');
+            throw new SystemException('You must have an Engine Module loaded to render the page.');
         }
 
         // Get content type automatically

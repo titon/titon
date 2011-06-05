@@ -10,7 +10,6 @@
 namespace titon\log;
 
 use \titon\Titon;
-use \titon\log\Exception;
 use \titon\log\Logger;
 
 /**
@@ -19,7 +18,6 @@ use \titon\log\Logger;
  *
  * @package titon.log
  * @uses	titon\Titon
- * @uses	titon\log\Exception
  * @uses	titon\log\Logger
  */
 class Debugger {
@@ -152,7 +150,7 @@ class Debugger {
 		ini_set('error_log', APP_TEMP . Logger::ERROR_LOG);
 
 		set_error_handler(array(__NAMESPACE__ . NS .'Debugger', 'error'), E_ALL | E_STRICT);
-		set_exception_handler(array(new Exception(), 'log'));
+		set_exception_handler(array(__NAMESPACE__ . NS .'Debugger', 'uncaught'));
 	}
 
 	/**
@@ -273,6 +271,28 @@ class Debugger {
 		}
 
 		return $response;
+	}
+	
+	/**
+	 * How to handle uncaught exceptions: log if in production, debug if in development.
+	 * Is also the registered handler for dealing with uncaught exceptions.
+	 *
+	 * @access public
+	 * @param Exception $exception
+	 * @return void
+	 * @static
+	 */
+	public static function uncaught(\Exception $exception) {
+		$trace = $exception->getTrace();
+		$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] .'()';
+		$response = $method .': '. $exception->getMessage();
+		$code = $exception->getCode();
+
+		if ($code) {
+			$response .= ' (Code: '. $code .')';
+		}
+
+		self::error($code, $response, $exception->getFile(), $exception->getLine());
 	}
 
 	/**

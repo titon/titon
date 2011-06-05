@@ -11,7 +11,6 @@ namespace titon\core;
 
 use \titon\libs\routes\core\Route;
 use \titon\libs\routes\RouteInterface;
-use \titon\log\Exception;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -20,7 +19,6 @@ use \titon\log\Exception;
  * You can also define custom slugs or routes to be used for internal routing mechanisms.
  *
  * @package	titon.core
- * @uses	titon\log\Exception
  */
 class Router {
 
@@ -301,7 +299,7 @@ class Router {
 					return $route;
 				}
 			}
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			$e->log();
 		}
 	}

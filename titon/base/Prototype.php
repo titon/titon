@@ -11,7 +11,7 @@ namespace titon\base;
 
 use \titon\Titon;
 use \titon\base\Base;
-use \titon\log\Exception;
+use \titon\base\BaseException;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
 use \Closure;
@@ -23,7 +23,7 @@ use \Closure;
  *
  * @package	titon.base
  * @uses	titon\Titon
- * @uses	titon\log\Exception
+ * @uses	titon\base\BaseException
  * @uses	titon\utility\Inflector
  * @uses	titon\utility\Set
  */
@@ -166,7 +166,7 @@ class Prototype extends Base {
 		);
 
 		if (empty($options['alias'])) {
-			throw new Exception('You must define an alias to reference the attached object.');
+			throw new BaseException('You must define an alias to reference the attached object.');
 		} else {
 			$options['alias'] = Inflector::variable($options['alias']);
 		}
@@ -219,7 +219,7 @@ class Prototype extends Base {
 			return $this->_loaded[$class];
 
 		} else if (!isset($this->_classes[$class])) {
-			throw new Exception(sprintf('No class configuration could be found for %s.', $class));
+			throw new BaseException(sprintf('No class configuration could be found for %s.', $class));
 		}
 
 		// Gather options

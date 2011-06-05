@@ -9,15 +9,15 @@
 
 namespace titon\core;
 
+use \titon\core\CoreException;
 use \titon\libs\storage\StorageInterface;
-use \titon\log\Exception;
 
 /**
  * Provides a very basic interface for caching individual sets of data. Multiple storage engines can be setup 
  * to support different caching mechanisms: Memcache, APC, XCache, Memory, FileSystem.
  *
  * @package	titon.core
- * @uses	titon\log\Exception
+ * @uses	titon\core\CoreException
  */
 class Cache {
 	
@@ -90,7 +90,7 @@ class Cache {
 			return $this->_storage[$name];
 		}
 		
-		throw new Exception(sprintf('Cache storage engine %s does not exist.', $name));
+		throw new CoreException(sprintf('Cache storage engine %s does not exist.', $name));
 	}
 	
 }

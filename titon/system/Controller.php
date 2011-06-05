@@ -11,9 +11,9 @@ namespace titon\system;
 
 use \titon\Titon;
 use \titon\base\Prototype;
-use \titon\log\Exception;
 use \titon\system\Action;
 use \titon\system\View;
+use \titon\system\SystemException;
 
 /**
  * The Controller (MVC) acts as the median between the request and response within the dispatch cycle.
@@ -88,7 +88,7 @@ class Controller extends Prototype {
 		}
 
 		if (!in_array($action, get_class_methods(__CLASS__))) {
-			throw new Exception('Your action does not exist, or is not public, or is found within the parent Controller.');
+			throw new SystemException('Your action does not exist, or is not public, or is found within the parent Controller.');
 		}
 
 		return call_user_func_array(array($this, $action), $args);

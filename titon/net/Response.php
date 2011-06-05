@@ -10,8 +10,8 @@
 namespace titon\net;
 
 use \titon\Titon;
-use \titon\log\Exception;
 use \titon\net\Http;
+use \titon\net\NetException;
 
 /**
  * The Response object handles the collection and output of data to the browser. It stores a list of HTTP headers,
@@ -19,6 +19,7 @@ use \titon\net\Http;
  *
  * @package	titon.net
  * @uses	titon\Titon
+ * @uses	titon\net\NetException
  */
 class Response extends Http {
 
@@ -223,7 +224,7 @@ class Response extends Http {
 	 */
 	public function status($code = 302) {
 		if (!$this->statusCodes($code)) {
-			throw new Exception(sprintf('The status code %d is not supported.', $code));
+			throw new NetException(sprintf('The status code %d is not supported.', $code));
 		}
 
 		$this->_status = $code;
@@ -244,7 +245,7 @@ class Response extends Http {
 			$contentType = $this->contentTypes($type);
 
 			if ($contentType === null) {
-				throw new Exception(sprintf('The content type %s is not supported.', $type));
+				throw new NetException(sprintf('The content type %s is not supported.', $type));
 			}
 
 			if (is_array($contentType)) {

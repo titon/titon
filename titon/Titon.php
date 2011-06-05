@@ -19,7 +19,6 @@ use \titon\core\Loader;
 use \titon\core\Registry;
 use \titon\core\Router;
 use \titon\log\Debugger;
-use \titon\log\Exception;
 
 /**
  * The primary framework class contains all core classes that manipulate and power the application, or add quick convenience.
@@ -79,7 +78,7 @@ class Titon {
 	 */
 	public static function get($key) {
 		if (!isset(self::$__memory[$key])) {
-			throw new Exception(sprintf('Object %s has not been installed into Titon.', $key));
+			throw new \RuntimeException(sprintf('Object %s has not been installed into Titon.', $key));
 		}
 
 		return self::$__memory[$key];
