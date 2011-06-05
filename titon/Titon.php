@@ -12,13 +12,13 @@ namespace titon;
 use \titon\core\Application;
 use \titon\core\Cache;
 use \titon\core\Config;
+use \titon\core\Debugger;
 use \titon\core\Dispatch;
 use \titon\core\Environment;
 use \titon\core\Event;
 use \titon\core\Loader;
 use \titon\core\Registry;
 use \titon\core\Router;
-use \titon\log\Debugger;
 
 /**
  * The primary framework class contains all core classes that manipulate and power the application, or add quick convenience.
@@ -93,6 +93,7 @@ class Titon {
 	 */
 	public static function initialize() {
 		self::install('loader', new Loader(), true);
+		self::install('debugger', new Debugger(), true);
 		self::install('app', new Application(), true);
 		self::install('cache', new Cache(), true);
 		self::install('config', new Config(), true);
@@ -101,9 +102,6 @@ class Titon {
 		self::install('registry', new Registry(), true);
 		self::install('router', new Router(), true);
 		self::install('environment', new Environment(), true);
-		
-		// Start up error reporting
-		Debugger::initialize();
 	}
 
 	/**

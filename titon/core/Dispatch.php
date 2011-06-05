@@ -12,7 +12,7 @@ namespace titon\core;
 use \titon\Titon;
 use \titon\libs\dispatchers\front\Front;
 use \titon\libs\dispatchers\front\FrontDev;
-use \titon\libs\dispatchers\DispatcherInterface;
+use \titon\libs\dispatchers\Dispatcher;
 use \titon\utility\Inflector;
 
 /**
@@ -94,7 +94,7 @@ class Dispatch {
      * @param array $scope
      * @return void
      */
-    public function setup(DispatcherInterface $dispatcher, array $scope = array()) {
+    public function setup(Dispatcher $dispatcher, array $scope = array()) {
 		$scope = $scope + array('module' => '*', 'controller' => '*');
 
 		if ($scope['module'] != '*') {

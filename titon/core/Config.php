@@ -9,9 +9,9 @@
 
 namespace titon\core;
 
+use \titon\Titon;
 use \titon\core\CoreException;
-use \titon\libs\readers\ReaderInterface;
-use \titon\log\Debugger;
+use \titon\libs\readers\Reader;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
 
@@ -22,7 +22,6 @@ use \titon\utility\Set;
  *
  * @package	titon.core
  * @uses	titon\core\CoreException
- * @uses	titon\log\Debugger
  * @uses	titon\utility\Inflector
  * @uses	titon\utility\Set
  */
@@ -74,11 +73,11 @@ class Config {
 	 *
 	 * @access public
 	 * @param string $file
-	 * @param ReaderInterface $reader
+	 * @param Reader $reader
 	 * @return Config
 	 * @chainable
 	 */
-	public function load($file, ReaderInterface $reader) {
+	public function load($file, Reader $reader) {
 		$file = Inflector::filename($file, $reader->extension());
 		$path = APP_CONFIG .'sets'. DS . $file;
 
@@ -131,7 +130,7 @@ class Config {
 	 */
 	public function set($key, $value) {
 		if ($key === 'Debug.level') {
-			Debugger::enable(((int)$value > 0));
+			Titon::debugger()->enable(((int)$value > 0));
 		}
 
 		$this->_config = Set::insert($this->_config, $key, $value);

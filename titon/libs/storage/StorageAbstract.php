@@ -13,7 +13,7 @@ use \titon\base\Base;
 use \titon\libs\storage\Storage;
 
 /**
- * Primary class for all storage engines to extend. Provides functionality from the Base class and the StorageInterface.
+ * Primary class for all storage engines to extend. Provides functionality from the Base class and the Storage interface.
  *
  * @package	titon.libs.storage
  */

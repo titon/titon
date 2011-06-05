@@ -74,25 +74,17 @@ class Registry {
 
 		$namespace = Titon::loader()->toNamespace($key);
 
-		if (!class_exists($namespace)) {
-			Titon::loader()->import($key);
+		if (isset($this->_configs[$key])) {
+			$config = $config + $this->_configs[$key];
 		}
 
-		if (class_exists($namespace)) {
-			if (isset($this->_configs[$key])) {
-				$config = $config + $this->_configs[$key];
-			}
+		$object = new $namespace($config);
 
-			$object = new $namespace($config);
-			
-			if ($store) {
-				return $this->store($object);
-			}
-			
-			return $object;
+		if ($store) {
+			return $this->store($object);
 		}
 
-		throw new CoreException(sprintf('Class %s could not be instantiated into the registry.', $key));
+		return $object;
 	}
 
 	/**

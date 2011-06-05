@@ -19,7 +19,7 @@ namespace titon\libs\engines;
 use \titon\base\Prototype;
 use \titon\core\Config;
 use \titon\log\Exception;
-use \titon\libs\engines\EngineInterface;
+use \titon\libs\engines\Engine;
 use \titon\core\Router;
 use \titon\system\View;
 
