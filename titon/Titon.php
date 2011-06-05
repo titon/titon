@@ -9,6 +9,7 @@
 
 namespace titon;
 
+use \titon\Exception;
 use \titon\core\Application;
 use \titon\core\Cache;
 use \titon\core\Config;
@@ -78,7 +79,7 @@ class Titon {
 	 */
 	public static function get($key) {
 		if (!isset(self::$__memory[$key])) {
-			throw new \RuntimeException(sprintf('Object %s has not been installed into Titon.', $key));
+			throw new Exception(sprintf('Object %s has not been installed into Titon.', $key));
 		}
 
 		return self::$__memory[$key];

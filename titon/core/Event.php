@@ -65,7 +65,9 @@ class Event {
 			$obj = $listener['object'];
 			
 			if ($obj instanceof Closure) {
-				$obj($event, $object);
+				if (empty($listener['events']) || in_array($event, $listener['events'])) {
+					$obj($event, $object);
+				}
 			} else {
 				$obj->{$event}($object);
 			}
