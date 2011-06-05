@@ -9,7 +9,7 @@
 
 namespace titon\libs\storage\cache;
 
-use \titon\libs\storage\StorageAbstract;
+use \titon\libs\storage\cache\MemcacheStorage;
 use \titon\libs\storage\StorageException;
 
 /**
@@ -30,42 +30,10 @@ use \titon\libs\storage\StorageException;
  * 
  * @link	http://pecl.php.net/package/memcached
  */
-class MemcachedStorage extends StorageAbstract {
-	
-	/**
-	 * Default Memcache server port.
-	 */
-	const PORT = 11211;
-	
-	/**
-	 * Default Memcache server weight.
-	 */
-	const WEIGHT = 0;
+class MemcachedStorage extends MemcacheStorage {
 
 	/**
-	 * Decrement a value within the cache.
-	 * 
-	 * @access public
-	 * @param string $key
-	 * @param int $step
-	 * @return boolean
-	 */
-	public function decrement($key, $step = 1) {
-		return $this->connection->decrement($key, (int) $step);
-	}
-		
-	/**
-	 * Empty the cache.
-	 * 
-	 * @access public
-	 * @return boolean
-	 */
-	public function flush() {
-		return $this->connection->flush();
-	}
-	
-	/**
-	 * Get data from the cache if it exists. If serialize is true, the data will be unserialized.
+	 * Get data from the cache if it exists.
 	 * 
 	 * @access public
 	 * @param string|array $key
@@ -77,29 +45,6 @@ class MemcachedStorage extends StorageAbstract {
 		}
 
 		return $this->unserialize($this->connection->get($key));
-	}
-	
-	/**
-	 * Check if the item exists within the cache.
-	 * 
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function has($key) {
-		return $this->get($key);
-	}
-
-	/**
-	 * Increment a value within the cache.
-	 * 
-	 * @access public
-	 * @param string $key
-	 * @param int $step
-	 * @return boolean
-	 */
-	public function increment($key, $step = 1) {
-		return $this->connection->increment($key, (int) $step);
 	}
 	
 	/**
@@ -151,18 +96,7 @@ class MemcachedStorage extends StorageAbstract {
 	}
 	
 	/**
-	 * Remove the item if it exists and return true, else return false.
-	 * 
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function remove($key) {
-		return $this->connection->delete($key, 0);
-	}
-	
-	/**
-	 * Set data to the cache. If serialize is true, the data will be serialized.
+	 * Set data to the cache.
 	 * 
 	 * @access public
 	 * @param string|array $key
