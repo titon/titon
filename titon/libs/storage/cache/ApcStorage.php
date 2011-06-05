@@ -10,14 +10,14 @@
 namespace titon\libs\storage\cache;
 
 use \titon\libs\storage\StorageAbstract;
-use \titon\log\Exception;
+use \titon\libs\storage\StorageException;
 
 /**
  * A storage engine that uses the APC extension for a cache store; requires pecl/apc. 
  * This engine can be installed using the Cache::setup() method. No configuration options are available for this engine.
  *
  * @package	titon.libs.storage.cache
- * @uses	titon\log\Exception
+ * @uses	titon\libs\storage\StorageException
  * 
  * @link	http://pecl.php.net/package/apc
  */
@@ -97,7 +97,7 @@ class ApcStorage extends StorageAbstract {
 	 */
 	public function initialize() {
 		if (!extension_loaded('apc')) {
-			throw new Exception('APC extension does not exist.');
+			throw new StorageException('APC extension does not exist.');
 		}
 		
 		// Always use serialization with APC

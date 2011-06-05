@@ -10,6 +10,7 @@
 namespace titon\libs\storage\cache;
 
 use \titon\libs\storage\StorageAbstract;
+use \titon\libs\storage\StorageException;
 
 /**
  * @todo

@@ -10,12 +10,13 @@
 namespace titon\libs\storage\cache;
 
 use \titon\libs\storage\StorageAbstract;
-use \titon\log\Exception;
+use \titon\libs\storage\StorageException;
 
 /**
  * @todo
  *
  * @package	titon.libs.storage.cache
+ * @uses	titon\libs\storage\StorageException
  */
 class MemcacheStorage extends StorageAbstract {
 	
@@ -27,7 +28,7 @@ class MemcacheStorage extends StorageAbstract {
 	 */
 	public function initialize() {
 		if (!extension_loaded('memcache')) {
-			throw new Exception('Memcache extension does not exist.');
+			throw new StorageException('Memcache extension does not exist.');
 		}
 	}
 	

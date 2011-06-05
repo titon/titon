@@ -10,7 +10,7 @@
 namespace titon\libs\storage\cache;
 
 use \titon\libs\storage\StorageAbstract;
-use \titon\log\Exception;
+use \titon\libs\storage\StorageException;
 
 /**
  * A storage engine for the Memcache module, using the Memcached class; requires pecl/memcached. 
@@ -26,7 +26,7 @@ use \titon\log\Exception;
  * id, servers (array or string), compress, serialize, prefix, expires.
  *
  * @package	titon.libs.storage.cache
- * @uses	titon\log\Exception
+ * @uses	titon\libs\storage\StorageException
  * 
  * @link	http://pecl.php.net/package/memcached
  */
@@ -110,7 +110,7 @@ class MemcachedStorage extends StorageAbstract {
 	 */
 	public function initialize() {
 		if (!extension_loaded('memcache')) {
-			throw new Exception('Memcache extension does not exist.');
+			throw new StorageException('Memcache extension does not exist.');
 		}
 		
 		$config = $this->config();

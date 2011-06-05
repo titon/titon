@@ -10,7 +10,7 @@
 namespace titon\libs\storage\cache;
 
 use \titon\libs\storage\StorageAbstract;
-use \titon\log\Exception;
+use \titon\libs\storage\StorageException;
 
 /**
  * A storage engine that uses the Xcache extension for a cache store. 
@@ -25,6 +25,7 @@ use \titon\log\Exception;
  * serialize, compress, username/password (for flush()), expires.
  *
  * @package	titon.libs.storage.cache
+ * @uses	titon\libs\storage\StorageException
  * 
  * @link	http://xcache.lighttpd.net/
  */
@@ -117,7 +118,7 @@ class XcacheStorage extends StorageAbstract {
 	 */
 	public function initialize() {
 		if (!extension_loaded('xcache')) {
-			throw new Exception('Xcache extension does not exist.');
+			throw new StorageException('Xcache extension does not exist.');
 		}
 
 		if ($this->config('compress')) {
