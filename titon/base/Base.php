@@ -45,9 +45,7 @@ class Base {
 	 * @return void
 	 */
 	public function __construct(array $config = array()) {
-		if (!empty($config)) {
-			$this->_config = $config + $this->_config;
-		}
+		$this->configure($config);
 		
 		if (!isset($this->_config['initialize'])) {
 			$this->_config['initialize'] = true;
@@ -137,7 +135,7 @@ class Base {
 	 * 
 	 * @access public
 	 * @param string $method
-	 * @param Closure $value
+	 * @param Closure $callback
 	 * @return mixed 
 	 */
 	public function lazyLoad($method, Closure $callback) {
