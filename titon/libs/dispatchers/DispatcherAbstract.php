@@ -14,7 +14,7 @@ namespace titon\libs\dispatchers;
 use \titon\base\Prototype;
 use \titon\core\App;
 use \titon\log\Exception;
-use \titon\libs\dispatchers\DispatcherInterface;
+use \titon\libs\dispatchers\Dispatcher;
 use \titon\utility\Inflector;
 
 /**
@@ -24,7 +24,7 @@ use \titon\utility\Inflector;
  * @subpackage	Titon.Modules.Dispatchers
  * @abstract
  */
-abstract class DispatcherAbstract extends Prototype implements DispatcherInterface {
+abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 
     /**
      * Controller object.

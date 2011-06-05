@@ -18,7 +18,7 @@ use \titon\system\View;
  * @package		Titon
  * @subpackage	Titon.Modules
  */
-interface EngineInterface {
+interface Engine {
 
     /**
      * Output the inner content templates, as well as applying a wrapper if it exists.

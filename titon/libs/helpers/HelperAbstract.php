@@ -11,7 +11,7 @@ namespace titon\libs\helpers;
 
 use \titon\Titon;
 use \titon\base\Prototype;
-use \titon\libs\helpers\HelperInterface;
+use \titon\libs\helpers\Helper;
 use \titon\system\View;
 
 /**
@@ -22,7 +22,7 @@ use \titon\system\View;
  * @uses	titon\Titon
  * @abstract
  */
-abstract class HelperAbstract extends Prototype implements HelperInterface {
+abstract class HelperAbstract extends Prototype implements Helper {
 
 	/**
 	 * View class.

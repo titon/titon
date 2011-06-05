@@ -10,7 +10,7 @@
 namespace titon\libs\routes;
 
 use \titon\Titon;
-use \titon\libs\routes\RouteInterface;
+use \titon\libs\routes\Route;
 use \titon\log\Exception;
 
 /**
@@ -22,7 +22,7 @@ use \titon\log\Exception;
  * @uses	titon\Titon
  * @uses	titon\log\Exception
  */
-abstract class RouteAbstract implements RouteInterface {
+abstract class RouteAbstract implements Route {
 
 	/**
 	 * Pre-defined regex patterns.

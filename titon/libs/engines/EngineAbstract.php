@@ -30,7 +30,7 @@ use \titon\system\View;
  * @subpackage	Titon.Modules
  * @abstract
  */
-abstract class EngineAbstract extends Prototype implements EngineInterface {
+abstract class EngineAbstract extends Prototype implements Engine {
 
     /**
      * View object.

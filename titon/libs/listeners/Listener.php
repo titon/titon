@@ -18,7 +18,7 @@ use \titon\system\View;
  * @package		Titon
  * @subpackage	Titon.Modules.Events
  */
-interface ListenerInterface {
+interface Listener {
 
 	/**
 	 * Executed at the beginning of the dispatch cycle.

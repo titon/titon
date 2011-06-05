@@ -17,7 +17,7 @@ use \titon\system\View;
  *
  * @package	titon.library.helpers;
  */
-interface HelperInterface {
+interface Helper {
 
 	/**
 	 * Triggered upon the view class instantiation, following __construct().

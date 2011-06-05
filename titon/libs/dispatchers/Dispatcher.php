@@ -14,7 +14,7 @@ namespace titon\libs\dispatchers;
  *
  * @package	titon.library.dispatchers
  */
-interface DispatcherInterface {
+interface Dispatcher {
 
     /**
      * Primary method to run the dispatcher and process its logic.

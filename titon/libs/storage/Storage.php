@@ -14,7 +14,7 @@ namespace titon\libs\storage;
  *
  * @package	titon.libs.storage
  */
-interface StorageInterface {
+interface Storage {
 	
 	/**
 	 * Empty the cache.

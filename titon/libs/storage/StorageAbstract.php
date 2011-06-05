@@ -10,14 +10,14 @@
 namespace titon\libs\storage;
 
 use \titon\base\Base;
-use \titon\libs\storage\StorageInterface;
+use \titon\libs\storage\Storage;
 
 /**
  * Primary class for all storage engines to extend. Provides functionality from the Base class and the StorageInterface.
  *
  * @package	titon.libs.storage
  */
-abstract class StorageAbstract extends Base implements StorageInterface {
+abstract class StorageAbstract extends Base implements Storage {
 	
 	/**
 	 * The third-party class instance.

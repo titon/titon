@@ -14,7 +14,7 @@ namespace titon\libs\readers;
  *
  * @package	titon.library.readers
  */
-interface ReaderInterface {
+interface Reader {
 
 	/**
 	 * Return the file type extension for the reader.

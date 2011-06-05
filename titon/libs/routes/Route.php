@@ -14,7 +14,7 @@ namespace titon\libs\routes;
  *
  * @package	titon.library.routes
  */
-interface RouteInterface {
+interface Route {
 
 	/**
 	 * Compile the given path into a detectable regex pattern.

@@ -10,14 +10,14 @@
 namespace titon\libs\readers;
 
 use \titon\base\Base;
-use \titon\libs\readers\ReaderInterface;
+use \titon\libs\readers\Reader;
 
 /**
  * Interface for all Config Readers.
  *
  * @package titon.library.readers
  */
-abstract class ReaderAbstract extends Base implements ReaderInterface {
+abstract class ReaderAbstract extends Base implements Reader {
 
 	/**
 	 * File type extension.

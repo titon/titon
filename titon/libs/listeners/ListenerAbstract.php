@@ -10,7 +10,7 @@
 namespace titon\libs\listeners;
 
 use \titon\base\Base;
-use \titon\libs\events\ListenerInterface;
+use \titon\libs\events\Listener;
 use \titon\system\Controller;
 use \titon\system\View;
 
@@ -20,7 +20,7 @@ use \titon\system\View;
  * @package		Titon
  * @subpackage	Titon.Modules.Events
  */
-abstract class ListenerAbstract extends Base implements ListenerInterface {
+abstract class ListenerAbstract extends Base implements Listener {
 
 	/**
 	 * Executed at the beginning of the dispatch cycle.
