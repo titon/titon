@@ -41,7 +41,7 @@ class Loader {
 		spl_autoload_register(array($this, 'autoload'));
 
 		// Add default loader
-		$this->addLoader('default', function($class) {
+		$this->setup('default', function($class) {
 			return Titon::loader()->import($class);
 		});
 
@@ -49,22 +49,6 @@ class Loader {
 		$this->includePath(array(
 			APP, ROOT, TITON, LIBRARY, VENDORS
 		));
-	}
-
-	/**
-	 * Primary method that deals with autoloading classes.
-	 * Defines a closure that is triggered to attempt to include a file.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @param Closure $loader
-	 * @return this
-	 * @chainable
-	 */
-	public function addLoader($key, Closure $loader) {
-		$this->_loaders[(string)$key] = $loader;
-
-		return $this;
 	}
 
 	/**
@@ -144,6 +128,7 @@ class Loader {
 
 			if (is_file($source)) {
 				include_once $source;
+				
 				return true;
 			}
 		}
@@ -156,7 +141,7 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string|array $paths
-	 * @return this
+	 * @return Loader
 	 * @chainable
 	 */
 	public function includePath($paths) {
@@ -178,11 +163,27 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return this
+	 * @return Loader
 	 * @chainable
 	 */
-	public function removeLoader($key) {
-		unset($this->_loaders[(string)$key]);
+	public function remove($key) {
+		unset($this->_loaders[$key]);
+
+		return $this;
+	}
+
+	/**
+	 * Primary method that deals with autoloading classes.
+	 * Defines a closure that is triggered to attempt to include a file.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param Closure $loader
+	 * @return Loader
+	 * @chainable
+	 */
+	public function setup($key, Closure $loader) {
+		$this->_loaders[$key] = $loader;
 
 		return $this;
 	}

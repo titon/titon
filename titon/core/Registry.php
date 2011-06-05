@@ -45,7 +45,7 @@ class Registry {
 	 * @access public
 	 * @param string $key
 	 * @param array $config
-	 * @return this
+	 * @return Registry
 	 * @chainable
 	 */
 	public function configure($key, array $config = array()) {
@@ -56,23 +56,6 @@ class Registry {
 		}
 
 		return $this;
-	}
-
-	/**
-	 * Delete an object from registry.
-	 * Returns true if object exists and was deleted, else returns false.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function delete($key) {
-		if (isset($this->_registered[$key])) {
-			unset($this->_registered[$key]);
-			return true;
-		}
-
-		return false;
 	}
 
 	/**
@@ -116,7 +99,7 @@ class Registry {
 	 * Flush the registry by removing all stored objects.
 	 *
 	 * @access public
-	 * @return this
+	 * @return Registry
 	 * @chainable
 	 */
 	public function flush() {
@@ -148,6 +131,23 @@ class Registry {
 	 */
 	public function listing() {
 		return array_keys($this->_registered);
+	}
+
+	/**
+	 * Remove an object from registry.
+	 * Returns true if object exists and was deleted, else returns false.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function remove($key) {
+		if (isset($this->_registered[$key])) {
+			unset($this->_registered[$key]);
+			return true;
+		}
+
+		return false;
 	}
 
 	/**

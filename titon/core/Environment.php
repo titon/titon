@@ -70,7 +70,7 @@ class Environment {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return this
+	 * @return Environment
 	 * @chainable
 	 */
 	public function fallback($name) {
@@ -90,7 +90,7 @@ class Environment {
 	 * @return void
 	 */
 	public function initialize() {
-		$path = APP_CONFIG .'environments'. DS . $this->current() .'.php';
+		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current(), 'php', false);
 
 		if (is_file($path)) {
 			include_once $path;
@@ -103,7 +103,7 @@ class Environment {
 	 * @access public
 	 * @param string $name
 	 * @param array $hosts
-	 * @return this
+	 * @return Environment
 	 * @chainable
 	 */
 	public function setup($name, array $hosts) {

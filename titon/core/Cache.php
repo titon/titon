@@ -10,7 +10,7 @@
 namespace titon\core;
 
 use \titon\core\CoreException;
-use \titon\libs\storage\StorageInterface;
+use \titon\libs\storage\Storage;
 
 /**
  * Provides a very basic interface for caching individual sets of data. Multiple storage engines can be setup 
@@ -59,11 +59,12 @@ class Cache {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
+	 * @param mixed $expires
 	 * @param string $storage
 	 * @return boolean
 	 */
-	public function set($key, $value, $storage = 'default') {
-		return $this->storage($storage)->set($key, $value);
+	public function set($key, $value, $expires = null, $storage = 'default') {
+		return $this->storage($storage)->set($key, $value, $expires);
 	}
 	
 	/**
@@ -71,11 +72,14 @@ class Cache {
 	 * 
 	 * @access public
 	 * @param string $name
-	 * @param StorageInterface $storage 
-	 * @return void
+	 * @param Storage $storage 
+	 * @return Cache
+	 * @chainable
 	 */
-	public function setup($name, StorageInterface $storage) {
+	public function setup($name, Storage $storage) {
 		$this->_storage[$name] = $storage;
+		
+		return $this;
 	}
 	
 	/**
@@ -83,7 +87,7 @@ class Cache {
 	 * 
 	 * @access public
 	 * @param string $name
-	 * @return StorageInterface
+	 * @return Storage
 	 */
 	public function storage($name) {
 		if (isset($this->_storage[$name])) {

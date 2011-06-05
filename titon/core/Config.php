@@ -75,7 +75,7 @@ class Config {
 	 * @access public
 	 * @param string $file
 	 * @param ReaderInterface $reader
-	 * @return this
+	 * @return Config
 	 * @chainable
 	 */
 	public function load($file, ReaderInterface $reader) {
@@ -126,7 +126,7 @@ class Config {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return this
+	 * @return Config
 	 * @chainable
 	 */
 	public function set($key, $value) {

@@ -10,7 +10,7 @@
 namespace titon\core;
 
 use \titon\libs\routes\core\Route;
-use \titon\libs\routes\RouteInterface;
+use \titon\libs\routes\Route;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -256,11 +256,11 @@ class Router {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @param RouteInterface $route
-	 * @return this
+	 * @param Route $route
+	 * @return Router
 	 * @chainable
 	 */
-	public function map($key, RouteInterface $route) {
+	public function map($key, Route $route) {
 		$this->_routes[$key] = $route;
 
 		return $this;
@@ -272,7 +272,7 @@ class Router {
 	 * @access public
 	 * @param string $key
 	 * @param string|array $route
-	 * @return this
+	 * @return Router
 	 * @chainable
 	 */
 	public function mapSlug($key, $route = array()) {
@@ -300,7 +300,6 @@ class Router {
 				}
 			}
 		} catch (\Exception $e) {
-			$e->log();
 		}
 	}
 

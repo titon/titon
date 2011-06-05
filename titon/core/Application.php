@@ -68,12 +68,10 @@ class Application {
 	 * @access public
 	 * @param string $module
 	 * @param string|array $controllers
-	 * @return this
+	 * @return Application
 	 * @chainable
 	 */
 	public function setup($module, $controllers = array()) {
-		$module = (string)$module;
-
 		if (!isset($this->_modules[$module])) {
 			$this->_modules[$module] = array();
 		}

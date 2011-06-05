@@ -10,7 +10,7 @@
 namespace titon\core;
 
 use \titon\Titon;
-use \titon\libs\listeners\ListenerInterface;
+use \titon\libs\listeners\Listener;
 
 /**
  * Provides a way to register functionality to listen and execute within the application without having to edit the core files.
@@ -63,7 +63,7 @@ class Event {
 		$route = Titon::router()->current();
 
 		foreach ($this->_listeners[$event] as &$listener) {
-			if ($listener['executed'] === true) {
+			if ($listener['executed']) {
 				continue;
 			}
 
@@ -98,12 +98,12 @@ class Event {
 	 * Can drill down the event to only execute during a certain scope.
 	 *
 	 * @access public
-	 * @param ListenerInterface $listener
+	 * @param Listener $listener
 	 * @param array $scope
-	 * @return this
+	 * @return Event
 	 * @chainable
 	 */
-	public function register(ListenerInterface $listener, array $scope = array()) {
+	public function register(Listener $listener, array $scope = array()) {
 		$class = get_class($listener);
 		$this->_objectMap[$class] = $listener;
 
@@ -128,7 +128,7 @@ class Event {
 	 * @access public
 	 * @param string $class
 	 * @param string $event
-	 * @return this
+	 * @return Event
 	 * @chainable
 	 */
 	public function remove($class, $event = null) {
