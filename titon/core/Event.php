@@ -11,6 +11,7 @@ namespace titon\core;
 
 use \titon\Titon;
 use \titon\libs\listeners\Listener;
+use \Closure;
 
 /**
  * Provides a way to register functionality to listen and execute within the application without having to edit the core files.
@@ -39,14 +40,6 @@ class Event {
 	protected $_listeners = array();
 
 	/**
-	 * Listener object mapping.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_objectMap = array();
-
-	/**
 	 * Cycles through the listenerss for the specified event, and executes the related method.
 	 * If a scope is defined, and the listener doesn't match the scope, it will be bypassed.
 	 *
@@ -56,13 +49,9 @@ class Event {
 	 * @return void
 	 */
 	public function execute($event, $object = null) {
-		if (empty($this->_listeners[$event])) {
-			return;
-		}
-		
 		$route = Titon::router()->current();
 
-		foreach ($this->_listeners[$event] as &$listener) {
+		foreach ($this->_listeners as &$listener) {
 			if ($listener['executed']) {
 				continue;
 			}
@@ -73,8 +62,11 @@ class Event {
 				}
 			}
 
-			if (isset($this->_objectMap[$listener['source']])) {
-				$obj = $this->_objectMap[$listener['source']];
+			$obj = $listener['object'];
+			
+			if ($obj instanceof Closure) {
+				$obj($event, $object);
+			} else {
 				$obj->{$event}($object);
 			}
 
@@ -86,11 +78,10 @@ class Event {
 	 * Return all registered listeners.
 	 *
 	 * @access public
-	 * @param string $event
 	 * @return array
 	 */
-	public function listeners($event = null) {
-		return isset($this->_listeners[$event]) ? $this->_listeners[$event] : $this->_listeners;
+	public function listeners() {
+		return $this->_listeners;
 	}
 
 	/**
@@ -103,43 +94,58 @@ class Event {
 	 * @return Event
 	 * @chainable
 	 */
-	public function register(Listener $listener, array $scope = array()) {
-		$class = get_class($listener);
-		$this->_objectMap[$class] = $listener;
-
-		foreach ($this->_events as $event) {
-			$this->_listeners[$event][$class] = array(
-				'executed' => false,
-				'source' => $class,
-				'scope' => $scope + array(
-					'module' => '*',
-					'controller' => '*',
-					'action' => '*'
-				)
-			);
-		}
+	public function registerListener(Listener $listener, array $scope = array()) {
+		$this->_listeners[] = array(
+			'object' => $listener,
+			'executed' => false,
+			'events' => array(),
+			'scope' => $scope + array(
+				'module' => '*',
+				'controller' => '*',
+				'action' => '*'
+			)
+		);
 
 		return $this;
 	}
 
 	/**
-	 * Remove a certain event and scope from the registered list.
+	 * Register a basic callback using a Closure. This callback can be restricted in scope and a per event basis.
+	 * Can drill down the event to only execute during a certain scope.
 	 *
 	 * @access public
-	 * @param string $class
-	 * @param string $event
+	 * @param Closure $callback
+	 * @param array $events
+	 * @param array $scope
 	 * @return Event
 	 * @chainable
 	 */
-	public function remove($class, $event = null) {
-		if (!$event) {
-			foreach ($this->_listeners as $event => $listeners) {
-				unset($this->_listeners[$event][$class]);
-			}
-		} else {
-			unset($this->_listeners[$event][$class]);
-		}
+	public function registerCallback(Closure $callback, array $events = array(), array $scope = array()) {
+		$this->_listeners[] = array(
+			'object' => $callback,
+			'executed' => false,
+			'events' => $events,
+			'scope' => $scope + array(
+				'module' => '*',
+				'controller' => '*',
+				'action' => '*'
+			)
+		);
 
+		return $this;
+	}
+
+	/**
+	 * Add custom events to the system.
+	 * 
+	 * @access public
+	 * @param string|array $events
+	 * @return Event 
+	 * @chainable
+	 */
+	public function setup($events) {
+		$this->_events = (array) $events + $this->_events;
+		
 		return $this;
 	}
 
