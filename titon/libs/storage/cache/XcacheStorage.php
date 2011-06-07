@@ -40,7 +40,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		return xcache_dec($key, (int) $step);
+		return xcache_dec($this->key($key), (int) $step);
 	}
 		
 	/**
@@ -84,7 +84,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return mixed
 	 */
 	public function get($key) {
-		return $this->unserialize(xcache_get($key));
+		return $this->unserialize(xcache_get($this->key($key)));
 	}
 	
 	/**
@@ -95,7 +95,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return xcache_isset($key);
+		return xcache_isset($this->key($key));
 	}
 
 	/**
@@ -107,7 +107,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function increment($key, $step = 1) {
-		return xcache_inc($key, (int) $step);
+		return xcache_inc($this->key($key), (int) $step);
 	}
 		
 	/**
@@ -137,7 +137,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		return xcache_unset($key);
+		return xcache_unset($this->key($key));
 	}
 	
 	/**
@@ -150,18 +150,9 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value = null, $expires = null) {
-		if (is_array($key)) {
-			foreach ($key as $k => $v) {
-				$this->set($k, $v, $expires);
-			}
-			
-			return true;
-			
-		} else {
-			$expires = ($this->expires($expires) - time()) / 60;
-			
-			return xcache_set($key, $this->serialize($value), $expires);
-		}
+		$expires = ($this->expires($expires) - time()) / 60;
+
+		return xcache_set($this->key($key), $this->serialize($value), $expires);
 	}
 		
 }

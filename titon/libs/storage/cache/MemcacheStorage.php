@@ -51,7 +51,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		return $this->connection->decrement($key, (int) $step);
+		return $this->connection->decrement($this->key($key), (int) $step);
 	}
 		
 	/**
@@ -72,7 +72,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return mixed
 	 */
 	public function get($key) {
-		return $this->unserialize($this->connection->get($key));
+		return $this->unserialize($this->connection->get($this->key($key)));
 	}
 	
 	/**
@@ -83,7 +83,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return (bool) $this->get($key);
+		return (bool) $this->get($this->key($key));
 	}
 			
 	/**
@@ -140,7 +140,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		return $this->connection->delete($key, 0);
+		return $this->connection->delete($this->key($key), 0);
 	}
 	
 	/**
@@ -153,7 +153,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value = null, $expires = null) {
-		return $this->connection->set($key, $this->serialize($value), $this->config('compress'), $this->expires($expires));
+		return $this->connection->set($this->key($key), $this->serialize($value), $this->config('compress'), $this->expires($expires));
 	}
 	
 }

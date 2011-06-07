@@ -64,6 +64,19 @@ abstract class StorageAbstract extends Base implements Storage {
 	}
 	
 	/**
+	 * Rewrite the key to use a specific format.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @return string
+	 */
+	public function key($key) {
+		$key = (string) $this->config('prefix') + (string) $key;
+		
+		return trim(preg_replace('/[^a-z0-9\-_\.]+/is', '', str_replace(array(NS, '::'), '.', $key)), '.');
+	}
+	
+	/**
 	 * Serialize the data if the configuration is true.
 	 * 
 	 * @access public
@@ -87,7 +100,7 @@ abstract class StorageAbstract extends Base implements Storage {
 	 */
 	public function unserialize($value) {
 		if ($value && $this->config('serialize')) {
-			$value = unserialize($value);
+			$value = @unserialize($value);
 		}
 		
 		return $value;

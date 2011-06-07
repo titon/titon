@@ -125,13 +125,7 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value = null, $expires = null) {
-		if (is_array($key)) {
-			foreach ($key as $k => $v) {
-				$this->set($k, $v);
-			}
-		} else {
-			$this->_cache[$key] = $this->serialize($value);
-		}
+		$this->_cache[$key] = $this->serialize($value);
 		
 		return true;
 	}

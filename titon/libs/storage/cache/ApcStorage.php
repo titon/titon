@@ -32,7 +32,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		return apc_dec($key, (int) $step);
+		return apc_dec($this->key($key), (int) $step);
 	}
 		
 	/**
@@ -53,17 +53,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return mixed
 	 */
 	public function get($key) {
-		$value = apc_fetch($key);
-		
-		if (is_array($value)) {
-			foreach ($value as $k => $v) {
-				$value[$k] = $this->unserialize($v);
-			}
-		} else {
-			$value = $this->unserialize($value);
-		}
-		
-		return $value;
+		return $this->unserialize(apc_fetch($this->key($key)));
 	}
 	
 	/**
@@ -74,7 +64,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return apc_exists($key);
+		return apc_exists($this->key($key));
 	}
 	
 	/**
@@ -86,7 +76,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function increment($key, $step = 1) {
-		return apc_inc($key, (int) $step);
+		return apc_inc($this->key($key), (int) $step);
 	}
 	
 	/**
@@ -112,7 +102,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		return apc_delete($key);
+		return apc_delete($this->key($key));
 	}
 	
 	/**
@@ -125,18 +115,9 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value = null, $expires = null) {
-		if (is_array($key)) {
-			foreach ($key as $k => $v) {
-				$this->set($k, $v, $expires);
-			}
-			
-			return true;
-			
-		} else {
-			$expires = ($this->expires($expires) - time()) / 60;
-			
-			return apc_store($key, $this->serialize($value), $expires);
-		}
+		$expires = ($this->expires($expires) - time()) / 60;
+
+		return apc_store($this->key($key), $this->serialize($value), $expires);
 	}
 	
 }

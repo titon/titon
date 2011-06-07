@@ -40,11 +40,7 @@ class MemcachedStorage extends MemcacheStorage {
 	 * @return mixed
 	 */
 	public function get($key) {
-		if (is_array($key)) {
-			return $this->connection->getMulti($key, null, Memcached::GET_PRESERVE_ORDER);
-		}
-
-		return $this->unserialize($this->connection->get($key));
+		return $this->unserialize($this->connection->get($this->key($key)));
 	}
 	
 	/**
@@ -66,7 +62,6 @@ class MemcachedStorage extends MemcacheStorage {
 		
 		$this->connection = $this->connection ?: new \Memcached($config['id']);
 		$this->connection->setOption(Memcached::OPT_COMPRESSION, (bool) $config['compress']);
-		$this->connection->setOption(Memcached::OPT_PREFIX_KEY, (string) $config['prefix']);
 		$this->connection->setOption(Memcached::OPT_DISTRIBUTION, Memcached::DISTRIBUTION_CONSISTENT);
 		$this->connection->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
 		
@@ -105,11 +100,7 @@ class MemcachedStorage extends MemcacheStorage {
 	 * @return boolean
 	 */
 	public function set($key, $value = null, $expires = null) {
-		if (is_array($key)) {
-			return $this->connection->setMulti($key, $this->expires($expires));
-		}
-		
-		return $this->connection->set($key, $this->serialize($value), $this->expires($expires));
+		return $this->connection->set($this->key($key), $this->serialize($value), $this->expires($expires));
 	}
 	
 }
