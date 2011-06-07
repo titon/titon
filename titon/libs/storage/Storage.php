@@ -35,7 +35,7 @@ interface Storage {
 	public function flush();
 	
 	/**
-	 * Get data from the cache if it exists. If serialize is true, the data will be unserialized.
+	 * Get data from the cache if it exists.
 	 * 
 	 * @access public
 	 * @param string $key
@@ -72,7 +72,7 @@ interface Storage {
 	public function remove($key);
 	
 	/**
-	 * Set data to the cache. If serialize is true, the data will be serialized.
+	 * Set data to the cache.
 	 * 
 	 * @access public
 	 * @param string $key

@@ -57,7 +57,7 @@ class MemoryStorage extends StorageAbstract {
 	}
 	
 	/**
-	 * Get data from the cache if it exists. If serialize is true, the data will be unserialized.
+	 * Get data from the cache if it exists.
 	 * 
 	 * @access public
 	 * @param string $key
@@ -116,7 +116,7 @@ class MemoryStorage extends StorageAbstract {
 	}
 	
 	/**
-	 * Set data to the cache. If serialize is true, the data will be serialized.
+	 * Set data to the cache.
 	 * 
 	 * @access public
 	 * @param string|array $key

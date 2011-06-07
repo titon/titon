@@ -42,7 +42,8 @@ abstract class StorageAbstract extends Base implements Storage {
 		'expires' => '+1 day',
 		'prefix' => '',
 		'username' => '',
-		'password' => ''
+		'password' => '',
+		'storage' => ''
 	);
 	
 	/**

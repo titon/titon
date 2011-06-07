@@ -77,6 +77,8 @@ class Cache {
 	 * @chainable
 	 */
 	public function setup($name, Storage $storage) {
+		$storage->configure('storage', $name);
+		
 		$this->_storage[$name] = $storage;
 		
 		return $this;

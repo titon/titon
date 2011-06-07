@@ -141,7 +141,7 @@ class XcacheStorage extends StorageAbstract {
 	}
 	
 	/**
-	 * Set data to the cache. If serialize is true, the data will be serialized.
+	 * Set data to the cache.
 	 * 
 	 * @access public
 	 * @param string $key
