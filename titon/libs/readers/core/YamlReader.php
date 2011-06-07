@@ -10,14 +10,14 @@
 namespace titon\libs\readers\core;
 
 use \titon\libs\readers\ReaderAbstract;
-use \titon\log\Exception;
+use \titon\libs\readers\ReaderException;
 
 /**
  * A reader that loads its configuration from an YAML file.
  * Must have the PECL YAML module installed.
  *
- * @package	titon.core.readers
- * @uses	titon\log\Exception
+ * @package	titon.libs.readers.core
+ * @uses	titon\libs\readers\ReaderException
  * 
  * @link	http://php.net/yaml
  */
@@ -35,20 +35,20 @@ class YamlReader extends ReaderAbstract {
 	 * Parse the file contents.
 	 *
 	 * @access public
+	 * @param string $path
 	 * @return void
 	 */
-	public function read() {
-		if (!function_exists('yaml_parse_file')) {
-			throw new Exception('YAML PECL extension must be installed to use the YamlReader.');
+	public function read($path) {
+		if (!extension_loaded('yaml')) {
+			throw new ReaderException('YAML PECL extension must be installed to use the YamlReader.');
+		}
+		
+		$data = yaml_parse_file($path);
 
+		if (is_array($data)) {
+			$this->configure($data);
 		} else {
-			$data = yaml_parse_file($this->_path);
-
-			if (is_array($data)) {
-				$this->configure($data);
-			} else {
-				throw new Exception('Reader failed to parse YAML configuration.');
-			}
+			throw new ReaderException('Reader failed to parse YAML configuration.');
 		}
 	}
 

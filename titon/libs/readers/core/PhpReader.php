@@ -10,16 +10,16 @@
 namespace titon\libs\readers\core;
 
 use \titon\libs\readers\ReaderAbstract;
-use \titon\log\Exception;
+use \titon\libs\readers\ReaderException;
 
 /**
  * A reader that loads its configuration from a PHP file.
  * The PHP file must contain a return statement that returns an array.
  *
- * @package	titon.core.readers
- * @uses	titon\log\Exception
+ * @package	titon.libs.readers.core
+ * @uses	titon\libs\readers\ReaderException
  * 
- * @link	http://php.net/manual/en/function.include.php
+ * @link	http://php.net/manual/function.include.php
  */
 class PhpReader extends ReaderAbstract {
 
@@ -35,15 +35,16 @@ class PhpReader extends ReaderAbstract {
 	 * Parse the file contents.
 	 *
 	 * @access public
+	 * @param string $path
 	 * @return void
 	 */
-	public function read() {
-		$data = include_once $this->_path;
+	public function read($path) {
+		$data = include_once $path;
 		
 		if (is_array($data)) {
 			$this->configure($data);
 		} else {
-			throw new Exception('Reader failed to import PHP configuration.');
+			throw new ReaderException('Reader failed to import PHP configuration.');
 		}
 	}
 

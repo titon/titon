@@ -10,14 +10,14 @@
 namespace titon\libs\readers\core;
 
 use \titon\libs\readers\ReaderAbstract;
-use \titon\log\Exception;
+use \titon\libs\readers\ReaderException;
 
 /**
  * A reader that loads its configuration from a JSON file.
  * Must have the JSON module installed.
  *
- * @package	titon.core.readers
- * @uses	titon\log\Exception
+ * @package	titon.libs.readers.core
+ * @uses	titon\libs\readers\ReaderException
  * 
  * @link	http://php.net/json_decode
  */
@@ -35,15 +35,16 @@ class JsonReader extends ReaderAbstract {
 	 * Parse the file contents.
 	 *
 	 * @access public
+	 * @param string $path
 	 * @return void
 	 */
-	public function read() {
-		$data = json_decode(file_get_contents($this->_path), true);
+	public function read($path) {
+		$data = @json_decode(file_get_contents($path), true);
 
 		if (is_array($data)) {
 			$this->configure($data);
 		} else {
-			throw new Exception('Reader failed to decode JSON configuration.');
+			throw new ReaderException('Reader failed to decode JSON configuration.');
 		}
 	}
 

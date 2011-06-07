@@ -72,24 +72,19 @@ class Config {
 	 * Uses the defined reader to parse the file.
 	 *
 	 * @access public
-	 * @param string $file
+	 * @param string $key
 	 * @param Reader $reader
 	 * @return Config
 	 * @chainable
 	 */
-	public function load($file, Reader $reader) {
-		$file = Inflector::filename($file, $reader->extension());
+	public function load($key, Reader $reader) {
+		$file = Inflector::filename($key, $reader->extension(), false);
 		$path = APP_CONFIG .'sets'. DS . $file;
 
 		if (is_file($path)) {
-			$reader->setPath($path);
-			$reader->read();
+			$reader->read($path);
 
-			if (!isset($this->_config[$file])) {
-				$this->_config[$file] = array();
-			}
-
-			$this->_config[$file] = $reader->toArray() + $this->_config[$file];
+			$this->_config[$key] = $reader->config();
 
 		} else {
 			throw new CoreException(sprintf('Configuration file %s does not exist.', $file));

@@ -12,7 +12,7 @@ namespace titon\libs\readers;
 /**
  * Interface for all Config Readers.
  *
- * @package	titon.library.readers
+ * @package	titon.libs.renders
  */
 interface Reader {
 
@@ -28,25 +28,9 @@ interface Reader {
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @return void
-	 */
-	public function read();
-
-	/**
-	 * Set the path to the file.
-	 *
-	 * @access public
 	 * @param string $path
 	 * @return void
 	 */
-	public function setPath($path);
-
-	/**
-	 * The reader must return the loaded config file as an array.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function toArray();
+	public function read($path);
 
 }

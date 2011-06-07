@@ -10,14 +10,14 @@
 namespace titon\libs\readers\core;
 
 use \titon\libs\readers\ReaderAbstract;
-use \titon\log\Exception;
+use \titon\libs\readers\ReaderException;
 
 /**
  * A reader that loads its configuration from an XML file.
  * Must have the SimpleXML module installed.
  *
- * @package	titon.core.readers
- * @uses	titon\log\Exception
+ * @package	titon.libs.readers.core
+ * @uses	titon\libs\readers\ReaderException
  * 
  * @link	http://php.net/simplexml
  */
@@ -35,15 +35,16 @@ class XmlReader extends ReaderAbstract {
 	 * Parse the file contents.
 	 *
 	 * @access public
+	 * @param string $path
 	 * @return void
 	 */
-	public function read() {
-		$data = @simplexml_load_file($this->_path);
+	public function read($path) {
+		$data = @simplexml_load_file($path);
 
 		if ($data !== false) {
-			$this->configure($data);
+			$this->configure($this->toArray($data));
 		} else {
-			throw new Exception('Reader failed to parse XML configuration.');
+			throw new ReaderException('Reader failed to parse XML configuration.');
 		}
 	}
 
@@ -54,54 +55,43 @@ class XmlReader extends ReaderAbstract {
 	 * @param object $xml
 	 * @return array
 	 */
-	public function toArray($xml = null) {
-		if ($xml === null) {
-			$xml = $this->_config;
+	public function toArray($xml) {
+		if (is_string($xml)) {
+			$xml = @simplexml_load_string($xml);
 		}
 
-		if ($xml->count() === 0) {
-			return (string)$xml;
+		if ($xml->count() <= 0) {
+			return (string) $xml;
 		}
 
 		$array = array();
 
-		// Has children
 		foreach ($xml->children() as $element => $node) {
-			$total = count($xml->{$element});
-			$attributes = $node->attributes();
+			$data = array();
 
-			// Has attributes
-			if (count($attributes) > 0) {
-				$attr = array();
-				foreach ($attributes as $key => $value) {
-					$attr[$key] = (string)$value;
-				}
+			if (!isset($array[$element])) {
+				$array[$element] = "";
+			}
 
-				// Single node
-				if ($node->count() === 0) {
-					$array[$element] = array(
-						'value' => (string)$node,
-						'_attributes' => $attr
-					);
+			if (!$node->attributes()) {
+				$data = $this->toArray($node);
 
-				// Multiple nodes
-				} else {
-					if ($total > 1) {
-						$array[$element][] = $this->toArray($node);
-					} else {
-						$array[$element] = $this->toArray($node);
-					}
-
-					$array[$element]['_attributes'] = $attr;
-				}
-
-			// Just a value
 			} else {
-				if ($total > 1) {
-					$array[$element][] = $this->toArray($node);
+				if ($node->count() > 0) {
+					$data = $data + $this->toArray($node);
 				} else {
-					$array[$element] = $this->toArray($node);
+					$data['value'] = (string) $node;
 				}
+
+				foreach ($node->attributes() as $attr => $value) {
+					$data[$attr] = (string) $value;
+				}
+			}
+
+			if (count($xml->{$element}) > 1) {
+				$array[$element][] = $data;
+			} else {
+				$array[$element] = $data;
 			}
 		}
 

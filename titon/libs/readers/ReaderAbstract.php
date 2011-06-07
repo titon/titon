@@ -13,9 +13,9 @@ use \titon\base\Base;
 use \titon\libs\readers\Reader;
 
 /**
- * Interface for all Config Readers.
+ * Abstract class that implements the extension detection for Readers.
  *
- * @package titon.library.readers
+ * @package	titon.libs.readers
  */
 abstract class ReaderAbstract extends Base implements Reader {
 
@@ -28,14 +28,6 @@ abstract class ReaderAbstract extends Base implements Reader {
 	protected $_extension;
 
 	/**
-	 * Path to the configuration file.
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $_path;
-
-	/**
 	 * Return the file type extension for the reader.
 	 *
 	 * @access public
@@ -43,29 +35,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @final
 	 */
 	final public function extension() {
-		return $this->_extension;
+		return trim($this->_extension, '.');
 	}
-
-	/**
-	 * Set the path to the file.
-	 *
-	 * @access public
-	 * @param string $path
-	 * @return void
-	 * @final
-	 */
-	final public function setPath($path) {
-		$this->_path = $path;
-	}
-
-	/**
-	 * The reader must return the loaded config file as an array.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function toArray() {
-		return $this->_config;
-	}
-
+	
 }
