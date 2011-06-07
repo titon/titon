@@ -16,6 +16,6 @@ use \titon\libs\routes\RouteAbstract;
  *
  * @package	titon.library.routes.core
  */
-class Route extends RouteAbstract {
+class DefaultRoute extends RouteAbstract {
 	
 }

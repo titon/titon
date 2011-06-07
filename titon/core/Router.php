@@ -9,7 +9,7 @@
 
 namespace titon\core;
 
-use \titon\libs\routes\core\Route;
+use \titon\libs\routes\core\DefaultRoute;
 use \titon\libs\routes\Route;
 
 /**
@@ -241,11 +241,11 @@ class Router {
 		));
 
 		// Map default internal routes
-		$this->map('moduleControllerActionExt', new Route('/{module}/{controller}/{action}.{ext}'));
-		$this->map('moduleControllerAction', new Route('/{module}/{controller}/{action}'));
-		$this->map('moduleController', new Route('/{module}/{controller}'));
-		$this->map('module', new Route('/{module}'));
-		$this->map('root', new Route('/'), array(), array('static' => true));
+		$this->map('moduleControllerActionExt', new DefaultRoute('/{module}/{controller}/{action}.{ext}'));
+		$this->map('moduleControllerAction', new DefaultRoute('/{module}/{controller}/{action}'));
+		$this->map('moduleController', new DefaultRoute('/{module}/{controller}'));
+		$this->map('module', new DefaultRoute('/{module}'));
+		$this->map('root', new DefaultRoute('/'), array(), array('static' => true));
 
 		// Match the current URL to a route
 		$this->_current = $this->match($path);

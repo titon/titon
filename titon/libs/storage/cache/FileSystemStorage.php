@@ -27,8 +27,12 @@ class FileSystemStorage extends StorageAbstract {
 	 * @param int $step
 	 * @return boolean
 	 */
-	public function decrement($key, $step) {
+	public function decrement($key, $step = 1) {
+		if ($value = $this->get($key)) {
+			return $this->set($key, ((int) $value - (int) $step));
+		}
 		
+		return false;
 	}
 	
 	/**
@@ -52,8 +56,10 @@ class FileSystemStorage extends StorageAbstract {
 			
 			$path = $this->_path() . $file;
 			
-			if ($expires && filemtime($path) >= $expires) {
-				unlink($path);
+			if ($expires) {
+				if (filemtime($path) >= $expires) {
+					unlink($path);
+				}
 			} else {
 				unlink($path);
 			}
@@ -76,9 +82,11 @@ class FileSystemStorage extends StorageAbstract {
 			$value = file_get_contents($this->_path($key));
 			$pipe = strpos($value, '|');
 			$timestamp = substr($value, 0, $pipe);
-			
+
 			if ($timestamp >= time()) {
-				return $this->unserialize(substr($value, $pipe, strlen($value)));
+				return $this->unserialize(substr($value, ($pipe + 1), strlen($value)));
+			} else {
+				$this->remove($key);
 			}
 		}
 		
@@ -104,29 +112,21 @@ class FileSystemStorage extends StorageAbstract {
 	 * @param int $step
 	 * @return boolean
 	 */
-	public function increment($key, $step) {
+	public function increment($key, $step = 1) {
+		if ($value = $this->get($key)) {
+			return $this->set($key, ((int) $value + (int) $step));
+		}
 		
+		return false;
 	}
 	
 	/**
-	 * Initialize the engine by verifying the cache directories exist and are writable.
+	 * Always use serialization with file system caching.
 	 * 
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
-		$path = $this->_path();
-		
-		// Does folder exist?
-		if (!file_exists($path)) {
-			mkdir($path, 0777, true);
-			
-		// Is folder writable?
-		} else if (!is_writable($path)) {
-			chmod($path, 0777);
-		}
-		
-		// Always use serialization 
 		$this->configure('serialize', true);
 	}
 	
@@ -138,11 +138,11 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		clearstatcache();
-		
 		if ($this->has($key)) {
 			return unlink($this->_path($key));
 		}
+		
+		clearstatcache();
 		
 		return false;
 	}
@@ -158,19 +158,28 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function set($key, $value, $expires = null) {
 		$value = $this->expires($expires) ."|". $this->serialize($value);
-		
+
 		return file_put_contents($this->_path($key), $value, LOCK_EX);
 	}
 	
 	/**
-	 * Return the full path to the cache directory.
+	 * Return the full path to the cache directory. Verify the cache directories exist and are writable.
 	 * 
 	 * @access protected
 	 * @param string $key
 	 * @return string
 	 */
 	protected function _path($key = null) {
-		$path = APP_TEMP .'cache'. DS . $self->config('storage') . DS;
+		$path = APP_TEMP .'cache'. DS . $this->config('storage') . DS;
+		
+		// Does folder exist?
+		if (!file_exists($path)) {
+			mkdir($path, 0777, true);
+			
+		// Is folder writable?
+		} else if (!is_writable($path)) {
+			chmod($path, 0777);
+		}
 		
 		if ($key) {
 			$path .= $this->key($key);
