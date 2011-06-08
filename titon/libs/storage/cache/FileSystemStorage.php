@@ -39,16 +39,11 @@ class FileSystemStorage extends StorageAbstract {
 	 * Empty the cache.
 	 * 
 	 * @access public
-	 * @param mixed $expires
 	 * @return boolean
 	 */
-	public function flush($expires = null) {
+	public function flush() {
 		$dir = dir($this->_path());
-		
-		if ($expires) {
-			$expires = $this->expires($expires);
-		}
-		
+
 		while (($file = $dir->read()) !== false) {
 			if ($file == '.' || $file == '..') {
 				continue;
@@ -56,11 +51,7 @@ class FileSystemStorage extends StorageAbstract {
 			
 			$path = $this->_path() . $file;
 			
-			if ($expires) {
-				if (filemtime($path) >= $expires) {
-					unlink($path);
-				}
-			} else {
+			if (file_exists($path)) {
 				unlink($path);
 			}
 		}
@@ -121,13 +112,22 @@ class FileSystemStorage extends StorageAbstract {
 	}
 	
 	/**
-	 * Always use serialization with file system caching.
+	 * Always use serialization with file system caching. Verify the cache directories exist and are writable.
 	 * 
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
 		$this->configure('serialize', true);
+		
+		// Does folder exist?
+		if (!file_exists($path)) {
+			mkdir($path, 0777, true);
+			
+		// Is folder writable?
+		} else if (!is_writable($path)) {
+			chmod($path, 0777);
+		}
 	}
 	
 	/**
@@ -163,7 +163,7 @@ class FileSystemStorage extends StorageAbstract {
 	}
 	
 	/**
-	 * Return the full path to the cache directory. Verify the cache directories exist and are writable.
+	 * Return the full path to the cache directory.
 	 * 
 	 * @access protected
 	 * @param string $key
@@ -171,16 +171,7 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	protected function _path($key = null) {
 		$path = APP_TEMP .'cache'. DS . $this->config('storage') . DS;
-		
-		// Does folder exist?
-		if (!file_exists($path)) {
-			mkdir($path, 0777, true);
-			
-		// Is folder writable?
-		} else if (!is_writable($path)) {
-			chmod($path, 0777);
-		}
-		
+
 		if ($key) {
 			$path .= $this->key($key);
 		}

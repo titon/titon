@@ -28,6 +28,38 @@ class Cache {
 	 * @var array
 	 */
 	protected $_storage = array();
+	
+	/**
+	 * Decrement a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @param string $storage
+	 * @return boolean
+	 */
+	public function decrement($key, $step = 1, $storage = 'default') {
+		return $this->storage($storage)->decrement($key, $step);
+	}
+		
+	/**
+	 * Empty the cache.
+	 * 
+	 * @access public
+	 * @param string $storage
+	 * @return boolean
+	 */
+	public function flush($storage = null) {
+		if ($storage) {
+			return $this->storage($storage)->flush();
+		} else {
+			foreach ($this->_storage as $storage) {
+				$storage->flush();
+			}
+		}
+		
+		return true;
+	}
 
 	/**
 	 * Get data from the storage engine defined by the key.
@@ -54,6 +86,31 @@ class Cache {
 	}
 	
 	/**
+	 * Increment a value within the cache.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @param string $storage
+	 * @return boolean
+	 */
+	public function increment($key, $step = 1, $storage = 'default') {
+		return $this->storage($storage)->increment($key, $step);
+	}
+	
+	/**
+	 * Remove the item if it exists and return true, else return false.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param string $storage
+	 * @return boolean
+	 */
+	public function remove($key, $storage = 'default') {
+		return $this->storage($storage)->remove($key);
+	}
+	
+	/**
 	 * Set data to the defined storage engine.
 	 * 
 	 * @access public
@@ -77,7 +134,7 @@ class Cache {
 	 * @chainable
 	 */
 	public function setup($name, Storage $storage) {
-		$storage->configure('storage', $name);
+		$storage->configure('storage', $name)->initialize();
 		
 		$this->_storage[$name] = $storage;
 		
