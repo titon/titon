@@ -106,7 +106,7 @@ class Base {
 	 * @access public
 	 * @param string|array $key
 	 * @param mixed $value
-	 * @return this
+	 * @return Base
 	 * @chainable
 	 * @final
 	 */
