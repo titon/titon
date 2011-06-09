@@ -43,7 +43,7 @@ class String extends Type {
 		}
 
 		if (!empty($encoding)) {
-			$this->_encoding = strtoupper(str_replace(' ', '-', (string) $encoding));
+			$this->_encoding = mb_strtoupper(str_replace(' ', '-', (string) $encoding));
 		}
 	}
 
@@ -468,7 +468,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toCamelCase() {
-		$this->_value = str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $this->_value)))));
+		$this->_value = str_replace(' ', '', ucwords(mb_strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $this->_value)))));
 
 		return $this;
 	}

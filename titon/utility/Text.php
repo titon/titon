@@ -51,6 +51,11 @@ class Text {
 	public static function listing($items, $and = 'and') {
 		if (is_array($items)) {
 			$lastItem = array_pop($items);
+			
+			if (count($items) == 1) {
+				return $lastItem;
+			}
+			
 			$items = implode(', ', $items);
 			$items = $items .' '. $and .' '. $lastItem;
 		}
@@ -71,7 +76,7 @@ class Text {
 		if (mb_strlen($text) > $limit) {
 			$pre = mb_substr($text, 0, ($limit / 2));
 			$suf = mb_substr($text, -($limit / 2));
-			$text = $pre .' ... '. $suf;
+			$text = $pre .' … '. $suf;
 		}
 
 		return $text;
@@ -87,12 +92,12 @@ class Text {
 	 * @return string
 	 * @static
 	 */
-	public static function truncate($text, $limit = 25, $ending = '...') {
+	public static function truncate($text, $limit = 25, $suffix = '…') {
 		if (mb_strlen($text) > $limit) {
 			$text = strip_tags($text);
 			$text = mb_substr($text, 0, $limit);
 			$text = mb_substr($text, 0, -(mb_strlen(mb_strrchr($text, ' '))));
-			$text = $text . $ending;
+			$text = $text . $suffix;
 		}
 
 		return $text;

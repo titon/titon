@@ -80,11 +80,11 @@ class FileSystemStorage extends StorageAbstract {
 	public function get($key) {
 		if ($this->has($key)) {
 			$value = file_get_contents($this->_path($key));
-			$pipe = strpos($value, '|');
-			$timestamp = substr($value, 0, $pipe);
+			$pipe = mb_strpos($value, '|');
+			$timestamp = mb_substr($value, 0, $pipe);
 
 			if ($timestamp >= time()) {
-				return $this->unserialize(substr($value, ($pipe + 1), strlen($value)));
+				return $this->unserialize(mb_substr($value, ($pipe + 1), mb_strlen($value)));
 			} else {
 				$this->remove($key);
 			}
