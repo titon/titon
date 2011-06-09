@@ -130,12 +130,24 @@ class Logger {
 	public static function write($message, $level = 0) {
 		if (!empty($message)) {
 			switch ($level) {
-				case self::CRITICAL:	$type = 'Critical'; break;
-				case self::ALERT:		$type = 'Alert'; break;
-				case self::WARNING:		$type = 'Warning'; break;
-				case self::NOTICE:		$type = 'Notice'; break;
-				case self::INFO:		$type = 'Info'; break;
-				case self::DEBUG:		$type = 'Debug'; break;
+				case self::CRITICAL:
+					$type = 'Critical'; 
+				break;
+				case self::ALERT:
+					$type = 'Alert'; 
+				break;
+				case self::WARNING:
+					$type = 'Warning'; 
+				break;
+				case self::NOTICE:
+					$type = 'Notice'; 
+				break;
+				case self::INFO:
+					$type = 'Info'; 
+				break;
+				case self::DEBUG:
+					$type = 'Debug'; 
+				break;
 				default:
 					$type = 'Internal';
 				break;
@@ -147,10 +159,8 @@ class Logger {
 				$file = self::ERROR_LOG;
 				$message = '['. $type .'] '. $message;
 			}
-
-			$log = fopen(APP_TEMP . $file, 'ab');
-			fwrite($log, $message ."\n");
-			fclose($log);
+			
+			file_put_contents(APP_TEMP. $file, $message ."\n", FILE_APPEND | LOCK_EX);
 
 			if ($level >= self::WARNING) {
 				$email = Titon::config()->get('Debug.email');

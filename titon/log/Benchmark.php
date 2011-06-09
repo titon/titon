@@ -25,11 +25,11 @@ class Benchmark {
 	/**
 	 * User and system initiated benchmarking tests.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var array
 	 * @static
 	 */
-	private static $__benchmarks = array();
+	protected static $_benchmarks = array();
 
 	/**
 	 * Disable the class to enforce static methods.
@@ -48,7 +48,7 @@ class Benchmark {
 	 * @static
 	 */
 	public static function display($key = null) {
-		if (empty(self::$__benchmarks[$key])) {
+		if (empty(self::$_benchmarks[$key])) {
 			return false;
 		}
 
@@ -71,10 +71,10 @@ class Benchmark {
 	 */
 	public static function get($key = null) {
 		if (empty($key)) {
-			$benchmarks = self::$__benchmarks;
+			$benchmarks = self::$_benchmarks;
 			
-		} else if (isset(self::$__benchmarks[$key])) {
-			$benchmarks = array(self::$__benchmarks[$key]);
+		} else if (isset(self::$_benchmarks[$key])) {
+			$benchmarks = array(self::$_benchmarks[$key]);
 		}
 
 		if (!empty($benchmarks)) {
@@ -101,8 +101,8 @@ class Benchmark {
 	 * @static
 	 */
 	public static function start($key = 'benchmark') {
-		if (Titon::config()->get('Debug.level') > 0) {
-			self::$__benchmarks[$key] = array(
+		if (error_reporting() > 0) {
+			self::$_benchmarks[$key] = array(
 				'startTime'		=> microtime(true),
 				'startMemory'	=> memory_get_usage(true),
 			);
@@ -119,21 +119,21 @@ class Benchmark {
 	 * @static
 	 */
 	public static function stop($key = 'benchmark', $log = false) {
-		if (Titon::config()->get('Debug.level') > 0) {
-			if (empty(self::$__benchmarks[$key])) {
+		if (error_reporting() > 0) {
+			if (empty(self::$_benchmarks[$key])) {
 				return false;
 			}
 
-			self::$__benchmarks[$key] = array(
+			self::$_benchmarks[$key] = array(
 				'endTime'	=> microtime(true),
 				'endMemory'	=> memory_get_usage(true)
-			) + self::$__benchmarks[$key];
+			) + self::$_benchmarks[$key];
 
 			if ($log) {
 				Logger::debug(self::display($key));
 			}
 
-			return self::$__benchmarks[$key];
+			return self::$_benchmarks[$key];
 		}
 	}
 
