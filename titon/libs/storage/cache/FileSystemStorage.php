@@ -13,9 +13,18 @@ use \titon\libs\storage\StorageAbstract;
 use \titon\libs\storage\StorageException;
 
 /**
- * @todo
+ * A storage engine that uses the servers local filesystem to store its cached items.
+ * This engine can be installed using the Cache::setup() method.
+ * 
+ *		new FileSystemStorage(array(
+ *			'prefix' => 'sql_',
+ *			'expires' => '+1 day'
+ *		));
+ * 
+ * A sample configuration can be found above, and the following options are available: prefix, expires.
  *
  * @package	titon.libs.storage.cache
+ * @uses	titon\libs\storage\StorageException
  */
 class FileSystemStorage extends StorageAbstract {
 	
@@ -119,6 +128,8 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function initialize() {
 		$this->configure('serialize', true);
+		
+		$path = $this->_path();
 		
 		// Does folder exist?
 		if (!file_exists($path)) {
