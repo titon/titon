@@ -10,6 +10,7 @@
 namespace titon\base\types;
 
 use \titon\base\types\Type;
+use \Closure;
 
 /**
  * The Map type allows for the modification, manipulation and traversal of an array through the use of an object like interface.
@@ -34,14 +35,6 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @var array
 	 */
 	protected $_depth = null;
-
-	/**
-	 * Length of the array.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_length = null;
 
 	/**
 	 * Type cast to an array.
@@ -587,14 +580,18 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	/**
-	 * Alias for count().
+	 * Return the length of the array.
 	 *
 	 * @access public
 	 * @param bool $reset
 	 * @return int
 	 */
 	public function length($reset = false) {
-		return $this->count($reset);
+		if ($this->_length === null || $reset) {
+			$this->_length = count($this->_value);
+		}
+
+		return $this->_length;
 	}
 
 	/**
@@ -892,7 +889,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return array
 	 */
 	public function splice($offset, $length, array $replacement) {
-		return array_splice($this->_value, (int)$offset, (int)$length, $replacement);
+		return array_splice($this->_value, (int) $offset, (int) $length, $replacement);
 	}
 	
 	/**
@@ -1135,11 +1132,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return bool
 	 */
 	public function count($reset = false) {
-		if ($this->_length === null || $reset) {
-			$this->_length = count($this->_value);
-		}
-
-		return $this->_length;
+		return $this->length($reset);
 	}
 
 }

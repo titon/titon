@@ -11,6 +11,7 @@ namespace titon\base\types;
 
 use \titon\base\types\Type;
 use \titon\base\BaseException;
+use \Closure;
 
 /**
  * The Integer type allows for the twiddling and calculation of numbers (non-floats) and provides support for generic integer bases.
@@ -27,14 +28,6 @@ class Integer extends Type {
 	 * @var int
 	 */
 	protected $_base = 10;
-
-	/**
-	 * Total bit count in binary form.
-	 *
-	 * @access protected
-	 * @var int
-	 */
-	protected $_size;
 	
 	/**
 	 * Store the number value and base.
@@ -69,13 +62,13 @@ class Integer extends Type {
 	}
 
 	/**
-     * Returns the total 1's in the binary representation of the specified value.
+	 * Returns the total 1's in the binary representation of the specified value.
 	 * This function is sometimes referred to as the population count.
 	 *
 	 * @access public
 	 * @return int
-     */
-    public function bitCount() {
+	 */
+	public function bitCount() {
 		$value = ($this->_base != 2) ? $this->toBinary() : $this->_value;
 
 		return substr_count($value, '1');
@@ -245,11 +238,11 @@ class Integer extends Type {
 	 * @return int
 	 */
 	public function length($reset = false) {
-		if ($this->_size === null || $reset) {
-			$this->_size = (int) strlen($this->toBinary());
+		if ($this->_length === null || $reset) {
+			$this->_length = (int) strlen($this->toBinary());
 		}
 
-		return $this->_size;
+		return $this->_length;
 	}
 
 	/**

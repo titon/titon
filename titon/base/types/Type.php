@@ -17,6 +17,14 @@ namespace titon\base\types;
 class Type implements \Serializable {
 
 	/**
+	 * Length of the current value.
+	 *
+	 * @access protected
+	 * @var int
+	 */
+	protected $_length;
+
+	/**
 	 * Raw unchanged value.
 	 *
 	 * @access protected
@@ -71,7 +79,7 @@ class Type implements \Serializable {
 	 * @return mixed
 	 */
 	public function serialize() {
-		return $this->_value;
+		return serialize($this->_value);
 	}
 
 	/**
@@ -95,17 +103,6 @@ class Type implements \Serializable {
 	}
 
 	/**
-	 * Overwrite the value.
-	 *
-	 * @access public
-	 * @param mixed $value
-	 * @return void
-	 */
-	public function set($value) {
-		$this->_value = $value;
-	}
-
-	/**
 	 * Define basic to string.
 	 *
 	 * @access public
@@ -123,7 +120,7 @@ class Type implements \Serializable {
 	 * @return void
 	 */
 	public function unserialize($value) {
-		$this->_value = $value;
+		$this->_value = unserialize($value);
 	}
 
 	/**

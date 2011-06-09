@@ -20,14 +20,6 @@ use \titon\base\types\Type;
 class String extends Type {
 
 	/**
-	 * Length of the string.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_length = null;
-
-	/**
 	 * Current encoding.
 	 *
 	 * @access protected

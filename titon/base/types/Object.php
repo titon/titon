@@ -10,6 +10,7 @@
 namespace titon\base\types;
 
 use \titon\base\BaseException;
+use \Closure;
 
 /**
  * The Object type allows for the dynamic creation of classes during runtime, with support for properties and methods. 
