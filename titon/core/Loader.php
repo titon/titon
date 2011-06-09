@@ -126,7 +126,7 @@ class Loader {
 		foreach (array(ROOT, APP, TITON, VENDORS, LIBRARY) as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
-			if (is_file($source)) {
+			if (file_exists($source)) {
 				include_once $source;
 				
 				return true;

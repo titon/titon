@@ -92,7 +92,7 @@ class Environment {
 	public function initialize() {
 		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current(), 'php', false);
 
-		if (is_file($path)) {
+		if (file_exists($path)) {
 			include_once $path;
 		}
 	}

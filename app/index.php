@@ -35,7 +35,7 @@ define('TITON', ROOT .'titon'. DS);
 /**
  * Load the core Titon files and initialize dispatcher; throw fatal error if libraries could not be found.
  */
-if (!is_file(TITON .'bootstrap.php')) {
+if (!file_exists(TITON .'bootstrap.php')) {
 	trigger_error('Titon: Framework bootstrap failed to load the core libraries. Please check your paths and configuration.', E_USER_ERROR);
 }
 

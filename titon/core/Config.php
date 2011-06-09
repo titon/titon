@@ -81,7 +81,7 @@ class Config {
 		$file = Inflector::filename($key, $reader->extension(), false);
 		$path = APP_CONFIG .'sets'. DS . $file;
 
-		if (is_file($path)) {
+		if (file_exists($path)) {
 			$reader->read($path);
 
 			$this->_config[$key] = $reader->config();

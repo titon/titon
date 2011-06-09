@@ -46,7 +46,7 @@ class Application {
 		foreach (scandir(APP_MODULES) as $module) {
 			$path = APP_MODULES . $module . DS .'bootstrap.php';
 			
-			if (is_file($path)) {
+			if (file_exists($path)) {
 				include_once $path;
 			}
 		}
