@@ -12,6 +12,13 @@ namespace app\config;
 use \titon\Titon;
 
 /**
+ * INI Settings
+ */
+
+// Multibyte - http://php.net/manual/book.mbstring.php
+ini_set('mbstring.func_overload', 7);
+
+/**
  * Environments
  *
  * From here you can define all types of environmental configurations and host mappings.

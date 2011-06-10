@@ -28,7 +28,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function camelize($string) {
-		return str_replace(' ', '', ucwords(mb_strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $string)))));
+		return str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $string)))));
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function normalize($string, $callback = 'ucwords') {
-		$string = mb_strtolower(str_replace('_', ' ', $string));
+		$string = strtolower(str_replace('_', ' ', $string));
 
 		if ($callback && function_exists($callback)) {
 			$string = $callback($string);
@@ -150,7 +150,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function underscore($string) {
-		return mb_strtolower(preg_replace('/(\w)([A-Z]{1})/', '$1_$2', preg_replace('/[^_A-Za-z0-9\s]+/', '', $string)));
+		return strtolower(preg_replace('/(\w)([A-Z]{1})/', '$1_$2', preg_replace('/[^_A-Za-z0-9\s]+/', '', $string)));
 	}
 
 	/**
@@ -165,7 +165,7 @@ class Inflector {
 	public static function variable($string) {
 		$string = preg_replace('/[^_A-Za-z0-9]+/', '', $string);
 
-		if (is_numeric(mb_substr($string, 0, 1))) {
+		if (is_numeric(substr($string, 0, 1))) {
 			$string = '_'. $string;
 		}
 

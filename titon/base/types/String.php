@@ -43,7 +43,7 @@ class String extends Type {
 		}
 
 		if (!empty($encoding)) {
-			$this->_encoding = mb_strtoupper(str_replace(' ', '-', (string) $encoding));
+			$this->_encoding = strtoupper(str_replace(' ', '-', (string) $encoding));
 		}
 	}
 
@@ -162,7 +162,7 @@ class String extends Type {
 	 * @return bool
 	 */
 	public function endsWith($value) {
-		return ($this->extract(-mb_strlen($value)) == $value);
+		return ($this->extract(-strlen($value)) == $value);
 	}
 
 	/**
@@ -191,7 +191,7 @@ class String extends Type {
 	}
 
 	/**
-	 * Extracts a portion of a string (mb_substring).
+	 * Extracts a portion of a string (substring).
 	 *
 	 * @access public
 	 * @param int $offset
@@ -200,10 +200,10 @@ class String extends Type {
 	 */
 	public function extract($offset, $length = null) {
 		if ($length !== null) {
-			return mb_substr($this->_value, (int) $offset, $length);
+			return substr($this->_value, (int) $offset, $length);
 		}
 
-		return mb_substr($this->_value, (int) $offset);
+		return substr($this->_value, (int) $offset);
 	}
 
 	/**
@@ -217,10 +217,10 @@ class String extends Type {
 	 */
 	public function indexOf($needle, $strict = true, $offset = 0) {
 		if ($strict) {
-			return mb_strpos($this->_value, $needle, (int) $offset);
+			return strpos($this->_value, $needle, (int) $offset);
 		}
 
-		return mb_stripos($this->_value, $needle, (int) $offset);
+		return stripos($this->_value, $needle, (int) $offset);
 	}
 
 	/**
@@ -274,10 +274,10 @@ class String extends Type {
 	 */
 	public function lastIndexOf($needle, $strict = true, $offset = 0) {
 		if ($strict) {
-			return mb_strrpos($this->_value, $needle, (int) $offset);
+			return strrpos($this->_value, $needle, (int) $offset);
 		}
 
-		return mb_strripos($this->_value, $needle, (int) $offset);
+		return strripos($this->_value, $needle, (int) $offset);
 	}
 
 	/**
@@ -289,7 +289,7 @@ class String extends Type {
 	 */
 	public function length($reset = false) {
 		if ($this->_length === null || $reset) {
-			$this->_length = mb_strlen($this->_value);
+			$this->_length = strlen($this->_value);
 		}
 
 		return $this->_length;
@@ -420,7 +420,7 @@ class String extends Type {
 	 * @return bool
 	 */
 	public function startsWith($value) {
-		return ($this->extract(0, mb_strlen($value)) == $value);
+		return ($this->extract(0, strlen($value)) == $value);
 	}
 
 	/**
@@ -468,7 +468,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toCamelCase() {
-		$this->_value = str_replace(' ', '', ucwords(mb_strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $this->_value)))));
+		$this->_value = str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $this->_value)))));
 
 		return $this;
 	}
@@ -481,7 +481,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toLowerCase() {
-		$this->_value = mb_strtolower($this->_value);
+		$this->_value = strtolower($this->_value);
 
 		return $this;
 	}
@@ -494,7 +494,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toUpperCase() {
-		$this->_value = mb_strtoupper($this->_value);
+		$this->_value = strtoupper($this->_value);
 
 		return $this;
 	}

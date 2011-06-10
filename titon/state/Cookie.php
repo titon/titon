@@ -183,7 +183,7 @@ class Cookie {
         }
 
         $value = base64_encode(Config::get('App.salt') . $value);
-        $length = mb_strlen($value);
+        $length = strlen($value);
         $encrypted = '';
 
         for ($i = 0; $i < $length; ++$i) {

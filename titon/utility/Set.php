@@ -49,7 +49,7 @@ class Set {
 			$lines = explode("\n", $array);
 
 			foreach ($lines as $line) {
-				$indentation = (mb_strlen($line) - mb_strlen(ltrim($line))) / 4;
+				$indentation = (strlen($line) - strlen(ltrim($line))) / 4;
 
 				if ($indentation > $depth) {
 					$depth = $indentation;

@@ -29,7 +29,7 @@ class Text {
 		$return = '';
 
 		if ($length > 0) {
-			$totalChars = mb_strlen($characters) - 1;
+			$totalChars = strlen($characters) - 1;
 
 			for ($i = 0; $i <= $length; ++$i) {
 				$return .= $characters[rand(0, $totalChars)];
@@ -73,9 +73,9 @@ class Text {
 	 * @static
 	 */
 	public static function shorten($text, $limit = 25) {
-		if (mb_strlen($text) > $limit) {
-			$pre = mb_substr($text, 0, ($limit / 2));
-			$suf = mb_substr($text, -($limit / 2));
+		if (strlen($text) > $limit) {
+			$pre = substr($text, 0, ($limit / 2));
+			$suf = substr($text, -($limit / 2));
 			$text = $pre .' … '. $suf;
 		}
 
@@ -93,10 +93,10 @@ class Text {
 	 * @static
 	 */
 	public static function truncate($text, $limit = 25, $suffix = '…') {
-		if (mb_strlen($text) > $limit) {
+		if (strlen($text) > $limit) {
 			$text = strip_tags($text);
-			$text = mb_substr($text, 0, $limit);
-			$text = mb_substr($text, 0, -(mb_strlen(mb_strrchr($text, ' '))));
+			$text = substr($text, 0, $limit);
+			$text = substr($text, 0, -(strlen(strrchr($text, ' '))));
 			$text = $text . $suffix;
 		}
 
