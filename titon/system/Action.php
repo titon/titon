@@ -25,11 +25,10 @@ class Action extends Prototype {
 	/**
 	 * Controller object.
 	 *
-	 * @see Controller
-	 * @access protected
-	 * @var object
+	 * @access public
+	 * @var Controller
 	 */
-	protected $controller;
+	public $controller;
 
 	/**
 	 * Store the parent Controller.
@@ -49,7 +48,7 @@ class Action extends Prototype {
 	 * @return void
 	 */
 	public function run() {
-		throw new SystemException('You must define the run() method within your Action.');
+		throw new SystemException(spritnf('You must define the run() method within your %s Action.', get_class($this)));
 	}
 
 }

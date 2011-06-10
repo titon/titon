@@ -14,6 +14,7 @@ use \titon\base\Prototype;
 use \titon\system\Action;
 use \titon\system\View;
 use \titon\system\SystemException;
+use \titon\utility\Inflector;
 
 /**
  * The Controller (MVC) acts as the median between the request and response within the dispatch cycle.
@@ -28,20 +29,20 @@ use \titon\system\SystemException;
  *
  * @package	titon.system
  * @uses	titon\Titon
+ * @uses	titon\utility\Inflector
  */
 class Controller extends Prototype {
 
 	/**
 	 * View object.
 	 *
-	 * @see View
-	 * @access protected
-	 * @var object
+	 * @access public
+	 * @var View
 	 */
-	protected $view;
+	public $view;
 
 	/**
-	 * Controller configuration.
+	 * Configuration.
 	 *
 	 * @access protected
 	 * @var array
@@ -95,7 +96,7 @@ class Controller extends Prototype {
 	}
 
 	/**
-	 * Allows you to throw up an error page. The error template is derived from the $action passed.
+	 * Functionality to throw up an error page (like a 404). The error template is derived from the $action passed.
 	 *
 	 * @access public
 	 * @param string $action
@@ -107,7 +108,7 @@ class Controller extends Prototype {
 			if (is_numeric($action)) {
 				$args['pageTitle'] = $action;
 
-				$title = $this->response->getStatusCodes($action);
+				$title = $this->response->statusCodes($action);
 
 				if ($title !== null) {
 					$args['pageTitle'] .= ' - '. $title;
@@ -142,9 +143,9 @@ class Controller extends Prototype {
 	 */
 	final public function flash($message) {
 		if ($this->hasObject('Session')) {
-			$this->Session->set('app.flash', $message);
+			$this->Session->set('App.flash', $message);
 		} else {
-			$_SESSION = Set::insert($_SESSION, 'app.flash', $message);
+			$_SESSION = Set::insert($_SESSION, 'App.flash', $message);
 		}
 	}
 
@@ -164,23 +165,13 @@ class Controller extends Prototype {
 	}
 
 	/**
-	 * Triggered upon class instantiation, following __construct().
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-		$this->triggerCallback('initialize');
-	}
-
-	/**
 	 * Triggered before the Controller processes the requested Action.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function preProcess() {
-		$this->triggerCallback('preProcess');
+		$this->triggerObjects('preProcess');
 	}
 
 	/**
@@ -190,7 +181,7 @@ class Controller extends Prototype {
 	 * @return void
 	 */
 	public function postProcess() {
-		$this->triggerCallback('postProcess');
+		$this->triggerObjects('postProcess');
 	}
 
 	/**
