@@ -1,24 +1,23 @@
 <?php
 /**
- * The Event Listener loads the external object as well as defining skeleton callbacks.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 namespace titon\libs\listeners;
 
 use \titon\base\Base;
-use \titon\libs\events\Listener;
+use \titon\libs\listeners\Listener;
 use \titon\system\Controller;
 use \titon\system\View;
 
 /**
- * Event Listener Abstract
+ * Provides no functionality except the definition of skeleton methods.
  *
- * @package		Titon
- * @subpackage	Titon.Modules.Events
+ * @package	titon.libs.listeners
  */
 abstract class ListenerAbstract extends Base implements Listener {
 
@@ -28,7 +27,8 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * @access public
 	 * @return void
 	 */
-    public function preDispatch() {
+	public function preDispatch() {
+		return;
 	}
 
 	/**
@@ -38,6 +38,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * @return void
 	 */
 	public function postDispatch() {
+		return;
 	}
 
 	/**
@@ -48,6 +49,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * @return void
 	 */
 	public function preProcess(Controller $Controller) {
+		return;
 	}
 
 	/**
@@ -58,6 +60,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * @return void
 	 */
 	public function postProcess(Controller $Controller) {
+		return;
 	}
 
 	/**
@@ -68,6 +71,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * @return void
 	 */
 	public function preRender(View $View) {
+		return;
 	}
 
 	/**
@@ -78,6 +82,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * @return void
 	 */
 	public function postRender(View $View) {
+		return;
 	}
 
 }

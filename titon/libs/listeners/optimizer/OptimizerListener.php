@@ -12,11 +12,10 @@ namespace titon\libs\listeners\optimizer;
 use \titon\libs\listeners\ListenerAbstract;
 
 /**
- * The Optimizer is an Event that triggers the garbage collector and Gzip compression.
+ * The Optimizer is an event listener that triggers the garbage collection and gzip compression processes.
  * Extremely powerful for applications with heavy memory use and page loading times.
  *
- * @package     Titon
- * @subpackage  Titon.Modules.Events.Optimizer
+ * @package	titon.libs.listeners.optimizer
  */
 class OptimizerListener extends ListenerAbstract {
 
@@ -62,7 +61,7 @@ class OptimizerListener extends ListenerAbstract {
 	 * @access public
 	 * @return void
 	 */
-    public function enableGzipCompression() {
+	public function enableGzipCompression() {
 		if ($this->config('gzip')) {
 			$loaded = true;
 
@@ -83,7 +82,7 @@ class OptimizerListener extends ListenerAbstract {
 				ini_set('zlib.output_compression_level', $this->config('gzipLevel'));
 			}
 		}
-    }
+	}
 
 	/**
 	 * Enable Gzip and GC based on parent configuration.
@@ -91,10 +90,10 @@ class OptimizerListener extends ListenerAbstract {
 	 * @access public
 	 * @return void
 	 */
-    public function preDispatch() {
+	public function preDispatch() {
 		$this->enableGzipCompression();
 		$this->enableGarbageCollection();
-    }
+	}
 
 	/**
 	 * Disable the GC.
@@ -104,6 +103,6 @@ class OptimizerListener extends ListenerAbstract {
 	 */
 	public function postDispatch() {
 		$this->disableGarbageCollection();
-    }
+	}
 
 }
