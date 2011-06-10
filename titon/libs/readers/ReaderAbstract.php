@@ -9,7 +9,7 @@
 
 namespace titon\libs\readers;
 
-use \titon\base\Base;
+use \titon\base\Prototype;
 use \titon\libs\readers\Reader;
 
 /**
@@ -17,7 +17,7 @@ use \titon\libs\readers\Reader;
  *
  * @package	titon.libs.readers
  */
-abstract class ReaderAbstract extends Base implements Reader {
+abstract class ReaderAbstract extends Prototype implements Reader {
 
 	/**
 	 * File type extension.

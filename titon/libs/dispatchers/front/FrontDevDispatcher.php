@@ -30,7 +30,7 @@ class FrontDevDispatcher extends DispatcherAbstract {
 	 */
 	public function run() {
 		debug('Front development dispatcher');
-		
+
 		Benchmark::start('Dispatcher');
 		Titon::event()->execute('preDispatch');
 

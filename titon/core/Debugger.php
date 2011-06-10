@@ -136,10 +136,10 @@ class Debugger {
 		}
 		
 		if ($this->_exception instanceof Exception) {
-			return get_class($this->_exception);
+			return Titon::loader()->baseClass(get_class($this->_exception));
 		}
 		
-		return 'Uncaught Exception';
+		return 'Unknown Error';
 	}
 
 	/**

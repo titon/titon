@@ -19,7 +19,7 @@ use \titon\libs\dispatchers\DispatcherAbstract;
  */
 class FrontLightDispatcher extends DispatcherAbstract {
 
-    /**
+	/**
 	 * Dispatches the request internally with magic!
 	 *
 	 * @access public
@@ -40,4 +40,5 @@ class FrontLightDispatcher extends DispatcherAbstract {
 			$this->view->postRender();
 		}
 	}
+	
 }

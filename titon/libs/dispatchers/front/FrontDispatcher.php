@@ -21,7 +21,7 @@ use \titon\libs\dispatchers\DispatcherAbstract;
  */
 class FrontDispatcher extends DispatcherAbstract {
 
-    /**
+	/**
 	 * Dispatches the request internally with magic!
 	 *
 	 * @access public
@@ -29,7 +29,7 @@ class FrontDispatcher extends DispatcherAbstract {
 	 */
 	public function run() {
 		debug('Front dispatcher');
-		
+
 		Titon::event()->execute('preDispatch');
 
 		// Controller
