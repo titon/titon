@@ -55,6 +55,14 @@ class Debugger {
 	 * @var array
 	 */
 	protected $_errors = array();
+	
+	/**
+	 * The last uncaught exception.
+	 * 
+	 * @access protected
+	 * @var Exception
+	 */
+	protected $_exception;
 
 	/**
 	 * Initialize the error/exception/debug handling.
@@ -123,7 +131,15 @@ class Debugger {
 	 * @return string
 	 */
 	public function errorType($code = null) {
-		return isset($this->errorTypes[$code]) ? $this->errorTypes[$code] : 'Uncaught Exception';
+		if (isset($this->errorTypes[$code])) {
+			return $this->errorTypes[$code];
+		}
+		
+		if ($this->_exception instanceof Exception) {
+			return get_class($this->_exception);
+		}
+		
+		return 'Uncaught Exception';
 	}
 
 	/**
@@ -334,6 +350,8 @@ class Debugger {
 	 * @return void
 	 */
 	public function uncaught(Exception $exception) {
+		$this->_exception = $exception;
+		
 		$trace = $exception->getTrace();
 		$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] .'()';
 		$response = $method .': '. $exception->getMessage();
