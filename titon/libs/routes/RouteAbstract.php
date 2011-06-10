@@ -10,35 +10,47 @@
 namespace titon\libs\routes;
 
 use \titon\Titon;
+use \titon\base\Base;
 use \titon\libs\routes\Route;
-use \titon\log\Exception;
+use \titon\libs\routes\RouteException;
 
 /**
  * Represents the skeleton for an individual route. A route matches an internal URL that gets analyzed into multiple parts:
  * module, controller, action, extension, arguments and query parameters. A route can be used to mask a certain URL to
  * another internal destination.
  *
- * @package	titon.library.routes
+ * @package	titon.libs.routes
  * @uses	titon\Titon
- * @uses	titon\log\Exception
+ * @uses	titon\libs\routes\RouteException
  */
-abstract class RouteAbstract implements Route {
+abstract class RouteAbstract extends Base implements Route {
 
 	/**
 	 * Pre-defined regex patterns.
 	 */
-	const ALPHABETIC = '([a-z\_\-\+]+)';
+	const ALPHA = '([a-z\_\-\+]+)';
+	const ALNUM = '([a-z0-9\_\-\+]+)';
 	const NUMERIC = '([0-9]+)';
 	const WILDCARD = '(.*)';
 
 	/**
-	 * Request object.
-	 *
+	 * Configuration.
+	 * 
+	 *		secure:		When true, will only match if under HTTPS.
+	 *		static:		A static route that contains no patterns.
+	 *		method:		The types of acceptable HTTP methods. Defaults to all.
+	 *		patterns:	Custom defined regex patterns.
+	 * 
 	 * @access public
-	 * @var titon\net\Request
+	 * @var array
 	 */
-	public $request;
-
+	protected $_config = array(
+		'secure' => false,
+		'static' => false,
+		'method' => array(),
+		'patterns' => array()
+	);
+	
 	/**
 	 * The compiled regex pattern.
 	 *
@@ -56,14 +68,6 @@ abstract class RouteAbstract implements Route {
 	protected $_matches = array();
 
 	/**
-	 * The types of acceptable HTTP methods. Defaults to all.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_method = array();
-
-	/**
 	 * The path to match.
 	 *
 	 * @access protected
@@ -72,36 +76,12 @@ abstract class RouteAbstract implements Route {
 	protected $_path = '/';
 
 	/**
-	 * Custom defined regex patterns.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_patterns = array();
-
-	/**
 	 * Collection of route parameters.
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_route = array();
-
-	/**
-	 * When true, will only match if under HTTPS.
-	 *
-	 * @access protected
-	 * @var bool
-	 */
-	protected $_secure = false;
-
-	/**
-	 * A static route contains no patterns.
-	 *
-	 * @access protected
-	 * @var bool
-	 */
-	protected $_static = false;
 
 	/**
 	 * Custom defined tokens.
@@ -129,31 +109,18 @@ abstract class RouteAbstract implements Route {
 	 * @return void
 	 */
 	public function __construct($path, array $route = array(), array $config = array()) {
+		parent::__construct($config);
+		
 		$this->_path = $path;
 		$this->_route = Titon::router()->defaults($route);
-
-		// Store configuration
-		if (isset($config['secure'])) {
-			$this->_secure = (bool)$config['secure'];
-		}
-
-		if (isset($config['static'])) {
-			$this->_static = (bool)$config['static'];
-		}
-
-		if (isset($config['method'])) {
-			$this->_method = (array)$config['method'];
-		}
-
-		if (isset($config['patterns'])) {
-			$this->_patterns = $this->_patterns + (array)$config['patterns'];
-		}
 
 		// Compile when class is built
 		$this->compile();
 
 		// Grab the Request object
-		$this->request = Titon::registry()->factory('titon\net\Request');
+		$this->attachObject('request', function() {
+			return Titon::registry()->factory('titon\net\Request');
+		});
 	}
 
 	/**
@@ -169,6 +136,7 @@ abstract class RouteAbstract implements Route {
 
 		$path = ($this->_path != '/') ? rtrim($this->_path, '/') : $this->_path;
 		$compiled = str_replace(array('/', '.'), array('\/', '\.'), $path);
+		$patterns = $this->config('patterns');
 
 		if (!$this->isStatic()) {
 			preg_match_all('/([\{|\(|\[|\<])([a-z]+)([\}|\)|\]|\>])/i', $this->_path, $matches, PREG_SET_ORDER);
@@ -177,7 +145,7 @@ abstract class RouteAbstract implements Route {
 				foreach ($matches as $match) {
 					switch (true) {
 						case ($match[1] == '{' && $match[3] == '}'):
-							$compiled = str_replace($match[0], self::ALPHABETIC, $compiled);
+							$compiled = str_replace($match[0], self::ALPHA, $compiled);
 						break;
 
 						case ($match[1] == '[' && $match[3] == ']'):
@@ -189,10 +157,10 @@ abstract class RouteAbstract implements Route {
 						break;
 
 						case ($match[1] == '<' && $match[3] == '>'):
-							if (isset($this->_patterns[$match[2]])) {
-								$compiled = str_replace($match[0], $this->_patterns[$match[2]], $compiled);
+							if (isset($patterns[$match[2]])) {
+								$compiled = str_replace($match[0], $patterns[$match[2]], $compiled);
 							} else {
-								throw new Exception(sprintf('Pattern %s does not exist for route %s.', $match[2], $this->_path));
+								throw new RouteException(sprintf('Pattern %s does not exist for route %s.', $match[2], $this->_path));
 							}
 						break;
 					}
@@ -200,7 +168,7 @@ abstract class RouteAbstract implements Route {
 					$this->_tokens[] = $match[2];
 				}
 			} else {
-				$this->_static = true;
+				$this->configure('static', true);
 			}
 		}
 
@@ -252,7 +220,7 @@ abstract class RouteAbstract implements Route {
 							if (in_array($matches[0], $modules)) {
 								$this->_route['module'] = array_shift($matches);
 							} else {
-								throw new Exception(sprintf('Module %s has not been installed.', $matches[0]));
+								throw new RouteException(sprintf('Module %s has not been installed.', $matches[0]));
 							}
 						break;
 						case 'controller':
@@ -260,7 +228,7 @@ abstract class RouteAbstract implements Route {
 							if (in_array($matches[0], $controllers[$this->_route['module']])) {
 								$this->_route['controller'] = array_shift($matches);
 							} else {
-								throw new Exception(sprintf('Controller %s was not found within the %s module.', $matches[0], $this->_route['module']));
+								throw new RouteException(sprintf('Controller %s was not found within the %s module.', $matches[0], $this->_route['module']));
 							}
 						break;
 						default:
@@ -300,7 +268,9 @@ abstract class RouteAbstract implements Route {
 	 * @return bool
 	 */
 	public function isMethod() {
-		if (!empty($this->_method) && !in_array($this->request->method(), $this->_method)) {
+		$method = (array) $this->config('method');
+		
+		if (!empty($method) && !in_array($this->request->method(), $method)) {
 			return false;
 		}
 
@@ -314,7 +284,7 @@ abstract class RouteAbstract implements Route {
 	 * @return bool
 	 */
 	public function isSecure() {
-		if ($this->_secure && !$this->request->isSecure()) {
+		if ($this->config('secure') && !$this->request->isSecure()) {
 			return false;
 		}
 
@@ -328,7 +298,7 @@ abstract class RouteAbstract implements Route {
 	 * @return bool
 	 */
 	public function isStatic() {
-		return $this->_static;
+		return $this->config('static');
 	}
 
 	/**

@@ -10,9 +10,9 @@
 namespace titon\libs\routes;
 
 /**
- * Interface for all Routers.
+ * Interface for all Routes.
  *
- * @package	titon.library.routes
+ * @package	titon.libs.routes
  */
 interface Route {
 

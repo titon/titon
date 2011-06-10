@@ -12,9 +12,9 @@ namespace titon\libs\routes\core;
 use \titon\libs\routes\RouteAbstract;
 
 /**
- * Base route object. Inherits all its functionality from the RouteAbstract class.
+ * Default route object. Inherits all its functionality from the RouteAbstract class.
  *
- * @package	titon.library.routes.core
+ * @package	titon.libs.routes.core
  */
 class DefaultRoute extends RouteAbstract {
 	
