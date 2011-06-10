@@ -12,16 +12,16 @@ namespace titon\libs\dispatchers;
 /**
  * A required interface for all custom Dispatchers to implement.
  *
- * @package	titon.library.dispatchers
+ * @package	titon.libs.dispatchers
  */
 interface Dispatcher {
 
-    /**
-     * Primary method to run the dispatcher and process its logic.
-     *
-     * @access public
-     * @return void
-     */
-    public function run();
+	/**
+	 * Primary method to run the dispatcher and process its logic.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function run();
 
 }

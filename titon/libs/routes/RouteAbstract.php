@@ -10,7 +10,7 @@
 namespace titon\libs\routes;
 
 use \titon\Titon;
-use \titon\base\Base;
+use \titon\base\Prototype;
 use \titon\libs\routes\Route;
 use \titon\libs\routes\RouteException;
 
@@ -23,7 +23,7 @@ use \titon\libs\routes\RouteException;
  * @uses	titon\Titon
  * @uses	titon\libs\routes\RouteException
  */
-abstract class RouteAbstract extends Base implements Route {
+abstract class RouteAbstract extends Prototype implements Route {
 
 	/**
 	 * Pre-defined regex patterns.
@@ -319,7 +319,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @param string $key
 	 * @return string|null
 	 */
-	public function param($key = null) {
+	public function params($key = null) {
 		return isset($this->_route[$key]) ? $this->_route[$key] : $this->_route;
 	}
 

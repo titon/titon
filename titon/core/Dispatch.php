@@ -10,9 +10,9 @@
 namespace titon\core;
 
 use \titon\Titon;
-use \titon\libs\dispatchers\front\Front;
-use \titon\libs\dispatchers\front\FrontDev;
 use \titon\libs\dispatchers\Dispatcher;
+use \titon\libs\dispatchers\front\FrontDispatcher;
+use \titon\libs\dispatchers\front\FrontDevDispatcher;
 use \titon\utility\Inflector;
 
 /**
@@ -27,75 +27,73 @@ use \titon\utility\Inflector;
  */
 class Dispatch {
 
-    /**
-     * Mapped scopes to custom dispatchers.
-     *
-     * @access protected
-     * @var array
-     */
-    protected $_mapping = array();
+	/**
+	 * Mapped scopes to custom dispatchers.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_mapping = array();
 
-    /**
-     * Initialize dispatch and detects if a custom dispatcher should be used within the current scope.
-     * If no scope is defined, the default dispatcher will be instantiated.
-     *
-     * @access public
-     * @return void
-     */
-    public function run() {
+	/**
+	 * Initialize dispatch and detect if a custom dispatcher should be used within the current scope.
+	 * If no scope is defined, the default front dispatcher will be instantiated.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function run() {
+		$route = Titon::router()->current();
+		$params = $route->params();
+		$dispatch = null;
 
-        /*$params = Titon::router()->current();
-        $dispatch = null;
+		if (!empty($this->__mapping)) {
 
-        if (!empty($this->__mapping)) {
-            
-            // Specific controller and container
-            if (isset($this->__mapping[$params['container'] .'.'. $params['controller']])) {
-                $dispatch = $this->__mapping[$params['container'] .'.'. $params['controller']];
+			// Specific controller and module
+			if (isset($this->__mapping[$params['module'] .'.'. $params['controller']])) {
+				$dispatch = $this->__mapping[$params['module'] .'.'. $params['controller']];
 
-            // All controllers within a specific container
-            } else if (isset($this->__mapping[$params['container'] .'.*'])) {
-                $dispatch = $this->__mapping[$params['container'] .'.*'];
+			// All controllers within a specific container
+			} else if (isset($this->__mapping[$params['module'] .'.*'])) {
+				$dispatch = $this->__mapping[$params['module'] .'.*'];
 
-            // Specific controller within any container
-            } else if (isset($this->__mapping['*.'. $params['controller']])) {
-                $dispatch = $this->__mapping['*.'. $params['controller']];
+			// Specific controller within any container
+			} else if (isset($this->__mapping['*.'. $params['controller']])) {
+				$dispatch = $this->__mapping['*.'. $params['controller']];
 
-            // Apply to all controllers and containers
-            } else if (isset($this->__mapping['*.*'])) {
-                $dispatch = $this->__mapping['*.*'];
-            }
-        }
-
-        if ($dispatch) {
-            $dispatcher = $dispatch;
-			$dispatcher->configure($params);
-			
-        } else {
-			switch ($this->app->environment->current()) {
-				case 'development':
-					$dispatcher = new FrontDev($params);
-				break;
-				default:
-					$dispatcher = new Front($params);
-				break;
+			// Apply to all controllers and containers
+			} else if (isset($this->__mapping['*.*'])) {
+				$dispatch = $this->__mapping['*.*'];
 			}
-        }
+		}
 
+		if ($dispatch) {
+			$dispatcher = $dispatch;
+
+		} else if (Titon::environment()->current() == 'development') {
+			$dispatcher = new FrontDevDispatcher();
+
+		} else {
+			$dispatcher = new FrontDispatcher();
+		}
+
+		$dispatcher->configure($params);
 		$dispatcher->run();
-		exit();*/
-    }
+	}
 
-    /**
-     * Method to apply custom dispatchers to specific module or controller scopes.
-     *
-     * @access public
-     * @param DispatcherInterface $dispatcher
-     * @param array $scope
-     * @return void
-     */
-    public function setup(Dispatcher $dispatcher, array $scope = array()) {
-		$scope = $scope + array('module' => '*', 'controller' => '*');
+	/**
+	 * Apply custom dispatchers to a specific module or controller scope.
+	 *
+	 * @access public
+	 * @param Dispatcher $dispatcher
+	 * @param array $scope
+	 * @return void
+	 */
+	public function setup(Dispatcher $dispatcher, array $scope = array()) {
+		$scope = $scope + array(
+			'module' => '*', 
+			'controller' => '*'
+		);
 
 		if ($scope['module'] != '*') {
 			$scope['module'] = Inflector::underscore($scope['module']);
@@ -106,6 +104,6 @@ class Dispatch {
 		}
 
 		$this->_mapping[$scope['module'] .'.'. $scope['controller']] = $dispatcher;
-    }
+	}
 
 }

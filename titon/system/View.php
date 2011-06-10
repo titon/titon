@@ -117,16 +117,6 @@ class View extends Prototype {
     }
 
     /**
-	 * Triggered upon class instantiation, following __construct().
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-        $this->triggerCallback('initialize');
-    }
-
-    /**
      * Grab the page title if it has been set.
      *
      * @access public
@@ -150,7 +140,7 @@ class View extends Prototype {
 	 * @return void
 	 */
     public function preRender() {
-        $this->triggerHook('preRender');
+        $this->triggerObjects('preRender');
     }
 
     /**
@@ -160,7 +150,7 @@ class View extends Prototype {
 	 * @return void
 	 */
     public function postRender() {
-        $this->triggerHook('postRender');
+        $this->triggerObjects('postRender');
     }
 
     /**

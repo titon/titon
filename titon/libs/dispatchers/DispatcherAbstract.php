@@ -1,30 +1,28 @@
 <?php
 /**
- * The Dispatcher acts as the base for all child Dispatcher Modules. The Dispatcher should not be confused with Dispatch.
- * Dispatch determines the current request and then calls the Dispatcher to output the current request.
- * The Dispatcher has many default methods for locating and validating objects within the MVC paradigm.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 namespace titon\libs\dispatchers;
 
-use \titon\base\Prototype;
-use \titon\core\App;
-use \titon\log\Exception;
+use \titon\Titon;
+use \titon\base\Base;
 use \titon\libs\dispatchers\Dispatcher;
+use \titon\libs\dispatchers\DispatcherException;
 use \titon\utility\Inflector;
 
 /**
- * Dispatcher Class
+ * The Dispatcher acts as the base for all child Dispatcher Modules. The Dispatcher should not be confused with Dispatch.
+ * Dispatch determines the current request and then calls the Dispatcher to output the current request.
+ * The Dispatcher has many default methods for locating and validating objects within the MVC paradigm.
  *
- * @package		Titon
- * @subpackage	Titon.Modules.Dispatchers
- * @abstract
+ * @package	titon.libs.dispatchers
  */
-abstract class DispatcherAbstract extends Prototype implements Dispatcher {
+abstract class DispatcherAbstract extends Base implements Dispatcher {
 
     /**
      * Controller object.
@@ -32,7 +30,7 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
      * @access public
      * @var Controller
      */
-    public $Controller;
+    public $controller;
 
     /**
      * View object.
@@ -40,7 +38,7 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
      * @access public
      * @var View
      */
-    public $View;
+    public $view;
 
     /**
      * Store the configuration and load the Controller and View objects.
@@ -49,11 +47,10 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
      * @param array $config
      * @return void
      */
-    public function __construct(array $config = array()) {
-        parent::__construct($config);
-
-        $this->View = $this->loadView();
-        $this->Controller = $this->loadController();
+    public function initialize(array $config = array()) {
+		// @temporary
+		$this->view = new \titon\system\View();
+		$this->controller = new \titon\system\Controller();
     }
 
     /**
