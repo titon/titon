@@ -1,40 +1,50 @@
 <?php
+/**
+ * Titon: The PHP 5.3 Micro Framework
+ *
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
+ */
 
 namespace titon\system;
 
+use \titon\Titon;
 use \titon\base\Prototype;
-use \titon\utility\Inflector;
 use \titon\system\SystemException;
+use \titon\utility\Inflector;
 
 /**
- * View Class
+ * @todo
  *
- * @package     Titon
- * @subpackage  Titon.System
+ * @package	titon.system
  */
 class View extends Prototype {
 
-    /**
-     * Constants for all the possible types of templates.
-     *
-     * @constant
-     * @var int
-     */
-    const TYPE_TPL = 1;
-    const TYPE_LAYOUT = 2;
-    const TYPE_WRAPPER = 3;
-    const TYPE_INCLUDE = 4;
-    const TYPE_ERROR = 5;
+	/**
+	 * Constants for all the possible types of templates.
+	 */
+	const TYPE_TPL = 1;
+	const TYPE_LAYOUT = 2;
+	const TYPE_WRAPPER = 3;
+	const TYPE_INCLUDE = 4;
+	const TYPE_ERROR = 5;
 
-    /**
-	 * Default settings for view and template rendering. Can be overwritten in the Controller.
+	/**
+	 * Configuration. Can be overwritten in the Controller.
+	 * 
+	 *	type - The content type to respond as (defaults to html).
+	 *	template - An array containing the module, controller, and action.
+	 *	render - Toggle the rendering process.
+	 *	layout - The layout template to use.
+	 *	wrapper - The wrapper template to use.
+	 *	error - True if its an error page.
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_config = array(
 		'type'		=> null,
-		'data'		=> array(),
 		'template'	=> array(),
 		'render'	=> true,
 		'layout'	=> 'default',
@@ -42,193 +52,283 @@ class View extends Prototype {
 		'error'		=> false
 	);
 
-    /**
-     * Get the filepath for a type of template: layout, wrapper, view, error, include
-     *
-     * @access public
-     * @param string $type
-     * @param bool $absolute
-     * @param string $path
-     * @return string
-     */
-    public function buildPath($type = self::TYPE_TPL, $absolute = true, $path = null) {
-        if (isset($this->_config['error']) && $this->_config['error'] == true) {
-            $type = self::TYPE_ERROR;
-        }
-        
-        switch ($type) {
-            case self::TYPE_LAYOUT:
-                $output = 'private'. DS .'layouts'. DS . $this->getConfig('layout') .'.tpl';
-            break;
+	/**
+	 * Dynamic data set from the controller.
+	 * 
+	 * @access protected
+	 * @var array
+	 */
+	protected $_data = array();
 
-            case self::TYPE_WRAPPER:
-                $output = 'private'. DS .'wrappers'. DS . $this->getConfig('wrapper') .'.tpl';
-            break;
+	/**
+	 * The rendering engine.
+	 * 
+	 * @access protected
+	 * @var Engine
+	 */
+	protected $_engine;
+	
+	/**
+	 * Add a helper to the rendering engine, through the view layer.
+	 * 
+	 * @access public
+	 * @param string $alias
+	 * @param Closure $helper 
+	 * @return void
+	 */
+	public function addHelper($alias, Closure $helper) {
+		if (!$this->_engine) {
+			throw new SystemException('You must have an engine loaded to add helpers.');
+		}
+		
+		$self->_engine->attachObject(array(
+			'alias' => $alias,
+			'interface' => '\titon\libs\helpers\Helper'
+		), $helper);
+	}
 
-            case self::TYPE_INCLUDE:
-                $output = 'private'. DS .'includes'. DS . $path;
-            break;
+	/**
+	 * Get the filepath for a type of template: layout, wrapper, view, error, include
+	 *
+	 * @access public
+	 * @param string $type
+	 * @param string $path
+	 * @return string
+	 */
+	public function buildPath($type = self::TYPE_TPL, $path = null) {
+		$config = $this->config();
+		$template = $config['template'];
 
-            case self::TYPE_ERROR:
-                $output = 'private'. DS .'errors'. DS . (string)$this->getConfig('template') .'.tpl';
-            break;
+		if ($config['error']) {
+			$type = self::TYPE_ERROR;
+		}
 
-            case self::TYPE_TPL:
-            default:
-                $template = $this->getConfig('template');
-                $ext = null;
+		switch ($type) {
+			case self::TYPE_LAYOUT:
+				$layout = Titon::loader()->ds($config['layout']);
 
-                if (empty($template['container'])) {
-                    unset($template['container']);
-                }
+				$paths = array(
+					APP_MODULES . $template['module'] .'/views/private/layouts/'. $layout .'.tpl',
+					APP_VIEWS .'layouts/'. $layout .'.tpl'
+				);
+			break;
 
-                if (isset($template['ext'])) {
-                    $ext = $template['ext'];
-                    unset($template['ext']);
-                }
-                
-                $output  = 'public'. DS . implode(DS, $template);
-                $output .= (empty($ext) ? '.tpl' : '.'. $ext .'.tpl');
-            break;
-        }
+			case self::TYPE_WRAPPER:
+				$wrapper = Titon::loader()->ds($config['wrapper']);
 
-        if ($absolute == true) {
-            $output = TEMPLATES . $output;
-        }
+				$paths = array(
+					APP_MODULES . $template['module'] .'/views/private/wrappers/'. $wrapper .'.tpl',
+					APP_VIEWS .'wrappers/'. $wrapper .'.tpl'
+				);
+			break;
 
-        return $output;
-    }
+			case self::TYPE_INCLUDE:
+				$path = Titon::loader()->ds($path);
 
-    /**
-     * Check to see that the template file exists, else throw an error.
-     *
-     * @access public
-     * @param string $type
-     * @return bool
-     */
-    public function checkPath($type = self::TYPE_TPL) {
-        $path = $this->buildPath($type);
-        
-        if (file_exists($path)) {
-            return $path;
-        }
+				if (substr($path, -4) == '.tpl') {
+					$path = substr($path, 0, (strlen($path) - 4));
+				}
 
-        return false;
-    }
+				$paths = array(
+					APP_MODULES . $template['module'] .'/views/private/includes/'. $path .'.tpl',
+					APP_VIEWS .'includes/'. $path .'.tpl'
+				);
+			break;
 
-    /**
-     * Grab the page title if it has been set.
-     *
-     * @access public
-     * @param string|array $separator
-     * @return string
-     */
-	public function pageTitle($separator = ' - ') {
-        $pageTitle = $this->getConfig('data.pageTitle');
-        
-        if (is_array($pageTitle)) {
-            return implode($separator, $pageTitle);
-        }
+			case self::TYPE_ERROR:
+				$error = Titon::loader()->ds($template['action']);
 
-        return $pageTitle;
-    }
+				$paths = array(
+					APP_MODULES . $template['module'] .'/views/private/errors/'. $error .'.tpl',
+					APP_VIEWS .'errors/'. $error .'.tpl'
+				);
+			break;
 
-    /**
+			case self::TYPE_TPL:
+			default:
+				$parts = array(
+					$template['module'],
+					'views',
+					'public',
+					$template['controller'],
+					Titon::loader()->ds($template['action'])
+				);
+
+				$path  = APP_MODULES . implode(DS, $parts);
+				$path .= empty($ext) ? '.tpl' : '.'. $ext .'.tpl';
+
+				$paths = array($path);
+			break;
+		}
+
+		return $paths;
+	}
+
+	/**
+	 * Check to see that the template file exists, else throw an error.
+	 *
+	 * @access public
+	 * @param string $type
+	 * @return bool
+	 */
+	public function checkPath($type = self::TYPE_TPL) {
+		$paths = $this->buildPath($type);
+
+		foreach ($paths as $path) {
+			if (file_exists($path)) {
+				return $path;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Return the data based on the given key.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @return string
+	 */
+	public function data($key = null) {
+		return isset($this->_data[$key]) ? $this->_data[$key] : $this->_data;
+	}
+
+	/**
+	 * Attach the request and response objects.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		$this->attachObject('request', function() {
+			return Titon::registry()->factory('titon\net\Request');
+		});
+
+		$this->attachObject('response', function() {
+			return Titon::registry()->factory('titon\net\Response');
+		});
+	}
+
+	/**
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
 	 * @return void
 	 */
-    public function preRender() {
-        $this->triggerObjects('preRender');
-    }
+	public function preRender() {
+		if ($this->_engine) {
+			$this->_engine->triggerObjects('preRender');
+		}
+	}
 
-    /**
+	/**
 	 * Triggered after a template is rendered by the engine.
 	 *
 	 * @access public
 	 * @return void
 	 */
-    public function postRender() {
-        $this->triggerObjects('postRender');
-    }
+	public function postRender() {
+		if ($this->_engine) {
+			$this->_engine->triggerObjects('postRender');
+		}
+	}
 
-    /**
+	/**
 	 * Custom method to overwrite and configure the view engine manually.
 	 *
 	 * @access public
 	 * @param mixed $options
 	 * @return void
 	 */
-	final public function render($options) {
+	public function render($options) {
 		if (($options === false) || ($options === null)) {
-			$this->_config['render'] = false;
+			$this->configure('render', false);
 
 		} else if (is_string($options)) {
-			$this->_config['template']['action'] = $options;
+			$this->configure('template.action', $options);
 
 		} else if (is_array($options)) {
 			foreach ($options as $key => $value) {
 				if ($key == 'template') {
-                    if (is_array($value)) {
-                        $this->_config['template'] = $value + $this->_config['template'];
-                    } else {
-                        $this->_config['template']['action'] = $value;
-                    }
-				} else if ($key != 'data') {
-					$this->_config[$key] = $value;
+					if (is_array($value)) {
+						$this->configure('template', $value + $this->config('template'));
+					} else {
+						$this->configure('template.action', $value);
+					}
+				} else {
+					$this->configure($key, $value);
 				}
 			}
 		}
 	}
 
-    /**
-     * @todo
-     *
-     * @access public
-     * @return array
-     */
-    final public function run() {
-        if (!$this->_config['render']) {
-            return;
-        }
-        
-        // Check for engine
-        if (!$this->hasObject('Engine')) {
-            throw new SystemException('You must have an Engine Module loaded to render the page.');
-        }
+	/**
+	 * Render the template using the rendering engine, and output the result using the response.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function run() {
+		$config = $this->config();
 
-        // Get content type automatically
-        if (is_array($this->_config['template']) && isset($this->_config['template']['ext'])) {
-            $this->_config['type'] = $this->_config['template']['ext'];
-        } else if (empty($this->_config['type'])) {
-            $this->_config['type'] = 'html';
-        }
+		if (!$config['render']) {
+			return;
+		}
 
-        // Output the response!
-        $this->Response->contentType($this->_config['type']);
-        $this->Response->contentBody($this->Engine->run());
-        $this->Response->respond();
-    }
+		// Check for engine
+		if (!$this->_engine) {
+			throw new SystemException('You must have an engine loaded to render the page.');
+		}
 
-    /**
+		// Get content type automatically
+		if (is_array($config['template']) && isset($config['template']['ext'])) {
+			$this->configure('type', $config['template']['ext']);
+
+		} else if (empty($config['type'])) {
+			$this->configure('type', 'html');
+		}
+
+		// Output the response!
+		$this->response->contentType($this->config('type'));
+		$this->response->contentBody($this->_engine->run());
+		$this->response->respond();
+	}
+
+	/**
 	 * Set a variable to the view. The variable name will be inflected if it is invalid.
 	 *
 	 * @access public
-	 * @param string|array $keys
+	 * @param string|array $key
 	 * @param mixed $value
-	 * @return bool
+	 * @return View
+	 * @chainable
 	 */
-	final public function set($keys, $value = null) {
-		if (!is_array($keys)) {
-			$keys = array($keys => $value);
+	public function set($key, $value = null) {
+		if (is_array($key)) {
+			foreach ($key as $k => $v) {
+				$this->set($k, $v);
+			}
+		} else {
+			$this->_data[Inflector::variable($key)] = $value;
 		}
 
-        foreach ($keys as $key => $value) {
-            $this->_config['data'][Inflector::variable($key)] = $value;
-        }
-
-		return true;
+		return $this;
 	}
-    
+
+	/**
+	 * Set the rendering engine.
+	 * 
+	 * @access public
+	 * @param Engine $engine
+	 * @return View 
+	 * @chainable
+	 */
+	public function setEngine(Engine $engine) {
+		$this->_engine = $engine;
+		$this->_engine->setView($this);
+
+		return $this;
+	}
+
 }

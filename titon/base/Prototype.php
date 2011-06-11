@@ -162,7 +162,8 @@ class Prototype extends Base {
 			'alias' => null,
 			'source' => null,
 			'persist' => true,
-			'callback' => true
+			'callback' => true,
+			'interface' => null
 		);
 
 		if (empty($options['alias'])) {
@@ -239,6 +240,10 @@ class Prototype extends Base {
 			} else {
 				$object = new $options['source']();
 			}
+		}
+		
+		if ($options['interface'] && !($object instanceof $options['interface'])) {
+			throw new BaseException(sprintf('%s does not implement the %s interface.', get_class($object), $options['interface']));
 		}
 
 		$this->_loaded[$class] =& $object;

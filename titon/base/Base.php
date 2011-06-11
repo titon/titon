@@ -114,7 +114,7 @@ class Base {
 		if (is_array($key)) {
 			$this->_config = $key + $this->_config;
 		} else {
-			$this->_config[$key] = $value;
+			$this->_config = Set::insert($this->_config, $key, $value);
 		}
 
 		return $this;

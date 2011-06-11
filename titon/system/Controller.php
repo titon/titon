@@ -133,7 +133,7 @@ class Controller extends Prototype {
 		$args['url'] = Titon::router()->segment(true);
 
 		$this->view->set($args);
-		$this->view->configure(array(
+		$this->view->render(array(
 			'error' => true,
 			'layout' => 'error',
 			'template' => $action
@@ -202,14 +202,15 @@ class Controller extends Prototype {
 	 * @final
 	 */
 	final public function setView(View $view) {
+		$config = $this->config();
 		$template = array(
-			'module' => $this->_config['module'],
-			'controller' => $this->_config['controller'],
-			'action' => $this->_config['action']
+			'module' => $config['module'],
+			'controller' => $config['controller'],
+			'action' => $config['action']
 		);
 
-		if (!empty($this->_config['ext'])) {
-			$template['ext'] = $this->_config['ext'];
+		if (!empty($config['ext'])) {
+			$template['ext'] = $config['ext'];
 		}
 
 		$this->view = $view;

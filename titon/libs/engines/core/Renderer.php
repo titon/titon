@@ -34,10 +34,6 @@ class Renderer extends EngineAbstract {
     public function open($path, array $variables = array()) {
         $path = trim(str_replace(array('/', '\\'), DS, $path), DS);
 
-        if (substr($path, -4) != '.tpl') {
-            $path .= '.tpl';
-        }
-
         $path = $this->View->buildPath(self::TYPE_INCLUDE, true, $path);
 
         if (!file_exists($path)) {
