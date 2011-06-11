@@ -29,41 +29,43 @@ class FrontDevDispatcher extends DispatcherAbstract {
 	 * @return void
 	 */
 	public function run() {
-		debug('Front development dispatcher');
-
+		$controller = $this->controller;
+		$event = Titon::event();
+		$view = $this->view;
+		
 		Benchmark::start('Dispatcher');
-		Titon::event()->execute('preDispatch');
+		$event->execute('preDispatch');
 
 		// Controller
 		Benchmark::start('Controller');
-		$this->controller->preProcess();
-		Titon::event()->execute('preProcess', $this->controller);
+		$controller->preProcess();
+		$event->execute('preProcess', $controller);
 
 			// Action
 			Benchmark::start('Action');
-			$this->controller->dispatch();
+			$controller->dispatch();
 			Benchmark::stop('Action');
 
-		$this->controller->postProcess();
-		Titon::event()->execute('postProcess', $this->controller);
+		$controller->postProcess();
+		$event->execute('postProcess', $controller);
 		Benchmark::stop('Controller');
 
 		// View
 		Benchmark::start('View');
 
-		if ($this->view->config('render')) {
-			$this->view->preRender();
-			Titon::event()->execute('preRender', $this->view);
+		if ($view->config('render')) {
+			$view->preRender();
+			$event->execute('preRender', $view);
 
-			$this->view->run();
+			$view->run();
 
-			$this->view->postRender();
-			Titon::event()->execute('postRender', $this->view);
+			$view->postRender();
+			$event->execute('postRender', $view);
 		}
 
 		Benchmark::stop('View');
 
-		Titon::event()->execute('postDispatch');
+		$event->execute('postDispatch');
 		Benchmark::stop('Dispatcher');
 	}
 

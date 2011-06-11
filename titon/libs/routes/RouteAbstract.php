@@ -118,7 +118,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 		$this->compile();
 
 		// Grab the Request object
-		$this->attachObject('request', function() {
+		$this->attachObject('request', function($self) {
 			return Titon::registry()->factory('titon\net\Request');
 		});
 	}

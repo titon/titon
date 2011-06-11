@@ -96,6 +96,16 @@ class Environment {
 			include_once $path;
 		}
 	}
+	
+	/**
+	 * Does the current environment match the default (usually development).
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function isDefault() {
+		return ($this->current() == $this->_default);
+	}
 
 	/**
 	 * Add an environment and its hosts to the application.

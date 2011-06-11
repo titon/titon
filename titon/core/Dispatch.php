@@ -69,15 +69,15 @@ class Dispatch {
 
 		if ($dispatch) {
 			$dispatcher = $dispatch;
-
+			$dispatcher->configure($params);
+			
 		} else if (Titon::environment()->current() == 'development') {
-			$dispatcher = new FrontDevDispatcher();
+			$dispatcher = new FrontDevDispatcher($params);
 
 		} else {
-			$dispatcher = new FrontDispatcher();
+			$dispatcher = new FrontDispatcher($params);
 		}
 
-		$dispatcher->configure($params);
 		$dispatcher->run();
 	}
 

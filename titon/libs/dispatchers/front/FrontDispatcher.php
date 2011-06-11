@@ -28,32 +28,34 @@ class FrontDispatcher extends DispatcherAbstract {
 	 * @return void
 	 */
 	public function run() {
-		debug('Front dispatcher');
+		$controller = $this->controller;
+		$event = Titon::event();
+		$view = $this->view;
 
-		Titon::event()->execute('preDispatch');
+		$event->execute('preDispatch');
 
 		// Controller
-		$this->controller->preProcess();
-		Titon::event()->execute('preProcess', $this->controller);
+		$controller->preProcess();
+		$event->execute('preProcess', $controller);
 
 			// Action
-			$this->controller->dispatch();
+			$controller->dispatch();
 
-		$this->controller->postProcess();
-		Titon::event()->execute('postProcess', $this->controller);
+		$controller->postProcess();
+		$event->execute('postProcess', $controller);
 
 		// View
-		if ($this->view->config('render')) {
-			$this->view->preRender();
-			Titon::event()->execute('preRender', $this->view);
+		if ($view->config('render')) {
+			$view->preRender();
+			$event->execute('preRender', $view);
 
-			$this->view->run();
+			$view->run();
 
-			$this->view->postRender();
-			Titon::event()->execute('postRender', $this->view);
+			$view->postRender();
+			$event->execute('postRender', $view);
 		}
 
-		Titon::event()->execute('postDispatch');
+		$event->execute('postDispatch');
 	}
 
 }

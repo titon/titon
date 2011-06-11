@@ -157,7 +157,7 @@ class Debugger {
 	 * Renders a formatted error message to the view accompanied by a stack trace.
 	 *
 	 * @access public
-	 * @param string $error
+	 * @param string $number
 	 * @param string $message
 	 * @param string $file
 	 * @param int $line
@@ -190,7 +190,7 @@ class Debugger {
 					$output .= $trace['method'];
 				}
 
-				$output .= '() &nbsp;</td><td><i><acronym title="'. $file .'">'. $this->parseFile($trace['file']) .'</acronym></i>';
+				$output .= '() &nbsp;</td><td><i><acronym title="'. $trace['file'] .'">'. $this->parseFile($trace['file']) .'</acronym></i>';
 
 				if (!empty($trace['line'])) {
 					$output .= ' ('. $trace['line'] .')';
@@ -301,7 +301,7 @@ class Debugger {
 
 		if (!empty($backtrace)) {
 			foreach ($backtrace as $trace) {
-				if (!in_array($trace['function'], array('trace', 'output'))) {
+				//if (!in_array($trace['function'], get_class_methods($this))) {
 					$current = array();
 					$current['file'] = isset($trace['file']) ? $trace['file'] : '[Internal]';
 
@@ -333,7 +333,7 @@ class Debugger {
 						'file'	=> null,
 						'args'	=> null
 					);
-				}
+				//}
 			}
 
 			$response = array_reverse($response);

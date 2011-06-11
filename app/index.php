@@ -28,7 +28,7 @@ define('NS', '\\');
 /**
  * Define the folders that contain the app and titon files.
  */
-define('APP', __DIR__ . DS);
+define('APP', str_replace(NS, DS, __DIR__) . DS);
 define('ROOT', dirname(APP) . DS);
 define('TITON', ROOT .'titon'. DS);
 

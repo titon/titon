@@ -227,7 +227,7 @@ class Prototype extends Base {
 
 		// Load the object
 		if (isset($this->__objectMap[$class])) {
-			$object = $this->__objectMap[$class]();
+			$object = $this->__objectMap[$class]($this);
 
 			$this->_classes[$class]['source'] = get_class($object);
 

@@ -13,6 +13,8 @@ use \titon\Titon;
 use \titon\base\Prototype;
 use \titon\libs\dispatchers\Dispatcher;
 use \titon\libs\dispatchers\DispatcherException;
+use \titon\system\View;
+use \titon\system\Controller;
 use \titon\utility\Inflector;
 
 /**
@@ -31,15 +33,48 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->attachObject('view', function() {
-			return new \titon\system\View();
+		$this->attachObject('view', function($self) {
+			return $self->loadView();
 		});
+		
+		$this->attachObject('controller', function($self) {
+			$controller = $self->loadController();
+			$controller->setView($self->getObject('view'));
+			
+			return $controller;
+		});
+	}
+	
+	/**
+	 * Return the system View as this is not a modular class.
+	 * 
+	 * @access public
+	 * @return View
+	 */
+	public function loadView() {
+		return Titon::registry()->factory('titon\system\View');
+	}
+	
+	/**
+	 * Load the controller based on the routing params. If the controller does not exist, throw exceptions.
+	 * 
+	 * @todo - In production, it should throw up some sort of 404 error page.
+	 * 
+	 * @access public
+	 * @return Controller 
+	 */
+	public function loadController() {
+		$config = $this->config();
+		$path = APP_MODULES . $config['module'] . DS .'controllers'. DS . Inflector::filename($config['controller'] .'Controller');
 
-		// @todo
-		// Do some magic to find the correct controller
-		$this->attachObject('event', function() {
-			return new \titon\system\Controller();
-		});
+		if (file_exists($path)) {
+			return Titon::registry()->factory($path, $config);
+			
+		} else if (Titon::environment()->isDefault()) {
+			throw new DispatcherException(sprintf('Controller %s could not be found in the %s module.', $config['controller'], $config['module']));
+		}
+		
+		return new Controller();
 	}
 
 	/**
@@ -49,7 +84,7 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 	 * @return void
 	 */
 	public function run() {
-		throw new Exception('You must define your own run() method to dispatch the current request.');
+		throw new DispatcherException('You must define your own run() method to dispatch the current request.');
 	}
 
 }

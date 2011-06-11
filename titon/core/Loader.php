@@ -211,8 +211,9 @@ class Loader {
 	 * @return string
 	 */
 	public function toNamespace($path) {
-		if (strpos($path, DS) !== false && strpos($path, NS) === false) {
-			$path = str_replace(DS, NS, $this->ds($this->stripExt($path)));
+		if (strpos($path, DS) !== false) {
+			$path = str_replace($this->ds(ROOT), '', $this->ds($path));
+			$path = str_replace(DS, NS, $this->stripExt($path));
 		}
 
 		return $path;

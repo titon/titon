@@ -26,18 +26,19 @@ class FrontLightDispatcher extends DispatcherAbstract {
 	 * @return void
 	 */
 	public function run() {
-		debug('Front lightweight dispatcher');
+		$controller = $this->controller;
+		$view = $this->view;
 
 		// Controller and action
-		$this->controller->preProcess();
-		$this->controller->dispatch();
-		$this->controller->postProcess();
+		$controller->preProcess();
+		$controller->dispatch();
+		$controller->postProcess();
 
 		// View
-		if ($this->view->config('render')) {
-			$this->view->preRender();
-			$this->view->run();
-			$this->view->postRender();
+		if ($view->config('render')) {
+			$view->preRender();
+			$view->run();
+			$view->postRender();
 		}
 	}
 	

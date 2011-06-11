@@ -87,8 +87,11 @@ class Controller extends Prototype {
 		if (empty($args)) {
 			$args = $this->_config['args'];
 		}
+		
+		// Do not include the base controller methods
+		$methods = array_diff(get_class_methods($this), get_class_methods(__CLASS__));
 
-		if (!in_array($action, get_class_methods(__CLASS__))) {
+		if (!in_array($action, $methods)) {
 			throw new SystemException('Your action does not exist, or is not public, or is found within the parent Controller.');
 		}
 
