@@ -62,31 +62,6 @@ class Prototype extends Base {
 	private $__objectMap = array();
 
 	/**
-	 * Parses the $_classes and attaches any defined classes.
-	 *
-	 * @access public
-	 * @param array $config
-	 * @return void
-	 */
-	public function __construct(array $config = array()) {
-		if (!empty($this->_classes)) {
-			foreach ($this->_classes as $class => $options) {
-				if (is_string($options)) {
-					$options = array('source' => $options);
-				}
-
-				if (empty($options['alias'])) {
-					$options['alias'] = is_string($class) ? $class : Titon::loader()->baseClass($options['source']);
-				}
-
-				$this->attachObject($options);
-			}
-		}
-
-		parent::__construct($config);
-	}
-
-	/**
 	 * Magic method for Prototype::getObject().
 	 *
 	 * @access public
@@ -96,6 +71,19 @@ class Prototype extends Base {
 	 */
 	final public function __get($class) {
 		return $this->getObject($class);
+	}
+	
+	/**
+	 * Magic method for Prototype::getObject().
+	 *
+	 * @access public
+	 * @param string $class
+	 * @param Closure $closure
+	 * @return void
+	 * @final
+	 */
+	final public function __set($class, $closure) {
+		$this->attachObject($class, $closure);
 	}
 
 	/**
@@ -115,11 +103,11 @@ class Prototype extends Base {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return bool
+	 * @return void
 	 * @final
 	 */
 	final public function __unset($class) {
-		return $this->detachObject($class);
+		$this->detachObject($class);
 	}
 
 	/**
@@ -127,7 +115,7 @@ class Prototype extends Base {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return this
+	 * @return Prototype
 	 * @chainable
 	 * @final
 	 */
@@ -148,20 +136,20 @@ class Prototype extends Base {
 	 *
 	 * @access public
 	 * @param string|array $options
-	 * @param Closure $object
-	 * @return this
+	 * @param Closure $closure
+	 * @return Prototype
 	 * @chainable
 	 * @final
 	 */
-	final public function attachObject($options, Closure $object = null) {
+	final public function attachObject($options, Closure $closure = null) {
 		if (is_string($options)) {
 			$options = array('alias' => $options);
 		}
 
 		$options = $options + array(
 			'alias' => null,
-			'source' => null,
-			'persist' => true,
+			'class' => null,
+			'register' => true,
 			'callback' => true,
 			'interface' => null
 		);
@@ -174,8 +162,8 @@ class Prototype extends Base {
 
 		$this->_classes[$options['alias']] = $options;
 
-		if ($object !== null && $object instanceof Closure) {
-			$this->__objectMap[$options['alias']] = $object;
+		if ($closure !== null && $closure instanceof Closure) {
+			$this->__objectMap[$options['alias']] = $closure;
 		}
 
 		return $this;
@@ -186,18 +174,13 @@ class Prototype extends Base {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @param bool $deleteMap
-	 * @return this
+	 * @return Prototype
 	 * @chainable
 	 * @final
 	 */
-	final public function detachObject($class, $deleteMap = true) {
+	final public function detachObject($class) {
 		if (isset($this->_classes[$class])) {
-			unset($this->_classes[$class], $this->_loaded[$class]);
-
-			if ($deleteMap) {
-				unset($this->__objectMap[$class]);
-			}
+			unset($this->_classes[$class], $this->_loaded[$class], $this->__objectMap[$class]);
 		}
 
 		return $this;
@@ -230,15 +213,15 @@ class Prototype extends Base {
 		if (isset($this->__objectMap[$class])) {
 			$object = $this->__objectMap[$class]($this);
 
-			$this->_classes[$class]['source'] = get_class($object);
+			$this->_classes[$class]['class'] = get_class($object);
 
 		// Create manually
 		} else {
 			// Persist in registry
-			if ($options['persist']) {
-				$object = Titon::registry()->factory($options['source']);
+			if ($options['register']) {
+				$object = Titon::registry()->factory($options['class']);
 			} else {
-				$object = new $options['source']();
+				$object = new $options['class']();
 			}
 		}
 		
@@ -264,11 +247,33 @@ class Prototype extends Base {
 	}
 
 	/**
+	 * Parses the $_classes property and attaches any defined classes.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		if (!empty($this->_classes)) {
+			foreach ($this->_classes as $class => $options) {
+				if (is_string($options)) {
+					$options = array('class' => $options);
+				}
+
+				if (empty($options['alias'])) {
+					$options['alias'] = is_string($class) ? $class : Titon::loader()->baseClass($options['class']);
+				}
+
+				$this->attachObject($options);
+			}
+		}
+	}
+
+	/**
 	 * Restrict a class from being used within the current scope, or until the class is allowed again.
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return this
+	 * @return Prototype
 	 * @chainable
 	 * @final
 	 */
