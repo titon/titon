@@ -18,28 +18,27 @@ use \titon\system\View;
  * The Helper class acts as the base for all children helpers to extend.
  * Defines methods and properties for HTML tags and attribute generation.
  *
- * @package	titon.library.helpers
+ * @package	titon.libs.helpers
  * @uses	titon\Titon
  * @abstract
  */
 abstract class HelperAbstract extends Prototype implements Helper {
 
 	/**
-	 * View class.
-	 *
-	 * @see View
-	 * @access protected
-	 * @var object
-	 */
-	protected $view;
-
-	/**
-	 * A list of all HTML tags used within the current helper.
+	 * Mapping of HTML tags.
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_tags = array();
+
+	/**
+	 * View object.
+	 * 
+	 * @access protected
+	 * @var View
+	 */
+	protected $_view;
 
 	/**
 	 * Parses an array of attributes to the HTML equivalent.
@@ -53,8 +52,8 @@ abstract class HelperAbstract extends Prototype implements Helper {
 		$parsed = '';
 		$escape = true;
 
-		if (isset($attributes['escape']) && is_bool($attributes['escape'])) {
-			$escape = $attributes['escape'];
+		if (isset($attributes['escape'])) {
+			$escape = (bool) $attributes['escape'];
 			unset($attributes['escape']);
 		}
 
@@ -65,8 +64,8 @@ abstract class HelperAbstract extends Prototype implements Helper {
 					continue;
 				}
 
-				if ($escape === true) {
-					$value = htmlentities($value, ENT_COMPAT, Titon::app()->charset());
+				if ($escape) {
+					$value = htmlentities($value, ENT_COMPAT, Titon::config()->charset());
 				}
 
 				$parsed .= ' '. strtolower($key) .'="'. $value .'"';
@@ -77,17 +76,6 @@ abstract class HelperAbstract extends Prototype implements Helper {
 	}
 
 	/**
-	 * Store the View object within the helper.
-	 *
-	 * @access public
-	 * @param View $view
-	 * @return void
-	 */
-	public function initialize(View $view) {
-		$this->view = $view;
-	}
-
-	/**
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
@@ -95,7 +83,7 @@ abstract class HelperAbstract extends Prototype implements Helper {
 	 * @return void
 	 */
 	public function preRender(View $view) {
-		$this->view = $view;
+		$this->_view = $view;
 	}
 
 	/**
@@ -106,7 +94,7 @@ abstract class HelperAbstract extends Prototype implements Helper {
 	 * @return void
 	 */
 	public function postRender(View $view) {
-		$this->view = $view;
+		$this->_view = $view;
 	}
 
 	/**
@@ -117,8 +105,7 @@ abstract class HelperAbstract extends Prototype implements Helper {
 	 */
 	public function tag() {
 		$args = func_get_args();
-		$tagName = array_shift($args);
-		$tag = $this->_tags[$tagName];
+		$tag = $this->_tags[array_shift($args)];
 
 		return vsprintf($tag, $args) ."\n";
 	}

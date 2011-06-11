@@ -199,20 +199,22 @@ class Router {
 	public function detect($url) {
 		if (is_array($url)) {
 			if (isset($url['slug'])) {
-				$slug = $url['slug'];
-				$route = $this->slug($slug);
-
-				unset($url['slug']);
-
-				if (!empty($route)) {
-					return ($url + $route);
+				$route = $this->slug($url['slug']);
+				
+				if ($route) {
+					unset($url['slug']);
+					$route = $url + $route;
 				}
 			} else {
-				return $this->defaults($url);
+				$route = $url;
 			}
+		} else if ($slug = $this->slug($url)) {
+			$route = $slug;
+		} else {
+			$route = $url;
 		}
-
-		return $this->slug($url);
+		
+		return $route;
 	}
 
 	/**

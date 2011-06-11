@@ -12,21 +12,12 @@ namespace titon\libs\helpers;
 use \titon\system\View;
 
 /**
- * A required interface for all Helpers to implement.
- * Defines the callbacks and the arguments that are available to the Helper.
+ * A Helper is a class that helps in the rendering and presentation of the view templates. 
+ * This interface defines the basic callback methods.
  *
- * @package	titon.library.helpers;
+ * @package	titon.libs.helpers;
  */
 interface Helper {
-
-	/**
-	 * Triggered upon the view class instantiation, following __construct().
-	 *
-	 * @access public
-	 * @param View $view
-	 * @return void
-	 */
-	public function initialize(View $view);
 
 	/**
 	 * Triggered before a template is rendered by the engine.
