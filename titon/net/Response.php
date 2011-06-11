@@ -24,12 +24,16 @@ use \titon\net\NetException;
 class Response extends Http {
 
 	/**
-	 * Configuration for the Response object.
+	 * Configuration.
 	 *
+	 *	buffer - The range in which to break up the body into chunks.
+	 * 
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array('buffer' => 8192);
+	protected $_config = array(
+		'buffer' => 8192
+	);
 
 	/**
 	 * The body content to be outputted.

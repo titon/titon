@@ -43,6 +43,12 @@ class Controller extends Prototype {
 
 	/**
 	 * Configuration.
+	 * 
+	 *	module - Current application module.
+	 *	controller - Current controller within the module.
+	 *	action - Current action within the controller.
+	 *	ext - The extension within the address bar, and what content-type to render the page as.
+	 *	args - Action arguments.
 	 *
 	 * @access protected
 	 * @var array

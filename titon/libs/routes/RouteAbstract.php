@@ -22,6 +22,7 @@ use \titon\libs\routes\RouteException;
  * @package	titon.libs.routes
  * @uses	titon\Titon
  * @uses	titon\libs\routes\RouteException
+ * @abstract
  */
 abstract class RouteAbstract extends Prototype implements Route {
 

@@ -16,6 +16,7 @@ use \titon\libs\readers\Reader;
  * Abstract class that implements the extension detection for Readers.
  *
  * @package	titon.libs.readers
+ * @abstract
  */
 abstract class ReaderAbstract extends Prototype implements Reader {
 

@@ -16,6 +16,7 @@ use \titon\libs\storage\Storage;
  * Primary class for all storage engines to extend. Provides functionality from the Base class and the Storage interface.
  *
  * @package	titon.libs.storage
+ * @abstract
  */
 abstract class StorageAbstract extends Prototype implements Storage {
 	
@@ -28,7 +29,18 @@ abstract class StorageAbstract extends Prototype implements Storage {
 	public $connection;
 	
 	/**
-	 * Default storage configuration.
+	 * Configuration.
+	 * 
+	 *	id - Unique ID for specific engines.
+	 *	servers - List of servers to store data in.
+	 *	serialize - Toggle data serialization.
+	 *	compress - Toggle data compression.
+	 *	persistent - Toggle persistent server connections.
+	 *	expires - Global expiration timer.
+	 *	prefix - String to prefix before each cache key.
+	 *	username - Username used for HTTP auth.
+	 *	password - Password used for HTTP auth.
+	 *	storage - The alias for the current storage engine.
 	 * 
 	 * @access protected
 	 * @var array

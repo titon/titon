@@ -18,6 +18,7 @@ use \titon\system\View;
  * Provides no functionality except the definition of skeleton methods.
  *
  * @package	titon.libs.listeners
+ * @abstract
  */
 abstract class ListenerAbstract extends Prototype implements Listener {
 

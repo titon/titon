@@ -23,6 +23,7 @@ use \titon\utility\Inflector;
  * The Dispatcher has many default methods for locating and validating objects within the MVC paradigm.
  *
  * @package	titon.libs.dispatchers
+ * @abstract
  */
 abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 

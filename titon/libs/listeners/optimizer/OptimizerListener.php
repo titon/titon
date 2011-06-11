@@ -20,7 +20,11 @@ use \titon\libs\listeners\ListenerAbstract;
 class OptimizerListener extends ListenerAbstract {
 
 	/**
-	 * Default settings.
+	 * Configuration.
+	 * 
+	 *	gc - Toggle garbage collection.
+	 *	gzip - Toggle GZIP compression.
+	 *	gzipLevel - GZIP compression level.
 	 *
 	 * @access protected
 	 * @var array

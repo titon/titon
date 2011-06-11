@@ -68,7 +68,7 @@ class HtmlHelper extends HelperAbstract {
 	public function anchor($title, $url, array $attributes = array()) {
 		$url = Titon::router()->detect($url);
 
-		if (is_array($route)) {
+		if (is_array($url)) {
 			$url = Titon::router()->build($url);
 		}
 
