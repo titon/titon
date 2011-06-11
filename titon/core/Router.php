@@ -245,7 +245,7 @@ class Router {
 		$this->map('moduleControllerAction', new DefaultRoute('/{module}/{controller}/{action}'));
 		$this->map('moduleController', new DefaultRoute('/{module}/{controller}'));
 		$this->map('module', new DefaultRoute('/{module}'));
-		$this->map('root', new DefaultRoute('/'), array(), array('static' => true));
+		$this->map('root', new DefaultRoute('/', array(), array('static' => true)));
 
 		// Match the current URL to a route
 		$this->_current = $this->match($path);
@@ -293,13 +293,10 @@ class Router {
 	 * @return Route
 	 */
 	public function match($url) {
-		try {
-			foreach ($this->_routes as $key => $route) {
-				if ($route->match($url)) {
-					return $route;
-				}
+		foreach ($this->_routes as $key => $route) {
+			if ($route->match($url)) {
+				return $route;
 			}
-		} catch (\Exception $e) {
 		}
 	}
 

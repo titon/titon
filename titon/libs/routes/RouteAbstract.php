@@ -36,10 +36,10 @@ abstract class RouteAbstract extends Prototype implements Route {
 	/**
 	 * Configuration.
 	 * 
-	 *		secure:		When true, will only match if under HTTPS.
-	 *		static:		A static route that contains no patterns.
-	 *		method:		The types of acceptable HTTP methods. Defaults to all.
-	 *		patterns:	Custom defined regex patterns.
+	 *	secure - When true, will only match if under HTTPS.
+	 *	static - A static route that contains no patterns.
+	 *	method - The types of acceptable HTTP methods. Defaults to all.
+	 *	patterns - Custom defined regex patterns.
 	 * 
 	 * @access public
 	 * @var array
@@ -159,8 +159,6 @@ abstract class RouteAbstract extends Prototype implements Route {
 						case ($match[1] == '<' && $match[3] == '>'):
 							if (isset($patterns[$match[2]])) {
 								$compiled = str_replace($match[0], $patterns[$match[2]], $compiled);
-							} else {
-								throw new RouteException(sprintf('Pattern %s does not exist for route %s.', $match[2], $this->_path));
 							}
 						break;
 					}
@@ -219,16 +217,12 @@ abstract class RouteAbstract extends Prototype implements Route {
 							// Is it a module? Check against the installed modules.
 							if (in_array($matches[0], $modules)) {
 								$this->_route['module'] = array_shift($matches);
-							} else {
-								throw new RouteException(sprintf('Module %s has not been installed.', $matches[0]));
 							}
 						break;
 						case 'controller':
 							// Is it a controller? Check within the modules controllers.
 							if (in_array($matches[0], $controllers[$this->_route['module']])) {
 								$this->_route['controller'] = array_shift($matches);
-							} else {
-								throw new RouteException(sprintf('Controller %s was not found within the %s module.', $matches[0], $this->_route['module']));
 							}
 						break;
 						default:
@@ -273,7 +267,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 		if (!empty($method) && !in_array($this->request->method(), $method)) {
 			return false;
 		}
-
+		
 		return true;
 	}
 
@@ -287,7 +281,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 		if ($this->config('secure') && !$this->request->isSecure()) {
 			return false;
 		}
-
+		
 		return true;
 	}
 
