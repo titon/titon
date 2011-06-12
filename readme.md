@@ -55,8 +55,10 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 		core/
 		data/
 		libs/
+			actions/
 			adapters/
 			behaviors/
+			controllers/
 			dispatchers/
 			drivers/
 			engines/
@@ -67,7 +69,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			routes/
 			shells/
 			storage/
-			translaters/
+			translators/
 			transporters/
 		locale/
 		log/
@@ -79,8 +81,10 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 
 ### Libraries ###
 
+* Action - Re-usable and de-coupled controller actions, packaged as a stand alone class.
 * Adapter - Handles the case of adapting a specific class to another class.
 * Behavior - Defines a behavior pattern for a model.
+* Controller - Handles the HTTP request and returns the HTTP response, within the dispatch cycle.
 * Dispatcher - Handles the dispatch cycle in the MVC paradigm.
 * Driver - Allows the model to access different types of databases; describes the schema. Only works with Titon's model system.
 * Engine - Handles the rendering of the view templates.
@@ -91,5 +95,5 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Routes - Maps URLs to internal destinations.
 * Shell - Handles CLI execution and tasks.
 * Storage - Provides different methods of caching data.
-* Translater - Handles the translation of certain filetypes to be used by the locale message system.
+* Translator - Handles the translation of certain filetypes to be used by the locale message system.
 * Transporter - Handles the different type of email transporting (SMTP, etc).
