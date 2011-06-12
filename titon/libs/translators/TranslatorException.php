@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\libs\translaters;
+namespace titon\libs\translators;
 
 /**
- * Exception for the translaters library.
+ * Exception for the translators library.
  *
- * @package	titon.libs.translaters
+ * @package	titon.libs.translators
  */
-class TranslaterException extends \titon\Exception {  
+class TranslatorException extends \titon\Exception {  
 
 }
