@@ -9,11 +9,10 @@
 
 namespace titon\libs\helpers;
 
-use \titon\system\View;
+use \titon\libs\views\View;
 
 /**
- * A Helper is a class that helps in the rendering and presentation of the view templates. 
- * This interface defines the basic callback methods.
+ * Interface for the helpers library.
  *
  * @package	titon.libs.helpers;
  */

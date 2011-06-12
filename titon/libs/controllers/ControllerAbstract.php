@@ -31,6 +31,7 @@ use \titon\utility\Set;
  *
  * @package	titon.libs.controllers
  * @uses	titon\Titon
+ * @uses	titon\libs\controllers\ControllerException
  * @uses	titon\utility\Inflector
  * @uses	titon\utility\Set
  * @abstract

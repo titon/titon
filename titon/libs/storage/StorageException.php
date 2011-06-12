@@ -10,7 +10,7 @@
 namespace titon\libs\storage;
 
 /**
- * Exception for the storage library.
+ * Exception for the storage containers library.
  *
  * @package	titon.libs.storage
  */

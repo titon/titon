@@ -10,13 +10,12 @@
 
 namespace titon\libs\engines;
 
-use \titon\system\View;
+use \titon\libs\views\View;
 
 /**
- * Engine Interface
- *
- * @package		Titon
- * @subpackage	Titon.Modules
+ * Interface for the engines library.
+ * 
+ * @package	titon.libs.engines
  */
 interface Engine {
 

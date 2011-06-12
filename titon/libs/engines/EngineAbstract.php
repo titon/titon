@@ -21,13 +21,12 @@ use \titon\core\Config;
 use \titon\log\Exception;
 use \titon\libs\engines\Engine;
 use \titon\core\Router;
-use \titon\system\View;
+use \titon\libs\views\View;
 
 /**
  * Engine
  *
- * @package		Titon
- * @subpackage	Titon.Modules
+ * @package	titon.libs.engines
  * @abstract
  */
 abstract class EngineAbstract extends Prototype implements Engine {

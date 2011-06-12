@@ -10,7 +10,7 @@
 namespace titon\libs\storage;
 
 /**
- * Primary interface for all storage containers.
+ * Interface for the storage containers library.
  *
  * @package	titon.libs.storage
  */

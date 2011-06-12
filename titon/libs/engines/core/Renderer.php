@@ -12,7 +12,7 @@ namespace titon\libs\engines\titon;
 
 use \titon\log\Exception;
 use \titon\libs\engines\EngineAbstract;
-use \titon\system\View;
+use \titon\libs\views\View;
 
 /**
  * View Engine

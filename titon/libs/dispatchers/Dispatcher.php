@@ -10,7 +10,7 @@
 namespace titon\libs\dispatchers;
 
 /**
- * A required interface for all custom Dispatchers to implement.
+ * Interface for the dispatchers library.
  *
  * @package	titon.libs.dispatchers
  */

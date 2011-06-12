@@ -11,8 +11,8 @@ namespace titon\libs\listeners;
 
 use \titon\base\Prototype;
 use \titon\libs\listeners\Listener;
-use \titon\system\Controller;
-use \titon\system\View;
+use \titon\libs\controllers\Controller;
+use \titon\libs\views\View;
 
 /**
  * Provides no functionality except the definition of skeleton methods.

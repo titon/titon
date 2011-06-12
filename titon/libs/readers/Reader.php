@@ -10,7 +10,7 @@
 namespace titon\libs\readers;
 
 /**
- * Interface for all Config Readers.
+ * Interface for the config readers library.
  *
  * @package	titon.libs.renders
  */

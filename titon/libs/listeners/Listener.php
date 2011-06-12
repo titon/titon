@@ -9,11 +9,11 @@
 
 namespace titon\libs\listeners;
 
-use \titon\system\Controller;
-use \titon\system\View;
+use \titon\libs\controllers\Controller;
+use \titon\libs\views\View;
 
 /**
- * Interface for event listeners.
+ * Interface for the event listeners library.
  *
  * @package	titon.libs.listeners
  */

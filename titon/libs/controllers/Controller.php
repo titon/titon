@@ -13,7 +13,7 @@ use \titon\libs\actions\Action;
 use \titon\libs\views\View;
 
 /**
- * Interface for the Controller library.
+ * Interface for the controllers library.
  *
  * @package	titon.libs.controllers
  */

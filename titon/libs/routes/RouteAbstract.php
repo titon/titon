@@ -114,14 +114,6 @@ abstract class RouteAbstract extends Prototype implements Route {
 		
 		$this->_path = $path;
 		$this->_route = Titon::router()->defaults($route);
-
-		// Compile when class is built
-		$this->compile();
-
-		// Grab the Request object
-		$this->attachObject('request', function($self) {
-			return Titon::registry()->factory('titon\net\Request');
-		});
 	}
 
 	/**
@@ -178,6 +170,20 @@ abstract class RouteAbstract extends Prototype implements Route {
 		$this->_compiled = '/^'. $compiled .'/i';
 
 		return $this->_compiled;
+	}
+	
+	/**
+	 * Compile the route and attach the request object.
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function initialize() {
+		$this->compile();
+
+		$this->attachObject('request', function($self) {
+			return Titon::registry()->factory('titon\net\Request');
+		});
 	}
 
 	/**

@@ -11,10 +11,10 @@ namespace titon\libs\dispatchers;
 
 use \titon\Titon;
 use \titon\base\Prototype;
+use \titon\libs\controllers\Controller;
 use \titon\libs\dispatchers\Dispatcher;
 use \titon\libs\dispatchers\DispatcherException;
-use \titon\system\View;
-use \titon\system\Controller;
+use \titon\libs\views\View;
 use \titon\utility\Inflector;
 
 /**
@@ -23,6 +23,7 @@ use \titon\utility\Inflector;
  * The Dispatcher has many default methods for locating and validating objects within the MVC paradigm.
  *
  * @package	titon.libs.dispatchers
+ * @uses	titon\libs\dispatchers\DispatcherException
  * @abstract
  */
 abstract class DispatcherAbstract extends Prototype implements Dispatcher {
@@ -53,7 +54,7 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 	 * @return View
 	 */
 	public function loadView() {
-		return Titon::registry()->factory('titon\system\View');
+		return Titon::registry()->factory('titon\libs\views\View');
 	}
 	
 	/**

@@ -12,7 +12,7 @@ namespace titon\libs\helpers;
 use \titon\Titon;
 use \titon\base\Prototype;
 use \titon\libs\helpers\Helper;
-use \titon\system\View;
+use \titon\libs\views\View;
 
 /**
  * The Helper class acts as the base for all children helpers to extend.

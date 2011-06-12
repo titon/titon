@@ -10,7 +10,7 @@
 namespace titon\libs\readers;
 
 /**
- * Exception for the readers library.
+ * Exception for the config readers library.
  *
  * @package	titon.libs.readers
  */

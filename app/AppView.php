@@ -19,7 +19,7 @@ use \titon\core\Registry;
  * @package		Titon
  * @subpackage	App
  */
-class AppView extends \titon\system\View {
+class AppView extends \titon\libs\views\View {
 
 	/**
 	 * Construct the Engine and Helper object(s). Allows you to overwrite or remove for high customization.

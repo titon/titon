@@ -20,8 +20,10 @@ use \titon\libs\controllers\Controller;
  * Controllers, encapsulating additional methods within the Action process, and defining its own attachments.
  *
  * @package	titon.libs.actions
+ * @uses	titon\libs\actions\ActionException
+ * @abstract
  */
-class ActionAbstract extends Prototype implements Action {
+abstract class ActionAbstract extends Prototype implements Action {
 
 	/**
 	 * Controller object.

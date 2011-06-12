@@ -10,7 +10,7 @@
 namespace titon\libs\routes;
 
 /**
- * Interface for all Routes.
+ * Interface for the routes library.
  *
  * @package	titon.libs.routes
  */
