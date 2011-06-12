@@ -7,14 +7,16 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
  
-namespace titon\system;
+namespace titon\libs\controllers;
 
 use \titon\Titon;
 use \titon\base\Prototype;
-use \titon\system\Action;
-use \titon\system\View;
-use \titon\system\SystemException;
+use \titon\libs\actions\Action;
+use \titon\libs\controllers\Controller;
+use \titon\libs\controllers\ControllerException;
+use \titon\libs\views\View;
 use \titon\utility\Inflector;
+use \titon\utility\Set;
 
 /**
  * The Controller (MVC) acts as the median between the request and response within the dispatch cycle.
@@ -27,11 +29,13 @@ use \titon\utility\Inflector;
  * Furthermore, the Controller inherits all functionality from the Prototype class, allowing you to attach
  * external classes to use their functionality and trigger specific callbacks.
  *
- * @package	titon.system
+ * @package	titon.libs.controllers
  * @uses	titon\Titon
  * @uses	titon\utility\Inflector
+ * @uses	titon\utility\Set
+ * @abstract
  */
-class Controller extends Prototype {
+abstract class ControllerAbstract extends Prototype implements Controller {
 
 	/**
 	 * View object.
@@ -67,9 +71,8 @@ class Controller extends Prototype {
 	 * @access public
 	 * @param Action $Action
 	 * @return void
-	 * @final
 	 */
-	final public function action(Action $action) {
+	public function action(Action $action) {
 		$action->setController($this);
 		$action->run();
 
@@ -83,22 +86,21 @@ class Controller extends Prototype {
 	 * @param string $action
 	 * @param array $args
 	 * @return mixed
-	 * @final
 	 */
-	final public function dispatch($action = null, array $args = array()) {
+	public function dispatch($action = null, array $args = array()) {
 		if (empty($action)) {
-			$action = $this->_config['action'];
+			$action = $this->config('action');
 		}
 
 		if (empty($args)) {
-			$args = $this->_config['args'];
+			$args = $this->config('args');
 		}
 		
 		// Do not include the base controller methods
 		$methods = array_diff(get_class_methods($this), get_class_methods(__CLASS__));
 
 		if (!in_array($action, $methods)) {
-			throw new SystemException('Your action does not exist, or is not public, or is found within the parent Controller.');
+			throw new ControllerException('Your action does not exist, or is not public, or is found within the parent Controller.');
 		}
 
 		return call_user_func_array(array($this, $action), $args);
@@ -138,8 +140,6 @@ class Controller extends Prototype {
 			'layout' => 'error',
 			'template' => $action
 		));
-
-		return;
 	}
 
 	/**
@@ -148,11 +148,10 @@ class Controller extends Prototype {
 	 * @access public
 	 * @param mixed $message
 	 * @return void
-	 * @final
 	 */
-	final public function flash($message) {
-		if ($this->hasObject('Session')) {
-			$this->Session->set('App.flash', $message);
+	public function flash($message) {
+		if ($this->hasObject('session')) {
+			$this->session->set('App.flash', $message);
 		} else {
 			$_SESSION = Set::insert($_SESSION, 'App.flash', $message);
 		}
@@ -165,12 +164,27 @@ class Controller extends Prototype {
 	 * @param string $action
 	 * @param array $args
 	 * @return mixed
-	 * @final
 	 */
-	final public function forward($action, array $args = array()) {
+	public function forward($action, array $args = array()) {
 		$this->view->render($action);
-		$this->configure(array('action' => $action));
+		$this->configure('action', $action);
 		$this->dispatch($action, $args);
+	}
+	
+	/**
+	 * Attach the request and response objects. Can overwrite or remove for high customization.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		$this->attachObject('request', function() {
+			return Titon::registry()->factory('titon\net\Request');
+		});
+
+		$this->attachObject('response', function() {
+			return Titon::registry()->factory('titon\net\Response');
+		});
 	}
 
 	/**
@@ -199,9 +213,8 @@ class Controller extends Prototype {
 	 * @access public
 	 * @param View $view
 	 * @return void
-	 * @final
 	 */
-	final public function setView(View $view) {
+	public function setView(View $view) {
 		$config = $this->config();
 		$template = array(
 			'module' => $config['module'],

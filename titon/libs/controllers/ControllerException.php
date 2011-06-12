@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\system;
+namespace titon\libs\controllers;
 
 /**
- * Exception for the system package.
+ * Exception for the controllers library.
  *
- * @package	titon.system
+ * @package	titon.libs.controllers
  */
-class SystemException extends \titon\Exception {  
+class ControllerException extends \titon\Exception {  
 
 }

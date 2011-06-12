@@ -10,32 +10,14 @@
 namespace app;
 
 use \titon\Titon;
-use \titon\system\Controller;
+use \titon\libs\controllers\ControllerAbstract;
 
 /**
  * A Controller class that acts as a gateway between the client controller and the system controller.
  * Allows the client controllers to inheriet base functionality, as well as share functionality between other controllers.
  *
- * @package		Titon
- * @subpackage	App
+ * @package	app
  */
-class AppController extends Controller {
-
-	/**
-	 * Construct the Request and Response objects.
-	 * Allows you to overwrite or remove for high customization.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-		$this->attachObject('request', function() {
-			return Titon::registry()->factory('titon\net\Request');
-		});
-
-		$this->attachObject('response', function() {
-			return Titon::registry()->factory('titon\net\Response');
-		});
-	}
+class AppController extends ControllerAbstract {
 
 }
