@@ -17,7 +17,7 @@ namespace titon\libs\engines;
 interface Engine {
 
 	/**
-	 * The output of the rendering process. The output changes depending on the current rendering stage.
+	 * The current output within the rendering process. The output changes depending on the current rendering stage.
 	 *
 	 * @access public
 	 * @return void

@@ -20,13 +20,13 @@ use \titon\libs\engines\EngineException;
 class ViewEngine extends EngineAbstract {
 
 	/**
-	* Opens and renders a partial view element within the current document.
-	*
-	* @access public
-	* @param string $path
-	* @param array $variables
-	* @return string
-	*/
+	 * Opens and renders a partial view element within the current document.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @param array $variables
+	 * @return string
+	 */
 	public function open($path, array $variables = array()) {
 		$path = $this->buildPath(self::TYPE_INCLUDE, $path);
 		$variables = $variables + $this->data();
@@ -39,13 +39,13 @@ class ViewEngine extends EngineAbstract {
 	}
 
 	/**
-	* Primary method to render a single view template.
-	*
-	* @access public
-	* @param string $path
-	* @param array $variables
-	* @return void
-	*/
+	 * Primary method to render a single view template.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @param array $variables
+	 * @return void
+	 */
 	public function render($path, array $variables = array()) {
 		if (!empty($variables)) {
 			extract($variables, EXTR_SKIP);	
@@ -59,13 +59,13 @@ class ViewEngine extends EngineAbstract {
 	}
 
 	/**
-	* Begins the staged rendering process. First stage, the system must render the template based on the module, 
-	* controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
-	* wrap the current template ouput with the layout. Return the final result.
-	*
-	* @access public
-	* @return void
-	*/
+	 * Begins the staged rendering process. First stage, the system must render the template based on the module, 
+	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
+	 * wrap the current template ouput with the layout. Return the final result.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function run() {
 		$config = $this->config();
 
@@ -78,23 +78,22 @@ class ViewEngine extends EngineAbstract {
 
 		// Render the template, layout and wrappers
 		$data = $this->data();
-
-		if ($path = $this->buildPath(self::TYPE_TPL)) {
-			$this->_content = $this->render($path, $data);
-		} else {
-			throw new EngineException(sprintf('View template %s does not exist.', str_replace(ROOT, '', $path)));
-		}
-
-		if (!empty($config['wrapper'])) {
-			if ($wrapper = $this->buildPath(self::TYPE_WRAPPER)) {
-				$this->_content = $this->render($wrapper, $data);
+		$path = null;
+		$renders = array(
+			self::TYPE_TPL => 'template', 
+			self::TYPE_WRAPPER => 'wrapper', 
+			self::TYPE_LAYOUT => 'layout'
+		);
+		
+		foreach ($renders as $type => $render) {
+			if (empty($config[$render])) {
+				continue;
 			}
-		}
-
-		// Render layout
-		if (!empty($config['layout'])) {
-			if ($layout = $this->buildPath(self::TYPE_LAYOUT)) {
-				$this->_content = $this->render($layout, $data);
+			
+			if ($path = $this->buildPath($type)) {
+				$this->_content = $this->render($path, $data);
+			} else {
+				throw new EngineException(sprintf('View template %s does not exist.', str_replace(ROOT, '', $path)));
 			}
 		}
 
