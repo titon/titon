@@ -10,9 +10,9 @@
 namespace titon\libs\listeners;
 
 use \titon\base\Prototype;
-use \titon\libs\listeners\Listener;
 use \titon\libs\controllers\Controller;
-use \titon\libs\views\View;
+use \titon\libs\engines\Engine;
+use \titon\libs\listeners\Listener;
 
 /**
  * Provides no functionality except the definition of skeleton methods.
@@ -46,10 +46,10 @@ abstract class ListenerAbstract extends Prototype implements Listener {
 	 * Executed before the action gets processed.
 	 *
 	 * @access public
-	 * @param Controller $Controller
+	 * @param Controller $controller
 	 * @return void
 	 */
-	public function preProcess(Controller $Controller) {
+	public function preProcess(Controller $controller) {
 		return;
 	}
 
@@ -57,10 +57,10 @@ abstract class ListenerAbstract extends Prototype implements Listener {
 	 * Executed after the action gets processed.
 	 *
 	 * @access public
-	 * @param Controller $Controller
+	 * @param Controller $controller
 	 * @return void
 	 */
-	public function postProcess(Controller $Controller) {
+	public function postProcess(Controller $controller) {
 		return;
 	}
 
@@ -68,10 +68,10 @@ abstract class ListenerAbstract extends Prototype implements Listener {
 	 * Executed before the template gets rendered.
 	 *
 	 * @access public
-	 * @param View $View
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function preRender(View $View) {
+	public function preRender(Engine $engine) {
 		return;
 	}
 
@@ -79,10 +79,10 @@ abstract class ListenerAbstract extends Prototype implements Listener {
 	 * Executed after the template gets rendered.
 	 *
 	 * @access public
-	 * @param View $View
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function postRender(View $View) {
+	public function postRender(Engine $engine) {
 		return;
 	}
 

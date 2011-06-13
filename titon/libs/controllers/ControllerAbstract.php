@@ -14,7 +14,8 @@ use \titon\base\Prototype;
 use \titon\libs\actions\Action;
 use \titon\libs\controllers\Controller;
 use \titon\libs\controllers\ControllerException;
-use \titon\libs\views\View;
+use \titon\libs\engine\Engine;
+use \titon\libs\engines\core\ViewEngine;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
 
@@ -39,12 +40,12 @@ use \titon\utility\Set;
 abstract class ControllerAbstract extends Prototype implements Controller {
 
 	/**
-	 * View object.
+	 * Engine object.
 	 *
 	 * @access public
-	 * @var View
+	 * @var Engine
 	 */
-	public $view;
+	public $engine;
 
 	/**
 	 * Configuration.
@@ -135,27 +136,12 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 		$args['referrer'] = $this->request->referrer();
 		$args['url'] = Titon::router()->segment(true);
 
-		$this->view->set($args);
-		$this->view->render(array(
+		$this->engine->set($args);
+		$this->engine->setup(array(
 			'error' => true,
 			'layout' => 'error',
 			'template' => $action
 		));
-	}
-
-	/**
-	 * Set the flash message to be used in the view. Will use the Session class if its loaded.
-	 *
-	 * @access public
-	 * @param mixed $message
-	 * @return void
-	 */
-	public function flash($message) {
-		if ($this->hasObject('session')) {
-			$this->session->set('App.flash', $message);
-		} else {
-			$_SESSION = Set::insert($_SESSION, 'App.flash', $message);
-		}
 	}
 
 	/**
@@ -167,7 +153,7 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 	 * @return mixed
 	 */
 	public function forward($action, array $args = array()) {
-		$this->view->render($action);
+		$this->engine->render($action);
 		$this->configure('action', $action);
 		$this->dispatch($action, $args);
 	}
@@ -186,8 +172,28 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 		$this->attachObject('response', function() {
 			return Titon::registry()->factory('titon\net\Response');
 		});
+		
+		$this->setEngine( new ViewEngine() );
 	}
 
+	/**
+	 * The final result from the action and the rending engine.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function output() {
+		if ($type = $this->config('ext')) {
+			$this->response->type($type);
+		}
+		
+		if ($this->engine) {
+			$this->response->body($this->engine->content());
+		}
+		
+		$this->response->respond();
+	}
+	
 	/**
 	 * Triggered before the Controller processes the requested Action.
 	 *
@@ -209,26 +215,23 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 	}
 
 	/**
-	 * Configure the Controller and store the View object.
+	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param View $view
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function setView(View $view) {
+	public function setEngine(Engine $engine) {
 		$config = $this->config();
 		$template = array(
 			'module' => $config['module'],
 			'controller' => $config['controller'],
-			'action' => $config['action']
+			'action' => $config['action'],
+			'ext' => $config['ext']
 		);
 
-		if (!empty($config['ext'])) {
-			$template['ext'] = $config['ext'];
-		}
-
-		$this->view = $view;
-		$this->view->render(array('template' => $template));
+		$this->engine = $engine;
+		$this->engine->render(array('template' => $template));
 	}
 
 }

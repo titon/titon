@@ -10,7 +10,7 @@
 namespace titon\libs\controllers;
 
 use \titon\libs\actions\Action;
-use \titon\libs\views\View;
+use \titon\libs\engines\Engine;
 
 /**
  * Interface for the controllers library.
@@ -57,6 +57,14 @@ interface Controller {
 	 * @return mixed
 	 */
 	public function forward($action, array $args);
+	
+	/**
+	 * The final result from the action and the rending engine.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function output();
 
 	/**
 	 * Triggered before the Controller processes the requested Action.
@@ -75,12 +83,12 @@ interface Controller {
 	public function postProcess();
 
 	/**
-	 * Configure the Controller and store the View object.
+	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param View $view
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function setView(View $view);
+	public function setEngine(Engine $engine);
 
 }

@@ -10,7 +10,7 @@
 namespace titon\libs\listeners;
 
 use \titon\libs\controllers\Controller;
-use \titon\libs\views\View;
+use \titon\libs\engines\Engine;
 
 /**
  * Interface for the event listeners library.
@@ -39,36 +39,36 @@ interface Listener {
 	 * Executed before the action gets processed.
 	 *
 	 * @access public
-	 * @param Controller $Controller
+	 * @param Controller $controller
 	 * @return void
 	 */
-	public function preProcess(Controller $Controller);
+	public function preProcess(Controller $controller);
 
 	/**
 	 * Executed after the action gets processed.
 	 *
 	 * @access public
-	 * @param Controller $Controller
+	 * @param Controller $controller
 	 * @return void
 	 */
-	public function postProcess(Controller $Controller);
+	public function postProcess(Controller $controller);
 
 	/**
 	 * Executed before the template gets rendered.
 	 *
 	 * @access public
-	 * @param View $View
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function preRender(View $View);
+	public function preRender(Engine $engine);
 
 	/**
 	 * Executed after the template gets rendered.
 	 *
 	 * @access public
-	 * @param View $View
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function postRender(View $View);
+	public function postRender(Engine $engine);
     
 }

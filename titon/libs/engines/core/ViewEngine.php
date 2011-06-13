@@ -31,7 +31,7 @@ class ViewEngine extends EngineAbstract {
 		$path = $this->buildPath(self::TYPE_INCLUDE, $path);
 		$variables = $variables + $this->data();
 
-		if (!file_exists($path)) {
+		if (!$path) {
 			throw new EngineException(sprintf('The include template %s does not exist.', basename($path)));
 		}
 
@@ -74,14 +74,6 @@ class ViewEngine extends EngineAbstract {
 
 		} else if ($this->_rendered) {
 			return $this->content();
-		}
-
-		// Get content type automatically
-		if (is_array($config['template']) && isset($config['template']['ext'])) {
-			$this->configure('type', $config['template']['ext']);
-
-		} else if (empty($config['type'])) {
-			$this->configure('type', 'html');
 		}
 
 		// Render the template, layout and wrappers

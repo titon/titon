@@ -231,7 +231,7 @@ class HtmlHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function pageTitle($separator = ' - ') {
-		$pageTitle = $this->_view->config('data.pageTitle');
+		$pageTitle = $this->_engine->data('pageTitle');
 
 		if (is_array($pageTitle)) {
 			return implode($separator, $pageTitle);

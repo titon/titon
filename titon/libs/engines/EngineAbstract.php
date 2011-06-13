@@ -14,6 +14,7 @@ use \titon\base\Prototype;
 use \titon\libs\engines\Engine;
 use \titon\libs\engines\EngineException;
 use \titon\utility\Inflector;
+use \Closure;
 
 /**
  * The Engine acts as a base for all child Engines to inherit. The view engine acts as the renderer of data
@@ -22,7 +23,7 @@ use \titon\utility\Inflector;
  *
  *  - The engine inherits the configuration and variables that were set in the Controller
  *  - The engine applies the configuration and loads any defined helpers and classes
- *  - Once loaded, it renders all views used within the current request
+ *  - Once loaded, begins the staged rendering process
  *  - Will trigger any callbacks and shutdown
  *
  * @package	titon.libs.engines
@@ -225,22 +226,6 @@ abstract class EngineAbstract extends Prototype implements Engine {
 	}
 
 	/**
-	 * Attach the request and response objects.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-		$this->attachObject('request', function() {
-			return Titon::registry()->factory('titon\net\Request');
-		});
-
-		$this->attachObject('response', function() {
-			return Titon::registry()->factory('titon\net\Response');
-		});
-	}
-
-	/**
 	 * Opens and renders a partial view element within the current document.
 	 *
 	 * @access public
@@ -302,7 +287,7 @@ abstract class EngineAbstract extends Prototype implements Engine {
 	 * @access public
 	 * @param string|array $key
 	 * @param mixed $value
-	 * @return View
+	 * @return Engine
 	 * @chainable
 	 */
 	public function set($key, $value = null) {

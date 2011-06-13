@@ -11,8 +11,8 @@ namespace titon\libs\helpers;
 
 use \titon\Titon;
 use \titon\base\Prototype;
+use \titon\libs\engines\Engine;
 use \titon\libs\helpers\Helper;
-use \titon\libs\views\View;
 
 /**
  * The Helper class acts as the base for all children helpers to extend.
@@ -33,12 +33,12 @@ abstract class HelperAbstract extends Prototype implements Helper {
 	protected $_tags = array();
 
 	/**
-	 * View object.
+	 * Engine object.
 	 * 
 	 * @access protected
-	 * @var View
+	 * @var Engine
 	 */
-	protected $_view;
+	protected $_engine;
 
 	/**
 	 * Parses an array of attributes to the HTML equivalent.
@@ -79,22 +79,22 @@ abstract class HelperAbstract extends Prototype implements Helper {
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param View $view
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function preRender(View $view) {
-		$this->_view = $view;
+	public function preRender(Engine $engine) {
+		$this->_engine = $engine;
 	}
 
 	/**
 	 * Triggered after a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param View $view
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function postRender(View $view) {
-		$this->_view = $view;
+	public function postRender(Engine $engine) {
+		$this->_engine = $engine;
 	}
 
 	/**

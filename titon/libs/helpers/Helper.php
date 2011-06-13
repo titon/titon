@@ -9,7 +9,7 @@
 
 namespace titon\libs\helpers;
 
-use \titon\libs\views\View;
+use \titon\libs\engines\Engine;
 
 /**
  * Interface for the helpers library.
@@ -22,18 +22,18 @@ interface Helper {
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param View $view
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function preRender(View $view);
+	public function preRender(Engine $engine);
 
 	/**
 	 * Triggered after a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param View $view
+	 * @param Engine $engine
 	 * @return void
 	 */
-	public function postRender(View $view);
+	public function postRender(Engine $engine);
 
 }
