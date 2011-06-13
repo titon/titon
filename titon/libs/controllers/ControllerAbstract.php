@@ -14,7 +14,7 @@ use \titon\base\Prototype;
 use \titon\libs\actions\Action;
 use \titon\libs\controllers\Controller;
 use \titon\libs\controllers\ControllerException;
-use \titon\libs\engine\Engine;
+use \titon\libs\engines\Engine;
 use \titon\libs\engines\core\ViewEngine;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
@@ -40,14 +40,6 @@ use \titon\utility\Set;
 abstract class ControllerAbstract extends Prototype implements Controller {
 
 	/**
-	 * Engine object.
-	 *
-	 * @access public
-	 * @var Engine
-	 */
-	public $engine;
-
-	/**
 	 * Configuration.
 	 * 
 	 *	module - Current application module.
@@ -66,7 +58,7 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 		'ext' => '',
 		'args' => array()
 	);
-
+	
 	/**
 	 * Trigger a custom Action class.
 	 *
@@ -153,11 +145,11 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 	 * @return mixed
 	 */
 	public function forward($action, array $args = array()) {
-		$this->engine->render($action);
+		$this->engine->setup($action);
 		$this->configure('action', $action);
 		$this->dispatch($action, $args);
 	}
-	
+
 	/**
 	 * Attach the request and response objects. Can overwrite or remove for high customization.
 	 *
@@ -173,7 +165,15 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 			return Titon::registry()->factory('titon\net\Response');
 		});
 		
-		$this->setEngine( new ViewEngine() );
+		$this->setEngine(function($self) {
+			$config = $self->config();
+			unset($config['args']);
+
+			$engine = new ViewEngine();
+			$engine->setup(array('template' => $config));
+			
+			return $engine;
+		});
 	}
 
 	/**
@@ -187,7 +187,7 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 			$this->response->type($type);
 		}
 		
-		if ($this->engine) {
+		if ($this->hasObject('engine')) {
 			$this->response->body($this->engine->content());
 		}
 		
@@ -218,20 +218,14 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param Engine $engine
+	 * @param Closure $engine
 	 * @return void
 	 */
-	public function setEngine(Engine $engine) {
-		$config = $this->config();
-		$template = array(
-			'module' => $config['module'],
-			'controller' => $config['controller'],
-			'action' => $config['action'],
-			'ext' => $config['ext']
-		);
-
-		$this->engine = $engine;
-		$this->engine->render(array('template' => $template));
+	public function setEngine(Closure $engine) {
+		$this->attachObject(array(
+			'alias' => 'engine',
+			'interface' => 'titon\libs\engines\Engine'
+		), $engine);
 	}
 
 }

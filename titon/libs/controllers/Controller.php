@@ -11,6 +11,7 @@ namespace titon\libs\controllers;
 
 use \titon\libs\actions\Action;
 use \titon\libs\engines\Engine;
+use \Closure;
 
 /**
  * Interface for the controllers library.
@@ -86,9 +87,9 @@ interface Controller {
 	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param Engine $engine
+	 * @param Closure $engine
 	 * @return void
 	 */
-	public function setEngine(Engine $engine);
+	public function setEngine(Closure $engine);
 
 }

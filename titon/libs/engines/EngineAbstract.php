@@ -103,9 +103,8 @@ abstract class EngineAbstract extends Prototype implements Engine {
 	 * @param string $alias
 	 * @param Closure $helper 
 	 * @return void
-	 * @final
 	 */
-	final public function addHelper($alias, Closure $helper) {
+	public function addHelper($alias, Closure $helper) {
 		$this->_helpers[] = $alias;
 
 		$this->attachObject(array(
