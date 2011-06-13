@@ -117,9 +117,8 @@ class Prototype extends Base {
 	 * @param string|array $classes
 	 * @return Prototype
 	 * @chainable
-	 * @final
 	 */
-	final public function allowObject($classes) {
+	public function allowObject($classes) {
 		if (!is_array($classes)) {
 			$classes = array($classes);
 		}
@@ -139,9 +138,8 @@ class Prototype extends Base {
 	 * @param Closure $closure
 	 * @return Prototype
 	 * @chainable
-	 * @final
 	 */
-	final public function attachObject($options, Closure $closure = null) {
+	public function attachObject($options, Closure $closure = null) {
 		if (is_string($options)) {
 			$options = array('alias' => $options);
 		}
@@ -176,9 +174,8 @@ class Prototype extends Base {
 	 * @param string $class
 	 * @return Prototype
 	 * @chainable
-	 * @final
 	 */
-	final public function detachObject($class) {
+	public function detachObject($class) {
 		if (isset($this->_classes[$class])) {
 			unset($this->_classes[$class], $this->_loaded[$class], $this->__objectMap[$class]);
 		}
@@ -193,9 +190,8 @@ class Prototype extends Base {
 	 * @access public
 	 * @param string $class
 	 * @return object|null
-	 * @final
 	 */
-	final public function getObject($class) {
+	public function getObject($class) {
 		if (in_array($class, $this->_restricted)) {
 			return;
 
@@ -240,9 +236,8 @@ class Prototype extends Base {
 	 * @access public
 	 * @param string $class
 	 * @return bool
-	 * @final
 	 */
-	final public function hasObject($class) {
+	public function hasObject($class) {
 		return (isset($this->_loaded[$class]) || isset($this->__objectMap[$class]));
 	}
 
@@ -275,9 +270,8 @@ class Prototype extends Base {
 	 * @param string|array $classes
 	 * @return Prototype
 	 * @chainable
-	 * @final
 	 */
-	final public function restrictObject($classes) {
+	public function restrictObject($classes) {
 		if (!is_array($classes)) {
 			$classes = array($classes);
 		}
@@ -295,9 +289,8 @@ class Prototype extends Base {
 	 * @access public
 	 * @param string $method
 	 * @return void
-	 * @final
 	 */
-	final public function triggerObjects($method) {
+	public function triggerObjects($method) {
 		if (is_string($method) && !empty($this->_classes)) {
 			foreach ($this->_classes as $class => $options) {
 				if ($options['callback']) {
