@@ -129,8 +129,8 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 		$args['referrer'] = $this->request->referrer();
 		$args['url'] = Titon::router()->segment(true);
 
-		$this->engine->set($args);
-		$this->engine->setup(array(
+		$this->view->set($args);
+		$this->view->setup(array(
 			'error' => true,
 			'layout' => 'error',
 			'template' => $action
@@ -146,7 +146,7 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 	 * @return mixed
 	 */
 	public function forward($action, array $args = array()) {
-		$this->engine->setup($action);
+		$this->view->setup($action);
 		$this->configure('action', $action);
 		$this->dispatch($action, $args);
 	}
@@ -166,7 +166,7 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 			return Titon::registry()->factory('titon\net\Response');
 		});
 		
-		$this->setEngine('view', function($self) {
+		$this->setEngine(function($self) {
 			$config = $self->config();
 			unset($config['args']);
 
@@ -188,8 +188,8 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 			$this->response->type($type);
 		}
 		
-		if ($this->hasObject('engine')) {
-			$this->response->body($this->engine->content());
+		if ($this->hasObject('view')) {
+			$this->response->body($this->view->content());
 		}
 		
 		$this->response->respond();
@@ -219,13 +219,12 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param string $alias
 	 * @param Closure $engine
 	 * @return void
 	 */
-	public function setEngine($alias, Closure $engine) {
+	public function setEngine(Closure $engine) {
 		$this->attachObject(array(
-			'alias' => $alias,
+			'alias' => 'view',
 			'interface' => '\titon\libs\engines\Engine'
 		), $engine);
 	}

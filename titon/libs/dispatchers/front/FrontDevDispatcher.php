@@ -47,21 +47,19 @@ class FrontDevDispatcher extends DispatcherAbstract {
 		$event->execute('postProcess', $controller);
 		Benchmark::stop('Controller');
 
-		Benchmark::start('View');
-
-		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
-			$engine = $controller->engine;
+		if ($controller->hasObject('view') && $controller->view->config('render')) {
+			$view = $controller->view;
 			
-			$engine->preRender();
-			$event->execute('preRender', $engine);
+			Benchmark::start('View');
+			$view->preRender();
+			$event->execute('preRender', $view);
 
-			$engine->run();
+			$view->run();
 
-			$engine->postRender();
-			$event->execute('postRender', $engine);
+			$view->postRender();
+			$event->execute('postRender', $view);
+			Benchmark::stop('View');
 		}
-
-		Benchmark::stop('View');
 
 		$event->execute('postDispatch');
 		Benchmark::stop('Dispatcher');

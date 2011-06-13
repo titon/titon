@@ -87,10 +87,9 @@ interface Controller {
 	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param string $alias
 	 * @param Closure $engine
 	 * @return void
 	 */
-	public function setEngine($alias, Closure $engine);
+	public function setEngine(Closure $engine);
 
 }
