@@ -1,16 +1,13 @@
 <?php
 /**
- * A required interface for all custom view engines to implement.
- * Defines all the default methods that will be used in the rendering process.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 namespace titon\libs\engines;
-
-use \titon\libs\views\View;
 
 /**
  * Interface for the engines library.
@@ -19,69 +16,58 @@ use \titon\libs\views\View;
  */
 interface Engine {
 
-    /**
-     * Output the inner content templates, as well as applying a wrapper if it exists.
-     *
-     * @access public
-     * @return void
-     */
-	public function content();
-
-    /**
-	 * Triggered upon the engine class instantiation, following __construct().
+	/**
+	 * The output of the rendering process. The output changes depending on the current rendering stage.
 	 *
 	 * @access public
-     * @param View $View
 	 * @return void
 	 */
-    public function initialize(View $View);
+	public function content();
 
-    /**
-     * Output the flash message into the view. Uses the flash.tpl element.
-     *
-     * @access public
-     * @param array $params
-     * @return string|null
-     */
-    public function flash(array $params = array());
+	/**
+	 * Opens and renders a partial view element within the current document.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @param array $variables
+	 * @return string
+	 */
+	public function open($path, array $variables);
 
-    /**
-     * Opens and renders a partial view element within the current document.
-     * Can be called within other view templates.
-     *
-     * @access public
-     * @param string $path
-     * @param array $variables
-     * @return string
-     */
-    public function open($path, array $variables = array());
-
-    /**
+	/**
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
-     * @param View $View
 	 * @return void
 	 */
-    public function preRender(View $View);
+	public function preRender();
 
-    /**
+	/**
 	 * Triggered after a template is rendered by the engine.
 	 *
 	 * @access public
-     * @param View $View
 	 * @return void
 	 */
-    public function postRender(View $View);
+	public function postRender();
 
-    /**
-     * Renders the layout by extracting variables into the template and returning the output.
-     * The inner content will be rendered if the content() method exists in the tpl.
-     * Finally, it will output the correct HTTP headers depending on the "type" property in the config.
-     *
-     * @access public
-     * @return string
-     */
+	/**
+	 * Primary method to render a single view template.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @param array $variables
+	 * @return void
+	 */
+	public function render($path, array $variables);
+
+	/**
+	 * Begins the staged rendering process. First stage, the system must render the template based on the module, 
+	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
+	 * wrap the current template ouput with the layout. Return the final result.
+	 *
+	 * @access public
+	 * @return string
+	 */
 	public function run();
-	
+
 }

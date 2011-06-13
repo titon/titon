@@ -1,7 +1,23 @@
 <?php
 /**
+ * Titon: The PHP 5.3 Micro Framework
+ *
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
+ */
+
+namespace titon\libs\engines;
+
+use \titon\Titon;
+use \titon\base\Prototype;
+use \titon\libs\engines\Engine;
+use \titon\libs\engines\EngineException;
+use \titon\utility\Inflector;
+
+/**
  * The Engine acts as a base for all child Engines to inherit. The view engine acts as the renderer of data
- * (set by the Controller) to markup (the View templates), using a templating system. 
+ * (set by the controller) to markup (the view templates), using a templating system. 
  * The order of process is as follows:
  *
  *  - The engine inherits the configuration and variables that were set in the Controller
@@ -9,165 +25,325 @@
  *  - Once loaded, it renders all views used within the current request
  *  - Will trigger any callbacks and shutdown
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
- */
-
-namespace titon\libs\engines;
-
-use \titon\base\Prototype;
-use \titon\core\Config;
-use \titon\log\Exception;
-use \titon\libs\engines\Engine;
-use \titon\core\Router;
-use \titon\libs\views\View;
-
-/**
- * Engine
- *
  * @package	titon.libs.engines
+ * @uses	titon\libs\engines\EngineException
+ * @uses	titon\utility\Inflector
  * @abstract
  */
 abstract class EngineAbstract extends Prototype implements Engine {
 
-    /**
-     * View object.
-     *
-     * @access public
-     * @var View
-     */
-    public $View;
+	/**
+	 * Constants for all the possible types of templates.
+	 */
+	const TYPE_TPL = 1;
+	const TYPE_LAYOUT = 2;
+	const TYPE_WRAPPER = 3;
+	const TYPE_INCLUDE = 4;
+	const TYPE_ERROR = 5;
 
-    /**
-     * The rendered content used within the wrapper or the layout.
-     *
-     * @access protected
-     * @var string
-     */
-    protected $_content = null;
+	/**
+	 * Configuration. Can be overwritten in the Controller.
+	 * 
+	 *	type - The content type to respond as (defaults to html).
+	 *	template - An array containing the module, controller, and action.
+	 *	render - Toggle the rendering process.
+	 *	layout - The layout template to use.
+	 *	wrapper - The wrapper template to use.
+	 *	error - True if its an error page.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_config = array(
+		'type'		=> null,
+		'template'	=> array(),
+		'render'	=> true,
+		'layout'	=> 'default',
+		'wrapper'	=> null,
+		'error'		=> false
+	);
 
-    /**
-     * The name of the layout tpl to load for the base HTML.
-     *
-     * @access protected
-     * @var string
-     */
-    protected $_layout = 'default';
+	/**
+	 * The rendered content used within the wrapper or the layout.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_content = null;
 
-    /**
-     * Has the views been completely rendered.
-     *
-     * @access protected
-     * @var boolean
-     */
-    protected $_rendered = false;
+	/**
+	 * Dynamic data set from the controller.
+	 * 
+	 * @access protected
+	 * @var array
+	 */
+	protected $_data = array();
 
-    /**
-     * The name of the wrapper tpl to use for the wrapping of the HTML content, within the layout.
-     *
-     * @access protected
-     * @var string
-     */
-    protected $_wrapper = null;
+	/**
+	 * List of added helpers.
+	 * 
+	 * @access protected
+	 * @var array
+	 */
+	protected $_helpers = array();
 
-    /**
-     * Has a wrapper been applied to the layout.
-     *
-     * @access protected
-     * @var boolean
-     */
-    protected $_wrapped = false;
+	/**
+	 * Has the view been rendered.
+	 *
+	 * @access protected
+	 * @var boolean
+	 */
+	protected $_rendered = false;
 
-    /**
-     * Return the inner content for the layout or for the wrapper, depending if certain files exist.
-     *
-     * @access public
-     * @return void
-     */
+	/**
+	 * Add a helper to the view rendering engine.
+	 * 
+	 * @access public
+	 * @param string $alias
+	 * @param Closure $helper 
+	 * @return void
+	 * @final
+	 */
+	final public function addHelper($alias, Closure $helper) {
+		$this->_helpers[] = $alias;
+
+		$this->attachObject(array(
+			'alias' => $alias,
+			'interface' => '\titon\libs\helpers\Helper'
+		), $helper);
+	}
+
+	/**
+	 * Get the filepath for a type of template: layout, wrapper, view, error, include
+	 *
+	 * @access public
+	 * @param string $type
+	 * @param string $path
+	 * @return string
+	 */
+	public function buildPath($type = self::TYPE_TPL, $path = null) {
+		$paths = array();
+		$config = $this->config();
+		$template = $config['template'];
+
+		if ($config['error']) {
+			$type = self::TYPE_ERROR;
+		}
+
+		switch ($type) {
+			case self::TYPE_LAYOUT:
+				if (!empty($config['layout'])) {
+					$layout = Titon::loader()->ds($config['layout']);
+
+					$paths = array(
+						APP_MODULES . $template['module'] .'/views/private/layouts/'. $layout .'.tpl',
+						APP_VIEWS .'layouts/'. $layout .'.tpl'
+					);
+				}
+			break;
+
+			case self::TYPE_WRAPPER:
+				if (!empty($config['wrapper'])) {
+					$wrapper = Titon::loader()->ds($config['wrapper']);
+
+					$paths = array(
+						APP_MODULES . $template['module'] .'/views/private/wrappers/'. $wrapper .'.tpl',
+						APP_VIEWS .'wrappers/'. $wrapper .'.tpl'
+					);
+				}
+			break;
+
+			case self::TYPE_INCLUDE:
+				$path = Titon::loader()->ds($path);
+
+				if (substr($path, -4) == '.tpl') {
+					$path = substr($path, 0, (strlen($path) - 4));
+				}
+
+				$paths = array(
+					APP_MODULES . $template['module'] .'/views/private/includes/'. $path .'.tpl',
+					APP_VIEWS .'includes/'. $path .'.tpl'
+				);
+			break;
+
+			case self::TYPE_ERROR:
+				$error = Titon::loader()->ds($template['action']);
+
+				$paths = array(
+					APP_MODULES . $template['module'] .'/views/private/errors/'. $error .'.tpl',
+					APP_VIEWS .'errors/'. $error .'.tpl'
+				);
+			break;
+
+			case self::TYPE_TPL:
+			default:
+				$parts = array(
+					$template['module'],
+					'views',
+					'public',
+					$template['controller'],
+					Titon::loader()->ds($template['action'])
+				);
+
+				$path  = APP_MODULES . implode(DS, $parts);
+				$path .= empty($ext) ? '.tpl' : '.'. $ext .'.tpl';
+
+				$paths = array($path);
+			break;
+		}
+
+		if (!empty($paths)) {
+			foreach ($paths as $path) {
+				if (file_exists($path)) {
+					return $path;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * The output of the rendering process. The output changes depending on the current rendering stage.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function content() {
-        return $this->_content;
-    }
+		return $this->_content;
+	}
 
-    /**
-     * Output the flash message into the view. Uses the flash.tpl element.
-     *
-     * @access public
-     * @param array $params
-     * @return string|null
-     */
-    public function flash(array $params = array()) {
-        if ($this->View->hasObject('Session')) {
-            $message = $this->View->Session->get('App.flash');
-            $this->View->Session->set('App.flash', '');
-        } else {
-            $message = Set::extract($_SESSION, 'App.flash');
-            $_SESSION = Set::remove($_SESSION, 'App.flash');
-        }
+	/**
+	 * Return the data based on the given key.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @return string
+	 */
+	public function data($key = null) {
+		return isset($this->_data[$key]) ? $this->_data[$key] : $this->_data;
+	}
 
-        if (!empty($message)) {
-            $params = array('message' => $message) + $params;
+	/**
+	 * Attach the request and response objects.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		$this->attachObject('request', function() {
+			return Titon::registry()->factory('titon\net\Request');
+		});
 
-            return $this->open('flash', $params);
-        }
-    }
+		$this->attachObject('response', function() {
+			return Titon::registry()->factory('titon\net\Response');
+		});
+	}
 
-    /**
-     * Store the View object and define the layout and wrapper settings.
-     *
-     * @access public
-     * @param View $View
-     * @return void
-     */
-    public function initialize(View $View) {
-        $this->View = $View;
-        $this->_layout = $this->View->getConfig('layout');
-        $this->_wrapper = $this->View->getConfig('wrapper');
-    }
+	/**
+	 * Opens and renders a partial view element within the current document.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @param array $variables
+	 * @return string
+	 */
+	public function open($path, array $variables = array()) {
+		throw new EngineException('You must define the open() method within your engine.');
+	}
 
-    /**
-     * Opens and renders a partial view element within the current document.
-     * Can be called within other view templates.
-     *
-     * @access public
-     * @param string $path
-     * @param array $variables
-     * @return string
-     */
-    public function open($path, array $variables = array()) {
-        throw new Exception('You must define the open() method within your engine.');
-    }
-
-    /**
+	/**
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
-     * @param View $View
 	 * @return void
 	 */
-    public function preRender(View $View) {
-    }
+	public function preRender() {
+		$this->triggerObjects('preRender');
+	}
 
-    /**
+	/**
 	 * Triggered after a template is rendered by the engine.
 	 *
 	 * @access public
-     * @param View $View
 	 * @return void
 	 */
-    public function postRender(View $View) {
-    }
+	public function postRender() {
+		$this->triggerObjects('postRender');
+	}
 
-    /**
-     * Renders the inner content templates, applies a wrapper if it exists and renders the layout.
-     * The inner content will be rendered if the content() method exists in the tpl.
-     * Finally, it will output the correct HTTP headers depending on the "type" property in the config.
-     *
-     * @access public
-     * @return string
-     */
+	/**
+	 * Primary method to render a single view template.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @param array $variables
+	 * @return void
+	 */
+	public function render($path, array $variables = array()) {
+		throw new EngineException('You must define the render() method within your Engine.');
+	}
+
+	/**
+	 * Begins the staged rendering process. First stage, the system must render the template based on the module, 
+	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
+	 * wrap the current template ouput with the layout. Return the final result.
+	 *
+	 * @access public
+	 * @return string
+	 */
 	public function run() {
-        throw new Exception('You must define the run() method within your Engine.');
-    }
+		throw new EngineException('You must define the run() method within your Engine.');
+	}
+
+	/**
+	 * Set a variable to the view. The variable name will be inflected if it is invalid.
+	 *
+	 * @access public
+	 * @param string|array $key
+	 * @param mixed $value
+	 * @return View
+	 * @chainable
+	 */
+	public function set($key, $value = null) {
+		if (is_array($key)) {
+			foreach ($key as $k => $v) {
+				$this->set($k, $v);
+			}
+		} else {
+			$this->_data[Inflector::variable($key)] = $value;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Custom method to overwrite and configure the view engine manually.
+	 *
+	 * @access public
+	 * @param mixed $options
+	 * @return void
+	 */
+	public function setup($options) {
+		if (($options === false) || ($options === null)) {
+			$this->configure('render', false);
+
+		} else if (is_string($options)) {
+			$this->configure('template.action', $options);
+
+		} else if (is_array($options)) {
+			foreach ($options as $key => $value) {
+				if ($key == 'template') {
+					if (is_array($value)) {
+						$this->configure('template', $value + $this->config('template'));
+					} else {
+						$this->configure('template.action', $value);
+					}
+				} else {
+					$this->configure($key, $value);
+				}
+			}
+		}
+	}
 
 }
