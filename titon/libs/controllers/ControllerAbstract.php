@@ -18,6 +18,7 @@ use \titon\libs\engines\Engine;
 use \titon\libs\engines\core\ViewEngine;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
+use \Closure;
 
 /**
  * The Controller (MVC) acts as the median between the request and response within the dispatch cycle.
@@ -165,7 +166,7 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 			return Titon::registry()->factory('titon\net\Response');
 		});
 		
-		$this->setEngine(function($self) {
+		$this->setEngine('view', function($self) {
 			$config = $self->config();
 			unset($config['args']);
 
@@ -218,13 +219,14 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 	 * Setup the rendering engine to use.
 	 *
 	 * @access public
+	 * @param string $alias
 	 * @param Closure $engine
 	 * @return void
 	 */
-	public function setEngine(Closure $engine) {
+	public function setEngine($alias, Closure $engine) {
 		$this->attachObject(array(
-			'alias' => 'engine',
-			'interface' => 'titon\libs\engines\Engine'
+			'alias' => $alias,
+			'interface' => '\titon\libs\engines\Engine'
 		), $engine);
 	}
 

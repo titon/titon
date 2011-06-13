@@ -98,6 +98,16 @@ class Environment {
 	}
 	
 	/**
+	 * Does the current environment match the passed key?
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function is($name) {
+		return ($this->current() == $name);
+	}
+	
+	/**
 	 * Does the current environment match the default (usually development).
 	 * 
 	 * @access public

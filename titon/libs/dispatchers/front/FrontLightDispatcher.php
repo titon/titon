@@ -27,18 +27,15 @@ class FrontLightDispatcher extends DispatcherAbstract {
 	 */
 	public function run() {
 		$controller = $this->controller;
-		$view = $this->view;
-
-		// Controller and action
 		$controller->preProcess();
 		$controller->dispatch();
 		$controller->postProcess();
 
-		// View
-		if ($view->config('render')) {
-			$view->preRender();
-			$view->run();
-			$view->postRender();
+		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+			$engine = $controller->engine;
+			$engine->preRender();
+			$engine->run();
+			$engine->postRender();
 		}
 	}
 	

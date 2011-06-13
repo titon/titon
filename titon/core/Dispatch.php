@@ -71,7 +71,7 @@ class Dispatch {
 			$dispatcher = $dispatch;
 			$dispatcher->configure($params);
 			
-		} else if (Titon::environment()->current() == 'development') {
+		} else if (Titon::environment()->is('development')) {
 			$dispatcher = new FrontDevDispatcher($params);
 
 		} else {

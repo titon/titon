@@ -30,29 +30,27 @@ class FrontDispatcher extends DispatcherAbstract {
 	public function run() {
 		$controller = $this->controller;
 		$event = Titon::event();
-		$view = $this->view;
 
 		$event->execute('preDispatch');
 
-		// Controller
 		$controller->preProcess();
 		$event->execute('preProcess', $controller);
-
-			// Action
-			$controller->dispatch();
-
+		
+		$controller->dispatch();
+		
 		$controller->postProcess();
 		$event->execute('postProcess', $controller);
 
-		// View
-		if ($view->config('render')) {
-			$view->preRender();
-			$event->execute('preRender', $view);
+		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+			$engine = $controller->engine;
+			
+			$engine->preRender();
+			$event->execute('preRender', $engine);
 
-			$view->run();
+			$engine->run();
 
-			$view->postRender();
-			$event->execute('postRender', $view);
+			$engine->postRender();
+			$event->execute('postRender', $engine);
 		}
 
 		$event->execute('postDispatch');

@@ -12,9 +12,9 @@ namespace titon\libs\dispatchers;
 use \titon\Titon;
 use \titon\base\Prototype;
 use \titon\libs\controllers\Controller;
+use \titon\libs\controllers\core\ErrorController;
 use \titon\libs\dispatchers\Dispatcher;
 use \titon\libs\dispatchers\DispatcherException;
-use \titon\libs\views\View;
 use \titon\utility\Inflector;
 
 /**
@@ -29,38 +29,23 @@ use \titon\utility\Inflector;
 abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 
 	/**
-	 * Lazy load the view and controller objects.
+	 * Lazy load the controller object. Do not allow overrides.
 	 *
 	 * @access public
 	 * @return void
+	 * @final
 	 */
-	public function initialize() {
-		$this->attachObject('view', function($self) {
-			return $self->loadView();
-		});
-		
-		$this->attachObject('controller', function($self) {
-			$controller = $self->loadController();
-			$controller->setView($self->getObject('view'));
-			
-			return $controller;
+	final public function initialize() {
+		$this->attachObject(array(
+			'alias' => 'controller',
+			'interface' => '\titon\libs\controllers\Controller'
+		), function($self) {
+			return $self->loadController();
 		});
 	}
-	
-	/**
-	 * Return the system View as this is not a modular class.
-	 * 
-	 * @access public
-	 * @return View
-	 */
-	public function loadView() {
-		return Titon::registry()->factory('titon\libs\views\View');
-	}
-	
+
 	/**
 	 * Load the controller based on the routing params. If the controller does not exist, throw exceptions.
-	 * 
-	 * @todo - In production, it should throw up some sort of 404 error page.
 	 * 
 	 * @access public
 	 * @return Controller 
@@ -72,11 +57,12 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 		if (file_exists($path)) {
 			return Titon::registry()->factory($path, $config);
 			
-		} else if (Titon::environment()->isDefault()) {
+		} else if (Titon::environment()->is('development')) {
 			throw new DispatcherException(sprintf('Controller %s could not be found in the %s module.', $config['controller'], $config['module']));
 		}
 		
-		return new Controller();
+		// Return error controller in production
+		return new ErrorController();
 	}
 
 	/**
