@@ -62,6 +62,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			dispatchers/
 			drivers/
 			engines/
+			enums/
 			helpers/
 			listeners/
 			packages/
@@ -69,6 +70,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			routes/
 			shells/
 			storage/
+			traits/
 			translators/
 			transporters/
 		locale/
@@ -88,6 +90,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Dispatcher - Handles the dispatch cycle in the MVC paradigm.
 * Driver - Allows the model to access different types of databases; describes the schema. Only works with Titon's model system.
 * Engine - Handles the rendering of the view templates.
+* Enums - Pre-built convenience enums.
 * Helper - Provides additional functionality to the view layer.
 * Listener - Objects that listen and wait to be triggered at specific events in the system.
 * Package - A combination of library types into a single related entity.
@@ -95,5 +98,6 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Routes - Maps URLs to internal destinations.
 * Shell - Handles CLI execution and tasks.
 * Storage - Provides different methods of caching data.
+* Traits - Pre-built PHP 5.4 traits.
 * Translator - Handles the translation of certain filetypes to be used by the locale message system.
 * Transporter - Handles the different type of email transporting (SMTP, etc).
