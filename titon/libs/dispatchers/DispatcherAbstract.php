@@ -52,14 +52,20 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 	 */
 	public function loadController() {
 		$config = $this->config();
-		$path = APP_MODULES . $config['module'] . DS .'controllers'. DS . Inflector::filename($config['controller'] .'Controller');
+		$controllers = Titon::app()->controllers($config['module']);
+		$path = Titon::loader()->toPath($controllers[$config['controller']]);
+		
+		
+		$controller = Titon::registry()->factory($path, $config);
+		
+		return $controller;
 
-		if (file_exists($path)) {
+		/*if (file_exists($path)) {
 			return Titon::registry()->factory($path, $config);
 			
 		} else if (Titon::environment()->is('development')) {
 			throw new DispatcherException(sprintf('Controller %s could not be found in the %s module.', $config['controller'], $config['module']));
-		}
+		}*/
 		
 		// Return error controller in production
 		return new ErrorController();

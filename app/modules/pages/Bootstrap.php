@@ -17,4 +17,6 @@ use \titon\Titon;
  * models, and whatever logic it may have. You may also place custom global functions here specific to this module.
  */
 
-Titon::app()->setup('pages', array('index'));
+Titon::app()->setup('pages', array(
+	'index' => '\app\moduless\pages\controllers\IndexController'
+));

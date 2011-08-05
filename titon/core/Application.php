@@ -67,29 +67,13 @@ class Application {
 	 *
 	 * @access public
 	 * @param string $module
-	 * @param string|array $controllers
+	 * @param array $controllers
 	 * @return Application
 	 * @chainable
 	 */
-	public function setup($module, $controllers = array()) {
-		if (!isset($this->_modules[$module])) {
-			$this->_modules[$module] = array();
-		}
-
-		if (!empty($controllers)) {
-			if (!is_array($controllers)) {
-				$controllers = array($controllers);
-			}
-
-			foreach ($controllers as $controller) {
-				if (!empty($controller)) {
-					$this->_modules[$module][] = (string)$controller;
-				}
-			}
-
-			$this->_modules[$module] = array_unique($this->_modules[$module]);
-		}
-
+	public function setup($module, array $controllers = array()) {
+		$this->_modules[$module] = array_unique($controllers);
+		
 		return $this;
 	}
 
