@@ -79,7 +79,7 @@ class Config {
 	 */
 	public function load($key, Reader $reader) {
 		$file = Inflector::filename($key, $reader->extension(), false);
-		$path = APP_CONFIG .'sets'. DS . $file;
+		$path = APP_CONFIG . 'sets' . DS . $file;
 
 		if (file_exists($path)) {
 			$reader->read($path);
@@ -125,7 +125,7 @@ class Config {
 	 */
 	public function set($key, $value) {
 		if ($key === 'Debug.level') {
-			Titon::debugger()->enable(((int)$value > 0));
+			Titon::debugger()->enable(((int) $value > 0));
 		}
 
 		$this->_config = Set::insert($this->_config, $key, $value);

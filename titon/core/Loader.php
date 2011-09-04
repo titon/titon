@@ -109,7 +109,13 @@ class Loader {
 	 * @return string
 	 */
 	public function ds($path) {
-		return str_replace(array(':/', ':\\', '/', '\\'), DS, $path);
+		$path = str_replace(array(':/', ':\\', '/', '\\'), DS, $path);
+		
+		if (substr($path, -1) != DS) {
+			$path .= DS;
+		}
+		
+		return $path;
 	}
 
 	/**

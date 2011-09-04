@@ -9,21 +9,43 @@
 
 namespace titon\core;
 
+use \titon\Titon;
+
 /**
  * This class manages the location and installation of controllers and modules,
  * to speed up the lookup process of its sub-classes.
  *
  * @package	titon.core
+ * @uses	titon\Titon
  */
 class Application {
+	
+	/**
+	 * List of controllers per module.
+	 * 
+	 * @access protected
+	 * @var array
+	 */
+	protected $_controllers = array();
 
 	/**
-	 * List of added modules.
+	 * List of modules.
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_modules = array();
+	
+	/**
+	 * Default setup.
+	 * 
+	 * @access private
+	 * @var array
+	 */
+	private $__defaults = array(
+		'path' => '',
+		'controllers' => array()
+	);
 
 	/**
 	 * Return all controllers, or a modules controllers.
@@ -33,7 +55,7 @@ class Application {
 	 * @return array
 	 */
 	public function controllers($module = null) {
-		return isset($this->_modules[$module]) ? $this->_modules[$module] : $this->_modules;
+		return isset($this->_controllers[$module]) ? $this->_controllers[$module] : $this->_controllers;
 	}
 
 	/**
@@ -44,7 +66,7 @@ class Application {
 	 */
 	public function initialize() {
 		foreach (scandir(APP_MODULES) as $module) {
-			$path = APP_MODULES . $module . DS .'bootstrap.php';
+			$path = APP_MODULES . $module . DS . 'bootstrap.php';
 			
 			if (file_exists($path)) {
 				include_once $path;
@@ -63,16 +85,25 @@ class Application {
 	}
 
 	/**
-	 * Add a module (and controllers) to the application for fast lookup.
+	 * Add a module to the application for fast lookup.
 	 *
 	 * @access public
 	 * @param string $module
-	 * @param array $controllers
+	 * @param array $setup
 	 * @return Application
 	 * @chainable
 	 */
-	public function setup($module, array $controllers = array()) {
-		$this->_modules[$module] = array_unique($controllers);
+	public function setup($module, array $setup = array()) {
+		if (empty($setup['path'])) {
+			throw new CoreException(sprintf('The path for the %s module is required.', $module));
+		}
+		
+		$setup = $setup + $this->__defaults;
+		$setup['name'] = $module;
+		$setup['path'] = Titon::loader()->ds($setup['path']);
+		
+		$this->_modules[$module] = $setup;
+		$this->_controllers[$module] = $setup['controllers'];
 		
 		return $this;
 	}

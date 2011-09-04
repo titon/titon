@@ -18,5 +18,8 @@ use \titon\Titon;
  */
 
 Titon::app()->setup('pages', array(
-	'index' => '\app\moduless\pages\controllers\IndexController'
+	'path' => __DIR__,
+	'controllers' => array(
+		'index' => 'IndexController'
+	)
 ));

@@ -50,16 +50,16 @@ class Dispatch {
 		if (!empty($this->__mapping)) {
 
 			// Specific controller and module
-			if (isset($this->__mapping[$params['module'] .'.'. $params['controller']])) {
-				$dispatch = $this->__mapping[$params['module'] .'.'. $params['controller']];
+			if (isset($this->__mapping[$params['module'] . '.' . $params['controller']])) {
+				$dispatch = $this->__mapping[$params['module'] . '.' . $params['controller']];
 
 			// All controllers within a specific container
-			} else if (isset($this->__mapping[$params['module'] .'.*'])) {
-				$dispatch = $this->__mapping[$params['module'] .'.*'];
+			} else if (isset($this->__mapping[$params['module'] . '.*'])) {
+				$dispatch = $this->__mapping[$params['module'] . '.*'];
 
 			// Specific controller within any container
-			} else if (isset($this->__mapping['*.'. $params['controller']])) {
-				$dispatch = $this->__mapping['*.'. $params['controller']];
+			} else if (isset($this->__mapping['*.' . $params['controller']])) {
+				$dispatch = $this->__mapping['*.' . $params['controller']];
 
 			// Apply to all controllers and containers
 			} else if (isset($this->__mapping['*.*'])) {
