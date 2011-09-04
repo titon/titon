@@ -57,4 +57,3 @@ include_once TITON .'core'. DS .'Loader.php';
  * Include custom configuration and settings from the application.
  */
 include_once APP_CONFIG .'setup.php';
-include_once APP_CONFIG .'routes.php';

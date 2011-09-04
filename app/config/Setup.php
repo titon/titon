@@ -10,6 +10,7 @@
 namespace app\config;
 
 use \titon\Titon;
+use \titon\core\Environment;
 
 /**
  * INI Settings
@@ -26,7 +27,10 @@ ini_set('mbstring.func_overload', 7);
  */
 
 Titon::environment()
-	->setup('development', array('localhost', '127.0.0.1'))
+	->setup('development', array(
+		'type' => Environment::DEVELOPMENT,
+		'hosts' => array('localhost', '127.0.0.1')
+	))
 	->fallback('development');
 
 /**

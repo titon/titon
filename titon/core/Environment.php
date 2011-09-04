@@ -20,14 +20,13 @@ use \titon\utility\Inflector;
  * @uses	titon\utility\Inflector
  */
 class Environment {
-
+	
 	/**
-	 * Sets the default environment; defaults to development.
-	 *
-	 * @access protected
-	 * @var string
+	 * Types of environments.
 	 */
-	protected $_default = 'development';
+	const DEVELOPMENT = 1;
+	const STAGING = 2;
+	const PRODUCTION = 3;
 
 	/**
 	 * Holds the list of possible environment configurations.
@@ -36,6 +35,14 @@ class Environment {
 	 * @var array
 	 */
 	protected $_environments = array();
+
+	/**
+	 * Sets the default environment; defaults to development.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_fallback = 'development';
 
 	/**
 	 * Relate hostnames to environment configurations.
@@ -47,6 +54,17 @@ class Environment {
 		'localhost' => 'development',
 		'127.0.0.1' => 'development',
 		'::1' => 'development'
+	);
+	
+	/**
+	 * Default setup.
+	 * 
+	 * @access private
+	 * @var array
+	 */
+	private $__defaults = array(
+		'type' => self::DEVELOPMENT,
+		'hosts' => array()
 	);
 
 	/**
@@ -62,11 +80,11 @@ class Environment {
 			return $this->_hostMapping[$host];
 		}
 
-		return $this->_default;
+		return $this->_fallback;
 	}
 
 	/**
-	 * Set the default environment, must exist in the $__environments array.
+	 * Set the fallback (default) environment, must exist in the $_environments array.
 	 *
 	 * @access public
 	 * @param string $name
@@ -74,11 +92,11 @@ class Environment {
 	 * @chainable
 	 */
 	public function fallback($name) {
-		if (!in_array($name, $this->_environments)) {
+		if (empty($this->_environments[$name])) {
 			throw new CoreException(sprintf('Environment %s does not exist.', $name));
 		}
 
-		$this->_default = $name;
+		$this->_fallback = $name;
 
 		return $this;
 	}
@@ -90,7 +108,7 @@ class Environment {
 	 * @return void
 	 */
 	public function initialize() {
-		$path = APP_CONFIG .'environments'. DS . Inflector::filename($this->current(), 'php', false);
+		$path = APP_CONFIG . 'environments' . DS . Inflector::filename($this->current(), 'php', false);
 
 		if (file_exists($path)) {
 			include_once $path;
@@ -101,37 +119,71 @@ class Environment {
 	 * Does the current environment match the passed key?
 	 * 
 	 * @access public
+	 * @param string $name
 	 * @return boolean
 	 */
 	public function is($name) {
-		return ($this->current() == $name);
+		$current = $this->current();
+		
+		return ($current['name'] == $name);
 	}
 	
 	/**
-	 * Does the current environment match the default (usually development).
+	 * Is the current environment development?
 	 * 
 	 * @access public
 	 * @return boolean
 	 */
-	public function isDefault() {
-		return ($this->current() == $this->_default);
+	public function isDevelopment() {
+		$current = $this->current();
+		
+		return ($current['type'] == self::DEVELOPMENT);
+	}
+	
+	/**
+	 * Is the current environment production?
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function isProduction() {
+		$current = $this->current();
+		
+		return ($current['type'] == self::PRODUCTION);
+	}
+	
+	/**
+	 * Is the current environment staging?
+	 * 
+	 * @access public
+	 * @return boolean
+	 */
+	public function isStaging() {
+		$current = $this->current();
+		
+		return ($current['type'] == self::STAGING);
 	}
 
 	/**
-	 * Add an environment and its hosts to the application.
+	 * Add an environment and its configured hosts and type.
 	 *
 	 * @access public
 	 * @param string $name
-	 * @param array $hosts
+	 * @param array $setup
 	 * @return Environment
 	 * @chainable
 	 */
-	public function setup($name, array $hosts) {
-		if (!in_array($name, $this->_environments)) {
-			$this->_environments[] = $name;
+	public function setup($name, array $setup) {
+		if (empty($setup['hosts'])) {
+			throw new CoreException(sprintf('A host mapping is required for the %s environment.', $name));
 		}
+		
+		$setup = $setup + $this->__defaults;
+		$setup['name'] = $name;
+		
+		$this->_environments[$name] = $setup;
 
-		foreach ($hosts as $host) {
+		foreach ($setup['hosts'] as $host) {
 			$this->_hostMapping[$host] = $name;
 		}
 
