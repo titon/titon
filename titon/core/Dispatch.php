@@ -43,8 +43,7 @@ class Dispatch {
 	 * @return void
 	 */
 	public function run() {
-		$route = Titon::router()->current();
-		$params = $route->params();
+		$params = Titon::router()->current()->params();
 		$dispatch = null;
 
 		if (!empty($this->__mapping)) {
@@ -71,7 +70,7 @@ class Dispatch {
 			$dispatcher = $dispatch;
 			$dispatcher->configure($params);
 			
-		} else if (Titon::environment()->is('development')) {
+		} else if (Titon::environment()->isDevelopment()) {
 			$dispatcher = new FrontDevDispatcher($params);
 
 		} else {
@@ -103,7 +102,7 @@ class Dispatch {
 			$scope['controller'] = Inflector::underscore($scope['controller']);
 		}
 
-		$this->_mapping[$scope['module'] .'.'. $scope['controller']] = $dispatcher;
+		$this->_mapping[$scope['module'] . '.' . $scope['controller']] = $dispatcher;
 	}
 
 }

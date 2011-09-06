@@ -63,6 +63,8 @@ class FrontDevDispatcher extends DispatcherAbstract {
 
 		$event->execute('postDispatch');
 		Benchmark::stop('Dispatcher');
+		
+		$controller->output();
 	}
 
 }

@@ -23,6 +23,7 @@ use \titon\utility\Inflector;
  * The Dispatcher has many default methods for locating and validating objects within the MVC paradigm.
  *
  * @package	titon.libs.dispatchers
+ * @uses	titon\Titon
  * @uses	titon\libs\dispatchers\DispatcherException
  * @abstract
  */
@@ -52,23 +53,20 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 	 */
 	public function loadController() {
 		$config = $this->config();
-		$controllers = Titon::app()->controllers($config['module']);
-		$path = Titon::loader()->toPath($controllers[$config['controller']]);
+		$module = Titon::app()->module($config['module']);
+		$controller = $module['controllers'][$config['controller']];
 		
-		
-		$controller = Titon::registry()->factory($path, $config);
-		
-		return $controller;
+		// Load controller
+		$path = $module['path'] . DS . 'controllers' . DS . $controller . '.php';
 
-		/*if (file_exists($path)) {
+		if (file_exists($path)) {
 			return Titon::registry()->factory($path, $config);
-			
-		} else if (Titon::environment()->is('development')) {
-			throw new DispatcherException(sprintf('Controller %s could not be found in the %s module.', $config['controller'], $config['module']));
-		}*/
+		} else {
+			throw new DispatcherException(sprintf('%s could not be located in the file system.', $controller));
+		}
 		
-		// Return error controller in production
-		return new ErrorController();
+		// Return error controller as fallback
+		return new ErrorController($config);
 	}
 
 	/**

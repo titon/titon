@@ -17,7 +17,26 @@ use \titon\libs\controllers\ControllerAbstract;
  * Allows the client controllers to inheriet base functionality, as well as share functionality between other controllers.
  *
  * @package	app
+ * @uses	titon\Titon
  */
 class AppController extends ControllerAbstract {
 
+	/**
+	 * Define global helpers and objects.
+	 * 
+	 * @access public
+	 * @return type 
+	 */
+	public function initialize() {
+		parent::initialize();
+		
+		$this->view->addHelper('html', function($self) {
+			return Titon::registry()->factory('titon\libs\helpers\html\HtmlHelper');
+		});
+		
+		$this->view->addHelper('asset', function($self) {
+			return Titon::registry()->factory('titon\libs\helpers\html\AssetHelper');
+		});
+	}
+	
 }

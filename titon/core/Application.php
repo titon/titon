@@ -73,6 +73,17 @@ class Application {
 			}
 		}
 	}
+	
+	/**
+	 * Return the module.
+	 * 
+	 * @access public
+	 * @param string $module
+	 * @return array
+	 */
+	public function module($module) {
+		return $this->_modules[$module];
+	}
 
 	/**
 	 * Return a list of added modules.
@@ -100,7 +111,6 @@ class Application {
 		
 		$setup = $setup + $this->__defaults;
 		$setup['name'] = $module;
-		$setup['path'] = Titon::loader()->ds($setup['path']);
 		
 		$this->_modules[$module] = $setup;
 		$this->_controllers[$module] = $setup['controllers'];

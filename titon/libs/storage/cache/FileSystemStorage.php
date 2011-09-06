@@ -181,7 +181,7 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return string
 	 */
 	protected function _path($key = null) {
-		$path = APP_TEMP .'cache'. DS . $this->config('storage') . DS;
+		$path = APP_TEMP . 'cache' . DS . $this->config('storage') . DS;
 
 		if ($key) {
 			$path .= $this->key($key);

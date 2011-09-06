@@ -37,6 +37,8 @@ class FrontLightDispatcher extends DispatcherAbstract {
 			$view->run();
 			$view->postRender();
 		}
+		
+		$controller->output();
 	}
 	
 }

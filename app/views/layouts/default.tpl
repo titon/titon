@@ -9,6 +9,6 @@
 </head>
 <body>
     <?php echo $this->content(); ?>
-	<?php echo $this->asset->scripsts(); ?>
+	<?php echo $this->asset->scripts(); ?>
 </body>
 </html>

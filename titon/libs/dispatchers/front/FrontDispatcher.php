@@ -54,6 +54,7 @@ class FrontDispatcher extends DispatcherAbstract {
 		}
 
 		$event->execute('postDispatch');
+		$controller->output();
 	}
 
 }
