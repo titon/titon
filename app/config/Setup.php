@@ -27,10 +27,7 @@ ini_set('mbstring.func_overload', 7);
  */
 
 Titon::environment()
-	->setup('development', array(
-		'type' => Environment::DEVELOPMENT,
-		'hosts' => array('localhost', '127.0.0.1')
-	))
+	->setup('development', Environment::DEVELOPMENT, array('localhost', '127.0.0.1'))
 	->fallback('development');
 
 /**

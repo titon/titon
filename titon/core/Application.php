@@ -35,17 +35,6 @@ class Application {
 	 * @var array
 	 */
 	protected $_modules = array();
-	
-	/**
-	 * Default setup.
-	 * 
-	 * @access private
-	 * @var array
-	 */
-	private $__defaults = array(
-		'path' => '',
-		'controllers' => array()
-	);
 
 	/**
 	 * Return all controllers, or a modules controllers.
@@ -75,24 +64,14 @@ class Application {
 	}
 	
 	/**
-	 * Return the module.
-	 * 
+	 * Return a list of modules or a single module.
+	 *
 	 * @access public
 	 * @param string $module
 	 * @return array
 	 */
-	public function module($module) {
-		return $this->_modules[$module];
-	}
-
-	/**
-	 * Return a list of added modules.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function modules() {
-		return array_keys($this->_modules);
+	public function modules($module = null) {
+		return isset($this->_modules[$module]) ? $this->_modules[$module] : $this->_modules;
 	}
 
 	/**
@@ -100,20 +79,29 @@ class Application {
 	 *
 	 * @access public
 	 * @param string $module
-	 * @param array $setup
+	 * @param string $path
+	 * @param array $controllers
 	 * @return Application
 	 * @chainable
 	 */
-	public function setup($module, array $setup = array()) {
-		if (empty($setup['path'])) {
+	public function setup($module, $path, array $controllers) {
+		if (empty($path)) {
 			throw new CoreException(sprintf('The path for the %s module is required.', $module));
 		}
 		
-		$setup = $setup + $this->__defaults;
-		$setup['name'] = $module;
+		$path = Titon::loader()->ds($path);
 		
-		$this->_modules[$module] = $setup;
-		$this->_controllers[$module] = $setup['controllers'];
+		if (substr($path, -1) != DS) {
+			$path .= DS;
+		}
+		
+		$this->_modules[$module] = array(
+			'name' => $module,
+			'path' => $path,
+			'controllers' => $controllers
+		);
+		
+		$this->_controllers[$module] = $controllers;
 		
 		return $this;
 	}

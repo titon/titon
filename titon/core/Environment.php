@@ -55,17 +55,6 @@ class Environment {
 		'127.0.0.1' => 'development',
 		'::1' => 'development'
 	);
-	
-	/**
-	 * Default setup.
-	 * 
-	 * @access private
-	 * @var array
-	 */
-	private $__defaults = array(
-		'type' => self::DEVELOPMENT,
-		'hosts' => array()
-	);
 
 	/**
 	 * Return the current environment name, based on hostname.
@@ -169,21 +158,27 @@ class Environment {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @param array $setup
+	 * @param int $type
+	 * @param array $hosts
 	 * @return Environment
 	 * @chainable
 	 */
-	public function setup($name, array $setup) {
-		if (empty($setup['hosts'])) {
+	public function setup($name, $type, array $hosts) {
+		if (empty($hosts)) {
 			throw new CoreException(sprintf('A host mapping is required for the %s environment.', $name));
 		}
 		
-		$setup = $setup + $this->__defaults;
-		$setup['name'] = $name;
+		if ($type != self::DEVELOPMENT && $type != self::PRODUCTION && $type != self::STAGING) {
+			throw new CoreException(sprintf('Invalid environment type detected for %s.', $name));
+		}
 		
-		$this->_environments[$name] = $setup;
+		$this->_environments[$name] = array(
+			'name' => $name,
+			'type' => $type,
+			'hosts' => $hosts
+		);
 
-		foreach ($setup['hosts'] as $host) {
+		foreach ($hosts as $host) {
 			$this->_hostMapping[$host] = $name;
 		}
 

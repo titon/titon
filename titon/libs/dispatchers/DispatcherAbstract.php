@@ -53,11 +53,11 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 	 */
 	public function loadController() {
 		$config = $this->config();
-		$module = Titon::app()->module($config['module']);
+		$module = Titon::app()->modules($config['module']);
 		$controller = $module['controllers'][$config['controller']];
 		
 		// Load controller
-		$path = $module['path'] . DS . 'controllers' . DS . $controller . '.php';
+		$path = $module['path'] . 'controllers' . DS . $controller . '.php';
 
 		if (file_exists($path)) {
 			return Titon::registry()->factory($path, $config);
