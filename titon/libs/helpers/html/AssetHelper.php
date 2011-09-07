@@ -9,20 +9,16 @@
 
 namespace titon\libs\helpers\html;
 
+use \titon\Titon;
 use \titon\libs\helpers\HelperAbstract;
 
 /**
  * The AssetHelper aids in the process of including stylesheets and external scripts.
  * 
  * @package	titon.libs.helpers.html
+ * @uses	titon\Titon
  */
 class AssetHelper extends HelperAbstract {
-
-	/**
-	 * Constants to define the location for JavaScript.
-	 */
-	const JS_HEADER = 1;
-	const JS_FOOTER = 2;
 
 	/**
 	 * A list of JavaScript files to include in the current page. Can be placed at the top or bottom of the page.
@@ -41,24 +37,23 @@ class AssetHelper extends HelperAbstract {
 	protected $_stylesheets = array();
 
 	/**
-	 * Add a JavaScript file to the current page request. Can declare what order the scripts appear in, as well as the location.
+	 * Add a JavaScript file to the current page request.
 	 *
 	 * @access public
 	 * @param string $script
-	 * @param string $location
 	 * @param int $order
 	 * @return void
 	 */
-	public function addScript($script, $location = self::JS_FOOTER, $order = null) {
+	public function addScript($script, $order = null) {
 		if (substr($script, -3) != '.js') {
 			$script .= '.js';
 		}
 
-		if (!$order || !is_numeric($order) || isset($this->_scripts[$location][$order])) {
+		if (!is_numeric($order) || isset($this->_scripts[$order])) {
 			$order = count($this->_scripts);
 		}
 
-		$this->_scripts[$location][$order] = $script;
+		$this->_scripts[$order] = $script;
 	}
 
 	/**
@@ -75,7 +70,7 @@ class AssetHelper extends HelperAbstract {
 			$sheet .= '.css';
 		}
 
-		if (!$order || !is_numeric($order) || isset($this->_stylesheets[$order])) {
+		if (!is_numeric($order) || isset($this->_stylesheets[$order])) {
 			$order = count($this->_stylesheets);
 		}
 
@@ -101,14 +96,13 @@ class AssetHelper extends HelperAbstract {
 	 * Return all the attached scripts. Uses the HTML helper to build the HTML tags.
 	 *
 	 * @access public
-	 * @param string $location
 	 * @return string
 	 */
-	public function scripts($location = self::JS_HEADER) {
+	public function scripts() {
 		$output = null;
 
-		if (!empty($this->_scripts[$location])) {
-			foreach ($this->_scripts[$location] as $script) {
+		if (!empty($this->_scripts)) {
+			foreach ($this->_scripts as $script) {
 				$output .= $this->html->script($script);
 			}
 		}
@@ -127,12 +121,7 @@ class AssetHelper extends HelperAbstract {
 
 		if (!empty($this->_stylesheets)) {
 			foreach ($this->_stylesheets as $sheet) {
-				$output .= $this->html->link(array(
-					'rel'   => 'stylesheet',
-					'type'  => 'text/css',
-					'media' => $sheet['media'],
-					'href'  => $sheet['path']
-				));
+				$output .= $this->html->link($sheet['path'], array('media' => $sheet['media']));
 			}
 		}
 

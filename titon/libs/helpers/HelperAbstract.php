@@ -65,7 +65,7 @@ abstract class HelperAbstract extends Prototype implements Helper {
 				}
 
 				if ($escape) {
-					$value = htmlentities($value, ENT_COMPAT, Titon::config()->charset());
+					$value = htmlentities($value, ENT_COMPAT, Titon::config()->encoding());
 				}
 
 				$parsed .= ' '. strtolower($key) .'="'. $value .'"';

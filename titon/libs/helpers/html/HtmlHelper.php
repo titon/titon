@@ -17,16 +17,10 @@ use \titon\utility\Encrypt;
  * The HtmlHelper is primarily used for dynamic HTML tag creation within templates.
  *
  * @package	titon.libs.helpers.html
+ * @uses	titon\Titon
+ * @uses	titon\utility\Encrypt
  */
 class HtmlHelper extends HelperAbstract {
-
-	/**
-	 * A list of all breadcrumbs in the trail, with the title, url and attributes.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_breadcrumbs = array();
 
 	/**
 	 * Mapping of HTML tags for this helper.
@@ -42,19 +36,6 @@ class HtmlHelper extends HelperAbstract {
 		'style'		=> '<style%s>%s</style>',
 		'image'		=> '<img%s>'
 	);
-
-	/**
-	 * Add a link to the breadcrumbs.
-	 *
-	 * @access public
-	 * @param string $title
-	 * @param string|array $url
-	 * @param array $attributes
-	 * @return void
-	 */
-	public function addCrumb($title, $url, array $attributes = array()) {
-		$this->_breadcrumbs[] = array($title, $url, $attributes);
-	}
 
 	/**
 	 * Create an HTML anchor link.
@@ -75,32 +56,13 @@ class HtmlHelper extends HelperAbstract {
 		$attributes['href'] = $url;
 
 		if (!isset($attributes['title'])) {
-			$attributes['title'] = htmlentities($title, ENT_COMPAT, Titon::config()->charset());
+			$attributes['title'] = htmlentities($title, ENT_COMPAT, Titon::config()->encoding());
 		}
 
 		return $this->tag('anchor',
 			$this->attributes($attributes),
 			$title
 		);
-	}
-
-	/**
-	 * Return a trail of breadcrumbs, formatted as anchor links, separated by $separator.
-	 *
-	 * @access public
-	 * @param string $separator
-	 * @return string
-	 */
-	public function breadcrumbs($separator = ' &raquo; ') {
-		$trail = array();
-
-		if (!empty($this->_breadcrumbs)) {
-			foreach ($this->_breadcrumbs as $crumb) {
-				$trail[] = $this->anchor($crumb[0], $crumb[1], $crumb[2]);
-			}
-		}
-
-		return implode($separator, $trail);
 	}
 
 	/**
@@ -148,13 +110,20 @@ class HtmlHelper extends HelperAbstract {
 	 * Create a link element.
 	 *
 	 * @access public
+	 * @param string $path
 	 * @param array $attributes
 	 * @return string
 	 */
-	public function link(array $attributes = array()) {
-		return $this->tag('link',
-			$this->attributes($attributes)
+	public function link($path, array $attributes = array()) {
+		$attributes = $attributes + array(
+			'rel'   => 'stylesheet',
+			'type'  => 'text/css',
+			'media' => 'screen'
 		);
+		
+		$attributes['href'] = $path;
+		
+		return $this->tag('link', $this->attributes($attributes));
 	}
 
 	/**
@@ -172,7 +141,9 @@ class HtmlHelper extends HelperAbstract {
 			$attributes['title'] = '';
 		}
 
-		return $this->anchor($email, 'mailto:'. $email, $attributes);
+		$attributes['escape'] = false;
+
+		return $this->anchor($email, 'mailto:' . $email, $attributes);
 	}
 
 	/**
@@ -194,7 +165,7 @@ class HtmlHelper extends HelperAbstract {
 					$content = 'text/css'; 
 				break;
 				case 'content-type': 
-					$content = 'text/html; charset='. Titon::config()->charset();
+					$content = 'text/html; charset=' . Titon::config()->encoding();
 				break;
 			}
 		}
@@ -204,13 +175,13 @@ class HtmlHelper extends HelperAbstract {
 			'content-script-type'   => array('http-equiv' => 'Content-Script-Type', 'content' => $content),
 			'content-style-type'    => array('http-equiv' => 'Content-Style-Type', 'content' => $content),
 			'content-language'      => array('http-equiv' => 'Content-Language', 'content' => $content),
-			'keywords'      => array('name' => 'keywords', 'content' => $content),
-			'description'   => array('name' => 'description', 'content' => $content),
-			'author'        => array('name' => 'author', 'content' => $content),
-			'robots'        => array('name' => 'robots', 'content' => $content),
-			'rss'   => array('type' => 'application/rss+xml', 'rel' => 'alternate', 'title' => $type, 'link' => $content),
-			'atom'  => array('type' => 'application/atom+xml', 'title' => $type, 'link' => $content),
-			'icon'  => array('type' => 'image/x-icon', 'rel' => 'icon', 'link' => $content),
+			'keywords'				=> array('name' => 'keywords', 'content' => $content),
+			'description'			=> array('name' => 'description', 'content' => $content),
+			'author'				=> array('name' => 'author', 'content' => $content),
+			'robots'				=> array('name' => 'robots', 'content' => $content),
+			'rss'					=> array('type' => 'application/rss+xml', 'rel' => 'alternate', 'title' => $type, 'link' => $content),
+			'atom'					=> array('type' => 'application/atom+xml', 'title' => $type, 'link' => $content),
+			'icon'					=> array('type' => 'image/x-icon', 'rel' => 'icon', 'link' => $content),
 		);
 
 		if (isset($metaTypes[strtolower($type)])) {
@@ -224,37 +195,21 @@ class HtmlHelper extends HelperAbstract {
 	}
 
 	/**
-	 * Grab the page title if it has been set.
-	 *
-	 * @access public
-	 * @param string|array $separator
-	 * @return string
-	 */
-	public function pageTitle($separator = ' - ') {
-		$pageTitle = $this->_engine->data('pageTitle');
-
-		if (is_array($pageTitle)) {
-			return implode($separator, $pageTitle);
-		}
-
-		return $pageTitle;
-	}
-
-	/**
 	 * Create a script element to include a JS file or to encompass JS code.
 	 *
 	 * @access public
 	 * @param string $source
 	 * @param string $content
-	 * @param bool $escape
 	 * @return string
 	 */
-	public function script($source, $content = null, $escape = true) {
+	public function script($source, $content = null) {
 		$attributes = array('type' => 'text/javascript');
 
 		if (!empty($source)) {
 			$attributes['src'] = $source;
 		}
+
+		// @todo - CDATA
 
 		return $this->tag('script',
 			$this->attributes($attributes),
@@ -274,6 +229,23 @@ class HtmlHelper extends HelperAbstract {
 			$this->attributes(array('type' => 'text/css')),
 			$content
 		);
+	}
+
+	/**
+	 * Grab the page title if it has been set.
+	 *
+	 * @access public
+	 * @param string|array $separator
+	 * @return string
+	 */
+	public function title($separator = ' - ') {
+		$pageTitle = $this->_engine->data('pageTitle');
+
+		if (is_array($pageTitle)) {
+			return implode($separator, $pageTitle);
+		}
+
+		return $pageTitle;
 	}
 
 }
