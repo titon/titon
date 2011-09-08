@@ -214,6 +214,10 @@ class Router {
 			$route = $url;
 		}
 		
+		if (is_array($route)) {
+			$route = $this->build($route);
+		}
+		
 		return $route;
 	}
 

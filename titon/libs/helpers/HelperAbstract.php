@@ -68,7 +68,7 @@ abstract class HelperAbstract extends Prototype implements Helper {
 					$value = htmlentities($value, ENT_COMPAT, Titon::config()->encoding());
 				}
 
-				$parsed .= ' '. strtolower($key) .'="'. $value .'"';
+				$parsed .= ' ' . strtolower($key) . '="' . $value . '"';
 			}
 		}
 
@@ -107,7 +107,7 @@ abstract class HelperAbstract extends Prototype implements Helper {
 		$args = func_get_args();
 		$tag = $this->_tags[array_shift($args)];
 
-		return vsprintf($tag, $args) ."\n";
+		return vsprintf($tag, $args) . "\n";
 	}
 
 }

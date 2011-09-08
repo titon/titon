@@ -47,13 +47,7 @@ class HtmlHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function anchor($title, $url, array $attributes = array()) {
-		$url = Titon::router()->detect($url);
-
-		if (is_array($url)) {
-			$url = Titon::router()->build($url);
-		}
-
-		$attributes['href'] = $url;
+		$attributes['href'] = Titon::router()->detect($url);
 
 		if (!isset($attributes['title'])) {
 			$attributes['title'] = htmlentities($title, ENT_COMPAT, Titon::config()->encoding());

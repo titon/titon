@@ -62,7 +62,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function modelize($string) {
-		return self::camelize(self::singularize($string));
+		return self::camelize($string);
 	}
 
 	/**
