@@ -111,18 +111,19 @@ class FormHelper extends HelperAbstract {
         $output = '';
         $label = true;
 
-        if ($attributes['value'] !== '') {
+        if (isset($attributes['value'])) {
             $selected = $attributes['value'];
         } else if (isset($attributes['default'])) {
             $selected = $attributes['default'];
         }
 
-        if (isset($attributes['label'])) {
+        if (isset($attributes['label']) && $attributes['label'] !== true) {
             $label = $attributes['label'];
         } else {
-            $label = Inflector::normalize($input);
-        }
+			$label = Inflector::normalize($input);
+		}
 
+		// If no options, fake it using a label and a true value
         if (!is_array($options) || empty($options)) {
             $options = array(1 => $label);
         }
@@ -130,26 +131,24 @@ class FormHelper extends HelperAbstract {
         foreach ($options as $value => $title) {
             $checkbox = $attributes;
             $checkbox['value'] = $value;
+			$labelInput = $input;
 
             if (count($options) > 1) {
                 $append = Inflector::camelize($value);
+                $labelInput .= ' ' . $append;
+				
                 $checkbox['id'] = $checkbox['id'] . $append;
                 $checkbox['name'] .= '[]';
-                $labelInput = $input .'_'. $append;
-            } else {
-                $labelInput = $input;
             }
 
-            if (!empty($selected)) {
-                if ((is_array($selected) && in_array($value, $selected)) || ($value == $selected)) {
+            if ($selected !== null) {
+                if (is_array($selected) && in_array($value, $selected, true) || $value === $selected) {
                     $checkbox['checked'] = 'checked';
                 }
             }
 
             $output .= '<span class="form-checkbox">';
-            $output .= $this->tag('input',
-                $this->attributes($checkbox, array('label', 'options', 'default'))
-            );
+            $output .= $this->tag('input', $this->attributes($checkbox, array('label', 'options', 'default')));
 
             if ($label && !empty($title)) {
                 $output .= $this->label($labelInput, $title);
@@ -350,7 +349,6 @@ class FormHelper extends HelperAbstract {
     public function label($input, $title, array $attributes = array()) {
         $attributes = $attributes + array(
             'for' => $this->_model . Inflector::camelize($input),
-            'title' => $title
         );
 
         return $this->tag('label',
@@ -449,6 +447,7 @@ class FormHelper extends HelperAbstract {
 
         // Fieldset legend
         $legend = null;
+		
         if (isset($attributes['legend'])) {
             $legend = $attributes['legend'];
             unset($attributes['legend']);
@@ -461,14 +460,14 @@ class FormHelper extends HelperAbstract {
             'id' => $this->_model .'Form'
         );
 
-        if (!empty($attributes['action'])) {
+        if (isset($attributes['action'])) {
             $attributes['action'] = Titon::router()->detect($attributes['action']);
         }
 
         $output = $this->tag('form_open', $this->attributes($attributes));
 
         // If legend, add fieldset
-        if (isset($legend)) {
+        if ($legend !== null) {
             $attributes['legend'] = $legend;
 
             $output .= $this->tag('fieldset_open');
@@ -489,23 +488,23 @@ class FormHelper extends HelperAbstract {
      * @param array $options
      * @param array $attributes
      *		default: The radio to be selected by default
-     *		label: Enable or disable the label, or supply a new string to be used (single radio)
+     *		label: Enable or disable the labels
      * @return string
      */
     public function radio($input, array $options = array(), array $attributes = array()) {
         $attributes = $this->_prepare(array('name' => $input, 'type' => 'radio'), $attributes);
         $selected = null;
         $output = '';
-        $label = true;
+        $showLabel = true;
 
-        if ($attributes['value'] !== '') {
+        if (isset($attributes['value'])) {
             $selected = $attributes['value'];
         } else if (isset($attributes['default'])) {
             $selected = $attributes['default'];
         }
 
         if (isset($attributes['label'])) {
-            $label = (bool) $attributes['label'];
+            $showLabel = (bool) $attributes['label'];
         }
 		
         foreach ($options as $value => $title) {
@@ -520,7 +519,7 @@ class FormHelper extends HelperAbstract {
             $output .= '<span class="form-radio">';
             $output .= $this->tag('input', $this->attributes($radio, array('label', 'options', 'default')));
 
-            if ($label && !empty($title)) {
+            if ($showLabel && !empty($title)) {
                 $output .= $this->label($input . ' ' . $value, $title);
             }
 
@@ -586,7 +585,7 @@ class FormHelper extends HelperAbstract {
      */
     public function select($input, array $options = array(), array $attributes = array()) {
         $attributes = $this->_prepare(array('name' => $input), $attributes);
-        $selected = '';
+        $selected = null;
 
         if (isset($attributes['value'])) {
             $selected = $attributes['value'];
@@ -783,8 +782,8 @@ class FormHelper extends HelperAbstract {
                 } else {
                     $attributes = array('value' => $value);
 
-                    if (!empty($selected)) {
-                        if (is_array($selected) && in_array($value, $selected) || $value == $selected) {
+                    if ($selected !== null) {
+                        if (is_array($selected) && in_array($value, $selected) || $value === $selected) {
                             $attributes['selected'] = 'selected';
                         }
                     }
