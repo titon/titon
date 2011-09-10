@@ -221,19 +221,19 @@ class FormHelper extends HelperAbstract {
 			array('name' => $input .'.year') + $attributes
         );
 		
-		unset($attributes['reverseYear'], $attributes['yearFormat'], $attributes['startYear'], $attributes['endYear']);
+		unset($attributes['reverseYear'], $attributes['yearFormat'], $attributes['startYear'], $attributes['endYear'], $attributes['defaultYear']);
 		
 		$month = $this->month($input .'.month',
             array('name' => $input .'.month') + $attributes
         );
 		
-		unset($attributes['monthFormat']);
+		unset($attributes['monthFormat'], $attributes['defaultMonth']);
         
         $day = $this->day($input .'.day',
             array('name' => $input .'.day') + $attributes
         );
 		
-		unset($attributes['dayFormat']);
+		unset($attributes['dayFormat'], $attributes['defaultDay']);
 
         return $month . ' ' . $day . ' ' . $year;
     }
@@ -257,7 +257,7 @@ class FormHelper extends HelperAbstract {
      * @param string $input
      * @param array $attributes
 	 *		dayFormat: How the day should be formatted
-	 *		default: The default selected day
+	 *		defaultDay: The default selected day
      * @return string
      */
     public function day($input, array $attributes = array()) {
@@ -267,8 +267,8 @@ class FormHelper extends HelperAbstract {
 		
         if (isset($attributes['value']) && $attributes['value'] !== '') {
 			$selected = $attributes['value'];
-		} else if (isset($attributes['default'])) {
-			$selected = $attributes['default'];
+		} else if (isset($attributes['defaultDay'])) {
+			$selected = $attributes['defaultDay'];
 		} else {
 			$selected = $this->config('day');
 		}
@@ -278,7 +278,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'default', 'dayFormat')),
+            $this->attributes($attributes, array('value', 'defaultDay', 'dayFormat')),
             $this->_options($options, $selected)
         );
     }
@@ -322,7 +322,7 @@ class FormHelper extends HelperAbstract {
      * @param string $input
      * @param array $attributes
      *		military: Should the times be 0-23 or 1-12
-	 *		default: The default selected hour
+	 *		defaultHour: The default selected hour
      * @return string
      */
     public function hour($input, array $attributes = array()) {
@@ -332,8 +332,8 @@ class FormHelper extends HelperAbstract {
 		
         if (isset($attributes['value']) && $attributes['value'] !== '') {
 			$selected = $attributes['value'];
-		} else if (isset($attributes['default'])) {
-			$selected = $attributes['default'];
+		} else if (isset($attributes['defaultHour'])) {
+			$selected = $attributes['defaultHour'];
 		}
 
         if (isset($attributes['military']) && $attributes['military']) {
@@ -357,7 +357,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'default', 'military')),
+            $this->attributes($attributes, array('value', 'defaultHour', 'military')),
             $this->_options($options, $selected)
         );
     }
@@ -404,7 +404,7 @@ class FormHelper extends HelperAbstract {
      * @access public
      * @param string $input
      * @param array $attributes
-	 *		default: The default selected meridiem
+	 *		defaultMeridiem: The default selected meridiem
      * @return string
      */
     public function meridiem($input, array $attributes = array()) {
@@ -413,14 +413,14 @@ class FormHelper extends HelperAbstract {
 		
         if (isset($attributes['value']) && $attributes['value'] !== '') {
 			$selected = $attributes['value'];
-		} else if (isset($attributes['default'])) {
-			$selected = $attributes['default'];
+		} else if (isset($attributes['defaultMeridiem'])) {
+			$selected = $attributes['defaultMeridiem'];
 		} else {
 			$selected = $this->config('meridiem');
 		}
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'default')),
+            $this->attributes($attributes, array('value', 'defaultMeridiem')),
             $this->_options($options, $selected)
         );
     }
@@ -431,7 +431,7 @@ class FormHelper extends HelperAbstract {
      * @access public
      * @param string $input
      * @param array $attributes
-	 *		default: The default selected minute
+	 *		defaultMinute: The default selected minute
      * @return string
      */
     public function minute($input, array $attributes = array()) {
@@ -440,8 +440,8 @@ class FormHelper extends HelperAbstract {
 		
         if (isset($attributes['value']) && $attributes['value'] !== '') {
 			$selected = $attributes['value'];
-		} else if (isset($attributes['default'])) {
-			$selected = $attributes['default'];
+		} else if (isset($attributes['defaultMinute'])) {
+			$selected = $attributes['defaultMinute'];
 		} else {
 			$selected = $this->config('minute');
 		}
@@ -451,7 +451,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'default')),
+            $this->attributes($attributes, array('value', 'defaultMinute')),
             $this->_options($options, $selected)
         );
     }
@@ -463,7 +463,7 @@ class FormHelper extends HelperAbstract {
      * @param string $input
      * @param array $attributes
      *		monthFormat: Format the month names in the dropdown
-	 *		default: The default selected month
+	 *		defaultMonth: The default selected month
      * @return string
      */
     public function month($input, array $attributes = array()) {
@@ -473,8 +473,8 @@ class FormHelper extends HelperAbstract {
 		
         if (isset($attributes['value']) && $attributes['value'] !== '') {
 			$selected = $attributes['value'];
-		} else if (isset($attributes['default'])) {
-			$selected = $attributes['default'];
+		} else if (isset($attributes['defaultMonth'])) {
+			$selected = $attributes['defaultMonth'];
 		} else {
 			$selected = $this->config('month');
 		}
@@ -484,7 +484,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'default', 'monthFormat')),
+            $this->attributes($attributes, array('value', 'defaultMonth', 'monthFormat')),
             $this->_options($options, $selected)
         );
     }
@@ -620,7 +620,7 @@ class FormHelper extends HelperAbstract {
      * @access public
      * @param string $input
      * @param array $attributes
-	 *		default: The default selected second
+	 *		defaultSecond: The default selected second
      * @return string
      */
     public function second($input, array $attributes = array()) {
@@ -629,8 +629,8 @@ class FormHelper extends HelperAbstract {
 		
         if (isset($attributes['value']) && $attributes['value'] !== '') {
 			$selected = $attributes['value'];
-		} else if (isset($attributes['default'])) {
-			$selected = $attributes['default'];
+		} else if (isset($attributes['defaultSecond'])) {
+			$selected = $attributes['defaultSecond'];
 		} else {
 			$selected = $this->config('second');
 		}
@@ -640,7 +640,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'default')),
+            $this->attributes($attributes, array('value', 'defaultSecond')),
             $this->_options($options, $selected)
         );
     }
@@ -789,7 +789,7 @@ class FormHelper extends HelperAbstract {
      *		endYear: The year to end the range
      *		reverseYear: Should the years be in reverse order
      *		yearFormat: How the year should be formatted
-	 *		default: The default selected year
+	 *		defaultYear: The default selected year
      * @return string
      */
     public function year($input, array $attributes = array()) {
@@ -804,8 +804,8 @@ class FormHelper extends HelperAbstract {
 		
         if (isset($attributes['value']) && $attributes['value'] !== '') {
 			$selected = $attributes['value'];
-		} else if (isset($attributes['default'])) {
-			$selected = $attributes['default'];
+		} else if (isset($attributes['defaultYear'])) {
+			$selected = $attributes['defaultYear'];
 		} else {
 			$selected = $config['year'];
 		}
@@ -821,7 +821,7 @@ class FormHelper extends HelperAbstract {
         }
         
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'default', 'yearFormat', 'reverseYear', 'startYear', 'endYear')),
+            $this->attributes($attributes, array('value', 'defaultYear', 'yearFormat', 'reverseYear', 'startYear', 'endYear')),
             $this->_options($options, $selected)
         );
     }
