@@ -93,6 +93,24 @@ class FormHelper extends HelperAbstract {
             'meridiem' => date('a')
         ));
     }
+	
+	/**
+	 * Parses an array of attributes to the HTML equivalent.
+	 *
+	 * @access public
+	 * @param array $attributes
+	 * @param array $remove
+	 * @return string
+	 */
+	public function attributes(array $attributes, array $remove = array()) {
+		$remove = $remove + array(
+			'defaultDay', 'dayFormat', 'defaultHour', 'military', 'defaultMeridiem', 'defaultSecond',
+			'defaultMinute', 'defaultMonth', 'monthFormat', 'label', 'options', 'default',
+			'defaultYear', 'yearFormat', 'reverseYear', 'startYear', 'endYear'
+		);
+
+		return parent::attributes($attributes, $remove);
+	}
 
     /**
      * Create a single checkbox element, or multiple checkboxes if an 'options' array is passed.
@@ -220,20 +238,14 @@ class FormHelper extends HelperAbstract {
         $year = $this->year($input .'.year',
 			array('name' => $input .'.year') + $attributes
         );
-		
-		unset($attributes['reverseYear'], $attributes['yearFormat'], $attributes['startYear'], $attributes['endYear'], $attributes['defaultYear']);
-		
+
 		$month = $this->month($input .'.month',
             array('name' => $input .'.month') + $attributes
         );
-		
-		unset($attributes['monthFormat'], $attributes['defaultMonth']);
-        
+
         $day = $this->day($input .'.day',
             array('name' => $input .'.day') + $attributes
         );
-		
-		unset($attributes['dayFormat'], $attributes['defaultDay']);
 
         return $month . ' ' . $day . ' ' . $year;
     }
@@ -278,7 +290,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'defaultDay', 'dayFormat')),
+            $this->attributes($attributes, array('value')),
             $this->_options($options, $selected)
         );
     }
@@ -357,7 +369,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'defaultHour', 'military')),
+            $this->attributes($attributes, array('value')),
             $this->_options($options, $selected)
         );
     }
@@ -420,7 +432,7 @@ class FormHelper extends HelperAbstract {
 		}
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'defaultMeridiem')),
+            $this->attributes($attributes, array('value')),
             $this->_options($options, $selected)
         );
     }
@@ -451,7 +463,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'defaultMinute')),
+            $this->attributes($attributes, array('value')),
             $this->_options($options, $selected)
         );
     }
@@ -484,7 +496,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'defaultMonth', 'monthFormat')),
+            $this->attributes($attributes, array('value')),
             $this->_options($options, $selected)
         );
     }
@@ -523,7 +535,7 @@ class FormHelper extends HelperAbstract {
         $attributes = $attributes + array(
             'method' => 'post',
             'action' => '',
-            'id' => $this->_model .'Form'
+            'id' => $this->_model . 'Form'
         );
 
         if (isset($attributes['action'])) {
@@ -582,7 +594,7 @@ class FormHelper extends HelperAbstract {
                 $radio['checked'] = 'checked';
             }
 
-            $output = $this->tag('input', $this->attributes($radio, array('label', 'options', 'default')));
+            $output = $this->tag('input', $this->attributes($radio));
 
             if ($showLabel && $option !== '') {
                 $output .= $this->label($input . ' ' . $value, $option);
@@ -640,7 +652,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'defaultSecond')),
+            $this->attributes($attributes, array('value')),
             $this->_options($options, $selected)
         );
     }
@@ -671,7 +683,7 @@ class FormHelper extends HelperAbstract {
         }
 
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'default', 'empty')),
+            $this->attributes($attributes, array('value', 'empty')),
             $this->_options($options, $selected)
         );
     }
@@ -741,13 +753,11 @@ class FormHelper extends HelperAbstract {
         $hour = $this->hour($input .'.hour',
             array('name' => $input .'.hour') + $attributes
         );
-		
-		unset($attributes['military']);
 
         $minute = $this->minute($input .'.minute',
             array('name' => $input .'.minute') + $attributes
         );
-
+		
         $second = $this->second($input .'.second',
             array('name' => $input .'.second') + $attributes
         );
@@ -771,9 +781,11 @@ class FormHelper extends HelperAbstract {
         $data = $this->request->data;
         $value = Set::extract($data, $model .'.'. $field);
 
-		// Force to empty string
+		// Force specific types
 		if ($value === false || $value === null) {
 			$value = '';
+		} else if ($value === true) {
+			$value = 1;
 		}
 		
 		return $value;
@@ -821,7 +833,7 @@ class FormHelper extends HelperAbstract {
         }
         
         return $this->tag('select',
-            $this->attributes($attributes, array('value', 'defaultYear', 'yearFormat', 'reverseYear', 'startYear', 'endYear')),
+            $this->attributes($attributes, array('value')),
             $this->_options($options, $selected)
         );
     }
@@ -839,14 +851,9 @@ class FormHelper extends HelperAbstract {
 		
         if (!empty($options)) {
             foreach ($options as $value => $option) {
-                /*if ($value == 'emptyValue') {
+				if ($value == 'emptyValue') {
                     $value = '';
-					
-                    if (!is_string($option)) {
-                        $option = '';
-                    }
-                }*/
-				// @todo
+                }
 
                 // Optgroup
                 if (is_array($option)) {
