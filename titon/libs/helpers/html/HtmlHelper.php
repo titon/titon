@@ -49,10 +49,6 @@ class HtmlHelper extends HelperAbstract {
 	public function anchor($title, $url, array $attributes = array()) {
 		$attributes['href'] = Titon::router()->detect($url);
 
-		if (!isset($attributes['title'])) {
-			$attributes['title'] = htmlentities($title, ENT_COMPAT, Titon::config()->encoding());
-		}
-
 		return $this->tag('anchor',
 			$this->attributes($attributes),
 			$title
@@ -193,17 +189,18 @@ class HtmlHelper extends HelperAbstract {
 	 *
 	 * @access public
 	 * @param string $source
-	 * @param string $content
+	 * @param string $isBlock
 	 * @return string
 	 */
-	public function script($source, $content = null) {
+	public function script($source, $isBlock = false) {
 		$attributes = array('type' => 'text/javascript');
-
-		if (!empty($source)) {
+		$content = '';
+		
+		if ($isBlock) {
+			$content = '<![CDATA[' . $source . ']]>';
+		} else {
 			$attributes['src'] = $source;
 		}
-
-		// @todo - CDATA
 
 		return $this->tag('script',
 			$this->attributes($attributes),

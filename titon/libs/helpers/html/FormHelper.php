@@ -1,11 +1,10 @@
 <?php
 /**
- * A Form helper used for form and data creation. Creates forms based around a Model of data,
- * that will be pre-populated according to the data available in the $_POST (App::$data).
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 namespace titon\libs\helpers\html;
@@ -16,10 +15,13 @@ use \titon\utility\Inflector;
 use \titon\utility\Set;
 
 /**
- * Form Helper
- *
- * @package		Titon
- * @subpackage	Titon.Modules.Helpers
+ * The Formhelper is used for HTML form creation. Data is passed to the associated input fields 
+ * if a value is present with the Request object ($_POST, $_GET and $_FILES).
+ * 
+ * @package	titon.libs.helpers.html
+ * @uses	titon\Titon
+ * @uses	titon\utility\Inflector
+ * @uses	titon\utility\Set
  */
 class FormHelper extends HelperAbstract {
 
@@ -67,32 +69,6 @@ class FormHelper extends HelperAbstract {
 		'fieldset_open'	=> '<fieldset>',
 		'fieldset_close'=> '</fieldset>'
 	);
-
-	/**
-	 * Configure the class with the current date settings, instead of calling them multiple times.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-		$this->attachObject('request', function() {
-			return Titon::registry()->factory('titon\net\Request');
-		});
-		
-		$this->configure(array_diff_key(array(
-			'day' => date('j'),
-			'dayFormat' => 'j',
-			'month' => date('n'),
-			'monthFormat' => 'F',
-			'year' => date('Y'),
-			'yearFormat' => 'Y',
-			'hour' => date('h'),
-			'hour24' => date('H'),
-			'minute' => date('i'),
-			'second' => date('s'),
-			'meridiem' => date('a')
-		), $this->config()));
-	}
 
 	/**
 	 * Parses an array of attributes to the HTML equivalent.
@@ -353,6 +329,32 @@ class FormHelper extends HelperAbstract {
 		return $this->tag('input', 
 			$this->attributes($attributes)
 		);
+	}
+
+	/**
+	 * Configure the class with the current date settings, instead of calling them multiple times.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		$this->attachObject('request', function() {
+			return Titon::registry()->factory('titon\net\Request');
+		});
+		
+		$this->configure(array_diff_key(array(
+			'day' => date('j'),
+			'dayFormat' => 'j',
+			'month' => date('n'),
+			'monthFormat' => 'F',
+			'year' => date('Y'),
+			'yearFormat' => 'Y',
+			'hour' => date('h'),
+			'hour24' => date('H'),
+			'minute' => date('i'),
+			'second' => date('s'),
+			'meridiem' => date('a')
+		), $this->config()));
 	}
 
 	/**
@@ -691,7 +693,7 @@ class FormHelper extends HelperAbstract {
 	}
 
 	/**
-	 * Check to see if a value exists in the request data, if so escape and return.
+	 * Check to see if a value exists in the request data, if so return.
 	 *
 	 * @access public
 	 * @param string $model
@@ -814,8 +816,12 @@ class FormHelper extends HelperAbstract {
 		}
 
 		foreach (array('disabled', 'readonly', 'multiple') as $attr) {
-			if (isset($attributes[$attr]) && ($attributes[$attr] === true || $attributes[$attr] == $attr)) {
-				$attributes[$attr] = $attr;
+			if (isset($attributes[$attr])) {
+				if ($attributes[$attr] === true || $attributes[$attr] == $attr) {
+					$attributes[$attr] = $attr;
+				} else {
+					unset($attributes[$attr]);
+				}
 			}
 		}
 

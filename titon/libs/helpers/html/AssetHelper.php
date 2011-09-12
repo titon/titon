@@ -13,7 +13,7 @@ use \titon\Titon;
 use \titon\libs\helpers\HelperAbstract;
 
 /**
- * The AssetHelper aids in the process of including stylesheets and external scripts.
+ * The AssetHelper aids in the process of including external stylesheets and scripts.
  * 
  * @package	titon.libs.helpers.html
  * @uses	titon\Titon
@@ -21,7 +21,7 @@ use \titon\libs\helpers\HelperAbstract;
 class AssetHelper extends HelperAbstract {
 
 	/**
-	 * A list of JavaScript files to include in the current page. Can be placed at the top or bottom of the page.
+	 * A list of JavaScript files to include in the current page.
 	 *
 	 * @access protected
 	 * @var array
