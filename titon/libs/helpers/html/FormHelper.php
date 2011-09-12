@@ -113,91 +113,68 @@ class FormHelper extends HelperAbstract {
 	}
 
     /**
-     * Create a single checkbox element, or multiple checkboxes if an 'options' array is passed.
+     * Create a single checkbox element.
      *
      * @access public
      * @param string $input
      * @param mixed $label
      * @param array $attributes
      *		default: The checkbox to be selected by default
+	 *		multiple: (Internal) Determines if multiple checkboxes are being created
      * @return string
      */
     public function checkbox($input, $label, array $attributes = array()) {
 		$value = isset($attributes['value']) ? $attributes['value'] : 1;
         $attributes = $this->_prepare(array('name' => $input, 'type' => 'checkbox', 'value' => $value), $attributes);
-        $selected = null;
-		
-		//debug($attributes);
-		
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-            $selected = $attributes['value'];
-        } else if (isset($attributes['default'])) {
-            $selected = $attributes['default'];
-        }
-		
+        $selected = $this->_selected($attributes);
+
 		if ($selected !== null) {
-			// @todo - strict checking
-			if (is_array($selected) && in_array($value, $selected, true) || $value === $selected) {
+			if (is_array($selected) && in_array($value, $selected) || $value == $selected) {
 				$attributes['checked'] = 'checked';
 			}
 		}
 		
-		//var_dump($selected);
+		if ($attributes['value'] === '' || is_array($attributes['value'])) {
+			$attributes['value'] = $value;
+		}
 		
-		$output = $this->tag('input', $this->attributes($attributes, array('label', 'options', 'default')));
+		if (isset($attributes['multiple']) && $attributes['multiple']) {
+			$append = Inflector::camelize($value);
+			
+			$input .= ' '. $append;
+			$attributes['id'] .= $append;
+			$attributes['name'] .= '[]';
+			
+			unset($attributes['multiple']);
+		}
+
+		$output = $this->tag('input', $this->attributes($attributes));
 
 		if ($label) {
 			$output .= $this->label($input, $label);
 		}
 		
 		return $output;
-
-		// If no options, fake it using a label and a true value
-       /* if (empty($options)) {
-            $options = array(1 => $label);
-        }
-
-        foreach ($options as $value => $option) {
-            $checkbox = $attributes;
-            $checkbox['value'] = $value;
-			$labelInput = $input;
-
-            if (count($options) > 1) {
-                $append = Inflector::camelize($value);
-                $labelInput .= ' ' . $append;
-				
-                $checkbox['id'] = $checkbox['id'] . $append;
-                $checkbox['name'] .= '[]';
-            }
-
-            if ($selected !== null) {
-				// @todo - strict checking
-                if (is_array($selected) && in_array($value, $selected, true) || $value === $selected) {
-                    $checkbox['checked'] = 'checked';
-                }
-            }
-
-            $output = $this->tag('input', $this->attributes($checkbox, array('label', 'options', 'default')));
-
-            if ($label && !empty($option)) {
-                $output .= $this->label($labelInput, $option);
-            }
-
-			$checkboxes[] = $output;
-        }
-
-		if (count($checkboxes) > 1) {
-			return $checkboxes;
-		}
-		
-		return $checkboxes[0];*/
     }
 	
+	/**
+     * Create multiple checkboxes.
+     *
+     * @access public
+     * @param string $input
+     * @param array $options
+     * @param array $attributes
+     *		default: The checkbox to be selected by default
+     * @return string
+     */
 	public function checkboxes($input, array $options, array $attributes = array()) {
 		$checkboxes = array();
 		
         foreach ($options as $value => $option) {
-			$checkboxes[] = $this->checkbox($input, $option);
+			$attributes['value'] = $value;
+			$attributes['multiple'] = true;
+			
+			$checkboxes[] = $this->checkbox($input, $option, $attributes);
 		}
 		
 		return $checkboxes;
@@ -276,14 +253,6 @@ class FormHelper extends HelperAbstract {
         $attributes = $this->_prepare(array('name' => $input), $attributes);
         $format = isset($attributes['dayFormat']) ? $attributes['dayFormat'] : $this->config('dayFormat');
         $options = array();
-		
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-			$selected = $attributes['value'];
-		} else if (isset($attributes['defaultDay'])) {
-			$selected = $attributes['defaultDay'];
-		} else {
-			$selected = $this->config('day');
-		}
 
         for ($i = 1; $i <= 31; ++$i) {
             $options[$i] = date($format, mktime(0, 0, 0, $this->config('month'), $i, $this->config('year')));
@@ -291,7 +260,7 @@ class FormHelper extends HelperAbstract {
 
         return $this->tag('select',
             $this->attributes($attributes, array('value')),
-            $this->_options($options, $selected)
+            $this->_options($options, $this->_selected($attributes, 'defaultDay', $this->config('day')))
         );
     }
 
@@ -341,12 +310,6 @@ class FormHelper extends HelperAbstract {
         $attributes = $this->_prepare(array('name' => $input), $attributes);
         $selected = null;
         $options = array();
-		
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-			$selected = $attributes['value'];
-		} else if (isset($attributes['defaultHour'])) {
-			$selected = $attributes['defaultHour'];
-		}
 
         if (isset($attributes['military']) && $attributes['military']) {
             $start = 0;
@@ -370,7 +333,7 @@ class FormHelper extends HelperAbstract {
 
         return $this->tag('select',
             $this->attributes($attributes, array('value')),
-            $this->_options($options, $selected)
+            $this->_options($options, $this->_selected($attributes, 'defaultHour', $selected))
         );
     }
 
@@ -422,18 +385,10 @@ class FormHelper extends HelperAbstract {
     public function meridiem($input, array $attributes = array()) {
         $attributes = $this->_prepare(array('name' => $input), $attributes);
 		$options = array('am' => 'AM', 'pm' => 'PM');
-		
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-			$selected = $attributes['value'];
-		} else if (isset($attributes['defaultMeridiem'])) {
-			$selected = $attributes['defaultMeridiem'];
-		} else {
-			$selected = $this->config('meridiem');
-		}
 
         return $this->tag('select',
             $this->attributes($attributes, array('value')),
-            $this->_options($options, $selected)
+            $this->_options($options, $this->_selected($attributes, 'defaultMeridiem', $this->config('meridiem')))
         );
     }
 
@@ -449,14 +404,6 @@ class FormHelper extends HelperAbstract {
     public function minute($input, array $attributes = array()) {
         $attributes = $this->_prepare(array('name' => $input), $attributes);
         $options = array();
-		
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-			$selected = $attributes['value'];
-		} else if (isset($attributes['defaultMinute'])) {
-			$selected = $attributes['defaultMinute'];
-		} else {
-			$selected = $this->config('minute');
-		}
 
         for ($i = 1; $i <= 60; ++$i) {
             $options[sprintf('%02d', $i)] = sprintf('%02d', $i);
@@ -464,7 +411,7 @@ class FormHelper extends HelperAbstract {
 
         return $this->tag('select',
             $this->attributes($attributes, array('value')),
-            $this->_options($options, $selected)
+            $this->_options($options, $this->_selected($attributes, 'defaultMinute', $this->config('minute')))
         );
     }
 
@@ -482,22 +429,14 @@ class FormHelper extends HelperAbstract {
         $attributes = $this->_prepare(array('name' => $input), $attributes);
         $format = isset($attributes['monthFormat']) ? $attributes['monthFormat'] : $this->config('monthFormat');
         $options = array();
-		
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-			$selected = $attributes['value'];
-		} else if (isset($attributes['defaultMonth'])) {
-			$selected = $attributes['defaultMonth'];
-		} else {
-			$selected = $this->config('month');
-		}
-        
+
         for ($i = 1; $i <= 12; ++$i) {
             $options[$i] = date($format, mktime(0, 0, 0, $i, $this->config('day'), $this->config('year')));
         }
 
         return $this->tag('select',
             $this->attributes($attributes, array('value')),
-            $this->_options($options, $selected)
+            $this->_options($options, $this->_selected($attributes, 'defaultMonth', $this->config('month')))
         );
     }
 
@@ -571,15 +510,9 @@ class FormHelper extends HelperAbstract {
      */
     public function radio($input, array $options = array(), array $attributes = array()) {
         $attributes = $this->_prepare(array('name' => $input, 'type' => 'radio'), $attributes);
-        $selected = null;
+        $selected = $this->_selected($attributes);
         $showLabel = true;
         $radios = array();
-
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-            $selected = $attributes['value'];
-        } else if (isset($attributes['default'])) {
-            $selected = $attributes['default'];
-        }
 
         if (isset($attributes['label'])) {
             $showLabel = (bool) $attributes['label'];
@@ -638,14 +571,6 @@ class FormHelper extends HelperAbstract {
     public function second($input, array $attributes = array()) {
         $attributes = $this->_prepare(array('name' => $input), $attributes);
         $options = array();
-		
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-			$selected = $attributes['value'];
-		} else if (isset($attributes['defaultSecond'])) {
-			$selected = $attributes['defaultSecond'];
-		} else {
-			$selected = $this->config('second');
-		}
 
         for ($i = 1; $i <= 60; ++$i) {
             $options[sprintf('%02d', $i)] = sprintf('%02d', $i);
@@ -653,7 +578,7 @@ class FormHelper extends HelperAbstract {
 
         return $this->tag('select',
             $this->attributes($attributes, array('value')),
-            $this->_options($options, $selected)
+            $this->_options($options, $this->_selected($attributes, 'defaultSecond', $this->config('second')))
         );
     }
 
@@ -670,21 +595,15 @@ class FormHelper extends HelperAbstract {
      */
     public function select($input, array $options = array(), array $attributes = array()) {
         $attributes = $this->_prepare(array('name' => $input), $attributes);
-        $selected = null;
 
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-            $selected = $attributes['value'];
-        } else if (isset($attributes['default'])) {
-            $selected = $attributes['default'];
-        }
-		
         if (isset($attributes['empty'])) {
             $options = array_merge(array('emptyOption' => $attributes['empty']), $options);
+			unset($attributes['empty']);
         }
 
         return $this->tag('select',
             $this->attributes($attributes, array('value', 'empty')),
-            $this->_options($options, $selected)
+            $this->_options($options, $this->_selected($attributes))
         );
     }
 
@@ -814,14 +733,6 @@ class FormHelper extends HelperAbstract {
         $start = isset($attributes['startYear']) ? $attributes['startYear'] : $config['year'];
         $end = isset($attributes['endYear']) ? $attributes['endYear'] : ($config['year'] + 10);
 		
-        if (isset($attributes['value']) && $attributes['value'] !== '') {
-			$selected = $attributes['value'];
-		} else if (isset($attributes['defaultYear'])) {
-			$selected = $attributes['defaultYear'];
-		} else {
-			$selected = $config['year'];
-		}
-
         if (!$reverse) {
             for ($i = $start; $i <= $end; ++$i) {
                 $options[$i] = date($format, mktime(0, 0, 0, $config['month'], $config['day'], $i));
@@ -834,7 +745,7 @@ class FormHelper extends HelperAbstract {
         
         return $this->tag('select',
             $this->attributes($attributes, array('value')),
-            $this->_options($options, $selected)
+            $this->_options($options, $this->_selected($attributes, 'defaultYear', $config['year']))
         );
     }
 
@@ -911,12 +822,8 @@ class FormHelper extends HelperAbstract {
         }
 
         foreach (array('disabled', 'readonly', 'multiple') as $attr) {
-            if (isset($attributes[$attr])) {
-				if ($attributes[$attr] === true || $attributes[$attr] == $attr) {
-                    $attributes[$attr] = $attr;
-                }
-				
-                unset($attributes[$attr]);
+            if (isset($attributes[$attr]) && ($attributes[$attr] === true || $attributes[$attr] == $attr)) {
+				$attributes[$attr] = $attr;
             }
         }
 
@@ -926,5 +833,33 @@ class FormHelper extends HelperAbstract {
 		
 		return $attributes;
     }
+	
+	/**
+	 * Return the currently selected value, or return a default value.
+	 * 
+	 * @access protected
+	 * @param array $attributes
+	 * @param string $key
+	 * @param mixed $default
+	 * @return mixed
+	 */
+	protected function _selected(array $attributes, $key = 'default', $default = null) {
+		$keys = array('value');
+		$keys[] = $key;
+		$selected = null;
+		
+		foreach ($keys as $key) {
+			if (isset($attributes[$key]) && $attributes[$key] !== '') {
+				$selected = $attributes[$key];
+				break;
+			}
+		}
+		
+		if ($selected === null && $default !== null) {
+			$selected = $default;
+		}
+		
+		return $selected;
+	}
     
 }
