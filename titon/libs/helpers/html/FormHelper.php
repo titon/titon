@@ -78,8 +78,8 @@ class FormHelper extends HelperAbstract {
 		$this->attachObject('request', function() {
 			return Titon::registry()->factory('titon\net\Request');
 		});
-
-		$this->configure(array(
+		
+		$this->configure(array_diff_key(array(
 			'day' => date('j'),
 			'dayFormat' => 'j',
 			'month' => date('n'),
@@ -91,7 +91,7 @@ class FormHelper extends HelperAbstract {
 			'minute' => date('i'),
 			'second' => date('s'),
 			'meridiem' => date('a')
-		));
+		), $this->config()));
 	}
 
 	/**
