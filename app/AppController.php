@@ -34,8 +34,16 @@ class AppController extends ControllerAbstract {
 			return Titon::registry()->factory('titon\libs\helpers\html\HtmlHelper');
 		});
 		
+		$this->view->addHelper('form', function($self) {
+			return Titon::registry()->factory('titon\libs\helpers\html\FormHelper');
+		});
+		
 		$this->view->addHelper('asset', function($self) {
 			return Titon::registry()->factory('titon\libs\helpers\html\AssetHelper');
+		});
+		
+		$this->view->addHelper('breadcrumb', function($self) {
+			return Titon::registry()->factory('titon\libs\helpers\html\BreadcrumbHelper');
 		});
 	}
 	

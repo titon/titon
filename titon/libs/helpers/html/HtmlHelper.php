@@ -26,7 +26,7 @@ class HtmlHelper extends HelperAbstract {
 	 * Mapping of HTML tags for this helper.
 	 *
 	 * @access protected
-	 * @var string
+	 * @var array
 	 */
 	protected $_tags = array(
 		'anchor'	=> '<a%s>%s</a>',
