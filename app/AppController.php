@@ -30,6 +30,10 @@ class AppController extends ControllerAbstract {
 	public function initialize() {
 		parent::initialize();
 		
+		$this->attachObject('session', function($self) {
+			return Titon::registry()->factory('titon\state\Session');
+		});
+		
 		$this->view->addHelper('html', function($self) {
 			return Titon::registry()->factory('titon\libs\helpers\html\HtmlHelper');
 		});

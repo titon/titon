@@ -1,178 +1,90 @@
 <?php
 /**
- * Primary library class to manage all session data. Applies appropriate ini settings depending on the environment setting.
- * Implements security walls to check for session highjacking and fixation. Lastly, defines different save handlers.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 namespace titon\state;
 
-use \titon\core\Config;
+use \titon\Titon;
+use \titon\base\Base;
 use \titon\utility\Set;
 
 /**
- * Session Class
+ * Primary library class to manage all session data. Applies appropriate ini settings depending on the environment setting.
+ * Implements security walls to check for session highjacking and defines adapters for different save handlers.
  *
- * @package		Titon
- * @subpackage	Titon.State
+ * @package	titon.state
+ * @uses	titon\Titon
+ * @uses	titon\utility\Set
  */
-class Session {
-
-    /**
-     * Session security level constant: low.
-     *
-     * @var string
-     */
-    const SECURITY_LOW = 1;
-
-    /**
-     * Session security level constant: medium.
-     *
-     * @var string
-     */
-    const SECURITY_MEDIUM = 2;
-
-    /**
-     * Session security level constant: high.
-     *
-     * @var string
-     */
-    const SECURITY_HIGH = 3;
-
-    /**
-     * Storage engine setting: php.
-     *
-     * @var string
-     */
-    const STORAGE_PHP = 'php';
-
-    /**
-     * Storage engine setting: cache.
-     *
-     * @var string
-     */
-    const STORAGE_CACHE = 'cache';
-
-    /**
-     * Storage engine setting: database.
-     *
-     * @var string
-     */
-    const STORAGE_DATABASE = 'database';
+class Session extends Base {
 
 	/**
-	 * How long (in minutes) until the session should be regenerated.
-	 *
-	 * @access public
-	 * @var int
+	 * Session security levels.
 	 */
-	public $inactivity = 10; // Minutes
+	const SECURITY_LOW = 1;
+	const SECURITY_MEDIUM = 2;
+	const SECURITY_HIGH = 3;
 
 	/**
-	 * The current level of session security defined by the environment.
+	 * Storage adapter instance.
 	 *
-	 * @access public
-	 * @var string
+	 * @access protected
+	 * @var SessionAdapter
 	 */
-	public $security;
+	protected $_adapter;
 
 	/**
-     * Which storage adapter should be used. Possible values are: php, database, cache.
-     *
-     * @access public
-     * @var string
-     */
-    public $storage;
-	
-	/**
-	 * The users browser / user agent used during security session validation.
-	 *
-	 * @access private
-	 * @var string
+	 * Configuration.
+	 * 
+	 *	inactivity - How long until the session should be regenerated
+	 *	security - The current session security level
+	 * 
+	 * @access protected
+	 * @var array
 	 */
-	private $__agent;
-	
-	/**
-	 * The current HTTP host. Used for cookie and session ini settings.
-	 *
-	 * @access private
-	 * @var string
-	 */
-	private $__host;
+	protected $_config = array(
+		'inactivity' => '+10 minutes',
+		'security' => self::SECURITY_MEDIUM
+	);
 
 	/**
 	 * The current users session id.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
-	private $__id;
+	protected $_id;
 
-    /**
-     * Has the session been started.
-     *
-     * @access private
-     * @var string
-     */
-    private $__started = false;
-	
 	/**
-	 * The current timestamp used in session security timeouts.
+	 * Has the session been started.
 	 *
-	 * @access private
+	 * @access protected
 	 * @var string
 	 */
-	private $__time;
-	
+	protected $_started = false;
+
 	/**
 	 * Initialize the session settings and security. Do some validation as well.
 	 *
 	 * @access public
+	 * @param array $config
 	 * @return void
 	 */
-	public function __construct() {
-		if ($this->__started == false) {
-			$this->__time	= time();
-			$this->__host	= trim(str_replace('http://', '', $_SERVER['HTTP_HOST']), '/');
-			$this->__agent	= md5(Config::get('App.salt') . $_SERVER['HTTP_USER_AGENT']);
+	public function __construct(array $config = array()) {
+		if (isset($config['security']) && !in_array($config['security'], array(self::SECURITY_LOW, self::SECURITY_MEDIUM, self::SECURITY_HIGH))) {
+			throw new StateException('Invalid security type passed to the Session object.');
 		}
-		
-		// Validate on each request
-		if ($this->__started === true) {
-			$settings = $this->get('Security');
 
-			if (!empty($settings)) {
-				if (($this->security == self::SECURITY_HIGH) || ($this->security == self::SECURITY_MEDIUM)) {
-					if ($settings['agent'] != md5(Config::get('App.salt') . $_SERVER['HTTP_USER_AGENT'])) {
-						$this->destroy();
-					}
-				}
+		parent::__construct($config);
 
-				if ($this->security == self::SECURITY_HIGH) {
-					$timeout = strtotime('-'. $this->inactivity .' minutes');
-
-					if ($settings['time'] <= $timeout) {
-						$this->regenerate();
-					}
-				}
-			}
-		}
+		$this->validate();
 	}
-	
-	/**
-	 * Check to see if a certain key/path exist in the session.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return bool
-	 */
-	public function check($key) {
-		return Set::exists($_SESSION, $key);
-	}
-	
+
 	/**
 	 * Destroy the current sesssion and all values, the session id and remove the session specific cookie.
 	 *
@@ -180,23 +92,19 @@ class Session {
 	 * @return void
 	 */
 	public function destroy() {
-		$this->__id = null;
-		$this->__agent = null;
-		$this->__time = null;
 		$_SESSION = array();
-		
+
 		if (isset($_COOKIE[session_name()])) {
 			setcookie(session_name(), '', time(), '/');
 		}
-		
-		session_destroy();
-        
-        if (!headers_sent()) {
-            $this->regenerate();
-        }
 
-        $this->__started = true;
-		$this->__construct();
+		session_destroy();
+
+		if (!headers_sent()) {
+			$this->regenerate();
+		}
+
+		$this->_started = true;
 	}
 
 	/**
@@ -206,10 +114,21 @@ class Session {
 	 * @param string $key
 	 * @return mixed
 	 */
-	public function get($key) {
+	public function get($key = null) {
 		return Set::extract($_SESSION, $key);
 	}
-	
+
+	/**
+	 * Check to see if a certain key/path exist in the session.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function has($key) {
+		return Set::exists($_SESSION, $key);
+	}
+
 	/**
 	 * Returns the current session ID. If no ID is found, regenerate one.
 	 *
@@ -217,104 +136,81 @@ class Session {
 	 * @return int
 	 */
 	public function id() {
-		if (isset($this->__id)) {
-			return $this->__id;
+		if (!empty($this->_id)) {
+			return $this->_id;
+			
 		} else if ($id = session_id()) {
 			return $id;
 		}
-		
+
 		return $this->regenerate();
 	}
 
-    /**
-	 * Initialize the session by applying all ini settings depending on security level.
+	/**
+	 * Initialize the session by applying all ini settings dependent on security level.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
-        if ($this->__started == true) {
-            return;
-        }
+		if ($this->_started) {
+			return;
+		}
 
-		if (!in_array($this->storage, array(self::STORAGE_PHP, self::STORAGE_CACHE, self::STORAGE_DATABASE))) {
-            $this->storage = self::STORAGE_PHP;
-        }
+		$config = $this->config();
+		$segments = Titon::router()->segments();
 
-        if (!in_array($this->security, array(self::SECURITY_LOW, self::SECURITY_MEDIUM, self::SECURITY_HIGH))) {
-            $this->security = self::SECURITY_MEDIUM;
-        }
-
-        // Ini Settings
-		ini_set('session.name', Config::get('App.name') .'[Session]');
+		ini_set('session.name', Titon::config()->name() . '[Session]');
 		ini_set('session.use_trans_sid', false);
 		ini_set('url_rewriter.tags', '');
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
-        ini_set('session.auto_start', true);
+		ini_set('session.auto_start', true);
 
-        if (isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) == 'on') {
+		if ($segments['scheme'] == 'https') {
 			ini_set('session.cookie_secure', true);
 		}
 
-        // Security Settings
-		switch ($this->security) {
+		$time = time();
+		$host = str_replace('http://', '', $segments['host']);
+		$agent = md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT']);
+
+		switch ($config['security']) {
 			case self::SECURITY_HIGH:
 			case self::SECURITY_MEDIUM:
 			default:
-				$timeout = ($this->security == self::SECURITY_HIGH) ? 10 : 25;
-				$lifetime = (60 * $timeout); // seconds * length = minutes
+				$timeout = ($config['security'] == self::SECURITY_HIGH) ? 10 : 25;
 
-				ini_set('session.referer_check', $this->__host);
-                ini_set('session.cookie_domain', $this->__host);
-				ini_set('session.cookie_lifetime', $lifetime);
+				ini_set('session.referer_check', $host);
+				ini_set('session.cookie_domain', $host);
+				ini_set('session.cookie_lifetime', (60 * $timeout));
 			break;
 			case self::SECURITY_LOW:
-				$timeout = 45;
-
-				ini_set('session.cookie_domain', $this->__host);
-				ini_set('session.cookie_lifetime', 0);
+				ini_set('session.cookie_domain', $host);
+				ini_set('session.cookie_lifetime', (60 * 45));
 			break;
 		}
 
-        // Storage Settings
-        switch ($this->storage) {
-            case self::STORAGE_CACHE:
-
-            break;
-            case self::STORAGE_DATABASE:
-
-            break;
-            case self::STORAGE_PHP:
-            default:
-                
-            break;
-        }
-
-        // Start Session
 		if (headers_sent()) {
-            $_SESSION = array();
+			$_SESSION = array();
 		} else {
 			session_start();
 		}
 
-		$this->__id = session_id();
-        $this->__started = true;
+		$this->_id = session_id();
+		$this->_started = true;
 
-		// Store settings
-		if ($this->check('Security') == false) {
+		if ($this->has('Security') === false) {
 			$this->set('Security', array(
-				'time' => $this->__time,
-				'host' => $this->__host,
-				'agent' => $this->__agent,
-				'storage' => $this->storage,
-				'inactivity' => $this->inactivity
+				'time' => $time,
+				'host' => $host,
+				'agent' => $agent
 			));
 		}
-		
-        return $this->__started;
+
+		return $this->_started;
 	}
-	
+
 	/**
 	 * Regenerate the current session and apply a new session ID.
 	 *
@@ -324,32 +220,83 @@ class Session {
 	 */
 	public function regenerate($delete = true) {
 		session_regenerate_id($delete);
-		$this->__id = session_id();
-        
-		return $this->__id;
+
+		$this->_id = session_id();
+
+		return $this->_id;
 	}
 
-    /**
-	 * Remove a certain key/path from the session.
+	/**
+	 * Remove a certain key from the session.
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return bool
+	 * @return Session
+	 * @chainable
 	 */
 	public function remove($key) {
 		$_SESSION = Set::remove($_SESSION, $key);
+
+		return $this;
 	}
-	
+
 	/**
-	 * Add a value into the session based on the key/path.
+	 * Add a value into the session.
 	 *
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return bool
+	 * @return Session
+	 * @chainable
 	 */
 	public function set($key, $value) {
 		$_SESSION = Set::insert($_SESSION, $key, $value);
+
+		return $this;
 	}
-	
+
+	/**
+	 * Set the session adapter to use.
+	 * 
+	 * @access public
+	 * @param SessionAdapter $adapter 
+	 * @return Session
+	 * @chainable
+	 */
+	public function setAdapter(SessionAdapter $adapter) {
+		$this->_adapter = $adapter;
+
+		return $this;
+	}
+
+	/**
+	 * Validate the session and regenerate or destroy if necessary.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function validate() {
+		if (!$this->_started) {
+			return;
+		}
+
+		$security = $this->get('Security');
+
+		if (!empty($security)) {
+			$config = $this->config();
+			
+			if ($config['security'] == self::SECURITY_HIGH || $config['security'] == self::SECURITY_MEDIUM) {
+				if ($security['agent'] != md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])) {
+					$this->destroy();
+				}
+			}
+
+			if ($config['security'] == self::SECURITY_HIGH) {
+				if ($security['time'] <= strtotime($config['inactivity'])) {
+					$this->regenerate();
+				}
+			}
+		}
+	}
+
 }

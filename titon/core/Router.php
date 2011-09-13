@@ -169,7 +169,7 @@ class Router {
 	public function defaults(array $data = array()) {
 		$data = $data + array(
 			'ext' => '',
-			'query' => $this->segment('query'),
+			'query' => $this->segments('query'),
 			'params' => array()
 		);
 
@@ -313,9 +313,9 @@ class Router {
 	 * @param mixed $key
 	 * @return string|array
 	 */
-	public function segment($key = false) {
+	public function segments($key = false) {
 		if ($key === true) {
-			$segments = $this->segment();
+			$segments = $this->segments();
 
 			$url  = $segments['scheme'] .'://';
 			$url .= $segments['host'];
