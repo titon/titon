@@ -41,6 +41,7 @@ Titon::config()
 	->set('App', array(
 		'name' => 'Titon',
 		'salt' => '66c63d989368170aff46040ab2353923',
+		'seed' => 'nsdASDn7012dn1dsjSa',
 		'encoding' => 'UTF-8'
 	))
 	->set('Debug', array(

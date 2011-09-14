@@ -1,208 +1,181 @@
 <?php
 /**
- * Primary library class to manage and produce cookies. Can encrypt and decrypt cookies according to $encrypt,
- * as well as packaging all cookies within a namespace architecture.
+ * Titon: The PHP 5.3 Micro Framework
  *
- * @copyright	Copyright 2009, Titon (A PHP Micro Framework)
- * @link		http://titonphp.com
- * @license		http://opensource.org/licenses/bsd-license.php (The BSD License)
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
 namespace titon\state;
 
-use \titon\core\Config;
-use \titon\utility\Set;
+use \titon\Titon;
+use \titon\base\Base;
+use \Closure;
 
 /**
- * Cookie Class
+ * Primary library class to manage and produce cookies with customizable encryption and decryption.
  *
- * @package		Titon
- * @subpackage	Titon.State
+ * @package	titon.state
+ * @uses	titon\Titon
  */
-class Cookie {
+class Cookie extends Base {
 
-    /**
-     * What domain the cookie should be useable on.
-     *
-     * @access public
-     * @var string
-     */
-    public $domain = '';
+	/**
+	 * Configuration.
+	 * 
+	 *	domain - What domain the cookie should be useable on
+	 *	expires - How much time until the cookie expires
+	 *	path - Which path should the cookie only be accessible to
+	 *	secure - Should the cookie only be useable across an HTTPS connection
+	 *	encrypt - Should the cookies be encrypted and decrypted
+	 * 
+	 * @access protected
+	 * @var array
+	 */
+	protected $_config = array(
+		'domain' => '',
+		'expires' => '+1 week',
+		'path' => '/',
+		'secure' => false,
+		'encrypt' => true
+	);
 
-    /**
-     * Should the cookies be encrypted and decrypted.
-     *
-     * @access public
-     * @var boolean
-     */
-    public $encrypt = true;
+	/**
+	 * Callback to decrypt the data.
+	 * 
+	 * @access protected
+	 * @var Closure
+	 */
+	protected $_decrypt = null;
 
-    /**
-     * How much time until the cookie expires.
-     *
-     * @access public
-     * @var string
-     */
-    public $expires = '+1 week';
+	/**
+	 * Callback to encrypt the data.
+	 * 
+	 * @access protected
+	 * @var Closure
+	 */
+	protected $_encrypt = null;
 
-    /**
-     * The namespace to wrap all cookies within.
-     *
-     * @access public
-     * @var string
-     */
-    public $namespace = 'Cookie';
+	/**
+	 * Destroy a specific cookie. Returns true if successful, else false if failure.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function delete($key) {
+		$config = $this->config();
 
-    /**
-     * Which path should the cookie only be accessible to
-     *
-     * @access public
-     * @var string
-     */
-    public $path = '/';
-
-    /**
-     * Should the cookie only be useable across an HTTP connection.
-     *
-     * @access public
-     * @var string
-     */
-    public $secure = false;
-
-    /**
-     * Destroy a specific cookie within the namespace. Returns true if successful, else if failure.
-     *
-     * @access public
-     * @param string $key
-     * @return bool
-     */
-	public function delete($key = null) {
-        return setcookie($this->namespace .'['. $key .']', '', time(), $this->path, $this->domain, $this->secure);
+		return setcookie($key, '', time(), $config['path'], $config['domain'], $config['secure']);
 	}
 
-    /**
-     * Get a value or an index from a cookie depending on the given key or path. Will decrypt the cookie if necessary.
-     *
-     * @access public
-     * @param string $key
-     * @return string
-     */
-	public function get($key = null) {
-		if (isset($_COOKIE[$this->namespace][$key])) {
-            return $this->__decrypt($_COOKIE[$this->namespace][$key]);
+	/**
+	 * Get a value from a cookie depending on the given key. Will decrypt the cookie if necessary.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function get($key) {
+		if ($this->has($key)) {
+			$value = $_COOKIE[$key];
+
+			// Assign closure to a variable as it will throw an undefined method error
+			if ($this->config('encrypt')) {
+				$decrypt = $this->_decrypt;
+				$value = $decrypt($value);
+			}
+
+			return $value;
 		}
-        
+
 		return null;
 	}
 
-    /**
-     * Remove a certain key/path from the cookie. Returns true if successful, else if failure.
-     *
-     * @access public
-     * @param string $key
-     * @param array $meta
-     * @return bool
-     */
-	public function remove($key, array $meta = array()) {
-        if (!empty($key)) {
-            $paths = explode('.', $key);
-            $index = array_shift($paths);
-
-            if (isset($_COOKIE[$this->namespace][$index])) {
-                $cookie = $this->__decrypt($_COOKIE[$this->namespace][$index]);
-                $cookie = Set::remove($cookie, implode('.', $paths));
-
-                return $this->set($index, $cookie, $meta);
-            }
-        }
-
-        return false;
+	/**
+	 * Check to see if a certain key exists.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function has($key) {
+		return isset($_COOKIE[$key]);
 	}
 
-    /**
-     * Set a cookie. Can take an optional 3rd argument to overwrite the default cookie parameters.
-     *
-     * @access public
-     * @param string $key
-     * @param string $value
-     * @param array $meta
-     * @return bool
-     */
-	public function set($key, $value, array $meta = array()) {
-		if (!empty($key) && !empty($value)) {
-            $meta = $meta + array(
-                'expires' => $this->expires,
-                'domain' => $this->domain,
-                'secure' => $this->secure,
-                'path' => $this->path
-            );
+	/**
+	 * If no encryption or decryption callbacks are present, define them.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		if ($this->_encrypt === null) {
+			$this->setEncrypter(function($value) {
+				$salt = md5(Titon::config()->salt());
 
-            return setcookie($this->namespace .'['. $key .']', $this->__encrypt($value), $this->__expires($meta['expires']), $meta['path'], $meta['domain'], $meta['secure']);
+				return base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $salt, $value, MCRYPT_MODE_CBC, $salt));
+			});
 		}
 
-        return false;
+		if ($this->_decrypt === null) {
+			$this->setDecrypter(function($value) {
+				$salt = md5(Titon::config()->salt());
+
+				return rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $salt, base64_decode($value), MCRYPT_MODE_CBC, $salt), "\0");
+			});
+		}
 	}
 
-    /**
-     * Decrypt a cookies value to by usuable by the application.
-     *
-     * @access public
-     * @param string $value
-     * @return string
-     */
-	private function __decrypt($value) {
-        if (empty($value) || $this->encrypt === false) {
-            return $value;
-        }
+	/**
+	 * Set a cookie. Can take an optional 3rd argument to overwrite the default cookie parameters.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param string $value
+	 * @param array $config
+	 * @return bool
+	 */
+	public function set($key, $value, array $config = array()) {
+		$config = $config + $this->config();
+		$expires = is_int($config['expires']) ? $config['expires'] : strtotime($config['expires']);
 
-        $parts = explode(';', $value);
-        $decrypted = '';
+		// Assign closure to a variable as it will throw an undefined method error
+		if ($this->config('encrypt')) {
+			$encrypt = $this->_encrypt;
+			$value = $encrypt($value);
+		}
 
-        foreach ($parts as $part) {
-            $decrypted .= chr($part);
-        }
-
-        $decrypted = unserialize(base64_decode(Config::get('App.salt') . $decrypted));
-        return $decrypted;
+		return setcookie($key, $value, $expires, $config['path'], $config['domain'], $config['secure']);
 	}
 
-    /**
-     * Encrypt a cookies value to offer more security and protection.
-     *
-     * @access private
-     * @param string $value
-     * @return string
-     */
-	private function __encrypt($value) {
-        if (empty($value) || $this->encrypt === false) {
-            return $value;
-        }
+	/**
+	 * Set the encryption method.
+	 * 
+	 * @access public
+	 * @param Closure $encrypt
+	 * @return Cookie
+	 * @chainable 
+	 */
+	public function setEncrypter(Closure $encrypt) {
+		$this->_encrypt = $encrypt;
 
-        if (is_array($value)) {
-            $value = serialize($value);
-        }
-
-        $value = base64_encode(Config::get('App.salt') . $value);
-        $length = strlen($value);
-        $encrypted = '';
-
-        for ($i = 0; $i < $length; ++$i) {
-            $encrypted .= ';' . ord(substr($value, $i, 1));
-        }
-
-        $encrypted = trim($encrypted, ';');
-        return $encrypted;
+		return $this;
 	}
 
-    /**
-     * Converts a string to a unix timestamp if it is not one.
-     *
-     * @access private
-     * @param mixed $time
-     * @return int
-     */
-    private function __expires($time) {
-		return (is_int($time) ? $time : strtotime($time));
-    }
-	
+	/**
+	 * Set the decryption method.
+	 * 
+	 * @access public
+	 * @param Closure $encrypt
+	 * @return Cookie
+	 * @chainable 
+	 */
+	public function setDecrypter(Closure $decrypt) {
+		$this->_decrypt = $decrypt;
+
+		return $this;
+	}
+
 }
