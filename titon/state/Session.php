@@ -24,13 +24,6 @@ use \titon\utility\Set;
 class Session extends Base {
 
 	/**
-	 * Session security levels.
-	 */
-	const SECURITY_LOW = 1;
-	const SECURITY_MEDIUM = 2;
-	const SECURITY_HIGH = 3;
-
-	/**
 	 * Storage adapter instance.
 	 *
 	 * @access protected
@@ -41,49 +34,30 @@ class Session extends Base {
 	/**
 	 * Configuration.
 	 * 
-	 *	inactivity - How long until the session should be regenerated
-	 *	security - The current session security level
+	 *	checkUserAgent - Validate the user agent hasn't changed between requests
+	 *	checkInactivity - Regenerate the client session if they are idle
+	 *	checkReferer - Validate the host in the referrer
+	 *	inactivityThreshold - The alotted time the client can be inactive
+	 *	sessionLifetime - Lifetime of the session cookie
 	 * 
 	 * @access protected
 	 * @var array
 	 */
 	protected $_config = array(
-		'inactivity' => '+10 minutes',
-		'security' => self::SECURITY_MEDIUM
+		'checkUserAgent' => true,
+		'checkInactivity' => true,
+		'checkReferer' => true,
+		'inactivityThreshold' => '+5 minutes',
+		'sessionLifetime' => '+10 minutes'
 	);
 
 	/**
-	 * The current users session id.
+	 * The current session id.
 	 *
 	 * @access protected
 	 * @var string
 	 */
 	protected $_id;
-
-	/**
-	 * Has the session been started.
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $_started = false;
-
-	/**
-	 * Initialize the session settings and security. Do some validation as well.
-	 *
-	 * @access public
-	 * @param array $config
-	 * @return void
-	 */
-	public function __construct(array $config = array()) {
-		if (isset($config['security']) && !in_array($config['security'], array(self::SECURITY_LOW, self::SECURITY_MEDIUM, self::SECURITY_HIGH))) {
-			throw new StateException('Invalid security type passed to the Session object.');
-		}
-
-		parent::__construct($config);
-
-		$this->validate();
-	}
 
 	/**
 	 * Destroy the current sesssion and all values, the session id and remove the session specific cookie.
@@ -95,7 +69,9 @@ class Session extends Base {
 		$_SESSION = array();
 
 		if (isset($_COOKIE[session_name()])) {
-			setcookie(session_name(), '', time(), '/');
+			$params = session_get_cookie_params();
+
+			setcookie(session_name(), '', time(), $params['path'], $params['domain'], $params['secure'], $params['httponly']);
 		}
 
 		session_destroy();
@@ -103,8 +79,6 @@ class Session extends Base {
 		if (!headers_sent()) {
 			$this->regenerate();
 		}
-
-		$this->_started = true;
 	}
 
 	/**
@@ -138,7 +112,7 @@ class Session extends Base {
 	public function id() {
 		if (!empty($this->_id)) {
 			return $this->_id;
-			
+
 		} else if ($id = session_id()) {
 			return $id;
 		}
@@ -153,43 +127,31 @@ class Session extends Base {
 	 * @return void
 	 */
 	public function initialize() {
-		if ($this->_started) {
-			return;
-		}
-
 		$config = $this->config();
 		$segments = Titon::router()->segments();
 
-		ini_set('session.name', Titon::config()->name() . '[Session]');
-		ini_set('session.use_trans_sid', false);
 		ini_set('url_rewriter.tags', '');
+		ini_set('session.name', 'TitonSession');
+		ini_set('session.use_trans_sid', false);
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
-		ini_set('session.auto_start', true);
+		ini_set('session.cookie_domain', $segments['host']);
 
 		if ($segments['scheme'] == 'https') {
 			ini_set('session.cookie_secure', true);
 		}
 
-		$time = time();
-		$host = str_replace('http://', '', $segments['host']);
-		$agent = md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT']);
-
-		switch ($config['security']) {
-			case self::SECURITY_HIGH:
-			case self::SECURITY_MEDIUM:
-			default:
-				$timeout = ($config['security'] == self::SECURITY_HIGH) ? 10 : 25;
-
-				ini_set('session.referer_check', $host);
-				ini_set('session.cookie_domain', $host);
-				ini_set('session.cookie_lifetime', (60 * $timeout));
-			break;
-			case self::SECURITY_LOW:
-				ini_set('session.cookie_domain', $host);
-				ini_set('session.cookie_lifetime', (60 * 45));
-			break;
+		if ($config['checkReferer']) {
+			ini_set('session.referer_check', $segments['host']);
 		}
+
+		if (is_int($config['sessionLifetime'])) {
+			$timeout = $config['sessionLifetime'];
+		} else {
+			$timeout = strtotime($config['sessionLifetime']) - time();
+		}
+
+		ini_set('session.cookie_lifetime', $timeout);
 
 		if (headers_sent()) {
 			$_SESSION = array();
@@ -198,17 +160,7 @@ class Session extends Base {
 		}
 
 		$this->_id = session_id();
-		$this->_started = true;
-
-		if ($this->has('Security') === false) {
-			$this->set('Security', array(
-				'time' => $time,
-				'host' => $host,
-				'agent' => $agent
-			));
-		}
-
-		return $this->_started;
+		$this->validate();
 	}
 
 	/**
@@ -256,7 +208,7 @@ class Session extends Base {
 	}
 
 	/**
-	 * Set the session adapter to use.
+	 * Set the SessionAdapter to use.
 	 * 
 	 * @access public
 	 * @param SessionAdapter $adapter 
@@ -276,26 +228,27 @@ class Session extends Base {
 	 * @return void
 	 */
 	public function validate() {
-		if (!$this->_started) {
-			return;
-		}
+		$agent = md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT']);
+		$config = $this->config();
 
-		$security = $this->get('Security');
+		if ($this->has('Security')) {
+			$session = $this->get('Security');
 
-		if (!empty($security)) {
-			$config = $this->config();
-			
-			if ($config['security'] == self::SECURITY_HIGH || $config['security'] == self::SECURITY_MEDIUM) {
-				if ($security['agent'] != md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])) {
-					$this->destroy();
-				}
+			if ($config['checkUserAgent'] && $session['agent'] != $agent) {
+				$this->destroy();
 			}
 
-			if ($config['security'] == self::SECURITY_HIGH) {
-				if ($security['time'] <= strtotime($config['inactivity'])) {
-					$this->regenerate();
-				}
+			if ($config['checkInactivity'] && $session['time'] <= time()) {
+				$this->remove('Security');
+				$this->regenerate();
 			}
+
+		} else {
+			$this->set('Security', array(
+				'time' => strtotime($config['inactivityThreshold']),
+				'host' => Titon::router()->segments('host'),
+				'agent' => $agent
+			));
 		}
 	}
 
