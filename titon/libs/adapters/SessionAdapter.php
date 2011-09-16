@@ -1,7 +1,21 @@
 <?php
+/**
+ * Titon: The PHP 5.3 Micro Framework
+ *
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
+ */
 
+namespace titon\libs\adapters;
+
+/**
+ * Interface for all session adapters, based on session_set_save_handler().
+ * 
+ * @package	titon.libs.adapters
+ */
 interface SessionAdapter {
-	
+
 	/**
 	 * Close the session handler.
 	 * 
@@ -14,10 +28,10 @@ interface SessionAdapter {
 	 * Triggered when a session is destroyed.
 	 * 
 	 * @access public
-	 * @param string $id
+	 * @param string $key
 	 * @return void
 	 */
-	public function destroy($id);
+	public function destroy($key);
 
 	/**
 	 * Triggered when the sessions garbage collector activates.
@@ -27,7 +41,7 @@ interface SessionAdapter {
 	 * @return void
 	 */
 	public function gc($maxLifetime);
-		
+
 	/**
 	 * Open the session handler.
 	 * 
@@ -42,19 +56,27 @@ interface SessionAdapter {
 	 * Read value from the session handler.
 	 * 
 	 * @access public
-	 * @param string $id
+	 * @param string $key
 	 * @return string
 	 */
-	public function read($id);
+	public function read($key);
+	
+	/**
+	 * Register the session handler.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function register();
 
 	/**
 	 * Write data to the session handler.
 	 * 
 	 * @access public
-	 * @param string $id
-	 * @param mixed $data
-	 * @return string
+	 * @param string $key
+	 * @param mixed $value
+	 * @return boolean
 	 */
-	public function write($id, $data);
+	public function write($key, $value);
 	
 }

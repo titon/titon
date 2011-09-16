@@ -10,10 +10,11 @@
 namespace app\config;
 
 use \titon\Titon;
-use \titon\core\Environment;
 
 /**
  * INI Settings
+ * 
+ * Define application specific INI settings here as this file is bootstrapped first in the dispatch cycle.
  */
 
 // Multibyte - http://php.net/manual/book.mbstring.php
@@ -25,6 +26,8 @@ ini_set('mbstring.func_overload', 7);
  * From here you can define all types of environmental configurations and host mappings.
  * The specific environment configuration file is loaded based on the current hostname.
  */
+
+use \titon\core\Environment;
 
 Titon::environment()
 	->setup('development', Environment::DEVELOPMENT, array('localhost', '127.0.0.1'))
@@ -48,3 +51,16 @@ Titon::config()
 		'level' => 2,
 		'email' => ''
 	));
+
+/**
+ * Caching
+ *
+ * Setup unique storage engines to cache your data throughout your application. 
+ * A storage engine implementing the Storage interface can be instantiated using the Titon::cache() system.
+ */
+
+use \titon\libs\storage\cache\FileSystemStorage;
+
+Titon::cache()->setup('session', new FileSystemStorage(array(
+	'prefix' => 'session.'
+)));

@@ -45,13 +45,18 @@ class FileSystemStorage extends StorageAbstract {
 	}
 	
 	/**
-	 * Empty the cache.
+	 * Empty the cache. An optional expiration time can be passed to delete older files only.
 	 * 
 	 * @access public
+	 * @param mixed $expires
 	 * @return boolean
 	 */
-	public function flush() {
+	public function flush($expires = null) {
 		$dir = dir($this->_path());
+		
+		if ($expires !== null) {
+			$expires = $this->expires($expires);
+		}
 
 		while (($file = $dir->read()) !== false) {
 			if ($file == '.' || $file == '..') {
@@ -61,7 +66,11 @@ class FileSystemStorage extends StorageAbstract {
 			$path = $this->_path() . $file;
 			
 			if (file_exists($path)) {
-				unlink($path);
+				if ($expires && filemtime($path) >= $expires) {
+					unlink($path);
+				} else {
+					unlink($path);	
+				}
 			}
 		}
 		
@@ -168,7 +177,7 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		$value = $this->expires($expires) ."|". $this->serialize($value);
+		$value = $this->expires($expires) . '|' . $this->serialize($value);
 
 		return file_put_contents($this->_path($key), $value, LOCK_EX);
 	}

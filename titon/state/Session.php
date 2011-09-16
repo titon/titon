@@ -11,6 +11,7 @@ namespace titon\state;
 
 use \titon\Titon;
 use \titon\base\Base;
+use \titon\libs\adapters\SessionAdapter;
 use \titon\utility\Set;
 
 /**
@@ -78,6 +79,10 @@ class Session extends Base {
 
 		if (!headers_sent()) {
 			$this->regenerate();
+		}
+		
+		if ($this->_adapter) {
+			$this->_adapter->register();
 		}
 	}
 
@@ -160,7 +165,7 @@ class Session extends Base {
 		}
 
 		$this->_id = session_id();
-		$this->validate();
+		$this->_validate();
 	}
 
 	/**
@@ -217,38 +222,49 @@ class Session extends Base {
 	 */
 	public function setAdapter(SessionAdapter $adapter) {
 		$this->_adapter = $adapter;
+		$this->_adapter->register();
 
 		return $this;
+	}
+	
+	/**
+	 * Startup and save the session security params.
+	 * 
+	 * @access protected
+	 * @return void
+	 */
+	protected function _startup() {
+		$this->set('Security', array(
+			'time' => strtotime($this->config('inactivityThreshold')),
+			'host' => Titon::router()->segments('host'),
+			'agent' => md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])
+		));
 	}
 
 	/**
 	 * Validate the session and regenerate or destroy if necessary.
 	 * 
-	 * @access public
+	 * @access protected
 	 * @return void
 	 */
-	public function validate() {
-		$agent = md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT']);
+	protected function _validate() {
 		$config = $this->config();
 
 		if ($this->has('Security')) {
 			$session = $this->get('Security');
 
-			if ($config['checkUserAgent'] && $session['agent'] != $agent) {
+			if ($config['checkUserAgent'] && $session['agent'] != md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])) {
 				$this->destroy();
+				$this->_startup();
 			}
 
 			if ($config['checkInactivity'] && $session['time'] <= time()) {
-				$this->remove('Security');
 				$this->regenerate();
+				$this->_startup();
 			}
 
 		} else {
-			$this->set('Security', array(
-				'time' => strtotime($config['inactivityThreshold']),
-				'host' => Titon::router()->segments('host'),
-				'agent' => $agent
-			));
+			$this->_startup();
 		}
 	}
 

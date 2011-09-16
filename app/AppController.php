@@ -31,7 +31,14 @@ class AppController extends ControllerAbstract {
 		parent::initialize();
 		
 		$this->attachObject('session', function($self) {
-			return Titon::registry()->factory('titon\state\Session');
+			$adapter = new \titon\libs\adapters\session\CacheAdapter(array(
+				'storage' => 'session'
+			));
+			
+			$session = new \titon\state\Session();
+			$session->setAdapter($adapter);
+			
+			return $session;
 		});
 		
 		$this->view->addHelper('html', function($self) {

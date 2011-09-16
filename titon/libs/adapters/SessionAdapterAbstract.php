@@ -1,44 +1,44 @@
 <?php
+/**
+ * Titon: The PHP 5.3 Micro Framework
+ *
+ * @copyright	Copyright 2010, Titon
+ * @link		http://github.com/titon
+ * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
+ */
 
 namespace titon\libs\adapters;
 
+use \titon\base\Base;
 use \titon\libs\adapters\SessionAdapter;
 
-abstract class SessionAdapterAbstract implements SessionAdapter {
-	
-	/**
-	 * Set the handler on instantiation.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function __construct() {
-		session_set_save_handler(
-			array($this, 'open'),
-			array($this, 'close'),
-			array($this, 'read'),
-			array($this, 'write'),
-			array($this, 'destroy'),
-			array($this, 'gc')
-        );
-	}
-	
+/**
+ * Primary class for all session adapters extend. Automatically registers the handler when set into the Session class.
+ * 
+ * @package	titon.libs.adapters
+ */
+abstract class SessionAdapterAbstract extends Base implements SessionAdapter {
+
 	/**
 	 * Close the session handler.
 	 * 
 	 * @access public
 	 * @return void
 	 */
-	abstract public function close();
+	public function close() {
+		return;
+	}
 
 	/**
 	 * Triggered when a session is destroyed.
 	 * 
 	 * @access public
-	 * @param string $id
+	 * @param string $key
 	 * @return void
 	 */
-	abstract public function destroy($id);
+	public function destroy($key) {
+		return;
+	}
 
 	/**
 	 * Triggered when the sessions garbage collector activates.
@@ -47,8 +47,10 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 	 * @param int $maxLifetime
 	 * @return void
 	 */
-	abstract public function gc($maxLifetime);
-		
+	public function gc($maxLifetime) {
+		return;
+	}
+
 	/**
 	 * Open the session handler.
 	 * 
@@ -57,25 +59,49 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 	 * @param string $sessionName
 	 * @return void
 	 */
-	abstract public function open($savePath, $sessionName);
+	public function open($savePath, $sessionName) {
+		return;
+	}
 
 	/**
 	 * Read value from the session handler.
 	 * 
 	 * @access public
-	 * @param string $id
+	 * @param string $key
 	 * @return string
 	 */
-	abstract public function read($id);
+	public function read($key) {
+		return;
+	}
+	
+	/**
+	 * Register the session handler.
+	 * 
+	 * @access public
+	 * @return void
+	 * @final
+	 */
+	final public function register() {
+		session_set_save_handler(
+			array($this, 'open'),
+			array($this, 'close'),
+			array($this, 'read'),
+			array($this, 'write'),
+			array($this, 'destroy'),
+			array($this, 'gc')
+		);
+	}
 
 	/**
 	 * Write data to the session handler.
 	 * 
 	 * @access public
-	 * @param string $id
-	 * @param mixed $data
-	 * @return string
+	 * @param string $key
+	 * @param mixed $value
+	 * @return boolean
 	 */
-	abstract public function write($id, $data);
-	
+	public function write($key, $value) {
+		return;
+	}
+
 }
