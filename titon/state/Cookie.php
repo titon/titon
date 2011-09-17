@@ -44,19 +44,6 @@ class Cookie extends Base {
 	);
 
 	/**
-	 * Destroy a specific cookie. Returns true if successful, else false if failure.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function delete($key) {
-		$config = $this->config();
-
-		return setcookie($key, '', time(), $config['path'], $config['domain'], $config['secure'], $config['httponly']);
-	}
-
-	/**
 	 * Get a value from a cookie depending on the given key. Will decrypt the cookie if necessary.
 	 *
 	 * @access public
@@ -87,6 +74,19 @@ class Cookie extends Base {
 	 */
 	public function has($key) {
 		return isset($_COOKIE[$key]);
+	}
+
+	/**
+	 * Remove a specific cookie. Returns true if successful, else false if failure.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function remove($key) {
+		$config = $this->config();
+
+		return setcookie($key, '', time(), $config['path'], $config['domain'], $config['secure'], $config['httponly']);
 	}
 
 	/**
