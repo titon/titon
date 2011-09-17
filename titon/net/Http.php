@@ -151,7 +151,7 @@ class Http extends Base {
 	 * @return string
 	 */
 	public function env($header) {
-		$headerAlt = strtoupper(str_replace('-', '_', $header));
+		$headerAlt = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
 
 		foreach (array($_SERVER, $_ENV) as $data) {
 			if (isset($data[$header])) {

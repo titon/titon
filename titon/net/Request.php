@@ -56,36 +56,12 @@ class Request extends Http {
 	public $post = array();
 
 	/**
-	 * The accepted charset types, based on the Accept-Charset header.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_charsets = array();
-
-	/**
-	 * The accepted language / locale types, based on the Accept-Language header.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_locales = array();
-
-	/**
 	 * The current HTTP method used.
 	 *
 	 * @access protected
 	 * @var string
 	 */
 	protected $_method = 'get';
-
-	/**
-	 * The accepted content types, based on the Accept header.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_types = array();
 
 	/**
 	 * Loads the $_POST, $_FILES data, configures the query params and populates the accepted headers fields.
@@ -100,9 +76,9 @@ class Request extends Http {
 
 		if (!empty($_FILES)) {
 			foreach ($_FILES as $model => $data) {
-				foreach ($data as $meta => $values) {
+				foreach ($data as $key => $values) {
 					$keys = array_keys($values);
-					$files[$model][$keys[0]][$meta] = $values[$keys[0]];
+					$files[$model][$keys[0]][$key] = $values[$keys[0]];
 				}
 			}
 		}
@@ -118,43 +94,10 @@ class Request extends Http {
 			$files = $stripSlashes($files);
 		}
 
-		// Store into the class
 		$this->data = array_merge_recursive($post, $files);
 		$this->files = $files;
 		$this->get = $get;
 		$this->post = $post;
-
-		// Store accept HTTP headers
-		foreach (array('Accept', 'Accept-Language', 'Accept-Charset') as $acception) {
-			$accept = $this->env($acception);
-
-			if ($accept !== null) {
-				$accept = explode(',', $accept);
-
-				foreach ($accept as $type) {
-					if (strpos($type, ';') !== false) {
-						list($type, $quality) = explode(';', $type);
-					} else {
-						$quality = 1;
-					}
-
-					$data = array(
-						'type' => $type,
-						'quality' => str_replace('q=', '', $quality)
-					);
-
-					if ($acception == 'Accept-Language') {
-						$this->_locales[] = $data;
-					} else if ($acception == 'Accept-Charset') {
-						$this->_charsets[] = $data;
-					} else {
-						$this->_types[] = $data;
-					}
-				}
-			}
-		}
-
-		// Get method
 		$this->_method = strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
 	}
 
@@ -176,7 +119,7 @@ class Request extends Http {
 			$contentType = array($contentType);
 		}
 
-		foreach ($this->_acceptTypes as $aType) {
+		foreach ($this->_accepts('Accept') as $aType) {
 			if (in_array(strtolower($aType['type']), $contentType)) {
 				return true;
 			}
@@ -197,7 +140,7 @@ class Request extends Http {
 			$charset = 'utf-8';
 		}
 
-		foreach ($this->_acceptCharsets as $set) {
+		foreach ($this->_accepts('Accept-Charset') as $set) {
 			if (strtolower($charset) == strtolower($set['type'])) {
 				return true;
 			}
@@ -214,12 +157,12 @@ class Request extends Http {
 	 * @param string $language
 	 * @return bool
 	 */
-	public function acceptsLang($language = 'en') {
+	public function acceptsLanguage($language = 'en') {
 		if (empty($language)) {
 			$language = 'en';
 		}
 
-		foreach ($this->_acceptLangs as $lang) {
+		foreach ($this->_accepts('Accept-Language') as $lang) {
 			if (strpos(strtolower($lang['type']), strtolower($language)) !== false) {
 				return true;
 			}
@@ -294,7 +237,7 @@ class Request extends Http {
 	 */
 	public function isFlash() {
 		return $this->lazyLoad(__FUNCTION__, function($self) {
-			return (bool)preg_match('/^(Shockwave|Adobe) Flash/', $self->userAgent(false));
+			return (bool) preg_match('/^(Shockwave|Adobe) Flash/', $self->userAgent(false));
 		});
 	}
 
@@ -341,7 +284,7 @@ class Request extends Http {
 			$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
 			$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
 
-			return (bool)preg_match('/('. $mobiles .')/i', $self->userAgent(false));
+			return (bool) preg_match('/('. $mobiles .')/i', $self->userAgent(false));
 		});
 	}
 
@@ -442,8 +385,8 @@ class Request extends Http {
 	 * @param bool $explicit
 	 * @return array|string
 	 */
-	public function userAgent($explicit = true) {
-		return $this->lazyLoad(__FUNCTION__ . $explicit, function($self) {
+	public function userAgent($explicit = false) {
+		return $this->lazyLoad(__FUNCTION__ . $explicit, function($self) use ($explicit) {
 			$agent = $self->env('HTTP_USER_AGENT');
 
 			if ($explicit && function_exists('get_browser')) {
@@ -452,7 +395,6 @@ class Request extends Http {
 				return array(
 					'browser' => $browser['browser'],
 					'version' => $browser['version'],
-					'parent'  => $browser['parent'],
 					'cookies' => $browser['cookies'],
 					'agent' => $agent,
 					'os' => $browser['platform']
@@ -460,6 +402,37 @@ class Request extends Http {
 			}
 
 			return $agent;
+		});
+	}
+	
+	/**
+	 * Lazy loading functionality for extracting Accept header information and parsing it.
+	 * 
+	 * @access protected
+	 * @param string $header
+	 * @return array
+	 */
+	protected function _accepts($header) {
+		return $this->lazyLoad(__FUNCTION__ . '-' . $header, function($self) use ($header) {
+			$accept = explode(',', $self->env($header));
+			$data = array();
+
+			if (count($accept) > 0) {
+				foreach ($accept as $type) {
+					if (strpos($type, ';') !== false) {
+						list($type, $quality) = explode(';', $type);
+					} else {
+						$quality = 1;
+					}
+
+					$data[] = array(
+						'type' => $type,
+						'quality' => str_replace('q=', '', $quality)
+					);
+				}
+			}
+			
+			return $data;
 		});
 	}
 
