@@ -190,7 +190,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 	 * Has the regex pattern been compiled?
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isCompiled() {
 		return ($this->_compiled !== null);
@@ -202,7 +202,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 	 *
 	 * @acccess public
 	 * @param string $url
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isMatch($url) {
 		if ($this->_path == $url) {
@@ -266,7 +266,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 	 * Validates the route matches the correct HTTP method.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isMethod() {
 		$method = (array) $this->config('method');
@@ -282,7 +282,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 	 * Validates the route matches a secure connection.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isSecure() {
 		if ($this->config('secure') && !$this->request->isSecure()) {
@@ -296,7 +296,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 	 * Is the route static (no regex patterns)?
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isStatic() {
 		return $this->config('static');
@@ -307,7 +307,7 @@ abstract class RouteAbstract extends Prototype implements Route {
 	 *
 	 * @acccess public
 	 * @param string $url
-	 * @return bool
+	 * @return boolean
 	 */
 	public function match($url) {
 		return ($this->isMatch($url) && $this->isMethod() && $this->isSecure());

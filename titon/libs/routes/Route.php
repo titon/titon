@@ -30,7 +30,7 @@ interface Route {
 	 *
 	 * @acccess public
 	 * @param string $url
-	 * @return bool
+	 * @return boolean
 	 */
 	public function match($url);
 

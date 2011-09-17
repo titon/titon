@@ -91,7 +91,7 @@ class Prototype extends Base {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return bool
+	 * @return boolean
 	 * @final
 	 */
 	final public function __isset($class) {
@@ -235,7 +235,7 @@ class Prototype extends Base {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return bool
+	 * @return boolean
 	 */
 	public function hasObject($class) {
 		return (isset($this->_loaded[$class]) || isset($this->__objectMap[$class]));

@@ -111,7 +111,7 @@ class Titon {
 	 * @access public
 	 * @param string $key
 	 * @param object $object
-	 * @param bool $lock
+	 * @param boolean $lock
 	 * @return void
 	 * @static
 	 */

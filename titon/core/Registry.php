@@ -109,7 +109,7 @@ class Registry {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return bool
+	 * @return boolean
 	 */
 	public function has($key) {
 		return (isset($this->_registered[$key]) && is_object($this->_registered[$key]));

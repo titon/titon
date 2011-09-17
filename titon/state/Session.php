@@ -172,7 +172,7 @@ class Session extends Base {
 	 * Regenerate the current session and apply a new session ID.
 	 *
 	 * @access public
-	 * @param bool $delete
+	 * @param boolean $delete
 	 * @return int
 	 */
 	public function regenerate($delete = true) {

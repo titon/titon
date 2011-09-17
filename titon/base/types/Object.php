@@ -96,7 +96,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return bool
+	 * @return boolean
 	 */
 	public function __isset($name) {
 		return $this->hasProperty($name);
@@ -214,7 +214,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return bool
+	 * @return boolean
 	 */
 	public function hasMethod($name) {
 		return isset($this->_methods[$name]);
@@ -225,7 +225,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return bool
+	 * @return boolean
 	 */
 	public function hasProperty($name) {
 		return isset($this->_properties[$name]);

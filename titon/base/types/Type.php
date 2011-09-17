@@ -66,7 +66,7 @@ class Type implements \Serializable {
 	 * Does the current value match the raw value?
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isRaw() {
 		return ($this->_value === $this->_raw);

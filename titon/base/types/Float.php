@@ -251,7 +251,7 @@ class Float extends Integer {
 	 * Check to see if the current float is finite.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isFinite() {
 		return is_finite($this->_value);
@@ -261,7 +261,7 @@ class Float extends Integer {
 	 * Check to see if the current float is infinite.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isInfinite() {
 		return is_infinite($this->_value);
@@ -271,7 +271,7 @@ class Float extends Integer {
 	 * Check to see if the current float is not a number.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isNaN() {
 		return is_nan($this->_value);

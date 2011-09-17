@@ -106,7 +106,7 @@ class Response extends Http {
 	 * @access public
 	 * @param string $header
 	 * @param string $value
-	 * @param bool $replace
+	 * @param boolean $replace
 	 * @return Response
 	 * @chainable
 	 */

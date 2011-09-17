@@ -106,7 +106,7 @@ class Request extends Http {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return bool
+	 * @return boolean
 	 */
 	public function accepts($type = 'html') {
 		$contentType = $this->contentTypes($type);
@@ -133,7 +133,7 @@ class Request extends Http {
 	 *
 	 * @access public
 	 * @param string $charset
-	 * @return bool
+	 * @return boolean
 	 */
 	public function acceptsCharset($charset = 'utf-8') {
 		if (empty($charset)) {
@@ -155,7 +155,7 @@ class Request extends Http {
 	 *
 	 * @access public
 	 * @param string $language
-	 * @return bool
+	 * @return boolean
 	 */
 	public function acceptsLanguage($language = 'en') {
 		if (empty($language)) {
@@ -193,7 +193,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with AJAX.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isAjax() {
 		return (strtolower($this->env('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest');
@@ -203,7 +203,7 @@ class Request extends Http {
 	 * Returns true if the interface environment is CGI.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isCGI() {
 		return (substr(PHP_SAPI, 0, 3) === 'cgi');
@@ -213,7 +213,7 @@ class Request extends Http {
 	 * Returns true if the interface environment is CLI (command line).
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isCLI() {
 		return (substr(PHP_SAPI, 0, 3) === 'cli');
@@ -223,7 +223,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a DELETE method.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isDelete() {
 		return $this->isMethod('delete');
@@ -233,7 +233,7 @@ class Request extends Http {
 	 * Returns true if the page was requested through Flash.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isFlash() {
 		return $this->lazyLoad(__FUNCTION__, function($self) {
@@ -245,7 +245,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a GET method.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isGet() {
 		return $this->isMethod('get');
@@ -255,7 +255,7 @@ class Request extends Http {
 	 * Returns true if the interface environment is IIS.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isIIS() {
 		return (substr(PHP_SAPI, 0, 5) === 'isapi');
@@ -266,7 +266,7 @@ class Request extends Http {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isMethod($type = 'post') {
 		return (strtolower($type) == $this->method());
@@ -276,7 +276,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a mobile device.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isMobile() {
 		return $this->lazyLoad(__FUNCTION__, function($self) {
@@ -292,7 +292,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a POST method.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isPost() {
 		return $this->isMethod('post');
@@ -302,7 +302,7 @@ class Request extends Http {
 	 * Returns true if the page was requested with a PUT method.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isPut() {
 		return $this->isMethod('put');
@@ -312,7 +312,7 @@ class Request extends Http {
 	 * Is the page being requested through a secure connection.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isSecure() {
 		return $this->lazyLoad(__FUNCTION__, function($self) {
@@ -382,7 +382,7 @@ class Request extends Http {
 	 * @link http://php.net/manual/misc.configuration.php#ini.browscap
 	 * 
 	 * @access public
-	 * @param bool $explicit
+	 * @param boolean $explicit
 	 * @return array|string
 	 */
 	public function userAgent($explicit = false) {

@@ -96,7 +96,7 @@ class Cookie extends Base {
 	 * @param string $key
 	 * @param string $value
 	 * @param array $config
-	 * @return bool
+	 * @return boolean
 	 */
 	public function set($key, $value, array $config = array()) {
 		$config = $config + $this->config();

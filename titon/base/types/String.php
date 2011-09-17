@@ -105,7 +105,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $value
-	 * @param bool $strict
+	 * @param boolean $strict
 	 * @param int $length
 	 * @return int
 	 */
@@ -130,7 +130,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $string
-	 * @param bool $append
+	 * @param boolean $append
 	 * @return String
 	 */
 	public function concat($string, $append = true) {
@@ -146,9 +146,9 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $needle
-	 * @param bool $strict
+	 * @param boolean $strict
 	 * @param int $offset
-	 * @return bool
+	 * @return boolean
 	 */
 	public function contains($needle, $strict = true, $offset = 0) {
 		return ($this->indexOf($needle, $strict, $offset) !== false);
@@ -159,7 +159,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $value
-	 * @return bool
+	 * @return boolean
 	 */
 	public function endsWith($value) {
 		return ($this->extract(-strlen($value)) == $value);
@@ -170,7 +170,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $value
-	 * @return bool
+	 * @return boolean
 	 */
 	public function equals($value) {
 		return ($this->_value === $value);
@@ -211,9 +211,9 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $needle
-	 * @param bool $strict
+	 * @param boolean $strict
 	 * @param int $offset
-	 * @return bool
+	 * @return boolean
 	 */
 	public function indexOf($needle, $strict = true, $offset = 0) {
 		if ($strict) {
@@ -227,7 +227,7 @@ class String extends Type {
 	 * Checks to see if the trimmed value is empty.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isBlank() { 
 		return (trim($this->_value) === '');
@@ -237,7 +237,7 @@ class String extends Type {
 	 * Checks to see if the value is empty.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isEmpty() { 
 		return ($this->_value === '');
@@ -247,7 +247,7 @@ class String extends Type {
 	 * Checks to see if the trimmed value is not empty.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isNotBlank() { 
 		return !$this->isBlank();
@@ -257,7 +257,7 @@ class String extends Type {
 	 * Checks to see if the value is not empty.
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isNotEmpty() { 
 		return !$this->isEmpty();
@@ -268,9 +268,9 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $needle
-	 * @param bool $strict
+	 * @param boolean $strict
 	 * @param int $offset
-	 * @return bool
+	 * @return boolean
 	 */
 	public function lastIndexOf($needle, $strict = true, $offset = 0) {
 		if ($strict) {
@@ -284,7 +284,7 @@ class String extends Type {
 	 * Return the string length.
 	 *
 	 * @access public
-	 * @param bool $reset
+	 * @param boolean $reset
 	 * @return int
 	 */
 	public function length($reset = false) {
@@ -300,7 +300,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $pattern
-	 * @param bool $return
+	 * @param boolean $return
 	 * @param int $flags
 	 * @return int|array
 	 */
@@ -372,7 +372,7 @@ class String extends Type {
 	 * @access public
 	 * @param string|array $search
 	 * @param string|array $replace
-	 * @param bool $strict
+	 * @param boolean $strict
 	 * @return String
 	 * @chainable
 	 */
@@ -417,7 +417,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $value
-	 * @return bool
+	 * @return boolean
 	 */
 	public function startsWith($value) {
 		return ($this->extract(0, strlen($value)) == $value);

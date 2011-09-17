@@ -94,7 +94,7 @@ class Integer extends Type {
 	 * 
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function compare($no) {
 		return ($this->_value == $no) ? 0 : (($this->_value < $no) ? -1 : 1);
@@ -137,7 +137,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function equals($no) {
 		return ($this->_value == $no);
@@ -160,7 +160,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function greaterThan($no) {
 		return ($this->_value > $no);
@@ -171,7 +171,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function greaterThanEquals($no) {
 		return ($this->_value >= $no);
@@ -182,7 +182,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function inRange($start, $end) {
 		return ($this->_value >= $start && $this->_value <= $end);
@@ -192,7 +192,7 @@ class Integer extends Type {
 	 * Is the current value even?
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isEven() {
 		return ($this->_value % 2 === 0);
@@ -203,7 +203,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isNegative() {
 		return ($this->_value < 0);
@@ -213,7 +213,7 @@ class Integer extends Type {
 	 * Is the current value odd?
 	 *
 	 * @access public
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isOdd() {
 		return !$this->isEven();
@@ -224,7 +224,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function isPositive($zero = true) {
 		return ($zero) ? ($this->_value >= 0) : ($this->_value > 0);
@@ -234,7 +234,7 @@ class Integer extends Type {
 	 * The number of bits in the value in binary form.
 	 *
 	 * @access public
-	 * @param bool $reset
+	 * @param boolean $reset
 	 * @return int
 	 */
 	public function length($reset = false) {
@@ -250,7 +250,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function lessThan($no) {
 		return ($this->_value < $no);
@@ -261,7 +261,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function lessThanEquals($no) {
 		return ($this->_value <= $no);
@@ -359,7 +359,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function notEquals($no) {
 		return !$this->equals($no);
@@ -370,7 +370,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return bool
+	 * @return boolean
 	 */
 	public function outRange($start, $end) {
 		return ($this->_value < $start && $this->_value > $end);
@@ -459,7 +459,7 @@ class Integer extends Type {
 	 * Alias for length().
 	 *
 	 * @access public
-	 * @param bool $reset
+	 * @param boolean $reset
 	 * @return int
 	 */
 	public function size($reset = false) {

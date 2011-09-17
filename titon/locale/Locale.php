@@ -152,7 +152,7 @@ class L10n {
 	 * @access public
 	 * @param string $string
 	 * @param array $rules
-	 * @return bool
+	 * @return boolean
 	 * @static
 	 */
 	public static function addCatalog($locale, $rules = array()) {

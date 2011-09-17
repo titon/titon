@@ -114,7 +114,7 @@ class Benchmark {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @param bool $log
+	 * @param boolean $log
 	 * @return string|mixed
 	 * @static
 	 */
