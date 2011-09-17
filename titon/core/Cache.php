@@ -147,6 +147,7 @@ class Cache {
 	 * @access public
 	 * @param string $name
 	 * @return Storage
+	 * @throws CoreException
 	 */
 	public function storage($name) {
 		if (isset($this->_storage[$name])) {

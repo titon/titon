@@ -36,6 +36,7 @@ class Integer extends Type {
 	 * @param mixed $value
 	 * @param int $base
 	 * @return void
+	 * @throws BaseException
 	 */
 	public function __construct($value, $base = 10) {
 		parent::__construct((int) $value);

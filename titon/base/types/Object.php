@@ -121,6 +121,7 @@ class Object {
 	 * @param string $name
 	 * @param Closure $method
 	 * @return Object
+	 * @throws BaseException
 	 * @chainable
 	 */
 	public function addMethod($name, Closure $method) {
@@ -140,6 +141,7 @@ class Object {
 	 * @param string $name
 	 * @param mixed $value
 	 * @return Object
+	 * @throws BaseException
 	 * @chainable
 	 */
 	public function addProperty($name, $value = null) {
@@ -158,6 +160,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @param array $args
+	 * @throws BaseException
 	 * @return mixed
 	 */
 	public function getMethod($name, $args) {
@@ -200,6 +203,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @return mixed
+	 * @throws BaseException
 	 */
 	public function getProperty($name) {
 		if ($this->hasProperty($name)) {

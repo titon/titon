@@ -137,6 +137,7 @@ class Prototype extends Base {
 	 * @param string|array $options
 	 * @param Closure $closure
 	 * @return Prototype
+	 * @throws BaseException
 	 * @chainable
 	 */
 	public function attachObject($options, Closure $closure = null) {
@@ -190,6 +191,7 @@ class Prototype extends Base {
 	 * @access public
 	 * @param string $class
 	 * @return object|null
+	 * @throws BaseException
 	 */
 	public function getObject($class) {
 		if (in_array($class, $this->_restricted)) {

@@ -82,6 +82,7 @@ class Application {
 	 * @param string $path
 	 * @param array $controllers
 	 * @return Application
+	 * @throws CoreException
 	 * @chainable
 	 */
 	public function setup($module, $path, array $controllers) {

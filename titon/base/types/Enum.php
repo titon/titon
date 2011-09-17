@@ -43,6 +43,7 @@ class Enum {
 	 * @access public
 	 * @param int $type
 	 * @return void
+	 * @throws BaseException
 	 * @final
 	 */
 	final public function __construct($type) {

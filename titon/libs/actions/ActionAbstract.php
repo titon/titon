@@ -49,6 +49,7 @@ abstract class ActionAbstract extends Prototype implements Action {
 	 *
 	 * @access public
 	 * @return void
+	 * @throws ActionException
 	 */
 	public function run() {
 		throw new ActionException(spritnf('You must define the run() method within your %s Action.', get_class($this)));

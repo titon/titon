@@ -37,6 +37,7 @@ class PhpReader extends ReaderAbstract {
 	 * @access public
 	 * @param string $path
 	 * @return void
+	 * @throws ReaderException
 	 */
 	public function read($path) {
 		$data = include_once $path;

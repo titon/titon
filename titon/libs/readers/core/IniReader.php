@@ -37,6 +37,7 @@ class IniReader extends ReaderAbstract {
 	 * @access public
 	 * @param string $path
 	 * @return void
+	 * @throws ReaderException
 	 */
 	public function read($path) {
 		$data = parse_ini_file($path, true, INI_SCANNER_NORMAL);

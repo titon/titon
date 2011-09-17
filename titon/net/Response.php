@@ -198,13 +198,13 @@ class Response extends Http {
 
 		// Content type
 		if (!empty($this->_type)) {
-			header('Content-Type: '. $this->_type);
+			header('Content-Type: ' . $this->_type);
 		}
 
 		// HTTP headers
 		if (!empty($this->_headers)) {
 			foreach ($this->_headers as $header) {
-				header($header['header'] .': '. $header['value'], $header['replace']);
+				header($header['header'] . ': ' . $header['value'], $header['replace']);
 			}
 		}
 
@@ -224,6 +224,7 @@ class Response extends Http {
 	 * @access public
 	 * @param int $code
 	 * @return Response
+	 * @throws NetException
 	 * @chainable
 	 */
 	public function status($code = 302) {
@@ -242,6 +243,7 @@ class Response extends Http {
 	 * @access public
 	 * @param string $type
 	 * @return Response
+	 * @throws NetException
 	 * @chainable
 	 */
 	public function type($type = null) {

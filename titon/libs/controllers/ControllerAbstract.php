@@ -81,6 +81,7 @@ abstract class ControllerAbstract extends Prototype implements Controller {
 	 * @param string $action
 	 * @param array $args
 	 * @return mixed
+	 * @throws ControllerException
 	 */
 	public function dispatch($action = null, array $args = array()) {
 		if (empty($action)) {

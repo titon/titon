@@ -26,6 +26,7 @@ class ViewEngine extends EngineAbstract {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
+	 * @throws EngineException
 	 */
 	public function open($path, array $variables = array()) {
 		$path = $this->buildPath(self::TYPE_INCLUDE, $path);
@@ -65,6 +66,7 @@ class ViewEngine extends EngineAbstract {
 	 *
 	 * @access public
 	 * @return void
+	 * @throws EngineException
 	 */
 	public function run() {
 		$config = $this->config();

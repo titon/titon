@@ -49,7 +49,8 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 	 * Load the controller based on the routing params. If the controller does not exist, throw exceptions.
 	 * 
 	 * @access public
-	 * @return Controller 
+	 * @return Controller
+	 * @throws DispatcherException 
 	 */
 	public function loadController() {
 		$config = $this->config();
@@ -74,6 +75,7 @@ abstract class DispatcherAbstract extends Prototype implements Dispatcher {
 	 *
 	 * @access public
 	 * @return void
+	 * @throws DispatcherException
 	 */
 	public function run() {
 		throw new DispatcherException('You must define your own run() method to dispatch the current request.');

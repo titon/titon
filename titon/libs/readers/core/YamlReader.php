@@ -37,6 +37,7 @@ class YamlReader extends ReaderAbstract {
 	 * @access public
 	 * @param string $path
 	 * @return void
+	 * @throws ReaderException
 	 */
 	public function read($path) {
 		if (!extension_loaded('yaml')) {

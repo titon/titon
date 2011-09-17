@@ -75,6 +75,7 @@ class Titon {
 	 * @access public
 	 * @param string $key
 	 * @return object
+	 * @throws Exception
 	 * @static
 	 */
 	public static function get($key) {

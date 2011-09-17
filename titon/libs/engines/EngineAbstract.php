@@ -231,6 +231,7 @@ abstract class EngineAbstract extends Prototype implements Engine {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
+	 * @throws EngineException
 	 */
 	public function open($path, array $variables = array()) {
 		throw new EngineException('You must define the open() method within your engine.');
@@ -263,6 +264,7 @@ abstract class EngineAbstract extends Prototype implements Engine {
 	 * @param string $path
 	 * @param array $variables
 	 * @return void
+	 * @throws EngineException
 	 */
 	public function render($path, array $variables = array()) {
 		throw new EngineException('You must define the render() method within your Engine.');
@@ -275,6 +277,7 @@ abstract class EngineAbstract extends Prototype implements Engine {
 	 *
 	 * @access public
 	 * @return string
+	 * @throws EngineException
 	 */
 	public function run() {
 		throw new EngineException('You must define the run() method within your Engine.');

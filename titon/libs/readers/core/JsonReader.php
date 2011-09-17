@@ -37,6 +37,7 @@ class JsonReader extends ReaderAbstract {
 	 * @access public
 	 * @param string $path
 	 * @return void
+	 * @throws ReaderException
 	 */
 	public function read($path) {
 		$data = @json_decode(file_get_contents($path), true);

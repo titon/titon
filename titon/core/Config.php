@@ -75,6 +75,7 @@ class Config {
 	 * @param string $key
 	 * @param Reader $reader
 	 * @return Config
+	 * @throws CoreException
 	 * @chainable
 	 */
 	public function load($key, Reader $reader) {

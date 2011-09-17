@@ -78,6 +78,7 @@ class Environment {
 	 * @access public
 	 * @param string $name
 	 * @return Environment
+	 * @throws CoreException
 	 * @chainable
 	 */
 	public function fallback($name) {
@@ -161,6 +162,7 @@ class Environment {
 	 * @param int $type
 	 * @param array $hosts
 	 * @return Environment
+	 * @throws CoreException
 	 * @chainable
 	 */
 	public function setup($name, $type, array $hosts) {

@@ -64,49 +64,12 @@ class Request extends Http {
 	protected $_method = 'get';
 
 	/**
-	 * Loads the $_POST, $_FILES data, configures the query params and populates the accepted headers fields.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-		$get = $_GET;
-		$post = $_POST;
-		$files = array();
-
-		if (!empty($_FILES)) {
-			foreach ($_FILES as $model => $data) {
-				foreach ($data as $key => $values) {
-					$keys = array_keys($values);
-					$files[$model][$keys[0]][$key] = $values[$keys[0]];
-				}
-			}
-		}
-
-		// Clear magic quotes, just in case
-		if (get_magic_quotes_gpc() > 0) {
-			$stripSlashes = function($data) {
-				return is_array($data) ? array_map($stripSlashes, $data) : stripslashes($data);
-			};
-
-			$get = $stripSlashes($get);
-			$post = $stripSlashes($post);
-			$files = $stripSlashes($files);
-		}
-
-		$this->data = array_merge_recursive($post, $files);
-		$this->files = $files;
-		$this->get = $get;
-		$this->post = $post;
-		$this->_method = strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
-	}
-
-	/**
 	 * Checks to see if the client accepts a certain content type, based on the Accept header.
 	 *
 	 * @access public
 	 * @param string $type
 	 * @return boolean
+	 * @throws NetException
 	 */
 	public function accepts($type = 'html') {
 		$contentType = $this->contentTypes($type);
@@ -187,6 +150,44 @@ class Request extends Http {
 
 			return null;
 		});
+	}
+
+	/**
+	 * Loads the $_POST, $_FILES data, configures the query params and populates the accepted headers fields.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		$get = $_GET;
+		$post = $_POST;
+		$files = array();
+
+		if (!empty($_FILES)) {
+			foreach ($_FILES as $model => $data) {
+				foreach ($data as $key => $values) {
+					$keys = array_keys($values);
+					$files[$model][$keys[0]][$key] = $values[$keys[0]];
+				}
+			}
+		}
+
+		// Clear magic quotes, just in case
+		if (get_magic_quotes_gpc() > 0) {
+			$stripSlashes = function($data) {
+				return is_array($data) ? array_map($stripSlashes, $data) : stripslashes($data);
+			};
+
+			$get = $stripSlashes($get);
+			$post = $stripSlashes($post);
+			$files = $stripSlashes($files);
+		}
+
+		$this->data = array_merge_recursive($post, $files);
+		$this->files = $files;
+		$this->get = $get;
+		$this->post = $post;
+		$this->_method = strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
 	}
 
 	/**

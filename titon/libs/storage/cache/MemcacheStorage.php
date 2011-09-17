@@ -91,6 +91,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * 
 	 * @access public
 	 * @return void
+	 * @throws StorageException
 	 */
 	public function initialize() {
 		if (!extension_loaded('memcache')) {

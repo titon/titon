@@ -149,6 +149,7 @@ class Registry {
 	 * @param object $object
 	 * @param string $key
 	 * @return object
+	 * @throws CoreException
 	 */
 	public function store($object, $key = null) {
 		if (!is_object($object)) {

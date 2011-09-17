@@ -37,6 +37,7 @@ class XmlReader extends ReaderAbstract {
 	 * @access public
 	 * @param string $path
 	 * @return void
+	 * @throws ReaderException
 	 */
 	public function read($path) {
 		$data = @simplexml_load_file($path);

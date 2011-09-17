@@ -48,6 +48,7 @@ class MemcachedStorage extends MemcacheStorage {
 	 * 
 	 * @access public
 	 * @return void
+	 * @throws StorageException
 	 */
 	public function initialize() {
 		if (!extension_loaded('memcache')) {
