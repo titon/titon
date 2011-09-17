@@ -9,7 +9,6 @@
 
 namespace titon\libs\adapters;
 
-use \titon\base\Base;
 use \titon\libs\adapters\SessionAdapter;
 
 /**
@@ -17,7 +16,17 @@ use \titon\libs\adapters\SessionAdapter;
  * 
  * @package	titon.libs.adapters
  */
-abstract class SessionAdapterAbstract extends Base implements SessionAdapter {
+abstract class SessionAdapterAbstract implements SessionAdapter {
+	
+	/**
+	 * Register the handler before the session is started.
+	 * 
+	 * @access public
+	 * @return void
+	 */
+	public function __construct() {
+		$this->register();
+	}
 
 	/**
 	 * Close the session handler.

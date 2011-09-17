@@ -31,10 +31,8 @@ class AppController extends ControllerAbstract {
 		parent::initialize();
 		
 		$this->attachObject('session', function($self) {
-			$adapter = new \titon\libs\adapters\session\CacheAdapter(array(
-				'storage' => 'session'
-			));
-			
+			$storage = new \titon\libs\storage\cache\FileSystemStorage(array('prefix' => 'session.'));
+			$adapter = new \titon\libs\adapters\session\CacheAdapter($storage);
 			$session = new \titon\state\Session();
 			$session->setAdapter($adapter);
 			

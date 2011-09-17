@@ -11,6 +11,7 @@ namespace titon\libs\adapters\session;
 
 use \titon\Titon;
 use \titon\libs\adapters\SessionAdapterAbstract;
+use \titon\libs\storage\Storage;
 
 /**
  * Caches session data using one of the built in cache storage engines.
@@ -20,20 +21,28 @@ use \titon\libs\adapters\SessionAdapterAbstract;
  * @uses	titon\Titon
  */
 class CacheAdapter extends SessionAdapterAbstract {
-	
+
 	/**
-	 * Configuration.
-	 * 
-	 *	storage - The key of the cache storage engine to use.
-	 *	expires - When the cache should expire.
+	 * Storage engine instance.
 	 * 
 	 * @access protected
-	 * @var array
+	 * @var Storage
 	 */
-	protected $_config = array(
-		'storage' => 'session',
-		'expires' => ''
-	);
+	protected $_storage;
+	
+	/**
+	 * Inject the storage engine.
+	 * 
+	 * @access public
+	 * @param Storage $storage
+	 * @return void
+	 */
+	final public function __construct(Storage $storage) {
+		parent::__construct();
+		
+		$this->_storage = $storage;
+		$this->_storage->configure('storage', 'session')->initialize();
+	}
 
 	/**
 	 * Triggered when a session is destroyed.
@@ -43,7 +52,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * @return void
 	 */
 	public function destroy($key) {
-		return Titon::cache()->storage($this->config('storage'))->remove($key);
+		return $this->_storage->remove($key);
 	}
 
 	/**
@@ -54,21 +63,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * @return void
 	 */
 	public function gc($maxLifetime) {
-		return Titon::cache()->storage($this->config('storage'))->flush(time() - $maxLifetime);
-	}
-	
-	/**
-	 * Validate the cache lifetime.
-	 * 
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-		$expires = $this->config('expires');
-		
-		if (empty($expires)) {
-			$this->configure('expires', time() + ini_get('session.gc_maxlifetime'));
-		}
+		return $this->_storage->flush(time() - $maxLifetime);
 	}
 
 	/**
@@ -79,7 +74,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * @return string
 	 */
 	public function read($key) {
-		return (string) Titon::cache()->storage($this->config('storage'))->get($key);
+		return (string) $this->_storage->get($key);
 	}
 
 	/**
@@ -91,7 +86,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * @return boolean
 	 */
 	public function write($key, $value) {
-		return Titon::cache()->storage($this->config('storage'))->set($key, $value);
+		return $this->_storage->set($key, $value);
 	}	
 	
 }

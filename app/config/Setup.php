@@ -58,9 +58,3 @@ Titon::config()
  * Setup unique storage engines to cache your data throughout your application. 
  * A storage engine implementing the Storage interface can be instantiated using the Titon::cache() system.
  */
-
-use \titon\libs\storage\cache\FileSystemStorage;
-
-Titon::cache()->setup('session', new FileSystemStorage(array(
-	'prefix' => 'session.'
-)));

@@ -139,7 +139,7 @@ class FileSystemStorage extends StorageAbstract {
 		$this->configure('serialize', true);
 		
 		$path = $this->_path();
-		
+
 		// Does folder exist?
 		if (!file_exists($path)) {
 			mkdir($path, 0777, true);

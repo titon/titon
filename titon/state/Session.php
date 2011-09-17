@@ -222,7 +222,6 @@ class Session extends Base {
 	 */
 	public function setAdapter(SessionAdapter $adapter) {
 		$this->_adapter = $adapter;
-		$this->_adapter->register();
 
 		return $this;
 	}
