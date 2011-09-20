@@ -11,17 +11,16 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 	app/
 		config/
 			environments/
-				Development.php
-				Production.php
+				development.php
+				production.php
 			sets/
-			Routes.php
-			Setup.php
-		library/
+			setup.php
+		libs/
 		modules/
 			pages/
 				actions/
 				controllers/
-				library/
+				libs/
 				models/
 				views/
 					private/
@@ -30,12 +29,11 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 					css/
 					js/
 					img/
-				Bootstrap.php
+				bootstrap.php
 			admin/
 				***
 		temp/
 			cache/
-			session/
 			debug.log
 			error.log
 		views/
@@ -45,13 +43,12 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			css/
 			js/
 			img/
-		AppController.php
-		AppModel.php
-		AppView.php
+		index.php
 	tests/
 	titon/
 		base/
 		console/
+		constant/
 		core/
 		data/
 		libs/
@@ -77,9 +74,12 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 		log/
 		net/
 		state/
-		system/
 		utility/
 		vendors/
+		Exception.php
+		Titon.php
+		bootstrap.php
+		functions.php
 
 ### Libraries ###
 
@@ -94,10 +94,10 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Helper - Provides additional functionality to the view layer.
 * Listener - Objects that listen and wait to be triggered at specific events in the system.
 * Package - A combination of library types into a single related entity.
-* Readers - Handles the loading of configuration file types: xml, json, yaml, etc
-* Routes - Maps URLs to internal destinations.
+* Reader - Handles the loading of configuration file types: xml, json, yaml, etc
+* Route - Maps URLs to internal destinations.
 * Shell - Handles CLI execution and tasks.
 * Storage - Provides different methods of caching data.
-* Traits - Pre-built PHP 5.4 traits.
+* Trait - Pre-built PHP 5.4 traits.
 * Translator - Handles the translation of certain filetypes to be used by the locale message system.
 * Transporter - Handles the different type of email transporting (SMTP, etc).
