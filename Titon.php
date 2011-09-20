@@ -36,7 +36,7 @@ class Titon {
 	 * @var string
 	 * @static
 	 */
-	public static $version = '0.0001 ALPHA';
+	public static $version = '0.0.1.1';
 
 	/**
 	 * Installed objects that can not be uninstalled.
@@ -79,11 +79,11 @@ class Titon {
 	 * @static
 	 */
 	public static function get($key) {
-		if (!isset(self::$__memory[$key])) {
-			throw new Exception(sprintf('Object %s has not been installed into Titon.', $key));
+		if (isset(self::$__memory[$key])) {
+			return self::$__memory[$key];
 		}
-
-		return self::$__memory[$key];
+		
+		throw new Exception(sprintf('Object %s has not been installed into Titon.', $key));
 	}
 
 	/**
