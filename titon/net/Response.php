@@ -10,7 +10,8 @@
 namespace titon\net;
 
 use \titon\Titon;
-use \titon\net\Http;
+use \titon\base\Base;
+use \titon\constant\Http;
 use \titon\net\NetException;
 
 /**
@@ -19,9 +20,10 @@ use \titon\net\NetException;
  *
  * @package	titon.net
  * @uses	titon\Titon
+ * @uses	titon\constant\Http
  * @uses	titon\net\NetException
  */
-class Response extends Http {
+class Response extends Base {
 
 	/**
 	 * Configuration.
@@ -93,7 +95,7 @@ class Response extends Http {
 		$expires = is_int($expires) ? $expires : strtotime($expires);
 
 		$this->headers(array(
-			'Expires' => gmdate(self::DATE_FORMAT, $expires) .' GMT',
+			'Expires' => gmdate(Http::DATE_FORMAT, $expires) .' GMT',
 			'Cache-Control' => 'max-age='. ($expires - time())
 		));
 
@@ -154,7 +156,7 @@ class Response extends Http {
 	public function noCache() {
 		$this->headers(array(
 			'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
-			'Last-Modified' => gmdate(self::DATE_FORMAT) .' GMT',
+			'Last-Modified' => gmdate(Http::DATE_FORMAT) .' GMT',
 			'Cache-Control' => array(
 				'no-store, no-cache, must-revalidate',
 				'post-check=0, pre-check=0',
@@ -176,7 +178,7 @@ class Response extends Http {
 	 */
 	public function redirect($url, $code = 302) {
 		$this->status($code)
-			->header('Location', Titon::router()->build($url))
+			->header('Location', Titon::router()->detect($url))
 			->body(null)
 			->respond();
 
@@ -191,9 +193,9 @@ class Response extends Http {
 	 */
 	public function respond() {
 		header(sprintf('%s %s %s',
-			self::HTTP_11,
+			Http::HTTP_11,
 			$this->_status,
-			$this->statusCodes($this->_status)
+			Http::statusCodes($this->_status)
 		));
 
 		// Content type
@@ -228,7 +230,7 @@ class Response extends Http {
 	 * @chainable
 	 */
 	public function status($code = 302) {
-		if (!$this->statusCodes($code)) {
+		if (!Http::statusCodes($code)) {
 			throw new NetException(sprintf('The status code %d is not supported.', $code));
 		}
 
@@ -248,7 +250,7 @@ class Response extends Http {
 	 */
 	public function type($type = null) {
 		if (strpos($type, '/') === false) {
-			$contentType = $this->contentTypes($type);
+			$contentType = Http::contentTypes($type);
 
 			if ($contentType === null) {
 				throw new NetException(sprintf('The content type %s is not supported.', $type));

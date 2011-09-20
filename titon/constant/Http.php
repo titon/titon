@@ -7,16 +7,14 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\net;
-
-use \titon\base\Base;
+namespace titon\constant;
 
 /**
- * Primary HTTP base class that provides functionality for common HTTP status codes and content types.
+ * HTTP related constants and static variables.
  *
- * @package titon.net
+ * @package titon.constant
  */
-class Http extends Base {
+class Http {
 
 	/**
 	 * Valid format for HTTP timestamps.
@@ -36,10 +34,11 @@ class Http extends Base {
 	/**
 	 * List of content types to parse the request as.
 	 *
-	 * @access protected
-	 * @var string
+	 * @access public
+	 * @var array
+	 * @static
 	 */
-	protected $_contentTypes = array(
+	public static $contentTypes = array(
 		'ai'			=> 'application/postscript',
 		'amf'			=> 'application/x-amf',
 		'atom'			=> 'application/atom+xml',
@@ -68,39 +67,91 @@ class Http extends Base {
 	/**
 	 * List of acceptable header types.
 	 *
-	 * @access protected
+	 * @access public
 	 * @var array
+	 * @static
 	 */
-	protected $_headerTypes = array(
-		'Accept', 'Accept-Charset', 'Accept-Encoding', 'Accept-Language', 'Accept-Ranges',
-		'Age', 'Allow', 'Authentication-Info', 'Authorization', 'Cache-Control', 'Connection',
-		'Content-Disposition', 'Content-Encoding', 'Content-Language', 'Content-Length',
-		'Content-Location', 'Content-MD5', 'Content-Range', 'Content-Type', 'Cookie',
-		'Date', 'ETag', 'Expires', 'Expect', 'From', 'Host', 'If-Match', 'If-Modified-Since',
-		'If-None-Match', 'If-Unmodified-Since', 'If-Range', 'Keep-Alive', 'Last-Modified',
-		'Location', 'Max-Forwards', 'Pragma', 'Proxy-Authenticate', 'Proxy-Authorization',
-		'Range', 'Referer', 'Refresh', 'Retry-After', 'Server', 'Set-Cookie', 'TE', 'Trailer',
-		'Transfer-Encoding', 'Upgrade', 'User-Agent', 'Vary', 'Via', 'Warning', 'WWW-Authenticate'
+	public static $headerTypes = array(
+		'Accept', 
+		'Accept-Charset', 
+		'Accept-Encoding', 
+		'Accept-Language', 
+		'Accept-Ranges',
+		'Age', 
+		'Allow', 
+		'Authentication-Info', 
+		'Authorization', 
+		'Cache-Control', 
+		'Connection',
+		'Content-Disposition', 
+		'Content-Encoding', 
+		'Content-Language', 
+		'Content-Length',
+		'Content-Location', 
+		'Content-MD5', 
+		'Content-Range', 
+		'Content-Type', 
+		'Cookie',
+		'Date', 
+		'ETag', 
+		'Expires', 
+		'Expect', 
+		'From', 
+		'Host', 
+		'If-Match', 
+		'If-Modified-Since',
+		'If-None-Match', 
+		'If-Unmodified-Since', 
+		'If-Range', 
+		'Keep-Alive', 
+		'Last-Modified',
+		'Location', 
+		'Max-Forwards', 
+		'Pragma', 
+		'Proxy-Authenticate', 
+		'Proxy-Authorization',
+		'Range', 
+		'Referer', 
+		'Refresh', 
+		'Retry-After', 
+		'Server', 
+		'Set-Cookie', 
+		'TE', 
+		'Trailer',
+		'Transfer-Encoding', 
+		'Upgrade', 
+		'User-Agent', 
+		'Vary', 
+		'Via', 
+		'Warning', 
+		'WWW-Authenticate'
 	);
 
 	/**
 	 * List of possible method types.
 	 *
-	 * @access protected
+	 * @access public
 	 * @var array
 	 */
-	protected $_methodTypes = array(
-		'GET', 'POST', 'PUT', 'DELETE',
-		'HEAD', 'TRACE', 'OPTIONS', 'CONNECT'
+	public static $methodTypes = array(
+		'GET', 
+		'POST', 
+		'PUT', 
+		'DELETE',
+		'HEAD', 
+		'TRACE', 
+		'OPTIONS', 
+		'CONNECT'
 	);
 
 	/**
 	 * List of all available response status codes.
 	 *
-	 * @access protected
+	 * @access public
 	 * @var array
+	 * @static
 	 */
-	protected $_statusCodes = array(
+	public static $statusCodes = array(
 		100 => 'Continue',
 		101 => 'Switching Protocols',
 		200 => 'OK',
@@ -142,38 +193,18 @@ class Http extends Base {
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported'
 	);
-
-	/**
-	 * Get the value of a header by searching through the HTTP headers, $_SERVER and $_ENV globals.
-	 *
-	 * @access public
-	 * @param string $header
-	 * @return string
-	 */
-	public function env($header) {
-		$headerAlt = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
-
-		foreach (array($_SERVER, $_ENV) as $data) {
-			if (isset($data[$header])) {
-				return $data[$header];
-
-			} else if (isset($data[$headerAlt])) {
-				return $data[$headerAlt];
-			}
-		}
-
-		return null;
-	}
-
+	
+	
 	/**
 	 * Get a single content type, or all content types.
 	 *
 	 * @access public
 	 * @param string $type
 	 * @return string|array
+	 * @static
 	 */
-	public function contentTypes($type = null) {
-		return isset($this->_contentTypes[$type]) ? $this->_contentTypes[$type] : $this->_contentTypes;
+	public static function contentTypes($type = null) {
+		return isset(self::$contentTypes[$type]) ? self::$contentTypes[$type] : self::$contentTypes;
 	}
 
 	/**
@@ -181,9 +212,10 @@ class Http extends Base {
 	 *
 	 * @access public
 	 * @return array
+	 * @static
 	 */
-	public function headerTypes() {
-		return $this->_headerTypes;
+	public static function headerTypes() {
+		return self::$headerTypes;
 	}
 
 	/**
@@ -191,9 +223,10 @@ class Http extends Base {
 	 *
 	 * @access public
 	 * @return array
+	 * @static
 	 */
-	public function methodTypes() {
-		return $this->_methodTypes;
+	public static function methodTypes() {
+		return self::$methodTypes;
 	}
 
 	/**
@@ -202,9 +235,10 @@ class Http extends Base {
 	 * @access public
 	 * @param int $code
 	 * @return string|array
+	 * @static
 	 */
-	public function statusCodes($code = null) {
-		return isset($this->_statusCodes[$code]) ? $this->_statusCodes[$code] : $this->_statusCodes;
+	public static function statusCodes($code = null) {
+		return isset(self::$statusCodes[$code]) ? self::$statusCodes[$code] : self::$statusCodes;
 	}
 
 }

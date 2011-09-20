@@ -10,7 +10,8 @@
 namespace titon\net;
 
 use \titon\Titon;
-use \titon\net\Http;
+use \titon\base\Base;
+use \titon\constant\Http;
 use \titon\net\NetException;
 
 /**
@@ -19,9 +20,10 @@ use \titon\net\NetException;
  * 
  * @package	titon.net
  * @uses	titon\Titon
+ * @uses	titon\constant\Http
  * @uses	titon\net\NetException
  */
-class Request extends Http {
+class Request extends Base {
 
 	/**
 	 * An combined array of $_POST and $_FILES data for the current request.
@@ -72,7 +74,7 @@ class Request extends Http {
 	 * @throws NetException
 	 */
 	public function accepts($type = 'html') {
-		$contentType = $this->contentTypes($type);
+		$contentType = Http::contentTypes($type);
 
 		if ($contentType === null) {
 			throw new NetException(sprintf('The content type %s is not supported.', $type));
@@ -151,6 +153,28 @@ class Request extends Http {
 			return null;
 		});
 	}
+	
+	/**
+	 * Get the value of a header by searching through the HTTP headers, $_SERVER and $_ENV globals.
+	 *
+	 * @access public
+	 * @param string $header
+	 * @return string
+	 */
+	public function env($header) {
+		$headerAlt = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
+
+		foreach (array($_SERVER, $_ENV) as $data) {
+			if (isset($data[$header])) {
+				return $data[$header];
+
+			} else if (isset($data[$headerAlt])) {
+				return $data[$headerAlt];
+			}
+		}
+
+		return null;
+	}
 
 	/**
 	 * Loads the $_POST, $_FILES data, configures the query params and populates the accepted headers fields.
@@ -175,7 +199,7 @@ class Request extends Http {
 		// Clear magic quotes, just in case
 		if (get_magic_quotes_gpc() > 0) {
 			$stripSlashes = function($data) {
-				return is_array($data) ? array_map($stripSlashes, $data) : stripslashes($data);
+				return is_array($data) ? array_map($stripSlashes, $data) : filter_var($data, FILTER_SANITIZE_MAGIC_QUOTES);
 			};
 
 			$get = $stripSlashes($get);
