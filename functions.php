@@ -54,3 +54,7 @@ function dump() {
 		echo '</div>';
 	}
 }
+
+function __($key, $params) {
+	return \titon\Titon::g11n()->translate($key, $params);
+}

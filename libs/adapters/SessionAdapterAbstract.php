@@ -15,6 +15,7 @@ use \titon\libs\adapters\SessionAdapter;
  * Primary class for all session adapters extend. Automatically registers the handler when set into the Session class.
  * 
  * @package	titon.libs.adapters
+ * @abstract
  */
 abstract class SessionAdapterAbstract implements SessionAdapter {
 	

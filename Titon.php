@@ -17,8 +17,8 @@ use \titon\core\Debugger;
 use \titon\core\Dispatch;
 use \titon\core\Environment;
 use \titon\core\Event;
+use \titon\core\G11n;
 use \titon\core\Loader;
-use \titon\core\Locale;
 use \titon\core\Registry;
 use \titon\core\Router;
 
@@ -104,7 +104,7 @@ class Titon {
 		self::install('event', new Event(), true);
 		self::install('registry', new Registry(), true);
 		self::install('router', new Router(), true);
-		self::install('locale', new Locale(), true);
+		self::install('g11n', new G11n(), true);
 		self::install('environment', new Environment(), true);
 	}
 
