@@ -55,6 +55,6 @@ function dump() {
 	}
 }
 
-function __($key, $params) {
+function __($key, array $params = array()) {
 	return \titon\Titon::g11n()->translate($key, $params);
 }
