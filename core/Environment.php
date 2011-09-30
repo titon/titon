@@ -27,6 +27,14 @@ class Environment {
 	const DEVELOPMENT = 1;
 	const STAGING = 2;
 	const PRODUCTION = 3;
+	
+	/**
+	 * Currently active environment.
+	 * 
+	 * @access protected
+	 * @var string
+	 */
+	protected $_current = 'development';
 
 	/**
 	 * Holds the list of possible environment configurations.
@@ -37,7 +45,7 @@ class Environment {
 	protected $_environments = array();
 
 	/**
-	 * Sets the default environment; defaults to development.
+	 * Sets the fallback environment; defaults to development.
 	 *
 	 * @access protected
 	 * @var string
@@ -57,36 +65,37 @@ class Environment {
 	);
 
 	/**
-	 * Return the current environment name, based on hostname.
+	 * Return the current environment config, or a certain value.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return string
 	 */
-	public function current() {
-		$host = $_SERVER['HTTP_HOST'];
-
-		if (isset($this->_hostMapping[$host])) {
-			return $this->_hostMapping[$host];
+	public function current($key = null) {
+		$environment = $this->_environments[$this->_current];
+		
+		if (isset($environment[$key])) {
+			return $environment[$key];
 		}
-
-		return $this->_fallback;
+		
+		return $environment;
 	}
 
 	/**
-	 * Set the fallback (default) environment, must exist in the $_environments array.
+	 * Set the fallback environment; fallback must exist in the $_environments array.
 	 *
 	 * @access public
-	 * @param string $name
+	 * @param string $key
 	 * @return Environment
 	 * @throws CoreException
 	 * @chainable
 	 */
-	public function fallback($name) {
-		if (empty($this->_environments[$name])) {
-			throw new CoreException(sprintf('Environment %s does not exist.', $name));
+	public function fallback($key) {
+		if (empty($this->_environments[$key])) {
+			throw new CoreException(sprintf('Environment %s does not exist.', $key));
 		}
 
-		$this->_fallback = $name;
+		$this->_fallback = $key;
 
 		return $this;
 	}
@@ -98,10 +107,17 @@ class Environment {
 	 * @return void
 	 */
 	public function initialize() {
-		$path = APP_CONFIG . 'environments' . DS . Inflector::filename($this->current(), 'php', false);
+		$path = APP_CONFIG . 'environments' . DS . Inflector::filename($this->_current, 'php', false);
+		$host = $_SERVER['HTTP_HOST'];
 
 		if (file_exists($path)) {
 			include_once $path;
+		}
+
+		if (isset($this->_hostMapping[$host])) {
+			$this->_current = $this->_hostMapping[$host];
+		} else {
+			$this->_current = $this->_fallback;
 		}
 	}
 	
@@ -109,13 +125,11 @@ class Environment {
 	 * Does the current environment match the passed key?
 	 * 
 	 * @access public
-	 * @param string $name
+	 * @param string $key
 	 * @return boolean
 	 */
-	public function is($name) {
-		$current = $this->current();
-		
-		return ($current['name'] == $name);
+	public function is($key) {
+		return ($this->current('key') == $key);
 	}
 	
 	/**
@@ -125,9 +139,7 @@ class Environment {
 	 * @return boolean
 	 */
 	public function isDevelopment() {
-		$current = $this->current();
-		
-		return ($current['type'] == self::DEVELOPMENT);
+		return ($this->current('type') == self::DEVELOPMENT);
 	}
 	
 	/**
@@ -137,9 +149,7 @@ class Environment {
 	 * @return boolean
 	 */
 	public function isProduction() {
-		$current = $this->current();
-		
-		return ($current['type'] == self::PRODUCTION);
+		return ($this->current('type') == self::PRODUCTION);
 	}
 	
 	/**
@@ -149,39 +159,37 @@ class Environment {
 	 * @return boolean
 	 */
 	public function isStaging() {
-		$current = $this->current();
-		
-		return ($current['type'] == self::STAGING);
+		return ($this->current('type') == self::STAGING);
 	}
 
 	/**
 	 * Add an environment and its configured hosts and type.
 	 *
 	 * @access public
-	 * @param string $name
+	 * @param string $key
 	 * @param int $type
 	 * @param array $hosts
 	 * @return Environment
 	 * @throws CoreException
 	 * @chainable
 	 */
-	public function setup($name, $type, array $hosts) {
+	public function setup($key, $type, array $hosts) {
 		if (empty($hosts)) {
-			throw new CoreException(sprintf('A host mapping is required for the %s environment.', $name));
+			throw new CoreException(sprintf('A host mapping is required for the %s environment.', $key));
 		}
 		
 		if ($type != self::DEVELOPMENT && $type != self::PRODUCTION && $type != self::STAGING) {
-			throw new CoreException(sprintf('Invalid environment type detected for %s.', $name));
+			throw new CoreException(sprintf('Invalid environment type detected for %s.', $key));
 		}
 		
-		$this->_environments[$name] = array(
-			'name' => $name,
+		$this->_environments[$key] = array(
+			'name' => $key,
 			'type' => $type,
 			'hosts' => $hosts
 		);
 
 		foreach ($hosts as $host) {
-			$this->_hostMapping[$host] = $name;
+			$this->_hostMapping[$host] = $key;
 		}
 
 		return $this;
