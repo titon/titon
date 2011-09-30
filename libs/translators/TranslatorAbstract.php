@@ -41,18 +41,39 @@ class TranslatorAbstract extends Base implements Translator {
 		
 		throw new TranslatorException(sprintf('Message key %s does not exist.', $key));
 	}
-	
-	public function hasMessage($key) {
-		$parts = $this->parseKey($key);
-		$module = $parts['module'];
-		$domain = $parts['domain'];
-		$key = $parts['key'];
-		
-		return isset($this->_cache[$module][$domain][$key]);
-	}
-	
+
 	public function loadFile($module, $domain) {
 		throw new TranslatorException(spritnf('You must define the loadFile() method within your %s translator.', get_class($this)));
+	}
+	
+	/**
+	 * Get a list of locales and fallback locales in descending order starting from the current locale.
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function getLocalesCycle() {
+		$fallback = Titon::g11n()->getFallback();
+		$locales = Titon::g11n()->getLocales();
+		$current = Titon::g11n()->current();
+		$cycle = array();
+		
+		function addToCycle($locale, $locales, &$cycle) {
+			$cycle[] = $locale['locale'];
+
+			if (strlen($locale['key']) == 2) {
+				$cycle[] = $locale['key'];
+			}
+				
+			if (isset($locale['fallback']) && isset($locales[$locale['fallback']])) {
+				addToCycle($locales[$locale['fallback']], $locales, $cycle);
+			}
+		};
+		
+		addToCycle($current, $locales, $cycle);
+		addToCycle($fallback, $locales, $cycle);
+
+		return array_unique($cycle);
 	}
 	
 	public function parseKey($key) {

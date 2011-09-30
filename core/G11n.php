@@ -7,7 +7,7 @@ use \titon\libs\translators\Translator;
 class G11n {
 	
 	/**
-	 * Currently active locale.
+	 * Currently active locale key based on the client.
 	 * 
 	 * @access protected
 	 * @var string
@@ -23,21 +23,12 @@ class G11n {
 	protected $_fallback;
 	
 	/**
-	 * Mapping of locales and related meta data.
+	 * Supported locales and related meta data.
 	 * 
 	 * @access protected
 	 * @var array
 	 */
-	protected $_locales = array(
-		'en' => array(
-			'language' => 'English (United States)',
-			'iso2' => 'us',
-			'iso3' => 'usa',
-			'locale' => 'en_US',
-			'timezone' => 'America/New_York',
-			'mapping' => array('en', 'en-us', 'en_us')
-		)
-	);
+	protected $_locales = array();
 	
 	/**
 	 * Mapping of locales (and their mappings) to the respective locale keys.
@@ -48,7 +39,7 @@ class G11n {
 	protected $_localeMapping = array();
 	
 	/**
-	 * Translator class to use for string fetching and parsing.
+	 * Translator object to use for string fetching and parsing.
 	 * 
 	 * @access protected
 	 * @var Translator
@@ -56,13 +47,91 @@ class G11n {
 	protected $_translator;
 	
 	/**
-	 * Return the currently set locale key.
+	 * Apple the locale using PHPs built in setlocale().
+	 * 
+	 * @link http://php.net/setlocale
 	 * 
 	 * @access public
-	 * @return string
+	 * @param string $key 
+	 * @return G11n
+	 * @throws CoreException
+	 * @chainable
 	 */
-	public function current() {
-		return $this->_locales[$this->_current];
+	public function applyLocale($key) {
+		if (empty($this->_locales[$key])) {
+			throw new CoreException(sprintf('Locale %s does not exist.', $key));
+		}
+		
+		$locale = $this->_locales[$this->_current];
+		
+		// Build array of options to set
+		$options = array(
+			$locale['locale'] . '.UTF8',
+			$locale['locale'] . '.UTF-8',
+			$locale['locale']
+		);
+		
+		if (!empty($locale['iso3'])) {
+			$options = array_merge($options, array(
+				$locale['iso3'] . '.UTF8',
+				$locale['iso3'] . '.UTF-8',
+				$locale['iso3']
+			));
+		}
+		
+		if (!empty($locale['iso2'])) {
+			$options = array_merge($options, array(
+				$locale['iso2'] . '.UTF8',
+				$locale['iso2'] . '.UTF-8',
+				$locale['iso2']
+			));
+		}
+		
+		$options = array_merge($options, array(
+			'eng.UTF8',
+			'eng.UTF-8',
+			'eng',
+			'en_US'
+		));
+
+		setlocale(LC_ALL, $options);
+		
+		if (!empty($locale['timezone'])) {
+			$this->applyTimezone($locale['timezone']);
+		}
+		
+		return $this;
+	}
+	
+	/**
+	 * Apply the timezone to use for datetime processing.
+	 * 
+	 * @access public
+	 * @param type $timezone
+	 * @return G11n 
+	 * @chainable
+	 */
+	public function applyTimezone($timezone) {
+		date_default_timezone_set($timezone);
+		
+		return $this;
+	}
+	
+	/**
+	 * Return the current locale config, or a certain value.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @return string|array
+	 */
+	public function current($key = null) {
+		$locale = $this->_locales[$this->_current];
+		
+		if (isset($locale[$key])) {
+			return $locale[$key];
+		}
+		
+		return $locale;
 	}
 	
 	/**
@@ -71,6 +140,7 @@ class G11n {
 	 * @access public
 	 * @param string $key
 	 * @return G11n 
+	 * @throws CoreException
 	 * @chainable
 	 */
 	public function fallback($key) {
@@ -84,19 +154,39 @@ class G11n {
 	}
 	
 	/**
+	 * Return the fallback locale.
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function getFallback() {
+		return $this->_locales[$this->_fallback];
+	}
+	
+	/**
+	 * Returns the supported locales.
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function getLocales() {
+		return $this->_locales;
+	}
+	
+	/**
 	 * Detect which locale to use based on the clients Accept-Language header.
 	 * 
 	 * @access public
+	 * @throws CoreException
 	 * @return void
 	 */
 	public function initialize() {
-		if (empty($this->_locales)) {
-			// Don't do anything if G11n isn't being used
+		if (!$this->isEnabled()) {
 			return;
 		}
 		
 		$header = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
-		
+
 		if (strpos($header, ';') !== false) {
 			$header = strstr($header, ';', true);
 		}
@@ -118,7 +208,7 @@ class G11n {
 		}
 		
 		// Apply the locale
-		$this->setLocale($this->_current);
+		$this->applyLocale($this->_current);
 		
 		// Check for a translator
 		if (empty($this->_translator)) {
@@ -127,114 +217,66 @@ class G11n {
 	}
 	
 	/**
-	 * Setup the application with a list of supported locales. 
-	 * These locales define the list of translatable content.
+	 * Does the current locale matched the passed key?
 	 * 
 	 * @access public
-	 * @param array $locales
-	 * @return G11n 
-	 * @chainable
+	 * @param string $key
+	 * @return boolean
 	 */
-	public function setup(array $locales) {
-		foreach ($locales as $key => &$locale) {
-			if (empty($locale['locale'])) {
-				throw new CoreException(sprintf('Please provide a locale (xx_XX) for %s.', $locale));
-			}
-			
-			$this->_localeMapping[$key] = $key;
-			
-			if (!empty($locale['mapping'])) {
-				foreach ($locale['mapping'] as $map) {
-					$this->_localeMapping[strtolower($map)] = $key;
-				}
-			}
-			
-			if (empty($this->_fallback)) {
-				$this->_fallback = $key;
-			}
-			
-			$locale['key'] = $key;
-		}
-		
-		$this->_locales = $locales;
-		
-		return $this;
+	public function is($key) {
+		return ($this->current('key') == $key || $this->current('locale') == $key);
 	}
 	
 	/**
-	 * Trigger PHPs built in setlocale().
-	 * 
-	 * @link http://php.net/setlocale
+	 * G11n will be enabled if a locale has been mapped.
 	 * 
 	 * @access public
-	 * @param string $key 
-	 * @return G11n
+	 * @return boolean 
+	 */
+	public function isEnabled() {
+		return !empty($this->_locales);
+	}
+	
+	/**
+	 * Define a key and respective locale config to use for translating content.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param array $locale
+	 * @return G11n 
+	 * @throws CoreException
 	 * @chainable
 	 */
-	public function setLocale($key) {
-		if (empty($this->_locales[$key])) {
-			throw new CoreException(sprintf('Locale %s does not exist.', $key));
+	public function setup($key, array $locale) {
+		if (empty($locale['locale'])) {
+			throw new CoreException(sprintf('Please provide a locale (xx_XX) for %s.', $key));
 		}
-		
-		$bundle = $this->_locales[$key];
-		
-		// Build array of options to set
-		$options = array(
-			$bundle['locale'] . '.UTF8',
-			$bundle['locale'] . '.UTF-8',
-			$bundle['locale']
-		);
-		
-		if (!empty($bundle['iso3'])) {
-			$options = array(
-				$bundle['iso3'] . '.UTF8',
-				$bundle['iso3'] . '.UTF-8',
-				$bundle['iso3']
-			) + $options;
-		}
-		
-		if (!empty($bundle['iso2'])) {
-			$options = array(
-				$bundle['iso2'] . '.UTF8',
-				$bundle['iso2'] . '.UTF-8',
-				$bundle['iso2']
-			) + $options;
-		}
-		
-		$options = array(
-			'eng.UTF8',
-			'eng.UTF-8',
-			'eng',
-			'en_US'
-		) + $options;
 
-		setlocale(LC_ALL, $options);
-		
-		if (!empty($bundle['timezone'])) {
-			$this->setTimezone($bundle['timezone']);
+		// Save a mapping
+		$this->_localeMapping[$key] = $key;
+		$this->_localeMapping[str_replace('_', '-', strtolower($locale['locale']))] = $key;
+
+		// Set the first locale as a fallback
+		if (empty($this->_fallback)) {
+			$this->_fallback = $key;
 		}
 		
-		return $this;
-	}
-	
-	/**
-	 * Set the timezone for datetime formatting.
-	 * 
-	 * @link http://php.net/manual/timezones.php
-	 * 
-	 * @access public
-	 * @param type $timezone
-	 * @return G11n 
-	 * @chainable
-	 */
-	public function setTimezone($timezone) {
-		date_default_timezone_set($timezone);
+		// If the fallback defined doesn't exist, error out
+		if (isset($locale['fallback']) && empty($this->_locales[$locale['fallback']])) {
+			throw new CoreException(sprintf('Fallback locale for %s does not exist.', $key));
+		}
+
+		$locale['key'] = $key;
+		$locale['language'] = substr($locale['locale'], 0, 2);
+		$locale['territory'] = strtolower(substr($locale['locale'], -2));
+		
+		$this->_locales[$key] = $locale;
 		
 		return $this;
 	}
 	
 	/**
-	 * Set the translator to use.
+	 * Sets the translator to use in the string locating and translating process.
 	 * 
 	 * @access public
 	 * @param Translator $translator
@@ -248,8 +290,8 @@ class G11n {
 	}
 	
 	/**
-	 * Return a translated string using the translator. Will use the built in 
-	 * MessageFormatter to parse strings with dynamic data.
+	 * Return a translated string using the translator. 
+	 * Will use the built in MessageFormatter to parse strings with dynamic data.
 	 * 
 	 * @access public
 	 * @param string $key
