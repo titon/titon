@@ -31,6 +31,68 @@ class TranslatorAbstract extends Base implements Translator {
 	protected $_cache = array();
 	
 	/**
+	 * Get a list of locales and fallback locales in descending order starting from the current locale. 
+	 * This will be used to cycle through the respective domain files to find a match.
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function getFileCycle() {
+		return $this->lazyLoad(__FUNCTION__, function($self) {
+			$fallback = Titon::g11n()->getFallback();
+			$locales = Titon::g11n()->getLocales();
+			$current = Titon::g11n()->current();
+			$cycle = array();
+
+			function addToCycle($locale, $locales, &$cycle) {
+				$cycle[] = $locale['locale'];
+
+				if (strlen($locale['key']) == 2) {
+					$cycle[] = $locale['key'];
+				}
+
+				if (isset($locale['fallback']) && isset($locales[$locale['fallback']])) {
+					addToCycle($locales[$locale['fallback']], $locales, $cycle);
+				}
+			};
+
+			addToCycle($current, $locales, $cycle);
+			addToCycle($fallback, $locales, $cycle);
+
+			return array_unique($cycle);
+		});
+	}
+	
+	/**
+	 * Determine the correct file path by cycling through all the locale files.
+	 * 
+	 * @access public
+	 * @param string $module
+	 * @param string $domain
+	 * @param string $ext
+	 * @return string 
+	 */
+	public function getFilePath($module, $domain, $ext) {
+		$locales = $this->getFileCycle();
+		$finalPath = null;
+
+		foreach ($locales as $locale) {
+			$path = APP_MODULES . $module . DS . 'locale' . DS . $locale . DS . $domain . '.' . $ext;
+
+			if (file_exists($path)) {
+				$finalPath = $path;
+				break;
+			}
+		}
+
+		if ($finalPath === null) {
+			throw new TranslatorException(sprintf('Translation file %s.php could not be found in the %s module for the following locales: %s.', $domain, $module, implode(', ', $locales)));
+		}
+		
+		return $finalPath;
+	}
+	
+	/**
 	 * Locate the key within the domain file. If the domain file has not been loaded, 
 	 * load it and cache the collection of strings.
 	 * 
@@ -65,36 +127,6 @@ class TranslatorAbstract extends Base implements Translator {
 	}
 	
 	/**
-	 * Get a list of locales and fallback locales in descending order starting from the current locale.
-	 * 
-	 * @access public
-	 * @return array
-	 */
-	public function getLocalesCycle() {
-		$fallback = Titon::g11n()->getFallback();
-		$locales = Titon::g11n()->getLocales();
-		$current = Titon::g11n()->current();
-		$cycle = array();
-		
-		function addToCycle($locale, $locales, &$cycle) {
-			$cycle[] = $locale['locale'];
-
-			if (strlen($locale['key']) == 2) {
-				$cycle[] = $locale['key'];
-			}
-				
-			if (isset($locale['fallback']) && isset($locales[$locale['fallback']])) {
-				addToCycle($locales[$locale['fallback']], $locales, $cycle);
-			}
-		};
-		
-		addToCycle($current, $locales, $cycle);
-		addToCycle($fallback, $locales, $cycle);
-
-		return array_unique($cycle);
-	}
-	
-	/**
 	 * Parse out the module, domain and key for string lookup.
 	 * 
 	 * @access public
@@ -125,6 +157,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 */
 	public function translate($key, array $params = array()) {	
 		$locale = Titon::g11n()->current();
+
 		return $this->getMessage($key);
 		//$format = new \MessageFormatter($locale['locale'], $this->getMessage($key));
 		

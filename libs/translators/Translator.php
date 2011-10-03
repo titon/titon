@@ -17,6 +17,26 @@ namespace titon\libs\translators;
 interface Translator {
 	
 	/**
+	 * Get a list of locales and fallback locales in descending order starting from the current locale. 
+	 * This will be used to cycle through the respective domain files to find a match.
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function getFileCycle();
+	
+	/**
+	 * Determine the file path by looping through all the locale options.
+	 * 
+	 * @access public
+	 * @param string $module
+	 * @param string $domain
+	 * @param string $ext
+	 * @return string 
+	 */
+	public function getFilePath($module, $domain, $ext);
+
+	/**
 	 * Locate the key within the domain file. If the domain file has not been loaded, 
 	 * load it and cache the collection of strings.
 	 * 
