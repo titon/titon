@@ -25,10 +25,10 @@ class TranslatorAbstract extends Base implements Translator {
 	/**
 	 * Collection of cached localization strings.
 	 * 
-	 * @access protected
+	 * @access public
 	 * @var array
 	 */
-	protected $_cache = array();
+	public $public = array();
 	
 	/**
 	 * Get a list of locales and fallback locales in descending order starting from the current locale. 
@@ -71,6 +71,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @param string $domain
 	 * @param string $ext
 	 * @return string 
+	 * @throws TranslatorException
 	 */
 	public function getFilePath($module, $domain, $ext) {
 		$locales = $this->getFileCycle();
@@ -99,19 +100,22 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @access public
 	 * @param string $key
 	 * @return string
+	 * @throws TranslatorException
 	 */
 	public function getMessage($key) {
-		list($module, $domain, $message) = $this->parseKey($key);
-		
-		if (!isset($this->_cache[$module][$domain])) {
-			$this->_cache[$module][$domain] = $this->loadFile($module, $domain);
-		}
-		
-		if (isset($this->_cache[$module][$domain][$message])) {
-			return $this->_cache[$module][$domain][$message];
-		}
-		
-		throw new TranslatorException(sprintf('Message key %s does not exist.', $key));
+		return $this->lazyLoad(__FUNCTION__ . '-' . $key, function($self) use ($key) {
+			list($module, $domain, $message) = $self->parseKey($key);
+
+			if (!isset($self->cache[$module][$domain])) {
+				$self->cache[$module][$domain] = $self->loadFile($module, $domain);
+			}
+
+			if (isset($self->cache[$module][$domain][$message])) {
+				return $self->cache[$module][$domain][$message];
+			}
+
+			throw new TranslatorException(sprintf('Message key %s does not exist.', $key));
+		});
 	}
 
 	/**
@@ -121,6 +125,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @param string $module
 	 * @param string $domain
 	 * @return array
+	 * @throws TranslatorException
 	 */
 	public function loadFile($module, $domain) {
 		throw new TranslatorException(sprintf('You must define the loadFile() method within your %s.', get_class($this)));
@@ -132,19 +137,22 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @access public
 	 * @param string $key
 	 * @return string
+	 * @throws TranslatorException
 	 */
 	public function parseKey($key) {
-		$parts = explode('.', $key);
-		
-		if (count($parts) < 3 && $parts[0] != 'common') {
-			throw new TranslatorException(sprintf('No module or domain preset for %s key.', $key));
-		}
-		
-		$module = array_shift($parts);
-		$domain = array_shift($parts);
-		$key = implode('.', $parts);
-		
-		return array($module, $domain, $key);
+		return $this->lazyLoad(__FUNCTION__ . '-' . $key, function($self) use ($key) {
+			$parts = explode('.', $key);
+
+			if (count($parts) < 3 && $parts[0] != 'common') {
+				throw new TranslatorException(sprintf('No module or domain preset for %s key.', $key));
+			}
+
+			$module = array_shift($parts);
+			$domain = array_shift($parts);
+			$key = implode('.', $parts);
+
+			return array($module, $domain, $key);
+		});
 	}
 
 	/**
@@ -156,12 +164,9 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @return string
 	 */
 	public function translate($key, array $params = array()) {	
-		$locale = Titon::g11n()->current();
+		$format = new \MessageFormatter(Titon::g11n()->current('locale'), $this->getMessage($key));
 
-		return $this->getMessage($key);
-		//$format = new \MessageFormatter($locale['locale'], $this->getMessage($key));
-		
-		//return $format->format($params);
+		return $format->format($params);
 	}
 	
 }
