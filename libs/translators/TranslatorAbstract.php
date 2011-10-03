@@ -13,37 +13,55 @@ use \titon\Titon;
 use \titon\base\Base;
 use \titon\libs\translators\Translator;
 use \titon\libs\translators\TranslatorException;
-use \titon\utility\Set;
 
 /**
- * @todo
+ * Abstract class that implements the string translation functionality for Translators.
  *
  * @package	titon.libs.translators
  * @abstract
  */
 class TranslatorAbstract extends Base implements Translator { 
 	
+	/**
+	 * Collection of cached localization strings.
+	 * 
+	 * @access protected
+	 * @var array
+	 */
 	protected $_cache = array();
 	
+	/**
+	 * Locate the key within the domain file. If the domain file has not been loaded, 
+	 * load it and cache the collection of strings.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @return string
+	 */
 	public function getMessage($key) {
-		$parts = $this->parseKey($key);
-		$module = $parts['module'];
-		$domain = $parts['domain'];
-		$key = $parts['key'];
+		list($module, $domain, $message) = $this->parseKey($key);
 		
-		if (!Set::exists($this->_cache, $module . '.' . $domain)) {
-			$this->_cache = Set::insert($this->_cache, $module . '.' . $domain, $this->loadFile($module, $domain));
+		if (!isset($this->_cache[$module][$domain])) {
+			$this->_cache[$module][$domain] = $this->loadFile($module, $domain);
 		}
 		
-		if (isset($this->_cache[$module][$domain][$key])) {
-			return $this->_cache[$module][$domain][$key];
+		if (isset($this->_cache[$module][$domain][$message])) {
+			return $this->_cache[$module][$domain][$message];
 		}
 		
 		throw new TranslatorException(sprintf('Message key %s does not exist.', $key));
 	}
 
+	/**
+	 * Load a domain file within a specific module.
+	 * 
+	 * @access public
+	 * @param string $module
+	 * @param string $domain
+	 * @return array
+	 */
 	public function loadFile($module, $domain) {
-		throw new TranslatorException(spritnf('You must define the loadFile() method within your %s translator.', get_class($this)));
+		throw new TranslatorException(sprintf('You must define the loadFile() method within your %s.', get_class($this)));
 	}
 	
 	/**
@@ -76,24 +94,35 @@ class TranslatorAbstract extends Base implements Translator {
 		return array_unique($cycle);
 	}
 	
+	/**
+	 * Parse out the module, domain and key for string lookup.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @return string
+	 */
 	public function parseKey($key) {
 		$parts = explode('.', $key);
 		
-		if (count($parts) < 3) {
-			throw new TranslatorException(sprintf('No module or domain located for %s.', $key));
+		if (count($parts) < 3 && $parts[0] != 'common') {
+			throw new TranslatorException(sprintf('No module or domain preset for %s key.', $key));
 		}
 		
 		$module = array_shift($parts);
 		$domain = array_shift($parts);
 		$key = implode('.', $parts);
 		
-		return array(
-			'module' => $module,
-			'domain' => $domain,
-			'key' => $key
-		);
+		return array($module, $domain, $key);
 	}
 
+	/**
+	 * Process the located string with dynamic parameters if necessary.
+	 * 
+	 * @access public
+	 * @param string $key
+	 * @param array $params
+	 * @return string
+	 */
 	public function translate($key, array $params = array()) {	
 		$locale = Titon::g11n()->current();
 		return $this->getMessage($key);
