@@ -90,7 +90,7 @@ class Environment {
 	 * @throws CoreException
 	 * @chainable
 	 */
-	public function fallback($key) {
+	public function fallbackAs($key) {
 		if (empty($this->_environments[$key])) {
 			throw new CoreException(sprintf('Environment %s does not exist.', $key));
 		}

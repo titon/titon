@@ -57,7 +57,7 @@ class G11n {
 	 * @throws CoreException
 	 * @chainable
 	 */
-	public function applyLocale($key) {
+	public function apply($key) {
 		if (empty($this->_locales[$key])) {
 			throw new CoreException(sprintf('Locale %s does not exist.', $key));
 		}
@@ -144,7 +144,7 @@ class G11n {
 	 * @throws CoreException
 	 * @chainable
 	 */
-	public function fallback($key) {
+	public function fallbackAs($key) {
 		if (empty($this->_locales[$key])) {
 			throw new CoreException(sprintf('Locale %s does not exist.', $key));
 		}
@@ -209,7 +209,7 @@ class G11n {
 		}
 		
 		// Apply the locale
-		$this->applyLocale($this->_current);
+		$this->apply($this->_current);
 		
 		// Check for a translator
 		if (empty($this->_translator)) {

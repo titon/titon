@@ -9,7 +9,7 @@
 
 namespace titon\libs\storage;
 
-use \titon\base\Prototype;
+use \titon\base\Base;
 use \titon\libs\storage\Storage;
 
 /**
@@ -18,7 +18,7 @@ use \titon\libs\storage\Storage;
  * @package	titon.libs.storage
  * @abstract
  */
-abstract class StorageAbstract extends Prototype implements Storage {
+abstract class StorageAbstract extends Base implements Storage {
 	
 	/**
 	 * The third-party class instance.

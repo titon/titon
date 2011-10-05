@@ -342,7 +342,7 @@ class Router {
 	 * @param string $key
 	 * @return array
 	 */
-	public function slug($key) {
+	public function slugs($key) {
 		return isset($this->_slugs[$key]) ? $this->_slugs[$key] : null;
 	}
 

@@ -88,6 +88,9 @@ class Application {
 	public function setup($module, $path, array $controllers) {
 		if (empty($path)) {
 			throw new CoreException(sprintf('The path for the %s module is required.', $module));
+			
+		} else if (!file_exists($path)) {
+			throw new CoreException(sprintf('Module directory does not exist: %s', $path));
 		}
 		
 		$path = Titon::loader()->ds($path);

@@ -68,7 +68,8 @@ class Event {
 				if (empty($listener['events']) || in_array($event, $listener['events'])) {
 					$obj($event, $object);
 				}
-			} else {
+				
+			} else if (method_exists($event, $object)) {
 				$obj->{$event}($object);
 			}
 
@@ -141,12 +142,12 @@ class Event {
 	 * Add custom events to the system.
 	 * 
 	 * @access public
-	 * @param string|array $events
+	 * @param array $events
 	 * @return Event 
 	 * @chainable
 	 */
-	public function setup($events) {
-		$this->_events = (array) $events + $this->_events;
+	public function setup(array $events) {
+		$this->_events = $events + $this->_events;
 		
 		return $this;
 	}
