@@ -165,10 +165,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @return string
 	 */
 	public function translate($key, array $params = array()) {	
-		return $this->getMessage($key);
-		//$format = new \MessageFormatter(Titon::g11n()->current('locale'), $this->getMessage($key));
-
-		//return $format->format($params);
+		return \MessageFormatter::parseMessage(Titon::g11n()->current('locale'), $this->getMessage($key));
 	}
 	
 }

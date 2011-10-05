@@ -94,6 +94,7 @@ class G11n {
 			'en_US'
 		));
 
+		putenv('LC_ALL=' + $locale['locale']);
 		setlocale(LC_ALL, $options);
 		
 		if (!empty($locale['timezone'])) {
@@ -259,6 +260,7 @@ class G11n {
 		// Set the first locale as a fallback
 		if (empty($this->_fallback)) {
 			$this->_fallback = $key;
+			ini_set('intl.default_locale', $locale['locale']);
 		}
 		
 		// If the fallback defined doesn't exist, error out
