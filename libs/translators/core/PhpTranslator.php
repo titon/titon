@@ -9,16 +9,16 @@
 
 namespace titon\libs\translators\core;
 
-use \titon\Titon;
 use \titon\libs\translators\TranslatorAbstract;
-use \titon\libs\translators\TranslatorException;
 
 /**
- * Basic translator used for parsing simple PHP files into an array of translated messages.
+ * Translator used for parsing PHP files into an array of translated messages.
  * 
  * @package	titon.libs.translators.core
+ * 
+ * @link	http://php.net/manual/function.include.php
  */
-class DefaultTranslator extends TranslatorAbstract {
+class PhpTranslator extends TranslatorAbstract {
 
 	/**
 	 * Load a domain file within a specific module.

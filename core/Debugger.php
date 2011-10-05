@@ -353,7 +353,15 @@ class Debugger {
 		$this->_exception = $exception;
 		
 		$trace = $exception->getTrace();
-		$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] .'()';
+		$method = '';
+
+		if (isset($trace[0]['class'])) {
+			$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] .'()';
+			
+		} else if (strpos($trace[0]['function'], 'closure') !== false) {
+			$method = get_class($trace[0]['args'][0]) . '[Closure]';
+		}
+		
 		$response = $method .': '. $exception->getMessage();
 		$code = $exception->getCode();
 

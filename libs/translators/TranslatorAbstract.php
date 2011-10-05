@@ -18,6 +18,7 @@ use \titon\libs\translators\TranslatorException;
  * Abstract class that implements the string translation functionality for Translators.
  *
  * @package	titon.libs.translators
+ * @uses	titon\Titon
  * @abstract
  */
 class TranslatorAbstract extends Base implements Translator { 
@@ -28,7 +29,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @access public
 	 * @var array
 	 */
-	public $public = array();
+	public $cache = array();
 	
 	/**
 	 * Get a list of locales and fallback locales in descending order starting from the current locale. 
@@ -87,7 +88,7 @@ class TranslatorAbstract extends Base implements Translator {
 		}
 
 		if ($finalPath === null) {
-			throw new TranslatorException(sprintf('Translation file %s.php could not be found in the %s module for the following locales: %s.', $domain, $module, implode(', ', $locales)));
+			throw new TranslatorException(sprintf('Translation file %s could not be found in the %s module for the following locales: %s.', $domain, $module, implode(', ', $locales)));
 		}
 		
 		return $finalPath;
@@ -103,7 +104,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @throws TranslatorException
 	 */
 	public function getMessage($key) {
-		return $this->lazyLoad(__FUNCTION__ . '-' . $key, function($self) use ($key) {
+		return $this->lazyLoad(__FUNCTION__ . ':' . $key, function($self) use ($key) {
 			list($module, $domain, $message) = $self->parseKey($key);
 
 			if (!isset($self->cache[$module][$domain])) {
@@ -140,7 +141,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @throws TranslatorException
 	 */
 	public function parseKey($key) {
-		return $this->lazyLoad(__FUNCTION__ . '-' . $key, function($self) use ($key) {
+		return $this->lazyLoad(__FUNCTION__ . ':' . $key, function($self) use ($key) {
 			$parts = explode('.', $key);
 
 			if (count($parts) < 3 && $parts[0] != 'common') {
@@ -164,9 +165,10 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @return string
 	 */
 	public function translate($key, array $params = array()) {	
-		$format = new \MessageFormatter(Titon::g11n()->current('locale'), $this->getMessage($key));
+		return $this->getMessage($key);
+		//$format = new \MessageFormatter(Titon::g11n()->current('locale'), $this->getMessage($key));
 
-		return $format->format($params);
+		//return $format->format($params);
 	}
 	
 }

@@ -12,13 +12,13 @@ namespace titon\libs\translators\core;
 use \titon\libs\translators\TranslatorAbstract;
 
 /**
- * Translator used for parsing INI files into an array of translated messages.
+ * Translator used for parsing JSON files into an array of translated messages.
  * 
  * @package	titon.libs.translators.core
  * 
- * @link	http://php.net/parse_ini_file
+ * @link	http://php.net/json_decode
  */
-class IniTranslator extends TranslatorAbstract {
+class JsonTranslator extends TranslatorAbstract {
 
 	/**
 	 * Load a domain file within a specific module.
@@ -29,7 +29,7 @@ class IniTranslator extends TranslatorAbstract {
 	 * @return array
 	 */
 	public function loadFile($module, $domain) {
-		return parse_ini_file($this->getFilePath($module, $domain, 'ini'), false, INI_SCANNER_NORMAL);
+		return json_decode(file_get_contents($this->getFilePath($module, $domain, 'json')), true);
 	}
 
 }

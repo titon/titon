@@ -438,7 +438,7 @@ class Request extends Base {
 	 * @return array
 	 */
 	protected function _accepts($header) {
-		return $this->lazyLoad(__FUNCTION__ . '-' . $header, function($self) use ($header) {
+		return $this->lazyLoad(__FUNCTION__ . ':' . $header, function($self) use ($header) {
 			$accept = explode(',', $self->env($header));
 			$data = array();
 
