@@ -30,15 +30,7 @@ class G11n {
 	 * @var array
 	 */
 	protected $_locales = array();
-	
-	/**
-	 * Mapping of locales (and their mappings) to the respective locale keys.
-	 * 
-	 * @access protected
-	 * @var array
-	 */
-	protected $_localeMapping = array();
-	
+
 	/**
 	 * Storage engine for caching.
 	 * 
@@ -49,6 +41,11 @@ class G11n {
 	
 	// http://www.loc.gov/standards/iso639-2/php/code_list.php
 	// http://www.science.co.il/language/locale-codes.asp
+	/**
+	 *http://en.wikipedia.org/wiki/IETF_language_tag
+	 *		iso2 - http://en.wikipedia.org/wiki/ISO_639
+	 * @var type 
+	 */
 	protected $_supportedLocales = array(
 		'aa'	=> array('id' => 'aa',		'iso2' => 'aa',	'iso3' => 'aar', 'timezone' => '', 'language' => 'Afar'),
 		'ab'	=> array('id' => 'ab',		'iso2' => 'ab',	'iso3' => 'abk', 'timezone' => '', 'language' => 'Abkhazian'),
@@ -521,40 +518,60 @@ class G11n {
 	}
 	
 	/**
-	 * Define a key and respective locale config to use for translating content.
+	 * Find the locale within the list of supported locales based on the given key. 
+	 * If a locale has a parent, merge the parent into the child to gain its values.
 	 * 
 	 * @access public
 	 * @param string $key
-	 * @param array $locale
-	 * @return G11n 
+	 * @return array
 	 * @throws CoreException
+	 */
+	public function find($key) {
+		$key = $this->canonicalize($key);
+		
+		if (!isset($this->_supportedLocales[$key])) {
+			throw new CoreException(sprintf('%s is not a supported locale.', $key));
+		}
+		
+		$locale = $this->_supportedLocales[$key];
+		
+		if (isset($locale['fallback'])) {
+			$locale = $locale + $this->find($locale['fallback']);
+		}
+		
+		return $locale;
+	}
+	
+	/**
+	 * Accepts a list of locale keys to setup the application with. 
+	 * The list may accept the locale key in the array index or value position. 
+	 * If the locale key is placed in the index, the value may consist of an array to overwrite with.
+	 * 
+	 * @access public
+	 * @param array $keys
+	 * @return G11n 
 	 * @chainable
 	 */
-	public function setup($key, array $locale) {
-		if (empty($locale['locale'])) {
-			throw new CoreException(sprintf('Please provide a locale (xx_XX) for %s.', $key));
+	public function setup(array $keys) {
+		foreach ($keys as $key => $locale) {
+			if (is_string($locale)) {
+				$key = $locale;
+				$locale = array();
+			}
+			
+			$locale = $locale + $this->find($key);
+			
+			// Set the first locale key as a fallback
+			if (empty($this->_fallback)) {
+				$this->_fallback = $locale['id'];
+				ini_set('intl.default_locale', $locale['id']);
+			}
+			
+			$locale['language'] = substr($locale['id'], 0, 2);
+			$locale['region'] = substr($locale['id'], -2);
+			
+			$this->_locales[$locale['id']] = $locale;
 		}
-
-		// Save a mapping
-		$this->_localeMapping[$key] = $key;
-		$this->_localeMapping[str_replace('_', '-', strtolower($locale['locale']))] = $key;
-
-		// Set the first locale as a fallback
-		if (empty($this->_fallback)) {
-			$this->_fallback = $key;
-			ini_set('intl.default_locale', $locale['locale']);
-		}
-		
-		// If the fallback defined doesn't exist, error out
-		if (isset($locale['fallback']) && empty($this->_locales[$locale['fallback']])) {
-			throw new CoreException(sprintf('Fallback locale for %s does not exist.', $key));
-		}
-
-		$locale['key'] = $key;
-		$locale['language'] = substr($locale['locale'], 0, 2);
-		$locale['territory'] = strtolower(substr($locale['locale'], -2));
-		
-		$this->_locales[$key] = $locale;
 		
 		return $this;
 	}
