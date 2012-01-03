@@ -667,8 +667,7 @@ class G11n {
 				$locale = array();
 			}
 			
-			$locale = $locale + $this->find($key);
-			$this->_locales[$key] = $locale;
+			$this->_locales[$key] = $locale + $this->find($key);
 		}
 		
 		return $this;
@@ -698,13 +697,13 @@ class G11n {
 	 */
 	public function setStorage(Storage $storage) {
 		$this->_storage = $storage;
-		
+
 		return $this;
 	}
 	
 	/**
-	 * Return a translated string using the translator. 
-	 * Will use the built in MessageFormatter to parse strings with dynamic data.
+	 * Return a translated string using the translator.
+	 * If a storage engine is present, read and write from the cache.
 	 * 
 	 * @access public
 	 * @param string $key
@@ -712,6 +711,21 @@ class G11n {
 	 * @return string
 	 */
 	public function translate($key, array $params = array()) {	
+		list($module, $catalog) = $this->_translator->parseKey($key);
+		
+		$cacheKey = $module . '.' . $catalog . '.' . $this->current('id');
+
+		if (isset($this->_storage)) {
+			$messages = $this->_storage->get($cacheKey);
+			
+			if (empty($messages)) {
+				$messages = $this->_translator->translate($key, $params);
+				$this->_storage->set($cacheKey, $messages);
+			}
+		} else {
+			$messages = $this->_translator->translate($key, $params);
+		}
+		
 		return $this->_translator->translate($key, $params);
 	}
 

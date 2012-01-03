@@ -56,7 +56,7 @@ abstract class StorageAbstract extends Base implements Storage {
 		'username' => '',
 		'password' => '',
 		'storage' => '',
-		'initialize' => false
+		'initialize' => true
 	);
 	
 	/**
