@@ -21,15 +21,15 @@ use \titon\libs\translators\TranslatorAbstract;
 class XmlTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a domain file within a specific module.
+	 * Load a catalog from a specific module.
 	 * 
 	 * @access public
 	 * @param string $module
-	 * @param string $domain
+	 * @param string $catalog
 	 * @return array
 	 */
-	public function loadFile($module, $domain) {
-		$xml = simplexml_load_file($this->getFilePath($module, $domain, 'xml'));
+	public function parseFile($module, $catalog) {
+		$xml = simplexml_load_file($this->getFilePath($module, $catalog, 'xml'));
 		$array = array();
 		
 		foreach ($xml->children() as $key => $value) {

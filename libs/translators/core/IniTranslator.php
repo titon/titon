@@ -21,15 +21,15 @@ use \titon\libs\translators\TranslatorAbstract;
 class IniTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a domain file within a specific module.
+	 * Load a catalog from a specific module.
 	 * 
 	 * @access public
 	 * @param string $module
-	 * @param string $domain
+	 * @param string $catalog
 	 * @return array
 	 */
-	public function loadFile($module, $domain) {
-		return parse_ini_file($this->getFilePath($module, $domain, 'ini'), false, INI_SCANNER_NORMAL);
+	public function parseFile($module, $catalog) {
+		return parse_ini_file($this->getFilePath($module, $catalog, 'ini'), false, INI_SCANNER_NORMAL);
 	}
 
 }

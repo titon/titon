@@ -66,8 +66,10 @@ class FileSystemStorage extends StorageAbstract {
 			$path = $this->_path() . $file;
 			
 			if (file_exists($path)) {
-				if ($expires && filemtime($path) >= $expires) {
-					unlink($path);
+				if ($expires) {
+					if (filemtime($path) >= $expires) {
+						unlink($path);
+					}
 				} else {
 					unlink($path);	
 				}

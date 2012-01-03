@@ -341,7 +341,8 @@ class G11n {
 			throw new CoreException(sprintf('Locale %s does not exist.', $key));
 		}
 		
-		$locale = $this->current();
+		$locale = $this->find($key);
+		$this->_current = $key;
 		
 		// Build array of options to set
 		$options = array(
@@ -462,7 +463,11 @@ class G11n {
 		}
 
 		$this->_fallback = $key;
-
+		
+		$locale = $this->find($key);
+		
+		ini_set('intl.default_locale', $locale['id']);
+		
 		return $this;
 	}
 	
@@ -471,8 +476,13 @@ class G11n {
 	 * 
 	 * @access public
 	 * @return array
+	 * @throws CoreException
 	 */
 	public function getFallback() {
+		if (!$this->_fallback || empty($this->_locales[$this->_fallback])) {
+			throw new CoreException('Fallback locale has not been setup.');
+		}
+		
 		return $this->_locales[$this->_fallback];
 	}
 	
@@ -515,23 +525,24 @@ class G11n {
 		}
 		
 		$header = explode(',', $header);
+		$current = null;
 		
 		if (count($header) > 0) {
 			foreach ($header as $locale) {
 				if (isset($this->_locales[$locale])) {
-					$this->_current = $locale;
+					$current = $locale;
 					break;
 				}
 			}
 		}
 		
 		// Set current to the fallback if none found
-		if (empty($this->_current)) {
-			$this->_current = $this->_fallback;
+		if ($current == null) {
+			$current = $this->_fallback;
 		}
 		
 		// Apply the locale
-		$this->apply($this->_current);
+		$this->apply($current);
 		
 		// Check for a translator
 		if (empty($this->_translator)) {
@@ -657,13 +668,6 @@ class G11n {
 			}
 			
 			$locale = $locale + $this->find($key);
-			
-			// Set the first locale key as a fallback
-			if (empty($this->_fallback)) {
-				$this->_fallback = $key;
-				ini_set('intl.default_locale', $locale['id']);
-			}
-			
 			$this->_locales[$key] = $locale;
 		}
 		

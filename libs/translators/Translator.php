@@ -18,7 +18,7 @@ interface Translator {
 	
 	/**
 	 * Get a list of locales and fallback locales in descending order starting from the current locale. 
-	 * This will be used to cycle through the respective domain files to find a match.
+	 * This will be used to cycle through the respective catalogs to find a match.
 	 * 
 	 * @access public
 	 * @return array
@@ -30,14 +30,14 @@ interface Translator {
 	 * 
 	 * @access public
 	 * @param string $module
-	 * @param string $domain
+	 * @param string $catalog
 	 * @param string $ext
 	 * @return string 
 	 */
-	public function getFilePath($module, $domain, $ext);
+	public function getFilePath($module, $catalog, $ext);
 
 	/**
-	 * Locate the key within the domain file. If the domain file has not been loaded, 
+	 * Locate the key within the catalog. If the catalog has not been loaded, 
 	 * load it and cache the collection of strings.
 	 * 
 	 * @access public
@@ -47,17 +47,17 @@ interface Translator {
 	public function getMessage($key);
 
 	/**
-	 * Load a domain file within a specific module.
+	 * Load a catalog from a specific module and parse the contents.
 	 * 
 	 * @access public
 	 * @param string $module
-	 * @param string $domain
+	 * @param string $catalog
 	 * @return array
 	 */
-	public function loadFile($module, $domain);
+	public function parseFile($module, $catalog);
 	
 	/**
-	 * Parse out the module, domain and key for string lookup.
+	 * Parse out the module, catalog and key for string lookup.
 	 * 
 	 * @access public
 	 * @param string $key

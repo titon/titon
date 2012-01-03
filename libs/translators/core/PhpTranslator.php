@@ -21,15 +21,15 @@ use \titon\libs\translators\TranslatorAbstract;
 class PhpTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a domain file within a specific module.
+	 * Load a catalog from a specific module.
 	 * 
 	 * @access public
 	 * @param string $module
-	 * @param string $domain
+	 * @param string $catalog
 	 * @return array
 	 */
-	public function loadFile($module, $domain) {
-		return include $this->getFilePath($module, $domain, 'php');
+	public function parseFile($module, $catalog) {
+		return include $this->getFilePath($module, $catalog, 'php');
 	}
 
 }

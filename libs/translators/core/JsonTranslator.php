@@ -21,15 +21,15 @@ use \titon\libs\translators\TranslatorAbstract;
 class JsonTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a domain file within a specific module.
+	 * Load a catalog from a specific module.
 	 * 
 	 * @access public
 	 * @param string $module
-	 * @param string $domain
+	 * @param string $catalog
 	 * @return array
 	 */
-	public function loadFile($module, $domain) {
-		return json_decode(file_get_contents($this->getFilePath($module, $domain, 'json')), true);
+	public function parseFile($module, $catalog) {
+		return json_decode(file_get_contents($this->getFilePath($module, $catalog, 'json')), true);
 	}
 
 }

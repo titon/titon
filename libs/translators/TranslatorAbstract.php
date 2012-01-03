@@ -33,7 +33,7 @@ class TranslatorAbstract extends Base implements Translator {
 	
 	/**
 	 * Get a list of locales and fallback locales in descending order starting from the current locale. 
-	 * This will be used to cycle through the respective domain files to find a match.
+	 * This will be used to cycle through the respective catalogs to find a match.
 	 * 
 	 * @access public
 	 * @return array
@@ -41,45 +41,43 @@ class TranslatorAbstract extends Base implements Translator {
 	public function getFileCycle() {
 		return $this->lazyLoad(__FUNCTION__, function($self) {
 			$fallback = Titon::g11n()->getFallback();
-			$locales = Titon::g11n()->getLocales();
 			$current = Titon::g11n()->current();
 			$cycle = array();
 
-			function addToCycle($locale, $locales, &$cycle) {
-				$cycle[] = $locale['locale'];
+			function addToCycle($locale, &$cycle) {
+				$cycle[] = $locale['id'];
 
-				if (strlen($locale['key']) == 2) {
-					$cycle[] = $locale['key'];
-				}
-
-				if (isset($locale['fallback']) && isset($locales[$locale['fallback']])) {
-					addToCycle($locales[$locale['fallback']], $locales, $cycle);
+				if ($locale['id'] != $locale['iso2']) {
+					$cycle[] = $locale['iso2'];
 				}
 			};
 
-			addToCycle($current, $locales, $cycle);
-			addToCycle($fallback, $locales, $cycle);
+			addToCycle($current, $cycle);
+			
+			if (!empty($fallback) && $fallback['key'] != $current['key']) {
+				addToCycle($fallback, $cycle);
+			}
 
 			return array_unique($cycle);
 		});
 	}
 	
 	/**
-	 * Determine the correct file path by cycling through all the locale files.
+	 * Determine the correct file path by cycling through all the locale catalogs.
 	 * 
 	 * @access public
 	 * @param string $module
-	 * @param string $domain
+	 * @param string $catalog
 	 * @param string $ext
 	 * @return string 
 	 * @throws TranslatorException
 	 */
-	public function getFilePath($module, $domain, $ext) {
+	public function getFilePath($module, $catalog, $ext) {
 		$locales = $this->getFileCycle();
 		$finalPath = null;
 
 		foreach ($locales as $locale) {
-			$path = APP_MODULES . $module . DS . 'locale' . DS . $locale . DS . $domain . '.' . $ext;
+			$path = APP_MODULES . $module . DS . 'locale' . DS . $locale . DS . $catalog . '.' . $ext;
 
 			if (file_exists($path)) {
 				$finalPath = $path;
@@ -88,14 +86,14 @@ class TranslatorAbstract extends Base implements Translator {
 		}
 
 		if ($finalPath === null) {
-			throw new TranslatorException(sprintf('Translation file %s could not be found in the %s module for the following locales: %s.', $domain, $module, implode(', ', $locales)));
+			throw new TranslatorException(sprintf('Translation file %s could not be found in the %s module for the following locales: %s.', $catalog, $module, implode(', ', $locales)));
 		}
 		
 		return $finalPath;
 	}
 	
 	/**
-	 * Locate the key within the domain file. If the domain file has not been loaded, 
+	 * Locate the key within the catalog. If the catalog has not been loaded, 
 	 * load it and cache the collection of strings.
 	 * 
 	 * @access public
@@ -105,14 +103,14 @@ class TranslatorAbstract extends Base implements Translator {
 	 */
 	public function getMessage($key) {
 		return $this->lazyLoad(__FUNCTION__ . ':' . $key, function($self) use ($key) {
-			list($module, $domain, $message) = $self->parseKey($key);
+			list($module, $catalog, $message) = $self->parseKey($key);
 
-			if (!isset($self->cache[$module][$domain])) {
-				$self->cache[$module][$domain] = $self->loadFile($module, $domain);
+			if (!isset($self->cache[$module][$catalog])) {
+				$self->cache[$module][$catalog] = $self->parseFile($module, $catalog);
 			}
 
-			if (isset($self->cache[$module][$domain][$message])) {
-				return $self->cache[$module][$domain][$message];
+			if (isset($self->cache[$module][$catalog][$message])) {
+				return $self->cache[$module][$catalog][$message];
 			}
 
 			throw new TranslatorException(sprintf('Message key %s does not exist.', $key));
@@ -120,39 +118,39 @@ class TranslatorAbstract extends Base implements Translator {
 	}
 
 	/**
-	 * Load a domain file within a specific module.
+	 * Load a catalog from a specific module.
 	 * 
 	 * @access public
 	 * @param string $module
-	 * @param string $domain
+	 * @param string $catalog
 	 * @return array
 	 * @throws TranslatorException
 	 */
-	public function loadFile($module, $domain) {
-		throw new TranslatorException(sprintf('You must define the loadFile() method within your %s.', get_class($this)));
+	public function parseFile($module, $catalog) {
+		throw new TranslatorException(sprintf('You must define the parseFile() method within your %s.', get_class($this)));
 	}
 	
 	/**
-	 * Parse out the module, domain and key for string lookup.
+	 * Parse out the module, catalog and key for string lookup.
 	 * 
 	 * @access public
 	 * @param string $key
-	 * @return string
+	 * @return array
 	 * @throws TranslatorException
 	 */
 	public function parseKey($key) {
 		return $this->lazyLoad(__FUNCTION__ . ':' . $key, function($self) use ($key) {
 			$parts = explode('.', $key);
 
-			if (count($parts) < 3 && $parts[0] != 'common') {
-				throw new TranslatorException(sprintf('No module or domain preset for %s key.', $key));
+			if (count($parts) < 3) {
+				throw new TranslatorException(sprintf('No module or catalog present for %s key.', $key));
 			}
 
 			$module = array_shift($parts);
-			$domain = array_shift($parts);
+			$catalog = array_shift($parts);
 			$key = implode('.', $parts);
 
-			return array($module, $domain, $key);
+			return array($module, $catalog, $key);
 		});
 	}
 
@@ -165,6 +163,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @return string
 	 */
 	public function translate($key, array $params = array()) {	
+		return $this->getMessage($key);
 		//return \MessageFormatter::parseMessage(Titon::g11n()->current('locale'), $this->getMessage($key));
 	}
 	
