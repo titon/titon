@@ -6,6 +6,13 @@ use \titon\libs\storage\Storage;
 use \titon\libs\translators\Translator;
 
 class G11n {
+
+	/**
+	 * Possible formats for locale keys.
+	 */
+	const FORMAT_1 = 1;
+	const FORMAT_2 = 2;
+	const FORMAT_3 = 3;
 	
 	/**
 	 * Currently active locale key based on the client.
@@ -16,7 +23,7 @@ class G11n {
 	protected $_current;
 	
 	/**
-	 * Fallback locale if none can be found.
+	 * Fallback locale key if none can be found.
 	 * 
 	 * @access protected
 	 * @var string
@@ -38,13 +45,17 @@ class G11n {
 	 * @var Storage
 	 */
 	protected $_storage;
-	
-	// http://www.loc.gov/standards/iso639-2/php/code_list.php
-	// http://www.science.co.il/language/locale-codes.asp
+
 	/**
-	 *http://en.wikipedia.org/wiki/IETF_language_tag
-	 *		iso2 - http://en.wikipedia.org/wiki/ISO_639
-	 * @var type 
+	 * A list of all possible locale codes based on the ISO-639 and ISO-3166 standards.
+	 * 
+	 * @link http://en.wikipedia.org/wiki/IETF_language_tag
+	 * @link http://en.wikipedia.org/wiki/ISO_639
+	 * @link http://en.wikipedia.org/wiki/ISO_3166-1
+	 * @link http://loc.gov/standards/iso639-2/php/code_list.php
+	 * 
+	 * @access protected
+	 * @var array
 	 */
 	protected $_supportedLocales = array(
 		'aa'	=> array('id' => 'aa',		'iso2' => 'aa',	'iso3' => 'aar', 'timezone' => '', 'language' => 'Afar'),
@@ -55,26 +66,26 @@ class G11n {
 		'am'	=> array('id' => 'am',		'iso2' => 'am',	'iso3' => 'amh', 'timezone' => '', 'language' => 'Amharic'),
 		'an'	=> array('id' => 'an',		'iso2' => 'an',	'iso3' => 'arg', 'timezone' => '', 'language' => 'Aragonese'),
 		'ar'	=> array('id' => 'ar',		'iso2' => 'ar',	'iso3' => 'ara', 'timezone' => '', 'language' => 'Arabic'),
-		'ar-ae'	=> array('id' => 'ar-ae',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (U.A.E.)'),
-		'ar-bh'	=> array('id' => 'ar-bh',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Bahrain)'),
-		'ar-dz'	=> array('id' => 'ar-dz',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Algeria)'),
-		'ar-eg'	=> array('id' => 'ar-eg',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Egypt)'),
-		'ar-iq'	=> array('id' => 'ar-iq',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Iraq)'),
-		'ar-jo'	=> array('id' => 'ar-jo',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Jordan)'),
-		'ar-kw'	=> array('id' => 'ar-kw',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Kuwait)'),
-		'ar-lb'	=> array('id' => 'ar-lb',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Lebanon)'),
-		'ar-ly'	=> array('id' => 'ar-ly',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Libya)'),
-		'ar-ma'	=> array('id' => 'ar-ma',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Morocco)'),
-		'ar-om'	=> array('id' => 'ar-om',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Oman)'),
-		'ar-qa'	=> array('id' => 'ar-qa',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Qatar)'),
-		'ar-sa'	=> array('id' => 'ar-sa',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Saudi Arabia)'),
-		'ar-sy'	=> array('id' => 'ar-sy',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Syria)'),
-		'ar-tn'	=> array('id' => 'ar-tn',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Tunisia)'),
-		'ar-ye'	=> array('id' => 'ar-ye',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Yemen)'),
+		'ar-ae'	=> array('id' => 'ar_AE',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (U.A.E.)'),
+		'ar-bh'	=> array('id' => 'ar_BH',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Bahrain)'),
+		'ar-dz'	=> array('id' => 'ar_DZ',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Algeria)'),
+		'ar-eg'	=> array('id' => 'ar_EG',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Egypt)'),
+		'ar-iq'	=> array('id' => 'ar_IQ',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Iraq)'),
+		'ar-jo'	=> array('id' => 'ar_JO',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Jordan)'),
+		'ar-kw'	=> array('id' => 'ar_KW',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Kuwait)'),
+		'ar-lb'	=> array('id' => 'ar_LB',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Lebanon)'),
+		'ar-ly'	=> array('id' => 'ar_LY',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Libya)'),
+		'ar-ma'	=> array('id' => 'ar_MA',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Morocco)'),
+		'ar-om'	=> array('id' => 'ar_OM',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Oman)'),
+		'ar-qa'	=> array('id' => 'ar_QA',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Qatar)'),
+		'ar-sa'	=> array('id' => 'ar_SA',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Saudi Arabia)'),
+		'ar-sy'	=> array('id' => 'ar_SY',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Syria)'),
+		'ar-tn'	=> array('id' => 'ar_TN',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Tunisia)'),
+		'ar-ye'	=> array('id' => 'ar_YE',	'fallback' => 'ar', 'timezone' => '', 'language' => 'Arabic (Yemen)'),
 		'av'	=> array('id' => 'av',		'iso2' => 'av',	'iso3' => 'ava', 'timezone' => '', 'language' => 'Avaric'),
 		'ay'	=> array('id' => 'ay',		'iso2' => 'ay',	'iso3' => 'aym', 'timezone' => '', 'language' => 'Aymara'),
 		'az'	=> array('id' => 'az',		'iso2' => 'az',	'iso3' => 'aze', 'timezone' => '', 'language' => 'Azerbaijani'),
-		'az-az'	=> array('id' => 'az-az',	'fallback' => 'az', 'timezone' => '', 'language' => 'Azerbaijani (Cyrillic)'),
+		'az-az'	=> array('id' => 'az_AZ',	'fallback' => 'az', 'timezone' => '', 'language' => 'Azerbaijani (Cyrillic)'),
 		'ba'	=> array('id' => 'ba',		'iso2' => 'ba',	'iso3' => 'bak', 'timezone' => '', 'language' => 'Bashkir'),
 		'be'	=> array('id' => 'be',		'iso2' => 'be',	'iso3' => 'bel', 'timezone' => '', 'language' => 'Belarusian'),
 		'bg'	=> array('id' => 'bg',		'iso2' => 'bg',	'iso3' => 'bul', 'timezone' => '', 'language' => 'Bulgarian'),
@@ -83,8 +94,8 @@ class G11n {
 		'bm'	=> array('id' => 'bm',		'iso2' => 'bm',	'iso3' => 'bam', 'timezone' => '', 'language' => 'Bambara'),
 		'bn'	=> array('id' => 'bn',		'iso2' => 'bn',	'iso3' => 'ben', 'timezone' => '', 'language' => 'Bengali'),
 		'bo'	=> array('id' => 'bo',		'iso2' => 'bo',	'iso3' => array('tib', 'bod'), 'timezone' => '', 'language' => 'Tibetan'),
-		'bo-cn'	=> array('id' => 'bo-cn',	'fallback' => 'bo', 'timezone' => '', 'language' => 'Tibetan (China)'),
-		'bo-in'	=> array('id' => 'bo-in',	'fallback' => 'bo', 'timezone' => '', 'language' => 'Tibetan (India)'),
+		'bo-cn'	=> array('id' => 'bo_CN',	'fallback' => 'bo', 'timezone' => '', 'language' => 'Tibetan (China)'),
+		'bo-in'	=> array('id' => 'bo_IN',	'fallback' => 'bo', 'timezone' => '', 'language' => 'Tibetan (India)'),
 		'br'	=> array('id' => 'br',		'iso2' => 'br',	'iso3' => 'bre', 'timezone' => '', 'language' => 'Breton'),
 		'bs'	=> array('id' => 'bs',		'iso2' => 'bs',	'iso3' => 'bos', 'timezone' => '', 'language' => 'Bosnian'),
 		'ca'	=> array('id' => 'ca',		'iso2' => 'ca',	'iso3' => 'cat', 'timezone' => '', 'language' => 'Catalan'),
@@ -97,50 +108,50 @@ class G11n {
 		'cy'	=> array('id' => 'cy',		'iso2' => 'cy',	'iso3' => array('wel', 'cym'), 'timezone' => '', 'language' => 'Welsh'),
 		'da'	=> array('id' => 'da',		'iso2' => 'da',	'iso3' => 'dan', 'timezone' => '', 'language' => 'Danish'),
 		'de'	=> array('id' => 'de',		'iso2' => 'de',	'iso3' => array('ger', 'deu'), 'timezone' => '', 'language' => 'German (Standard)'),
-		'de-at'	=> array('id' => 'de-at',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Austria)'),
-		'de-ch'	=> array('id' => 'de-ch',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Swiss)'),
-		'de-de'	=> array('id' => 'de-de',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Germany)'),
-		'de-li'	=> array('id' => 'de-li',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Liechtenstein)'),
-		'de-lu'	=> array('id' => 'de-lu',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Luxembourg)'),
+		'de-at'	=> array('id' => 'de_AT',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Austria)'),
+		'de-ch'	=> array('id' => 'de_CH',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Swiss)'),
+		'de-de'	=> array('id' => 'de_DE',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Germany)'),
+		'de-li'	=> array('id' => 'de_LI',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Liechtenstein)'),
+		'de-lu'	=> array('id' => 'de_LU',	'fallback' => 'de', 'timezone' => '', 'language' => 'German (Luxembourg)'),
 		'dv'	=> array('id' => 'dv',		'iso2' => 'dv',	'iso3' => 'div', 'timezone' => '', 'language' => 'Divehi'),
 		'dz'	=> array('id' => 'dz',		'iso2' => 'dz',	'iso3' => 'dzo', 'timezone' => '', 'language' => 'Dzongkha'),
 		'ee'	=> array('id' => 'ee',		'iso2' => 'ee',	'iso3' => 'ewe', 'timezone' => '', 'language' => 'Ewe'),
 		'el'	=> array('id' => 'el',		'iso2' => 'el',	'iso3' => array('gre', 'ell'), 'timezone' => '', 'language' => 'Greek'),
 		'en'	=> array('id' => 'en',		'iso2' => 'en',	'iso3' => 'eng', 'timezone' => '', 'language' => 'English'),
-		'en-au'	=> array('id' => 'en-au',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Australian)'),
-		'en-bz'	=> array('id' => 'en-bz',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Belize)'),
-		'en-ca'	=> array('id' => 'en-ca',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Canadian)'),
-		'en-cb'	=> array('id' => 'en-cb',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Caribbean)'),
-		'en-gb'	=> array('id' => 'en-gb',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (British)'),
-		'en-in'	=> array('id' => 'en-in',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (India)'),
-		'en-ie'	=> array('id' => 'en-ie',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Ireland)'),
-		'en-jm'	=> array('id' => 'en-jm',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Jamaica)'),
-		'en-nz'	=> array('id' => 'en-nz',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (New Zealand)'),
-		'en-ph'	=> array('id' => 'en-ph',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Phillippines)'),
-		'en-tt'	=> array('id' => 'en-tt',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Trinidad)'),
-		'en-us'	=> array('id' => 'en-us',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (United States)'),
-		'en-za'	=> array('id' => 'en-za',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (South Africa)'),
+		'en-au'	=> array('id' => 'en_AU',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Australian)'),
+		'en-bz'	=> array('id' => 'en_BZ',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Belize)'),
+		'en-ca'	=> array('id' => 'en_CZ',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Canadian)'),
+		'en-cb'	=> array('id' => 'en_CB',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Caribbean)'),
+		'en-gb'	=> array('id' => 'en_GB',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (British)'),
+		'en-in'	=> array('id' => 'en_IN',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (India)'),
+		'en-ie'	=> array('id' => 'en_IE',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Ireland)'),
+		'en-jm'	=> array('id' => 'en_JM',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Jamaica)'),
+		'en-nz'	=> array('id' => 'en_NZ',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (New Zealand)'),
+		'en-ph'	=> array('id' => 'en_PH',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Phillippines)'),
+		'en-tt'	=> array('id' => 'en_TT',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (Trinidad)'),
+		'en-us'	=> array('id' => 'en_US',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (United States)'),
+		'en-za'	=> array('id' => 'en_ZA',	'fallback' => 'en', 'timezone' => '', 'language' => 'English (South Africa)'),
 		'eo'	=> array('id' => 'eo',		'iso2' => 'eo',	'iso3' => 'epo', 'timezone' => '', 'language' => 'Esperanto'),
 		'es'	=> array('id' => 'es',		'iso2' => 'es',	'iso3' => 'spa', 'timezone' => '', 'language' => 'Spanish (Spain - Traditional)'),
-		'es-ar'	=> array('id' => 'es-ar',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Argentina)'),
-		'es-bo'	=> array('id' => 'es-bo',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Bolivia)'),
-		'es-cl'	=> array('id' => 'es-cl',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Chile)'),
-		'es-co'	=> array('id' => 'es-co',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Colombia)'),
-		'es-cr'	=> array('id' => 'es-cr',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Costa Rica)'),
-		'es-do'	=> array('id' => 'es-do',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Dominican Republic)'),
-		'es-ec'	=> array('id' => 'es-ec',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Ecuador)'),
-		'es-es'	=> array('id' => 'es-es',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Spain)'),
-		'es-gt'	=> array('id' => 'es-gt',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Guatemala)'),
-		'es-hn'	=> array('id' => 'es-hn',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Honduras)'),
-		'es-mx'	=> array('id' => 'es-mx',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Mexico)'),
-		'es-ni'	=> array('id' => 'es-ni',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Nicaragua)'),
-		'es-pa'	=> array('id' => 'es-pa',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Panama)'),
-		'es-pe'	=> array('id' => 'es-pe',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Peru)'),
-		'es-pr'	=> array('id' => 'es-pr',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Puerto Rico)'),
-		'es-py'	=> array('id' => 'es-py',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Paraguay)'),
-		'es-sv'	=> array('id' => 'es-sv',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (El Salvador)'),
-		'es-uy'	=> array('id' => 'es-uy',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Uruguay)'),
-		'es-ve'	=> array('id' => 'es-ve',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Venezuela)'),
+		'es-ar'	=> array('id' => 'es_AR',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Argentina)'),
+		'es-bo'	=> array('id' => 'es_BO',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Bolivia)'),
+		'es-cl'	=> array('id' => 'es_CL',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Chile)'),
+		'es-co'	=> array('id' => 'es_CO',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Colombia)'),
+		'es-cr'	=> array('id' => 'es_CR',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Costa Rica)'),
+		'es-do'	=> array('id' => 'es_DO',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Dominican Republic)'),
+		'es-ec'	=> array('id' => 'es_EC',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Ecuador)'),
+		'es-es'	=> array('id' => 'es_ES',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Spain)'),
+		'es-gt'	=> array('id' => 'es_GT',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Guatemala)'),
+		'es-hn'	=> array('id' => 'es_HN',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Honduras)'),
+		'es-mx'	=> array('id' => 'es_MX',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Mexico)'),
+		'es-ni'	=> array('id' => 'es_NI',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Nicaragua)'),
+		'es-pa'	=> array('id' => 'es_PA',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Panama)'),
+		'es-pe'	=> array('id' => 'es_PE',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Peru)'),
+		'es-pr'	=> array('id' => 'es_PR',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Puerto Rico)'),
+		'es-py'	=> array('id' => 'es_PY',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Paraguay)'),
+		'es-sv'	=> array('id' => 'es_SV',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (El Salvador)'),
+		'es-uy'	=> array('id' => 'es_UY',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Uruguay)'),
+		'es-ve'	=> array('id' => 'es_VE',	'fallback' => 'es', 'timezone' => '', 'language' => 'Spanish (Venezuela)'),
 		'et'	=> array('id' => 'et',		'iso2' => 'et',	'iso3' => 'est', 'timezone' => '', 'language' => 'Estonian'),
 		'eu'	=> array('id' => 'eu',		'iso2' => 'eu',	'iso3' => array('baq', 'eus'), 'timezone' => '', 'language' => 'Basque'),
 		'fa'	=> array('id' => 'fa',		'iso2' => 'fa',	'iso3' => array('fas', 'per'), 'timezone' => '', 'language' => 'Farsi / Persian'),
@@ -149,15 +160,15 @@ class G11n {
 		'fj'	=> array('id' => 'fj',		'iso2' => 'fj',	'iso3' => 'fij', 'timezone' => '', 'language' => 'Fijian'),
 		'fo'	=> array('id' => 'fo',		'iso2' => 'fo',	'iso3' => 'fao', 'timezone' => '', 'language' => 'Faeroese'),
 		'fr'	=> array('id' => 'fr',		'iso2' => 'fr',	'iso3' => array('fra', 'fre'), 'timezone' => '', 'language' => 'French (Standard)'),
-		'fr-be'	=> array('id' => 'fr-be',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (Belgium)'),
-		'fr-ca'	=> array('id' => 'fr-ca',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (Canadian)'),
-		'fr-ch'	=> array('id' => 'fr-ch',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (Swiss)'),
-		'fr-fr'	=> array('id' => 'fr-fr',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (France)'),
-		'fr-lu'	=> array('id' => 'fr-lu',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (Luxembourg)'),
+		'fr-be'	=> array('id' => 'fr_BE',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (Belgium)'),
+		'fr-ca'	=> array('id' => 'fr_CA',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (Canadian)'),
+		'fr-ch'	=> array('id' => 'fr_CH',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (Swiss)'),
+		'fr-fr'	=> array('id' => 'fr_FR',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (France)'),
+		'fr-lu'	=> array('id' => 'fr_LU',	'fallback' => 'fr', 'timezone' => '', 'language' => 'French (Luxembourg)'),
 		'fy'	=> array('id' => 'fy',		'iso2' => 'fy',	'iso3' => 'fry', 'timezone' => '', 'language' => 'Frisian'),
 		'ga'	=> array('id' => 'ga',		'iso2' => 'ga',	'iso3' => 'gle', 'timezone' => '', 'language' => 'Irish'),
 		'gd'	=> array('id' => 'gd',		'iso2' => 'gd',	'iso3' => 'gla', 'timezone' => '', 'language' => 'Gaelic (Scots)'),
-		'gd-ie'	=> array('id' => 'gd-ie',	'fallback' => 'gd', 'timezone' => '', 'language' => 'Gaelic (Irish)'),
+		'gd-ie'	=> array('id' => 'gd_IE',	'fallback' => 'gd', 'timezone' => '', 'language' => 'Gaelic (Irish)'),
 		'gl'	=> array('id' => 'gl',		'iso2' => 'gl',	'iso3' => 'glg', 'timezone' => '', 'language' => 'Galician'),
 		'gn'	=> array('id' => 'gn',		'iso2' => 'gn',	'iso3' => 'grn', 'timezone' => '', 'language' => 'Guarani'),
 		'gu'	=> array('id' => 'gu',		'iso2' => 'gu',	'iso3' => 'guj', 'timezone' => '', 'language' => 'Gujarati'),
@@ -180,7 +191,7 @@ class G11n {
 		'iu'	=> array('id' => 'iu',		'iso2' => 'iu',	'iso3' => 'iku', 'timezone' => '', 'language' => 'Inuktitut'),
 		'is'	=> array('id' => 'is',		'iso2' => 'is',	'iso3' => array('isl', 'ice'), 'timezone' => '', 'language' => 'Icelandic'),
 		'it'	=> array('id' => 'it',		'iso2' => 'it',	'iso3' => 'ita', 'timezone' => '', 'language' => 'Italian'),
-		'it-ch'	=> array('id' => 'it-ch',	'fallback' => 'it', 'timezone' => '', 'language' => 'Italian (Swiss)'),
+		'it-ch'	=> array('id' => 'it_CH',	'fallback' => 'it', 'timezone' => '', 'language' => 'Italian (Swiss)'),
 		'ja'	=> array('id' => 'ja',		'iso2' => 'ja',	'iso3' => 'jpn', 'timezone' => '', 'language' => 'Japanese'),
 		'ka'	=> array('id' => 'ka',		'iso2' => 'ka',	'iso3' => array('kat', 'geo'), 'timezone' => '', 'language' => 'Georgian'),
 		'kg'	=> array('id' => 'kg',		'iso2' => 'kg',	'iso3' => 'kon', 'timezone' => '', 'language' => 'Kongo'),
@@ -191,8 +202,8 @@ class G11n {
 		'km'	=> array('id' => 'km',		'iso2' => 'km',	'iso3' => 'khm', 'timezone' => '', 'language' => 'Central Khmer'),
 		'kn'	=> array('id' => 'kn',		'iso2' => 'kn',	'iso3' => 'kan', 'timezone' => '', 'language' => 'Kannada'),
 		'ko'	=> array('id' => 'ko',		'iso2' => 'ko',	'iso3' => 'kor', 'timezone' => '', 'language' => 'Korean'),
-		'ko-kp'	=> array('id' => 'ko-kp',	'fallback' => 'ko', 'timezone' => '', 'language' => 'Korea (North)'),
-		'ko-kr'	=> array('id' => 'ko-kr',	'fallback' => 'ko', 'timezone' => '', 'language' => 'Korea (South)'),
+		'ko-kp'	=> array('id' => 'ko_KP',	'fallback' => 'ko', 'timezone' => '', 'language' => 'Korea (North)'),
+		'ko-kr'	=> array('id' => 'ko_KR',	'fallback' => 'ko', 'timezone' => '', 'language' => 'Korea (South)'),
 		'kr'	=> array('id' => 'kr',		'iso2' => 'kr',	'iso3' => 'kau', 'timezone' => '', 'language' => 'Kanuri'),
 		'ks'	=> array('id' => 'ks',		'iso2' => 'ks',	'iso3' => 'kas', 'timezone' => '', 'language' => 'Kashmiri'),
 		'ku'	=> array('id' => 'ku',		'iso2' => 'ku',	'iso3' => 'kur', 'timezone' => '', 'language' => 'Kurdish'),
@@ -216,7 +227,7 @@ class G11n {
 		'mn'	=> array('id' => 'mn',		'iso2' => 'mn',	'iso3' => 'mon', 'timezone' => '', 'language' => 'Mongolian'),
 		'mr'	=> array('id' => 'mr',		'iso2' => 'mr',	'iso3' => 'mar', 'timezone' => '', 'language' => 'Marathi'),
 		'ms'	=> array('id' => 'ms',		'iso2' => 'ms',	'iso3' => array('msa', 'may'), 'timezone' => '', 'language' => 'Malaysian'),
-		'ms-bn'	=> array('id' => 'ms-bn',	'fallback' => 'ms', 'timezone' => '', 'language' => 'Malaysian (Brunei)'),
+		'ms-bn'	=> array('id' => 'ms_BN',	'fallback' => 'ms', 'timezone' => '', 'language' => 'Malaysian (Brunei)'),
 		'mt'	=> array('id' => 'mt',		'iso2' => 'mt',	'iso3' => 'mlt', 'timezone' => '', 'language' => 'Maltese'),
 		'my'	=> array('id' => 'my',		'iso2' => 'my',	'iso3' => array('mya', 'bur'), 'timezone' => '', 'language' => 'Burmese'),
 		'na'	=> array('id' => 'na',		'iso2' => 'na',	'iso3' => 'nau', 'timezone' => '', 'language' => 'Nauru'),
@@ -225,7 +236,7 @@ class G11n {
 		'ne'	=> array('id' => 'ne',		'iso2' => 'ne',	'iso3' => 'nep', 'timezone' => '', 'language' => 'Nepali'),
 		'ng'	=> array('id' => 'ng',		'iso2' => 'ng',	'iso3' => 'ndo', 'timezone' => '', 'language' => 'Ndonga'),
 		'nl'	=> array('id' => 'nl',		'iso2' => 'nl',	'iso3' => array('nld', 'dut'), 'timezone' => '', 'language' => 'Dutch (Standard)'),
-		'nl-be'	=> array('id' => 'nl-be',	'fallback' => 'nl', 'timezone' => '', 'language' => 'Dutch (Belgium)'),
+		'nl-be'	=> array('id' => 'nl_BE',	'fallback' => 'nl', 'timezone' => '', 'language' => 'Dutch (Belgium)'),
 		'nn'	=> array('id' => 'nn',		'iso2' => 'nn',	'iso3' => 'nno', 'timezone' => '', 'language' => 'Norwegian Nynorsk'),
 		'no'	=> array('id' => 'no',		'iso2' => 'no',	'iso3' => 'nor', 'timezone' => '', 'language' => 'Norwegian'),
 		'nr'	=> array('id' => 'nr',		'iso2' => 'nr',	'iso3' => 'nbl', 'timezone' => '', 'language' => 'South Ndebele'),
@@ -240,14 +251,14 @@ class G11n {
 		'pl'	=> array('id' => 'pl',		'iso2' => 'pl',	'iso3' => 'pol', 'timezone' => '', 'language' => 'Polish'),
 		'ps'	=> array('id' => 'ps',		'iso2' => 'ps',	'iso3' => 'pus', 'timezone' => '', 'language' => 'Pushto'),
 		'pt'	=> array('id' => 'pt',		'iso2' => 'pt',	'iso3' => 'por', 'timezone' => '', 'language' => 'Portuguese (Portugal)'),
-		'pt-br'	=> array('id' => 'pt-br',	'fallback' => 'pt', 'timezone' => '', 'language' => 'Portuguese (Brazil)'),
+		'pt-br'	=> array('id' => 'pt_BR',	'fallback' => 'pt', 'timezone' => '', 'language' => 'Portuguese (Brazil)'),
 		'qu'	=> array('id' => 'qu',		'iso2' => 'qu',	'iso3' => 'que', 'timezone' => '', 'language' => 'Quechua'),
 		'rm'	=> array('id' => 'rm',		'iso2' => 'rm',	'iso3' => 'roh', 'timezone' => '', 'language' => 'Rhaeto-Romanic'),
 		'rn'	=> array('id' => 'rn',		'iso2' => 'rn',	'iso3' => 'run', 'timezone' => '', 'language' => 'Rundi'),
 		'ro'	=> array('id' => 'ro',		'iso2' => 'ro',	'iso3' => array('ron', 'rum'), 'timezone' => '', 'language' => 'Romanian'),
-		'ro-mo'	=> array('id' => 'ro-mo',	'fallback' => 'ro', 'timezone' => '', 'language' => 'Romanian (Moldavia)'),
+		'ro-mo'	=> array('id' => 'ro_MO',	'fallback' => 'ro', 'timezone' => '', 'language' => 'Romanian (Moldavia)'),
 		'ru'	=> array('id' => 'ru',		'iso2' => 'ru',	'iso3' => 'rus', 'timezone' => '', 'language' => 'Russian'),
-		'ru-mo'	=> array('id' => 'ru-mo',	'fallback' => 'ru', 'timezone' => '', 'language' => 'Russian (Moldavia)'),
+		'ru-mo'	=> array('id' => 'ru_MO',	'fallback' => 'ru', 'timezone' => '', 'language' => 'Russian (Moldavia)'),
 		'rw'	=> array('id' => 'rw',		'iso2' => 'rw',	'iso3' => 'kin', 'timezone' => '', 'language' => 'Kinyarwanda'),
 		'sa'	=> array('id' => 'sa',		'iso2' => 'sa',	'iso3' => 'san', 'timezone' => '', 'language' => 'Sanskrit'),
 		'sb'	=> array('id' => 'sb',		'iso2' => 'sb',	'iso3' => 'wen', 'timezone' => '', 'language' => 'Sorbian'),
@@ -266,7 +277,7 @@ class G11n {
 		'ss'	=> array('id' => 'ss',		'iso2' => 'ss',	'iso3' => 'ssw', 'timezone' => '', 'language' => 'Swati'),
 		'st'	=> array('id' => 'st',		'iso2' => 'st',	'iso3' => 'sot', 'timezone' => '', 'language' => 'Sotho'),
 		'sv'	=> array('id' => 'sv',		'iso2' => 'sv',	'iso3' => 'swe', 'timezone' => '', 'language' => 'Swedish'),
-		'sv-fi'	=> array('id' => 'sv-fi',	'fallback' => 'sv', 'timezone' => '', 'language' => 'Swedish (Finland)'),
+		'sv-fi'	=> array('id' => 'sv_FI',	'fallback' => 'sv', 'timezone' => '', 'language' => 'Swedish (Finland)'),
 		'sw'	=> array('id' => 'sw',		'iso2' => 'sw',	'iso3' => 'swa', 'timezone' => '', 'language' => 'Swahili'),
 		'sz'	=> array('id' => 'sz',		'iso2' => 'sz',	'iso3' => 'smi', 'timezone' => '', 'language' => 'Sami (Lappish)'),
 		'ta'	=> array('id' => 'ta',		'iso2' => 'ta',	'iso3' => 'tam', 'timezone' => '', 'language' => 'Tamil'),
@@ -297,11 +308,11 @@ class G11n {
 		'yo'	=> array('id' => 'yo',		'iso2' => 'yo',	'iso3' => 'yor', 'timezone' => '', 'language' => 'Yoruba'),
 		'za'	=> array('id' => 'za',		'iso2' => 'za',	'iso3' => 'zha', 'timezone' => '', 'language' => 'Zhuang'),
 		'zh'	=> array('id' => 'zh',		'iso2' => 'zh',	'iso3' => array('chi', 'zho'), 'timezone' => '', 'language' => 'Chinese'),
-		'zh-cn'	=> array('id' => 'zh-cn',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (PRC)'),
-		'zh-hk'	=> array('id' => 'zh-hk',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (Hong Kong)'),
-		'zh-mo'	=> array('id' => 'zh-mo',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (Macau)'),
-		'zh-sg'	=> array('id' => 'zh-sg',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (Singapore)'),
-		'zh-tw'	=> array('id' => 'zh-tw',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (Taiwan)'),
+		'zh-cn'	=> array('id' => 'zh_CN',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (PRC)'),
+		'zh-hk'	=> array('id' => 'zh_HK',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (Hong Kong)'),
+		'zh-mo'	=> array('id' => 'zh_MO',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (Macau)'),
+		'zh-sg'	=> array('id' => 'zh_SG',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (Singapore)'),
+		'zh-tw'	=> array('id' => 'zh_TW',	'fallback' => 'zh', 'timezone' => '', 'language' => 'Chinese (Taiwan)'),
 		'zu'	=> array('id' => 'zu',		'iso2' => 'zu',	'iso3' => 'zul', 'timezone' => '', 'language' => 'Zulu'),
 	);
 	
@@ -330,7 +341,7 @@ class G11n {
 			throw new CoreException(sprintf('Locale %s does not exist.', $key));
 		}
 		
-		$locale = $this->_locales[$this->_current];
+		$locale = $this->current();
 		
 		// Build array of options to set
 		$options = array(
@@ -362,7 +373,7 @@ class G11n {
 			'en_US'
 		));
 
-		putenv('LC_ALL=' + $locale['id']);
+		putenv('LC_ALL=' . $locale['id']);
 		setlocale(LC_ALL, $options);
 		
 		if (!empty($locale['timezone'])) {
@@ -373,10 +384,10 @@ class G11n {
 	}
 	
 	/**
-	 * Apply the timezone to use for datetime processing.
+	 * Apply the timezone.
 	 * 
 	 * @access public
-	 * @param type $timezone
+	 * @param string $timezone
 	 * @return G11n 
 	 * @chainable
 	 */
@@ -387,15 +398,36 @@ class G11n {
 	}
 	
 	/**
-	 * Return the locale key/ID to its most basic form,
-	 * by replacing underscores with hyphens and lowercasing.
+	 * Convert a locale key to 3 possible formats.
+	 * 
+	 *	FORMAT_1 - en-us
+	 *	FORMAT_2 - en-US
+	 *	FORMAT_3 - en_US
 	 * 
 	 * @access public
 	 * @param string $key
+	 * @param int $format
 	 * @return string
 	 */
-	public function canonicalize($key) {
-		return str_replace('_', '-', strtolower($key));
+	public function canonicalize($key, $format = self::FORMAT_1) {
+		$parts = explode('-', str_replace('_', '-', strtolower($key)));
+		$return = $parts[0];
+		
+		if (isset($parts[1])) {
+			switch ($format) {
+				case self::FORMAT_1:
+					$return .= '-' . $parts[1];
+				break;
+				case self::FORMAT_2:
+					$return .= '-' . strtoupper($parts[1]);
+				break;
+				case self::FORMAT_3:
+					$return .= '_' . strtoupper($parts[1]);
+				break;
+			}
+		}
+		
+		return $return;
 	}
 	
 	/**
@@ -426,7 +458,7 @@ class G11n {
 	 */
 	public function fallbackAs($key) {
 		if (empty($this->_locales[$key])) {
-			throw new CoreException(sprintf('Locale %s does not exist.', $key));
+			throw new CoreException(sprintf('Locale %s has not been setup.', $key));
 		}
 
 		$this->_fallback = $key;
@@ -445,13 +477,23 @@ class G11n {
 	}
 	
 	/**
-	 * Returns the supported locales.
+	 * Returns the setup locales.
 	 * 
 	 * @access public
 	 * @return array
 	 */
 	public function getLocales() {
 		return $this->_locales;
+	}
+	
+	/**
+	 * Returns the supported locales.
+	 * 
+	 * @access public
+	 * @return array
+	 */
+	public function getSupportedLocales() {
+		return $this->_supportedLocales;
 	}
 	
 	/**
@@ -476,8 +518,8 @@ class G11n {
 		
 		if (count($header) > 0) {
 			foreach ($header as $locale) {
-				if (isset($this->_localeMapping[$locale])) {
-					$this->_current = $this->_localeMapping[$locale];
+				if (isset($this->_locales[$locale])) {
+					$this->_current = $locale;
 					break;
 				}
 			}
@@ -505,11 +547,11 @@ class G11n {
 	 * @return boolean
 	 */
 	public function is($key) {
-		return ($this->current('key') == $key || $this->current('locale') == $key);
+		return ($this->current('key') == $key || $this->current('id') == $key);
 	}
 	
 	/**
-	 * G11n will be enabled if a locale has been mapped.
+	 * G11n will be enabled if a locale has been setup.
 	 * 
 	 * @access public
 	 * @return boolean 
@@ -539,12 +581,16 @@ class G11n {
 		if (isset($locale['fallback'])) {
 			$locale = $locale + $this->find($locale['fallback']);
 		}
+			
+		$locale['language'] = substr($locale['id'], 0, 2);
+		$locale['region'] = substr($locale['id'], -2);
+		$locale['key'] = $key;
 		
 		return $locale;
 	}
 	
 	/**
-	 * Find a locale using the ISO 639-1 (2 character code) standard.
+	 * Find a locale using the ISO 2 character code standard.
 	 * 
 	 * @access public
 	 * @param string $key
@@ -561,14 +607,14 @@ class G11n {
 		}
 		
 		if (empty($return)) {
-			throw new CoreException(sprintf('No locale was found using the ISO2 (ISO 639-1) key %s.', $key));
+			throw new CoreException(sprintf('No locale was found using the ISO2 key %s.', $key));
 		}
 		
 		return $return;
 	}
 	
 	/**
-	 * Find a locale using the ISO 639-2 (3 character code) standard.
+	 * Find a locale using the ISO 3 character code standard.
 	 * 
 	 * @access public
 	 * @param string $key
@@ -587,7 +633,7 @@ class G11n {
 		}
 		
 		if (empty($return)) {
-			throw new CoreException(sprintf('No locale was found using the ISO3 (ISO 639-2) key %s.', $key));
+			throw new CoreException(sprintf('No locale was found using the ISO3 key %s.', $key));
 		}
 		
 		return $return;
@@ -614,14 +660,11 @@ class G11n {
 			
 			// Set the first locale key as a fallback
 			if (empty($this->_fallback)) {
-				$this->_fallback = $locale['id'];
+				$this->_fallback = $key;
 				ini_set('intl.default_locale', $locale['id']);
 			}
 			
-			$locale['language'] = substr($locale['id'], 0, 2);
-			$locale['region'] = substr($locale['id'], -2);
-			
-			$this->_locales[$locale['id']] = $locale;
+			$this->_locales[$key] = $locale;
 		}
 		
 		return $this;
