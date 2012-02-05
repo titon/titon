@@ -10,8 +10,8 @@
 namespace titon\libs\readers;
 
 use \titon\base\Base;
-use \titon\base\Prototype;
 use \titon\libs\readers\Reader;
+use \titon\libs\traits\Prototype;
 
 /**
  * Abstract class that implements the extension detection for Readers.

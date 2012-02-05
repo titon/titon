@@ -11,9 +11,9 @@ namespace titon\libs\engines;
 
 use \titon\Titon;
 use \titon\base\Base;
-use \titon\base\Prototype;
 use \titon\libs\engines\Engine;
 use \titon\libs\engines\EngineException;
+use \titon\libs\traits\Prototype;
 use \titon\utility\Inflector;
 use \Closure;
 

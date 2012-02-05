@@ -10,10 +10,10 @@
 namespace titon\libs\listeners;
 
 use \titon\base\Base;
-use \titon\base\Prototype;
 use \titon\libs\controllers\Controller;
 use \titon\libs\engines\Engine;
 use \titon\libs\listeners\Listener;
+use \titon\libs\traits\Prototype;
 
 /**
  * Provides no functionality except the definition of skeleton methods.

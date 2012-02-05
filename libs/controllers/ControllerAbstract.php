@@ -11,12 +11,12 @@ namespace titon\libs\controllers;
 
 use \titon\Titon;
 use \titon\base\Base;
-use \titon\base\Prototype;
 use \titon\libs\actions\Action;
 use \titon\libs\controllers\Controller;
 use \titon\libs\controllers\ControllerException;
 use \titon\libs\engines\Engine;
 use \titon\libs\engines\core\ViewEngine;
+use \titon\libs\traits\Prototype;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
 use \Closure;

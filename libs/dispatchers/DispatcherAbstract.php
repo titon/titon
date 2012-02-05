@@ -11,11 +11,11 @@ namespace titon\libs\dispatchers;
 
 use \titon\Titon;
 use \titon\base\Base;
-use \titon\base\Prototype;
 use \titon\libs\controllers\Controller;
 use \titon\libs\controllers\core\ErrorController;
 use \titon\libs\dispatchers\Dispatcher;
 use \titon\libs\dispatchers\DispatcherException;
+use \titon\libs\traits\Prototype;
 use \titon\utility\Inflector;
 
 /**

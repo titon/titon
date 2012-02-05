@@ -11,9 +11,9 @@ namespace titon\libs\helpers;
 
 use \titon\Titon;
 use \titon\base\Base;
-use \titon\base\Prototype;
 use \titon\libs\engines\Engine;
 use \titon\libs\helpers\Helper;
+use \titon\libs\traits\Prototype;
 
 /**
  * The Helper class acts as the base for all children helpers to extend.

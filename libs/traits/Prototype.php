@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\base;
+namespace titon\libs\traits;
 
 use \titon\Titon;
 use \titon\base\BaseException;

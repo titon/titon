@@ -3,7 +3,7 @@
 namespace titon\data;
 
 use \titon\base\Base;
-use \titon\base\Prototype;
+use \titon\libs\traits\Prototype;
 
 class Model extends Base {
 	use Prototype;
