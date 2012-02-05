@@ -228,39 +228,39 @@ class Debugger {
 	 * @return mixed
 	 */
 	public function parseArg($arg, $end = false) {
-		switch (true) {
-			case is_numeric($arg):
-				return $arg;
-			break;
-			case is_bool($arg):
-				return ($arg === true) ? 'true' : 'false';
-			break;
-			case is_string($arg):
-				return "'". htmlentities($arg) ."'";
-			break;
-			case is_array($arg):
-				if ($end === true) {
-					return 'array([Truncated])';
-				} else {
-					$args = array();
-					foreach ($arg as $a) {
-						$args[] = $this->parseArg($a, true);
-					}
-					return 'array('. implode(', ', $args) .')';
+		if (is_numeric($arg)) {
+			return (int) $arg;
+
+		} else if (is_bool($arg)) {
+			return ($arg === true) ? 'true' : 'false';
+
+		} else if (is_string($arg)) {
+			return "'" . htmlentities($arg) . "'";
+
+		} else if (is_array($arg)) {
+			if ($end === true) {
+				return 'array([Truncated])';
+			} else {
+				$args = array();
+
+				foreach ($arg as $a) {
+					$args[] = $this->parseArg($a, true);
 				}
-			break;
-			case is_null($arg):
-				return 'null';
-			break;
-			case is_object($arg):
-				return get_class($arg) .'()';
-			break;
-			case is_resource($arg):
-				return strtolower(get_resource_type($arg));
-			break;
-			default:
-				return (string) $arg;
-			break;
+
+				return 'array('. implode(', ', $args) .')';
+			}
+
+		} else if (is_null($arg)) {
+			return 'null';
+
+		} else if (is_object($arg)) {
+			return get_class($arg);
+
+		} else if (is_resource($arg)) {
+			return strtolower(get_resource_type($arg));
+
+		} else {
+			return (string) $arg;
 		}
 	}
 
