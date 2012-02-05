@@ -10,6 +10,7 @@
 namespace titon\libs\engines;
 
 use \titon\Titon;
+use \titon\base\Base;
 use \titon\base\Prototype;
 use \titon\libs\engines\Engine;
 use \titon\libs\engines\EngineException;
@@ -31,7 +32,8 @@ use \Closure;
  * @uses	titon\utility\Inflector
  * @abstract
  */
-abstract class EngineAbstract extends Prototype implements Engine {
+abstract class EngineAbstract extends Base implements Engine {
+	use Prototype;
 
 	/**
 	 * Constants for all the possible types of templates.

@@ -10,6 +10,7 @@
 namespace titon\libs\helpers;
 
 use \titon\Titon;
+use \titon\base\Base;
 use \titon\base\Prototype;
 use \titon\libs\engines\Engine;
 use \titon\libs\helpers\Helper;
@@ -22,7 +23,8 @@ use \titon\libs\helpers\Helper;
  * @uses	titon\Titon
  * @abstract
  */
-abstract class HelperAbstract extends Prototype implements Helper {
+abstract class HelperAbstract extends Base implements Helper {
+	use Prototype;
 
 	/**
 	 * Mapping of HTML tags.

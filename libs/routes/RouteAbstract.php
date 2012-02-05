@@ -10,6 +10,7 @@
 namespace titon\libs\routes;
 
 use \titon\Titon;
+use \titon\base\Base;
 use \titon\base\Prototype;
 use \titon\libs\routes\Route;
 use \titon\libs\routes\RouteException;
@@ -24,7 +25,8 @@ use \titon\libs\routes\RouteException;
  * @uses	titon\libs\routes\RouteException
  * @abstract
  */
-abstract class RouteAbstract extends Prototype implements Route {
+abstract class RouteAbstract extends Base implements Route {
+	use Prototype;
 
 	/**
 	 * Pre-defined regex patterns.

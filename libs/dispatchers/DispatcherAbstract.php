@@ -10,6 +10,7 @@
 namespace titon\libs\dispatchers;
 
 use \titon\Titon;
+use \titon\base\Base;
 use \titon\base\Prototype;
 use \titon\libs\controllers\Controller;
 use \titon\libs\controllers\core\ErrorController;
@@ -27,7 +28,8 @@ use \titon\utility\Inflector;
  * @uses	titon\libs\dispatchers\DispatcherException
  * @abstract
  */
-abstract class DispatcherAbstract extends Prototype implements Dispatcher {
+abstract class DispatcherAbstract extends Base implements Dispatcher {
+	use Prototype;
 
 	/**
 	 * Lazy load the controller object. Do not allow overrides.

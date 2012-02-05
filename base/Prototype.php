@@ -26,7 +26,7 @@ use \Closure;
  * @uses	titon\utility\Inflector
  * @uses	titon\utility\Set
  */
-class Prototype {
+trait Prototype {
 
 	/**
 	 * Classes and their options / namespaces to load for dependencies.

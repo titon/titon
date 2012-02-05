@@ -9,6 +9,7 @@
 
 namespace titon\libs\listeners;
 
+use \titon\base\Base;
 use \titon\base\Prototype;
 use \titon\libs\controllers\Controller;
 use \titon\libs\engines\Engine;
@@ -20,7 +21,8 @@ use \titon\libs\listeners\Listener;
  * @package	titon.libs.listeners
  * @abstract
  */
-abstract class ListenerAbstract extends Prototype implements Listener {
+abstract class ListenerAbstract extends Base implements Listener {
+	use Prototype;
 
 	/**
 	 * Executed at the beginning of the dispatch cycle.

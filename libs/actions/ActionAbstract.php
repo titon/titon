@@ -9,6 +9,7 @@
 
 namespace titon\libs\actions;
 
+use \titon\base\Base;
 use \titon\base\Prototype;
 use \titon\libs\actions\Action;
 use \titon\libs\actions\ActionException;
@@ -23,7 +24,8 @@ use \titon\libs\controllers\Controller;
  * @uses	titon\libs\actions\ActionException
  * @abstract
  */
-abstract class ActionAbstract extends Prototype implements Action {
+abstract class ActionAbstract extends Base implements Action {
+	use Prototype;
 
 	/**
 	 * Controller object.

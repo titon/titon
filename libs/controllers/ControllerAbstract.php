@@ -10,6 +10,7 @@
 namespace titon\libs\controllers;
 
 use \titon\Titon;
+use \titon\base\Base;
 use \titon\base\Prototype;
 use \titon\libs\actions\Action;
 use \titon\libs\controllers\Controller;
@@ -38,7 +39,8 @@ use \Closure;
  * @uses	titon\utility\Set
  * @abstract
  */
-abstract class ControllerAbstract extends Prototype implements Controller {
+abstract class ControllerAbstract extends Base implements Controller {
+	use Prototype;
 
 	/**
 	 * Configuration.

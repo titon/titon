@@ -2,9 +2,11 @@
 
 namespace titon\data;
 
+use \titon\base\Base;
 use \titon\base\Prototype;
 
-class Model extends Prototype {
+class Model extends Base {
+	use Prototype;
 
 	/*public $oneToOne = array(); // has one, a user has one profile
 
