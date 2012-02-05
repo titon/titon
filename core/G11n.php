@@ -729,7 +729,7 @@ class G11n {
 			$messages = $this->_translator->translate($key, $params);
 		}
 		
-		return $this->_translator->translate($key, $params);
+		return $messages;
 	}
 
 }

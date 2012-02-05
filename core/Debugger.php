@@ -224,6 +224,7 @@ class Debugger {
 	 *
 	 * @access public
 	 * @param mixed $arg
+	 * @param boolean $end
 	 * @return mixed
 	 */
 	public function parseArg($arg, $end = false) {
@@ -255,7 +256,7 @@ class Debugger {
 				return get_class($arg) .'()';
 			break;
 			case is_resource($arg):
-				return strtolower(get_resource_type($var));
+				return strtolower(get_resource_type($arg));
 			break;
 			default:
 				return (string) $arg;

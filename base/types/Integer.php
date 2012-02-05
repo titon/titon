@@ -182,7 +182,8 @@ class Integer extends Type {
 	 * Is the current value within a range of two numbers.
 	 *
 	 * @access public
-	 * @param int $no
+	 * @param int $start
+	 * @param int $end
 	 * @return boolean
 	 */
 	public function inRange($start, $end) {
@@ -203,7 +204,6 @@ class Integer extends Type {
 	 * Is the current value negative; less than zero.
 	 *
 	 * @access public
-	 * @param int $no
 	 * @return boolean
 	 */
 	public function isNegative() {
@@ -224,7 +224,7 @@ class Integer extends Type {
 	 * Is the current value positive; greater than or equal to zero.
 	 *
 	 * @access public
-	 * @param int $no
+	 * @param boolean $zero
 	 * @return boolean
 	 */
 	public function isPositive($zero = true) {
@@ -345,7 +345,6 @@ class Integer extends Type {
 	 * Convert the value to its negative equivalent.
 	 *
 	 * @access public
-	 * @param int $no
 	 * @return Number
 	 * @chainable
 	 */
@@ -359,7 +358,6 @@ class Integer extends Type {
 	 * Is the current value not equal to the passed value.
 	 *
 	 * @access public
-	 * @param int $no
 	 * @return boolean
 	 */
 	public function notEquals($no) {
@@ -370,7 +368,8 @@ class Integer extends Type {
 	 * Is the current value outside of the current range.
 	 *
 	 * @access public
-	 * @param int $no
+	 * @param int $start
+	 * @param int $end
 	 * @return boolean
 	 */
 	public function outRange($start, $end) {

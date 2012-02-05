@@ -397,7 +397,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Filters elements of the array using a callback function.
 	 *
 	 * @access public
-	 * @param Closure $callback		Params: $value
+	 * @param Closure $callback
 	 * @return Map
 	 * @chainable
 	 */
@@ -430,6 +430,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param boolean $serialize
+	 * @param mixed $default
 	 * @return Map
 	 * @chainable
 	 */
@@ -598,7 +599,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Applies the callback to the elements of the array.
 	 *
 	 * @access public
-	 * @param Closure $callback		Params: $value
+	 * @param Closure $callback
 	 * @param array $data
 	 * @return Map
 	 * @chainable
@@ -831,7 +832,6 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param boolean $reverse
-	 * @param boolean $preserve
 	 * @param int $flags
 	 * @return Map
 	 * @chainable
@@ -999,7 +999,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Apply a user function to every member of an array.
 	 *
 	 * @access public
-	 * @param Closure $callback		Params: $value, $key, $data
+	 * @param Closure $callback
 	 * @param boolean $recursive
 	 * @param mixed $data
 	 * @return Map
@@ -1034,6 +1034,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * ArrayAccess: Checking if a key/index exists.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return boolean
 	 */
 	public function offsetExists($key) {
@@ -1044,6 +1045,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * ArrayAccess: Getting a value based on key.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return boolean
 	 */
 	public function offsetGet($key) {
@@ -1054,6 +1056,8 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * ArrayAccess: Setting a value.
 	 *
 	 * @access public
+	 * @param string $key
+	 * @param string $value
 	 * @return boolean
 	 */
 	public function offsetSet($key, $value) {
@@ -1068,6 +1072,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * ArrayAccess: Deleting an array index.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return boolean
 	 */
 	public function offsetUnset($key) {

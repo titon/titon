@@ -88,7 +88,7 @@ class Text {
 	 * @access public
 	 * @param string $text
 	 * @param int $limit
-	 * @param string $ending
+	 * @param string $suffix
 	 * @return string
 	 * @static
 	 */

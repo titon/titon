@@ -85,6 +85,18 @@ class MemcacheStorage extends StorageAbstract {
 	public function has($key) {
 		return (bool) $this->get($this->key($key));
 	}
+
+	/**
+	 * Increment a value within the cache.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param int $step
+	 * @return boolean
+	 */
+	public function increment($key, $step = 1) {
+		return $this->connection->increment($this->key($key), (int) $step);
+	}
 			
 	/**
 	 * Initialize the Memcached instance and set all relevant options.

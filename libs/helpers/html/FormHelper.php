@@ -162,7 +162,7 @@ class FormHelper extends HelperAbstract {
 	 * Close a form by outputting the form close tag. If the submit button text or legend is present, append those elements.
 	 *
 	 * @access public
-	 * @param string $submit
+	 * @param mixed $submit
 	 * @return string
 	 */
 	public function close($submit = false) {

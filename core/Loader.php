@@ -121,8 +121,6 @@ class Loader {
 	 * @return boolean
 	 */
 	public function import($path) {
-		$namespace = $this->toNamespace($path);
-
 		foreach (array(ROOT, APP, TITON, VENDORS, LIBRARY) as $root) {
 			$source = $this->toPath($path, 'php', $root);
 

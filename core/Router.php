@@ -199,7 +199,7 @@ class Router {
 	public function detect($url) {
 		if (is_array($url)) {
 			if (isset($url['slug'])) {
-				$route = $this->slug($url['slug']);
+				$route = $this->slugs($url['slug']);
 				
 				if ($route) {
 					unset($url['slug']);
@@ -208,7 +208,7 @@ class Router {
 			} else {
 				$route = $url;
 			}
-		} else if ($slug = $this->slug($url)) {
+		} else if ($slug = $this->slugs($url)) {
 			$route = $slug;
 		} else {
 			$route = $url;

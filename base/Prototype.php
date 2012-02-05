@@ -10,7 +10,6 @@
 namespace titon\base;
 
 use \titon\Titon;
-use \titon\base\Base;
 use \titon\base\BaseException;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
