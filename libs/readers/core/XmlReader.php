@@ -25,22 +25,18 @@ class XmlReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
-	 *
-	 * @access protected
-	 * @var string
 	 */
-	protected $_extension = 'xml';
+	const EXT = 'xml';
 
 	/**
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 * @throws ReaderException
 	 */
-	public function read($path) {
-		$data = @simplexml_load_file($path);
+	public function parseFile() {
+		$data = @simplexml_load_file($this->getPath());
 
 		if ($data !== false) {
 			$this->configure($this->toArray($data));

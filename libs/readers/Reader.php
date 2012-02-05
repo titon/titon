@@ -17,20 +17,27 @@ namespace titon\libs\readers;
 interface Reader {
 
 	/**
-	 * Return the file type extension for the reader.
+	 * Check to see if the file exists.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function fileExists();
+
+	/**
+	 * Returns the final path.
 	 *
 	 * @access public
 	 * @return string
 	 */
-	public function extension();
+	public function getPath();
 
 	/**
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 */
-	public function read($path);
+	public function parseFile();
 
 }

@@ -25,26 +25,22 @@ class YamlReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
-	 *
-	 * @access protected
-	 * @var string
 	 */
-	protected $_extension = 'yaml';
+	const EXT = 'yaml';
 
 	/**
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 * @throws ReaderException
 	 */
-	public function read($path) {
+	public function parseFile() {
 		if (!extension_loaded('yaml')) {
 			throw new ReaderException('YAML PECL extension must be installed to use the YamlReader.');
 		}
 		
-		$data = yaml_parse_file($path);
+		$data = yaml_parse_file($this->getPath());
 
 		if (is_array($data)) {
 			$this->configure($data);

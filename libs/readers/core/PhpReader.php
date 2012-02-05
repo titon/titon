@@ -25,22 +25,18 @@ class PhpReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
-	 *
-	 * @access protected
-	 * @var string
 	 */
-	protected $_extension = 'php';
+	const EXT = 'php';
 
 	/**
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 * @throws ReaderException
 	 */
-	public function read($path) {
-		$data = include_once $path;
+	public function parseFile() {
+		$data = include_once $this->getPath();
 		
 		if (is_array($data)) {
 			$this->configure($data);

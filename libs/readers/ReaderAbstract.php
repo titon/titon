@@ -23,22 +23,46 @@ abstract class ReaderAbstract extends Base implements Reader {
 	use Prototype;
 
 	/**
-	 * File type extension.
+	 * Path to file.
 	 *
 	 * @access protected
 	 * @var string
 	 */
-	protected $_extension;
+	protected $_path;
 
 	/**
-	 * Return the file type extension for the reader.
+	 * Set the path when instantiating. Check if the file extension exists based on the constant.
+	 *
+	 * @access public
+	 * @param $path
+	 * @return void
+	 */
+	public function __construct($path) {
+		if (substr($path, -strlen(self::EXT)) != self::EXT) {
+			$path .= '.' self::EXT;
+		}
+
+		$this->_path = $path;
+	}
+
+	/**
+	 * Check to see if the file exists.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function fileExists() {
+		return file_exists(APP_CONFIG . 'sets' . DS . $this->_path);
+	}
+
+	/**
+	 * Returns the final path.
 	 *
 	 * @access public
 	 * @return string
-	 * @final
 	 */
-	final public function extension() {
-		return trim($this->_extension, '.');
+	public function getPath() {
+		return $this->_path;
 	}
 	
 }

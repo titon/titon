@@ -25,22 +25,18 @@ class IniReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
-	 *
-	 * @access protected
-	 * @var string
 	 */
-	protected $_extension = 'ini';
+	const EXT = 'ini';
 
 	/**
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 * @throws ReaderException
 	 */
-	public function read($path) {
-		$data = parse_ini_file($path, true, INI_SCANNER_NORMAL);
+	public function parseFile() {
+		$data = parse_ini_file($this->getPath(), true, INI_SCANNER_NORMAL);
 
 		if (is_array($data)) {
 			$this->configure(Set::expand($data));

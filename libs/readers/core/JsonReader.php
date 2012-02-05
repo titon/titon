@@ -25,22 +25,18 @@ class JsonReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
-	 *
-	 * @access protected
-	 * @var string
 	 */
-	protected $_extension = 'json';
+	const EXT = 'json';
 
 	/**
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @param string $path
 	 * @return void
 	 * @throws ReaderException
 	 */
-	public function read($path) {
-		$data = @json_decode(file_get_contents($path), true);
+	public function parseFile() {
+		$data = @json_decode(file_get_contents($this->getPath()), true);
 
 		if (is_array($data)) {
 			$this->configure($data);
