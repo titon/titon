@@ -141,12 +141,16 @@ class Titon {
 	}
 
 	/**
-	 * Shutdown the framework.
+	 * Shutdown the framework and unset all core classes to trigger __destruct().
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public static function shutdown() {
+		foreach (self::$__memory as $key => $object) {
+			unset(self::$__memory[$key]);
+		}
+
 		exit();
 	}
 
@@ -154,6 +158,7 @@ class Titon {
 	 * Uninstall an object. Core classes cannot be uninstalled.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return void
 	 * @static
 	 */
