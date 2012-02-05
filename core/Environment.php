@@ -34,7 +34,7 @@ class Environment {
 	 * @access protected
 	 * @var string
 	 */
-	protected $_current = 'development';
+	protected $_current = 'dev';
 
 	/**
 	 * Holds the list of possible environment configurations.
@@ -50,7 +50,7 @@ class Environment {
 	 * @access protected
 	 * @var string
 	 */
-	protected $_fallback = 'development';
+	protected $_fallback = 'dev';
 
 	/**
 	 * Relate hostnames to environment configurations.
@@ -59,9 +59,9 @@ class Environment {
 	 * @var array
 	 */
 	protected $_hostMapping = array(
-		'localhost' => 'development',
-		'127.0.0.1' => 'development',
-		'::1' => 'development'
+		'localhost' => 'dev',
+		'127.0.0.1' => 'dev',
+		'::1' => 'dev'
 	);
 
 	/**
