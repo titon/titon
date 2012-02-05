@@ -1,6 +1,6 @@
 <?php
 /**
- * Titon: The PHP 5.3 Micro Framework
+ * Titon: A PHP 5.4 Modular Framework
  *
  * @copyright	Copyright 2010, Titon
  * @link		http://github.com/titon
@@ -27,7 +27,7 @@ use \Closure;
  * @uses	titon\utility\Inflector
  * @uses	titon\utility\Set
  */
-class Prototype extends Base {
+class Prototype {
 
 	/**
 	 * Classes and their options / namespaces to load for dependencies.
@@ -134,7 +134,7 @@ class Prototype extends Base {
 	 * Attaches the defined closure object to the $__objectMap, as well as saving its options to $_classes.
 	 *
 	 * @access public
-	 * @param string|array $options
+	 * @param array|string $options
 	 * @param Closure $closure
 	 * @return Prototype
 	 * @throws BaseException
@@ -195,7 +195,7 @@ class Prototype extends Base {
 	 */
 	public function getObject($class) {
 		if (in_array($class, $this->_restricted)) {
-			return;
+			return null;
 
 		} else if (isset($this->_loaded[$class])) {
 			return $this->_loaded[$class];
@@ -294,7 +294,7 @@ class Prototype extends Base {
 	 */
 	public function triggerObjects($method) {
 		if (is_string($method) && !empty($this->_classes)) {
-			foreach ($this->_classes as $class => $options) {
+			foreach ($this->_classes as $options) {
 				if ($options['callback']) {
 					$object = $this->getObject($options['alias']);
 

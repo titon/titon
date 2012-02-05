@@ -593,9 +593,12 @@ class G11n {
 			$locale = $locale + $this->find($locale['fallback']);
 		}
 			
-		$locale['language'] = substr($locale['id'], 0, 2);
-		$locale['region'] = substr($locale['id'], -2);
 		$locale['key'] = $key;
+		$locale['language'] = substr($locale['id'], 0, 2);
+		
+		if (strlen($locale['id']) > 2) {
+			$locale['region'] = substr($locale['id'], -2);
+		}
 		
 		return $locale;
 	}

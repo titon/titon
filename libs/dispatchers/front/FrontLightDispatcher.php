@@ -1,6 +1,6 @@
 <?php
 /**
- * Titon: The PHP 5.3 Micro Framework
+ * Titon: A PHP 5.4 Modular Framework
  *
  * @copyright	Copyright 2010, Titon
  * @link		http://github.com/titon
