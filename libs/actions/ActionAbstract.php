@@ -13,7 +13,7 @@ use \titon\base\Base;
 use \titon\libs\actions\Action;
 use \titon\libs\actions\ActionException;
 use \titon\libs\controllers\Controller;
-use \titon\libs\traits\Prototype;
+use \titon\libs\traits\Decorator;
 
 /**
  * The Action is a sub-routine of the Controller parent and is packaged as a stand-alone object instead of a method.
@@ -25,7 +25,7 @@ use \titon\libs\traits\Prototype;
  * @abstract
  */
 abstract class ActionAbstract extends Base implements Action {
-	use Prototype;
+	use Decorator;
 
 	/**
 	 * Controller object.

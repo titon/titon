@@ -13,7 +13,7 @@ use \titon\Titon;
 use \titon\base\Base;
 use \titon\libs\engines\Engine;
 use \titon\libs\helpers\Helper;
-use \titon\libs\traits\Prototype;
+use \titon\libs\traits\Decorator;
 
 /**
  * The Helper class acts as the base for all children helpers to extend.
@@ -24,7 +24,7 @@ use \titon\libs\traits\Prototype;
  * @abstract
  */
 abstract class HelperAbstract extends Base implements Helper {
-	use Prototype;
+	use Decorator;
 
 	/**
 	 * Mapping of HTML tags.

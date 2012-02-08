@@ -11,7 +11,6 @@ namespace titon\libs\readers;
 
 use \titon\base\Base;
 use \titon\libs\readers\Reader;
-use \titon\libs\traits\Prototype;
 
 /**
  * Abstract class that implements the extension detection for Readers.
@@ -20,7 +19,6 @@ use \titon\libs\traits\Prototype;
  * @abstract
  */
 abstract class ReaderAbstract extends Base implements Reader {
-	use Prototype;
 
 	/**
 	 * Path to file.

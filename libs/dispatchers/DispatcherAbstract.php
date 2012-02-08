@@ -15,7 +15,7 @@ use \titon\libs\controllers\Controller;
 use \titon\libs\controllers\core\ErrorController;
 use \titon\libs\dispatchers\Dispatcher;
 use \titon\libs\dispatchers\DispatcherException;
-use \titon\libs\traits\Prototype;
+use \titon\libs\traits\Decorator;
 use \titon\utility\Inflector;
 
 /**
@@ -29,7 +29,7 @@ use \titon\utility\Inflector;
  * @abstract
  */
 abstract class DispatcherAbstract extends Base implements Dispatcher {
-	use Prototype;
+	use Decorator;
 
 	/**
 	 * Lazy load the controller object. Do not allow overrides.

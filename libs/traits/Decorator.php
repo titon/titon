@@ -16,7 +16,7 @@ use \titon\utility\Set;
 use \Closure;
 
 /**
- * The Prototype class is the base for all classes that need dependency or functionality from other classes.
+ * The Decorator is an inheritable trait for all classes that need dependency or functionality from other classes.
  * It allows you to attach classes to the parent class, while encapsulating the attaching class in a Closure,
  * enabling the objects to only be instantiated when triggered; also known as, lazy loading.
  *
@@ -26,7 +26,7 @@ use \Closure;
  * @uses	titon\utility\Inflector
  * @uses	titon\utility\Set
  */
-trait Prototype {
+trait Decorator {
 
 	/**
 	 * Classes and their options / namespaces to load for dependencies.
@@ -61,7 +61,7 @@ trait Prototype {
 	private $__objectMap = array();
 
 	/**
-	 * Magic method for Prototype::getObject().
+	 * Magic method for Decorator::getObject().
 	 *
 	 * @access public
 	 * @param string $class
@@ -73,7 +73,7 @@ trait Prototype {
 	}
 	
 	/**
-	 * Magic method for Prototype::getObject().
+	 * Magic method for Decorator::getObject().
 	 *
 	 * @access public
 	 * @param string $class
@@ -86,7 +86,7 @@ trait Prototype {
 	}
 
 	/**
-	 * Magic method for Prototype::hasObject().
+	 * Magic method for Decorator::hasObject().
 	 *
 	 * @access public
 	 * @param string $class
@@ -98,7 +98,7 @@ trait Prototype {
 	}
 
 	/**
-	 * Magic method for Prototype::detachObject().
+	 * Magic method for Decorator::detachObject().
 	 *
 	 * @access public
 	 * @param string $class
@@ -114,7 +114,7 @@ trait Prototype {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return Prototype
+	 * @return Decorator
 	 * @chainable
 	 */
 	public function allowObject($classes) {
@@ -135,7 +135,7 @@ trait Prototype {
 	 * @access public
 	 * @param array|string $options
 	 * @param Closure $closure
-	 * @return Prototype
+	 * @return Decorator
 	 * @throws BaseException
 	 * @chainable
 	 */
@@ -172,7 +172,7 @@ trait Prototype {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return Prototype
+	 * @return Decorator
 	 * @chainable
 	 */
 	public function detachObject($class) {
@@ -269,7 +269,7 @@ trait Prototype {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return Prototype
+	 * @return Decorator
 	 * @chainable
 	 */
 	public function restrictObject($classes) {

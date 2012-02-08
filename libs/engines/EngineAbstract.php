@@ -13,7 +13,7 @@ use \titon\Titon;
 use \titon\base\Base;
 use \titon\libs\engines\Engine;
 use \titon\libs\engines\EngineException;
-use \titon\libs\traits\Prototype;
+use \titon\libs\traits\Decorator;
 use \titon\utility\Inflector;
 use \Closure;
 
@@ -33,7 +33,7 @@ use \Closure;
  * @abstract
  */
 abstract class EngineAbstract extends Base implements Engine {
-	use Prototype;
+	use Decorator;
 
 	/**
 	 * Constants for all the possible types of templates.

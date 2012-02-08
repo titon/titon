@@ -13,7 +13,6 @@ use \titon\base\Base;
 use \titon\libs\controllers\Controller;
 use \titon\libs\engines\Engine;
 use \titon\libs\listeners\Listener;
-use \titon\libs\traits\Prototype;
 
 /**
  * Provides no functionality except the definition of skeleton methods.
@@ -22,7 +21,6 @@ use \titon\libs\traits\Prototype;
  * @abstract
  */
 abstract class ListenerAbstract extends Base implements Listener {
-	use Prototype;
 
 	/**
 	 * Executed at the beginning of the dispatch cycle.
