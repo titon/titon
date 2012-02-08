@@ -13,6 +13,7 @@ use \titon\Titon;
 use \titon\base\Base;
 use \titon\constant\Http;
 use \titon\net\NetException;
+use \titon\libs\traits\Memoizer;
 
 /**
  * The Request object is the primary source of data and state management for the environment.
@@ -24,7 +25,8 @@ use \titon\net\NetException;
  * @uses	titon\net\NetException
  */
 class Request extends Base {
-
+	use Memoizer;
+	
 	/**
 	 * An combined array of $_POST and $_FILES data for the current request.
 	 *
@@ -143,7 +145,7 @@ class Request extends Base {
 	 * @return string
 	 */
 	public function clientIp() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->cacheMethod(__FUNCTION__, null, function($self) {
 			foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
 				if (($address = $self->env($key)) != null) {
 					return $address;
@@ -261,7 +263,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isFlash() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->cacheMethod(__FUNCTION__, null, function($self) {
 			return (bool) preg_match('/^(Shockwave|Adobe) Flash/', $self->userAgent(false));
 		});
 	}
@@ -304,7 +306,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isMobile() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->cacheMethod(__FUNCTION__, null, function($self) {
 			$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|';
 			$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
 			$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
@@ -340,7 +342,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isSecure() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->cacheMethod(__FUNCTION__, null, function($self) {
 			return ($self->env('HTTPS') == 'on' || $self->env('SERVER_PORT') == 443);
 		});
 	}
@@ -372,7 +374,7 @@ class Request extends Base {
 	 * @return string
 	 */
 	public function referrer() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->cacheMethod(__FUNCTION__, null, function($self) {
 			$referrer = $self->env('HTTP_REFERER');
 
 			if (empty($referrer)) {
@@ -411,7 +413,7 @@ class Request extends Base {
 	 * @return array|string
 	 */
 	public function userAgent($explicit = false) {
-		return $this->lazyLoad(__FUNCTION__ . $explicit, function($self) use ($explicit) {
+		return $this->cacheMethod(__FUNCTION__, $explicit, function($self) use ($explicit) {
 			$agent = $self->env('HTTP_USER_AGENT');
 
 			if ($explicit && function_exists('get_browser')) {
@@ -438,7 +440,7 @@ class Request extends Base {
 	 * @return array
 	 */
 	protected function _accepts($header) {
-		return $this->lazyLoad(__FUNCTION__ . ':' . $header, function($self) use ($header) {
+		return $this->cacheMethod(__FUNCTION__, $header, function($self) use ($header) {
 			$accept = explode(',', $self->env($header));
 			$data = array();
 

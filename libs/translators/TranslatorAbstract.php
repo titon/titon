@@ -11,6 +11,7 @@ namespace titon\libs\translators;
 
 use \titon\Titon;
 use \titon\base\Base;
+use \titon\libs\traits\Memoizer;
 use \titon\libs\translators\Translator;
 use \titon\libs\translators\TranslatorException;
 
@@ -22,6 +23,7 @@ use \titon\libs\translators\TranslatorException;
  * @abstract
  */
 class TranslatorAbstract extends Base implements Translator { 
+	use Memoizer;
 	
 	/**
 	 * Collection of cached localization strings.
@@ -39,7 +41,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @return array
 	 */
 	public function getFileCycle() {
-		return $this->lazyLoad(__FUNCTION__, function($self) {
+		return $this->cacheMethod(__FUNCTION__, null, function($self) {
 			$fallback = Titon::g11n()->getFallback();
 			$current = Titon::g11n()->current();
 			$cycle = array();
@@ -102,7 +104,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @throws TranslatorException
 	 */
 	public function getMessage($key) {
-		return $this->lazyLoad(__FUNCTION__ . ':' . $key, function($self) use ($key) {
+		return $this->cacheMethod(__FUNCTION__, $key, function($self) use ($key) {
 			list($module, $catalog, $message) = $self->parseKey($key);
 
 			if (!isset($self->cache[$module][$catalog])) {
@@ -139,7 +141,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @throws TranslatorException
 	 */
 	public function parseKey($key) {
-		return $this->lazyLoad(__FUNCTION__ . ':' . $key, function($self) use ($key) {
+		return $this->cacheMethod(__FUNCTION__, $key, function($self) use ($key) {
 			$parts = explode('.', $key);
 
 			if (count($parts) < 3) {

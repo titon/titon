@@ -27,14 +27,6 @@ class Base {
 	 * @var array
 	 */
 	protected $_config = array('initialize' => true);
-	
-	/**
-	 * Store the methods return value after lazy loading.
-	 * 
-	 * @access protected
-	 * @var array
-	 */
-	protected $_lazyLoaded = array();
 
 	/**
 	 * Merges the custom configuration with the defaults.
@@ -63,7 +55,7 @@ class Base {
 	 * @return array
 	 */
 	public function __sleep() {
-		return array('_config', '_lazyLoaded');
+		return array('_config');
 	}
 
 	/**
@@ -128,24 +120,6 @@ class Base {
 	 */
 	public function initialize() {
 		return;
-	}
-	
-	/**
-	 * Lazy load the data when executed. If the data has already been loaded, return that instead.
-	 * 
-	 * @access public
-	 * @param string $method
-	 * @param Closure $callback
-	 * @return mixed 
-	 */
-	public function lazyLoad($method, Closure $callback) {
-		if (isset($this->_lazyLoaded[$method])) {
-			return $this->_lazyLoaded[$method];
-		}
-		
-		$this->_lazyLoaded[$method] = $callback($this);
-		
-		return $this->_lazyLoaded[$method];
 	}
 
 	/**

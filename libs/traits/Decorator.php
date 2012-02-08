@@ -20,7 +20,7 @@ use \Closure;
  * It allows you to attach classes to the parent class, while encapsulating the attaching class in a Closure,
  * enabling the objects to only be instantiated when triggered; also known as, lazy loading.
  *
- * @package	titon.base
+ * @package	titon.libs.traits
  * @uses	titon\Titon
  * @uses	titon\base\BaseException
  * @uses	titon\utility\Inflector

@@ -11,6 +11,7 @@ namespace titon\libs\storage;
 
 use \titon\base\Base;
 use \titon\libs\storage\Storage;
+use \titon\libs\traits\Memoizer;
 
 /**
  * Primary class for all storage engines to extend. Provides functionality from the Base class and the Storage interface.
@@ -19,6 +20,7 @@ use \titon\libs\storage\Storage;
  * @abstract
  */
 abstract class StorageAbstract extends Base implements Storage {
+	use Memoizer;
 	
 	/**
 	 * The third-party class instance.
@@ -85,7 +87,7 @@ abstract class StorageAbstract extends Base implements Storage {
 	 * @return string
 	 */
 	public function key($key) {
-		return $this->lazyLoad(__FUNCTION__ . ':' . $key, function($self) use ($key) {
+		return $this->cacheMethod(__FUNCTION__, $key, function($self) use ($key) {
 			$key = (string) $self->config('prefix') . (string) $key;
 
 			return trim(preg_replace('/[^a-z0-9\-_\.]+/is', '', str_replace(array(NS, '::'), '.', $key)), '.');
