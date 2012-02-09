@@ -25,14 +25,14 @@ trait Memoizer {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_memoized = array();
+	protected $_methodCaches = array();
 	
 	/**
 	 * Execute the method and cache the result when executed. If the data has already been cached, return that instead.
 	 * 
 	 * @access public
 	 * @param string $method
-	 * @param string $id
+	 * @param mixed $id
 	 * @param Closure $callback
 	 * @return mixed 
 	 */
@@ -41,13 +41,13 @@ trait Memoizer {
 			$method .= ':' . $id;
 		}
 		
-		if (isset($this->_memoized[$method])) {
-			return $this->_memoized[$method];
+		if (isset($this->_methodCaches[$method])) {
+			return $this->_methodCaches[$method];
 		}
 		
-		$this->_memoized[$method] = $callback($this);
+		$this->_methodCaches[$method] = $callback($this);
 		
-		return $this->_memoized[$method];
+		return $this->_methodCaches[$method];
 	}
 	
 }
