@@ -101,7 +101,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	public function forwardAction($action, array $args = array()) {
 		$this->engine->setup($action);
 		$this->configure('action', $action);
-		$this->dispatch($action, $args);
+		$this->dispatchAction($action, $args);
 	}
 
 	/**

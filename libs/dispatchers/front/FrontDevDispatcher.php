@@ -12,6 +12,7 @@ namespace titon\libs\dispatchers\front;
 use \titon\Titon;
 use \titon\log\Benchmark;
 use \titon\libs\dispatchers\DispatcherAbstract;
+use \titon\libs\exceptions\HttpException;
 
 /**
  * FrontDevDispatcher is used as the default dispatching mechanism, sometimes referred to as a Front Controller.
@@ -40,31 +41,35 @@ class FrontDevDispatcher extends DispatcherAbstract {
 		$event->execute('preProcess', $controller);
 
 		Benchmark::start('Action');
-		$controller->dispatch();
+
+		try {
+			$controller->dispatchAction();
+		} catch (HttpException $e) {
+			$controller->throwError($e->getCode());
+		}
+
 		Benchmark::stop('Action');
 
 		$controller->postProcess();
 		$event->execute('postProcess', $controller);
 		Benchmark::stop('Controller');
 
-		if ($controller->hasObject('view') && $controller->view->config('render')) {
-			$view = $controller->view;
-			
+		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+			$engine = $controller->engine;
+
 			Benchmark::start('View');
-			$view->preRender();
-			$event->execute('preRender', $view);
+			$engine->preRender();
+			$event->execute('preRender', $engine);
 
-			$view->run();
+			$engine->run();
 
-			$view->postRender();
-			$event->execute('postRender', $view);
+			$engine->postRender();
+			$event->execute('postRender', $engine);
 			Benchmark::stop('View');
 		}
 
 		$event->execute('postDispatch');
 		Benchmark::stop('Dispatcher');
-		
-		$controller->output();
 	}
 
 }

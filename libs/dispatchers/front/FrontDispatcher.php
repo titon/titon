@@ -11,6 +11,7 @@ namespace titon\libs\dispatchers\front;
 
 use \titon\Titon;
 use \titon\libs\dispatchers\DispatcherAbstract;
+use \titon\libs\exceptions\HttpException;
 
 /**
  * FrontDispatcher is used as the default dispatching mechanism, sometimes referred to as a Front Controller.
@@ -35,26 +36,29 @@ class FrontDispatcher extends DispatcherAbstract {
 
 		$controller->preProcess();
 		$event->execute('preProcess', $controller);
-		
-		$controller->dispatch();
+
+		try {
+			$controller->dispatchAction();
+		} catch (HttpException $e) {
+			$controller->throwError($e->getCode());
+		}
 		
 		$controller->postProcess();
 		$event->execute('postProcess', $controller);
 
-		if ($controller->hasObject('view') && $controller->view->config('render')) {
-			$view = $controller->view;
+		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+			$engine = $controller->engine;
 			
-			$view->preRender();
-			$event->execute('preRender', $view);
+			$engine->preRender();
+			$event->execute('preRender', $engine);
 
-			$view->run();
+			$engine->run();
 
-			$view->postRender();
-			$event->execute('postRender', $view);
+			$engine->postRender();
+			$event->execute('postRender', $engine);
 		}
 
 		$event->execute('postDispatch');
-		$controller->output();
 	}
 
 }

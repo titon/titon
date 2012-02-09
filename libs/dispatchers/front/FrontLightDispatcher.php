@@ -10,6 +10,7 @@
 namespace titon\libs\dispatchers\front;
 
 use \titon\libs\dispatchers\DispatcherAbstract;
+use \titon\libs\exceptions\HttpException;
 
 /**
  * FrontLightDispatcher is a very lightweight replacement for the FrontDispatcher. 
@@ -28,17 +29,21 @@ class FrontLightDispatcher extends DispatcherAbstract {
 	public function run() {
 		$controller = $this->controller;
 		$controller->preProcess();
-		$controller->dispatch();
+
+		try {
+			$controller->dispatchAction();
+		} catch (HttpException $e) {
+			$controller->throwError($e->getCode());
+		}
+
 		$controller->postProcess();
 
-		if ($controller->hasObject('view') && $controller->view->config('render')) {
-			$view = $controller->view;
-			$view->preRender();
-			$view->run();
-			$view->postRender();
+		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+			$engine = $controller->engine;
+			$engine->preRender();
+			$engine->run();
+			$engine->postRender();
 		}
-		
-		$controller->output();
 	}
 	
 }

@@ -11,12 +11,9 @@ namespace titon\libs\dispatchers;
 
 use \titon\Titon;
 use \titon\base\Base;
-use \titon\libs\controllers\Controller;
-use \titon\libs\controllers\core\ErrorController;
 use \titon\libs\dispatchers\Dispatcher;
 use \titon\libs\dispatchers\DispatcherException;
 use \titon\libs\traits\Decorator;
-use \titon\utility\Inflector;
 
 /**
  * The Dispatcher acts as the base for all child dispatchers. The Dispatcher should not be confused with Dispatch.
@@ -52,24 +49,20 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 	 * 
 	 * @access public
 	 * @return Controller
-	 * @throws DispatcherException 
+	 * @throws DispatcherException
+	 * @final
 	 */
-	public function loadController() {
+	final public function loadController() {
 		$config = $this->config();
 		$module = Titon::app()->modules($config['module']);
 		$controller = $module['controllers'][$config['controller']];
-		
-		// Load controller
 		$path = $module['path'] . 'controllers' . DS . $controller . '.php';
 
 		if (file_exists($path)) {
 			return Titon::registry()->factory($path, $config);
-		} else {
-			throw new DispatcherException(sprintf('%s could not be located in the file system.', $controller));
 		}
-		
-		// Return error controller as fallback
-		return new ErrorController($config);
+
+		throw new DispatcherException(sprintf('%s could not be located in the file system.', $controller));
 	}
 
 	/**

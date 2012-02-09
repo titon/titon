@@ -46,27 +46,27 @@ class Dispatch {
 		$params = Titon::router()->current()->params();
 		$dispatch = null;
 
-		if (!empty($this->__mapping)) {
+		if (!empty($this->_mapping)) {
 
 			// Specific controller and module
-			if (isset($this->__mapping[$params['module'] . '.' . $params['controller']])) {
-				$dispatch = $this->__mapping[$params['module'] . '.' . $params['controller']];
+			if (isset($this->_mapping[$params['module'] . '.' . $params['controller']])) {
+				$dispatch = $this->_mapping[$params['module'] . '.' . $params['controller']];
 
 			// All controllers within a specific container
-			} else if (isset($this->__mapping[$params['module'] . '.*'])) {
-				$dispatch = $this->__mapping[$params['module'] . '.*'];
+			} else if (isset($this->_mapping[$params['module'] . '.*'])) {
+				$dispatch = $this->_mapping[$params['module'] . '.*'];
 
 			// Specific controller within any container
-			} else if (isset($this->__mapping['*.' . $params['controller']])) {
-				$dispatch = $this->__mapping['*.' . $params['controller']];
+			} else if (isset($this->_mapping['*.' . $params['controller']])) {
+				$dispatch = $this->_mapping['*.' . $params['controller']];
 
 			// Apply to all controllers and containers
-			} else if (isset($this->__mapping['*.*'])) {
-				$dispatch = $this->__mapping['*.*'];
+			} else if (isset($this->_mapping['*.*'])) {
+				$dispatch = $this->_mapping['*.*'];
 			}
 		}
 
-		if ($dispatch) {
+		if ($dispatch instanceof Dispatcher) {
 			$dispatcher = $dispatch;
 			$dispatcher->configure($params);
 			
@@ -78,6 +78,7 @@ class Dispatch {
 		}
 
 		$dispatcher->run();
+		$dispatcher->output();
 	}
 
 	/**
