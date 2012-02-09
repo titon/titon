@@ -54,7 +54,7 @@ abstract class ActionAbstract extends Base implements Action {
 	 * @throws ActionException
 	 */
 	public function run() {
-		throw new ActionException(spritnf('You must define the run() method within your %s Action.', get_class($this)));
+		throw new ActionException(sprintf('You must define the run() method within your %s Action.', get_class($this)));
 	}
 
 }

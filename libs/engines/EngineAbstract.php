@@ -47,12 +47,12 @@ abstract class EngineAbstract extends Base implements Engine {
 	/**
 	 * Configuration. Can be overwritten in the Controller.
 	 * 
-	 *	type - The content type to respond as (defaults to html).
-	 *	template - An array containing the module, controller, and action.
-	 *	render - Toggle the rendering process.
-	 *	layout - The layout template to use.
-	 *	wrapper - The wrapper template to use.
-	 *	error - True if its an error page.
+	 *	type 		- The content type to respond as (defaults to html)
+	 *	template 	- An array containing the module, controller, and action
+	 *	render 		- Toggle the rendering process
+	 *	layout 		- The layout template to use
+	 *	wrapper 	- The wrapper template to use
+	 *	error 		- True if its an error page
 	 *
 	 * @access protected
 	 * @var array

@@ -22,9 +22,9 @@ class OptimizerListener extends ListenerAbstract {
 	/**
 	 * Configuration.
 	 * 
-	 *	gc - Toggle garbage collection.
-	 *	gzip - Toggle GZIP compression.
-	 *	gzipLevel - GZIP compression level.
+	 *	gc 			- Toggle garbage collection
+	 *	gzip 		- Toggle GZIP compression
+	 *	gzipLevel 	- GZIP compression level
 	 *
 	 * @access protected
 	 * @var array

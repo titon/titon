@@ -39,10 +39,10 @@ abstract class RouteAbstract extends Base implements Route {
 	/**
 	 * Configuration.
 	 * 
-	 *	secure - When true, will only match if under HTTPS.
-	 *	static - A static route that contains no patterns.
-	 *	method - The types of acceptable HTTP methods. Defaults to all.
-	 *	patterns - Custom defined regex patterns.
+	 *	secure 		- When true, will only match if under HTTPS
+	 *	static 		- A static route that contains no patterns
+	 *	method 		- The types of acceptable HTTP methods (defaults to all)
+	 *	patterns 	- Custom defined regex patterns
 	 * 
 	 * @access public
 	 * @var array
@@ -112,10 +112,10 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @return void
 	 */
 	public function __construct($path, array $route = array(), array $config = array()) {
-		parent::__construct($config);
-		
 		$this->_path = $path;
 		$this->_route = Titon::router()->defaults($route);
+
+		parent::__construct($config);
 	}
 
 	/**

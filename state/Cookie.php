@@ -24,12 +24,12 @@ class Cookie extends Base {
 	/**
 	 * Configuration.
 	 * 
-	 *	domain - What domain the cookie should be useable on
-	 *	expires - How much time until the cookie expires
-	 *	path - Which path should the cookie only be accessible to
-	 *	secure - Should the cookie only be useable across an HTTPS connection
-	 *	httponly - Should the cookie only be accessable through PHP and not the Javascript layer
-	 *	encrypt - Should the cookies be encrypted and decrypted
+	 *	domain 		- What domain the cookie should be useable on
+	 *	expires 	- How much time until the cookie expires
+	 *	path 		- Which path should the cookie only be accessible to
+	 *	secure 		- Should the cookie only be useable across an HTTPS connection
+	 *	httponly 	- Should the cookie only be accessable through PHP and not the Javascript layer
+	 *	encrypt 	- Should the cookies be encrypted and decrypted
 	 * 
 	 * @access protected
 	 * @var array

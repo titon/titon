@@ -50,7 +50,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @return boolean
 	 */
 	public function fileExists() {
-		return file_exists(APP_CONFIG . 'sets' . DS . $this->_path);
+		return file_exists(APP_CONFIG . 'sets' . DS . $this->getPath());
 	}
 
 	/**

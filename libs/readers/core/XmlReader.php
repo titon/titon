@@ -49,7 +49,7 @@ class XmlReader extends ReaderAbstract {
 	 * Convert a SimpleXML object into an array.
 	 *
 	 * @access public
-	 * @param object $xml
+	 * @param mixed $xml
 	 * @return array
 	 */
 	public function toArray($xml) {

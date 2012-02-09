@@ -33,16 +33,16 @@ abstract class StorageAbstract extends Base implements Storage {
 	/**
 	 * Configuration.
 	 * 
-	 *	id - Unique ID for specific engines.
-	 *	servers - List of servers to store data in.
-	 *	serialize - Toggle data serialization.
-	 *	compress - Toggle data compression.
-	 *	persistent - Toggle persistent server connections.
-	 *	expires - Global expiration timer.
-	 *	prefix - String to prefix before each cache key.
-	 *	username - Username used for HTTP auth.
-	 *	password - Password used for HTTP auth.
-	 *	storage - The alias for the current storage engine.
+	 *	id 			- Unique ID for specific engines
+	 *	servers 	- List of servers to store data in
+	 *	serialize 	- Toggle data serialization
+	 *	compress 	- Toggle data compression
+	 *	persistent 	- Toggle persistent server connections
+	 *	expires 	- Global expiration timer
+	 *	prefix 		- String to prefix before each cache key
+	 *	username 	- Username used for HTTP auth
+	 *	password 	- Password used for HTTP auth
+	 *	storage 	- The alias for the current storage engine
 	 * 
 	 * @access protected
 	 * @var array
