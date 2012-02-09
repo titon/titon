@@ -45,11 +45,11 @@ abstract class ControllerAbstract extends Base implements Controller {
 	/**
 	 * Configuration.
 	 * 
-	 *	module - Current application module.
-	 *	controller - Current controller within the module.
-	 *	action - Current action within the controller.
-	 *	ext - The extension within the address bar, and what content-type to render the page as.
-	 *	args - Action arguments.
+	 *	module 			- Current application module
+	 *	controller 		- Current controller within the module
+	 *	action 			- Current action within the controller
+	 *	ext 			- The extension within the address bar, and what content-type to render the page as
+	 *	args 			- Action arguments
 	 *
 	 * @access protected
 	 * @var array
@@ -61,20 +61,6 @@ abstract class ControllerAbstract extends Base implements Controller {
 		'ext' => '',
 		'args' => array()
 	);
-	
-	/**
-	 * Trigger a custom Action class.
-	 *
-	 * @access public
-	 * @param Action $Action
-	 * @return void
-	 */
-	public function action(Action $action) {
-		$action->setController($this);
-		$action->run();
-
-		return;
-	}
 
 	/**
 	 * Dispatch the request to the correct controller action. Checks to see if the action exists and is not protected.
@@ -85,7 +71,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return mixed
 	 * @throws ControllerException
 	 */
-	public function dispatch($action = null, array $args = array()) {
+	public function dispatchAction($action = null, array $args = array()) {
 		if (empty($action)) {
 			$action = $this->config('action');
 		}
@@ -105,42 +91,6 @@ abstract class ControllerAbstract extends Base implements Controller {
 	}
 
 	/**
-	 * Functionality to throw up an error page (like a 404). The error template is derived from the $action passed.
-	 *
-	 * @access public
-	 * @param string $action
-	 * @param array $args
-	 * @return void
-	 */
-	public function error($action, array $args = array()) {
-		if (empty($args['pageTitle'])) {
-			if (is_numeric($action)) {
-				$args['pageTitle'] = $action;
-
-				$title = $this->response->statusCodes($action);
-
-				if ($title !== null) {
-					$args['pageTitle'] .= ' - '. $title;
-
-					$this->response->status($action);
-				}
-			} else {
-				$args['pageTitle'] = Inflector::normalize($action);
-			}
-		}
-
-		$args['referrer'] = $this->request->referrer();
-		$args['url'] = Titon::router()->segment(true);
-
-		$this->view->set($args);
-		$this->view->setup(array(
-			'error' => true,
-			'layout' => 'error',
-			'template' => $action
-		));
-	}
-
-	/**
 	 * Forward the current request to a new action, instead of doing an additional HTTP request.
 	 *
 	 * @access public
@@ -148,8 +98,8 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @param array $args
 	 * @return mixed
 	 */
-	public function forward($action, array $args = array()) {
-		$this->view->setup($action);
+	public function forwardAction($action, array $args = array()) {
+		$this->engine->setup($action);
 		$this->configure('action', $action);
 		$this->dispatch($action, $args);
 	}
@@ -181,21 +131,53 @@ abstract class ControllerAbstract extends Base implements Controller {
 	}
 
 	/**
-	 * The final result from the action and the rending engine.
-	 * 
+	 * Trigger a custom Action class.
+	 *
 	 * @access public
+	 * @param Action $Action
 	 * @return void
 	 */
-	public function output() {
-		if ($type = $this->config('ext')) {
-			$this->response->type($type);
+	public function runAction(Action $action) {
+		$action->setController($this);
+		$action->run();
+
+		return;
+	}
+
+	/**
+	 * Functionality to throw up an error page (like a 404). The error template is derived from the $action passed.
+	 *
+	 * @access public
+	 * @param string $action
+	 * @param array $args
+	 * @return void
+	 */
+	public function throwError($action, array $args = array()) {
+		if (empty($args['pageTitle'])) {
+			if (is_numeric($action)) {
+				$args['pageTitle'] = $action;
+
+				$title = $this->response->statusCodes($action);
+
+				if ($title !== null) {
+					$args['pageTitle'] .= ' - '. $title;
+
+					$this->response->status($action);
+				}
+			} else {
+				$args['pageTitle'] = Inflector::normalize($action);
+			}
 		}
-		
-		if ($this->hasObject('view')) {
-			$this->response->body($this->view->content());
-		}
-		
-		$this->response->respond();
+
+		$args['referrer'] = $this->request->referrer();
+		$args['url'] = Titon::router()->segment(true);
+
+		$this->engine->set($args);
+		$this->engine->setup(array(
+			'error' => true,
+			'layout' => 'error',
+			'template' => $action
+		));
 	}
 	
 	/**
@@ -224,10 +206,11 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @access public
 	 * @param Closure $engine
 	 * @return void
+	 * @final
 	 */
-	public function setEngine(Closure $engine) {
+	final public function setEngine(Closure $engine) {
 		$this->attachObject(array(
-			'alias' => 'view',
+			'alias' => 'engine',
 			'interface' => '\titon\libs\engines\Engine'
 		), $engine);
 	}

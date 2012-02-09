@@ -314,7 +314,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return void
 	 */
 	public function setup($options) {
-		if (($options === false) || ($options === null)) {
+		if ($options === false || $options === null) {
 			$this->configure('render', false);
 
 		} else if (is_string($options)) {

@@ -21,15 +21,6 @@ use \Closure;
 interface Controller {
 
 	/**
-	 * Trigger a custom Action class.
-	 *
-	 * @access public
-	 * @param Action $Action
-	 * @return void
-	 */
-	public function action(Action $action);
-
-	/**
 	 * Dispatch the request to the correct controller action. Checks to see if the action exists and is not protected.
 	 *
 	 * @access public
@@ -37,17 +28,7 @@ interface Controller {
 	 * @param array $args
 	 * @return mixed
 	 */
-	public function dispatch($action, array $args);
-
-	/**
-	 * Functionality to throw up an error page (like a 404). The error template is derived from the $action passed.
-	 *
-	 * @access public
-	 * @param string $action
-	 * @param array $args
-	 * @return void
-	 */
-	public function error($action, array $args);
+	public function dispatchAction($action, array $args);
 
 	/**
 	 * Forward the current request to a new action, instead of doing an additional HTTP request.
@@ -57,15 +38,26 @@ interface Controller {
 	 * @param array $args
 	 * @return mixed
 	 */
-	public function forward($action, array $args);
-	
+	public function forwardAction($action, array $args);
+
 	/**
-	 * The final result from the action and the rending engine.
-	 * 
+	 * Trigger a custom Action class.
+	 *
 	 * @access public
+	 * @param Action $Action
 	 * @return void
 	 */
-	public function output();
+	public function runAction(Action $action);
+
+	/**
+	 * Functionality to throw up an error page (like a 404). The error template is derived from the $action passed.
+	 *
+	 * @access public
+	 * @param string $action
+	 * @param array $args
+	 * @return void
+	 */
+	public function throwError($action, array $args);
 
 	/**
 	 * Triggered before the Controller processes the requested Action.

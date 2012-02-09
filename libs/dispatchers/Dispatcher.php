@@ -17,6 +17,14 @@ namespace titon\libs\dispatchers;
 interface Dispatcher {
 
 	/**
+	 * The final result from the controller action and the rending engine.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function output();
+
+	/**
 	 * Primary method to run the dispatcher and process its logic.
 	 *
 	 * @access public

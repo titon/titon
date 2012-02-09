@@ -73,6 +73,26 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 	}
 
 	/**
+	 * The final result from the action and the rending engine.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function output() {
+		$controller = $this->controller;
+
+		if ($type = $controller->config('ext')) {
+			$controller->response->type($type);
+		}
+
+		if ($controller->hasObject('engine')) {
+			$controller->response->body($controller->engine->content());
+		}
+
+		$controller->response->respond();
+	}
+
+	/**
 	 * Primary method to run the dispatcher and its process its logic.
 	 *
 	 * @access public
