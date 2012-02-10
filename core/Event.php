@@ -29,7 +29,7 @@ class Event {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_events = array('preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
+	protected $_events = array('startup', 'shutdown', 'preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
 
 	/**
 	 * Listeners that will be executed.

@@ -138,6 +138,8 @@ class Titon {
 				$object->initialize();
 			}
 		}
+
+		self::event()->execute('startup');
 	}
 
 	/**
@@ -147,6 +149,8 @@ class Titon {
 	 * @return void
 	 */
 	public static function shutdown() {
+		self::event()->execute('shutdown');
+
 		foreach (self::$__memory as $key => $object) {
 			unset(self::$__memory[$key]);
 		}
