@@ -160,7 +160,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 				$title = $this->response->statusCodes($action);
 
 				if ($title !== null) {
-					$args['pageTitle'] .= ' - '. $title;
+					$args['pageTitle'] .= ' - ' . $title;
 
 					$this->response->status($action);
 				}

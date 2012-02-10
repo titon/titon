@@ -233,7 +233,7 @@ class Loader {
 		$path = implode(DS, $dirs) . DS . str_replace('_', DS, $file);
 
 		if ($ext) {
-			$path .= '.'. $ext;
+			$path .= '.' . $ext;
 		}
 
 		if ($root) {

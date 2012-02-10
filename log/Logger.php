@@ -54,7 +54,7 @@ class Logger {
 	 * @static
 	 */
 	public static function alert($message) {
-		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::ALERT);
+		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::ALERT);
 	}
 
 	/**
@@ -66,7 +66,7 @@ class Logger {
 	 * @static
 	 */
 	public static function critical($message) {
-		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::CRITICAL);
+		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::CRITICAL);
 	}
 
 	/**
@@ -78,7 +78,7 @@ class Logger {
 	 * @static
 	 */
 	public static function debug($message) {
-		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::DEBUG);
+		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::DEBUG);
 	}
 
 	/**
@@ -90,7 +90,7 @@ class Logger {
 	 * @static
 	 */
 	public static function info($message) {
-		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::INFO);
+		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::INFO);
 	}
 
 	/**
@@ -102,7 +102,7 @@ class Logger {
 	 * @static
 	 */
 	public static function notice($message) {
-		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::NOTICE);
+		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::NOTICE);
 	}
 
 	/**
@@ -114,7 +114,7 @@ class Logger {
 	 * @static
 	 */
 	public static function warning($message) {
-		self::write('['. date('d-M-Y H:i:s') .'] '. $message, self::WARNING);
+		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::WARNING);
 	}
 
 	/**
@@ -157,7 +157,7 @@ class Logger {
 				$file = self::DEBUG_LOG;
 			} else {
 				$file = self::ERROR_LOG;
-				$message = '['. $type .'] '. $message;
+				$message = '[' . $type . '] ' . $message;
 			}
 			
 			file_put_contents(APP_TEMP. $file, $message ."\n", FILE_APPEND | LOCK_EX);
@@ -166,7 +166,7 @@ class Logger {
 				$email = Titon::config()->get('Debug.email');
 
 				if (!empty($email)) {
-					mail($email, '[Titon Error] '. $type, $message);
+					mail($email, '[Titon Error] ' . $type, $message);
 				}
 			}
 		}

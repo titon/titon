@@ -103,7 +103,7 @@ class Router {
 		$path[] = $route['controller'];
 
 		if (!empty($route['ext'])) {
-			$path[] = $route['action'] .'.'. $route['ext'];
+			$path[] = $route['action'] . '.' . $route['ext'];
 
 		} else if ($route['action'] != 'index' || !empty($route['params'])) {
 			$path[] = $route['action'];
@@ -135,17 +135,17 @@ class Router {
 
 		if (!empty($route['query'])) {
 			foreach ($route['query'] as $key => $value) {
-				$path[] = str_replace(' ', '', $key) .':'. urlencode($value);
+				$path[] = str_replace(' ', '', $key) . ':' . urlencode($value);
 			}
 		}
 
 		if (!empty($route['#'])) {
-			$path[] = '#'. $route['#'];
+			$path[] = '#' . $route['#'];
 		}
 
 		unset($route);
 
-		return '/'. implode('/', $path);
+		return '/' . implode('/', $path);
 	}
 
 	/**
@@ -319,13 +319,13 @@ class Router {
 		if ($key === true) {
 			$segments = $this->segments();
 
-			$url  = $segments['scheme'] .'://';
+			$url  = $segments['scheme'] . '://';
 			$url .= $segments['host'];
 			$url .= $this->base();
 			$url .= $segments['path'];
 
 			if (!empty($segments['query'])) {
-				$url .= '?'. http_build_query($segments['query']);
+				$url .= '?' . http_build_query($segments['query']);
 			}
 
 			return $url;

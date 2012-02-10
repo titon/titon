@@ -188,7 +188,7 @@ class Set {
 		}
 
 		if (!empty($path)) {
-			$path = $path .'.';
+			$path = $path . '.';
 		}
 
 		$data = array();

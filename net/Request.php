@@ -303,7 +303,7 @@ class Request extends Base {
 			$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
 			$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
 
-			return (bool) preg_match('/('. $mobiles .')/i', $self->userAgent(false));
+			return (bool) preg_match('/(' . $mobiles . ')/i', $self->userAgent(false));
 		});
 	}
 
@@ -376,7 +376,7 @@ class Request extends Base {
 			$host = $self->env('HTTP_HOST');
 
 			if (strpos($referrer, $host) !== false) {
-				$referrer = str_replace($self->protocol() .'://'. $host, '', $referrer);
+				$referrer = str_replace($self->protocol() . '://' . $host, '', $referrer);
 			}
 
 			return trim($referrer);

@@ -49,7 +49,7 @@ class Inflector {
 			$path = ucfirst($path);
 		}
 		
-		return $path .'.'. $ext;
+		return $path . '.' . $ext;
 	}
 
 	/**
@@ -166,7 +166,7 @@ class Inflector {
 		$string = preg_replace('/[^_A-Za-z0-9]+/', '', $string);
 
 		if (is_numeric(substr($string, 0, 1))) {
-			$string = '_'. $string;
+			$string = '_' . $string;
 		}
 
 		return $string;

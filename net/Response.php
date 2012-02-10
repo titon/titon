@@ -95,8 +95,8 @@ class Response extends Base {
 		$expires = is_int($expires) ? $expires : strtotime($expires);
 
 		$this->headers(array(
-			'Expires' => gmdate(Http::DATE_FORMAT, $expires) .' GMT',
-			'Cache-Control' => 'max-age='. ($expires - time())
+			'Expires' => gmdate(Http::DATE_FORMAT, $expires) . ' GMT',
+			'Cache-Control' => 'max-age=' . ($expires - time())
 		));
 
 		return $this;
@@ -156,7 +156,7 @@ class Response extends Base {
 	public function noCache() {
 		$this->headers(array(
 			'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
-			'Last-Modified' => gmdate(Http::DATE_FORMAT) .' GMT',
+			'Last-Modified' => gmdate(Http::DATE_FORMAT) . ' GMT',
 			'Cache-Control' => array(
 				'no-store, no-cache, must-revalidate',
 				'post-check=0, pre-check=0',

@@ -166,10 +166,10 @@ abstract class RouteAbstract extends Base implements Route {
 		}
 
 		// Append a wildcard to the end incase of parameters or arguments
-		$compiled .= self::WILDCARD .'?';
+		$compiled .= self::WILDCARD . '?';
 
 		// Save the compiled regex
-		$this->_compiled = '/^'. $compiled .'/i';
+		$this->_compiled = '/^' . $compiled . '/i';
 
 		return $this->_compiled;
 	}

@@ -53,9 +53,9 @@ class Benchmark {
 		}
 
 		$benchmark = self::get($key);
-		$result  = 'Benchmark ['. $key .'] - ';
-		$result .= 'Time: '. number_format($benchmark['avgTime'], 4) .' - ';
-		$result .= 'Memory: '. $benchmark['avgMemory'] .' (Max: '. $benchmark['peakMemory'] .')';
+		$result  = 'Benchmark [' . $key . '] - ';
+		$result .= 'Time: ' . number_format($benchmark['avgTime'], 4) . ' - ';
+		$result .= 'Memory: ' . $benchmark['avgMemory'] . ' (Max: ' . $benchmark['peakMemory'] . ')';
 
 		return $result;
 	}

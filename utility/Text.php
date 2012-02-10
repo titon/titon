@@ -57,7 +57,7 @@ class Text {
 			}
 			
 			$items = implode(', ', $items);
-			$items = $items .' '. $and .' '. $lastItem;
+			$items = $items . ' ' . $and . ' ' . $lastItem;
 		}
 
 		return $items;
@@ -76,7 +76,7 @@ class Text {
 		if (strlen($text) > $limit) {
 			$pre = substr($text, 0, ($limit / 2));
 			$suf = substr($text, -($limit / 2));
-			$text = $pre .' … '. $suf;
+			$text = $pre . ' … ' . $suf;
 		}
 
 		return $text;

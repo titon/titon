@@ -114,7 +114,7 @@ class FormHelper extends HelperAbstract {
 		if (isset($attributes['multiple']) && $attributes['multiple']) {
 			$append = Inflector::camelize($value);
 
-			$input .= ' '. $append;
+			$input .= ' ' . $append;
 			$attributes['id'] .= $append;
 			$attributes['name'] .= '[]';
 
@@ -190,16 +190,16 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function date($input, array $attributes = array()) {
-		$year = $this->year($input .'.year',
-			array('name' => $input .'.year') + $attributes
+		$year = $this->year($input . '.year',
+			array('name' => $input . '.year') + $attributes
 		);
 
-		$month = $this->month($input .'.month',
-			array('name' => $input .'.month') + $attributes
+		$month = $this->month($input . '.month',
+			array('name' => $input . '.month') + $attributes
 		);
 
-		$day = $this->day($input .'.day',
-			array('name' => $input .'.day') + $attributes
+		$day = $this->day($input . '.day',
+			array('name' => $input . '.day') + $attributes
 		);
 
 		return $month . ' ' . $day . ' ' . $year;
@@ -673,20 +673,20 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function time($input, array $attributes = array()) {
-		$hour = $this->hour($input .'.hour',
-			array('name' => $input .'.hour') + $attributes
+		$hour = $this->hour($input . '.hour',
+			array('name' => $input . '.hour') + $attributes
 		);
 
-		$minute = $this->minute($input .'.minute',
-			array('name' => $input .'.minute') + $attributes
+		$minute = $this->minute($input . '.minute',
+			array('name' => $input . '.minute') + $attributes
 		);
 
-		$second = $this->second($input .'.second',
-			array('name' => $input .'.second') + $attributes
+		$second = $this->second($input . '.second',
+			array('name' => $input . '.second') + $attributes
 		);
 
-		$meridiem = $this->meridiem($input .'.meridiem',
-			array('name' => $input .'.meridiem') + $attributes
+		$meridiem = $this->meridiem($input . '.meridiem',
+			array('name' => $input . '.meridiem') + $attributes
 		);
 
 		return $hour . ':' . $minute . ':' . $second . $meridiem;
@@ -701,7 +701,7 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function value($model, $field) {
-		return Set::extract($this->request->data, $model .'.'. $field);
+		return Set::extract($this->request->data, $model . '.' . $field);
 	}
 
 	/**

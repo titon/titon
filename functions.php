@@ -22,7 +22,7 @@ function debug() {
 
 		if (!empty($vars)) {
 			foreach ($vars as $var) {
-				echo '<pre>'. print_r($var, true) .'</pre>';
+				echo '<pre>' . print_r($var, true) . '</pre>';
 			}
 		}
 

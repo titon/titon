@@ -173,37 +173,37 @@ class Debugger {
 			return "document.getElementById('". $id ."').style.display = (document.getElementById('". $id ."').style.display == 'none' ? '". $display ."' : 'none');";
 		};
 
-		$output  = '<div id="TitonDebugError-'. $append .'">';
-		$output .= '<b><a href="#debug" onclick="'. $toggle('TitonStackTrace-'. $append) .' return false;">'. $this->errorType($number) .'</a>:</b> '. $message .' ';
-		$output .= '<b><acronym title="'. $file .'">'. $this->parseFile($file) .'</acronym></b> ('. $line .')<br><br>';
+		$output  = '<div id="TitonDebugError-' . $append . '">';
+		$output .= '<b><a href="#debug" onclick="' . $toggle('TitonStackTrace-' . $append) . ' return false;">' . $this->errorType($number) . '</a>:</b> ' . $message . ' ';
+		$output .= '<b><acronym title="' . $file . '">' . $this->parseFile($file) . '</acronym></b> (' . $line . ')<br><br>';
 
 		if (!empty($backtrace)) {
-			$output .= '<div id="TitonStackTrace-'. $append .'" style="display: none">';
+			$output .= '<div id="TitonStackTrace-' . $append . '" style="display: none">';
 			$output .= '<table cellpadding="0" cellspacing="0" style="border: none">';
 
 			foreach ($backtrace as $stack => $trace) {
 				$output .= '<tr><td>';
 
 				if (!empty($trace['args'])) {
-					$output .= '<a href="#debug" onclick="'. $toggle('TitonMethodArgs-'. $stack .'-'. $append, true) .' return false;">'. $trace['method'] .'</a>';
+					$output .= '<a href="#debug" onclick="' . $toggle('TitonMethodArgs-' . $stack . '-' . $append, true) . ' return false;">' . $trace['method'] . '</a>';
 				} else {
 					$output .= $trace['method'];
 				}
 
-				$output .= '() &nbsp;</td><td><i><acronym title="'. $trace['file'] .'">'. $this->parseFile($trace['file']) .'</acronym></i>';
+				$output .= '() &nbsp;</td><td><i><acronym title="' . $trace['file'] . '">' . $this->parseFile($trace['file']) . '</acronym></i>';
 
 				if (!empty($trace['line'])) {
-					$output .= ' ('. $trace['line'] .')';
+					$output .= ' (' . $trace['line'] . ')';
 				}
 				
 				$output .= '</td></tr>';
 
 				if (!empty($trace['args'])) {
-					$output .= '<tr id="TitonMethodArgs-'. $stack .'-'. $append .'" style="display: none">';
+					$output .= '<tr id="TitonMethodArgs-' . $stack . '-' . $append . '" style="display: none">';
 					$output .= '<td colspan="2"><br><b>Arguments:</b><ol>';
 
 					foreach ($trace['args'] as $arg) {
-						$output .= '<li>'. $arg .'</li>';
+						$output .= '<li>' . $arg . '</li>';
 					}
 
 					$output .= '</ol></td></tr>';
@@ -247,7 +247,7 @@ class Debugger {
 					$args[] = $this->parseArg($a, true);
 				}
 
-				return 'array('. implode(', ', $args) .')';
+				return 'array(' . implode(', ', $args) . ')';
 			}
 
 		} else if (is_null($arg)) {
@@ -282,7 +282,7 @@ class Debugger {
 			$location = Titon::loader()->ds(constant(strtoupper($constant)));
 
 			if (strpos($path, $location) !== false) {
-				$path = str_replace($location, '['. $constant .']', $path);
+				$path = str_replace($location, '[' . $constant . ']', $path);
 				break;
 			}
 		}
@@ -357,17 +357,17 @@ class Debugger {
 		$method = '';
 
 		if (isset($trace[0]['class'])) {
-			$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] .'()';
+			$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] . '()';
 			
 		} else if (strpos($trace[0]['function'], 'closure') !== false) {
 			$method = get_class($trace[0]['args'][0]) . '[Closure]';
 		}
 		
-		$response = $method .': '. $exception->getMessage();
+		$response = $method . ': ' . $exception->getMessage();
 		$code = $exception->getCode();
 
 		if ($code) {
-			$response .= ' (Code: '. $code .')';
+			$response .= ' (Code: ' . $code . ')';
 		}
 
 		$this->error($code, $response, $exception->getFile(), $exception->getLine());

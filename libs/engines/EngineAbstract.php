@@ -138,8 +138,8 @@ abstract class EngineAbstract extends Base implements Engine {
 					$layout = Titon::loader()->ds($config['layout']);
 
 					$paths = array(
-						APP_MODULES . $template['module'] .'/views/private/layouts/'. $layout .'.tpl',
-						APP_VIEWS .'layouts/'. $layout .'.tpl'
+						APP_MODULES . $template['module'] . '/views/private/layouts/' . $layout . '.tpl',
+						APP_VIEWS . 'layouts/' . $layout . '.tpl'
 					);
 				}
 			break;
@@ -149,8 +149,8 @@ abstract class EngineAbstract extends Base implements Engine {
 					$wrapper = Titon::loader()->ds($config['wrapper']);
 
 					$paths = array(
-						APP_MODULES . $template['module'] .'/views/private/wrappers/'. $wrapper .'.tpl',
-						APP_VIEWS .'wrappers/'. $wrapper .'.tpl'
+						APP_MODULES . $template['module'] . '/views/private/wrappers/' . $wrapper . '.tpl',
+						APP_VIEWS . 'wrappers/' . $wrapper . '.tpl'
 					);
 				}
 			break;
@@ -163,8 +163,8 @@ abstract class EngineAbstract extends Base implements Engine {
 				}
 
 				$paths = array(
-					APP_MODULES . $template['module'] .'/views/private/includes/'. $path .'.tpl',
-					APP_VIEWS .'includes/'. $path .'.tpl'
+					APP_MODULES . $template['module'] . '/views/private/includes/' . $path . '.tpl',
+					APP_VIEWS . 'includes/' . $path . '.tpl'
 				);
 			break;
 
@@ -172,8 +172,8 @@ abstract class EngineAbstract extends Base implements Engine {
 				$error = Titon::loader()->ds($template['action']);
 
 				$paths = array(
-					APP_MODULES . $template['module'] .'/views/private/errors/'. $error .'.tpl',
-					APP_VIEWS .'errors/'. $error .'.tpl'
+					APP_MODULES . $template['module'] . '/views/private/errors/' . $error . '.tpl',
+					APP_VIEWS . 'errors/' . $error . '.tpl'
 				);
 			break;
 
@@ -188,7 +188,7 @@ abstract class EngineAbstract extends Base implements Engine {
 				);
 
 				$path  = APP_MODULES . implode(DS, $parts);
-				$path .= empty($ext) ? '.tpl' : '.'. $ext .'.tpl';
+				$path .= empty($ext) ? '.tpl' : '.' . $ext . '.tpl';
 
 				$paths = array($path);
 			break;
