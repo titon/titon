@@ -9,6 +9,7 @@
 
 namespace titon\libs\storage\cache;
 
+use \Memcached;
 use \titon\libs\storage\cache\MemcacheStorage;
 use \titon\libs\storage\StorageException;
 
@@ -61,7 +62,7 @@ class MemcachedStorage extends MemcacheStorage {
 			return;
 		}
 		
-		$this->connection = $this->connection ?: new \Memcached($config['id']);
+		$this->connection = $this->connection ?: new Memcached($config['id']);
 		$this->connection->setOption(Memcached::OPT_COMPRESSION, (bool) $config['compress']);
 		$this->connection->setOption(Memcached::OPT_DISTRIBUTION, Memcached::DISTRIBUTION_CONSISTENT);
 		$this->connection->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, true);

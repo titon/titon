@@ -56,7 +56,7 @@ interface Engine {
 	 * @access public
 	 * @param string $path
 	 * @param array $variables
-	 * @return void
+	 * @return string
 	 */
 	public function render($path, array $variables);
 

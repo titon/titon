@@ -163,7 +163,7 @@ class Set {
 		}
 
 		if ($recursive === true) {
-			foreach ($set as $key => &$value) {
+			foreach ($set as &$value) {
 				$value = self::filter($value, $recursive);
 			}
 		}
@@ -241,7 +241,7 @@ class Set {
 			return false;
 		}
 
-		foreach ($set as $key => $value) {
+		foreach ($set as $value) {
 			if (!is_string($value)) {
 				return false;
 			}
@@ -269,7 +269,7 @@ class Set {
 			return false;
 		}
 
-		foreach ($set as $key => $value) {
+		foreach ($set as $value) {
 			if (!is_numeric($value)) {
 				return false;
 			}
@@ -301,7 +301,7 @@ class Set {
 		}
 
 		if (is_array($set)) {
-			foreach ($set as $key => &$value) {
+			foreach ($set as &$value) {
 				$value = self::map($value, $function, $args);
 			}
 

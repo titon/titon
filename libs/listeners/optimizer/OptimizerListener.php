@@ -76,7 +76,7 @@ class OptimizerListener extends ListenerAbstract {
 					$extension = 'zlib.so';
 				}
 
-				if (!dl($extension)) {
+				if (function_exists('dl') && !dl($extension)) {
 					$loaded = false;
 				}
 			}

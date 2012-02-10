@@ -265,7 +265,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @access public
 	 * @param string $path
 	 * @param array $variables
-	 * @return void
+	 * @return string
 	 * @throws EngineException
 	 */
 	public function render($path, array $variables = array()) {

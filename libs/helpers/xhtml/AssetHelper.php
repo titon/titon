@@ -9,6 +9,7 @@
 
 namespace titon\libs\helpers\xhtml;
 
+use \titon\Titon;
 use \titon\libs\helpers\html\AssetHelper as HtmlAssetHelper;
 
 /**

@@ -245,7 +245,7 @@ abstract class RouteAbstract extends Base implements Route {
 			if (!empty($matches[0]) && $matches[0] != '/') {
 				$parts = explode('/', trim($matches[0], '/'));
 
-				foreach ($parts as $index => $part) {
+				foreach ($parts as $part) {
 					if (strpos($part, ':') !== false) {
 						list($key, $value) = explode(':', $part);
 						$this->_route['query'][$key] = $value;

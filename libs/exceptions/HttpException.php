@@ -30,7 +30,7 @@ class HttpException extends Exception {
 	 */
 	public function __construct($message, $code, $previous) {
 		if ($code && !isset(Http::$statusCodes[$code])) {
-			$code = null;
+			$code = 0;
 		}
 
 		if ($code && empty($message)) {

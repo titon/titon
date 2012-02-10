@@ -299,11 +299,13 @@ class Router {
 	 * @return Route
 	 */
 	public function match($url) {
-		foreach ($this->_routes as $key => $route) {
+		foreach ($this->_routes as $route) {
 			if ($route->match($url)) {
 				return $route;
 			}
 		}
+
+		return null;
 	}
 
 	/**

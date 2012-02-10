@@ -9,6 +9,7 @@
 
 namespace titon\libs\storage\cache;
 
+use \Memcache;
 use \titon\libs\storage\StorageAbstract;
 use \titon\libs\storage\StorageException;
 
@@ -124,7 +125,7 @@ class MemcacheStorage extends StorageAbstract {
 			$config['servers'] = array($config['servers']);
 		}
 		
-		$this->connection = $this->connection ?: new \Memcache();
+		$this->connection = $this->connection ?: new Memcache();
 		
 		foreach ($config['servers'] as $server) {
 			if (is_array($server)) {

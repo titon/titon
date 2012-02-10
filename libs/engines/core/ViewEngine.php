@@ -45,7 +45,7 @@ class ViewEngine extends EngineAbstract {
 	 * @access public
 	 * @param string $path
 	 * @param array $variables
-	 * @return void
+	 * @return string
 	 */
 	public function render($path, array $variables = array()) {
 		if (!empty($variables)) {
