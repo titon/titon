@@ -7,14 +7,14 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\libs\exceptions;
+namespace titon\libs\exceptions\http;
 
 use \titon\libs\exceptions\HttpException;
 
 /**
  * Represents an HTTP 404 error.
  *
- * @package	titon.libs.exceptions
+ * @package	titon.libs.exceptions.http
  */
 class NotFoundException extends HttpException {
 
