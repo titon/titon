@@ -132,6 +132,7 @@ class Http {
 	 *
 	 * @access public
 	 * @var array
+	 * @static
 	 */
 	public static $methodTypes = array(
 		'GET', 
@@ -193,18 +194,33 @@ class Http {
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported'
 	);
-	
-	
+
 	/**
-	 * Get a single content type, or all content types.
+	 * Get a single content type.
 	 *
 	 * @access public
-	 * @param string $type
-	 * @return string|array
+	 * @param string|array $type
+	 * @return string
+	 * @throws ConstantException
 	 * @static
 	 */
-	public static function contentTypes($type = null) {
-		return isset(self::$contentTypes[$type]) ? self::$contentTypes[$type] : self::$contentTypes;
+	public static function contentType($type) {
+		if (isset(self::$contentTypes[$type])) {
+			return self::$contentTypes[$type];
+		}
+
+		throw new ConstantException(sprintf('Content type %s is not supported.', $type));
+	}
+	
+	/**
+	 * Get all content types.
+	 *
+	 * @access public
+	 * @return array
+	 * @static
+	 */
+	public static function contentTypes() {
+		return self::$contentTypes;
 	}
 
 	/**
@@ -230,15 +246,31 @@ class Http {
 	}
 
 	/**
-	 * Get a single status code, or all status codes.
+	 * Get a single status code.
 	 *
 	 * @access public
 	 * @param int $code
-	 * @return string|array
+	 * @return string
+	 * @throws ConstantException
 	 * @static
 	 */
-	public static function statusCodes($code = null) {
-		return isset(self::$statusCodes[$code]) ? self::$statusCodes[$code] : self::$statusCodes;
+	public static function statusCode($code) {
+		if (isset(self::$statusCodes[$code])) {
+			return self::$statusCodes[$code];
+		}
+
+		throw new ConstantException(sprintf('Status code %s is not supported.', $code));
+	}
+
+	/**
+	 * Get all status codes.
+	 *
+	 * @access public
+	 * @return array
+	 * @static
+	 */
+	public static function statusCodes() {
+		return self::$statusCodes;
 	}
 
 }

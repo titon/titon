@@ -76,15 +76,7 @@ class Request extends Base {
 	 * @throws NetException
 	 */
 	public function accepts($type = 'html') {
-		$contentType = Http::contentTypes($type);
-
-		if ($contentType === null) {
-			throw new NetException(sprintf('The content type %s is not supported.', $type));
-		}
-
-		if (!is_array($contentType)) {
-			$contentType = array($contentType);
-		}
+		$contentType = (array) Http::contentType($type);
 
 		foreach ($this->_accepts('Accept') as $aType) {
 			if (in_array(strtolower($aType['type']), $contentType)) {

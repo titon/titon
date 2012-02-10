@@ -195,7 +195,7 @@ class Response extends Base {
 		header(sprintf('%s %s %s',
 			Http::HTTP_11,
 			$this->_status,
-			Http::statusCodes($this->_status)
+			Http::statusCode($this->_status)
 		));
 
 		// Content type
@@ -230,10 +230,6 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function status($code = 302) {
-		if (!Http::statusCodes($code)) {
-			throw new NetException(sprintf('The status code %d is not supported.', $code));
-		}
-
 		$this->_status = $code;
 
 		return $this;
@@ -250,11 +246,7 @@ class Response extends Base {
 	 */
 	public function type($type = null) {
 		if (strpos($type, '/') === false) {
-			$contentType = Http::contentTypes($type);
-
-			if ($contentType === null) {
-				throw new NetException(sprintf('The content type %s is not supported.', $type));
-			}
+			$contentType = Http::contentType($type);
 
 			if (is_array($contentType)) {
 				$type = $contentType[0];
