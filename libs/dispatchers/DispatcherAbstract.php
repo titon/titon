@@ -54,7 +54,7 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 	 */
 	final public function loadController() {
 		$config = $this->config();
-		$module = Titon::app()->modules($config['module']);
+		$module = Titon::app()->module($config['module']);
 		$controller = $module['controllers'][$config['controller']];
 		$path = $module['path'] . 'controllers' . DS . $controller . '.php';
 

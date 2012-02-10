@@ -700,6 +700,7 @@ class G11n {
 	 */
 	public function setStorage(Storage $storage) {
 		$this->_storage = $storage;
+		$this->_storage->configure('storage', 'g11n');
 
 		return $this;
 	}
