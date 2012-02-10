@@ -37,14 +37,53 @@ class Application {
 	protected $_modules = array();
 
 	/**
-	 * Return all controllers, or a modules controllers.
+	 * Return all controllers.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function controllers() {
+		return $this->_controllers;
+	}
+
+	/**
+	 * Return a single module.
 	 *
 	 * @access public
 	 * @param string $module
 	 * @return array
 	 */
-	public function controllers($module = null) {
-		return isset($this->_controllers[$module]) ? $this->_controllers[$module] : $this->_controllers;
+	public function module($module) {
+		if (isset($this->_modules[$module])) {
+			return $this->_modules[$module];
+		}
+
+		throw new CoreException(sprintf('Could not locate %s module.', $module));
+	}
+
+	/**
+	 * Return all module controllers.
+	 *
+	 * @access public
+	 * @param string $module
+	 * @return array
+	 */
+	public function moduleControllers($module) {
+		if (isset($this->_controllers[$module])) {
+			return $this->_controllers[$module];
+		}
+
+		throw new CoreException(sprintf('Could not locate controllers for %s module.', $module));
+	}
+
+	/**
+	 * Return all modules
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function modules() {
+		return $this->_modules;
 	}
 
 	/**
@@ -61,17 +100,6 @@ class Application {
 				include_once $path;
 			}
 		}
-	}
-	
-	/**
-	 * Return a list of modules or a single module.
-	 *
-	 * @access public
-	 * @param string $module
-	 * @return array
-	 */
-	public function modules($module = null) {
-		return isset($this->_modules[$module]) ? $this->_modules[$module] : $this->_modules;
 	}
 
 	/**

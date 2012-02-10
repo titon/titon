@@ -41,7 +41,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 		parent::__construct();
 		
 		$this->_storage = $storage;
-		$this->_storage->configure('storage', 'session')->initialize();
+		$this->_storage->configure('storage', 'session');
 	}
 
 	/**
