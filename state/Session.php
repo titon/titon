@@ -35,11 +35,11 @@ class Session extends Base {
 	/**
 	 * Configuration.
 	 * 
-	 *	checkUserAgent - Validate the user agent hasn't changed between requests
-	 *	checkInactivity - Regenerate the client session if they are idle
-	 *	checkReferer - Validate the host in the referrer
-	 *	inactivityThreshold - The alotted time the client can be inactive
-	 *	sessionLifetime - Lifetime of the session cookie
+	 *	checkUserAgent 			- Validate the user agent hasn't changed between requests
+	 *	checkInactivity 		- Regenerate the client session if they are idle
+	 *	checkReferer 			- Validate the host in the referrer
+	 *	inactivityThreshold 	- The alotted time the client can be inactive
+	 *	sessionLifetime 		- Lifetime of the session cookie
 	 * 
 	 * @access protected
 	 * @var array
@@ -81,7 +81,7 @@ class Session extends Base {
 			$this->regenerate();
 		}
 		
-		if ($this->_adapter) {
+		if ($this->_adapter instanceof SessionAdapter) {
 			$this->_adapter->register();
 		}
 	}
@@ -119,6 +119,8 @@ class Session extends Base {
 			return $this->_id;
 
 		} else if ($id = session_id()) {
+			$this->_id = $id;
+
 			return $id;
 		}
 

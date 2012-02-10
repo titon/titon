@@ -52,7 +52,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * @return void
 	 */
 	public function destroy($key) {
-		return $this->_storage->remove($key);
+		$this->_storage->remove($key);
 	}
 
 	/**
@@ -63,7 +63,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * @return void
 	 */
 	public function gc($maxLifetime) {
-		return $this->_storage->flush(time() - $maxLifetime);
+		$this->_storage->flush(time() - $maxLifetime);
 	}
 
 	/**
@@ -86,7 +86,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * @return boolean
 	 */
 	public function write($key, $value) {
-		return $this->_storage->set($key, $value);
+		return $this->_storage->set($key, $value, null);
 	}	
 	
 }
