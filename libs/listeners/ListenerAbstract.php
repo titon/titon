@@ -23,6 +23,26 @@ use \titon\libs\listeners\Listener;
 abstract class ListenerAbstract extends Base implements Listener {
 
 	/**
+	 * Executed after kernel startup.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function startup() {
+		return;
+	}
+
+	/**
+	 * Executed before kernel shutdown.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function shutdown() {
+		return;
+	}
+
+	/**
 	 * Executed at the beginning of the dispatch cycle.
 	 *
 	 * @access public
