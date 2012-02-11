@@ -9,8 +9,11 @@
 
 namespace titon\base;
 
+use \titon\Titon;
 use \titon\utility\Set;
 use \Closure;
+use \ReflectionClass;
+use \ReflectionMethod;
 
 use \titon\utility\Inflector;
 
@@ -126,6 +129,37 @@ class Base {
 		}
 
 		return;
+	}
+
+	/**
+	 * Return all relevant meta data regarding the current class. This includes file path, namespace package,
+	 * class name, constants, methods and properties (with visibility) and much more.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function meta() {
+		$class = get_class($this);
+		$reflection = new ReflectionClass($this);
+
+		return array(
+			'filePath' => Titon::loader()->toPath($class),
+			'className' => $class,
+			'shortClassName' => $reflection->getShortName(),
+			'namespace' => $reflection->getNamespaceName(),
+			'publicMethods' => $reflection->getMethods(ReflectionMethod::IS_PUBLIC),
+			'protectedMethods' => $reflection->getMethods(ReflectionMethod::IS_PROTECTED),
+			'privateMethods' => $reflection->getMethods(ReflectionMethod::IS_PRIVATE),
+			'staticMethods' => $reflection->getMethods(ReflectionMethod::IS_STATIC),
+			'publicProperties' => $reflection->getProperties(ReflectionMethod::IS_PUBLIC),
+			'protectedProperties' => $reflection->getProperties(ReflectionMethod::IS_PROTECTED),
+			'privateProperties' => $reflection->getProperties(ReflectionMethod::IS_PRIVATE),
+			'staticProperties' => $reflection->getProperties(ReflectionMethod::IS_STATIC),
+			'constants' => $reflection->getConstants(),
+			'interfaces' => $reflection->getInterfaceNames(),
+			'traits' => $reflection->getTraitNames(),
+			'parent' => $reflection->getParentClass()
+		);
 	}
 
 	/**
