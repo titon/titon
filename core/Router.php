@@ -9,8 +9,8 @@
 
 namespace titon\core;
 
-use \titon\libs\routes\core\DefaultRoute;
 use \titon\libs\routes\Route;
+use \titon\libs\routes\core\DefaultRoute;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -262,8 +262,8 @@ class Router {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @param Route $route
-	 * @return Router
+	 * @param \titon\libs\routes\Route $route
+	 * @return \titon\core\Router
 	 * @chainable
 	 */
 	public function map($key, Route $route) {
@@ -278,7 +278,7 @@ class Router {
 	 * @access public
 	 * @param string $key
 	 * @param string|array $route
-	 * @return Router
+	 * @return \titon\core\Router
 	 * @chainable
 	 */
 	public function mapSlug($key, $route = array()) {
@@ -296,7 +296,7 @@ class Router {
 	 *
 	 * @access public
 	 * @param string $url
-	 * @return Route
+	 * @return \titon\libs\routes\Route
 	 */
 	public function match($url) {
 		foreach ($this->_routes as $route) {

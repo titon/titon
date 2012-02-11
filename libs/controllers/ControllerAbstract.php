@@ -70,7 +70,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @param string $action
 	 * @param array $args
 	 * @return mixed
-	 * @throws ControllerException
+	 * @throws \titon\libs\controllers\ControllerException
 	 */
 	public function dispatchAction($action = null, array $args = array()) {
 		if (empty($action)) {
@@ -135,7 +135,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * Trigger a custom Action class.
 	 *
 	 * @access public
-	 * @param Action $Action
+	 * @param \titon\libs\actions\Action $action
 	 * @return void
 	 */
 	public function runAction(Action $action) {
@@ -202,7 +202,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param Closure $engine
+	 * @param \Closure $engine
 	 * @return void
 	 * @final
 	 */

@@ -71,11 +71,8 @@ class ViewEngine extends EngineAbstract {
 	public function run() {
 		$config = $this->config();
 
-		if (!$config['render']) {
-			return '';
-
-		} else if ($this->_rendered) {
-			return $this->content();
+		if (!$config['render'] || $this->_rendered) {
+			return;
 		}
 
 		// Render the template, layout and wrappers
@@ -100,8 +97,6 @@ class ViewEngine extends EngineAbstract {
 		}
 
 		$this->_rendered = true;
-
-		return $this->content();
 	}
 
 }

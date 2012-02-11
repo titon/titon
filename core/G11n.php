@@ -2,6 +2,7 @@
 
 namespace titon\core;
 
+use \titon\core\CoreException;
 use \titon\libs\storage\Storage;
 use \titon\libs\translators\Translator;
 
@@ -332,8 +333,8 @@ class G11n {
 	 * 
 	 * @access public
 	 * @param string $key 
-	 * @return G11n
-	 * @throws CoreException
+	 * @return \titon\core\G11n
+	 * @throws \titon\core\CoreException
 	 * @chainable
 	 */
 	public function apply($key) {
@@ -389,7 +390,7 @@ class G11n {
 	 * 
 	 * @access public
 	 * @param string $timezone
-	 * @return G11n 
+	 * @return \titon\core\G11n
 	 * @chainable
 	 */
 	public function applyTimezone($timezone) {
@@ -453,8 +454,8 @@ class G11n {
 	 * 
 	 * @access public
 	 * @param string $key
-	 * @return G11n 
-	 * @throws CoreException
+	 * @return \titon\core\G11n
+	 * @throws \titon\core\CoreException
 	 * @chainable
 	 */
 	public function fallbackAs($key) {
@@ -476,7 +477,7 @@ class G11n {
 	 * 
 	 * @access public
 	 * @return array
-	 * @throws CoreException
+	 * @throws \titon\core\CoreException
 	 */
 	public function getFallback() {
 		if (!$this->_fallback || empty($this->_locales[$this->_fallback])) {
@@ -510,7 +511,7 @@ class G11n {
 	 * Detect which locale to use based on the clients Accept-Language header.
 	 * 
 	 * @access public
-	 * @throws CoreException
+	 * @throws \titon\core\CoreException
 	 * @return void
 	 */
 	public function initialize() {
@@ -578,7 +579,7 @@ class G11n {
 	 * @access public
 	 * @param string $key
 	 * @return array
-	 * @throws CoreException
+	 * @throws \titon\core\CoreException
 	 */
 	public function find($key) {
 		$key = $this->canonicalize($key);
@@ -609,7 +610,7 @@ class G11n {
 	 * @access public
 	 * @param string $key
 	 * @return array
-	 * @throws CoreException
+	 * @throws \titon\core\CoreException
 	 */
 	public function findByIso2($key) {
 		$return = array();
@@ -633,7 +634,7 @@ class G11n {
 	 * @access public
 	 * @param string $key
 	 * @return array
-	 * @throws CoreException
+	 * @throws \titon\core\CoreException
 	 */
 	public function findByIso3($key) {
 		$return = array();
@@ -660,7 +661,7 @@ class G11n {
 	 * 
 	 * @access public
 	 * @param array $keys
-	 * @return G11n 
+	 * @return \titon\core\G11n
 	 * @chainable
 	 */
 	public function setup(array $keys) {
@@ -680,8 +681,8 @@ class G11n {
 	 * Sets the translator to use in the string locating and translating process.
 	 * 
 	 * @access public
-	 * @param Translator $translator
-	 * @return G11n 
+	 * @param \titon\libs\translators\Translator $translator
+	 * @return \titon\core\G11n
 	 * @chainable
 	 */
 	public function setTranslator(Translator $translator) {
@@ -694,8 +695,8 @@ class G11n {
 	 * Set the storage engine to use for catalog caching.
 	 * 
 	 * @access public
-	 * @param Storage $storage
-	 * @return G11n 
+	 * @param \titon\libs\storage\Storage $storage
+	 * @return \titon\core\G11n
 	 * @chainable
 	 */
 	public function setStorage(Storage $storage) {

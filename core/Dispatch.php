@@ -84,7 +84,7 @@ class Dispatch {
 	 * Apply custom dispatchers to a specific module or controller scope.
 	 *
 	 * @access public
-	 * @param Dispatcher $dispatcher
+	 * @param \titon\libs\dispatchers\Dispatcher $dispatcher
 	 * @param array $scope
 	 * @return void
 	 */

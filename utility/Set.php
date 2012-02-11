@@ -375,12 +375,12 @@ class Set {
 	 * @access public
 	 * @param array $set1 - The base array
 	 * @param array $set2 - The array to overwrite the base array
-	 * @return void|array
+	 * @return null|array
 	 * @static
 	 */
 	public static function overwrite($set1, $set2) {
 		if (!is_array($set1) || !is_array($set2)) {
-			return;
+			return null;
 		}
 
 		return array_merge($set1, array_intersect_key($set2, $set1));

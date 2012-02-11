@@ -45,7 +45,6 @@ class Type implements \Serializable {
 	 *
 	 * @access public
 	 * @param mixed $value
-	 * @return void
 	 */
 	public function __construct($value) {
 		$this->_value = $value;
@@ -96,7 +95,7 @@ class Type implements \Serializable {
 	 * Return a new instance based on the raw value.
 	 *
 	 * @access public
-	 * @return Type
+	 * @return \titon\base\types\Type
 	 */
 	public function rawOf() {
 		return new self($this->_raw);
@@ -137,7 +136,7 @@ class Type implements \Serializable {
 	 * Return a new instance based on the current value.
 	 *
 	 * @access public
-	 * @return Type
+	 * @return \titon\base\types\Type
 	 */
 	public function valueOf() {
 		return new self($this->_value);

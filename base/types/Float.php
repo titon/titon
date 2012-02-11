@@ -25,8 +25,6 @@ class Float extends Integer {
 	 * @access public
 	 * @param float $value
 	 * @param int $base
-	 * @return void
-	 * @throws BaseException
 	 */
 	public function __construct($value, $base = 10) {
 		parent::__construct((float) $value);
@@ -42,7 +40,7 @@ class Float extends Integer {
 	 * Absolute value. Alias for abs().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function abs() {
@@ -55,7 +53,7 @@ class Float extends Integer {
 	 * Arc cosine. Alias for acos().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function acos() {
@@ -68,7 +66,7 @@ class Float extends Integer {
 	 * Inverse hyperbolic cosine. Alias for acosh().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function acosh() {
@@ -81,7 +79,7 @@ class Float extends Integer {
 	 * Arc sine. Alias for asin().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function asin() {
@@ -94,7 +92,7 @@ class Float extends Integer {
 	 * Inverse hyperbolic sine. Alias for asinh().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function asinh() {
@@ -108,7 +106,7 @@ class Float extends Integer {
 	 *
 	 * @access public
 	 * @param float $float
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function atan2($float) {
@@ -121,7 +119,7 @@ class Float extends Integer {
 	 * Inverse hyperbolic tangent. Alias for atanh().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function atanh() {
@@ -134,7 +132,7 @@ class Float extends Integer {
 	 * Arc tangent. Alias for atan().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function atan() {
@@ -147,7 +145,7 @@ class Float extends Integer {
 	 * Round fractions up. Alias for ceil().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function ceil() {
@@ -160,7 +158,7 @@ class Float extends Integer {
 	 * Cosine. Alias for cos().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function cos() {
@@ -173,7 +171,7 @@ class Float extends Integer {
 	 * Hyperbolic cosine. Alias for cosh().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function cosh() {
@@ -186,7 +184,7 @@ class Float extends Integer {
 	 * Converts the number in degrees to the radian equivalent. Alias for deg2rad().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function deg2rad() {
@@ -199,7 +197,7 @@ class Float extends Integer {
 	 * Calculates the exponent of e. Alias for exp().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function exp() {
@@ -212,7 +210,7 @@ class Float extends Integer {
 	 * Returns exp(number) - 1, computed in a way that is accurate even when the value of number is close to zero. Alias for expm1().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function expm1() {
@@ -225,7 +223,7 @@ class Float extends Integer {
 	 * Round fractions down. Alias for floor().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function floor() {
@@ -239,7 +237,7 @@ class Float extends Integer {
 	 *
 	 * @access public
 	 * @param float $float
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function fmod($float) {
@@ -282,7 +280,7 @@ class Float extends Integer {
 	 * Converts the radian number to the equivalent number in degrees. Alias for rad2deg().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function rad2deg() {
@@ -295,7 +293,7 @@ class Float extends Integer {
 	 * Sine. Alias for sin().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function sin() {
@@ -308,7 +306,7 @@ class Float extends Integer {
 	 * Hyperbolic sine. Alias for sinh().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function sinh() {
@@ -321,7 +319,7 @@ class Float extends Integer {
 	 * Square root. Alias for sqrt().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function sqrt() {
@@ -334,7 +332,7 @@ class Float extends Integer {
 	 * Tangent. Alias for tan().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function tan() {
@@ -347,7 +345,7 @@ class Float extends Integer {
 	 * Hyperbolic tangent. Alias for tanh().
 	 *
 	 * @access public
-	 * @return Float
+	 * @return \titon\base\types\Float
 	 * @chainable
 	 */
 	public function tanh() {

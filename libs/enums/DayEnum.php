@@ -60,6 +60,14 @@ class DayEnum extends Enum {
 	 * @var string
 	 */
 	public $name;
+
+	/**
+	 * Day as a slug.
+	 *
+	 * @access public
+	 * @var string
+	 */
+	public $slug;
 	
 	/**
 	 * Set variables.

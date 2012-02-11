@@ -10,6 +10,7 @@
 namespace titon\base;
 
 use \titon\Titon;
+use \titon\base\BaseException;
 use \titon\utility\Set;
 use \Closure;
 use \ReflectionClass;
@@ -39,7 +40,6 @@ class Base {
 	 *
 	 * @access public
 	 * @param array $config
-	 * @return void
 	 */
 	public function __construct(array $config = array()) {
 		$this->configure($config);
@@ -103,7 +103,7 @@ class Base {
 	 * @access public
 	 * @param string|array $key
 	 * @param mixed $value
-	 * @return Base
+	 * @return \titon\base\Base
 	 * @chainable
 	 * @final
 	 */
@@ -281,7 +281,7 @@ class Base {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return Decorator
+	 * @return \titon\base\Base
 	 * @chainable
 	 */
 	public function allowObject($classes) {
@@ -301,9 +301,9 @@ class Base {
 	 *
 	 * @access public
 	 * @param array|string $options
-	 * @param Closure $closure
-	 * @return Decorator
-	 * @throws BaseException
+	 * @param \Closure $closure
+	 * @return \titon\base\Base
+	 * @throws \titon\base\BaseException
 	 * @chainable
 	 */
 	public function attachObject($options, Closure $closure = null) {
@@ -339,7 +339,7 @@ class Base {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return Decorator
+	 * @return \titon\base\Base
 	 * @chainable
 	 */
 	public function detachObject($class) {
@@ -357,7 +357,7 @@ class Base {
 	 * @access public
 	 * @param string $class
 	 * @return object|null
-	 * @throws BaseException
+	 * @throws \titon\base\BaseException
 	 */
 	public function getObject($class) {
 		if (in_array($class, $this->_restricted)) {
@@ -436,7 +436,7 @@ class Base {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return Decorator
+	 * @return \titon\base\Base
 	 * @chainable
 	 */
 	public function restrictObject($classes) {

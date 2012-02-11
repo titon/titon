@@ -13,6 +13,7 @@ use \titon\Titon;
 use \titon\log\Benchmark;
 use \titon\libs\dispatchers\DispatcherAbstract;
 use \titon\libs\exceptions\HttpException;
+use \Exception;
 
 /**
  * FrontDevDispatcher is used as the default dispatching mechanism, sometimes referred to as a Front Controller.

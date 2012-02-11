@@ -190,7 +190,7 @@ class Session extends Base {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return Session
+	 * @return \titon\state\Session
 	 * @chainable
 	 */
 	public function remove($key) {
@@ -205,7 +205,7 @@ class Session extends Base {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return Session
+	 * @return \titon\state\Session
 	 * @chainable
 	 */
 	public function set($key, $value) {
@@ -218,8 +218,8 @@ class Session extends Base {
 	 * Set the SessionAdapter to use.
 	 * 
 	 * @access public
-	 * @param SessionAdapter $adapter 
-	 * @return Session
+	 * @param \titon\libs\adapters\SessionAdapter $adapter
+	 * @return \titon\state\Session
 	 * @chainable
 	 */
 	public function setAdapter(SessionAdapter $adapter) {

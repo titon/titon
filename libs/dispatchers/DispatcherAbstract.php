@@ -48,8 +48,8 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 	 * Load the controller based on the routing params. If the controller does not exist, throw exceptions.
 	 * 
 	 * @access public
-	 * @return Controller
-	 * @throws DispatcherException
+	 * @return \titon\libs\controllers\Controller
+	 * @throws \titon\libs\dispatchers\DispatcherException
 	 * @final
 	 */
 	final public function loadController() {
@@ -92,7 +92,7 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws DispatcherException
+	 * @throws \titon\libs\dispatchers\DispatcherException
 	 */
 	public function run() {
 		throw new DispatcherException('You must define your own run() method to dispatch the current request.');

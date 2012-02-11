@@ -9,6 +9,8 @@
 
 namespace titon\constant;
 
+use \titon\constant\ConstantException;
+
 /**
  * HTTP related constants and static variables.
  *
@@ -201,7 +203,7 @@ class Http {
 	 * @access public
 	 * @param string|array $type
 	 * @return string
-	 * @throws ConstantException
+	 * @throws \titon\constant\ConstantException
 	 * @static
 	 */
 	public static function contentType($type) {
@@ -251,7 +253,7 @@ class Http {
 	 * @access public
 	 * @param int $code
 	 * @return string
-	 * @throws ConstantException
+	 * @throws \titon\constant\ConstantException
 	 * @static
 	 */
 	public static function statusCode($code) {

@@ -72,7 +72,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @param string $catalog
 	 * @param string $ext
 	 * @return string 
-	 * @throws TranslatorException
+	 * @throws \titon\libs\translators\TranslatorException
 	 */
 	public function getFilePath($module, $catalog, $ext) {
 		$locales = $this->getFileCycle();
@@ -101,7 +101,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @access public
 	 * @param string $key
 	 * @return string
-	 * @throws TranslatorException
+	 * @throws \titon\libs\translators\TranslatorException
 	 */
 	public function getMessage($key) {
 		return $this->cacheMethod(__FUNCTION__, $key, function($self) use ($key) {
@@ -126,7 +126,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @param string $module
 	 * @param string $catalog
 	 * @return array
-	 * @throws TranslatorException
+	 * @throws \titon\libs\translators\TranslatorException
 	 */
 	public function parseFile($module, $catalog) {
 		throw new TranslatorException(sprintf('You must define the parseFile() method within your %s.', get_class($this)));
@@ -138,7 +138,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @access public
 	 * @param string $key
 	 * @return array
-	 * @throws TranslatorException
+	 * @throws \titon\libs\translators\TranslatorException
 	 */
 	public function parseKey($key) {
 		return $this->cacheMethod(__FUNCTION__, $key, function($self) use ($key) {

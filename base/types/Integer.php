@@ -35,8 +35,7 @@ class Integer extends Type {
 	 * @access public
 	 * @param mixed $value
 	 * @param int $base
-	 * @return void
-	 * @throws BaseException
+	 * @throws \titon\base\BaseException
 	 */
 	public function __construct($value, $base = 10) {
 		parent::__construct((int) $value);
@@ -53,7 +52,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function add($no) {
@@ -79,8 +78,8 @@ class Integer extends Type {
 	 * Run an advanced expression/calculation through the use of a closure.
 	 *
 	 * @access public
-	 * @param Closure $expr
-	 * @return Number
+	 * @param \Closure $expr
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function calculate(Closure $expr) {
@@ -124,7 +123,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function divide($no) {
@@ -148,8 +147,8 @@ class Integer extends Type {
 	 * Evaluate an expression to return a boolean.
 	 *
 	 * @access public
-	 * @param Closure $expr
-	 * @return Number
+	 * @param \Closure $expr
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function evaluate(Closure $expr) {
@@ -274,7 +273,7 @@ class Integer extends Type {
 	 * @access public
 	 * @param int $min
 	 * @param int $max
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function limit($min, $max) {
@@ -286,7 +285,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $min
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function min($min) {
@@ -302,7 +301,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $max
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function max($max) {
@@ -318,7 +317,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function multiply($no) {
@@ -332,7 +331,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function modulus($no) {
@@ -345,7 +344,7 @@ class Integer extends Type {
 	 * Convert the value to its negative equivalent.
 	 *
 	 * @access public
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function negate() {
@@ -358,6 +357,7 @@ class Integer extends Type {
 	 * Is the current value not equal to the passed value.
 	 *
 	 * @access public
+	 * @param int $no
 	 * @return boolean
 	 */
 	public function notEquals($no) {
@@ -381,7 +381,7 @@ class Integer extends Type {
 	 * Use a hacky way of simply reversing the string.
 	 *
 	 * @access public
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function reverse() {
@@ -402,7 +402,7 @@ class Integer extends Type {
 	 * @access public
 	 * @param int $precision
 	 * @param int $mode
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function round($precision = 0, $mode = PHP_ROUND_HALF_UP) {
@@ -416,7 +416,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $step
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function shiftLeft($step) {
@@ -430,7 +430,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $step
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function shiftRight($step) {
@@ -471,7 +471,7 @@ class Integer extends Type {
 	 *
 	 * @access public
 	 * @param int $no
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 * @chainable
 	 */
 	public function subtract($no) {
@@ -554,7 +554,7 @@ class Integer extends Type {
 	 * Return a new instance based on the current value.
 	 *
 	 * @access public
-	 * @return Number
+	 * @return \titon\base\types\Number
 	 */
 	public function valueOf() {
 		return new self($this->_value, $this->_base);

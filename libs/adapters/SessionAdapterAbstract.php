@@ -23,7 +23,6 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 	 * Register the handler before the session is started.
 	 * 
 	 * @access public
-	 * @return void
 	 */
 	public function __construct() {
 		$this->register();

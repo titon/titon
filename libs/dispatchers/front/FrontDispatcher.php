@@ -12,6 +12,7 @@ namespace titon\libs\dispatchers\front;
 use \titon\Titon;
 use \titon\libs\dispatchers\DispatcherAbstract;
 use \titon\libs\exceptions\HttpException;
+use \Exception;
 
 /**
  * FrontDispatcher is used as the default dispatching mechanism, sometimes referred to as a Front Controller.

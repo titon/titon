@@ -104,7 +104,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * 
 	 * @access public
 	 * @param string $alias
-	 * @param Closure $helper
+	 * @param \Closure $helper
 	 * @return void
 	 * @final
 	 */
@@ -211,7 +211,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * The output of the rendering process. The output changes depending on the current rendering stage.
 	 *
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
 	public function content() {
 		return $this->_content;
@@ -239,7 +239,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
-	 * @throws EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function open($path, array $variables = array()) {
 		throw new EngineException('You must define the open() method within your engine.');
@@ -272,7 +272,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
-	 * @throws EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function render($path, array $variables = array()) {
 		throw new EngineException('You must define the render() method within your Engine.');
@@ -285,7 +285,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function run() {
 		throw new EngineException('You must define the run() method within your Engine.');
@@ -297,7 +297,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @access public
 	 * @param string|array $key
 	 * @param mixed $value
-	 * @return Engine
+	 * @return \titon\libs\engines\Engine
 	 * @chainable
 	 */
 	public function set($key, $value = null) {

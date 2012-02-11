@@ -33,7 +33,6 @@ class Loader {
 	 * Define autoloader and attempt to autoload from include_paths first.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct() {
 		spl_autoload_extensions('.php');
@@ -139,7 +138,7 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string|array $paths
-	 * @return Loader
+	 * @return \titon\core\Loader
 	 * @chainable
 	 */
 	public function includePath($paths) {
@@ -161,7 +160,7 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return Loader
+	 * @return \titon\core\Loader
 	 * @chainable
 	 */
 	public function remove($key) {
@@ -176,8 +175,8 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @param Closure $loader
-	 * @return Loader
+	 * @param \Closure $loader
+	 * @return \titon\core\Loader
 	 * @chainable
 	 */
 	public function setup($key, Closure $loader) {

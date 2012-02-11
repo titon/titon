@@ -23,12 +23,11 @@ class HttpException extends Exception {
 	 * Set the HTTP status code and message.
 	 *
 	 * @access public
-	 * @param $message
-	 * @param $code
-	 * @param $previous
-	 * @return void
+	 * @param string $message
+	 * @param int $code
+	 * @param mixed $previous
 	 */
-	public function __construct($message, $code, $previous) {
+	public function __construct($message, $code = 0, $previous) {
 		if ($code && !isset(Http::$statusCodes[$code])) {
 			$code = 0;
 		}

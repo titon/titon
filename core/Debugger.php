@@ -68,7 +68,6 @@ class Debugger {
 	 * Initialize the error/exception/debug handling.
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct() {
 		ini_set('log_errors', true);
@@ -347,7 +346,7 @@ class Debugger {
 	 * Handler for catching uncaught exceptions.
 	 *
 	 * @access public
-	 * @param Exception $exception
+	 * @param \Exception $exception
 	 * @return void
 	 */
 	public function uncaught(Exception $exception) {

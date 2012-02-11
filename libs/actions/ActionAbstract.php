@@ -31,7 +31,7 @@ abstract class ActionAbstract extends Base implements Action {
 	 * Controller object.
 	 *
 	 * @access public
-	 * @var Controller
+	 * @var \titon\libs\controllers\Controller
 	 */
 	public $controller;
 
@@ -39,7 +39,7 @@ abstract class ActionAbstract extends Base implements Action {
 	 * Store the parent Controller.
 	 *
 	 * @access public
-	 * @param Controller $controller
+	 * @param \titon\libs\controllers\Controller $controller
 	 * @return void
 	 */
 	public function setController(Controller $controller) {
@@ -51,7 +51,7 @@ abstract class ActionAbstract extends Base implements Action {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws ActionException
+	 * @throws \titon\libs\actions\ActionException
 	 */
 	public function run() {
 		throw new ActionException(sprintf('You must define the run() method within your %s Action.', get_class($this)));

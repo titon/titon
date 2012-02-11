@@ -11,6 +11,7 @@ namespace titon\libs\dispatchers\front;
 
 use \titon\libs\dispatchers\DispatcherAbstract;
 use \titon\libs\exceptions\HttpException;
+use \Exception;
 
 /**
  * FrontLightDispatcher is a very lightweight replacement for the FrontDispatcher. 

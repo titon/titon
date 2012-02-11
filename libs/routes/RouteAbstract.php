@@ -109,7 +109,6 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @param string $path
 	 * @param array $route
 	 * @param array $config
-	 * @return void
 	 */
 	public function __construct($path, array $route = array(), array $config = array()) {
 		$this->_path = $path;

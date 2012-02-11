@@ -20,7 +20,7 @@ interface Engine {
 	 * The current output within the rendering process. The output changes depending on the current rendering stage.
 	 *
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
 	public function content();
 
@@ -66,7 +66,7 @@ interface Engine {
 	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
-	 * @return string
+	 * @return void
 	 */
 	public function run();
 

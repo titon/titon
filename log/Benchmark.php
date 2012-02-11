@@ -35,7 +35,6 @@ class Benchmark {
 	 * Disable the class to enforce static methods.
 	 *
 	 * @access private
-	 * @return void
 	 */
 	private function __construct() { }
 
@@ -77,7 +76,7 @@ class Benchmark {
 			$benchmarks = array(self::$_benchmarks[$key]);
 		}
 
-		if (!empty($benchmarks)) {
+		if (isset($benchmarks)) {
 			$peakMemory = memory_get_peak_usage();
 
 			foreach ($benchmarks as &$bm) {
@@ -115,7 +114,7 @@ class Benchmark {
 	 * @access public
 	 * @param string $key
 	 * @param boolean $log
-	 * @return string|mixed
+	 * @return mixed
 	 * @static
 	 */
 	public static function stop($key = 'benchmark', $log = false) {
@@ -135,6 +134,8 @@ class Benchmark {
 
 			return self::$_benchmarks[$key];
 		}
+
+		return false;
 	}
 
 }

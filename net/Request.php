@@ -73,7 +73,7 @@ class Request extends Base {
 	 * @access public
 	 * @param string $type
 	 * @return boolean
-	 * @throws NetException
+	 * @throws \titon\net\NetException
 	 */
 	public function accepts($type = 'html') {
 		$contentType = (array) Http::contentType($type);
@@ -359,7 +359,7 @@ class Request extends Base {
 			$referrer = $self->env('HTTP_REFERER');
 
 			if (empty($referrer)) {
-				return;
+				return '';
 			}
 
 			$host = $self->env('HTTP_HOST');

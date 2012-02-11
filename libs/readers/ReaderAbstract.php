@@ -33,7 +33,6 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 *
 	 * @access public
 	 * @param $path
-	 * @return void
 	 */
 	public function __construct($path) {
 		if (substr($path, -strlen(self::EXT)) != self::EXT) {

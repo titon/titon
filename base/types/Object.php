@@ -41,7 +41,6 @@ class Object {
 	 *
 	 * @access public
 	 * @param array $params
-	 * @return void
 	 */
 	public function __construct(array $params = array()) {
 		if (!empty($params)) {
@@ -107,7 +106,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return Object
+	 * @return \titon\base\types\Object
 	 * @chainable
 	 */
 	public function __unset($name) {
@@ -119,9 +118,9 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @param Closure $method
-	 * @return Object
-	 * @throws BaseException
+	 * @param \Closure $method
+	 * @return \titon\base\types\Object
+	 * @throws \titon\base\BaseException
 	 * @chainable
 	 */
 	public function addMethod($name, Closure $method) {
@@ -140,8 +139,8 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @param mixed $value
-	 * @return Object
-	 * @throws BaseException
+	 * @return \titon\base\types\Object
+	 * @throws \titon\base\BaseException
 	 * @chainable
 	 */
 	public function addProperty($name, $value = null) {
@@ -160,7 +159,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @param array $args
-	 * @throws BaseException
+	 * @throws \titon\base\BaseException
 	 * @return mixed
 	 */
 	public function getMethod($name, $args) {
@@ -203,7 +202,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @return mixed
-	 * @throws BaseException
+	 * @throws \titon\base\BaseException
 	 */
 	public function getProperty($name) {
 		if ($this->hasProperty($name)) {
@@ -240,7 +239,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return Object
+	 * @return \titon\base\types\Object
 	 * @chainable
 	 */
 	public function removeMethod($name) {
@@ -254,7 +253,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return Object
+	 * @return \titon\base\types\Object
 	 * @chainable
 	 */
 	public function removeProperty($name) {
@@ -268,8 +267,8 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @param Closure $method
-	 * @return Object
+	 * @param \Closure $method
+	 * @return \titon\base\types\Object
 	 * @chainable
 	 */
 	public function setMethod($name, Closure $method) {
@@ -289,7 +288,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @param mixed $value
-	 * @return Object
+	 * @return \titon\base\types\Object
 	 * @chainable
 	 */
 	public function setProperty($name, $value) {

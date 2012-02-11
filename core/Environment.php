@@ -86,8 +86,8 @@ class Environment {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return Environment
-	 * @throws CoreException
+	 * @return \titon\core\Environment
+	 * @throws \titon\core\CoreException
 	 * @chainable
 	 */
 	public function fallbackAs($key) {
@@ -170,8 +170,8 @@ class Environment {
 	 * @param string $key
 	 * @param int $type
 	 * @param array $hosts
-	 * @return Environment
-	 * @throws CoreException
+	 * @return \titon\core\Environment
+	 * @throws \titon\core\CoreException
 	 * @chainable
 	 */
 	public function setup($key, $type, array $hosts) {

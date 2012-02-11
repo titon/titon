@@ -22,7 +22,7 @@ interface Helper {
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param Engine $engine
+	 * @param \titon\libs\engines\Engine $engine
 	 * @return void
 	 */
 	public function preRender(Engine $engine);
@@ -31,7 +31,7 @@ interface Helper {
 	 * Triggered after a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param Engine $engine
+	 * @param \titon\libs\engines\Engine $engine
 	 * @return void
 	 */
 	public function postRender(Engine $engine);

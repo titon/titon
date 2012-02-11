@@ -189,7 +189,7 @@ class HtmlHelper extends HelperAbstract {
 	 *
 	 * @access public
 	 * @param string $source
-	 * @param string $isBlock
+	 * @param boolean $isBlock
 	 * @return string
 	 */
 	public function script($source, $isBlock = false) {

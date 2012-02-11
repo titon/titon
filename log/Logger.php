@@ -41,7 +41,6 @@ class Logger {
 	 * Disable the class to enforce static methods.
 	 *
 	 * @access private
-	 * @return void
 	 */
 	private function __construct() { }
 

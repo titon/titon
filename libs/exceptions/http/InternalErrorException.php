@@ -22,10 +22,9 @@ class InternalErrorException extends HttpException {
 	 * Set the HTTP status code and message.
 	 *
 	 * @access public
-	 * @param $message
-	 * @param $code
-	 * @param $previous
-	 * @return void
+	 * @param string $message
+	 * @param int $code
+	 * @param mixed $previous
 	 */
 	public function __construct($message, $code = 500, $previous) {
 		parent::__construct($message, $code, $previous);
