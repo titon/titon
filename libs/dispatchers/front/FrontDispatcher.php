@@ -39,8 +39,12 @@ class FrontDispatcher extends DispatcherAbstract {
 
 		try {
 			$controller->dispatchAction();
+
 		} catch (HttpException $e) {
-			$controller->throwError($e->getCode());
+			$controller->throwError($e->getCode(), array(
+				'message' => $e->getMessage()
+			));
+
 		} catch (Exception $e) {
 			debug($e->getCode());
 		}

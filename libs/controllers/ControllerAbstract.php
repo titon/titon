@@ -11,6 +11,7 @@ namespace titon\libs\controllers;
 
 use \titon\Titon;
 use \titon\base\Base;
+use \titon\constant\Http;
 use \titon\libs\actions\Action;
 use \titon\libs\controllers\Controller;
 use \titon\libs\controllers\ControllerException;
@@ -83,7 +84,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 		// Do not include the base controller methods
 		$methods = array_diff(get_class_methods($this), get_class_methods(__CLASS__));
 
-		if (!in_array($action, $methods)) {
+		if (!in_array($action, $methods) || substr($action, 0, 1) == '_') {
 			throw new ControllerException('Your action does not exist, or is not public, or is found within the parent Controller.');
 		}
 
@@ -154,24 +155,20 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 */
 	public function throwError($action, array $args = array()) {
 		if (empty($args['pageTitle'])) {
-			/* @todo
-			 * if (is_numeric($action)) {
-				$args['pageTitle'] = $action;
-
-				$title = $this->response->statusCodes($action);
-
-				if ($title !== null) {
-					$args['pageTitle'] .= ' - ' . $title;
-
-					$this->response->status($action);
-				}
+			if (is_numeric($action)) {
+				$args['pageTitle'] = $action . ' - ' . Http::statusCode($action);
 			} else {
 				$args['pageTitle'] = Inflector::normalize($action);
-			}*/
+			}
+		}
+
+		// Must be an HTTP code, set the status
+		if (is_numeric($action)) {
+			$this->response->status($action);
 		}
 
 		$args['referrer'] = $this->request->referrer();
-		$args['url'] = Titon::router()->segment(true);
+		$args['url'] = Titon::router()->segments(true);
 
 		$this->engine->set($args);
 		$this->engine->setup(array(
