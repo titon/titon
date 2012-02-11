@@ -34,16 +34,18 @@ class FrontLightDispatcher extends DispatcherAbstract {
 			$controller->dispatchAction();
 		} catch (HttpException $e) {
 			$controller->throwError($e->getCode());
+		} catch (Exception $e) {
+			debug($e->getCode());
 		}
 
 		$controller->postProcess();
 
-		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+		/*if ($controller->hasObject('engine') && $controller->engine->config('render')) {
 			$engine = $controller->engine;
 			$engine->preRender();
 			$engine->run();
 			$engine->postRender();
-		}
+		}*/
 	}
 	
 }

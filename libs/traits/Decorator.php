@@ -10,7 +10,7 @@
 namespace titon\libs\traits;
 
 use \titon\Titon;
-use \titon\base\BaseException;
+use \titon\libs\traits\TraitException;
 use \titon\utility\Inflector;
 use \titon\utility\Set;
 use \Closure;
@@ -22,7 +22,7 @@ use \Closure;
  *
  * @package	titon.libs.traits
  * @uses	titon\Titon
- * @uses	titon\base\BaseException
+ * @uses	titon\base\TraitException
  * @uses	titon\utility\Inflector
  * @uses	titon\utility\Set
  */
@@ -136,7 +136,7 @@ trait Decorator {
 	 * @param array|string $options
 	 * @param Closure $closure
 	 * @return Decorator
-	 * @throws BaseException
+	 * @throws TraitException
 	 * @chainable
 	 */
 	public function attachObject($options, Closure $closure = null) {
@@ -153,7 +153,7 @@ trait Decorator {
 		);
 
 		if (empty($options['alias'])) {
-			throw new BaseException('You must define an alias to reference the attached object.');
+			throw new TraitException('You must define an alias to reference the attached object.');
 		} else {
 			$options['alias'] = Inflector::variable($options['alias']);
 		}
@@ -165,6 +165,28 @@ trait Decorator {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Parses the $_classes property and attaches any defined classes.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function decorate() {
+		if (!empty($this->_classes)) {
+			foreach ($this->_classes as $class => $options) {
+				if (is_string($options)) {
+					$options = array('class' => $options);
+				}
+
+				if (empty($options['alias'])) {
+					$options['alias'] = is_string($class) ? $class : Titon::loader()->baseClass($options['class']);
+				}
+
+				$this->attachObject($options);
+			}
+		}
 	}
 
 	/**
@@ -190,7 +212,7 @@ trait Decorator {
 	 * @access public
 	 * @param string $class
 	 * @return object|null
-	 * @throws BaseException
+	 * @throws TraitException
 	 */
 	public function getObject($class) {
 		if (in_array($class, $this->_restricted)) {
@@ -200,7 +222,7 @@ trait Decorator {
 			return $this->_loaded[$class];
 
 		} else if (!isset($this->_classes[$class])) {
-			throw new BaseException(sprintf('No class configuration could be found for %s.', $class));
+			throw new TraitException(sprintf('No class configuration could be found for %s.', $class));
 		}
 
 		// Gather options
@@ -223,7 +245,7 @@ trait Decorator {
 		}
 		
 		if ($options['interface'] && !($object instanceof $options['interface'])) {
-			throw new BaseException(sprintf('%s does not implement the %s interface.', get_class($object), $options['interface']));
+			throw new TraitException(sprintf('%s does not implement the %s interface.', get_class($object), $options['interface']));
 		}
 
 		$this->_loaded[$class] =& $object;
@@ -240,28 +262,6 @@ trait Decorator {
 	 */
 	public function hasObject($class) {
 		return (isset($this->_loaded[$class]) || isset($this->__objectMap[$class]));
-	}
-
-	/**
-	 * Parses the $_classes property and attaches any defined classes.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize() {
-		if (!empty($this->_classes)) {
-			foreach ($this->_classes as $class => $options) {
-				if (is_string($options)) {
-					$options = array('class' => $options);
-				}
-
-				if (empty($options['alias'])) {
-					$options['alias'] = is_string($class) ? $class : Titon::loader()->baseClass($options['class']);
-				}
-
-				$this->attachObject($options);
-			}
-		}
 	}
 
 	/**

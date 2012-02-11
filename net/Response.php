@@ -192,11 +192,12 @@ class Response extends Base {
 	 * @return void
 	 */
 	public function respond() {
-		header(sprintf('%s %s %s',
+		/* todo throwing internal errors?
+		 * header(sprintf('%s %d %s',
 			Http::HTTP_11,
 			$this->_status,
 			Http::statusCode($this->_status)
-		));
+		));*/
 
 		// Content type
 		if (!empty($this->_type)) {

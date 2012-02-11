@@ -40,7 +40,7 @@ use \Closure;
  * @abstract
  */
 abstract class ControllerAbstract extends Base implements Controller {
-	use Decorator;
+	//use Decorator;
 
 	/**
 	 * Configuration.
@@ -79,7 +79,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 		if (empty($args)) {
 			$args = $this->config('args');
 		}
-		
+
 		// Do not include the base controller methods
 		$methods = array_diff(get_class_methods($this), get_class_methods(__CLASS__));
 
@@ -154,7 +154,8 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 */
 	public function throwError($action, array $args = array()) {
 		if (empty($args['pageTitle'])) {
-			if (is_numeric($action)) {
+			/* @todo
+			 * if (is_numeric($action)) {
 				$args['pageTitle'] = $action;
 
 				$title = $this->response->statusCodes($action);
@@ -166,7 +167,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 				}
 			} else {
 				$args['pageTitle'] = Inflector::normalize($action);
-			}
+			}*/
 		}
 
 		$args['referrer'] = $this->request->referrer();

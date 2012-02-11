@@ -107,17 +107,18 @@ class Environment {
 	 * @return void
 	 */
 	public function initialize() {
-		$path = APP_CONFIG . 'environments' . DS . Inflector::filename($this->_current, 'php', false);
 		$host = $_SERVER['HTTP_HOST'];
-
-		if (file_exists($path)) {
-			include_once $path;
-		}
 
 		if (isset($this->_hostMapping[$host])) {
 			$this->_current = $this->_hostMapping[$host];
 		} else {
 			$this->_current = $this->_fallback;
+		}
+
+		$path = APP_CONFIG . 'environments' . DS . Inflector::filename($this->_current, 'php', false);
+
+		if (file_exists($path)) {
+			include_once $path;
 		}
 	}
 	

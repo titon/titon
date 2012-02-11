@@ -62,21 +62,6 @@ class Application {
 	}
 
 	/**
-	 * Return all module controllers.
-	 *
-	 * @access public
-	 * @param string $module
-	 * @return array
-	 */
-	public function moduleControllers($module) {
-		if (isset($this->_controllers[$module])) {
-			return $this->_controllers[$module];
-		}
-
-		throw new CoreException(sprintf('Could not locate controllers for %s module.', $module));
-	}
-
-	/**
 	 * Return all modules
 	 *
 	 * @access public
@@ -87,7 +72,7 @@ class Application {
 	}
 
 	/**
-	 * Bootstrap the application.
+	 * Bootstrap the application after Titon has startup.
 	 *
 	 * @access public
 	 * @return void

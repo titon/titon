@@ -44,30 +44,29 @@ class Dispatch {
 	 */
 	public function run() {
 		$params = Titon::router()->current()->params();
-		$dispatch = null;
+		$dispatcher = null;
 
 		if (!empty($this->_mapping)) {
 
 			// Specific controller and module
 			if (isset($this->_mapping[$params['module'] . '.' . $params['controller']])) {
-				$dispatch = $this->_mapping[$params['module'] . '.' . $params['controller']];
+				$dispatcher = $this->_mapping[$params['module'] . '.' . $params['controller']];
 
 			// All controllers within a specific container
 			} else if (isset($this->_mapping[$params['module'] . '.*'])) {
-				$dispatch = $this->_mapping[$params['module'] . '.*'];
+				$dispatcher = $this->_mapping[$params['module'] . '.*'];
 
 			// Specific controller within any container
 			} else if (isset($this->_mapping['*.' . $params['controller']])) {
-				$dispatch = $this->_mapping['*.' . $params['controller']];
+				$dispatcher = $this->_mapping['*.' . $params['controller']];
 
 			// Apply to all controllers and containers
 			} else if (isset($this->_mapping['*.*'])) {
-				$dispatch = $this->_mapping['*.*'];
+				$dispatcher = $this->_mapping['*.*'];
 			}
 		}
 
-		if ($dispatch instanceof Dispatcher) {
-			$dispatcher = $dispatch;
+		if ($dispatcher instanceof Dispatcher) {
 			$dispatcher->configure($params);
 			
 		} else if (Titon::environment()->isDevelopment()) {
@@ -96,11 +95,11 @@ class Dispatch {
 		);
 
 		if ($scope['module'] != '*') {
-			$scope['module'] = Inflector::underscore($scope['module']);
+			$scope['module'] = Inflector::slugify($scope['module']);
 		}
 
 		if ($scope['controller'] != '*') {
-			$scope['controller'] = Inflector::underscore($scope['controller']);
+			$scope['controller'] = Inflector::slugify($scope['controller']);
 		}
 
 		$this->_mapping[$scope['module'] . '.' . $scope['controller']] = $dispatcher;

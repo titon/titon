@@ -49,6 +49,10 @@ class Event {
 	 * @return void
 	 */
 	public function execute($event, $object = null) {
+		if (empty($this->_listeners)) {
+			return;
+		}
+
 		$route = Titon::router()->current();
 
 		foreach ($this->_listeners as &$listener) {
@@ -57,7 +61,7 @@ class Event {
 			}
 
 			foreach (array('module', 'controller', 'action') as $action) {
-				if (($listener['scope'][$action] !== $route->param($action)) || ($listener['scope'][$action] !== '*')) {
+				if ($listener['scope'][$action] !== $route->param($action) || $listener['scope'][$action] !== '*') {
 					continue;
 				}
 			}
@@ -69,7 +73,7 @@ class Event {
 					$obj($event, $object);
 				}
 				
-			} else if (method_exists($event, $object)) {
+			} else if (method_exists($event, $obj)) {
 				$obj->{$event}($object);
 			}
 

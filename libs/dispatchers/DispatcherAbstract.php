@@ -26,7 +26,7 @@ use \titon\libs\traits\Decorator;
  * @abstract
  */
 abstract class DispatcherAbstract extends Base implements Dispatcher {
-	use Decorator;
+	//use Decorator;
 
 	/**
 	 * Lazy load the controller object. Do not allow overrides.
@@ -74,15 +74,17 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 	public function output() {
 		$controller = $this->controller;
 
-		if ($type = $controller->config('ext')) {
-			$controller->response->type($type);
-		}
+		if ($controller->hasObject('response')) {
+			if ($type = $controller->config('ext')) {
+				$controller->response->type($type);
+			}
 
-		if ($controller->hasObject('engine')) {
-			$controller->response->body($controller->engine->content());
-		}
+			/*if ($controller->hasObject('engine')) {
+				$controller->response->body($controller->engine->content());
+			}*/
 
-		$controller->response->respond();
+			$controller->response->respond();
+		}
 	}
 
 	/**

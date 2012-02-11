@@ -41,12 +41,14 @@ class FrontDispatcher extends DispatcherAbstract {
 			$controller->dispatchAction();
 		} catch (HttpException $e) {
 			$controller->throwError($e->getCode());
+		} catch (Exception $e) {
+			debug($e->getCode());
 		}
 		
 		$controller->postProcess();
 		$event->execute('postProcess', $controller);
 
-		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+		/*if ($controller->hasObject('engine') && $controller->engine->config('render')) {
 			$engine = $controller->engine;
 			
 			$engine->preRender();
@@ -56,7 +58,7 @@ class FrontDispatcher extends DispatcherAbstract {
 
 			$engine->postRender();
 			$event->execute('postRender', $engine);
-		}
+		}*/
 
 		$event->execute('postDispatch');
 	}

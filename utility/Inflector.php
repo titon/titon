@@ -121,10 +121,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function slugify($string) {
-		$string = preg_replace('/[^-A-Za-z0-9\s]+/', '', $string);
-		$string = str_replace(' ', '-', ucwords(str_replace('-', '_', $string)));
-		
-		return $string;
+		return strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-A-Za-z0-9\s]+/', '', $string))));
 	}
 
 	/**

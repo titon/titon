@@ -33,7 +33,7 @@ use \Closure;
  * @abstract
  */
 abstract class EngineAbstract extends Base implements Engine {
-	use Decorator;
+	//use Decorator;
 
 	/**
 	 * Constants for all the possible types of templates.

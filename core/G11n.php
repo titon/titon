@@ -719,7 +719,7 @@ class G11n {
 		
 		$cacheKey = $module . '.' . $catalog . '.' . $this->current('id');
 
-		if (isset($this->_storage)) {
+		if ($this->_storage instanceof Storage) {
 			$messages = $this->_storage->get($cacheKey);
 			
 			if (empty($messages)) {

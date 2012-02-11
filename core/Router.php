@@ -305,7 +305,7 @@ class Router {
 			}
 		}
 
-		return null;
+		return $this->_routes['root'];
 	}
 
 	/**

@@ -100,12 +100,12 @@ class Titon {
 		self::install('app', new Application(), true);
 		self::install('cache', new Cache(), true);
 		self::install('config', new Config(), true);
-		self::install('dispatch', new Dispatch(), true);
 		self::install('event', new Event(), true);
 		self::install('registry', new Registry(), true);
 		self::install('router', new Router(), true);
 		self::install('g11n', new G11n(), true);
 		self::install('environment', new Environment(), true);
+		self::install('dispatch', new Dispatch(), true);
 	}
 
 	/**
@@ -127,6 +127,21 @@ class Titon {
 	}
 
 	/**
+	 * Run the framework.
+	 *
+	 * @access public
+	 * @return void
+	 * @static
+	 */
+	public static function run() {
+		self::startup();
+		self::event()->execute('startup');
+		self::dispatch()->run();
+		self::event()->execute('shutdown');
+		self::shutdown();
+	}
+
+	/**
 	 * Startup the framework.
 	 *
 	 * @access public
@@ -138,8 +153,6 @@ class Titon {
 				$object->initialize();
 			}
 		}
-
-		self::event()->execute('startup');
 	}
 
 	/**
@@ -149,8 +162,6 @@ class Titon {
 	 * @return void
 	 */
 	public static function shutdown() {
-		self::event()->execute('shutdown');
-
 		foreach (self::$__memory as $key => $object) {
 			unset(self::$__memory[$key]);
 		}

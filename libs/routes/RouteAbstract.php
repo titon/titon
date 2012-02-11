@@ -26,7 +26,7 @@ use \titon\libs\traits\Decorator;
  * @abstract
  */
 abstract class RouteAbstract extends Base implements Route {
-	use Decorator;
+	//use Decorator;
 
 	/**
 	 * Pre-defined regex patterns.

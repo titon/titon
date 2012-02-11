@@ -190,17 +190,6 @@ class Request extends Base {
 			}
 		}
 
-		// Clear magic quotes, just in case
-		if (get_magic_quotes_gpc() > 0) {
-			$stripSlashes = function($data) {
-				return is_array($data) ? array_map($stripSlashes, $data) : filter_var($data, FILTER_SANITIZE_MAGIC_QUOTES);
-			};
-
-			$get = $stripSlashes($get);
-			$post = $stripSlashes($post);
-			$files = $stripSlashes($files);
-		}
-
 		$this->data = array_merge_recursive($post, $files);
 		$this->files = $files;
 		$this->get = $get;
