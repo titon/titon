@@ -79,9 +79,9 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 				$controller->response->type($type);
 			}
 
-			/*if ($controller->hasObject('engine')) {
+			if ($controller->hasObject('engine')) {
 				$controller->response->body($controller->engine->content());
-			}*/
+			}
 
 			$controller->response->respond();
 		}

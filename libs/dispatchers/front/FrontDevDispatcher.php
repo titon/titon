@@ -60,7 +60,7 @@ class FrontDevDispatcher extends DispatcherAbstract {
 		$event->execute('postProcess', $controller);
 		Benchmark::stop('Controller');
 
-		/*if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
 			$engine = $controller->engine;
 
 			Benchmark::start('View');
@@ -72,7 +72,7 @@ class FrontDevDispatcher extends DispatcherAbstract {
 			$engine->postRender();
 			$event->execute('postRender', $engine);
 			Benchmark::stop('View');
-		}*/
+		}
 
 		$event->execute('postDispatch');
 		Benchmark::stop('Dispatcher');

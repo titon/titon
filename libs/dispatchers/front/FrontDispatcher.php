@@ -52,7 +52,7 @@ class FrontDispatcher extends DispatcherAbstract {
 		$controller->postProcess();
 		$event->execute('postProcess', $controller);
 
-		/*if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
 			$engine = $controller->engine;
 			
 			$engine->preRender();
@@ -62,7 +62,7 @@ class FrontDispatcher extends DispatcherAbstract {
 
 			$engine->postRender();
 			$event->execute('postRender', $engine);
-		}*/
+		}
 
 		$event->execute('postDispatch');
 	}

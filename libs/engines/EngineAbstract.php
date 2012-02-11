@@ -14,6 +14,7 @@ use \titon\base\Base;
 use \titon\libs\engines\Engine;
 use \titon\libs\engines\EngineException;
 use \titon\libs\traits\Decorator;
+use \titon\libs\traits\Memoizer;
 use \titon\utility\Inflector;
 use \Closure;
 
@@ -33,7 +34,7 @@ use \Closure;
  * @abstract
  */
 abstract class EngineAbstract extends Base implements Engine {
-	//use Decorator;
+	use Memoizer; //use Decorator;
 
 	/**
 	 * Constants for all the possible types of templates.
@@ -103,10 +104,11 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * 
 	 * @access public
 	 * @param string $alias
-	 * @param Closure $helper 
+	 * @param Closure $helper
 	 * @return void
+	 * @final
 	 */
-	public function addHelper($alias, Closure $helper) {
+	final public function addHelper($alias, Closure $helper) {
 		$this->_helpers[] = $alias;
 
 		$this->attachObject(array(
@@ -119,9 +121,9 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * Get the filepath for a type of template: layout, wrapper, view, error, include
 	 *
 	 * @access public
-	 * @param string $type
-	 * @param string $path
-	 * @return string
+	 * @param int $type
+	 * @param string|null $path
+	 * @return string|null
 	 */
 	public function buildPath($type = self::TYPE_TPL, $path = null) {
 		$paths = array();
@@ -135,7 +137,7 @@ abstract class EngineAbstract extends Base implements Engine {
 		switch ($type) {
 			case self::TYPE_LAYOUT:
 				if (!empty($config['layout'])) {
-					$layout = Titon::loader()->ds($config['layout']);
+					$layout = $this->_preparePath($config['layout']);
 
 					$paths = array(
 						APP_MODULES . $template['module'] . '/views/private/layouts/' . $layout . '.tpl',
@@ -146,7 +148,7 @@ abstract class EngineAbstract extends Base implements Engine {
 
 			case self::TYPE_WRAPPER:
 				if (!empty($config['wrapper'])) {
-					$wrapper = Titon::loader()->ds($config['wrapper']);
+					$wrapper = $this->_preparePath($config['wrapper']);
 
 					$paths = array(
 						APP_MODULES . $template['module'] . '/views/private/wrappers/' . $wrapper . '.tpl',
@@ -156,7 +158,7 @@ abstract class EngineAbstract extends Base implements Engine {
 			break;
 
 			case self::TYPE_INCLUDE:
-				$path = Titon::loader()->ds($path);
+				$path = $this->_preparePath($path);
 
 				if (substr($path, -4) == '.tpl') {
 					$path = substr($path, 0, (strlen($path) - 4));
@@ -169,7 +171,7 @@ abstract class EngineAbstract extends Base implements Engine {
 			break;
 
 			case self::TYPE_ERROR:
-				$error = Titon::loader()->ds($template['action']);
+				$error = $this->_preparePath($template['action']);
 
 				$paths = array(
 					APP_MODULES . $template['module'] . '/views/private/errors/' . $error . '.tpl',
@@ -202,7 +204,7 @@ abstract class EngineAbstract extends Base implements Engine {
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	/**
@@ -223,7 +225,11 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return string
 	 */
 	public function data($key = null) {
-		return isset($this->_data[$key]) ? $this->_data[$key] : $this->_data;
+		if ($key == null) {
+			return $this->_data;
+		}
+
+		return isset($this->_data[$key]) ? $this->_data[$key] : null;
 	}
 
 	/**
@@ -275,7 +281,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	/**
 	 * Begins the staged rendering process. First stage, the system must render the template based on the module, 
 	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
-	 * wrap the current template ouput with the layout. Return the final result.
+	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
 	 * @return string
@@ -333,6 +339,25 @@ abstract class EngineAbstract extends Base implements Engine {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Prepare a path by converting slashes and removing .tpl.
+	 *
+	 * @access protected
+	 * @param $path
+	 * @return string
+	 */
+	protected function _preparePath($path) {
+		return $this->cacheMethod(__FUNCTION__, $path, function($self) use ($path) {
+			$path = Titon::loader()->ds($path);
+
+			if (substr($path, -4) == '.tpl') {
+				$path = substr($path, 0, (strlen($path) - 4));
+			}
+
+			return $path;
+		});
 	}
 
 }

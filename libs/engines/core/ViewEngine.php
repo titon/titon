@@ -62,7 +62,7 @@ class ViewEngine extends EngineAbstract {
 	/**
 	 * Begins the staged rendering process. First stage, the system must render the template based on the module, 
 	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
-	 * wrap the current template ouput with the layout. Return the final result.
+	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
 	 * @return void
@@ -72,7 +72,7 @@ class ViewEngine extends EngineAbstract {
 		$config = $this->config();
 
 		if (!$config['render']) {
-			return;
+			return '';
 
 		} else if ($this->_rendered) {
 			return $this->content();
