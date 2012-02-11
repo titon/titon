@@ -139,27 +139,36 @@ class Base {
 	 * @return array
 	 */
 	public function meta() {
-		$class = get_class($this);
-		$reflection = new ReflectionClass($this);
+		$callback = function($self) {
+			$class = get_class($self);
+			$reflection = new ReflectionClass($self);
 
-		return array(
-			'filePath' => Titon::loader()->toPath($class),
-			'className' => $class,
-			'shortClassName' => $reflection->getShortName(),
-			'namespace' => $reflection->getNamespaceName(),
-			'publicMethods' => $reflection->getMethods(ReflectionMethod::IS_PUBLIC),
-			'protectedMethods' => $reflection->getMethods(ReflectionMethod::IS_PROTECTED),
-			'privateMethods' => $reflection->getMethods(ReflectionMethod::IS_PRIVATE),
-			'staticMethods' => $reflection->getMethods(ReflectionMethod::IS_STATIC),
-			'publicProperties' => $reflection->getProperties(ReflectionMethod::IS_PUBLIC),
-			'protectedProperties' => $reflection->getProperties(ReflectionMethod::IS_PROTECTED),
-			'privateProperties' => $reflection->getProperties(ReflectionMethod::IS_PRIVATE),
-			'staticProperties' => $reflection->getProperties(ReflectionMethod::IS_STATIC),
-			'constants' => $reflection->getConstants(),
-			'interfaces' => $reflection->getInterfaceNames(),
-			'traits' => $reflection->getTraitNames(),
-			'parent' => $reflection->getParentClass()
-		);
+			return array(
+				'filePath' => Titon::loader()->toPath($class),
+				'className' => $class,
+				'shortClassName' => $reflection->getShortName(),
+				'namespace' => $reflection->getNamespaceName(),
+				'publicMethods' => $reflection->getMethods(ReflectionMethod::IS_PUBLIC),
+				'protectedMethods' => $reflection->getMethods(ReflectionMethod::IS_PROTECTED),
+				'privateMethods' => $reflection->getMethods(ReflectionMethod::IS_PRIVATE),
+				'staticMethods' => $reflection->getMethods(ReflectionMethod::IS_STATIC),
+				'publicProperties' => $reflection->getProperties(ReflectionMethod::IS_PUBLIC),
+				'protectedProperties' => $reflection->getProperties(ReflectionMethod::IS_PROTECTED),
+				'privateProperties' => $reflection->getProperties(ReflectionMethod::IS_PRIVATE),
+				'staticProperties' => $reflection->getProperties(ReflectionMethod::IS_STATIC),
+				'constants' => $reflection->getConstants(),
+				'interfaces' => $reflection->getInterfaceNames(),
+				'traits' => $reflection->getTraitNames(),
+				'parent' => $reflection->getParentClass()
+			);
+		};
+
+		// Use Memoizer if available
+		if (method_exists($this, 'cacheMethod')) {
+			return $this->cacheMethod(__FUNCTION__, null, $callback);
+		}
+
+		return $callback($this);
 	}
 
 	/**
