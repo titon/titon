@@ -11,8 +11,8 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 	app/
 		config/
 			environments/
-				development.php
-				production.php
+				dev.php
+				prod.php
 			sets/
 			setup.php
 		libs/
@@ -50,7 +50,6 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 		console/
 		constant/
 		core/
-		data/
 		libs/
 			actions/
 			adapters/
@@ -60,8 +59,10 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			drivers/
 			engines/
 			enums/
+			exceptions/
 			helpers/
 			listeners/
+			models/
 			packages/
 			readers/
 			routes/
@@ -70,7 +71,6 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			traits/
 			translators/
 			transporters/
-		locale/
 		log/
 		net/
 		state/
@@ -90,9 +90,11 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Dispatcher - Handles the dispatch cycle in the MVC paradigm.
 * Driver - Allows the model to access different types of databases; describes the schema. Only works with Titon's model system.
 * Engine - Handles the rendering of the view templates.
-* Enums - Pre-built convenience enums.
+* Enum - Pre-built convenience enums.
+* Exception - Pre-built exceptions.
 * Helper - Provides additional functionality to the view layer.
 * Listener - Objects that listen and wait to be triggered at specific events in the system.
+* Model - Represents a single entities data schema.
 * Package - A combination of library types into a single related entity.
 * Reader - Handles the loading of configuration file types: xml, json, yaml, etc
 * Route - Maps URLs to internal destinations.
