@@ -55,6 +55,13 @@ function dump() {
 	}
 }
 
+/**
+ * Convenience function for fetching a localized string.
+ *
+ * @param string $key
+ * @param array $params
+ * @return string
+ */
 function __($key, array $params = array()) {
 	return \titon\Titon::g11n()->translate($key, $params);
 }

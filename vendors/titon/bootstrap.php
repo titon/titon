@@ -12,7 +12,6 @@
  */
 define('CONSOLE', TITON . 'console' . DS);
 define('LIBRARY', TITON . 'libs' . DS);
-define('VENDORS', TITON . 'vendors' . DS);
 
 /**
  * App directory constants.
@@ -44,7 +43,7 @@ define('LIB_ROUTES', LIBRARY . 'routes' . DS);
 define('LIB_SHELLS', LIBRARY . 'shells' . DS);
 define('LIB_STORAGE', LIBRARY . 'storage' . DS);
 define('LIB_TRAITS', LIBRARY . 'traits' . DS);
-define('LIB_TRANSLATERS', LIBRARY . 'translaters' . DS);
+define('LIB_TRANSLATORS', LIBRARY . 'translators' . DS);
 define('LIB_TRANSPORTERS', LIBRARY . 'transporters' . DS);
 
 /**

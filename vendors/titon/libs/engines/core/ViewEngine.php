@@ -92,7 +92,7 @@ class ViewEngine extends EngineAbstract {
 			if ($path = $this->buildPath($type)) {
 				$this->_content = $this->render($path, $data);
 			} else {
-				throw new EngineException(sprintf('View template %s does not exist.', str_replace(ROOT, '', $path)));
+				throw new EngineException(sprintf('View template %s does not exist.', str_replace(APP, '', $path)));
 			}
 		}
 

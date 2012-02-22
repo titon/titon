@@ -46,7 +46,7 @@ class Loader {
 
 		// Set default include paths
 		$this->includePath(array(
-			APP, ROOT, TITON, LIBRARY, VENDORS
+			APP, TITON, LIBRARY, VENDORS
 		));
 	}
 
@@ -120,7 +120,7 @@ class Loader {
 	 * @return boolean
 	 */
 	public function import($path) {
-		foreach (array(ROOT, APP, TITON, VENDORS, LIBRARY) as $root) {
+		foreach (array(APP, TITON, VENDORS, LIBRARY) as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
 			if (file_exists($source)) {
@@ -209,7 +209,7 @@ class Loader {
 	 */
 	public function toNamespace($path) {
 		if (strpos($path, DS) !== false) {
-			$path = str_replace($this->ds(ROOT), '', $this->ds($path));
+			$path = str_replace($this->ds(VENDORS), '', $this->ds($path));
 			$path = str_replace(DS, NS, $this->stripExt($path));
 		}
 
