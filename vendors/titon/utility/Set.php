@@ -540,28 +540,29 @@ class Set {
 
 		while ($total > 0) {
 			$key = $paths[0];
+			$keyExists = array_key_exists($key, $search);
 
 			// Within the last path
 			if ($total == 1) {
-				if ($command == self::INSERT) {
+				if ($command === self::INSERT) {
 					$search[$key] = $value;
 
-				} else if ($command == self::REMOVE) {
+				} else if ($command === self::REMOVE) {
 					unset($search[$key]);
 					
-				} else if ($command == self::EXISTS) {
-					return isset($search[$key]);
+				} else if ($command === self::EXISTS) {
+					return $keyExists;
 					
-				} else if ($command == self::EXTRACT) {
-					return isset($search[$key]) ? $search[$key] : null;
+				} else if ($command === self::EXTRACT) {
+					return $keyExists ? $search[$key] : null;
 				}
 
 			// Break out of unexistent paths early
-			} else if (isset($search[$key]) && !is_array($search[$key]) && $command !== self::INSERT) {
-				if ($command == self::EXISTS) {
+			} else if (!$keyExists || ($keyExists && !is_array($search[$key]) && $command !== self::INSERT)) {
+				if ($command === self::EXISTS) {
 					return false;
 					
-				} else if ($command == self::EXTRACT) {
+				} else if ($command === self::EXTRACT) {
 					return null;
 
 				} else {
@@ -578,6 +579,7 @@ class Set {
 		}
 
 		unset($search);
+
 		return $set;
 	}
 
