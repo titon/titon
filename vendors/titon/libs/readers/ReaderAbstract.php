@@ -35,11 +35,13 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @param $path
 	 */
 	public function __construct($path) {
-		if (substr($path, -strlen(self::EXT)) != self::EXT) {
-			$path .= '.' self::EXT;
+		$ext = '.' . static::EXT;
+
+		if (substr($path, -strlen($ext)) != $ext) {
+			$path .= $ext;
 		}
 
-		$this->_path = $path;
+		$this->_path = APP_CONFIG . 'sets' . DS . $path;
 	}
 
 	/**
@@ -49,7 +51,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @return boolean
 	 */
 	public function fileExists() {
-		return file_exists(APP_CONFIG . 'sets' . DS . $this->getPath());
+		return file_exists($this->getPath());
 	}
 
 	/**

@@ -12,7 +12,7 @@ include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 /**
  * Test class for \titon\core\Config.
  */
-class ConfigTest extends PHPUnit_Framework_TestCase {
+class ConfigTest extends \PHPUnit_Framework_TestCase {
 
 	public $app = array(
 		'name' => 'Titon',
@@ -93,7 +93,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($this->object->get('Test.array.one') === true);
 		$this->assertTrue($this->object->get('Test.false') === false);
 		$this->assertTrue($this->object->get('Test.true') === true);
-		$this->assertTrue($this->object->get('Test.null') === null);
 		$this->assertTrue($this->object->get('Test.zero') === 0);
 		$this->assertTrue($this->object->get('Test.fakeKey') === null);
 
@@ -109,7 +108,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue($this->object->has('Test.number'));
 		$this->assertTrue($this->object->has('Test.true'));
 		$this->assertTrue($this->object->has('Test.false'));
-		$this->assertTrue($this->object->has('Test.null'));
 		$this->assertTrue($this->object->has('Test.zero'));
 
 		$this->assertFalse($this->object->has('App.id'));
@@ -119,43 +117,71 @@ class ConfigTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @todo Implement testLoad().
-	 *
+	 * Test that loading a config set works correctly.
+	 * Config file php.php is found within the app/config/sets/php.php file and uses the data from $test.
+	 */
 	public function testLoad() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		$reader = new \titon\libs\readers\core\PhpReader('php');
+
+		$this->object->load('Php', $reader);
+		$this->assertArrayHasKey('Php', $this->object->get());
+
+		$data = $this->object->get('Php');
+		unset($data['initialize']);
+		$this->assertEquals($data, $this->test);
 	}
 
-	**
-	 * @todo Implement testName().
-	 *
+	/**
+	 * Test that name() returns the correct App.name.
+	 */
 	public function testName() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		$this->assertEquals($this->object->name(), $this->app['name']);
+
+		$this->object->set('App.name', 'TestName');
+		$this->assertEquals($this->object->name(), 'TestName');
+
+		$this->object->set('App.name', '');
+		$this->assertEquals($this->object->name(), '');
 	}
 
-	**
-	 * @todo Implement testSalt().
-	 *
+	/**
+	 * Test that salt() returns the correct App.salt.
+	 */
 	public function testSalt() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
+		$this->assertEquals($this->object->salt(), $this->app['salt']);
+
+		$this->object->set('App.salt', md5('TestSalt'));
+		$this->assertEquals($this->object->salt(), md5('TestSalt'));
+
+		$this->object->set('App.salt', '');
+		$this->assertEquals($this->object->salt(), '');
 	}
 
-	**
-	 * @todo Implement testSet().
-	 *
+	/**
+	 * Test that set() correctly sets values at the correct depths.
+	 */
 	public function testSet() {
-		// Remove the following lines when you implement this test.
-		$this->markTestIncomplete(
-			'This test has not been implemented yet.'
-		);
-	}*/
+		$this->object->set('Set.level1', 1);
+		$this->assertEquals($this->object->get('Set.level1'), 1);
+
+		$this->object->set('Set.level2.level2', 2);
+		$this->assertEquals($this->object->get('Set.level2.level2'), 2);
+
+		$this->object->set('Set.level3.level3.level3', 3);
+		$this->assertEquals($this->object->get('Set.level3.level3.level3'), 3);
+
+		$this->object->set('Set.level4.level4.level4.level4', 4);
+		$this->assertEquals($this->object->get('Set.level4.level4.level4.level4'), 4);
+		$this->assertTrue(is_array($this->object->get('Set.level4.level4.level4')));
+		$this->assertFalse($this->object->get('Set.level4.level4') === 'falsey');
+
+		$this->object->set('Set.level4.array', array('key' => 'value'));
+		$this->assertEquals($this->object->get('Set.level4.array'), array('key' => 'value'));
+		$this->assertEquals($this->object->get('Set.level4.array.key'), 'value');
+
+		$this->object->set('Set.level4', 'Flattened!');
+		$this->assertEquals($this->object->get('Set.level4'), 'Flattened!');
+		$this->assertEquals($this->object->get('Set.level4.level4.level4.level4'), null);
+	}
 
 }
