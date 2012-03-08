@@ -272,7 +272,7 @@ class Debugger {
 	 */
 	public function parseFile($path) {
 		if (empty($path)) {
-			return '[Internal]';
+			return '[internal]';
 		}
 
 		$path = Titon::loader()->ds($path);
