@@ -34,7 +34,7 @@ class Environment {
 	 * @access protected
 	 * @var string
 	 */
-	protected $_current = 'dev';
+	protected $_current = null;
 
 	/**
 	 * Holds the list of possible environment configurations.
@@ -42,7 +42,11 @@ class Environment {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_environments = array();
+	protected $_environments = array(
+		'name' => 'dev',
+		'type' => self::DEVELOPMENT,
+		'hosts' => array('localhost', '127.0.0.1', '::1')
+	);
 
 	/**
 	 * Sets the fallback environment; defaults to development.
@@ -107,11 +111,13 @@ class Environment {
 	 * @return void
 	 */
 	public function initialize() {
-		$host = $_SERVER['HTTP_HOST'];
+		foreach (array($_SERVER['HTTP_HOST'], $_SERVER['SERVER_ADDR']) as $host) {
+			if (isset($this->_hostMapping[$host])) {
+				$this->_current = $this->_hostMapping[$host];
+			}
+		}
 
-		if (isset($this->_hostMapping[$host])) {
-			$this->_current = $this->_hostMapping[$host];
-		} else {
+		if (!$this->_current) {
 			$this->_current = $this->_fallback;
 		}
 
@@ -130,7 +136,7 @@ class Environment {
 	 * @return boolean
 	 */
 	public function is($key) {
-		return ($this->current('key') == $key);
+		return ($this->current('name') == $key);
 	}
 	
 	/**

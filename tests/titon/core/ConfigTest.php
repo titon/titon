@@ -129,6 +129,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		$data = $this->object->get('Php');
 		unset($data['initialize']);
 		$this->assertEquals($data, $this->test);
+
+		try {
+			$missingReader = new \titon\libs\readers\core\PhpReader('fakePhp');
+			$this->object->load('fakePhp', $missingReader);
+		} catch (\Exception $e) {
+			$this->assertTrue(true);
+		}
 	}
 
 	/**

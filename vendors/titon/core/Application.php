@@ -79,11 +79,13 @@ class Application {
 	 * @return void
 	 */
 	public function initialize() {
-		foreach (scandir(APP_MODULES) as $module) {
-			$path = APP_MODULES . $module . DS . 'bootstrap.php';
-			
-			if (file_exists($path)) {
-				include_once $path;
+		if (file_exists(APP_MODULES)) {
+			foreach (scandir(APP_MODULES) as $module) {
+				$path = APP_MODULES . $module . DS . 'bootstrap.php';
+
+				if (file_exists($path)) {
+					include_once $path;
+				}
 			}
 		}
 	}

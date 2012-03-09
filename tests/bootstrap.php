@@ -13,7 +13,7 @@
 define('DS', '/');
 define('PS', PATH_SEPARATOR);
 define('NS', '\\');
-define('APP', dirname(dirname(__DIR__)) . '/app/');
+define('APP', __DIR__ . '/app/');
 define('VENDORS', dirname(__DIR__) . '/vendors/');
 define('TITON', VENDORS . 'titon/');
 
@@ -32,6 +32,7 @@ include_once TITON . 'core' . DS . 'Loader.php';
 $_SERVER['HTTP_HOST'] = 'localhost';
 $_SERVER['PHP_SELF'] = '/index.php';
 $_SERVER['REQUEST_URI'] = '/';
+$_SERVER['SERVER_ADDR'] = '';
 
 \titon\Titon::initialize();
 \titon\Titon::startup();
