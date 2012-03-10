@@ -40,6 +40,16 @@ class Event {
 	protected $_listeners = array();
 
 	/**
+	 * Return all assigned events.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function events() {
+		return $this->_events;
+	}
+
+	/**
 	 * Cycles through the listenerss for the specified event, and executes the related method.
 	 * If a scope is defined, and the listener doesn't match the scope, it will be bypassed.
 	 *
@@ -56,7 +66,7 @@ class Event {
 		$route = Titon::router()->current();
 
 		foreach ($this->_listeners as &$listener) {
-			if ($listener['executed']) {
+			if (isset($listener['executed'][$event])) {
 				continue;
 			}
 
@@ -68,16 +78,17 @@ class Event {
 
 			$obj = $listener['object'];
 			
-			if ($obj instanceof Closure) {
-				if (empty($listener['events']) || in_array($event, $listener['events'])) {
-					$obj($event, $object);
-				}
-				
-			} else if (method_exists($event, $obj)) {
+			if ($obj instanceof Closure && in_array($event, $listener['events'])) {
+				$obj($event, $object);
+
+			} else if (method_exists($obj, $event)) {
 				$obj->{$event}($object);
+
+			} else {
+				continue;
 			}
 
-			$listener['executed'] = true;
+			$listener['executed'][$event] = true;
 		}
 	}
 
@@ -104,7 +115,7 @@ class Event {
 	public function registerListener(Listener $listener, array $scope = array()) {
 		$this->_listeners[] = array(
 			'object' => $listener,
-			'executed' => false,
+			'executed' => array(),
 			'events' => array(),
 			'scope' => $scope + array(
 				'module' => '*',
@@ -128,9 +139,13 @@ class Event {
 	 * @chainable
 	 */
 	public function registerCallback(Closure $callback, array $events = array(), array $scope = array()) {
+		if (empty($events)) {
+			$events = $this->_events;
+		}
+
 		$this->_listeners[] = array(
 			'object' => $callback,
-			'executed' => false,
+			'executed' => array(),
 			'events' => $events,
 			'scope' => $scope + array(
 				'module' => '*',

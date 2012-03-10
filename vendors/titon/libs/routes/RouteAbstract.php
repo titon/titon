@@ -321,8 +321,18 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @param string $key
 	 * @return string|null
 	 */
-	public function params($key = null) {
-		return isset($this->_route[$key]) ? $this->_route[$key] : $this->_route;
+	public function param($key = null) {
+		return isset($this->_route[$key]) ? $this->_route[$key] : null;
+	}
+
+	/**
+	 * Return all route params.
+	 *
+	 * @access public
+	 * @return string|null
+	 */
+	public function params() {
+		return $this->_route;
 	}
 
 }
