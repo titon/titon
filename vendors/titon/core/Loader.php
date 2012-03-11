@@ -74,30 +74,25 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @param string $sep
+	 * @param string $separator
 	 * @return string
 	 */
-	public function baseClass($class, $sep = NS) {
-		$class = trim(strrchr($class, $sep), $sep);
-
-		// Remove ext for file paths
-		if ($sep === DS) {
-			$class = $this->stripExt($class);
-		}
-
-		return $class;
+	public function baseClass($class, $separator = NS) {
+		return $this->stripExt(trim(strrchr($class, $separator), $separator));
 	}
 
 	/**
-	 * Returns a namespace with only the base path, and not the class name.
+	 * Returns a namespace with only the base package, and not the class name.
 	 *
 	 * @access public
 	 * @param string $class
-	 * @param string $sep
+	 * @param string $separator
 	 * @return string
 	 */
-	public function baseNamespace($class, $sep = NS) {
-		return $this->toNamespace(substr($class, 0, strrpos($class, $sep)));
+	public function baseNamespace($class, $separator = NS) {
+		$class = $this->toNamespace($class);
+
+		return substr($class, 0, strrpos($class, $separator));
 	}
 
 	/**
@@ -145,7 +140,9 @@ class Loader {
 		$current = array(get_include_path());
 
 		if (is_array($paths)) {
-			$current = $current + $paths;
+			foreach ($paths as $path) {
+				$current[] = $path;
+			}
 		} else {
 			$current[] = $paths;
 		}
@@ -201,23 +198,25 @@ class Loader {
 	}
 
 	/**
-	 * Converts a path to a namespace path.
+	 * Converts a path to a namespace package.
 	 *
 	 * @access public
 	 * @param string $path
 	 * @return string
 	 */
 	public function toNamespace($path) {
+		$path = $this->stripExt($path);
+
 		if (strpos($path, DS) !== false) {
 			$path = str_replace($this->ds(VENDORS), '', $this->ds($path));
-			$path = str_replace(DS, NS, $this->stripExt($path));
+			$path = str_replace(DS, NS, $path);
 		}
 
-		return $path;
+		return trim($path, NS);
 	}
 
 	/**
-	 * Converts a path to an absolute file system path.
+	 * Converts a namespace to a relative or absolute file system path.
 	 *
 	 * @access public
 	 * @param string $path
@@ -231,7 +230,7 @@ class Loader {
 		$file = array_pop($dirs);
 		$path = implode(DS, $dirs) . DS . str_replace('_', DS, $file);
 
-		if ($ext) {
+		if ($ext && substr($path, -strlen($ext)) != $ext) {
 			$path .= '.' . $ext;
 		}
 
