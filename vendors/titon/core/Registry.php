@@ -68,7 +68,7 @@ class Registry {
 	 * @return object
 	 */
 	public function factory($key, array $config = array(), $store = true) {
-		if (isset($this->_registered[$key])) {
+		if ($this->has($key)) {
 			return $this->_registered[$key];
 		}
 
@@ -78,10 +78,14 @@ class Registry {
 			$config = $config + $this->_configs[$key];
 		}
 
-		$object = new $namespace($config);
+		if (empty($config)) {
+			$object = new $namespace();
+		} else {
+			$object = new $namespace($config);
+		}
 
 		if ($store) {
-			return $this->store($object);
+			return $this->store($object, $key);
 		}
 
 		return $object;
@@ -97,8 +101,10 @@ class Registry {
 	public function flush() {
 		$this->_configs = array();
 
-		foreach ($this->_registered as $key => $object) {
-			unset($this->_registered[$key]);
+		if (!empty($this->_registered)) {
+			foreach ($this->_registered as $key => $object) {
+				unset($this->_registered[$key]);
+			}
 		}
 
 		return $this;
@@ -134,7 +140,7 @@ class Registry {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		if (isset($this->_registered[$key])) {
+		if ($this->has($key)) {
 			unset($this->_registered[$key]);
 			return true;
 		}
@@ -147,7 +153,7 @@ class Registry {
 	 *
 	 * @access public
 	 * @param object $object
-	 * @param string $key
+	 * @param string|null $key
 	 * @return object
 	 * @throws \titon\core\CoreException
 	 */
