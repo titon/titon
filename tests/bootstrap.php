@@ -22,9 +22,6 @@ define('TITON', VENDORS . 'titon/');
  */
 include_once 'PHPUnit/Autoload.php';
 include_once TITON . 'bootstrap.php';
-include_once TITON . 'functions.php';
-include_once TITON . 'Titon.php';
-include_once TITON . 'core' . DS . 'Loader.php';
 
 /**
  * Start class with fake environment.
@@ -33,6 +30,3 @@ $_SERVER['HTTP_HOST'] = 'localhost';
 $_SERVER['PHP_SELF'] = '/index.php';
 $_SERVER['REQUEST_URI'] = '/';
 $_SERVER['SERVER_ADDR'] = '';
-
-\titon\Titon::initialize();
-\titon\Titon::startup();

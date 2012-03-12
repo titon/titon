@@ -22,6 +22,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		\titon\Titon::router()->initialize();
 		\titon\Titon::app()->setup('test', '/', array(
 			'index' => 'IndexController'
 		));
