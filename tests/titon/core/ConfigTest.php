@@ -44,7 +44,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 	protected $object;
 
 	/**
-	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
@@ -52,13 +51,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->object->set('App', $this->app);
 		$this->object->set('Debug', $this->debug);
 		$this->object->set('Test', $this->test);
-	}
-
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown() {
 	}
 
 	/**

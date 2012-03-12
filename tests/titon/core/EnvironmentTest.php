@@ -19,7 +19,6 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	protected $object;
 
 	/**
-	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
@@ -27,13 +26,6 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$this->object->setup('dev', Environment::DEVELOPMENT, array('dev', '123.0.0.0'));
 		$this->object->setup('prod', Environment::PRODUCTION, array('prod', '123.456.0.0'));
 		$this->object->setup('staging', Environment::STAGING, array('staging', '123.456.789.0'));
-	}
-
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown() {
 	}
 
 	/**

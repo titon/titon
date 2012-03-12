@@ -26,7 +26,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	protected $object;
 
 	/**
-	 * Sets up the fixture, for example, opens a network connection.
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
@@ -35,13 +34,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 		$this->object = \titon\Titon::app();
 		$this->object->setup($this->module, $this->path, $this->controllers);
 		$this->object->setup('otherModule', $this->path, array());
-	}
-
-	/**
-	 * Tears down the fixture, for example, closes a network connection.
-	 * This method is called after a test is executed.
-	 */
-	protected function tearDown() {
 	}
 
 	/**

@@ -119,11 +119,15 @@ class Titon {
 	 * @static
 	 */
 	public static function install($key, $object, $lock = false) {
-		self::$__memory[$key] = $object;
+		if (in_array($key, self::$__locked)) {
+			throw new Exception(sprintf('Object cannot be installed as the key %s is locked.', $key));
+		}
 
 		if ($lock) {
 			self::$__locked[] = $key;
 		}
+
+		self::$__memory[$key] = $object;
 	}
 
 	/**
