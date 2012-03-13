@@ -39,7 +39,7 @@ class TitonTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testInstallAndUninstall() {
 		Titon::install('base1', new \titon\base\Base());
-		Titon::install('base2', new \titon\base\Base());
+		Titon::install('base2', new \titon\base\Base(), true);
 		Titon::install('base3', new \titon\base\Base(), true);
 
 		$this->assertInstanceOf('titon\base\Base', Titon::base1());
@@ -50,18 +50,23 @@ class TitonTest extends \PHPUnit_Framework_TestCase {
 
 		try {
 			Titon::base1();
+			$this->assertTrue(false);
 		} catch (\Exception $e) {
 			$this->assertTrue(true);
 		}
 
+		Titon::uninstall('base2');
+
 		try {
-			Titon::uninstall('base2');
-		} catch (\Exception $e) {
+			Titon::base2();
 			$this->assertTrue(true);
+		} catch (\Exception $e) {
+			$this->assertTrue(false);
 		}
 
 		try {
 			Titon::install('base3', new \titon\base\Base());
+			$this->assertTrue(false);
 		} catch (\Exception $e) {
 			$this->assertTrue(true);
 		}
