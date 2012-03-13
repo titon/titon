@@ -225,12 +225,16 @@ abstract class RouteAbstract extends Base implements Route {
 							// Is it a module? Check against the installed modules.
 							if (in_array($matches[0], $modules)) {
 								$this->_route['module'] = array_shift($matches);
+							} else {
+								array_shift($matches);
 							}
 						break;
 						case 'controller':
 							// Is it a controller? Check within the modules controllers.
-							if (in_array($matches[0], $controllers[$this->_route['module']])) {
+							if (isset($controllers[$this->_route['module']]) && in_array($matches[0], $controllers[$this->_route['module']])) {
 								$this->_route['controller'] = array_shift($matches);
+							} else {
+								array_shift($matches);
 							}
 						break;
 						default:
