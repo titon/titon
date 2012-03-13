@@ -124,7 +124,10 @@ class Object {
 	 * @chainable
 	 */
 	public function addMethod($name, Closure $method) {
-		if (isset($this->_methods[$name])) {
+		if (is_numeric($name)) {
+			throw new BaseException(sprintf('Method name %s is invalid.', $name));
+
+		} else if (isset($this->_methods[$name])) {
 			throw new BaseException(sprintf('Method %s already exists.', $name));
 		}
 
@@ -144,7 +147,10 @@ class Object {
 	 * @chainable
 	 */
 	public function addProperty($name, $value = null) {
-		if (isset($this->_properties[$name])) {
+		if (is_numeric($name)) {
+			throw new BaseException(sprintf('Property name %s is invalid.', $name));
+
+		} else if (isset($this->_properties[$name])) {
 			throw new BaseException(sprintf('Property %s already exists.', $name));
 		}
 
@@ -162,7 +168,7 @@ class Object {
 	 * @throws \titon\base\BaseException
 	 * @return mixed
 	 */
-	public function getMethod($name, $args) {
+	public function getMethod($name, $args = array()) {
 		if ($this->hasMethod($name)) {
 			if (!is_array($args)) {
 				$args = array($args);
