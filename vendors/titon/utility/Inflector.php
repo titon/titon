@@ -95,7 +95,27 @@ class Inflector {
 	 * @static
 	 */
 	public static function pluralize($string) {
-		//return L10n::pluralize($string);
+		/*$locale = self::getLocale();
+		$string = strtolower($string);
+
+		if (isset(self::$__pluralized[$string])) {
+			return self::$__pluralized[$string];
+		}else if (isset(self::$__uninflected[$locale]) && in_array($string, self::$__uninflected[$locale])) {
+			return $string;
+		} else if (isset(self::$__irregular[$locale]) && isset(self::$__irregular[$locale][$string])) {
+			return self::$__irregular[$locale][$string];
+		}
+
+		if (isset(self::$__plural[$locale])) {
+			foreach (self::$__plural[$locale] as $pattern => $replacement) {
+				if (preg_match($pattern, $string)) {
+					self::$__pluralized[$string] = preg_replace($pattern, $replacement, $string);
+					return self::$__pluralized[$string];
+				}
+			}
+		}
+
+		return $string;*/
 	}
 
 	/**
@@ -108,7 +128,28 @@ class Inflector {
 	 * @static
 	 */
 	public static function singularize($string) {
-		//return L10n::singularize($string);
+		/*$locale = self::getLocale();
+		$string = strtolower($string);
+
+		if (isset(self::$__singularized[$string])) {
+			return self::$__singularized[$string];
+		} else if (isset(self::$__uninflected[$locale]) && in_array($string, self::$__uninflected[$locale])) {
+			return $string;
+		} else if (isset(self::$__irregular[$locale]) && in_array($string, self::$__irregular[$locale])) {
+			return array_search($string, self::$__irregular[$locale]);
+		}
+
+		if (isset(self::$__singular[$locale])) {
+			foreach (self::$__singular[$locale] as $pattern => $replacement) {
+				if (preg_match($pattern, $string)) {
+					self::$__singularized[$string] = preg_replace($pattern, $replacement, $string);
+					return self::$__singularized[$string];
+				}
+			}
+		}
+
+		self::$__singularized[$string] = $string;
+		return $string;*/
 	}
 
 	/**
