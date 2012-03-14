@@ -18,9 +18,9 @@ class EnumTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->foo = new EnumMock(EnumMock::FOO);
-		$this->bar = new EnumMock(EnumMock::BAR);
-		$this->baz = new EnumMock(EnumMock::BAZ);
+		$this->foo = new MockEnum(MockEnum::FOO);
+		$this->bar = new MockEnum(MockEnum::BAR);
+		$this->baz = new MockEnum(MockEnum::BAZ);
 	}
 
 	public function testConstructorArgs() {
@@ -50,30 +50,30 @@ class EnumTest extends \PHPUnit_Framework_TestCase {
 	 * Test that is() returns true if the object matches the constant enum.
 	 */
 	public function testIs() {
-		$this->assertTrue($this->foo->is(EnumMock::FOO));
-		$this->assertFalse($this->bar->is(EnumMock::FOO));
-		$this->assertFalse($this->baz->is(EnumMock::FOO));
+		$this->assertTrue($this->foo->is(MockEnum::FOO));
+		$this->assertFalse($this->bar->is(MockEnum::FOO));
+		$this->assertFalse($this->baz->is(MockEnum::FOO));
 
-		$this->assertFalse($this->foo->is(EnumMock::BAR));
-		$this->assertTrue($this->bar->is(EnumMock::BAR));
-		$this->assertFalse($this->baz->is(EnumMock::BAR));
+		$this->assertFalse($this->foo->is(MockEnum::BAR));
+		$this->assertTrue($this->bar->is(MockEnum::BAR));
+		$this->assertFalse($this->baz->is(MockEnum::BAR));
 
-		$this->assertFalse($this->foo->is(EnumMock::BAZ));
-		$this->assertFalse($this->bar->is(EnumMock::BAZ));
-		$this->assertTrue($this->baz->is(EnumMock::BAZ));
+		$this->assertFalse($this->foo->is(MockEnum::BAZ));
+		$this->assertFalse($this->bar->is(MockEnum::BAZ));
+		$this->assertTrue($this->baz->is(MockEnum::BAZ));
 	}
 
 	/**
 	 * Test that the value returned matches.
 	 */
 	public function testValue() {
-		$this->assertEquals(EnumMock::FOO, $this->foo->value());
-		$this->assertEquals(EnumMock::BAR, $this->bar->value());
-		$this->assertEquals(EnumMock::BAZ, $this->baz->value());
+		$this->assertEquals(MockEnum::FOO, $this->foo->value());
+		$this->assertEquals(MockEnum::BAR, $this->bar->value());
+		$this->assertEquals(MockEnum::BAZ, $this->baz->value());
 	}
 }
 
-class EnumMock extends \titon\base\types\Enum {
+class MockEnum extends \titon\base\types\Enum {
 	const FOO = 0;
 	const BAR = 1;
 	const BAZ = 2;

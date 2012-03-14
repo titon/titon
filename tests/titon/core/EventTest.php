@@ -34,8 +34,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	public function testExecute() {
 		// test events by name
 		$event1 = new \titon\core\Event();
-		$event1->registerListener(new ListenerMock());
-		$event1->registerListener(new ListenerMock());
+		$event1->registerListener(new MockListener());
+		$event1->registerListener(new MockListener());
 		$event1->registerCallback(function() {}, array('startup', 'shutdown', 'testEvent1'));
 		$event1->registerCallback(function() {}, array('startup', 'testEvent1', 'testEvent2'));
 		$event1->execute('startup');
@@ -75,8 +75,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		// test events by scope
 		/* @todo
 		 * $event2 = new \titon\core\Event();
-		$event2->registerListener(new ListenerMock(), array('controller' => 'test'));
-		$event2->registerListener(new ListenerMock());
+		$event2->registerListener(new MockListener(), array('controller' => 'test'));
+		$event2->registerListener(new MockListener());
 		$event2->registerCallback(function() {}, array(), array('action' => 'action'));
 		$event2->registerCallback(function() {});
 
@@ -92,7 +92,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testListeners() {
 		$event = new \titon\core\Event();
-		$event->registerListener(new ListenerMock());
+		$event->registerListener(new MockListener());
 		$event->registerCallback(function() {});
 
 		$listeners = $event->listeners();
@@ -100,7 +100,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(2, count($listeners));
 
 		foreach ($listeners as $listener) {
-			if ($listener['object'] instanceof ListenerMock || $listener['object'] instanceof Closure) {
+			if ($listener['object'] instanceof MockListener || $listener['object'] instanceof Closure) {
 				$this->assertTrue(true);
 			} else {
 				$this->assertTrue(false);
@@ -113,15 +113,15 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testRegisterListener() {
 		$event = new \titon\core\Event();
-		$event->registerListener(new ListenerMock());
-		$event->registerListener(new ListenerMock());
+		$event->registerListener(new MockListener());
+		$event->registerListener(new MockListener());
 
 		$listeners = $event->listeners();
 
 		$this->assertEquals(2, count($listeners));
 
 		foreach ($listeners as $listener) {
-			if ($listener['object'] instanceof ListenerMock) {
+			if ($listener['object'] instanceof MockListener) {
 				$this->assertTrue(true);
 			} else {
 				$this->assertTrue(false);
@@ -168,7 +168,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class ListenerMock implements Listener {
+class MockListener implements Listener {
 	public function startup() {}
 	public function shutdown() {}
 	public function preDispatch() {}
