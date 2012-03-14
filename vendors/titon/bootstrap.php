@@ -12,6 +12,7 @@
  */
 define('CONSOLE', TITON . 'console' . DS);
 define('LIBRARY', TITON . 'libs' . DS);
+define('RESOURCES', TITON . 'resources' . DS);
 
 /**
  * App directory constants.
@@ -21,6 +22,11 @@ define('APP_LIBRARY', APP . 'libs' . DS);
 define('APP_MODULES', APP . 'modules' . DS);
 define('APP_TEMP', APP . 'temp' . DS);
 define('APP_VIEWS', APP . 'views' . DS);
+
+/**
+ * Resource directory constants.
+ */
+define('RES_LOCALES', RESOURCES . 'locales' . DS);
 
 /**
  * Library directory constants.
@@ -61,4 +67,6 @@ include_once TITON . 'core' . DS . 'Loader.php';
 /**
  * Include custom configuration and settings from the application.
  */
-include_once APP_CONFIG . 'setup.php';
+if (file_exists(APP_CONFIG . 'setup.php')) {
+	include_once APP_CONFIG . 'setup.php';
+}
