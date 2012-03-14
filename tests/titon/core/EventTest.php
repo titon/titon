@@ -9,7 +9,6 @@
 
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
-use \titon\libs\listeners\Listener;
 use \titon\libs\controllers\Controller;
 use \titon\libs\engines\Engine;
 
@@ -168,7 +167,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class MockListener implements Listener {
+class MockListener extends \titon\libs\listeners\ListenerAbstract {
+
 	public function startup() {}
 	public function shutdown() {}
 	public function preDispatch() {}
@@ -177,4 +177,5 @@ class MockListener implements Listener {
 	public function postProcess(Controller $controller) {}
 	public function preRender(Engine $engine) {}
 	public function postRender(Engine $engine) {}
+
 }

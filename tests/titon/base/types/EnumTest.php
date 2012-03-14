@@ -23,6 +23,9 @@ class EnumTest extends \PHPUnit_Framework_TestCase {
 		$this->baz = new MockEnum(MockEnum::BAZ);
 	}
 
+	/**
+	 * Test values mapped through initialize().
+	 */
 	public function testConstructorArgs() {
 		$this->assertEquals('Foo', $this->foo->name);
 		$this->assertEquals('Bar', $this->bar->name);
@@ -71,9 +74,11 @@ class EnumTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(MockEnum::BAR, $this->bar->value());
 		$this->assertEquals(MockEnum::BAZ, $this->baz->value());
 	}
+
 }
 
 class MockEnum extends \titon\base\types\Enum {
+
 	const FOO = 0;
 	const BAR = 1;
 	const BAZ = 2;
@@ -89,4 +94,5 @@ class MockEnum extends \titon\base\types\Enum {
 		$this->id = $id;
 		$this->bool = $bool;
 	}
+
 }
