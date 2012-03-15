@@ -318,11 +318,21 @@ class Router {
 	public function segments($key = false) {
 		if ($key === true) {
 			$segments = $this->segments();
+			$url = '';
 
-			$url  = $segments['scheme'] . '://';
-			$url .= $segments['host'];
+			if (isset($segments['scheme'])) {
+				$url .= $segments['scheme'] . '://';
+			}
+
+			if (isset($segments['host'])) {
+				$url .= $segments['host'];
+			}
+
 			$url .= $this->base();
-			$url .= $segments['path'];
+
+			if (isset($segments['path'])) {
+				$url .= $segments['path'];
+			}
 
 			if (!empty($segments['query'])) {
 				$url .= '?' . http_build_query($segments['query']);

@@ -23,7 +23,7 @@ use \titon\libs\translators\TranslatorException;
  * @abstract
  */
 class TranslatorAbstract extends Base implements Translator { 
-	use Memoizer;
+	//use Memoizer;
 	
 	/**
 	 * Collection of cached localization strings.

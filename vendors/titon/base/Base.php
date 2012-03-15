@@ -472,4 +472,35 @@ class Base {
 		}
 	}
 
+	/**
+	 * Store the methods return value after evaluating.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_methodCaches = array();
+
+	/**
+	 * Execute the method and cache the result when executed. If the data has already been cached, return that instead.
+	 *
+	 * @access public
+	 * @param string $method
+	 * @param mixed $id
+	 * @param \Closure $callback
+	 * @return mixed
+	 */
+	public function cacheMethod($method, $id, Closure $callback) {
+		if ($id) {
+			$method .= ':' . $id;
+		}
+
+		if (isset($this->_methodCaches[$method])) {
+			return $this->_methodCaches[$method];
+		}
+
+		$this->_methodCaches[$method] = $callback($this);
+
+		return $this->_methodCaches[$method];
+	}
+
 }
