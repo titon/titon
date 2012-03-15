@@ -15,17 +15,17 @@ include_once dirname(dirname(dirname(__DIR__))) . '/bootstrap.php';
 class ActionTest extends \PHPUnit_Framework_TestCase {
 
 	/**
-	 * Test that run correct executes and modifies the passed controller.
+	 * Test that run correctly executes and modifies the passed controller.
 	 */
 	public function testRun() {
-		$controller = new MockController(array(
+		$controller = new TitonLibsActionsMockController(array(
 			'foo' => 'bar'
 		));
 
 		$this->assertEquals('bar', $controller->config('foo'));
 		$this->assertArrayNotHasKey('test', $controller->config());
 
-		$action = new MockAction();
+		$action = new TitonLibsActionsMockAction();
 		$action->setController($controller);
 		$action->run();
 
@@ -36,11 +36,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class MockController extends \titon\libs\controllers\ControllerAbstract {
+class TitonLibsActionsMockController extends \titon\libs\controllers\ControllerAbstract {
 
 }
 
-class MockAction extends \titon\libs\actions\ActionAbstract {
+class TitonLibsActionsMockAction extends \titon\libs\actions\ActionAbstract {
 
 	public function run() {
 		$this->controller->configure(array(
