@@ -13,15 +13,15 @@
 define('DS', '/');
 define('PS', PATH_SEPARATOR);
 define('NS', '\\');
-define('APP', __DIR__ . '/app/');
-define('VENDORS', dirname(__DIR__) . '/vendors/');
-define('TITON', VENDORS . 'titon/');
+define('TITON_APP', __DIR__ . '/app/');
+define('TITON_VENDORS', dirname(__DIR__) . '/vendors/');
+define('TITON_SOURCE', TITON_VENDORS . 'titon/');
 
 /**
  * Include scripts.
  */
 include_once 'PHPUnit/Autoload.php';
-include_once TITON . 'bootstrap.php';
+include_once TITON_SOURCE . 'bootstrap.php';
 
 /**
  * Start class with fake environment.

@@ -114,8 +114,8 @@ class LoaderTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('test\file\path\FileName', $this->object->toNamespace('/test/file/path/FileName.php'));
 		$this->assertEquals('test\file\path\File\Name', $this->object->toNamespace('/test/file/path/File/Name.php'));
 
-		$this->assertEquals('test\file\path\FileName', $this->object->toNamespace(VENDORS . 'test/file/path/FileName.php'));
-		$this->assertEquals('titon\test\file\path\File\Name', $this->object->toNamespace(TITON . 'test/file/path/File/Name.php'));
+		$this->assertEquals('test\file\path\FileName', $this->object->toNamespace(TITON_VENDORS . 'test/file/path/FileName.php'));
+		$this->assertEquals('titon\test\file\path\File\Name', $this->object->toNamespace(TITON_SOURCE . 'test/file/path/File/Name.php'));
 	}
 
 	/**
@@ -131,11 +131,11 @@ class LoaderTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('/test/namespace/ClassName.PHP', $this->object->toPath('\test\namespace\ClassName', 'PHP'));
 		$this->assertEquals('/test/namespace/Class/Name.PHP', $this->object->toPath('\test\namespace\Class_Name', 'PHP'));
 
-		$this->assertEquals(TITON . '/test/namespace/ClassName.php', $this->object->toPath('\test\namespace\ClassName', 'php', TITON));
-		$this->assertEquals(TITON . '/test/namespace/Class/Name.php', $this->object->toPath('\test\namespace\Class_Name', 'php', TITON));
+		$this->assertEquals(TITON_SOURCE . '/test/namespace/ClassName.php', $this->object->toPath('\test\namespace\ClassName', 'php', TITON_SOURCE));
+		$this->assertEquals(TITON_SOURCE . '/test/namespace/Class/Name.php', $this->object->toPath('\test\namespace\Class_Name', 'php', TITON_SOURCE));
 
-		$this->assertEquals(APP . '/test/namespace/ClassName.php', $this->object->toPath('\test\namespace\ClassName', 'php', APP));
-		$this->assertEquals(APP . '/test/namespace/Class/Name.php', $this->object->toPath('\test\namespace\Class_Name', 'php', APP));
+		$this->assertEquals(TITON_APP . '/test/namespace/ClassName.php', $this->object->toPath('\test\namespace\ClassName', 'php', TITON_APP));
+		$this->assertEquals(TITON_APP . '/test/namespace/Class/Name.php', $this->object->toPath('\test\namespace\Class_Name', 'php', TITON_APP));
 	}
 
 }

@@ -277,11 +277,11 @@ class Debugger {
 
 		$path = Titon::loader()->ds($path);
 
-		foreach(array('app', 'library', 'vendors', 'titon') as $constant) {
+		foreach(array('titon_app', 'titon_libs', 'titon_vendors', 'titon_source') as $constant) {
 			$location = Titon::loader()->ds(constant(strtoupper($constant)));
 
 			if (strpos($path, $location) !== false) {
-				$path = str_replace($location, '[' . $constant . ']', $path);
+				$path = str_replace($location, '[' . str_replace('titon_', '', $constant) . ']', $path);
 				break;
 			}
 		}

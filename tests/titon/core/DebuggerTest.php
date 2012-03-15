@@ -67,13 +67,13 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testParseFile() {
 		$this->assertEquals('[internal]', $this->object->parseFile(null));
-		$this->assertEquals('[vendors]', $this->object->parseFile(VENDORS));
-		$this->assertEquals('[vendors]titon/', $this->object->parseFile(TITON));
-		$this->assertEquals('[vendors]titon/core/Debugger.php', $this->object->parseFile(TITON . 'core/Debugger.php'));
-		$this->assertEquals('[app]', $this->object->parseFile(APP));
-		$this->assertEquals('[app]modules/controllers/TestController.php', $this->object->parseFile(APP . 'modules/controllers/TestController.php'));
-		$this->assertEquals('[library]', $this->object->parseFile(LIBRARY));
-		$this->assertEquals('[library]traits/Decorator.php', $this->object->parseFile(LIBRARY . 'traits/Decorator.php'));
+		$this->assertEquals('[vendors]', $this->object->parseFile(TITON_VENDORS));
+		$this->assertEquals('[vendors]titon/', $this->object->parseFile(TITON_SOURCE));
+		$this->assertEquals('[vendors]titon/core/Debugger.php', $this->object->parseFile(TITON_SOURCE . 'core/Debugger.php'));
+		$this->assertEquals('[app]', $this->object->parseFile(TITON_APP));
+		$this->assertEquals('[app]modules/controllers/TestController.php', $this->object->parseFile(TITON_APP . 'modules/controllers/TestController.php'));
+		$this->assertEquals('[libs]', $this->object->parseFile(TITON_LIBS));
+		$this->assertEquals('[libs]traits/Decorator.php', $this->object->parseFile(TITON_LIBS . 'traits/Decorator.php'));
 	}
 
 }
