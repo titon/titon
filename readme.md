@@ -32,6 +32,8 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 				bootstrap.php
 			admin/
 				***
+		resources/
+			messages/
 		temp/
 			cache/
 			debug.log
@@ -44,49 +46,53 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 			js/
 			img/
 		index.php
-	tests/
-	titon/
-		base/
-			types/
-		console/
-		constant/
-		core/
-		libs/
-			actions/
-			adapters/
-			behaviors/
-			controllers/
-			dispatchers/
-			drivers/
-			engines/
-			enums/
-			exceptions/
-			helpers/
-			listeners/
-			models/
-			packages/
-			readers/
-			routes/
-			shells/
-			storage/
-			traits/
-			translators/
-			transporters/
-		log/
-		net/
-		state/
-		utility/
-		vendors/
-		Exception.php
-		Titon.php
-		bootstrap.php
-		functions.php
+	vendors/
+		titon/
+			base/
+				types/
+			console/
+			constant/
+			core/
+			libs/
+				actions/
+				adapters/
+				behaviors/
+				bundles/
+				controllers/
+				dispatchers/
+				drivers/
+				engines/
+				enums/
+				exceptions/
+				helpers/
+				listeners/
+				models/
+				packages/
+				readers/
+				routes/
+				shells/
+				storage/
+				traits/
+				translators/
+				transporters/
+			log/
+			net/
+			resources/
+				locales/
+				messages/
+			state/
+			utility/
+			Exception.php
+			Titon.php
+			bootstrap.php
+			functions.php
 
 ### Libraries ###
 
 * Action - Re-usable and de-coupled controller actions, packaged as a stand alone class.
 * Adapter - Handles the case of adapting a specific class to another class.
 * Behavior - Defines a behavior pattern for a model.
+* Bundle - Manages the loading and manipulating of resources and their locations.
 * Controller - Handles the HTTP request and returns the HTTP response, within the dispatch cycle.
 * Dispatcher - Handles the dispatch cycle in the MVC paradigm.
 * Driver - Allows the model to access different types of databases; describes the schema. Only works with Titon's model system.
