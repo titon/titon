@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon;
+
 /**
  * Outputs multiple variables in an easily readable format.
  * 
@@ -62,6 +64,6 @@ function dump() {
  * @param array $params
  * @return string
  */
-function __($key, array $params = array()) {
+function msg($key, array $params = array()) {
 	return \titon\Titon::g11n()->translate($key, $params);
 }
