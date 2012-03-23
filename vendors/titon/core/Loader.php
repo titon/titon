@@ -77,7 +77,7 @@ class Loader {
 	 * @param string $separator
 	 * @return string
 	 */
-	public function baseClass($class, $separator = NS) {
+	public function baseClass($class, $separator = '\\') {
 		return $this->stripExt(trim(strrchr($class, $separator), $separator));
 	}
 
@@ -89,7 +89,7 @@ class Loader {
 	 * @param string $separator
 	 * @return string
 	 */
-	public function baseNamespace($class, $separator = NS) {
+	public function baseNamespace($class, $separator = '\\') {
 		$class = $this->toNamespace($class);
 
 		return substr($class, 0, strrpos($class, $separator));
@@ -103,7 +103,7 @@ class Loader {
 	 * @return string
 	 */
 	public function ds($path) {
-		return str_replace(array('/', '\\'), DS, $path);
+		return str_replace('\\', '/', $path);
 	}
 
 	/**
@@ -147,7 +147,7 @@ class Loader {
 			$current[] = $paths;
 		}
 
-		set_include_path(implode(PS, $current));
+		set_include_path(implode(PATH_SEPARATOR, $current));
 
 		return $this;
 	}
@@ -207,12 +207,12 @@ class Loader {
 	public function toNamespace($path) {
 		$path = $this->stripExt($path);
 
-		if (strpos($path, DS) !== false) {
+		if (strpos($path, '/') !== false) {
 			$path = str_replace($this->ds(TITON_VENDORS), '', $this->ds($path));
-			$path = str_replace(DS, NS, $path);
+			$path = str_replace('/', '\\', $path);
 		}
 
-		return trim($path, NS);
+		return trim($path, '\\');
 	}
 
 	/**
@@ -226,9 +226,9 @@ class Loader {
 	 */
 	public function toPath($path, $ext = 'php', $root = false) {
 		$path = $this->ds($path);
-		$dirs = explode(DS, $path);
+		$dirs = explode('/', $path);
 		$file = array_pop($dirs);
-		$path = implode(DS, $dirs) . DS . str_replace('_', DS, $file);
+		$path = implode('/', $dirs) . '/' . str_replace('_', '/', $file);
 
 		if ($ext && substr($path, -strlen($ext)) != $ext) {
 			$path .= '.' . $ext;

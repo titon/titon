@@ -81,7 +81,7 @@ class Application {
 	public function initialize() {
 		if (file_exists(APP_MODULES)) {
 			foreach (scandir(APP_MODULES) as $module) {
-				$path = APP_MODULES . $module . DS . 'bootstrap.php';
+				$path = APP_MODULES . $module . '/bootstrap.php';
 
 				if (file_exists($path)) {
 					include_once $path;
@@ -111,8 +111,8 @@ class Application {
 		
 		$path = Titon::loader()->ds($path);
 		
-		if (substr($path, -1) != DS) {
-			$path .= DS;
+		if (substr($path, -1) != '/') {
+			$path .= '/';
 		}
 		
 		$this->_modules[$module] = array(

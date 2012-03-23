@@ -41,7 +41,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 			$path .= $ext;
 		}
 
-		$this->_path = APP_CONFIG . 'sets' . DS . $path;
+		$this->_path = APP_CONFIG . 'sets/' . $path;
 	}
 
 	/**

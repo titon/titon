@@ -79,7 +79,7 @@ class TranslatorAbstract extends Base implements Translator {
 		$finalPath = null;
 
 		foreach ($locales as $locale) {
-			$path = APP_MODULES . $module . DS . 'locale' . DS . $locale . DS . $catalog . '.' . $ext;
+			$path = APP_MODULES . $module . '/locale/' . $locale . '/' . $catalog . '.' . $ext;
 
 			if (file_exists($path)) {
 				$finalPath = $path;

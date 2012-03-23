@@ -189,7 +189,7 @@ abstract class EngineAbstract extends Base implements Engine {
 					Titon::loader()->ds($template['action'])
 				);
 
-				$path  = APP_MODULES . implode(DS, $parts);
+				$path  = APP_MODULES . implode('/', $parts);
 				$path .= empty($ext) ? '.tpl' : '.' . $ext . '.tpl';
 
 				$paths = array($path);

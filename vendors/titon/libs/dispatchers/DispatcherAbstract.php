@@ -56,7 +56,7 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 		$config = $this->config();
 		$module = Titon::app()->module($config['module']);
 		$controller = $module['controllers'][$config['controller']];
-		$path = $module['path'] . 'controllers' . DS . $controller . '.php';
+		$path = $module['path'] . 'controllers/' . $controller . '.php';
 
 		if (file_exists($path)) {
 			return Titon::registry()->factory($path, $config);

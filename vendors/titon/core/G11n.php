@@ -339,7 +339,7 @@ class G11n {
 	 */
 	public function loadBundle($key) {
 		$id = $this->canonicalize($key, self::FORMAT_3);
-		$folder = RES_LOCALES . $id . DS;
+		$folder = RES_LOCALES . $id . '/';
 		$path = $folder . 'locale.php';
 
 		if (!file_exists($folder) || !file_exists($path)) {

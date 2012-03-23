@@ -121,7 +121,7 @@ class Environment {
 			$this->_current = $this->_fallback;
 		}
 
-		$path = APP_CONFIG . 'environments' . DS . Inflector::filename($this->_current, 'php', false);
+		$path = APP_CONFIG . 'environments/' . Inflector::filename($this->_current, 'php', false);
 
 		if (file_exists($path)) {
 			include_once $path;

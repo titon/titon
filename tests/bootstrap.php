@@ -10,9 +10,6 @@
 /**
  * Define primary constants.
  */
-define('DS', '/');
-define('PS', PATH_SEPARATOR);
-define('NS', '\\');
 define('TITON_APP', __DIR__ . '/app/');
 define('TITON_VENDORS', dirname(__DIR__) . '/vendors/');
 define('TITON_SOURCE', TITON_VENDORS . 'titon/');

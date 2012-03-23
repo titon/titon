@@ -193,7 +193,7 @@ class FileSystemStorage extends StorageAbstract {
 			$this->_checkPath();
 		}
 
-		$path = APP_TEMP . 'cache' . DS . $this->config('storage') . DS;
+		$path = APP_TEMP . 'cache/' . $this->config('storage') . '/';
 
 		if ($key) {
 			$path .= $this->key($key) . '.cache';
