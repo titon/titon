@@ -56,14 +56,14 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws \titon\libs\bundles\g11n\BundleException
+	 * @throws \titon\libs\bundles\BundleException
 	 */
 	public function initialize() {
 		$config = $this->config();
 
 		$locations = array_map(function($value) use ($config) {
 			foreach ($config as $key => $val) {
-				$value = str_replace('{' . $key . '}', $val, $value);
+				$value = str_replace('{' . $key . 's}', $val, $value);
 			}
 
 			return $value;
@@ -76,7 +76,10 @@ abstract class BundleAbstract extends Base implements Bundle {
 			}
 		}
 
-		throw new BundleException('Resource bundle could not be located.');
+		// Remove so that we can throw a reasonable exception
+		unset($config['ext'], $config['initialize']);
+
+		throw new BundleException(sprintf('Resource bundle %s could not be located.', implode(':', $config)));
 	}
 
 	/**
@@ -121,7 +124,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @access public
 	 * @param $path
 	 * @return array
-	 * @throws \titon\libs\bundles\g11n\BundleException
+	 * @throws \titon\libs\bundles\BundleException
 	 */
 	public function parse($path) {
 		throw new BundleException(sprintf('You must define the parse() method within your %s.', get_class($this)));
