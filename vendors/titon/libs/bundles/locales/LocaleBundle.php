@@ -10,16 +10,35 @@
 namespace titon\libs\bundles\locales;
 
 use \titon\libs\bundles\BundleAbstract;
-use \titon\utility\Inflector;
 
 /**
  * The LocaleBundle manages the loading of locale resources which contain locale specific configuration,
  * validation rules (phone numbers, zip codes, etc) and inflection rules (plurals, singulars, irregulars, etc).
  *
  * @package	titon.libs.bundles.locales
- * @uses	titon\utility\Inflector
  */
 class LocaleBundle extends BundleAbstract {
+
+	/**
+	 * Configuration.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_config = array(
+		'bundle' => '',
+		'ext' => 'php'
+	);
+
+	/**
+	 * Convenience method to return the inflection rules.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function inflections() {
+		return $this->load('inflections');
+	}
 
 	/**
 	 * Define the locations for the locale resources and load the default locale.php file once initialized.
@@ -29,39 +48,13 @@ class LocaleBundle extends BundleAbstract {
 	 */
 	public function initialize() {
 		$this->_locations = array(
-			APP_RESOURCES . 'locales/',
-			TITON_RESOURCES . 'locales/'
+			APP_RESOURCES . 'locales/{bundle}/',
+			TITON_RESOURCES . 'locales/{bundle}/'
 		);
 
 		parent::initialize();
 
-		$this->load('locale');
-	}
-
-	/**
-	 * Load the file from the resource bundle if it exists and cache the data.
-	 * If the file does not exist, return an empty array.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return array
-	 */
-	public function load($key) {
-		if ($data = $this->config($key)) {
-			return $data;
-		}
-
-		$filename = Inflector::filename($key, $this->config('ext'), false);
-
-		if (in_array($filename, $this->files())) {
-			$data = include_once $this->path() . $filename;
-		} else {
-			$data = array();
-		}
-
-		$this->configure($key, $data);
-
-		return $data;
+		$this->locale();
 	}
 
 	/**
@@ -75,13 +68,14 @@ class LocaleBundle extends BundleAbstract {
 	}
 
 	/**
-	 * Convenience method to return the inflection rules.
+	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
+	 * @param $path
 	 * @return array
 	 */
-	public function inflections() {
-		return $this->load('inflections');
+	public function parse($path) {
+		return include_once $path;
 	}
 
 	/**

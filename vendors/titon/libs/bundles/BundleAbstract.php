@@ -12,6 +12,7 @@ namespace titon\libs\bundles;
 use \titon\base\Base;
 use \titon\libs\bundles\Bundle;
 use \titon\libs\bundles\BundleException;
+use \titon\utility\Inflector;
 
 /**
  * @todo
@@ -21,17 +22,6 @@ use \titon\libs\bundles\BundleException;
  */
 abstract class BundleAbstract extends Base implements Bundle {
 	// use Memoizer;
-
-	/**
-	 * Configuration.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_config = array(
-		'folder' => '',
-		'ext' => 'php'
-	);
 
 	/**
 	 * Resource locations.
@@ -57,8 +47,62 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 */
 	public function files() {
 		return $this->cacheMethod(__FUNCTION__, null, function($self) {
-			return array_map('basename', glob($self->path() . '*'));
+			return array_map('basename', glob($self->path() . '*.' . $self->config('ext')));
 		});
+	}
+
+	/**
+	 * Attempt to find the resource bundle within the resource locations.
+	 *
+	 * @access public
+	 * @return void
+	 * @throws \titon\libs\bundles\g11n\BundleException
+	 */
+	public function initialize() {
+		$config = $this->config();
+
+		$locations = array_map(function($value) use ($config) {
+			foreach ($config as $key => $val) {
+				$value = str_replace('{' . $key . '}', $val, $value);
+			}
+
+			return $value;
+		}, $this->locations());
+
+		foreach ($locations as $location) {
+			if (file_exists($location)) {
+				$this->_path = $location;
+				return;
+			}
+		}
+
+		throw new BundleException('Resource bundle could not be located.');
+	}
+
+	/**
+	 * Load the file from the resource bundle if it exists and cache the data.
+	 * If the file does not exist, return an empty array.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return array
+	 */
+	public function load($key) {
+		if ($data = $this->config($key)) {
+			return $data;
+		}
+
+		$filename = Inflector::filename($key, $this->config('ext'), false);
+
+		if (in_array($filename, $this->files())) {
+			$data = $this->parse($this->path() . $filename);
+		} else {
+			$data = array();
+		}
+
+		$this->configure($key, $data);
+
+		return $data;
 	}
 
 	/**
@@ -72,6 +116,18 @@ abstract class BundleAbstract extends Base implements Bundle {
 	}
 
 	/**
+	 * Parse the file at the given path and return the result.
+	 *
+	 * @access public
+	 * @param $path
+	 * @return array
+	 * @throws \titon\libs\bundles\g11n\BundleException
+	 */
+	public function parse($path) {
+		throw new BundleException(sprintf('You must define the parse() method within your %s.', get_class($this)));
+	}
+
+	/**
 	 * Return the final resource bundle path.
 	 *
 	 * @access public
@@ -79,45 +135,6 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 */
 	public function path() {
 		return $this->_path;
-	}
-
-	/**
-	 * Attempt to find the resource bundle within the resource locations.
-	 *
-	 * @access public
-	 * @return void
-	 * @throws \titon\libs\bundles\g11n\BundleException
-	 */
-	public function initialize() {
-		$folder = $this->config('folder');
-
-		if (empty($folder)) {
-			$folder = '[empty]';
-		} else {
-			foreach ($this->locations() as $location) {
-				$path = $location . $folder . '/';
-
-				if (file_exists($path)) {
-					$this->_path = $path;
-					return;
-				}
-			}
-		}
-
-		throw new BundleException(sprintf('Resource bundle %s could not be located.', $folder));
-	}
-
-	/**
-	 * Load the file from the resource bundle if it exists and cache the data.
-	 * If the file does not exist, return an empty array.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return array
-	 * @throws \titon\libs\bundles\g11n\BundleException
-	 */
-	public function load($key) {
-		throw new BundleException(sprintf('You must define the load() method within your %s Bundle.', get_class($this)));
 	}
 
 }

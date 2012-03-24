@@ -337,7 +337,7 @@ class G11n {
 	 */
 	public function loadBundle($key, array $config = array()) {
 		$bundle = new LocaleBundle(array(
-			'folder' => $this->canonicalize($key, self::FORMAT_3),
+			'bundle' => $this->canonicalize($key, self::FORMAT_3),
 		));
 
 		$config = $config + $bundle->locale();
