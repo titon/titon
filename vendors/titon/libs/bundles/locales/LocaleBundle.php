@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
  
-namespace titon\libs\bundles\g11n;
+namespace titon\libs\bundles\locales;
 
 use \titon\libs\bundles\BundleAbstract;
 use \titon\utility\Inflector;
@@ -16,7 +16,7 @@ use \titon\utility\Inflector;
  * The LocaleBundle manages the loading of locale resources which contain locale specific configuration,
  * validation rules (phone numbers, zip codes, etc) and inflection rules (plurals, singulars, irregulars, etc).
  *
- * @package	titon.libs.bundles.g11n
+ * @package	titon.libs.bundles.locales
  * @uses	titon\utility\Inflector
  */
 class LocaleBundle extends BundleAbstract {

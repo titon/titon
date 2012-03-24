@@ -10,7 +10,7 @@
 namespace titon\core;
 
 use \titon\core\CoreException;
-use \titon\libs\bundles\g11n\LocaleBundle;
+use \titon\libs\bundles\locales\LocaleBundle;
 use \titon\libs\storage\Storage;
 use \titon\libs\translators\Translator;
 
@@ -24,6 +24,9 @@ use \titon\libs\translators\Translator;
  *
  * @package	titon.core
  * @uses	titon\core\CoreException
+ * @uses	titon\libs\bundles\locales\LocaleBundle
+ * @uses	titon\libs\storage\Storage
+ * @uses	titon\libs\translators\Translator
  */
 class G11n {
 
@@ -35,7 +38,7 @@ class G11n {
 	const FORMAT_3 = 3;
 	
 	/**
-	 * Currently active locale key based on the client.
+	 * Currently active locale bundle based on the client.
 	 * 
 	 * @access protected
 	 * @var string
@@ -51,7 +54,7 @@ class G11n {
 	protected $_fallback;
 	
 	/**
-	 * Supported locales and related meta data.
+	 * Loaded locale bundles.
 	 * 
 	 * @access protected
 	 * @var array
@@ -62,15 +65,15 @@ class G11n {
 	 * Storage engine for caching.
 	 * 
 	 * @access protected
-	 * @var Storage
+	 * @var \titon\libs\storage\Storage
 	 */
 	protected $_storage;
 
 	/**
-	 * Translator object to use for string fetching and parsing.
+	 * Translator used for string fetching and parsing.
 	 * 
 	 * @access protected
-	 * @var Translator
+	 * @var \titon\libs\translators\Translator
 	 */
 	protected $_translator;
 	
@@ -89,7 +92,7 @@ class G11n {
 	public function apply($key) {
 		$key = $this->canonicalize($key);
 
-		if (empty($this->_locales[$key])) {
+		if (!isset($this->_locales[$key])) {
 			throw new CoreException(sprintf('Locale %s does not exist.', $key));
 		}
 
@@ -118,14 +121,17 @@ class G11n {
 				$locale['iso2']
 			));
 		}
-		
+
+		// Use fallback options
+		$fallbackLocale = $this->getFallback()->locale();
+
 		$options = array_merge($options, array(
-			'eng.UTF8',
-			'eng.UTF-8',
-			'eng',
-			'en_US'
+			$fallbackLocale['id'] . '.UTF8',
+			$fallbackLocale['id'] . '.UTF-8',
+			$fallbackLocale['id']
 		));
 
+		// Set environment
 		putenv('LC_ALL=' . $locale['id']);
 		setlocale(LC_ALL, $options);
 		
@@ -162,11 +168,14 @@ class G11n {
 	 * @access public
 	 * @param string $key
 	 * @param int $format
+	 * @param boolean $full
 	 * @return string
 	 */
-	public function canonicalize($key, $format = self::FORMAT_1) {
+	public function canonicalize($key, $format = self::FORMAT_1, $full = false) {
 		$parts = explode('-', str_replace('_', '-', strtolower($key)));
+
 		$return = $parts[0];
+		unset($parts[0]);
 		
 		if (isset($parts[1])) {
 			switch ($format) {
@@ -180,6 +189,12 @@ class G11n {
 					$return .= '_' . strtoupper($parts[1]);
 				break;
 			}
+
+			unset($parts[1]);
+		}
+
+		if ($full && count($parts) > 0) {
+			$return .= '-' . implode('-', $parts);
 		}
 		
 		return $return;
@@ -189,7 +204,7 @@ class G11n {
 	 * Return the current locale config, or a certain value.
 	 * 
 	 * @access public
-	 * @return \titon\libs\bundles\g11n\LocaleBundle
+	 * @return \titon\libs\bundles\locales\LocaleBundle
 	 */
 	public function current() {
 		return $this->_current;
@@ -222,7 +237,7 @@ class G11n {
 	 * Return the fallback locale bundle.
 	 * 
 	 * @access public
-	 * @return \titon\libs\bundles\g11n\LocaleBundle
+	 * @return \titon\libs\bundles\locales\LocaleBundle
 	 * @throws \titon\core\CoreException
 	 */
 	public function getFallback() {
@@ -317,7 +332,7 @@ class G11n {
 	 * @access public
 	 * @param string $key
 	 * @param array $config
-	 * @return \titon\libs\bundles\g11n\LocaleBundle
+	 * @return \titon\libs\bundles\locales\LocaleBundle
 	 * @throws \titon\core\CoreException
 	 */
 	public function loadBundle($key, array $config = array()) {

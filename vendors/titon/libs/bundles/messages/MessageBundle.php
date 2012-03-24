@@ -7,14 +7,14 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
  
-namespace titon\libs\bundles\g11n;
+namespace titon\libs\bundles\messages;
 
 use \titon\libs\bundles\BundleAbstract;
 
 /**
  * @todo
  *
- * @package	titon.libs.bundles.g11n
+ * @package	titon.libs.bundles.messages
  */
 class MessageBundle extends BundleAbstract {
 
