@@ -43,13 +43,21 @@ class Inflector {
 	 * @static
 	 */
 	public static function filename($string, $ext = 'php', $capitalize = true) {
+		if (strpos($string, '.') !== false) {
+			$string = substr($string, 0, strrpos($string, '.'));
+		}
+
 		$path = self::camelize($string);
 		
-		if ($capitalize) {
-			$path = ucfirst($path);
+		if (!$capitalize) {
+			$path = lcfirst($path);
+		}
+
+		if (substr($path, -(strlen($ext) + 1)) != '.' . $ext) {
+			$path .= '.' . $ext;
 		}
 		
-		return $path . '.' . $ext;
+		return $path;
 	}
 
 	/**

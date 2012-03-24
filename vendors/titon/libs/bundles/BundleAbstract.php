@@ -11,6 +11,7 @@ namespace titon\libs\bundles;
 
 use \titon\base\Base;
 use \titon\libs\bundles\Bundle;
+use \titon\libs\bundles\BundleException;
 
 /**
  * @todo
@@ -19,5 +20,122 @@ use \titon\libs\bundles\Bundle;
  * @abstract
  */
 abstract class BundleAbstract extends Base implements Bundle {
+	// use Memoizer;
+
+	/**
+	 * Configuration.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_config = array(
+		'folder' => '',
+		'ext' => 'php'
+	);
+
+	/**
+	 * Loaded data.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_data = array();
+
+	/**
+	 * Resource bundle path.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_path;
+
+	/**
+	 * Resource locations.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_locations = array();
+
+	/**
+	 * Return all the data from the loaded resource files.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function data() {
+		return $this->_data;
+	}
+
+	/**
+	 * List of all filenames within the resource bundle.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function files() {
+		return $this->cacheMethod(__FUNCTION__, null, function($self) {
+			return array_map('basename', glob($self->path() . '*'));
+		});
+	}
+
+	/**
+	 * List of locations to find the resource bundle in.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function locations() {
+		return $this->_locations;
+	}
+
+	/**
+	 * Return the final resource bundle path.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function path() {
+		return $this->_path;
+	}
+
+	/**
+	 * Attempt to find the resource bundle within the resource locations.
+	 *
+	 * @access public
+	 * @return void
+	 * @throws BundleException
+	 */
+	public function initialize() {
+		$folder = $this->config('folder');
+
+		if (empty($folder)) {
+			$folder = '[empty]';
+		} else {
+			foreach ($this->locations() as $location) {
+				$path = $location . $folder . '/';
+
+				if (file_exists($path)) {
+					$this->_path = $path;
+					return;
+				}
+			}
+		}
+
+		throw new BundleException(sprintf('Resource bundle %s could not be located.', $folder));
+	}
+
+	/**
+	 * Load the file from the resource bundle if it exists and cache the data.
+	 * If the file does not exist, return an empty array.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return void
+	 * @throws BundleException
+	 */
+	public function load($key) {
+		throw new BundleException(sprintf('You must define the run() method within your %s Bundle.', get_class($this)));
+	}
 
 }
