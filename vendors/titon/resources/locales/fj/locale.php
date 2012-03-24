@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'fj',
 	'iso3' => 'fij',
 	'timezone' => '',
-	'language' => 'Fijian',
+	'title' => 'Fijian',
 );

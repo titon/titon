@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'av',
 	'iso3' => 'ava',
 	'timezone' => '',
-	'language' => 'Avaric',
+	'title' => 'Avaric',
 );

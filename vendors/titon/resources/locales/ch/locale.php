@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ch',
 	'iso3' => 'cha',
 	'timezone' => '',
-	'language' => 'Chamorro',
+	'title' => 'Chamorro',
 );

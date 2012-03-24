@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'or',
 	'iso3' => 'ori',
 	'timezone' => '',
-	'language' => 'Oriya',
+	'title' => 'Oriya',
 );

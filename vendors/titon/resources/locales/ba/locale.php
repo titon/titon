@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ba',
 	'iso3' => 'bak',
 	'timezone' => '',
-	'language' => 'Bashkir',
+	'title' => 'Bashkir',
 );

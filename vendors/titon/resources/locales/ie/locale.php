@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ie',
 	'iso3' => 'ile',
 	'timezone' => '',
-	'language' => 'Interlingue',
+	'title' => 'Interlingue',
 );

@@ -12,5 +12,5 @@ return array(
 	'id' => 'ru_MO',
 	'parent' => 'ru',
 	'timezone' => '',
-	'language' => 'Russian (Moldavia)',
+	'title' => 'Russian (Moldavia)',
 );

@@ -12,5 +12,5 @@ return array(
 	'id' => 'ar_LB',
 	'parent' => 'ar',
 	'timezone' => '',
-	'language' => 'Arabic (Lebanon)',
+	'title' => 'Arabic (Lebanon)',
 );

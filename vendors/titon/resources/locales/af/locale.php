@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'af',
 	'iso3' => 'afr',
 	'timezone' => '',
-	'language' => 'Afrikaans',
+	'title' => 'Afrikaans',
 );

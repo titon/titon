@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_CR',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Costa Rica)',
+	'title' => 'Spanish (Costa Rica)',
 );

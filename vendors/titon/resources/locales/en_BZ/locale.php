@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_BZ',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (Belize)',
+	'title' => 'English (Belize)',
 );

@@ -12,5 +12,5 @@ return array(
 	'id' => 'bo_IN',
 	'parent' => 'bo',
 	'timezone' => '',
-	'language' => 'Tibetan (India)',
+	'title' => 'Tibetan (India)',
 );

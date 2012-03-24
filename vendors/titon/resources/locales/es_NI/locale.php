@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_NI',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Nicaragua)',
+	'title' => 'Spanish (Nicaragua)',
 );

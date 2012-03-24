@@ -12,5 +12,5 @@ return array(
 	'id' => 'ar_QA',
 	'parent' => 'ar',
 	'timezone' => '',
-	'language' => 'Arabic (Qatar)',
+	'title' => 'Arabic (Qatar)',
 );

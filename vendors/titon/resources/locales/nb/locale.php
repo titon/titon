@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'nb',
 	'iso3' => 'nob',
 	'timezone' => '',
-	'language' => 'Norwegian Bokmal',
+	'title' => 'Norwegian Bokmal',
 );

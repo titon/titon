@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'sk',
 	'iso3' => array('slk', 'slo'),
 	'timezone' => '',
-	'language' => 'Slovak',
+	'title' => 'Slovak',
 );

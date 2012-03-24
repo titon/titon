@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'sc',
 	'iso3' => 'srd',
 	'timezone' => '',
-	'language' => 'Sardinian',
+	'title' => 'Sardinian',
 );

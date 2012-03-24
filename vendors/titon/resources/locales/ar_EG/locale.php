@@ -12,5 +12,5 @@ return array(
 	'id' => 'ar_EG',
 	'parent' => 'ar',
 	'timezone' => '',
-	'language' => 'Arabic (Egypt)',
+	'title' => 'Arabic (Egypt)',
 );

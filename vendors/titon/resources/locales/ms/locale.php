@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ms',
 	'iso3' => array('msa', 'may'),
 	'timezone' => '',
-	'language' => 'Malaysian',
+	'title' => 'Malaysian',
 );

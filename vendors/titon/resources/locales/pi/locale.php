@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'pi',
 	'iso3' => 'pli',
 	'timezone' => '',
-	'language' => 'Pali',
+	'title' => 'Pali',
 );

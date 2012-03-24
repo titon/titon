@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_DO',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Dominican Republic)',
+	'title' => 'Spanish (Dominican Republic)',
 );

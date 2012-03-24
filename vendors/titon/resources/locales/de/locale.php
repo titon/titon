@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'de',
 	'iso3' => array('ger', 'deu'),
 	'timezone' => '',
-	'language' => 'German (Standard)',
+	'title' => 'German (Standard)',
 );

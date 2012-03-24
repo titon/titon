@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_JM',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (Jamaica)',
+	'title' => 'English (Jamaica)',
 );

@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'lg',
 	'iso3' => 'lug',
 	'timezone' => '',
-	'language' => 'Ganda',
+	'title' => 'Ganda',
 );

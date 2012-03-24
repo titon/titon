@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'fo',
 	'iso3' => 'fao',
 	'timezone' => '',
-	'language' => 'Faeroese',
+	'title' => 'Faeroese',
 );

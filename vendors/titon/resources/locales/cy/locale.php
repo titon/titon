@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'cy',
 	'iso3' => array('wel', 'cym'),
 	'timezone' => '',
-	'language' => 'Welsh',
+	'title' => 'Welsh',
 );

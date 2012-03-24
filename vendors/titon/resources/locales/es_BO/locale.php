@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_BO',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Bolivia)',
+	'title' => 'Spanish (Bolivia)',
 );

@@ -12,5 +12,5 @@ return array(
 	'id' => 'ar_TN',
 	'parent' => 'ar',
 	'timezone' => '',
-	'language' => 'Arabic (Tunisia)',
+	'title' => 'Arabic (Tunisia)',
 );

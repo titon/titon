@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_HN',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Honduras)',
+	'title' => 'Spanish (Honduras)',
 );

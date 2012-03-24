@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'te',
 	'iso3' => 'tel',
 	'timezone' => '',
-	'language' => 'Telugu',
+	'title' => 'Telugu',
 );

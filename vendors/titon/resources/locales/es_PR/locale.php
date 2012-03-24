@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_PR',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Puerto Rico)',
+	'title' => 'Spanish (Puerto Rico)',
 );

@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ca',
 	'iso3' => 'cat',
 	'timezone' => '',
-	'language' => 'Catalan',
+	'title' => 'Catalan',
 );

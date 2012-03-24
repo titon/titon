@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'aa',
 	'iso3' => 'aar',
 	'timezone' => '',
-	'language' => 'Afar',
+	'title' => 'Afar',
 );

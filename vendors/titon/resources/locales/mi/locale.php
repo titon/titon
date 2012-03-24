@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'mi',
 	'iso3' => array('mri', 'mao'),
 	'timezone' => '',
-	'language' => 'Maori',
+	'title' => 'Maori',
 );

@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'om',
 	'iso3' => 'orm',
 	'timezone' => '',
-	'language' => 'Oromo',
+	'title' => 'Oromo',
 );

@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'wa',
 	'iso3' => 'wln',
 	'timezone' => '',
-	'language' => 'Walloon',
+	'title' => 'Walloon',
 );

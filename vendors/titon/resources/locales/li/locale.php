@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'li',
 	'iso3' => 'lim',
 	'timezone' => '',
-	'language' => 'Limburgan',
+	'title' => 'Limburgan',
 );

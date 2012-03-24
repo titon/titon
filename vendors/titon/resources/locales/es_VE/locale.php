@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_VE',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Venezuela)',
+	'title' => 'Spanish (Venezuela)',
 );

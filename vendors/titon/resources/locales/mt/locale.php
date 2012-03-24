@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'mt',
 	'iso3' => 'mlt',
 	'timezone' => '',
-	'language' => 'Maltese',
+	'title' => 'Maltese',
 );

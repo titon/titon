@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_PE',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Peru)',
+	'title' => 'Spanish (Peru)',
 );

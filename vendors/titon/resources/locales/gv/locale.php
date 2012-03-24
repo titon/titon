@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'gv',
 	'iso3' => 'glv',
 	'timezone' => '',
-	'language' => 'Manx',
+	'title' => 'Manx',
 );

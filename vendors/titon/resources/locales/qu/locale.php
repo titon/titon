@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'qu',
 	'iso3' => 'que',
 	'timezone' => '',
-	'language' => 'Quechua',
+	'title' => 'Quechua',
 );

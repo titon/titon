@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'la',
 	'iso3' => 'lat',
 	'timezone' => '',
-	'language' => 'Latin',
+	'title' => 'Latin',
 );

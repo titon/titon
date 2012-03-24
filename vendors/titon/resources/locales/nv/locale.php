@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'nv',
 	'iso3' => 'nav',
 	'timezone' => '',
-	'language' => 'Navajo',
+	'title' => 'Navajo',
 );

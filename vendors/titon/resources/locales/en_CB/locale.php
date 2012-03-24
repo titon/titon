@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_CB',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (Caribbean)',
+	'title' => 'English (Caribbean)',
 );

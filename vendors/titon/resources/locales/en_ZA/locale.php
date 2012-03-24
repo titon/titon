@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_ZA',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (South Africa)',
+	'title' => 'English (South Africa)',
 );

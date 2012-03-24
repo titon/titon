@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'gn',
 	'iso3' => 'grn',
 	'timezone' => '',
-	'language' => 'Guarani',
+	'title' => 'Guarani',
 );

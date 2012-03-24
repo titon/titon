@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'rm',
 	'iso3' => 'roh',
 	'timezone' => '',
-	'language' => 'Rhaeto-Romanic',
+	'title' => 'Rhaeto-Romanic',
 );

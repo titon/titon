@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'nn',
 	'iso3' => 'nno',
 	'timezone' => '',
-	'language' => 'Norwegian Nynorsk',
+	'title' => 'Norwegian Nynorsk',
 );

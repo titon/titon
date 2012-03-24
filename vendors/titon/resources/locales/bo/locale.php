@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'bo',
 	'iso3' => array('tib', 'bod'),
 	'timezone' => '',
-	'language' => 'Tibetan',
+	'title' => 'Tibetan',
 );

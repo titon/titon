@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'sr',
 	'iso3' => 'scc',
 	'timezone' => '',
-	'language' => 'Serbian',
+	'title' => 'Serbian',
 );

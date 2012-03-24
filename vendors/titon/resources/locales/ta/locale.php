@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ta',
 	'iso3' => 'tam',
 	'timezone' => '',
-	'language' => 'Tamil',
+	'title' => 'Tamil',
 );

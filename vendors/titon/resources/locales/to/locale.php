@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'to',
 	'iso3' => 'ton',
 	'timezone' => '',
-	'language' => 'Tonga',
+	'title' => 'Tonga',
 );

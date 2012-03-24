@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_MX',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Mexico)',
+	'title' => 'Spanish (Mexico)',
 );

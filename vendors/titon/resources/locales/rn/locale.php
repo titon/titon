@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'rn',
 	'iso3' => 'run',
 	'timezone' => '',
-	'language' => 'Rundi',
+	'title' => 'Rundi',
 );

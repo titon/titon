@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'nr',
 	'iso3' => 'nbl',
 	'timezone' => '',
-	'language' => 'South Ndebele',
+	'title' => 'South Ndebele',
 );

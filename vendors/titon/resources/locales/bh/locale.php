@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'bh',
 	'iso3' => 'bih',
 	'timezone' => '',
-	'language' => 'Bihari',
+	'title' => 'Bihari',
 );

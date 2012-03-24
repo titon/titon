@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ku',
 	'iso3' => 'kur',
 	'timezone' => '',
-	'language' => 'Kurdish',
+	'title' => 'Kurdish',
 );

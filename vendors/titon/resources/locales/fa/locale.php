@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'fa',
 	'iso3' => array('fas', 'per'),
 	'timezone' => '',
-	'language' => 'Farsi / Persian',
+	'title' => 'Farsi / Persian',
 );

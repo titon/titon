@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ko',
 	'iso3' => 'kor',
 	'timezone' => '',
-	'language' => 'Korean',
+	'title' => 'Korean',
 );

@@ -12,5 +12,5 @@ return array(
 	'id' => 'ar_OM',
 	'parent' => 'ar',
 	'timezone' => '',
-	'language' => 'Arabic (Oman)',
+	'title' => 'Arabic (Oman)',
 );

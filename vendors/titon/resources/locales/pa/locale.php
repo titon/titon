@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'pa',
 	'iso3' => 'pan',
 	'timezone' => '',
-	'language' => 'Panjabi',
+	'title' => 'Panjabi',
 );

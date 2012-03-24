@@ -12,5 +12,5 @@ return array(
 	'id' => 'zh_MO',
 	'parent' => 'zh',
 	'timezone' => '',
-	'language' => 'Chinese (Macau)',
+	'title' => 'Chinese (Macau)',
 );

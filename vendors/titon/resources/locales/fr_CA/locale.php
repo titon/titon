@@ -12,5 +12,5 @@ return array(
 	'id' => 'fr_CA',
 	'parent' => 'fr',
 	'timezone' => '',
-	'language' => 'French (Canadian)',
+	'title' => 'French (Canadian)',
 );

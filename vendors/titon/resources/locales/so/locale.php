@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'so',
 	'iso3' => 'som',
 	'timezone' => '',
-	'language' => 'Somali',
+	'title' => 'Somali',
 );

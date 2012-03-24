@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ks',
 	'iso3' => 'kas',
 	'timezone' => '',
-	'language' => 'Kashmiri',
+	'title' => 'Kashmiri',
 );

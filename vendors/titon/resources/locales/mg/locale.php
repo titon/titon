@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'mg',
 	'iso3' => 'mlg',
 	'timezone' => '',
-	'language' => 'Malagasy',
+	'title' => 'Malagasy',
 );

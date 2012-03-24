@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'kg',
 	'iso3' => 'kon',
 	'timezone' => '',
-	'language' => 'Kongo',
+	'title' => 'Kongo',
 );

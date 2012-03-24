@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ro',
 	'iso3' => array('ron', 'rum'),
 	'timezone' => '',
-	'language' => 'Romanian',
+	'title' => 'Romanian',
 );

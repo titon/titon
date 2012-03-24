@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'za',
 	'iso3' => 'zha',
 	'timezone' => '',
-	'language' => 'Zhuang',
+	'title' => 'Zhuang',
 );

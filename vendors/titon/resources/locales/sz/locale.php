@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'sz',
 	'iso3' => 'smi',
 	'timezone' => '',
-	'language' => 'Sami (Lappish)',
+	'title' => 'Sami (Lappish)',
 );

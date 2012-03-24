@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'kw',
 	'iso3' => 'cor',
 	'timezone' => '',
-	'language' => 'Cornish',
+	'title' => 'Cornish',
 );

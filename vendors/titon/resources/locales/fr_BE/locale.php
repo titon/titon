@@ -12,5 +12,5 @@ return array(
 	'id' => 'fr_BE',
 	'parent' => 'fr',
 	'timezone' => '',
-	'language' => 'French (Belgium)',
+	'title' => 'French (Belgium)',
 );

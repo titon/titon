@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ka',
 	'iso3' => array('kat', 'geo'),
 	'timezone' => '',
-	'language' => 'Georgian',
+	'title' => 'Georgian',
 );

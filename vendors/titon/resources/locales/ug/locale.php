@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ug',
 	'iso3' => 'uig',
 	'timezone' => '',
-	'language' => 'Uighur',
+	'title' => 'Uighur',
 );

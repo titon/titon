@@ -12,5 +12,5 @@ return array(
 	'id' => 'fr_CH',
 	'parent' => 'fr',
 	'timezone' => '',
-	'language' => 'French (Swiss)',
+	'title' => 'French (Swiss)',
 );

@@ -12,5 +12,5 @@ return array(
 	'id' => 'ro_MO',
 	'parent' => 'ro',
 	'timezone' => '',
-	'language' => 'Romanian (Moldavia)',
+	'title' => 'Romanian (Moldavia)',
 );

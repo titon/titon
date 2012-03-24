@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'tl',
 	'iso3' => 'tgl',
 	'timezone' => '',
-	'language' => 'Tagalog',
+	'title' => 'Tagalog',
 );

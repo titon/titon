@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'rw',
 	'iso3' => 'kin',
 	'timezone' => '',
-	'language' => 'Kinyarwanda',
+	'title' => 'Kinyarwanda',
 );

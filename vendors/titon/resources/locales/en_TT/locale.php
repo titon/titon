@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_TT',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (Trinidad)',
+	'title' => 'English (Trinidad)',
 );

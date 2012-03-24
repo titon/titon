@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'kn',
 	'iso3' => 'kan',
 	'timezone' => '',
-	'language' => 'Kannada',
+	'title' => 'Kannada',
 );

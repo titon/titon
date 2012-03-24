@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_AU',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (Australian)',
+	'title' => 'English (Australian)',
 );

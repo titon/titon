@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'mn',
 	'iso3' => 'mon',
 	'timezone' => '',
-	'language' => 'Mongolian',
+	'title' => 'Mongolian',
 );

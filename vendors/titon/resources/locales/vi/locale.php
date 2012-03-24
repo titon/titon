@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'vi',
 	'iso3' => 'vie',
 	'timezone' => '',
-	'language' => 'Vietnamese',
+	'title' => 'Vietnamese',
 );

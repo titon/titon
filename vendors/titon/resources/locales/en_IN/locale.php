@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_IN',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (India)',
+	'title' => 'English (India)',
 );

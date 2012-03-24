@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_PH',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (Phillippines)',
+	'title' => 'English (Phillippines)',
 );

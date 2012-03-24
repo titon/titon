@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_NZ',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (New Zealand)',
+	'title' => 'English (New Zealand)',
 );

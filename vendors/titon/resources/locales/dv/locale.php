@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'dv',
 	'iso3' => 'div',
 	'timezone' => '',
-	'language' => 'Divehi',
+	'title' => 'Divehi',
 );

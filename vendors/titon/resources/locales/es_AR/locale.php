@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_AR',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Argentina)',
+	'title' => 'Spanish (Argentina)',
 );

@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'gu',
 	'iso3' => 'guj',
 	'timezone' => '',
-	'language' => 'Gujarati',
+	'title' => 'Gujarati',
 );

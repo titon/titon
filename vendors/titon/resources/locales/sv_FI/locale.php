@@ -12,5 +12,5 @@ return array(
 	'id' => 'sv_FI',
 	'parent' => 'sv',
 	'timezone' => '',
-	'language' => 'Swedish (Finland)',
+	'title' => 'Swedish (Finland)',
 );

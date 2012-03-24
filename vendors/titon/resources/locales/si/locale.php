@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'si',
 	'iso3' => 'sin',
 	'timezone' => '',
-	'language' => 'Sinhala',
+	'title' => 'Sinhala',
 );

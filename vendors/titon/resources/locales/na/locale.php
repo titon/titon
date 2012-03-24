@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'na',
 	'iso3' => 'nau',
 	'timezone' => '',
-	'language' => 'Nauru',
+	'title' => 'Nauru',
 );

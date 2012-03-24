@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'hz',
 	'iso3' => 'her',
 	'timezone' => '',
-	'language' => 'Herero',
+	'title' => 'Herero',
 );

@@ -12,5 +12,5 @@ return array(
 	'id' => 'ar_LY',
 	'parent' => 'ar',
 	'timezone' => '',
-	'language' => 'Arabic (Libya)',
+	'title' => 'Arabic (Libya)',
 );

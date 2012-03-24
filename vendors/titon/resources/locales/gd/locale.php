@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'gd',
 	'iso3' => 'gla',
 	'timezone' => '',
-	'language' => 'Gaelic (Scots)',
+	'title' => 'Gaelic (Scots)',
 );

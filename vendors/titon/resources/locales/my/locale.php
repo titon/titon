@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'my',
 	'iso3' => array('mya', 'bur'),
 	'timezone' => '',
-	'language' => 'Burmese',
+	'title' => 'Burmese',
 );

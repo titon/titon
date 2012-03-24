@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'vo',
 	'iso3' => 'vol',
 	'timezone' => '',
-	'language' => 'Volapük',
+	'title' => 'Volapük',
 );

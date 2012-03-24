@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'yi',
 	'iso3' => 'yid',
 	'timezone' => '',
-	'language' => 'Yiddish',
+	'title' => 'Yiddish',
 );

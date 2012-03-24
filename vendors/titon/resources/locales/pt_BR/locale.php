@@ -12,5 +12,5 @@ return array(
 	'id' => 'pt_BR',
 	'parent' => 'pt',
 	'timezone' => '',
-	'language' => 'Portuguese (Brazil)',
+	'title' => 'Portuguese (Brazil)',
 );

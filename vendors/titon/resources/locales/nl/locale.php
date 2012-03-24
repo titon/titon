@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'nl',
 	'iso3' => array('nld', 'dut'),
 	'timezone' => '',
-	'language' => 'Dutch (Standard)',
+	'title' => 'Dutch (Standard)',
 );

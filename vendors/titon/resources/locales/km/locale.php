@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'km',
 	'iso3' => 'khm',
 	'timezone' => '',
-	'language' => 'Central Khmer',
+	'title' => 'Central Khmer',
 );

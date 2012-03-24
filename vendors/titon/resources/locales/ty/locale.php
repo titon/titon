@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ty',
 	'iso3' => 'tah',
 	'timezone' => '',
-	'language' => 'Tahitian',
+	'title' => 'Tahitian',
 );

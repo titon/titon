@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'sv',
 	'iso3' => 'swe',
 	'timezone' => '',
-	'language' => 'Swedish',
+	'title' => 'Swedish',
 );

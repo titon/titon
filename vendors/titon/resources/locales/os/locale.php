@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'os',
 	'iso3' => 'oss',
 	'timezone' => '',
-	'language' => 'Ossetian',
+	'title' => 'Ossetian',
 );

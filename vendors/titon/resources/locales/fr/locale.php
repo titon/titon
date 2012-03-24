@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'fr',
 	'iso3' => array('fra', 'fre'),
 	'timezone' => '',
-	'language' => 'French (Standard)',
+	'title' => 'French (Standard)',
 );

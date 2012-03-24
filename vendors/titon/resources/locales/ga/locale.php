@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ga',
 	'iso3' => 'gle',
 	'timezone' => '',
-	'language' => 'Irish',
+	'title' => 'Irish',
 );

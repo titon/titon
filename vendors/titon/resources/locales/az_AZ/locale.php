@@ -12,5 +12,5 @@ return array(
 	'id' => 'az_AZ',
 	'parent' => 'az',
 	'timezone' => '',
-	'language' => 'Azerbaijani (Cyrillic)',
+	'title' => 'Azerbaijani (Cyrillic)',
 );

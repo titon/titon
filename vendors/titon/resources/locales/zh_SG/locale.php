@@ -12,5 +12,5 @@ return array(
 	'id' => 'zh_SG',
 	'parent' => 'zh',
 	'timezone' => '',
-	'language' => 'Chinese (Singapore)',
+	'title' => 'Chinese (Singapore)',
 );

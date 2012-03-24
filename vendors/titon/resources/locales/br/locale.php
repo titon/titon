@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'br',
 	'iso3' => 'bre',
 	'timezone' => '',
-	'language' => 'Breton',
+	'title' => 'Breton',
 );

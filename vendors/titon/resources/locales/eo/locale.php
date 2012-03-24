@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'eo',
 	'iso3' => 'epo',
 	'timezone' => '',
-	'language' => 'Esperanto',
+	'title' => 'Esperanto',
 );

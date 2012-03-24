@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ja',
 	'iso3' => 'jpn',
 	'timezone' => '',
-	'language' => 'Japanese',
+	'title' => 'Japanese',
 );

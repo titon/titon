@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'lb',
 	'iso3' => 'ltz',
 	'timezone' => '',
-	'language' => 'Luxembourgish',
+	'title' => 'Luxembourgish',
 );

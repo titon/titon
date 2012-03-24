@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ht',
 	'iso3' => 'hat',
 	'timezone' => '',
-	'language' => 'Haitian',
+	'title' => 'Haitian',
 );

@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ab',
 	'iso3' => 'abk',
 	'timezone' => '',
-	'language' => 'Abkhazian',
+	'title' => 'Abkhazian',
 );

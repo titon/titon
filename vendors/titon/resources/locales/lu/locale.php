@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'lu',
 	'iso3' => 'lub',
 	'timezone' => '',
-	'language' => 'Luba-Katanga',
+	'title' => 'Luba-Katanga',
 );

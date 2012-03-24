@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ne',
 	'iso3' => 'nep',
 	'timezone' => '',
-	'language' => 'Nepali',
+	'title' => 'Nepali',
 );

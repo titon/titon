@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ho',
 	'iso3' => 'hmo',
 	'timezone' => '',
-	'language' => 'Hiri Motu',
+	'title' => 'Hiri Motu',
 );

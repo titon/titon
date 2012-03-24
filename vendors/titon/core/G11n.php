@@ -329,7 +329,9 @@ class G11n {
 
 		// Merge with parent
 		if (!empty($config['parent'])) {
-			$this->setup($config['parent']);
+			if (!isset($this->_locales[$config['parent']])) {
+				$this->setup($config['parent']);
+			}
 
 			$config = $config + $this->_locales[$config['parent']]->locale();
 		}

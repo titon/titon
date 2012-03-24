@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'eu',
 	'iso3' => array('baq', 'eus'),
 	'timezone' => '',
-	'language' => 'Basque',
+	'title' => 'Basque',
 );

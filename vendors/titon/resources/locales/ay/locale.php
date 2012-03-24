@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ay',
 	'iso3' => 'aym',
 	'timezone' => '',
-	'language' => 'Aymara',
+	'title' => 'Aymara',
 );

@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'iu',
 	'iso3' => 'iku',
 	'timezone' => '',
-	'language' => 'Inuktitut',
+	'title' => 'Inuktitut',
 );

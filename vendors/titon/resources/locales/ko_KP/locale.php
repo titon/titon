@@ -12,5 +12,5 @@ return array(
 	'id' => 'ko_KP',
 	'parent' => 'ko',
 	'timezone' => '',
-	'language' => 'Korea (North)',
+	'title' => 'Korea (North)',
 );

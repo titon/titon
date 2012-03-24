@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'mk',
 	'iso3' => array('mkd', 'mac'),
 	'timezone' => '',
-	'language' => 'Macedonian',
+	'title' => 'Macedonian',
 );

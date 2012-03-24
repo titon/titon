@@ -12,5 +12,5 @@ return array(
 	'id' => 'de_LI',
 	'parent' => 'de',
 	'timezone' => '',
-	'language' => 'German (Liechtenstein)',
+	'title' => 'German (Liechtenstein)',
 );

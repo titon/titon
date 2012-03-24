@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_PY',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Paraguay)',
+	'title' => 'Spanish (Paraguay)',
 );

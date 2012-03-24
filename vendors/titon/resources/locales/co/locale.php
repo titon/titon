@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'co',
 	'iso3' => 'cos',
 	'timezone' => '',
-	'language' => 'Corsican',
+	'title' => 'Corsican',
 );

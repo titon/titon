@@ -12,5 +12,5 @@ return array(
 	'id' => 'en_GB',
 	'parent' => 'en',
 	'timezone' => '',
-	'language' => 'English (British)',
+	'title' => 'English (British)',
 );

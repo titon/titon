@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'zh',
 	'iso3' => array('chi', 'zho'),
 	'timezone' => '',
-	'language' => 'Chinese',
+	'title' => 'Chinese',
 );

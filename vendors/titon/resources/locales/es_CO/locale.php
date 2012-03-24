@@ -12,5 +12,5 @@ return array(
 	'id' => 'es_CO',
 	'parent' => 'es',
 	'timezone' => '',
-	'language' => 'Spanish (Colombia)',
+	'title' => 'Spanish (Colombia)',
 );

@@ -12,5 +12,5 @@ return array(
 	'id' => 'de_DE',
 	'parent' => 'de',
 	'timezone' => '',
-	'language' => 'German (Germany)',
+	'title' => 'German (Germany)',
 );

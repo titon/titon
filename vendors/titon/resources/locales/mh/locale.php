@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'mh',
 	'iso3' => 'mah',
 	'timezone' => '',
-	'language' => 'Marshallese',
+	'title' => 'Marshallese',
 );

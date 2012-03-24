@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'sq',
 	'iso3' => array('alb', 'sqi'),
 	'timezone' => '',
-	'language' => 'Albanian',
+	'title' => 'Albanian',
 );

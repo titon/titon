@@ -12,5 +12,5 @@ return array(
 	'id' => 'gd_IE',
 	'parent' => 'gd',
 	'timezone' => '',
-	'language' => 'Gaelic (Irish)',
+	'title' => 'Gaelic (Irish)',
 );
