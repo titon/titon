@@ -10,7 +10,7 @@
 // Spanish (Dominican Republic)
 return array(
 	'id' => 'es_DO',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Dominican Republic)',
 );

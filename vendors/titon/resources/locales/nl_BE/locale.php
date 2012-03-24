@@ -10,7 +10,7 @@
 // Dutch (Belgium)
 return array(
 	'id' => 'nl_BE',
-	'fallback' => 'nl',
+	'parent' => 'nl',
 	'timezone' => '',
 	'language' => 'Dutch (Belgium)',
 );

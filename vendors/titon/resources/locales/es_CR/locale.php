@@ -10,7 +10,7 @@
 // Spanish (Costa Rica)
 return array(
 	'id' => 'es_CR',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Costa Rica)',
 );

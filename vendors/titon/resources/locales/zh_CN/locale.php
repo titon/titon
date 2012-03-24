@@ -10,7 +10,7 @@
 // Chinese (PRC)
 return array(
 	'id' => 'zh_CN',
-	'fallback' => 'zh',
+	'parent' => 'zh',
 	'timezone' => '',
 	'language' => 'Chinese (PRC)',
 );

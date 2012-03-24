@@ -10,6 +10,7 @@
 namespace titon\core;
 
 use \titon\core\CoreException;
+use \titon\libs\bundles\g11n\LocaleBundle;
 use \titon\libs\storage\Storage;
 use \titon\libs\translators\Translator;
 
@@ -86,12 +87,14 @@ class G11n {
 	 * @chainable
 	 */
 	public function apply($key) {
+		$key = $this->canonicalize($key);
+
 		if (empty($this->_locales[$key])) {
 			throw new CoreException(sprintf('Locale %s does not exist.', $key));
 		}
-		
-		$locale = $this->loadBundle($key);
-		$this->_current = $key;
+
+		$bundle = $this->_locales[$key];
+		$locale = $bundle->locale();
 		
 		// Build array of options to set
 		$options = array(
@@ -129,6 +132,8 @@ class G11n {
 		if (!empty($locale['timezone'])) {
 			$this->applyTimezone($locale['timezone']);
 		}
+
+		$this->_current = $bundle;
 		
 		return $this;
 	}
@@ -184,17 +189,10 @@ class G11n {
 	 * Return the current locale config, or a certain value.
 	 * 
 	 * @access public
-	 * @param string $key
-	 * @return string|array
+	 * @return \titon\libs\bundles\g11n\LocaleBundle
 	 */
-	public function current($key = null) {
-		$locale = $this->_locales[$this->_current];
-		
-		if (isset($locale[$key])) {
-			return $locale[$key];
-		}
-		
-		return $locale;
+	public function current() {
+		return $this->_current;
 	}
 	
 	/**
@@ -207,28 +205,28 @@ class G11n {
 	 * @chainable
 	 */
 	public function fallbackAs($key) {
-		if (empty($this->_locales[$key])) {
+		$key = $this->canonicalize($key);
+
+		if (!isset($this->_locales[$key])) {
 			throw new CoreException(sprintf('Locale %s has not been setup.', $key));
 		}
 
 		$this->_fallback = $key;
-		
-		$locale = $this->loadBundle($key);
-		
-		ini_set('intl.default_locale', $locale['id']);
+
+		ini_set('intl.default_locale', $this->_locales[$key]->config('locale.id'));
 		
 		return $this;
 	}
 	
 	/**
-	 * Return the fallback locale.
+	 * Return the fallback locale bundle.
 	 * 
 	 * @access public
-	 * @return array
+	 * @return \titon\libs\bundles\g11n\LocaleBundle
 	 * @throws \titon\core\CoreException
 	 */
 	public function getFallback() {
-		if (!$this->_fallback || empty($this->_locales[$this->_fallback])) {
+		if (!$this->_fallback || !isset($this->_locales[$this->_fallback])) {
 			throw new CoreException('Fallback locale has not been setup.');
 		}
 		
@@ -236,7 +234,7 @@ class G11n {
 	}
 	
 	/**
-	 * Returns the setup locales.
+	 * Returns the setup locales bundles.
 	 * 
 	 * @access public
 	 * @return array
@@ -244,25 +242,7 @@ class G11n {
 	public function getLocales() {
 		return $this->_locales;
 	}
-	
-	/**
-	 * Returns the supported locales based on the resources/locales folder.
-	 *
-	 * @todo Memoizer
-	 * 
-	 * @access public
-	 * @return array
-	 */
-	public function getSupportedBundles() {
-		if (!empty($this->_supportedLocales)) {
-			return $this->_supportedLocales;
-		}
 
-		$this->_supportedLocales = array_map('basename', glob(RES_LOCALES . '*', GLOB_ONLYDIR));
-
-		return $this->_supportedLocales;
-	}
-	
 	/**
 	 * Detect which locale to use based on the clients Accept-Language header.
 	 * 
@@ -303,7 +283,7 @@ class G11n {
 		
 		// Check for a translator
 		if (empty($this->_translator)) {
-			throw new CoreException('A translator is required for G11n string parsing.');
+			throw new CoreException('A translator is required for G11n message parsing.');
 		}
 	}
 	
@@ -315,7 +295,9 @@ class G11n {
 	 * @return boolean
 	 */
 	public function is($key) {
-		return ($this->current('key') == $key || $this->current('id') == $key);
+		$locale = $this->current()->locale();
+
+		return ($locale['key'] == $key || $locale['id'] == $key);
 	}
 	
 	/**
@@ -329,57 +311,60 @@ class G11n {
 	}
 
 	/**
-	 * Find the locale within the list of supported locale bundles based on the given key.
+	 * Find the locale within the list of supported locale resource bundles.
 	 * If a locale has a parent, merge the parent into the child to gain its values.
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return array
+	 * @param array $config
+	 * @return \titon\libs\bundles\g11n\LocaleBundle
 	 * @throws \titon\core\CoreException
 	 */
-	public function loadBundle($key) {
-		$id = $this->canonicalize($key, self::FORMAT_3);
-		$folder = RES_LOCALES . $id . '/';
-		$path = $folder . 'locale.php';
+	public function loadBundle($key, array $config = array()) {
+		$bundle = new LocaleBundle(array(
+			'folder' => $this->canonicalize($key, self::FORMAT_3),
+		));
 
-		if (!file_exists($folder) || !file_exists($path)) {
-			throw new CoreException(sprintf('%s is not a supported locale.', $id));
+		$config = $config + $bundle->locale();
+
+		// Merge with parent
+		if (!empty($config['parent'])) {
+			$this->setup($config['parent']);
+
+			$config = $config + $this->_locales[$config['parent']]->locale();
 		}
 
-		$locale = include $path;
+		// Generate meta data
+		$config['key'] = $key;
+		$config['language'] = substr($config['id'], 0, 2);
 
-		if (isset($locale['fallback'])) {
-			$locale = $locale + $this->loadBundle($locale['fallback']);
+		if (strlen($config['id']) > 2) {
+			$config['region'] = substr($config['id'], -2);
 		}
 
-		$locale['key'] = $key;
-		$locale['language'] = substr($locale['id'], 0, 2);
+		$bundle->configure('locale', $config);
 
-		if (strlen($locale['id']) > 2) {
-			$locale['region'] = substr($locale['id'], -2);
-		}
-
-		return $locale;
+		return $bundle;
 	}
 
 	/**
-	 * Accepts a list of locale keys to setup the application with. 
-	 * The list may accept the locale key in the array index or value position. 
-	 * If the locale key is placed in the index, the value may consist of an array to overwrite with.
+	 * Sets up the application with the defined locale key; the key will be formatted to a lowercase dashed URL friendly format.
+	 * The system will then attempt to load the locale resource bundle and finalize configuration settings.
 	 * 
 	 * @access public
-	 * @param array $keys
+	 * @param string $key
+	 * @param array $config
 	 * @return \titon\core\G11n
 	 * @chainable
 	 */
-	public function setup(array $keys) {
-		foreach ($keys as $key => $locale) {
-			if (is_string($locale)) {
-				$key = $locale;
-				$locale = array();
-			}
-			
-			$this->_locales[$key] = $locale + $this->loadBundle($key);
+	public function setup($key, array $config = array()) {
+		$urlKey = $this->canonicalize($key);
+
+		$this->_locales[$urlKey] = $this->loadBundle($key, $config);
+
+		// Set fallback if none defined
+		if (empty($this->_fallback)) {
+			$this->_fallback = $urlKey;
 		}
 		
 		return $this;

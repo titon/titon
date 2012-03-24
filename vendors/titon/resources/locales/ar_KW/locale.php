@@ -10,7 +10,7 @@
 // Arabic (Kuwait)
 return array(
 	'id' => 'ar_KW',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Kuwait)',
 );

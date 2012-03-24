@@ -10,7 +10,7 @@
 // Arabic (Morocco)
 return array(
 	'id' => 'ar_MA',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Morocco)',
 );

@@ -10,7 +10,7 @@
 // English (Ireland)
 return array(
 	'id' => 'en_IE',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (Ireland)',
 );

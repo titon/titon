@@ -10,7 +10,7 @@
 // Spanish (Ecuador)
 return array(
 	'id' => 'es_EC',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Ecuador)',
 );

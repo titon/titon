@@ -10,7 +10,7 @@
 // French (Swiss)
 return array(
 	'id' => 'fr_CH',
-	'fallback' => 'fr',
+	'parent' => 'fr',
 	'timezone' => '',
 	'language' => 'French (Swiss)',
 );

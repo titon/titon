@@ -10,7 +10,7 @@
 // Azerbaijani (Cyrillic)
 return array(
 	'id' => 'az_AZ',
-	'fallback' => 'az',
+	'parent' => 'az',
 	'timezone' => '',
 	'language' => 'Azerbaijani (Cyrillic)',
 );

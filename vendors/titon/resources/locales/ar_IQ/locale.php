@@ -10,7 +10,7 @@
 // Arabic (Iraq)
 return array(
 	'id' => 'ar_IQ',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Iraq)',
 );

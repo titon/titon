@@ -10,7 +10,7 @@
 // Arabic (Lebanon)
 return array(
 	'id' => 'ar_LB',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Lebanon)',
 );

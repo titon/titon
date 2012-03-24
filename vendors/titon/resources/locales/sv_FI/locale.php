@@ -10,7 +10,7 @@
 // Swedish (Finland)
 return array(
 	'id' => 'sv_FI',
-	'fallback' => 'sv',
+	'parent' => 'sv',
 	'timezone' => '',
 	'language' => 'Swedish (Finland)',
 );

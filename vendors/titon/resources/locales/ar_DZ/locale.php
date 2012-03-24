@@ -10,7 +10,7 @@
 // Arabic (Algeria)
 return array(
 	'id' => 'ar_DZ',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Algeria)',
 );

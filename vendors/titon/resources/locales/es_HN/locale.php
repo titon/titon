@@ -10,7 +10,7 @@
 // Spanish (Honduras)
 return array(
 	'id' => 'es_HN',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Honduras)',
 );

@@ -10,7 +10,7 @@
 // Arabic (Tunisia)
 return array(
 	'id' => 'ar_TN',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Tunisia)',
 );

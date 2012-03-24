@@ -10,7 +10,7 @@
 // Spanish (Nicaragua)
 return array(
 	'id' => 'es_NI',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Nicaragua)',
 );

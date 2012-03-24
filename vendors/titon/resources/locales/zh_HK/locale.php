@@ -10,7 +10,7 @@
 // Chinese (Hong Kong)
 return array(
 	'id' => 'zh_HK',
-	'fallback' => 'zh',
+	'parent' => 'zh',
 	'timezone' => '',
 	'language' => 'Chinese (Hong Kong)',
 );

@@ -10,7 +10,7 @@
 // Arabic (U.A.E.)
 return array(
 	'id' => 'ar_AE',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (U.A.E.)',
 );

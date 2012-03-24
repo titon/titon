@@ -10,7 +10,7 @@
 // Arabic (Yemen)
 return array(
 	'id' => 'ar_YE',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Yemen)',
 );

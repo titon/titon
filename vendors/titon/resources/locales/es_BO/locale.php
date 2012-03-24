@@ -10,7 +10,7 @@
 // Spanish (Bolivia)
 return array(
 	'id' => 'es_BO',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Bolivia)',
 );

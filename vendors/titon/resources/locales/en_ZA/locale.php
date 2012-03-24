@@ -10,7 +10,7 @@
 // English (South Africa)
 return array(
 	'id' => 'en_ZA',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (South Africa)',
 );

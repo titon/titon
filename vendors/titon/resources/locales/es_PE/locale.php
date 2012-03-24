@@ -10,7 +10,7 @@
 // Spanish (Peru)
 return array(
 	'id' => 'es_PE',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Peru)',
 );

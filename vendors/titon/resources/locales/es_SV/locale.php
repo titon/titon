@@ -10,7 +10,7 @@
 // Spanish (El Salvador)
 return array(
 	'id' => 'es_SV',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (El Salvador)',
 );

@@ -10,7 +10,7 @@
 // Malaysian (Brunei)
 return array(
 	'id' => 'ms_BN',
-	'fallback' => 'ms',
+	'parent' => 'ms',
 	'timezone' => '',
 	'language' => 'Malaysian (Brunei)',
 );

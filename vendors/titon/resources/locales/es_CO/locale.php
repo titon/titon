@@ -10,7 +10,7 @@
 // Spanish (Colombia)
 return array(
 	'id' => 'es_CO',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Colombia)',
 );

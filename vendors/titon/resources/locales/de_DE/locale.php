@@ -10,7 +10,7 @@
 // German (Germany)
 return array(
 	'id' => 'de_DE',
-	'fallback' => 'de',
+	'parent' => 'de',
 	'timezone' => '',
 	'language' => 'German (Germany)',
 );

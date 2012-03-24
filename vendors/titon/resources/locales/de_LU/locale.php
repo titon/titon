@@ -10,7 +10,7 @@
 // German (Luxembourg)
 return array(
 	'id' => 'de_LU',
-	'fallback' => 'de',
+	'parent' => 'de',
 	'timezone' => '',
 	'language' => 'German (Luxembourg)',
 );

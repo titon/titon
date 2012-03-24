@@ -10,7 +10,7 @@
 // Korea (North)
 return array(
 	'id' => 'ko_KP',
-	'fallback' => 'ko',
+	'parent' => 'ko',
 	'timezone' => '',
 	'language' => 'Korea (North)',
 );

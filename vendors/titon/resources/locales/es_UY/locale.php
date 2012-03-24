@@ -10,7 +10,7 @@
 // Spanish (Uruguay)
 return array(
 	'id' => 'es_UY',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Uruguay)',
 );

@@ -10,7 +10,7 @@
 // French (Belgium)
 return array(
 	'id' => 'fr_BE',
-	'fallback' => 'fr',
+	'parent' => 'fr',
 	'timezone' => '',
 	'language' => 'French (Belgium)',
 );

@@ -10,7 +10,7 @@
 // English (India)
 return array(
 	'id' => 'en_IN',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (India)',
 );

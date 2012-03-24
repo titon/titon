@@ -10,7 +10,7 @@
 // Spanish (Panama)
 return array(
 	'id' => 'es_PA',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Panama)',
 );

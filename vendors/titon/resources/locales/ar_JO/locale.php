@@ -10,7 +10,7 @@
 // Arabic (Jordan)
 return array(
 	'id' => 'ar_JO',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Jordan)',
 );

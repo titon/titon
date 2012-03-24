@@ -10,7 +10,7 @@
 // Portuguese (Brazil)
 return array(
 	'id' => 'pt_BR',
-	'fallback' => 'pt',
+	'parent' => 'pt',
 	'timezone' => '',
 	'language' => 'Portuguese (Brazil)',
 );

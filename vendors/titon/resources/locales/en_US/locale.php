@@ -10,7 +10,7 @@
 // English (United States)
 return array(
 	'id' => 'en_US',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (United States)',
 );

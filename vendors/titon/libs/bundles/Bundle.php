@@ -17,14 +17,6 @@ namespace titon\libs\bundles;
 interface Bundle {
 
 	/**
-	 * Returns all the data from the loaded resource files.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function data();
-
-	/**
 	 * List of all filenames within the resource bundle.
 	 *
 	 * @access public

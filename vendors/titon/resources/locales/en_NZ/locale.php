@@ -10,7 +10,7 @@
 // English (New Zealand)
 return array(
 	'id' => 'en_NZ',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (New Zealand)',
 );

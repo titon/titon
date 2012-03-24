@@ -10,7 +10,7 @@
 // Spanish (Guatemala)
 return array(
 	'id' => 'es_GT',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Guatemala)',
 );

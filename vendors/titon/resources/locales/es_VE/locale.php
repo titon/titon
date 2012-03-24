@@ -10,7 +10,7 @@
 // Spanish (Venezuela)
 return array(
 	'id' => 'es_VE',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Venezuela)',
 );

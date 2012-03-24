@@ -10,7 +10,7 @@
 // Italian (Swiss)
 return array(
 	'id' => 'it_CH',
-	'fallback' => 'it',
+	'parent' => 'it',
 	'timezone' => '',
 	'language' => 'Italian (Swiss)',
 );

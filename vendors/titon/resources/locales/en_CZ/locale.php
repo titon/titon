@@ -10,7 +10,7 @@
 // English (Canadian)
 return array(
 	'id' => 'en_CZ',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (Canadian)',
 );

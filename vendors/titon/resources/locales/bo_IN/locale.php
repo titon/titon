@@ -10,7 +10,7 @@
 // Tibetan (India)
 return array(
 	'id' => 'bo_IN',
-	'fallback' => 'bo',
+	'parent' => 'bo',
 	'timezone' => '',
 	'language' => 'Tibetan (India)',
 );

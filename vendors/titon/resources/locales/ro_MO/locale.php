@@ -10,7 +10,7 @@
 // Romanian (Moldavia)
 return array(
 	'id' => 'ro_MO',
-	'fallback' => 'ro',
+	'parent' => 'ro',
 	'timezone' => '',
 	'language' => 'Romanian (Moldavia)',
 );

@@ -13,34 +13,26 @@ use \titon\libs\bundles\BundleAbstract;
 use \titon\utility\Inflector;
 
 /**
- * @todo
+ * The LocaleBundle manages the loading of locale resources which contain locale specific configuration,
+ * validation rules (phone numbers, zip codes, etc) and inflection rules (plurals, singulars, irregulars, etc).
  *
  * @package	titon.libs.bundles.g11n
+ * @uses	titon\utility\Inflector
  */
 class LocaleBundle extends BundleAbstract {
 
 	/**
-	 * Define the locations for the locale resources.
-	 *
-	 * @access public
-	 * @param array $config
-	 */
-	public function __construct(array $config = array()) {
-		$this->_locations = array(
-			'app' => APP_RESOURCES . 'locales/',
-			'titon' => TITON_RESOURCES . 'locales/'
-		);
-
-		parent::__construct($config);
-	}
-
-	/**
-	 * Load the default locale file once initialized.
+	 * Define the locations for the locale resources and load the default locale.php file once initialized.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
+		$this->_locations = array(
+			APP_RESOURCES . 'locales/',
+			TITON_RESOURCES . 'locales/'
+		);
+
 		parent::initialize();
 
 		$this->load('locale');
@@ -52,25 +44,54 @@ class LocaleBundle extends BundleAbstract {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return void
+	 * @return array
 	 */
 	public function load($key) {
-		if (isset($this->_data[$key])) {
-			return $this->_data[$key];
+		if ($data = $this->config($key)) {
+			return $data;
 		}
 
 		$filename = Inflector::filename($key, $this->config('ext'), false);
-		$path = $this->path() . $filename;
 
 		if (in_array($filename, $this->files())) {
-			$data = include_once $path;
+			$data = include_once $this->path() . $filename;
 		} else {
 			$data = array();
 		}
 
-		$this->_data[$key] = $data;
+		$this->configure($key, $data);
 
 		return $data;
+	}
+
+	/**
+	 * Convenience method to return the locale configuration.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function locale() {
+		return $this->load('locale');
+	}
+
+	/**
+	 * Convenience method to return the inflection rules.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function inflections() {
+		return $this->load('inflections');
+	}
+
+	/**
+	 * Convenience method to return the validation rules.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function validations() {
+		return $this->load('validations');
 	}
 
 }

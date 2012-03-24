@@ -10,7 +10,7 @@
 // English (Caribbean)
 return array(
 	'id' => 'en_CB',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (Caribbean)',
 );

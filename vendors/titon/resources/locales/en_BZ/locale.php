@@ -10,7 +10,7 @@
 // English (Belize)
 return array(
 	'id' => 'en_BZ',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (Belize)',
 );

@@ -10,7 +10,7 @@
 // Gaelic (Irish)
 return array(
 	'id' => 'gd_IE',
-	'fallback' => 'gd',
+	'parent' => 'gd',
 	'timezone' => '',
 	'language' => 'Gaelic (Irish)',
 );

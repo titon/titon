@@ -10,7 +10,7 @@
 // Chinese (Macau)
 return array(
 	'id' => 'zh_MO',
-	'fallback' => 'zh',
+	'parent' => 'zh',
 	'timezone' => '',
 	'language' => 'Chinese (Macau)',
 );

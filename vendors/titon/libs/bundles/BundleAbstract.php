@@ -34,22 +34,6 @@ abstract class BundleAbstract extends Base implements Bundle {
 	);
 
 	/**
-	 * Loaded data.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_data = array();
-
-	/**
-	 * Resource bundle path.
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $_path;
-
-	/**
 	 * Resource locations.
 	 *
 	 * @access protected
@@ -58,14 +42,12 @@ abstract class BundleAbstract extends Base implements Bundle {
 	protected $_locations = array();
 
 	/**
-	 * Return all the data from the loaded resource files.
+	 * Resource bundle path.
 	 *
-	 * @access public
-	 * @return array
+	 * @access protected
+	 * @var string
 	 */
-	public function data() {
-		return $this->_data;
-	}
+	protected $_path;
 
 	/**
 	 * List of all filenames within the resource bundle.
@@ -104,7 +86,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws BundleException
+	 * @throws \titon\libs\bundles\g11n\BundleException
 	 */
 	public function initialize() {
 		$folder = $this->config('folder');
@@ -131,11 +113,11 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return void
-	 * @throws BundleException
+	 * @return array
+	 * @throws \titon\libs\bundles\g11n\BundleException
 	 */
 	public function load($key) {
-		throw new BundleException(sprintf('You must define the run() method within your %s Bundle.', get_class($this)));
+		throw new BundleException(sprintf('You must define the load() method within your %s Bundle.', get_class($this)));
 	}
 
 }

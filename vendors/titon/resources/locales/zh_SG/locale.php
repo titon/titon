@@ -10,7 +10,7 @@
 // Chinese (Singapore)
 return array(
 	'id' => 'zh_SG',
-	'fallback' => 'zh',
+	'parent' => 'zh',
 	'timezone' => '',
 	'language' => 'Chinese (Singapore)',
 );

@@ -10,7 +10,7 @@
 // Arabic (Syria)
 return array(
 	'id' => 'ar_SY',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Syria)',
 );

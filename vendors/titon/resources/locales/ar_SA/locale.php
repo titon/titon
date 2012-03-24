@@ -10,7 +10,7 @@
 // Arabic (Saudi Arabia)
 return array(
 	'id' => 'ar_SA',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Saudi Arabia)',
 );

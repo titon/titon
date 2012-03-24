@@ -10,7 +10,7 @@
 // English (Phillippines)
 return array(
 	'id' => 'en_PH',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (Phillippines)',
 );

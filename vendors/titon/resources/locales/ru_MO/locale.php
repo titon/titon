@@ -10,7 +10,7 @@
 // Russian (Moldavia)
 return array(
 	'id' => 'ru_MO',
-	'fallback' => 'ru',
+	'parent' => 'ru',
 	'timezone' => '',
 	'language' => 'Russian (Moldavia)',
 );

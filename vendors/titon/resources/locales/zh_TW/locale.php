@@ -10,7 +10,7 @@
 // Chinese (Taiwan)
 return array(
 	'id' => 'zh_TW',
-	'fallback' => 'zh',
+	'parent' => 'zh',
 	'timezone' => '',
 	'language' => 'Chinese (Taiwan)',
 );

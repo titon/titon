@@ -10,7 +10,7 @@
 // Arabic (Oman)
 return array(
 	'id' => 'ar_OM',
-	'fallback' => 'ar',
+	'parent' => 'ar',
 	'timezone' => '',
 	'language' => 'Arabic (Oman)',
 );

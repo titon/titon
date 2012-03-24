@@ -10,7 +10,7 @@
 // English (Trinidad)
 return array(
 	'id' => 'en_TT',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (Trinidad)',
 );

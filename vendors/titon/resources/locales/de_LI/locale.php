@@ -10,7 +10,7 @@
 // German (Liechtenstein)
 return array(
 	'id' => 'de_LI',
-	'fallback' => 'de',
+	'parent' => 'de',
 	'timezone' => '',
 	'language' => 'German (Liechtenstein)',
 );

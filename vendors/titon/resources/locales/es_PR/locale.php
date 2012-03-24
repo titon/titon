@@ -10,7 +10,7 @@
 // Spanish (Puerto Rico)
 return array(
 	'id' => 'es_PR',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Puerto Rico)',
 );

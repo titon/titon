@@ -10,7 +10,7 @@
 // English (Jamaica)
 return array(
 	'id' => 'en_JM',
-	'fallback' => 'en',
+	'parent' => 'en',
 	'timezone' => '',
 	'language' => 'English (Jamaica)',
 );

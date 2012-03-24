@@ -10,7 +10,7 @@
 // Spanish (Paraguay)
 return array(
 	'id' => 'es_PY',
-	'fallback' => 'es',
+	'parent' => 'es',
 	'timezone' => '',
 	'language' => 'Spanish (Paraguay)',
 );
