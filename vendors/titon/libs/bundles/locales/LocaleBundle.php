@@ -38,7 +38,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return array
 	 */
 	public function inflections($key = null) {
-		$data = $this->load('inflections');
+		$data = $this->loadFile('inflections');
 
 		if ($key) {
 			return $this->config('inflections.' . $key);
@@ -72,7 +72,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return array
 	 */
 	public function locale($key = null) {
-		$data = $this->load('locale');
+		$data = $this->loadFile('locale');
 
 		if ($key) {
 			return $this->config('locale.' . $key);
@@ -88,7 +88,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @param $path
 	 * @return array
 	 */
-	public function parse($path) {
+	public function parseFile($path) {
 		return include_once $path;
 	}
 
@@ -100,7 +100,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return array
 	 */
 	public function validations($key = null) {
-		$data = $this->load('validations');
+		$data = $this->loadFile('validations');
 
 		if ($key) {
 			return $this->config('validations.' . $key);

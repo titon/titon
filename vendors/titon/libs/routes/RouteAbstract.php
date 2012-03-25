@@ -216,8 +216,8 @@ abstract class RouteAbstract extends Base implements Route {
 
 			// Get pattern values
 			if (!empty($matches) && !empty($this->_tokens)) {
-				$modules = Titon::app()->modules();
-				$controllers = Titon::app()->controllers();
+				$modules = Titon::app()->getModules();
+				$controllers = Titon::app()->getControllers();
 
 				foreach ($this->_tokens as $token) {
 					switch ($token) {

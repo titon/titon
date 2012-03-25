@@ -45,10 +45,30 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @access public
 	 * @return array
 	 */
-	public function files() {
+	public function getFiles() {
 		return $this->cacheMethod(__FUNCTION__, null, function($self) {
-			return array_map('basename', glob($self->path() . '*.' . $self->config('ext')));
+			return array_map('basename', glob($self->getPath() . '*.' . $self->config('ext')));
 		});
+	}
+
+	/**
+	 * List of locations to find the resource bundle in.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getLocations() {
+		return $this->_locations;
+	}
+
+	/**
+	 * Return the final resource bundle path.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getPath() {
+		return $this->_path;
 	}
 
 	/**
@@ -67,7 +87,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 			}
 
 			return $value;
-		}, $this->locations());
+		}, $this->getLocations());
 
 		foreach ($locations as $location) {
 			if (file_exists($location)) {
@@ -83,22 +103,22 @@ abstract class BundleAbstract extends Base implements Bundle {
 	}
 
 	/**
-	 * Load the file from the resource bundle if it exists and cache the data.
-	 * If the file does not exist, return an empty array.
+	 * Load the file from the resource bundle and parse its contents.
+	 * If file does not exist, return an empty array.
 	 *
 	 * @access public
 	 * @param string $key
 	 * @return array
 	 */
-	public function load($key) {
+	public function loadFile($key) {
 		if (isset($this->_config[$key])) {
 			return $this->_config[$key];
 		}
 
 		$filename = Inflector::filename($key, $this->config('ext'), false);
 
-		if (in_array($filename, $this->files())) {
-			$data = $this->parse($this->path() . $filename);
+		if (in_array($filename, $this->getFiles())) {
+			$data = $this->parseFile($this->getPath() . $filename);
 		} else {
 			$data = array();
 		}
@@ -109,16 +129,6 @@ abstract class BundleAbstract extends Base implements Bundle {
 	}
 
 	/**
-	 * List of locations to find the resource bundle in.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function locations() {
-		return $this->_locations;
-	}
-
-	/**
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
@@ -126,18 +136,8 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @return array
 	 * @throws \titon\libs\bundles\BundleException
 	 */
-	public function parse($path) {
-		throw new BundleException(sprintf('You must define the parse() method within your %s.', get_class($this)));
-	}
-
-	/**
-	 * Return the final resource bundle path.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function path() {
-		return $this->_path;
+	public function parseFile($path) {
+		throw new BundleException(sprintf('You must define the parseFile() method within your %s.', get_class($this)));
 	}
 
 }

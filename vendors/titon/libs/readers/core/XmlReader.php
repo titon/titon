@@ -33,7 +33,7 @@ class XmlReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws ReaderException
+	 * @throws \titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		$data = @simplexml_load_file($this->getPath());

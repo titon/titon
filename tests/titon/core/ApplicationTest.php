@@ -40,7 +40,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	 * Test that the controllers are organized by module and returned as an array.
 	 */
 	public function testControllers() {
-		$controllers = $this->object->controllers();
+		$controllers = $this->object->getControllers();
 
 		$this->assertArrayHasKey($this->module, $controllers);
 		$this->assertArrayNotHasKey('noModule', $controllers);
@@ -52,7 +52,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	 * Test that the returned module contains the correct data when setup().
 	 */
 	public function testModule() {
-		$module = $this->object->module($this->module);
+		$module = $this->object->getModule($this->module);
 
 		$this->assertTrue(isset($module['name']));
 		$this->assertEquals($this->module, $module['name']);
@@ -70,7 +70,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	 * Test that all modules are returned correctly.
 	 */
 	public function testModules() {
-		$modules = $this->object->modules();
+		$modules = $this->object->getModules();
 
 		$this->assertArrayHasKey($this->module, $modules);
 		$this->assertArrayNotHasKey('noModule', $modules);

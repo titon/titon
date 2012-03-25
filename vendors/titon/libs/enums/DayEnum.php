@@ -80,7 +80,7 @@ class DayEnum extends Enum {
 	public function initialize($day, $slug) {
 		$this->day = $day;
 		$this->slug = $slug;
-		$this->name = __('common.' . $slug);
+		$this->name = \titon\msg('common.' . $slug);
 	}
 	
 }

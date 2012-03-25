@@ -37,7 +37,7 @@ class XmlMessageBundle extends MessageBundleAbstract {
 	 * @param $path
 	 * @return array
 	 */
-	public function parse($path) {
+	public function parseFile($path) {
 		$xml = simplexml_load_file($path);
 		$array = array();
 

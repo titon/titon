@@ -37,7 +37,7 @@ class PhpMessageBundle extends MessageBundleAbstract {
 	 * @param $path
 	 * @return array
 	 */
-	public function parse($path) {
+	public function parseFile($path) {
 		return include_once $path;
 	}
 

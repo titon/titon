@@ -33,7 +33,7 @@ class YamlReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws ReaderException
+	 * @throws \titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		if (!extension_loaded('yaml')) {

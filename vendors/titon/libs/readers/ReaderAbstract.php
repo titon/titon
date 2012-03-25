@@ -11,6 +11,7 @@ namespace titon\libs\readers;
 
 use \titon\base\Base;
 use \titon\libs\readers\Reader;
+use \titon\utility\Inflector;
 
 /**
  * Abstract class that implements the extension detection for Readers.
@@ -35,13 +36,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @param $path
 	 */
 	public function __construct($path) {
-		$ext = '.' . static::EXT;
-
-		if (substr($path, -strlen($ext)) != $ext) {
-			$path .= $ext;
-		}
-
-		$this->_path = APP_CONFIG . 'sets/' . $path;
+		$this->_path = APP_CONFIG . 'sets/' . Inflector::filename($path, static::EXT, false);
 	}
 
 	/**

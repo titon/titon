@@ -42,7 +42,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$event1->execute('testEvent1');
 		$event1->execute('testEvent2');
 
-		$listeners = $event1->listeners();
+		$listeners = $event1->getListeners();
 		$startup = 0;
 		$shutdown = 0;
 		$testEvent1 = 0;
@@ -94,7 +94,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$event->registerListener(new MockListener());
 		$event->registerCallback(function() {});
 
-		$listeners = $event->listeners();
+		$listeners = $event->getListeners();
 
 		$this->assertEquals(2, count($listeners));
 
@@ -115,7 +115,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$event->registerListener(new MockListener());
 		$event->registerListener(new MockListener());
 
-		$listeners = $event->listeners();
+		$listeners = $event->getListeners();
 
 		$this->assertEquals(2, count($listeners));
 
@@ -137,7 +137,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$event->registerCallback(function() {});
 		$event->registerCallback(function() {});
 
-		$listeners = $event->listeners();
+		$listeners = $event->getListeners();
 
 		$this->assertEquals(3, count($listeners));
 
@@ -158,11 +158,11 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$baseEvents = array('startup', 'shutdown', 'preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
 		$testEvents = array('testEvent1', 'testEvent2');
 
-		$this->assertEquals($baseEvents, $event->events());
+		$this->assertEquals($baseEvents, $event->getEvents());
 
 		$event->setup($testEvents);
 
-		$this->assertEquals(($testEvents + $baseEvents), $event->events());
+		$this->assertEquals(($testEvents + $baseEvents), $event->getEvents());
 	}
 
 }

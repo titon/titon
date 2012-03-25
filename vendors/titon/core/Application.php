@@ -43,7 +43,7 @@ class Application {
 	 * @access public
 	 * @return array
 	 */
-	public function controllers() {
+	public function getControllers() {
 		return $this->_controllers;
 	}
 
@@ -54,7 +54,7 @@ class Application {
 	 * @param string $module
 	 * @return array
 	 */
-	public function module($module) {
+	public function getModule($module) {
 		if (isset($this->_modules[$module])) {
 			return $this->_modules[$module];
 		}
@@ -68,7 +68,7 @@ class Application {
 	 * @access public
 	 * @return array
 	 */
-	public function modules() {
+	public function getModules() {
 		return $this->_modules;
 	}
 

@@ -40,16 +40,6 @@ class Event {
 	protected $_listeners = array();
 
 	/**
-	 * Return all assigned events.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function events() {
-		return $this->_events;
-	}
-
-	/**
 	 * Cycles through the listenerss for the specified event, and executes the related method.
 	 * If a scope is defined, and the listener doesn't match the scope, it will be bypassed.
 	 *
@@ -93,12 +83,22 @@ class Event {
 	}
 
 	/**
+	 * Return all assigned events.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getEvents() {
+		return $this->_events;
+	}
+
+	/**
 	 * Return all registered listeners.
 	 *
 	 * @access public
 	 * @return array
 	 */
-	public function listeners() {
+	public function getListeners() {
 		return $this->_listeners;
 	}
 

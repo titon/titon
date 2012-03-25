@@ -33,7 +33,7 @@ class JsonReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws ReaderException
+	 * @throws \titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		$data = @json_decode(file_get_contents($this->getPath()), true);

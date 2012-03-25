@@ -37,7 +37,7 @@ class IniMessageBundle extends MessageBundleAbstract {
 	 * @param $path
 	 * @return array
 	 */
-	public function parse($path) {
+	public function parseFile($path) {
 		return parse_ini_file($path, false, INI_SCANNER_NORMAL);
 	}
 

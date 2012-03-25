@@ -22,17 +22,7 @@ interface Bundle {
 	 * @access public
 	 * @return array
 	 */
-	public function files();
-
-	/**
-	 * Load the file from the resource bundle if it exists and cache the data.
-	 * If the file does not exist, return an empty array.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return array
-	 */
-	public function load($key);
+	public function getFiles();
 
 	/**
 	 * List of locations to find the resource bundle in.
@@ -40,7 +30,25 @@ interface Bundle {
 	 * @access public
 	 * @return array
 	 */
-	public function locations();
+	public function getLocations();
+
+	/**
+	 * Returns the final resource bundle path.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getPath();
+
+	/**
+	 * Load the file from the resource bundle and parse its contents.
+	 * If file does not exist, return an empty array.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return array
+	 */
+	public function loadFile($key);
 
 	/**
 	 * Parse the file at the given path and return the result.
@@ -49,14 +57,6 @@ interface Bundle {
 	 * @param $path
 	 * @return array
 	 */
-	public function parse($path);
-
-	/**
-	 * Returns the final resource bundle path.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function path();
+	public function parseFile($path);
 
 }

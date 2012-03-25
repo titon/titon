@@ -33,7 +33,7 @@ class IniReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws ReaderException
+	 * @throws \titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		$data = parse_ini_file($this->getPath(), true, INI_SCANNER_NORMAL);
