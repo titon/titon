@@ -34,10 +34,17 @@ class LocaleBundle extends BundleAbstract {
 	 * Convenience method to return the inflection rules.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return array
 	 */
-	public function inflections() {
-		return $this->load('inflections');
+	public function inflections($key = null) {
+		$data = $this->load('inflections');
+
+		if ($key) {
+			return $this->config('inflections.' . $key);
+		}
+
+		return $data;
 	}
 
 	/**
@@ -61,10 +68,17 @@ class LocaleBundle extends BundleAbstract {
 	 * Convenience method to return the locale configuration.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return array
 	 */
-	public function locale() {
-		return $this->load('locale');
+	public function locale($key = null) {
+		$data = $this->load('locale');
+
+		if ($key) {
+			return $this->config('locale.' . $key);
+		}
+
+		return $data;
 	}
 
 	/**
@@ -82,10 +96,17 @@ class LocaleBundle extends BundleAbstract {
 	 * Convenience method to return the validation rules.
 	 *
 	 * @access public
+	 * @param string $key
 	 * @return array
 	 */
-	public function validations() {
-		return $this->load('validations');
+	public function validations($key = null) {
+		$data = $this->load('validations');
+
+		if ($key) {
+			return $this->config('validations.' . $key);
+		}
+
+		return $data;
 	}
 
 }

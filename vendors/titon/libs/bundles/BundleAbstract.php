@@ -63,7 +63,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 
 		$locations = array_map(function($value) use ($config) {
 			foreach ($config as $key => $val) {
-				$value = str_replace('{' . $key . 's}', $val, $value);
+				$value = str_replace('{' . $key . '}', $val, $value);
 			}
 
 			return $value;
@@ -91,8 +91,8 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @return array
 	 */
 	public function load($key) {
-		if ($data = $this->config($key)) {
-			return $data;
+		if (isset($this->_config[$key])) {
+			return $this->_config[$key];
 		}
 
 		$filename = Inflector::filename($key, $this->config('ext'), false);
