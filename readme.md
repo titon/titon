@@ -6,6 +6,14 @@ A PHP 5.4 modular framework that attempts to be extremely lightweight and fast, 
 
 Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, Decorator, Factory, Memoization), Dependency Injection, ORM, System Hooks, Events and Event Listeners, Benchmarks, Inline Callbacks.
 
+### Requirements ###
+
+* curl
+* gettext (G11n)
+* intl (G11n)
+* phar
+* mbstring
+
 ### Folder Structure ###
 
 	app/

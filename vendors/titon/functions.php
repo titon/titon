@@ -19,8 +19,8 @@ function debug() {
 		$vars = func_get_args();
 		$calledFrom = debug_backtrace();
 
-		echo '<div class="TitonDebug">';
-		echo '<b>' . trim(str_replace(APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
+		echo '<div class="titon-debug">';
+		echo '<b>' . trim(str_replace(TITON_APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
 
 		if (!empty($vars)) {
 			foreach ($vars as $var) {
@@ -42,8 +42,8 @@ function dump() {
 		$vars = func_get_args();
 		$calledFrom = debug_backtrace();
 
-		echo '<div class="TitonDebug">';
-		echo '<b>' . trim(str_replace(APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
+		echo '<div class="titon-debug">';
+		echo '<b>' . trim(str_replace(TITON_APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
 
 		if (!empty($vars)) {
 			foreach ($vars as $var) {
