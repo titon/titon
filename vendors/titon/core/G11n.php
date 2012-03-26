@@ -13,6 +13,7 @@ use \titon\core\CoreException;
 use \titon\libs\bundles\locales\LocaleBundle;
 use \titon\libs\storage\Storage;
 use \titon\libs\translators\Translator;
+use \Locale;
 
 /**
  * @todo
@@ -134,6 +135,7 @@ class G11n {
 		// Set environment
 		putenv('LC_ALL=' . $locale['id']);
 		setlocale(LC_ALL, $options);
+		Locale::setDefault($locale['id']);
 		
 		if (!empty($locale['timezone'])) {
 			$this->applyTimezone($locale['timezone']);
@@ -168,14 +170,11 @@ class G11n {
 	 * @access public
 	 * @param string $key
 	 * @param int $format
-	 * @param boolean $full
 	 * @return string
 	 */
-	public function canonicalize($key, $format = self::FORMAT_1, $full = false) {
+	public function canonicalize($key, $format = self::FORMAT_1) {
 		$parts = explode('-', str_replace('_', '-', strtolower($key)));
-
 		$return = $parts[0];
-		unset($parts[0]);
 		
 		if (isset($parts[1])) {
 			switch ($format) {
@@ -189,15 +188,20 @@ class G11n {
 					$return .= '_' . strtoupper($parts[1]);
 				break;
 			}
-
-			unset($parts[1]);
 		}
 
-		if ($full && count($parts) > 0) {
-			$return .= '-' . implode('-', $parts);
-		}
-		
 		return $return;
+	}
+
+	/**
+	 * Takes an array of key-values and returns a correctly ordered and delimited locale ID.
+	 *
+	 * @access public
+	 * @param array $tags
+	 * @return string
+	 */
+	public function compose(array $tags) {
+		return Locale::composeLocale($tags);
 	}
 	
 	/**
@@ -352,12 +356,7 @@ class G11n {
 		}
 
 		// Generate meta data
-		$config['key'] = $key;
-		$config['language'] = substr($config['id'], 0, 2);
-
-		if (strlen($config['id']) > 2) {
-			$config['region'] = substr($config['id'], -2);
-		}
+		$config = Locale::parseLocale($config['id']) + $config;
 
 		$bundle->configure('locale', $config);
 
