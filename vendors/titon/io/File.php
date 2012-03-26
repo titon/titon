@@ -7,15 +7,15 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
  
-namespace titon\net;
+namespace titon\io;
 
 use \titon\base\Base;
 
 /**
  * @todo
  * 
- * @package	titon.net
+ * @package	titon.io
  */
-class Stream extends Base {
+class File extends Base {
 	
 }
