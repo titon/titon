@@ -47,14 +47,14 @@ interface Translator {
 	public function getMessage($key);
 
 	/**
-	 * Load a catalog from a specific module and parse the contents.
+	 * Load a catalog from a specific module using a resource bundle.
 	 * 
 	 * @access public
 	 * @param string $module
 	 * @param string $catalog
 	 * @return array
 	 */
-	public function parseFile($module, $catalog);
+	public function loadCatalog($module, $catalog);
 	
 	/**
 	 * Parse out the module, catalog and key for string lookup.

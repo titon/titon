@@ -245,7 +245,7 @@ class G11n {
 	 * @throws \titon\core\CoreException
 	 */
 	public function getFallback() {
-		if (!$this->_fallback || !isset($this->_locales[$this->_fallback])) {
+		if (empty($this->_fallback) || !isset($this->_locales[$this->_fallback])) {
 			throw new CoreException('Fallback locale has not been setup.');
 		}
 		
@@ -266,8 +266,8 @@ class G11n {
 	 * Detect which locale to use based on the clients Accept-Language header.
 	 * 
 	 * @access public
-	 * @throws \titon\core\CoreException
 	 * @return void
+	 * @throws \titon\core\CoreException
 	 */
 	public function initialize() {
 		if (!$this->isEnabled()) {
@@ -357,6 +357,7 @@ class G11n {
 
 		// Generate meta data
 		$config = Locale::parseLocale($config['id']) + $config;
+		$config['key'] = $key;
 
 		$bundle->configure('locale', $config);
 
@@ -427,7 +428,7 @@ class G11n {
 	public function translate($key, array $params = array()) {	
 		list($module, $catalog) = $this->_translator->parseKey($key);
 		
-		$cacheKey = $module . '.' . $catalog . '.' . $this->current('id');
+		/*$cacheKey = $module . '.' . $catalog . '.' . $this->current('id');
 
 		if ($this->_storage instanceof Storage) {
 			$messages = $this->_storage->get($cacheKey);
@@ -440,7 +441,7 @@ class G11n {
 			$messages = $this->_translator->translate($key, $params);
 		}
 		
-		return $messages;
+		return $messages;*/
 	}
 
 }

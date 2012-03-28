@@ -14,6 +14,8 @@ use \titon\base\Base;
 use \titon\libs\traits\Memoizer;
 use \titon\libs\translators\Translator;
 use \titon\libs\translators\TranslatorException;
+use \MessageFormatter;
+use \Locale;
 
 /**
  * Abstract class that implements the string translation functionality for Translators.
@@ -42,8 +44,8 @@ class TranslatorAbstract extends Base implements Translator {
 	 */
 	public function getFileCycle() {
 		return $this->cacheMethod(__FUNCTION__, null, function($self) {
-			$fallback = Titon::g11n()->getFallback();
-			$current = Titon::g11n()->current();
+			$fallback = Titon::g11n()->getFallback()->locale();
+			$current = Titon::g11n()->current()->locale();
 			$cycle = array();
 
 			function addToCycle($locale, &$cycle) {
@@ -56,7 +58,7 @@ class TranslatorAbstract extends Base implements Translator {
 
 			addToCycle($current, $cycle);
 			
-			if (!empty($fallback) && $fallback['key'] != $current['key']) {
+			if ($fallback['id'] != $current['id']) {
 				addToCycle($fallback, $cycle);
 			}
 
@@ -120,7 +122,7 @@ class TranslatorAbstract extends Base implements Translator {
 	}
 
 	/**
-	 * Load a catalog from a specific module.
+	 * Load a catalog from a specific module using a resource bundle.
 	 * 
 	 * @access public
 	 * @param string $module
@@ -128,8 +130,8 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @return array
 	 * @throws \titon\libs\translators\TranslatorException
 	 */
-	public function parseFile($module, $catalog) {
-		throw new TranslatorException(sprintf('You must define the parseFile() method within your %s.', get_class($this)));
+	public function loadCatalog($module, $catalog) {
+		throw new TranslatorException(sprintf('You must define the loadCatalog() method within your %s.', get_class($this)));
 	}
 	
 	/**
@@ -165,8 +167,7 @@ class TranslatorAbstract extends Base implements Translator {
 	 * @return string
 	 */
 	public function translate($key, array $params = array()) {	
-		return $this->getMessage($key);
-		//return \MessageFormatter::parseMessage(Titon::g11n()->current('locale'), $this->getMessage($key));
+		return MessageFormatter::formatMessage(Locale::DEFAULT_LOCALE, $this->getMessage($key), $params);
 	}
 	
 }
