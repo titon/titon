@@ -9,8 +9,8 @@
 * Variables should be written in camelBack
 * Constants should be written in UPPER_CASE
 
-	$examplePath = __DIR__ . '/example/path/';
-	define('EXAMPLE_PATH', '/var/example/path/');
+```$examplePath = __DIR__ . '/example/path/';
+define('EXAMPLE_PATH', '/var/example/path/');```
 
 ### Folders ###
 
@@ -19,9 +19,9 @@
 * Folder names should never be multi-word, either use a singular form or an acronym
 * Folder names should not consist of any character except letters and numbers
 
-	/titon/libs/controllers/core/DefaultController.php
-	/titon/resources/locales/en/
-	/titon/utility/
+```/titon/libs/controllers/core/DefaultController.php
+/titon/resources/locales/en/
+/titon/utility/```
 
 ### Namespaces ###
 
@@ -54,24 +54,24 @@ Properties and methods
 * All properties should be protected excluding rare cases
 * Default method arguments should be placed last
 
-	namespace titon\example;
+```namespace titon\example;
 
-	use \titon\libs\controllers\Controller;
-	use \titon\example\ExampleException;
+use \titon\libs\controllers\Controller;
+use \titon\example\ExampleException;
 
-	class ExampleController implements Controller {
+class ExampleController implements Controller {
 
-		protected $_protectedProp = array();
+	protected $_protectedProp = array();
 
-		public function publicMethod($var) {
-			throw new ExampleException();
-		}
-
-		private function __privateMethod($var, $default = 1) {
-			return;
-		}
-
+	public function publicMethod($var) {
+		throw new ExampleException();
 	}
+
+	private function __privateMethod($var, $default = 1) {
+		return;
+	}
+
+}```
 
 ### Method Naming ###
 
