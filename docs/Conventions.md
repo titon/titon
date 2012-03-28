@@ -83,12 +83,12 @@ Getters and setters should use singular words when returning granular data, and 
 * flush() - Remove all data
 * listing() - Return all data
 * has() - Checks if a key/index exists within an array
+* is() - Check to see if something matches something
 * setup() - Sets up the object with required data
 * parse() - Extracts content out of data
 * load() - Loads data from an external source (file), can also be used to load and parse contents
 * run() - Executes the classes functional purpose
 * output() - Output data based on a key
-* is() - Check to see if something matches something
 
 Reserved names.
 

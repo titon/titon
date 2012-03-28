@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\libs\drivers;
+namespace titon\io;
 
 /**
- * Exception for the drivers library.
+ * Exception for the io package.
  *
- * @package	titon.libs.drivers
+ * @package	titon.io
  */
-class DriverException extends \titon\Exception {  
+class IoException extends \titon\Exception {
 
 }
