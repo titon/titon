@@ -195,7 +195,7 @@ class Response extends Base {
 		header(sprintf('%s %d %s',
 			Http::HTTP_11,
 			$this->_status,
-			Http::statusCode($this->_status)
+			Http::getStatusCode($this->_status)
 		));
 
 		// Content type
@@ -245,7 +245,7 @@ class Response extends Base {
 	 */
 	public function type($type = null) {
 		if (strpos($type, '/') === false) {
-			$contentType = Http::contentType($type);
+			$contentType = Http::getContentType($type);
 
 			if (is_array($contentType)) {
 				$type = $contentType[0];

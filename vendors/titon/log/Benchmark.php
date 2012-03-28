@@ -39,27 +39,6 @@ class Benchmark {
 	private function __construct() { }
 
 	/**
-	 * Outputs and formats a benchmark directly as a string.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return string
-	 * @static
-	 */
-	public static function display($key = null) {
-		if (empty(self::$_benchmarks[$key])) {
-			return false;
-		}
-
-		$benchmark = self::get($key);
-		$result  = 'Benchmark [' . $key . '] - ';
-		$result .= 'Time: ' . number_format($benchmark['avgTime'], 4) . ' - ';
-		$result .= 'Memory: ' . $benchmark['avgMemory'] . ' (Max: ' . $benchmark['peakMemory'] . ')';
-
-		return $result;
-	}
-
-	/**
 	 * Grab a list of all benchmarks or a single benchmark and return an array.
 	 * Will calculate the averages of the time and memory if $calculate is true.
 	 *
@@ -89,6 +68,27 @@ class Benchmark {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Outputs and formats a benchmark directly as a string.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return string
+	 * @static
+	 */
+	public static function output($key = null) {
+		if (empty(self::$_benchmarks[$key])) {
+			return false;
+		}
+
+		$benchmark = self::get($key);
+		$result  = 'Benchmark [' . $key . '] - ';
+		$result .= 'Time: ' . number_format($benchmark['avgTime'], 4) . ' - ';
+		$result .= 'Memory: ' . $benchmark['avgMemory'] . ' (Max: ' . $benchmark['peakMemory'] . ')';
+
+		return $result;
 	}
 
 	/**

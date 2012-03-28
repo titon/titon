@@ -172,6 +172,27 @@ abstract class RouteAbstract extends Base implements Route {
 
 		return $this->_compiled;
 	}
+
+	/**
+	 * Grab a param from the route.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return string|null
+	 */
+	public function getParam($key = null) {
+		return isset($this->_route[$key]) ? $this->_route[$key] : null;
+	}
+
+	/**
+	 * Return all route params.
+	 *
+	 * @access public
+	 * @return string|null
+	 */
+	public function getParams() {
+		return $this->_route;
+	}
 	
 	/**
 	 * Compile the route and attach the request object.
@@ -316,27 +337,6 @@ abstract class RouteAbstract extends Base implements Route {
 	 */
 	public function match($url) {
 		return ($this->isMatch($url) && $this->isMethod() && $this->isSecure());
-	}
-
-	/**
-	 * Grab a param from the route.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return string|null
-	 */
-	public function param($key = null) {
-		return isset($this->_route[$key]) ? $this->_route[$key] : null;
-	}
-
-	/**
-	 * Return all route params.
-	 *
-	 * @access public
-	 * @return string|null
-	 */
-	public function params() {
-		return $this->_route;
 	}
 
 }

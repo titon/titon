@@ -40,46 +40,58 @@ class Event {
 	protected $_listeners = array();
 
 	/**
-	 * Cycles through the listenerss for the specified event, and executes the related method.
-	 * If a scope is defined, and the listener doesn't match the scope, it will be bypassed.
+	 * Register a basic callback using a Closure. This callback can be restricted in scope and a per event basis.
+	 * Can drill down the event to only execute during a certain scope.
 	 *
 	 * @access public
-	 * @param string $event
-	 * @param object $object
-	 * @return void
+	 * @param \Closure $callback
+	 * @param array $events
+	 * @param array $scope
+	 * @return \titon\core\Event
+	 * @chainable
 	 */
-	public function execute($event, $object = null) {
-		if (empty($this->_listeners)) {
-			return;
+	public function addCallback(Closure $callback, array $events = array(), array $scope = array()) {
+		if (empty($events)) {
+			$events = $this->_events;
 		}
 
-		$route = Titon::router()->current();
+		$this->_listeners[] = array(
+			'object' => $callback,
+			'executed' => array(),
+			'events' => $events,
+			'scope' => $scope + array(
+				'module' => '*',
+				'controller' => '*',
+				'action' => '*'
+			)
+		);
 
-		foreach ($this->_listeners as &$listener) {
-			if (isset($listener['executed'][$event])) {
-				continue;
-			}
+		return $this;
+	}
 
-			foreach (array('module', 'controller', 'action') as $action) {
-				if ($listener['scope'][$action] !== $route->param($action) || $listener['scope'][$action] !== '*') {
-					continue;
-				}
-			}
+	/**
+	 * Register an event listener (predefined class) to be called at certain events.
+	 * Can drill down the event to only execute during a certain scope.
+	 *
+	 * @access public
+	 * @param \titon\libs\listeners\Listener $listener
+	 * @param array $scope
+	 * @return \titon\core\Event
+	 * @chainable
+	 */
+	public function addListener(Listener $listener, array $scope = array()) {
+		$this->_listeners[] = array(
+			'object' => $listener,
+			'executed' => array(),
+			'events' => array(),
+			'scope' => $scope + array(
+				'module' => '*',
+				'controller' => '*',
+				'action' => '*'
+			)
+		);
 
-			$obj = $listener['object'];
-			
-			if ($obj instanceof Closure && in_array($event, $listener['events'])) {
-				$obj($event, $object);
-
-			} else if (method_exists($obj, $event)) {
-				$obj->{$event}($object);
-
-			} else {
-				continue;
-			}
-
-			$listener['executed'][$event] = true;
-		}
+		return $this;
 	}
 
 	/**
@@ -103,58 +115,46 @@ class Event {
 	}
 
 	/**
-	 * Register an event listener (predefined class) to be called at certain events.
-	 * Can drill down the event to only execute during a certain scope.
+	 * Cycles through the listenerss for the specified event, and executes the related method.
+	 * If a scope is defined, and the listener doesn't match the scope, it will be bypassed.
 	 *
 	 * @access public
-	 * @param \titon\libs\listeners\Listener $listener
-	 * @param array $scope
-	 * @return \titon\core\Event
-	 * @chainable
+	 * @param string $event
+	 * @param object $object
+	 * @return void
 	 */
-	public function registerListener(Listener $listener, array $scope = array()) {
-		$this->_listeners[] = array(
-			'object' => $listener,
-			'executed' => array(),
-			'events' => array(),
-			'scope' => $scope + array(
-				'module' => '*',
-				'controller' => '*',
-				'action' => '*'
-			)
-		);
-
-		return $this;
-	}
-
-	/**
-	 * Register a basic callback using a Closure. This callback can be restricted in scope and a per event basis.
-	 * Can drill down the event to only execute during a certain scope.
-	 *
-	 * @access public
-	 * @param \Closure $callback
-	 * @param array $events
-	 * @param array $scope
-	 * @return \titon\core\Event
-	 * @chainable
-	 */
-	public function registerCallback(Closure $callback, array $events = array(), array $scope = array()) {
-		if (empty($events)) {
-			$events = $this->_events;
+	public function notify($event, $object = null) {
+		if (empty($this->_listeners)) {
+			return;
 		}
 
-		$this->_listeners[] = array(
-			'object' => $callback,
-			'executed' => array(),
-			'events' => $events,
-			'scope' => $scope + array(
-				'module' => '*',
-				'controller' => '*',
-				'action' => '*'
-			)
-		);
+		$route = Titon::router()->current();
 
-		return $this;
+		foreach ($this->_listeners as &$listener) {
+			if (isset($listener['executed'][$event])) {
+				continue;
+			}
+
+			foreach (array('module', 'controller', 'action') as $action) {
+				if ($listener['scope'][$action] !== $route->getParam($action) || $listener['scope'][$action] !== '*') {
+					continue;
+				}
+			}
+
+			$obj = $listener['object'];
+
+			if ($obj instanceof Closure && in_array($event, $listener['events'])) {
+				$obj($event, $object);
+
+			} else if (method_exists($obj, $event)) {
+				$obj->{$event}($object);
+
+			} else {
+				continue;
+			}
+
+			$listener['executed'][$event] = true;
+		}
 	}
 
 	/**

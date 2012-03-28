@@ -33,7 +33,7 @@ class HttpException extends Exception {
 		}
 
 		if ($code && empty($message)) {
-			$message = Http::statusCode($code);
+			$message = Http::getStatusCode($code);
 		}
 
 		parent::__construct($message, $code, $previous);

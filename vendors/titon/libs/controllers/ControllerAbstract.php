@@ -156,7 +156,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	public function throwError($action, array $args = array()) {
 		if (empty($args['pageTitle'])) {
 			if (is_numeric($action)) {
-				$args['pageTitle'] = $action . ' - ' . Http::statusCode($action);
+				$args['pageTitle'] = $action . ' - ' . Http::getStatusCode($action);
 			} else {
 				$args['pageTitle'] = Inflector::normalize($action);
 			}

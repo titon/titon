@@ -206,7 +206,7 @@ class Http {
 	 * @throws \titon\constant\ConstantException
 	 * @static
 	 */
-	public static function contentType($type) {
+	public static function getContentType($type) {
 		if (isset(self::$contentTypes[$type])) {
 			return self::$contentTypes[$type];
 		}
@@ -221,7 +221,7 @@ class Http {
 	 * @return array
 	 * @static
 	 */
-	public static function contentTypes() {
+	public static function getContentTypes() {
 		return self::$contentTypes;
 	}
 
@@ -232,7 +232,7 @@ class Http {
 	 * @return array
 	 * @static
 	 */
-	public static function headerTypes() {
+	public static function getHeaderTypes() {
 		return self::$headerTypes;
 	}
 
@@ -243,7 +243,7 @@ class Http {
 	 * @return array
 	 * @static
 	 */
-	public static function methodTypes() {
+	public static function getMethodTypes() {
 		return self::$methodTypes;
 	}
 
@@ -256,7 +256,7 @@ class Http {
 	 * @throws \titon\constant\ConstantException
 	 * @static
 	 */
-	public static function statusCode($code) {
+	public static function getStatusCode($code) {
 		if (isset(self::$statusCodes[$code])) {
 			return self::$statusCodes[$code];
 		}
@@ -271,7 +271,7 @@ class Http {
 	 * @return array
 	 * @static
 	 */
-	public static function statusCodes() {
+	public static function getStatusCodes() {
 		return self::$statusCodes;
 	}
 

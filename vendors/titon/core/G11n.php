@@ -79,88 +79,6 @@ class G11n {
 	protected $_translator;
 	
 	/**
-	 * Apple the locale using PHPs built in setlocale().
-	 * 
-	 * @link http://php.net/setlocale
-	 * @link http://php.net/manual/locale.setdefault.php
-	 * 
-	 * @access public
-	 * @param string $key 
-	 * @return \titon\core\G11n
-	 * @throws \titon\core\CoreException
-	 * @chainable
-	 */
-	public function apply($key) {
-		$key = $this->canonicalize($key);
-
-		if (!isset($this->_locales[$key])) {
-			throw new CoreException(sprintf('Locale %s does not exist.', $key));
-		}
-
-		$bundle = $this->_locales[$key];
-		$locale = $bundle->locale();
-		
-		// Build array of options to set
-		$options = array(
-			$locale['id'] . '.UTF8',
-			$locale['id'] . '.UTF-8',
-			$locale['id']
-		);
-		
-		if (!empty($locale['iso3'])) {
-			$options = array_merge($options, array(
-				$locale['iso3'] . '.UTF8',
-				$locale['iso3'] . '.UTF-8',
-				$locale['iso3']
-			));
-		}
-		
-		if (!empty($locale['iso2'])) {
-			$options = array_merge($options, array(
-				$locale['iso2'] . '.UTF8',
-				$locale['iso2'] . '.UTF-8',
-				$locale['iso2']
-			));
-		}
-
-		// Use fallback options
-		$fallbackLocale = $this->getFallback()->locale();
-
-		$options = array_merge($options, array(
-			$fallbackLocale['id'] . '.UTF8',
-			$fallbackLocale['id'] . '.UTF-8',
-			$fallbackLocale['id']
-		));
-
-		// Set environment
-		putenv('LC_ALL=' . $locale['id']);
-		setlocale(LC_ALL, $options);
-		Locale::setDefault($locale['id']);
-		
-		if (!empty($locale['timezone'])) {
-			$this->applyTimezone($locale['timezone']);
-		}
-
-		$this->_current = $bundle;
-		
-		return $this;
-	}
-	
-	/**
-	 * Apply the timezone.
-	 * 
-	 * @access public
-	 * @param string $timezone
-	 * @return \titon\core\G11n
-	 * @chainable
-	 */
-	public function applyTimezone($timezone) {
-		date_default_timezone_set($timezone);
-		
-		return $this;
-	}
-	
-	/**
 	 * Convert a locale key to 3 possible formats.
 	 * 
 	 *	FORMAT_1 - en-us
@@ -298,7 +216,7 @@ class G11n {
 		}
 		
 		// Apply the locale
-		$this->apply($current);
+		$this->set($current);
 		
 		// Check for a translator
 		if (empty($this->_translator)) {
@@ -365,6 +283,74 @@ class G11n {
 	}
 
 	/**
+	 * Set the locale using PHPs built in setlocale().
+	 *
+	 * @link http://php.net/setlocale
+	 * @link http://php.net/manual/locale.setdefault.php
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return \titon\core\G11n
+	 * @throws \titon\core\CoreException
+	 * @chainable
+	 */
+	public function set($key) {
+		$key = $this->canonicalize($key);
+
+		if (!isset($this->_locales[$key])) {
+			throw new CoreException(sprintf('Locale %s does not exist.', $key));
+		}
+
+		$bundle = $this->_locales[$key];
+		$locale = $bundle->locale();
+
+		// Build array of options to set
+		$options = array(
+			$locale['id'] . '.UTF8',
+			$locale['id'] . '.UTF-8',
+			$locale['id']
+		);
+
+		if (!empty($locale['iso3'])) {
+			$options = array_merge($options, array(
+				$locale['iso3'] . '.UTF8',
+				$locale['iso3'] . '.UTF-8',
+				$locale['iso3']
+			));
+		}
+
+		if (!empty($locale['iso2'])) {
+			$options = array_merge($options, array(
+				$locale['iso2'] . '.UTF8',
+				$locale['iso2'] . '.UTF-8',
+				$locale['iso2']
+			));
+		}
+
+		// Use fallback options
+		$fallbackLocale = $this->getFallback()->locale();
+
+		$options = array_merge($options, array(
+			$fallbackLocale['id'] . '.UTF8',
+			$fallbackLocale['id'] . '.UTF-8',
+			$fallbackLocale['id']
+		));
+
+		// Set environment
+		putenv('LC_ALL=' . $locale['id']);
+		setlocale(LC_ALL, $options);
+		Locale::setDefault($locale['id']);
+
+		if (!empty($locale['timezone'])) {
+			$this->setTimezone($locale['timezone']);
+		}
+
+		$this->_current = $bundle;
+
+		return $this;
+	}
+
+	/**
 	 * Sets up the application with the defined locale key; the key will be formatted to a lowercase dashed URL friendly format.
 	 * The system will then attempt to load the locale resource bundle and finalize configuration settings.
 	 * 
@@ -384,6 +370,20 @@ class G11n {
 			$this->_fallback = $urlKey;
 		}
 		
+		return $this;
+	}
+
+	/**
+	 * Set the timezone.
+	 *
+	 * @access public
+	 * @param string $timezone
+	 * @return \titon\core\G11n
+	 * @chainable
+	 */
+	public function setTimezone($timezone) {
+		date_default_timezone_set($timezone);
+
 		return $this;
 	}
 	

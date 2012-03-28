@@ -33,14 +33,14 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	public function testExecute() {
 		// test events by name
 		$event1 = new \titon\core\Event();
-		$event1->registerListener(new MockListener());
-		$event1->registerListener(new MockListener());
-		$event1->registerCallback(function() {}, array('startup', 'shutdown', 'testEvent1'));
-		$event1->registerCallback(function() {}, array('startup', 'testEvent1', 'testEvent2'));
-		$event1->execute('startup');
-		$event1->execute('shutdown');
-		$event1->execute('testEvent1');
-		$event1->execute('testEvent2');
+		$event1->addListener(new MockListener());
+		$event1->addListener(new MockListener());
+		$event1->addCallback(function() {}, array('startup', 'shutdown', 'testEvent1'));
+		$event1->addCallback(function() {}, array('startup', 'testEvent1', 'testEvent2'));
+		$event1->notify('startup');
+		$event1->notify('shutdown');
+		$event1->notify('testEvent1');
+		$event1->notify('testEvent2');
 
 		$listeners = $event1->getListeners();
 		$startup = 0;
@@ -74,10 +74,10 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		// test events by scope
 		/* @todo
 		 * $event2 = new \titon\core\Event();
-		$event2->registerListener(new MockListener(), array('controller' => 'test'));
-		$event2->registerListener(new MockListener());
-		$event2->registerCallback(function() {}, array(), array('action' => 'action'));
-		$event2->registerCallback(function() {});
+		$event2->addListener(new MockListener(), array('controller' => 'test'));
+		$event2->addListener(new MockListener());
+		$event2->addCallback(function() {}, array(), array('action' => 'action'));
+		$event2->addCallback(function() {});
 
 		$_SERVER['PHP_SELF'] = 'index.php/test/index/action/';
 		$_SERVER['REQUEST_URI'] = 'http://localhost/test/index/action/';
@@ -91,8 +91,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testListeners() {
 		$event = new \titon\core\Event();
-		$event->registerListener(new MockListener());
-		$event->registerCallback(function() {});
+		$event->addListener(new MockListener());
+		$event->addCallback(function() {});
 
 		$listeners = $event->getListeners();
 
@@ -112,8 +112,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testRegisterListener() {
 		$event = new \titon\core\Event();
-		$event->registerListener(new MockListener());
-		$event->registerListener(new MockListener());
+		$event->addListener(new MockListener());
+		$event->addListener(new MockListener());
 
 		$listeners = $event->getListeners();
 
@@ -133,9 +133,9 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testRegisterCallback() {
 		$event = new \titon\core\Event();
-		$event->registerCallback(function() {});
-		$event->registerCallback(function() {});
-		$event->registerCallback(function() {});
+		$event->addCallback(function() {});
+		$event->addCallback(function() {});
+		$event->addCallback(function() {});
 
 		$listeners = $event->getListeners();
 

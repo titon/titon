@@ -76,7 +76,7 @@ class Request extends Base {
 	 * @throws \titon\net\NetException
 	 */
 	public function accepts($type = 'html') {
-		$contentType = (array) Http::contentType($type);
+		$contentType = (array) Http::getContentType($type);
 
 		foreach ($this->_accepts('Accept') as $aType) {
 			if (in_array(strtolower($aType['type']), $contentType)) {

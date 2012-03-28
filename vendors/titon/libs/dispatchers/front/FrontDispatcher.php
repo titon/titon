@@ -33,10 +33,10 @@ class FrontDispatcher extends DispatcherAbstract {
 		$controller = $this->controller;
 		$event = Titon::event();
 
-		$event->execute('preDispatch');
+		$event->notify('preDispatch');
 
 		$controller->preProcess();
-		$event->execute('preProcess', $controller);
+		$event->notify('preProcess', $controller);
 
 		try {
 			$controller->dispatchAction();
@@ -51,21 +51,21 @@ class FrontDispatcher extends DispatcherAbstract {
 		}
 		
 		$controller->postProcess();
-		$event->execute('postProcess', $controller);
+		$event->notify('postProcess', $controller);
 
 		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
 			$engine = $controller->engine;
 			
 			$engine->preRender();
-			$event->execute('preRender', $engine);
+			$event->notify('preRender', $engine);
 
 			$engine->run();
 
 			$engine->postRender();
-			$event->execute('postRender', $engine);
+			$event->notify('postRender', $engine);
 		}
 
-		$event->execute('postDispatch');
+		$event->notify('postDispatch');
 	}
 
 }
