@@ -7,6 +7,7 @@ Any library wrapped in parenthesis currently does not have a final location in t
 ### Systems In Development ###
 
 Globalization
+
 * core/G11n
 * libs/bundles
 * libs/translators
@@ -16,18 +17,21 @@ Globalization
 ### Upcoming Systems ###
 
 Dispatch Cycle
+
 * core/Dispatch
 * core/Router
 * libs/controllers
 * libs/routes
 
 View Rendering
+
 * core/Dispatch
 * libs/dispatchers
 * libs/engines
 * libs/helpers
 
 Database/Datasource Layer
+
 * core/Db
 * libs/behaviors
 * libs/daos
@@ -35,6 +39,7 @@ Database/Datasource Layer
 * (pagination)
 
 Security
+
 * (authorization)
 * (authentication)
 * (acl)
@@ -43,15 +48,18 @@ Security
 * (persistence)
 
 Utilities
+
 * base/types
 * utility
 * (uri/url)
 * (validation)
 
 Input/Ouput / Filesystem
+
 * io
 
 Email
+
 * net/Email
 * libs/transporters
 

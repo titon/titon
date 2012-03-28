@@ -38,6 +38,7 @@
 * Declare visibility on all properties and methods
 
 Names
+
 * Should be written in CamelCaps
 * Should be nouns when applicable (Animal)
 * Interfaces/Traits should be adjectives (Controller, not Control)
@@ -45,6 +46,7 @@ Names
 * Classes that extend interfaces should suffix the interface name into the classname (ExampleController)
 
 Properties and methods
+
 * Should be written in camelBack
 * Should be verbs
 * Protected visibility should begin with a single underscore
@@ -74,7 +76,7 @@ Properties and methods
 ### Method Naming ###
 
 Please use the following words (or variations of) when implementing methods in your classes.
-Getters and setters should use singular words when returning granular data, and plurals when returning collections of data.
+Getters and setters should use singular words when dealing with a single record, and plurals when dealing with collections of data.
 
 * get() - Fetching data based on a key
 * set() - Setting data based on a key (will overwrite)
