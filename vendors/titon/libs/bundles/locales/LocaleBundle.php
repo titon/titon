@@ -20,14 +20,18 @@ use \titon\libs\bundles\BundleAbstract;
 class LocaleBundle extends BundleAbstract {
 
 	/**
+	 * Bundle file extension.
+	 */
+	const EXT = 'php';
+
+	/**
 	 * Configuration.
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_config = array(
-		'bundle' => '',
-		'ext' => 'php'
+		'bundle' => ''
 	);
 
 	/**

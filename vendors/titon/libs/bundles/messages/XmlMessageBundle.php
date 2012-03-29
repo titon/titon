@@ -19,16 +19,9 @@ use \titon\libs\bundles\messages\MessageBundleAbstract;
 class XmlMessageBundle extends MessageBundleAbstract {
 
 	/**
-	 * Configuration.
-	 *
-	 * @access protected
-	 * @var array
+	 * Bundle file extension.
 	 */
-	protected $_config = array(
-		'module' => '',
-		'bundle' => '',
-		'ext' => 'xml'
-	);
+	const EXT = 'xml';
 
 	/**
 	 * Parse the file at the given path and return the result.

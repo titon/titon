@@ -47,7 +47,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 */
 	public function getFiles() {
 		return $this->cacheMethod(__FUNCTION__, null, function($self) {
-			return array_map('basename', glob($self->getPath() . '*.' . $self->config('ext')));
+			return array_map('basename', glob($self->getPath() . '*.' . static::EXT));
 		});
 	}
 
@@ -97,7 +97,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 		}
 
 		// Remove so that we can throw a reasonable exception
-		unset($config['ext'], $config['initialize']);
+		unset($config['initialize']);
 
 		throw new BundleException(sprintf('Resource bundle %s could not be located.', implode(':', $config)));
 	}
@@ -115,7 +115,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 			return $this->_config[$key];
 		}
 
-		$filename = Inflector::filename($key, $this->config('ext'), false);
+		$filename = Inflector::filename($key, static::EXT, false);
 
 		if (in_array($filename, $this->getFiles())) {
 			$data = $this->parseFile($this->getPath() . $filename);

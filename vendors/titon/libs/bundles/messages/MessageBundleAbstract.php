@@ -20,6 +20,17 @@ use \titon\libs\bundles\BundleAbstract;
 abstract class MessageBundleAbstract extends BundleAbstract {
 
 	/**
+	 * Configuration.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_config = array(
+		'module' => '',
+		'bundle' => ''
+	);
+
+	/**
 	 * Define the locations for the message resources.
 	 *
 	 * @access public
