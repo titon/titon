@@ -10,6 +10,7 @@
 namespace titon\libs\bundles\locales;
 
 use \titon\libs\bundles\BundleAbstract;
+use \Locale;
 
 /**
  * The LocaleBundle manages the loading of locale resources which contain locale specific configuration,
@@ -35,20 +36,51 @@ class LocaleBundle extends BundleAbstract {
 	);
 
 	/**
+	 * Parent locale bundle.
+	 *
+	 * @access protected
+	 * @var \titon\libs\bundles\locales\LocaleBundle
+	 */
+	protected $_parent;
+
+	/**
 	 * Convenience method to return the inflection rules.
 	 *
 	 * @access public
-	 * @param string $key
 	 * @return array
 	 */
-	public function inflections($key = null) {
-		$data = $this->loadFile('inflections');
+	public function getInflections() {
+		return $this->loadFile('inflections');
+	}
 
-		if ($key) {
-			return $this->config('inflections.' . $key);
-		}
+	/**
+	 * Convenience method to return the locale configuration.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getLocale() {
+		return $this->loadFile('locale');
+	}
 
-		return $data;
+	/**
+	 * Return the parent bundle if it exists.
+	 *
+	 * @access public
+	 * @return \titon\libs\bundles\locales\LocaleBundle
+	 */
+	public function getParent() {
+		return $this->_parent;
+	}
+
+	/**
+	 * Convenience method to return the validation rules.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getValidations() {
+		return $this->loadFile('validations');
 	}
 
 	/**
@@ -65,21 +97,36 @@ class LocaleBundle extends BundleAbstract {
 
 		parent::initialize();
 
-		$this->locale();
+		// Load locale file and load parent if one exists
+		$locale = $this->getLocale();
+
+		if (isset($locale['parent'])) {
+			$this->_parent = new LocaleBundle(array(
+				'bundle' => $locale['parent']
+			));
+		}
 	}
 
 	/**
-	 * Convenience method to return the locale configuration.
+	 * Load the file from the resource bundle and parse its contents.
+	 * If the bundle has a parent, merge its content with the child.
 	 *
 	 * @access public
 	 * @param string $key
 	 * @return array
 	 */
-	public function locale($key = null) {
-		$data = $this->loadFile('locale');
+	public function loadFile($key) {
+		if (isset($this->_config[$key])) {
+			return $this->_config[$key];
+		}
 
-		if ($key) {
-			return $this->config('locale.' . $key);
+		$data = parent::loadFile($key);
+		$data = Locale::parseLocale($data['id']) + $data;
+
+		$parent = $this->getParent();
+
+		if ($parent) {
+			$this->configure($key, $data + $parent->loadFile($key));
 		}
 
 		return $data;
@@ -94,23 +141,6 @@ class LocaleBundle extends BundleAbstract {
 	 */
 	public function parseFile($path) {
 		return include_once $path;
-	}
-
-	/**
-	 * Convenience method to return the validation rules.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return array
-	 */
-	public function validations($key = null) {
-		$data = $this->loadFile('validations');
-
-		if ($key) {
-			return $this->config('validations.' . $key);
-		}
-
-		return $data;
 	}
 
 }

@@ -262,22 +262,11 @@ class G11n {
 			'bundle' => $this->canonicalize($key, self::FORMAT_3),
 		));
 
-		$config = $config + $bundle->locale();
-
-		// Merge with parent
-		if (!empty($config['parent'])) {
-			if (!isset($this->_locales[$config['parent']])) {
-				$this->setup($config['parent']);
-			}
-
-			$config = $config + $this->_locales[$config['parent']]->locale();
-		}
-
-		// Generate meta data
-		$config = Locale::parseLocale($config['id']) + $config;
 		$config['key'] = $key;
 
-		$bundle->configure('locale', $config);
+		foreach ($config as $key => $value) {
+			$bundle->configure('locale.' . $key, $value);
+		}
 
 		return $bundle;
 	}
@@ -302,7 +291,7 @@ class G11n {
 		}
 
 		$bundle = $this->_locales[$key];
-		$locale = $bundle->locale();
+		$locale = $bundle->getLocale();
 
 		// Build array of options to set
 		$options = array(
@@ -328,7 +317,7 @@ class G11n {
 		}
 
 		// Use fallback options
-		$fallbackLocale = $this->getFallback()->locale();
+		$fallbackLocale = $this->getFallback()->getLocale();
 
 		$options = array_merge($options, array(
 			$fallbackLocale['id'] . '.UTF8',

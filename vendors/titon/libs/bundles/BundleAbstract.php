@@ -46,8 +46,10 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @return array
 	 */
 	public function getFiles() {
-		return $this->cacheMethod(__FUNCTION__, null, function($self) {
-			return array_map('basename', glob($self->getPath() . '*.' . static::EXT));
+		$ext = static::EXT;
+
+		return $this->cacheMethod(__FUNCTION__, null, function($self) use ($ext) {
+			return array_map('basename', glob($self->getPath() . '*.' . $ext));
 		});
 	}
 
