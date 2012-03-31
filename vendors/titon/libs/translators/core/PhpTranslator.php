@@ -9,6 +9,7 @@
 
 namespace titon\libs\translators\core;
 
+use \titon\libs\bundles\messages\PhpMessageBundle;
 use \titon\libs\translators\TranslatorAbstract;
 
 /**
@@ -21,15 +22,22 @@ use \titon\libs\translators\TranslatorAbstract;
 class PhpTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a catalog from a specific module.
+	 * Load a catalog from a specific module using a resource bundle.
 	 * 
 	 * @access public
 	 * @param string $module
 	 * @param string $catalog
 	 * @return array
 	 */
-	public function parseFile($module, $catalog) {
-		return include $this->getFilePath($module, $catalog, 'php');
+	public function loadCatalog($module, $catalog) {
+		if (!isset($this->_bundles[$module . '.' . $catalog])) {
+			$this->_bundles[$module . '.' . $catalog] = new PhpMessageBundle(array(
+				'module' => $module,
+				'catalog' => $catalog
+			));
+		}
+
+		$bundle = $this->_bundles[$module . '.' . $catalog];
 	}
 
 }

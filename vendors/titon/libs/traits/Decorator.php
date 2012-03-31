@@ -118,11 +118,7 @@ trait Decorator {
 	 * @chainable
 	 */
 	public function allowObject($classes) {
-		if (!is_array($classes)) {
-			$classes = array($classes);
-		}
-
-		foreach ($classes as $class) {
+		foreach ((array) $classes as $class) {
 			unset($this->_restricted[$class]);
 		}
 
@@ -273,11 +269,7 @@ trait Decorator {
 	 * @chainable
 	 */
 	public function restrictObject($classes) {
-		if (!is_array($classes)) {
-			$classes = array($classes);
-		}
-
-		foreach ($classes as $class){
+		foreach ((array) $classes as $class){
 			$this->_restricted[$class] = $class;
 		}
 
