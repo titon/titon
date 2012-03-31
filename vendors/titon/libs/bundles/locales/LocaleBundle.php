@@ -100,11 +100,20 @@ class LocaleBundle extends BundleAbstract {
 		// Load locale file and load parent if one exists
 		$locale = $this->getLocale();
 
+		echo $locale['id'] . "...\n";
+		echo $locale['parent'] . "...\n\n";
+
+		$locale = Locale::parseLocale($locale['id']) + $locale;
+
 		if (isset($locale['parent'])) {
 			$this->_parent = new LocaleBundle(array(
 				'bundle' => $locale['parent']
 			));
+
+			$locale = $locale + $this->_parent->getLocale();
 		}
+
+		$this->configure('locale', $locale);
 	}
 
 	/**
@@ -121,13 +130,12 @@ class LocaleBundle extends BundleAbstract {
 		}
 
 		$data = parent::loadFile($key);
-		$data = Locale::parseLocale($data['id']) + $data;
 
-		$parent = $this->getParent();
-
-		if ($parent) {
-			$this->configure($key, $data + $parent->loadFile($key));
+		if ($parent = $this->getParent()) {
+			$data = $data + $parent->loadFile($key);
 		}
+
+		$this->configure($key, $data);
 
 		return $data;
 	}

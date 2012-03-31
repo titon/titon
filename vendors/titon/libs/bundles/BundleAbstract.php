@@ -91,6 +91,8 @@ abstract class BundleAbstract extends Base implements Bundle {
 			return $value;
 		}, $this->getLocations());
 
+		$this->_locations = $locations;
+
 		foreach ($locations as $location) {
 			if (file_exists($location)) {
 				$this->_path = $location;
