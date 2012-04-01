@@ -9,9 +9,9 @@
 
 namespace titon\libs\adapters\session;
 
-use \titon\Titon;
-use \titon\libs\adapters\SessionAdapterAbstract;
-use \titon\libs\storage\Storage;
+use titon\Titon;
+use titon\libs\adapters\SessionAdapterAbstract;
+use titon\libs\storage\Storage;
 
 /**
  * Caches session data using one of the built in cache storage engines.
@@ -34,7 +34,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * Inject the storage engine.
 	 * 
 	 * @access public
-	 * @param \titon\libs\storage\Storage $storage
+	 * @param titon\libs\storage\Storage $storage
 	 */
 	final public function __construct(Storage $storage) {
 		parent::__construct();

@@ -9,8 +9,8 @@
 
 namespace titon\core;
 
-use \titon\Titon;
-use \titon\log\Logger;
+use titon\Titon;
+use titon\log\Logger;
 use \Exception;
 
 /**
@@ -346,7 +346,7 @@ class Debugger {
 	 * Handler for catching uncaught exceptions.
 	 *
 	 * @access public
-	 * @param \Exception $exception
+	 * @param Exception $exception
 	 * @return void
 	 */
 	public function uncaught(Exception $exception) {

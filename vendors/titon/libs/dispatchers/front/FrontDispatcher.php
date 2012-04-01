@@ -9,9 +9,9 @@
 
 namespace titon\libs\dispatchers\front;
 
-use \titon\Titon;
-use \titon\libs\dispatchers\DispatcherAbstract;
-use \titon\libs\exceptions\HttpException;
+use titon\Titon;
+use titon\libs\dispatchers\DispatcherAbstract;
+use titon\libs\exceptions\HttpException;
 use \Exception;
 
 /**

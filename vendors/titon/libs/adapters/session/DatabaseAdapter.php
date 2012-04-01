@@ -9,7 +9,7 @@
 
 namespace titon\libs\adapters\session;
 
-use \titon\libs\adapters\SessionAdapterAbstract;
+use titon\libs\adapters\SessionAdapterAbstract;
 
 /**
  * Saves session data to a database through the DAO layer.

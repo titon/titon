@@ -9,10 +9,10 @@
 
 namespace titon\libs\listeners;
 
-use \titon\base\Base;
-use \titon\libs\controllers\Controller;
-use \titon\libs\engines\Engine;
-use \titon\libs\listeners\Listener;
+use titon\base\Base;
+use titon\libs\controllers\Controller;
+use titon\libs\engines\Engine;
+use titon\libs\listeners\Listener;
 
 /**
  * Provides no functionality except the definition of skeleton methods.
@@ -66,7 +66,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * Executed before the action gets processed.
 	 *
 	 * @access public
-	 * @param \titon\libs\controllers\Controller $controller
+	 * @param titon\libs\controllers\Controller $controller
 	 * @return void
 	 */
 	public function preProcess(Controller $controller) {
@@ -77,7 +77,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * Executed after the action gets processed.
 	 *
 	 * @access public
-	 * @param \titon\libs\controllers\Controller $controller
+	 * @param titon\libs\controllers\Controller $controller
 	 * @return void
 	 */
 	public function postProcess(Controller $controller) {
@@ -88,7 +88,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * Executed before the template gets rendered.
 	 *
 	 * @access public
-	 * @param \titon\libs\engines\Engine $engine
+	 * @param titon\libs\engines\Engine $engine
 	 * @return void
 	 */
 	public function preRender(Engine $engine) {
@@ -99,7 +99,7 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * Executed after the template gets rendered.
 	 *
 	 * @access public
-	 * @param \titon\libs\engines\Engine $engine
+	 * @param titon\libs\engines\Engine $engine
 	 * @return void
 	 */
 	public function postRender(Engine $engine) {

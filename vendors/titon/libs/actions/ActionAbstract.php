@@ -9,11 +9,11 @@
 
 namespace titon\libs\actions;
 
-use \titon\base\Base;
-use \titon\libs\actions\Action;
-use \titon\libs\actions\ActionException;
-use \titon\libs\controllers\Controller;
-use \titon\libs\traits\Decorator;
+use titon\base\Base;
+use titon\libs\actions\Action;
+use titon\libs\actions\ActionException;
+use titon\libs\controllers\Controller;
+use titon\libs\traits\Decorator;
 
 /**
  * The Action is a sub-routine of the Controller parent and is packaged as a stand-alone object instead of a method.
@@ -31,7 +31,7 @@ abstract class ActionAbstract extends Base implements Action {
 	 * Controller object.
 	 *
 	 * @access public
-	 * @var \titon\libs\controllers\Controller
+	 * @var titon\libs\controllers\Controller
 	 */
 	public $controller;
 
@@ -39,7 +39,7 @@ abstract class ActionAbstract extends Base implements Action {
 	 * Store the parent Controller.
 	 *
 	 * @access public
-	 * @param \titon\libs\controllers\Controller $controller
+	 * @param titon\libs\controllers\Controller $controller
 	 * @return void
 	 */
 	public function setController(Controller $controller) {
@@ -51,7 +51,7 @@ abstract class ActionAbstract extends Base implements Action {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws \titon\libs\actions\ActionException
+	 * @throws titon\libs\actions\ActionException
 	 */
 	public function run() {
 		throw new ActionException(sprintf('You must define the run() method within your %s Action.', get_class($this)));

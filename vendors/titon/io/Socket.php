@@ -9,7 +9,7 @@
  
 namespace titon\io;
 
-use \titon\base\Base;
+use titon\base\Base;
 
 /**
  * @todo

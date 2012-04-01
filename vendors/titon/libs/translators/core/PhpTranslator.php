@@ -9,8 +9,8 @@
 
 namespace titon\libs\translators\core;
 
-use \titon\libs\bundles\messages\PhpMessageBundle;
-use \titon\libs\translators\TranslatorAbstract;
+use titon\libs\bundles\messages\PhpMessageBundle;
+use titon\libs\translators\TranslatorAbstract;
 
 /**
  * Translator used for parsing PHP files into an array of translated messages.

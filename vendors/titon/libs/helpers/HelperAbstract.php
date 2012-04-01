@@ -9,11 +9,11 @@
 
 namespace titon\libs\helpers;
 
-use \titon\Titon;
-use \titon\base\Base;
-use \titon\libs\engines\Engine;
-use \titon\libs\helpers\Helper;
-use \titon\libs\traits\Decorator;
+use titon\Titon;
+use titon\base\Base;
+use titon\libs\engines\Engine;
+use titon\libs\helpers\Helper;
+use titon\libs\traits\Decorator;
 
 /**
  * The Helper class acts as the base for all children helpers to extend.
@@ -81,7 +81,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param \titon\libs\engines\Engine $engine
+	 * @param titon\libs\engines\Engine $engine
 	 * @return void
 	 */
 	public function preRender(Engine $engine) {
@@ -92,7 +92,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * Triggered after a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param \titon\libs\engines\Engine $engine
+	 * @param titon\libs\engines\Engine $engine
 	 * @return void
 	 */
 	public function postRender(Engine $engine) {

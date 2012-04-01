@@ -9,7 +9,7 @@
 
 namespace titon\libs\translators\core;
 
-use \titon\libs\translators\TranslatorAbstract;
+use titon\libs\translators\TranslatorAbstract;
 
 /**
  * Translator used for parsing XML files into an array of translated messages.

@@ -9,17 +9,17 @@
  
 namespace titon\libs\controllers;
 
-use \titon\Titon;
-use \titon\base\Base;
-use \titon\constant\Http;
-use \titon\libs\actions\Action;
-use \titon\libs\controllers\Controller;
-use \titon\libs\controllers\ControllerException;
-use \titon\libs\engines\Engine;
-use \titon\libs\engines\core\ViewEngine;
-use \titon\libs\traits\Decorator;
-use \titon\utility\Inflector;
-use \titon\utility\Set;
+use titon\Titon;
+use titon\base\Base;
+use titon\constant\Http;
+use titon\libs\actions\Action;
+use titon\libs\controllers\Controller;
+use titon\libs\controllers\ControllerException;
+use titon\libs\engines\Engine;
+use titon\libs\engines\core\ViewEngine;
+use titon\libs\traits\Decorator;
+use titon\utility\Inflector;
+use titon\utility\Set;
 use \Closure;
 
 /**
@@ -70,7 +70,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @param string $action
 	 * @param array $args
 	 * @return mixed
-	 * @throws \titon\libs\controllers\ControllerException
+	 * @throws titon\libs\controllers\ControllerException
 	 */
 	public function dispatchAction($action = null, array $args = array()) {
 		if (empty($action)) {
@@ -135,7 +135,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * Trigger a custom Action class.
 	 *
 	 * @access public
-	 * @param \titon\libs\actions\Action $action
+	 * @param titon\libs\actions\Action $action
 	 * @return void
 	 */
 	public function runAction(Action $action) {
@@ -202,7 +202,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param \Closure $engine
+	 * @param Closure $engine
 	 * @return void
 	 * @final
 	 */

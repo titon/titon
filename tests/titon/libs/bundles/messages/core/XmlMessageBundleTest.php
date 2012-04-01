@@ -9,7 +9,7 @@
 
 include_once '../../../../../bootstrap.php';
 
-use \titon\libs\bundles\messages\core\XmlMessageBundle;
+use titon\libs\bundles\messages\core\XmlMessageBundle;
 
 /**
  * Test class for \titon\libs\bundles\messages\core\XmlMessageBundle.

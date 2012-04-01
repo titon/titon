@@ -9,7 +9,7 @@
  
 namespace titon\libs\controllers;
 
-use \titon\libs\actions\Action;
+use titon\libs\actions\Action;
 use \Closure;
 
 /**
@@ -43,7 +43,7 @@ interface Controller {
 	 * Trigger a custom Action class.
 	 *
 	 * @access public
-	 * @param \titon\libs\actions\Action $action
+	 * @param titon\libs\actions\Action $action
 	 * @return void
 	 */
 	public function runAction(Action $action);
@@ -78,7 +78,7 @@ interface Controller {
 	 * Setup the rendering engine to use.
 	 *
 	 * @access public
-	 * @param \Closure $engine
+	 * @param Closure $engine
 	 * @return void
 	 */
 	public function setEngine(Closure $engine);

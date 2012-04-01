@@ -9,8 +9,8 @@
 
 namespace titon\libs\engines\core;
 
-use \titon\libs\engines\EngineAbstract;
-use \titon\libs\engines\EngineException;
+use titon\libs\engines\EngineAbstract;
+use titon\libs\engines\EngineException;
 
 /**
  * Standard engine used for rendering views using pure PHP code.

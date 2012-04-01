@@ -9,8 +9,8 @@
 
 namespace titon\state;
 
-use \titon\Titon;
-use \titon\base\Base;
+use titon\Titon;
+use titon\base\Base;
 use \Closure;
 
 /**

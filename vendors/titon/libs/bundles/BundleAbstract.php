@@ -9,16 +9,16 @@
  
 namespace titon\libs\bundles;
 
-use \titon\base\Base;
-use \titon\libs\bundles\Bundle;
-use \titon\libs\bundles\BundleException;
-use \titon\utility\Inflector;
+use titon\base\Base;
+use titon\libs\bundles\Bundle;
+use titon\libs\bundles\BundleException;
+use titon\utility\Inflector;
 
 /**
  * @todo
  *
  * @package	titon.libs.bundles
- * @uses	\titon\utility\Inflector
+ * @uses	titon\utility\Inflector
  * @abstract
  */
 abstract class BundleAbstract extends Base implements Bundle {
@@ -46,7 +46,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @access public
 	 * @param array $locations
 	 * @return void
-	 * @throws \titon\libs\bundles\BundleException
+	 * @throws titon\libs\bundles\BundleException
 	 */
 	public function findBundle(array $locations) {
 		$config = $this->config();
@@ -147,7 +147,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @access public
 	 * @param $path
 	 * @return array
-	 * @throws \titon\libs\bundles\BundleException
+	 * @throws titon\libs\bundles\BundleException
 	 */
 	public function parseFile($path) {
 		throw new BundleException(sprintf('You must define the parseFile() method within your %s.', get_class($this)));

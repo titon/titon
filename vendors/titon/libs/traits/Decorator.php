@@ -9,10 +9,10 @@
 
 namespace titon\libs\traits;
 
-use \titon\Titon;
-use \titon\libs\traits\TraitException;
-use \titon\utility\Inflector;
-use \titon\utility\Set;
+use titon\Titon;
+use titon\libs\traits\TraitException;
+use titon\utility\Inflector;
+use titon\utility\Set;
 use \Closure;
 
 /**
@@ -114,7 +114,7 @@ trait Decorator {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return \titon\libs\traits\Decorator
+	 * @return titon\libs\traits\Decorator
 	 * @chainable
 	 */
 	public function allowObject($classes) {
@@ -130,9 +130,9 @@ trait Decorator {
 	 *
 	 * @access public
 	 * @param array|string $options
-	 * @param \Closure $closure
-	 * @return \titon\libs\traits\Decorator
-	 * @throws \titon\libs\traits\TraitException
+	 * @param Closure $closure
+	 * @return titon\libs\traits\Decorator
+	 * @throws titon\libs\traits\TraitException
 	 * @chainable
 	 */
 	public function attachObject($options, Closure $closure = null) {
@@ -190,7 +190,7 @@ trait Decorator {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return \titon\libs\traits\Decorator
+	 * @return titon\libs\traits\Decorator
 	 * @chainable
 	 */
 	public function detachObject($class) {
@@ -208,7 +208,7 @@ trait Decorator {
 	 * @access public
 	 * @param string $class
 	 * @return object|null
-	 * @throws \titon\libs\traits\TraitException
+	 * @throws titon\libs\traits\TraitException
 	 */
 	public function getObject($class) {
 		if (in_array($class, $this->_restricted)) {
@@ -265,7 +265,7 @@ trait Decorator {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return \titon\libs\traits\Decorator
+	 * @return titon\libs\traits\Decorator
 	 * @chainable
 	 */
 	public function restrictObject($classes) {

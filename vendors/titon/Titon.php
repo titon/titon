@@ -9,18 +9,18 @@
 
 namespace titon;
 
-use \titon\Exception;
-use \titon\core\Application;
-use \titon\core\Cache;
-use \titon\core\Config;
-use \titon\core\Debugger;
-use \titon\core\Dispatch;
-use \titon\core\Environment;
-use \titon\core\Event;
-use \titon\core\G11n;
-use \titon\core\Loader;
-use \titon\core\Registry;
-use \titon\core\Router;
+use titon\Exception;
+use titon\core\Application;
+use titon\core\Cache;
+use titon\core\Config;
+use titon\core\Debugger;
+use titon\core\Dispatch;
+use titon\core\Environment;
+use titon\core\Event;
+use titon\core\G11n;
+use titon\core\Loader;
+use titon\core\Registry;
+use titon\core\Router;
 
 /**
  * The primary framework class contains all core classes that manipulate and power the application, or add quick convenience.
@@ -76,7 +76,7 @@ class Titon {
 	 * @access public
 	 * @param string $key
 	 * @return object
-	 * @throws \titon\Exception
+	 * @throws titon\Exception
 	 * @static
 	 */
 	public static function get($key) {

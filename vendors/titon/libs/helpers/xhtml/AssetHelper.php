@@ -9,8 +9,8 @@
 
 namespace titon\libs\helpers\xhtml;
 
-use \titon\Titon;
-use \titon\libs\helpers\html\AssetHelper as HtmlAssetHelper;
+use titon\Titon;
+use titon\libs\helpers\html\AssetHelper as HtmlAssetHelper;
 
 /**
  * The AssetHelper aids in the process of including external stylesheets and scripts.

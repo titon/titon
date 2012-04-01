@@ -9,8 +9,8 @@
 
 namespace titon\libs\helpers\xhtml;
 
-use \titon\Titon;
-use \titon\libs\helpers\html\BreadcrumbHelper as HtmlBreadcrumbHelper;
+use titon\Titon;
+use titon\libs\helpers\html\BreadcrumbHelper as HtmlBreadcrumbHelper;
 
 /**
  * The BreadcrumbHelper is primarily used for adding and generating breadcrumb lists.

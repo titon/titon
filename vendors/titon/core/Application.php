@@ -9,8 +9,8 @@
 
 namespace titon\core;
 
-use \titon\Titon;
-use \titon\core\CoreException;
+use titon\Titon;
+use titon\core\CoreException;
 
 /**
  * This class manages the location and installation of controllers and modules,
@@ -97,8 +97,8 @@ class Application {
 	 * @param string $module
 	 * @param string $path
 	 * @param array $controllers
-	 * @return \titon\core\Application
-	 * @throws \titon\core\CoreException
+	 * @return titon\core\Application
+	 * @throws titon\core\CoreException
 	 * @chainable
 	 */
 	public function setup($module, $path, array $controllers) {

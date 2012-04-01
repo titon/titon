@@ -9,7 +9,7 @@
 
 namespace titon\libs\listeners\optimizer;
 
-use \titon\libs\listeners\ListenerAbstract;
+use titon\libs\listeners\ListenerAbstract;
 
 /**
  * The Optimizer is an event listener that triggers the garbage collection and gzip compression processes.

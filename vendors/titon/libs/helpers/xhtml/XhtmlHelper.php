@@ -9,7 +9,7 @@
 
 namespace titon\libs\helpers\xhtml;
 
-use \titon\libs\helpers\html\HtmlHelper;
+use titon\libs\helpers\html\HtmlHelper;
 
 /**
  * The HtmlHelper is primarily used for dynamic HTML tag creation within templates.

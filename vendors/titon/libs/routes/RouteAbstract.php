@@ -9,11 +9,11 @@
 
 namespace titon\libs\routes;
 
-use \titon\Titon;
-use \titon\base\Base;
-use \titon\libs\routes\Route;
-use \titon\libs\routes\RouteException;
-use \titon\libs\traits\Decorator;
+use titon\Titon;
+use titon\base\Base;
+use titon\libs\routes\Route;
+use titon\libs\routes\RouteException;
+use titon\libs\traits\Decorator;
 
 /**
  * Represents the skeleton for an individual route. A route matches an internal URL that gets analyzed into multiple parts:

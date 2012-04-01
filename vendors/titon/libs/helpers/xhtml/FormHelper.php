@@ -9,7 +9,7 @@
 
 namespace titon\libs\helpers\xhtml;
 
-use \titon\libs\helpers\html\FormHelper as HtmlFormHelper;
+use titon\libs\helpers\html\FormHelper as HtmlFormHelper;
 
 /**
  * The Formhelper is used for HTML form creation. Data is passed to the associated input fields 

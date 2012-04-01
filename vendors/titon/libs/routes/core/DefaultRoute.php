@@ -9,7 +9,7 @@
 
 namespace titon\libs\routes\core;
 
-use \titon\libs\routes\RouteAbstract;
+use titon\libs\routes\RouteAbstract;
 
 /**
  * Default route object. Inherits all its functionality from the RouteAbstract class.

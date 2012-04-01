@@ -9,7 +9,7 @@
  
 namespace titon\net;
 
-use \titon\base\Base;
+use titon\base\Base;
 
 /**
  * @todo

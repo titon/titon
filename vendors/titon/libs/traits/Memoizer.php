@@ -33,7 +33,7 @@ trait Memoizer {
 	 * @access public
 	 * @param string $method
 	 * @param mixed $id
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @return mixed 
 	 */
 	public function cacheMethod($method, $id, Closure $callback) {

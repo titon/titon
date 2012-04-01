@@ -9,9 +9,9 @@
 
 namespace titon\libs\storage;
 
-use \titon\base\Base;
-use \titon\libs\storage\Storage;
-use \titon\libs\traits\Memoizer;
+use titon\base\Base;
+use titon\libs\storage\Storage;
+use titon\libs\traits\Memoizer;
 
 /**
  * Primary class for all storage engines to extend. Provides functionality from the Base class and the Storage interface.

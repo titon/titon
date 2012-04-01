@@ -9,8 +9,8 @@
 
 namespace titon\libs\models;
 
-use \titon\libs\models\Model;
-use \titon\libs\models\ModelException;
+use titon\libs\models\Model;
+use titon\libs\models\ModelException;
 
 /**
  * @todo
@@ -117,7 +117,7 @@ class ModelAbstract implements Model {
 	 * @access public
 	 * @param string $field
 	 * @return mixed
-	 * @throws \titon\libs\models\ModelException
+	 * @throws titon\libs\models\ModelException
 	 */
 	public function get($field) {
 		if (!$this->hasField($field)) {
@@ -166,7 +166,7 @@ class ModelAbstract implements Model {
 	 * @param string $field
 	 * @param mixed $value
 	 * @return void
-	 * @throws \titon\libs\models\ModelException
+	 * @throws titon\libs\models\ModelException
 	 */
 	public function set($field, $value) {
 		if (!$this->hasField($field)) {

@@ -9,11 +9,11 @@
  
 namespace titon\net;
 
-use \titon\Titon;
-use \titon\base\Base;
-use \titon\constant\Http;
-use \titon\net\NetException;
-use \titon\libs\traits\Memoizer;
+use titon\Titon;
+use titon\base\Base;
+use titon\constant\Http;
+use titon\net\NetException;
+use titon\libs\traits\Memoizer;
 
 /**
  * The Request object is the primary source of data and state management for the environment.
@@ -73,7 +73,7 @@ class Request extends Base {
 	 * @access public
 	 * @param string $type
 	 * @return boolean
-	 * @throws \titon\net\NetException
+	 * @throws titon\net\NetException
 	 */
 	public function accepts($type = 'html') {
 		$contentType = (array) Http::getContentType($type);

@@ -9,8 +9,8 @@
 
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
-use \titon\libs\controllers\Controller;
-use \titon\libs\engines\Engine;
+use titon\libs\controllers\Controller;
+use titon\libs\engines\Engine;
 
 /**
  * Test class for \titon\core\Event.

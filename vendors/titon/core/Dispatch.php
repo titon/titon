@@ -9,11 +9,11 @@
 
 namespace titon\core;
 
-use \titon\Titon;
-use \titon\libs\dispatchers\Dispatcher;
-use \titon\libs\dispatchers\front\FrontDispatcher;
-use \titon\libs\dispatchers\front\FrontDevDispatcher;
-use \titon\utility\Inflector;
+use titon\Titon;
+use titon\libs\dispatchers\Dispatcher;
+use titon\libs\dispatchers\front\FrontDispatcher;
+use titon\libs\dispatchers\front\FrontDevDispatcher;
+use titon\utility\Inflector;
 
 /**
  * The dispatch handles the HTTP request and response cycle. Once it receives the HTTP request,
@@ -84,7 +84,7 @@ class Dispatch {
 	 * Apply custom dispatchers to a specific module or controller scope.
 	 *
 	 * @access public
-	 * @param \titon\libs\dispatchers\Dispatcher $dispatcher
+	 * @param titon\libs\dispatchers\Dispatcher $dispatcher
 	 * @param array $scope
 	 * @return void
 	 */

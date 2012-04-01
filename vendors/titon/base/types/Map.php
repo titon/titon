@@ -9,7 +9,7 @@
 
 namespace titon\base\types;
 
-use \titon\base\types\Type;
+use titon\base\types\Type;
 use \Closure;
 
 /**
@@ -51,7 +51,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param mixed $value
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function append($value) {
@@ -70,7 +70,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param int $size
 	 * @param boolean $preserve
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function chunk($size, $preserve = false) {
@@ -84,7 +84,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param boolean $removeZero
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function clean($removeZero = true) {
@@ -103,7 +103,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Empty the array.
 	 *
 	 * @access public
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function clear() {
@@ -121,7 +121,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param array $array
 	 * @param boolean $strict
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @return array
 	 */
 	public function compare(array $array, $strict = true, Closure $callback = null) {
@@ -143,8 +143,8 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param array $array
 	 * @param boolean $strict
-	 * @param \Closure $callback
-	 * @param \Closure $keyCallback
+	 * @param Closure $callback
+	 * @param Closure $keyCallback
 	 * @return array
 	 */
 	public function compareByCallback(array $array, $strict, Closure $callback, Closure $keyCallback = null) {
@@ -166,7 +166,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param array $array
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @return array
 	 */
 	public function compareKeys(array $array, Closure $callback = null) {
@@ -183,7 +183,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param array $array
 	 * @param boolean $append
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 */
 	public function concat(array $array, $append = true) {
 		if ($append) {
@@ -264,7 +264,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param array $array
 	 * @param boolean $strict
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @return array
 	 */
 	public function difference(array $array, $strict = true, Closure $callback = null) {
@@ -286,8 +286,8 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param array $array
 	 * @param boolean $strict
-	 * @param \Closure $callback
-	 * @param \Closure $keyCallback
+	 * @param Closure $callback
+	 * @param Closure $keyCallback
 	 * @return array
 	 */
 	public function differenceByCallback(array $array, $strict, Closure $callback, Closure $keyCallback = null) {
@@ -309,7 +309,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param array $array
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @return array
 	 */
 	public function differenceKeys(array $array, Closure $callback = null) {
@@ -336,7 +336,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param mixed $data
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function erase($data) {
@@ -355,7 +355,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Returns true if every element in the array satisfies the provided testing function.
 	 *
 	 * @access public
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @return boolean
 	 */
 	public function every(Closure $callback) {
@@ -396,8 +396,8 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Filters elements of the array using a callback function.
 	 *
 	 * @access public
-	 * @param \Closure $callback
-	 * @return \titon\base\types\Map
+	 * @param Closure $callback
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function filter(Closure $callback) {
@@ -430,7 +430,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param boolean $serialize
 	 * @param mixed $default
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function flatten($serialize = true, $default = null) {
@@ -457,7 +457,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Exchanges all keys with their associated values in the array.
 	 *
 	 * @access public
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function flip() {
@@ -598,9 +598,9 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Applies the callback to the elements of the array.
 	 *
 	 * @access public
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @param array $data
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function map(Closure $callback, array $data = array()) {
@@ -615,7 +615,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param array $array
 	 * @param boolean $recursive
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function merge(array $array, $recursive = true) {
@@ -633,7 +633,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param mixed $value
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function prepend($value) {
@@ -673,9 +673,9 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Iteratively reduce the array to a single value using a callback function.
 	 *
 	 * @access public
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @param boolean $initial
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function reduce(Closure $callback, $initial = null) {
@@ -689,7 +689,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function remove($key) {
@@ -702,7 +702,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Alias for rewind(), however returns the chainable object.
 	 *
 	 * @access public
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function reset() {
@@ -716,7 +716,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param boolean $preserve
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function reverse($preserve = true) {
@@ -729,7 +729,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Randomize the order of elements in the array.
 	 *
 	 * @access public
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function shuffle() {
@@ -759,7 +759,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Returns true if at least one element in the array satisfies the provided testing function.
 	 *
 	 * @access public
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @return boolean
 	 */
 	public function some(Closure $callback) {
@@ -785,7 +785,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @param boolean $reverse
 	 * @param boolean $preserve
 	 * @param int $flags
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function sort($reverse = false, $preserve = true, $flags = SORT_REGULAR) {
@@ -811,9 +811,9 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * If $preserve is true, the indices will be left in tact.
 	 *
 	 * @access public
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @param boolean $preserve
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function sortByCallback(Closure $callback, $preserve = true) {
@@ -832,7 +832,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param boolean $reverse
 	 * @param int $flags
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function sortKeys($reverse = false, $flags = SORT_REGULAR) {
@@ -849,8 +849,8 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Sort the keys in the array using a custom defined callback.
 	 *
 	 * @access public
-	 * @param \Closure $callback
-	 * @return \titon\base\types\Map
+	 * @param Closure $callback
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function sortKeysByCallback(Closure $callback) {
@@ -865,7 +865,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param boolean $strict
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function sortNatural($strict = false) {
@@ -976,7 +976,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param int $flags
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function unique($flags = SORT_REGULAR) {
@@ -999,10 +999,10 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Apply a user function to every member of an array.
 	 *
 	 * @access public
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @param boolean $recursive
 	 * @param mixed $data
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function walk(Closure $callback, $recursive = true, $data = null) {
@@ -1021,7 +1021,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return \titon\base\types\Map
+	 * @return titon\base\types\Map
 	 * @chainable
 	 */
 	public function write($key, $value) {

@@ -9,7 +9,7 @@
 
 namespace titon\base\types;
 
-use \titon\base\types\Type;
+use titon\base\types\Type;
 
 /**
  * The String type allows for the modification and manipulation of a string as if it was an object. 
@@ -51,7 +51,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $value
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable 
 	 */
 	public function append($value) {
@@ -64,7 +64,7 @@ class String extends Type {
 	 * Upper case the first letter of the first word.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function capitalize() {
@@ -78,7 +78,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param int $index
-	 * @return \titon\base\types\String|null
+	 * @return titon\base\types\String|null
 	 */
 	public function charAt($index = 0) {
 		return isset($this->_value[$index]) ? $this->_value[$index] : null;
@@ -88,7 +88,7 @@ class String extends Type {
 	 * Removes all extraneous whitespace from a string and trims it.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function clean() {
@@ -130,7 +130,7 @@ class String extends Type {
 	 * @access public
 	 * @param string $string
 	 * @param boolean $append
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 */
 	public function concat($string, $append = true) {
 		if ($append) {
@@ -180,7 +180,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param int $flags
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function escape($flags = ENT_QUOTES) {
@@ -195,7 +195,7 @@ class String extends Type {
 	 * @access public
 	 * @param int $offset
 	 * @param int $length
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 */
 	public function extract($offset, $length = null) {
 		if ($length !== null) {
@@ -316,7 +316,7 @@ class String extends Type {
 	 * @param int $length
 	 * @param string $value
 	 * @param int $type
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function pad($length, $value = ' ', $type = STR_PAD_BOTH) {
@@ -331,7 +331,7 @@ class String extends Type {
 	 * @access public
 	 * @param int $length
 	 * @param string $value
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function padLeft($length, $value = ' ') {
@@ -344,7 +344,7 @@ class String extends Type {
 	 * @access public
 	 * @param int $length
 	 * @param string $value
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function padRight($length, $value = ' ') {
@@ -356,7 +356,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $value
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function prepend($value) {
@@ -372,7 +372,7 @@ class String extends Type {
 	 * @param string|array $search
 	 * @param string|array $replace
 	 * @param boolean $strict
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function replace($search, $replace, $strict = true) {
@@ -389,7 +389,7 @@ class String extends Type {
 	 * Reverse the string.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function reverse() {
@@ -402,7 +402,7 @@ class String extends Type {
 	 * Shuffle the string.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function shuffle() {
@@ -426,7 +426,7 @@ class String extends Type {
 	 * Strips the string of its tags and anything in between them.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function strip() {
@@ -463,7 +463,7 @@ class String extends Type {
 	 * Converts a hyphenated string to a camelcased string.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function toCamelCase() {
@@ -476,7 +476,7 @@ class String extends Type {
 	 * Lower case the string.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function toLowerCase() {
@@ -489,7 +489,7 @@ class String extends Type {
 	 * Upper case the string.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function toUpperCase() {
@@ -502,7 +502,7 @@ class String extends Type {
 	 * Upper case the first letter of every word.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function toUpperWords() {
@@ -516,7 +516,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $char
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function trim($char = null) {
@@ -530,7 +530,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $char
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function trimLeft($char = null) {
@@ -544,7 +544,7 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param string $char
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function trimRight($char = null) {
@@ -557,7 +557,7 @@ class String extends Type {
 	 * Lower case the first letter of the first word.
 	 *
 	 * @access public
-	 * @return \titon\base\types\String
+	 * @return titon\base\types\String
 	 * @chainable
 	 */
 	public function uncapitalize() {

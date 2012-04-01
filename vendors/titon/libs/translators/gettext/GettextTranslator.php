@@ -9,9 +9,9 @@
 
 namespace titon\libs\translators\gettext;
 
-use \titon\Titon;
-use \titon\libs\translators\TranslatorAbstract;
-use \titon\libs\translators\TranslatorException;
+use titon\Titon;
+use titon\libs\translators\TranslatorAbstract;
+use titon\libs\translators\TranslatorException;
 
 /**
  * @todo

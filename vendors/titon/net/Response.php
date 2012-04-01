@@ -9,10 +9,10 @@
 
 namespace titon\net;
 
-use \titon\Titon;
-use \titon\base\Base;
-use \titon\constant\Http;
-use \titon\net\NetException;
+use titon\Titon;
+use titon\base\Base;
+use titon\constant\Http;
+use titon\net\NetException;
 
 /**
  * The Response object handles the collection and output of data to the browser. It stores a list of HTTP headers,
@@ -74,7 +74,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $body
-	 * @return \titon\net\Response
+	 * @return titon\net\Response
 	 * @chainable
 	 */
 	public function body($body = null) {
@@ -88,7 +88,7 @@ class Response extends Base {
 	 * 
 	 * @access public
 	 * @param int|string $expires
-	 * @return \titon\net\Response
+	 * @return titon\net\Response
 	 * @chainable
 	 */
 	public function cache($expires = '+24 hours') {
@@ -109,7 +109,7 @@ class Response extends Base {
 	 * @param string $header
 	 * @param string $value
 	 * @param boolean $replace
-	 * @return \titon\net\Response
+	 * @return titon\net\Response
 	 * @chainable
 	 */
 	public function header($header, $value, $replace = true) {
@@ -127,7 +127,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param array $headers
-	 * @return \titon\net\Response
+	 * @return titon\net\Response
 	 * @chainable
 	 */
 	public function headers(array $headers = array()) {
@@ -150,7 +150,7 @@ class Response extends Base {
 	 * Forces the clients browser not to cache the results of the current request.
 	 *
 	 * @access public
-	 * @return \titon\net\Response
+	 * @return titon\net\Response
 	 * @chainable
 	 */
 	public function noCache() {
@@ -225,8 +225,8 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param int $code
-	 * @return \titon\net\Response
-	 * @throws \titon\net\NetException
+	 * @return titon\net\Response
+	 * @throws titon\net\NetException
 	 * @chainable
 	 */
 	public function status($code = 302) {
@@ -240,7 +240,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return \titon\net\Response
+	 * @return titon\net\Response
 	 * @chainable
 	 */
 	public function type($type = null) {

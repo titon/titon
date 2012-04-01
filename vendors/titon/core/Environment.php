@@ -9,8 +9,8 @@
 
 namespace titon\core;
 
-use \titon\core\CoreException;
-use \titon\utility\Inflector;
+use titon\core\CoreException;
+use titon\utility\Inflector;
 
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
@@ -90,8 +90,8 @@ class Environment {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return \titon\core\Environment
-	 * @throws \titon\core\CoreException
+	 * @return titon\core\Environment
+	 * @throws titon\core\CoreException
 	 * @chainable
 	 */
 	public function fallbackAs($key) {
@@ -176,8 +176,8 @@ class Environment {
 	 * @param string $key
 	 * @param int $type
 	 * @param array $hosts
-	 * @return \titon\core\Environment
-	 * @throws \titon\core\CoreException
+	 * @return titon\core\Environment
+	 * @throws titon\core\CoreException
 	 * @chainable
 	 */
 	public function setup($key, $type, array $hosts) {

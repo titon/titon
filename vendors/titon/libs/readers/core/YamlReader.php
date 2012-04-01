@@ -9,8 +9,8 @@
 
 namespace titon\libs\readers\core;
 
-use \titon\libs\readers\ReaderAbstract;
-use \titon\libs\readers\ReaderException;
+use titon\libs\readers\ReaderAbstract;
+use titon\libs\readers\ReaderException;
 
 /**
  * A reader that loads its configuration from an YAML file.
@@ -33,7 +33,7 @@ class YamlReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws \titon\libs\readers\ReaderException
+	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		if (!extension_loaded('yaml')) {

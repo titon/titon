@@ -9,7 +9,7 @@
 
 include_once '../../../../../bootstrap.php';
 
-use \titon\libs\bundles\messages\core\IniMessageBundle;
+use titon\libs\bundles\messages\core\IniMessageBundle;
 
 /**
  * Test class for \titon\libs\bundles\messages\core\IniMessageBundle.

@@ -9,7 +9,7 @@
 
 namespace titon\base\types;
 
-use \titon\base\BaseException;
+use titon\base\BaseException;
 
 /**
  * The Enum type provides a basic interface to mimic enum based classes. Enums are first defined using class constants, 
@@ -42,7 +42,7 @@ class Enum {
 	 *
 	 * @access public
 	 * @param int $type
-	 * @throws \titon\base\BaseException
+	 * @throws titon\base\BaseException
 	 * @final
 	 */
 	final public function __construct($type) {

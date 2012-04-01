@@ -9,13 +9,13 @@
 
 namespace titon\libs\engines;
 
-use \titon\Titon;
-use \titon\base\Base;
-use \titon\libs\engines\Engine;
-use \titon\libs\engines\EngineException;
-use \titon\libs\traits\Decorator;
-use \titon\libs\traits\Memoizer;
-use \titon\utility\Inflector;
+use titon\Titon;
+use titon\base\Base;
+use titon\libs\engines\Engine;
+use titon\libs\engines\EngineException;
+use titon\libs\traits\Decorator;
+use titon\libs\traits\Memoizer;
+use titon\utility\Inflector;
 use \Closure;
 
 /**
@@ -104,7 +104,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * 
 	 * @access public
 	 * @param string $alias
-	 * @param \Closure $helper
+	 * @param Closure $helper
 	 * @return void
 	 * @final
 	 */
@@ -239,7 +239,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
-	 * @throws \titon\libs\engines\EngineException
+	 * @throws titon\libs\engines\EngineException
 	 */
 	public function open($path, array $variables = array()) {
 		throw new EngineException('You must define the open() method within your engine.');
@@ -272,7 +272,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
-	 * @throws \titon\libs\engines\EngineException
+	 * @throws titon\libs\engines\EngineException
 	 */
 	public function render($path, array $variables = array()) {
 		throw new EngineException('You must define the render() method within your Engine.');
@@ -285,7 +285,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws \titon\libs\engines\EngineException
+	 * @throws titon\libs\engines\EngineException
 	 */
 	public function run() {
 		throw new EngineException('You must define the run() method within your Engine.');
@@ -297,7 +297,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @access public
 	 * @param string|array $key
 	 * @param mixed $value
-	 * @return \titon\libs\engines\Engine
+	 * @return titon\libs\engines\Engine
 	 * @chainable
 	 */
 	public function set($key, $value = null) {

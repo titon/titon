@@ -61,8 +61,8 @@ Properties and methods
 ```php
 namespace titon\example;
 
-use \titon\libs\controllers\Controller;
-use \titon\example\ExampleException;
+use titon\libs\controllers\Controller;
+use titon\example\ExampleException;
 
 class ExampleController implements Controller {
 

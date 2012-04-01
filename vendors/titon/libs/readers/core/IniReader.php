@@ -9,9 +9,9 @@
 
 namespace titon\libs\readers\core;
 
-use \titon\libs\readers\ReaderAbstract;
-use \titon\libs\readers\ReaderException;
-use \titon\utility\Set;
+use titon\libs\readers\ReaderAbstract;
+use titon\libs\readers\ReaderException;
+use titon\utility\Set;
 
 /**
  * A reader that loads its configuration from an INI file.
@@ -33,7 +33,7 @@ class IniReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws \titon\libs\readers\ReaderException
+	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		$data = parse_ini_file($this->getPath(), true, INI_SCANNER_NORMAL);

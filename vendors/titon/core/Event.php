@@ -9,8 +9,8 @@
 
 namespace titon\core;
 
-use \titon\Titon;
-use \titon\libs\listeners\Listener;
+use titon\Titon;
+use titon\libs\listeners\Listener;
 use \Closure;
 
 /**
@@ -44,10 +44,10 @@ class Event {
 	 * Can drill down the event to only execute during a certain scope.
 	 *
 	 * @access public
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @param array $events
 	 * @param array $scope
-	 * @return \titon\core\Event
+	 * @return titon\core\Event
 	 * @chainable
 	 */
 	public function addCallback(Closure $callback, array $events = array(), array $scope = array()) {
@@ -74,9 +74,9 @@ class Event {
 	 * Can drill down the event to only execute during a certain scope.
 	 *
 	 * @access public
-	 * @param \titon\libs\listeners\Listener $listener
+	 * @param titon\libs\listeners\Listener $listener
 	 * @param array $scope
-	 * @return \titon\core\Event
+	 * @return titon\core\Event
 	 * @chainable
 	 */
 	public function addListener(Listener $listener, array $scope = array()) {
@@ -162,7 +162,7 @@ class Event {
 	 * 
 	 * @access public
 	 * @param array $events
-	 * @return \titon\core\Event
+	 * @return titon\core\Event
 	 * @chainable
 	 */
 	public function setup(array $events) {

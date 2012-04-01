@@ -9,7 +9,7 @@
  
 namespace titon\libs\controllers\core;
 
-use \titon\libs\controllers\ControllerAbstract;
+use titon\libs\controllers\ControllerAbstract;
 
 /**
  * Empty controller used for skeleton instantiation.

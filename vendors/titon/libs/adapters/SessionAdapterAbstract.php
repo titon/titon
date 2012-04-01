@@ -9,7 +9,7 @@
 
 namespace titon\libs\adapters;
 
-use \titon\libs\adapters\SessionAdapter;
+use titon\libs\adapters\SessionAdapter;
 
 /**
  * Primary class for all session adapters extend. Automatically registers the handler when set into the Session class.

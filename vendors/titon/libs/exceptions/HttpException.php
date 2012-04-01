@@ -9,8 +9,8 @@
 
 namespace titon\libs\exceptions;
 
-use \titon\Exception;
-use \titon\constant\Http;
+use titon\Exception;
+use titon\constant\Http;
 
 /**
  * Base Exception for HTTP exceptions.

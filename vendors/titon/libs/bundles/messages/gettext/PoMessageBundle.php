@@ -9,7 +9,7 @@
  
 namespace titon\libs\bundles\messages\gettext;
 
-use \titon\libs\bundles\messages\MessageBundleAbstract;
+use titon\libs\bundles\messages\MessageBundleAbstract;
 
 /**
  * Bundle used for loading gettext PO files.

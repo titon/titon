@@ -9,7 +9,7 @@
 
 namespace titon\libs\exceptions\http;
 
-use \titon\libs\exceptions\HttpException;
+use titon\libs\exceptions\HttpException;
 
 /**
  * Represents an HTTP 400 error.

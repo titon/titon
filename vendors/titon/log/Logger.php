@@ -9,7 +9,7 @@
 
 namespace titon\log;
 
-use \titon\Titon;
+use titon\Titon;
 
 /**
  * A simple class that handles the logging of errors and debug messages to the filesystem.

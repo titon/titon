@@ -9,8 +9,8 @@
 
 namespace titon\core;
 
-use \titon\Titon;
-use \titon\core\CoreException;
+use titon\Titon;
+use titon\core\CoreException;
 
 /**
  * The Registry acts a central hub where any part of the application can access a single instance of a stored object.
@@ -45,7 +45,7 @@ class Registry {
 	 * @access public
 	 * @param string $key
 	 * @param array $config
-	 * @return \titon\core\Registry
+	 * @return titon\core\Registry
 	 * @chainable
 	 */
 	public function configure($key, array $config = array()) {
@@ -95,7 +95,7 @@ class Registry {
 	 * Flush the registry by removing all stored objects.
 	 *
 	 * @access public
-	 * @return \titon\core\Registry
+	 * @return titon\core\Registry
 	 * @chainable
 	 */
 	public function flush() {
@@ -155,7 +155,7 @@ class Registry {
 	 * @param object $object
 	 * @param string|null $key
 	 * @return object
-	 * @throws \titon\core\CoreException
+	 * @throws titon\core\CoreException
 	 */
 	public function store($object, $key = null) {
 		if (!is_object($object)) {

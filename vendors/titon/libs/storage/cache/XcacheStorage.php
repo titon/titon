@@ -9,8 +9,8 @@
 
 namespace titon\libs\storage\cache;
 
-use \titon\libs\storage\StorageAbstract;
-use \titon\libs\storage\StorageException;
+use titon\libs\storage\StorageAbstract;
+use titon\libs\storage\StorageException;
 
 /**
  * A storage engine that uses the Xcache extension for a cache store. 

@@ -9,8 +9,8 @@
 
 namespace titon\libs\readers\core;
 
-use \titon\libs\readers\ReaderAbstract;
-use \titon\libs\readers\ReaderException;
+use titon\libs\readers\ReaderAbstract;
+use titon\libs\readers\ReaderException;
 
 /**
  * A reader that loads its configuration from a PHP file.
@@ -33,7 +33,7 @@ class PhpReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws \titon\libs\readers\ReaderException
+	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		$data = include_once $this->getPath();

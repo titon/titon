@@ -9,7 +9,7 @@
 
 include_once '../../../../../bootstrap.php';
 
-use \titon\libs\bundles\messages\core\JsonMessageBundle;
+use titon\libs\bundles\messages\core\JsonMessageBundle;
 
 /**
  * Test class for \titon\libs\bundles\messages\core\JsonMessageBundle.

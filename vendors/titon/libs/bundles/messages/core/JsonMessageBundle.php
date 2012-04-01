@@ -9,7 +9,7 @@
  
 namespace titon\libs\bundles\messages\core;
 
-use \titon\libs\bundles\messages\MessageBundleAbstract;
+use titon\libs\bundles\messages\MessageBundleAbstract;
 
 /**
  * Bundle used for loading JSON files.

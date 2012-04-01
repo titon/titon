@@ -9,10 +9,10 @@
 
 namespace titon\state;
 
-use \titon\Titon;
-use \titon\base\Base;
-use \titon\libs\adapters\SessionAdapter;
-use \titon\utility\Set;
+use titon\Titon;
+use titon\base\Base;
+use titon\libs\adapters\SessionAdapter;
+use titon\utility\Set;
 
 /**
  * Primary library class to manage all session data. Applies appropriate ini settings depending on the environment setting.
@@ -190,7 +190,7 @@ class Session extends Base {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return \titon\state\Session
+	 * @return titon\state\Session
 	 * @chainable
 	 */
 	public function remove($key) {
@@ -205,7 +205,7 @@ class Session extends Base {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return \titon\state\Session
+	 * @return titon\state\Session
 	 * @chainable
 	 */
 	public function set($key, $value) {
@@ -218,8 +218,8 @@ class Session extends Base {
 	 * Set the SessionAdapter to use.
 	 * 
 	 * @access public
-	 * @param \titon\libs\adapters\SessionAdapter $adapter
-	 * @return \titon\state\Session
+	 * @param titon\libs\adapters\SessionAdapter $adapter
+	 * @return titon\state\Session
 	 * @chainable
 	 */
 	public function setAdapter(SessionAdapter $adapter) {

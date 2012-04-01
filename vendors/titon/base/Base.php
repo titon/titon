@@ -9,14 +9,14 @@
 
 namespace titon\base;
 
-use \titon\Titon;
-use \titon\base\BaseException;
-use \titon\utility\Set;
+use titon\Titon;
+use titon\base\BaseException;
+use titon\utility\Set;
 use \Closure;
 use \ReflectionClass;
 use \ReflectionMethod;
 
-use \titon\utility\Inflector;
+use titon\utility\Inflector;
 
 /**
  * Primary class for all framework classes to extend. All child classes will inherit the $_config property,
@@ -103,7 +103,7 @@ class Base {
 	 * @access public
 	 * @param string|array $key
 	 * @param mixed $value
-	 * @return \titon\base\Base
+	 * @return titon\base\Base
 	 * @chainable
 	 * @final
 	 */
@@ -281,7 +281,7 @@ class Base {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return \titon\base\Base
+	 * @return titon\base\Base
 	 * @chainable
 	 */
 	public function allowObject($classes) {
@@ -301,9 +301,9 @@ class Base {
 	 *
 	 * @access public
 	 * @param array|string $options
-	 * @param \Closure $closure
-	 * @return \titon\base\Base
-	 * @throws \titon\base\BaseException
+	 * @param Closure $closure
+	 * @return titon\base\Base
+	 * @throws titon\base\BaseException
 	 * @chainable
 	 */
 	public function attachObject($options, Closure $closure = null) {
@@ -339,7 +339,7 @@ class Base {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return \titon\base\Base
+	 * @return titon\base\Base
 	 * @chainable
 	 */
 	public function detachObject($class) {
@@ -357,7 +357,7 @@ class Base {
 	 * @access public
 	 * @param string $class
 	 * @return object|null
-	 * @throws \titon\base\BaseException
+	 * @throws titon\base\BaseException
 	 */
 	public function getObject($class) {
 		if (in_array($class, $this->_restricted)) {
@@ -436,7 +436,7 @@ class Base {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return \titon\base\Base
+	 * @return titon\base\Base
 	 * @chainable
 	 */
 	public function restrictObject($classes) {
@@ -486,7 +486,7 @@ class Base {
 	 * @access public
 	 * @param string $method
 	 * @param mixed $id
-	 * @param \Closure $callback
+	 * @param Closure $callback
 	 * @return mixed
 	 */
 	public function cacheMethod($method, $id, Closure $callback) {

@@ -9,7 +9,7 @@
  
 namespace titon\libs\controllers\core;
 
-use \titon\libs\controllers\ControllerAbstract;
+use titon\libs\controllers\ControllerAbstract;
 
 /**
  * Controller used to render errors while in production.

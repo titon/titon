@@ -9,8 +9,8 @@
 
 namespace titon\log;
 
-use \titon\Titon;
-use \titon\log\Logger;
+use titon\Titon;
+use titon\log\Logger;
 
 /**
  * Delivers the functionality to start, stop and log benchmarks.

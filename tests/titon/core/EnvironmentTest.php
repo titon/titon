@@ -9,7 +9,7 @@
 
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
-use \titon\core\Environment;
+use titon\core\Environment;
 
 /**
  * Test class for \titon\core\Environment.

@@ -9,7 +9,7 @@
  
 namespace titon\libs\bundles\messages;
 
-use \titon\libs\bundles\BundleAbstract;
+use titon\libs\bundles\BundleAbstract;
 
 /**
  * The MessageBundle manages the loading of message catalogs for localization.

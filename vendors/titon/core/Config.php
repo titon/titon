@@ -9,11 +9,11 @@
 
 namespace titon\core;
 
-use \titon\Titon;
-use \titon\core\CoreException;
-use \titon\libs\readers\Reader;
-use \titon\utility\Inflector;
-use \titon\utility\Set;
+use titon\Titon;
+use titon\core\CoreException;
+use titon\libs\readers\Reader;
+use titon\utility\Inflector;
+use titon\utility\Set;
 
 /**
  * Stores the current configuration options for the application.
@@ -73,9 +73,9 @@ class Config {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @param \titon\libs\readers\Reader $reader
-	 * @return \titon\core\Config
-	 * @throws \titon\core\CoreException
+	 * @param titon\libs\readers\Reader $reader
+	 * @return titon\core\Config
+	 * @throws titon\core\CoreException
 	 * @chainable
 	 */
 	public function load($key, Reader $reader) {
@@ -118,7 +118,7 @@ class Config {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return \titon\core\Config
+	 * @return titon\core\Config
 	 * @chainable
 	 */
 	public function set($key, $value) {

@@ -10,8 +10,8 @@
 namespace titon\libs\storage\cache;
 
 use \Memcached;
-use \titon\libs\storage\cache\MemcacheStorage;
-use \titon\libs\storage\StorageException;
+use titon\libs\storage\cache\MemcacheStorage;
+use titon\libs\storage\StorageException;
 
 /**
  * A storage engine for the Memcache module, using the Memcached class; requires pecl/memcached. 

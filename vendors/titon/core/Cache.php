@@ -9,8 +9,8 @@
 
 namespace titon\core;
 
-use \titon\core\CoreException;
-use \titon\libs\storage\Storage;
+use titon\core\CoreException;
+use titon\libs\storage\Storage;
 
 /**
  * Provides a very basic interface for caching individual sets of data. Multiple storage engines can be setup 
@@ -129,8 +129,8 @@ class Cache {
 	 * 
 	 * @access public
 	 * @param string $name
-	 * @param \titon\libs\storage\Storage $storage
-	 * @return \titon\core\Cache
+	 * @param titon\libs\storage\Storage $storage
+	 * @return titon\core\Cache
 	 * @chainable
 	 */
 	public function setup($name, Storage $storage) {
@@ -146,8 +146,8 @@ class Cache {
 	 * 
 	 * @access public
 	 * @param string $name
-	 * @return \titon\libs\storage\Storage
-	 * @throws \titon\core\CoreException
+	 * @return titon\libs\storage\Storage
+	 * @throws titon\core\CoreException
 	 */
 	public function storage($name) {
 		if (isset($this->_storage[$name])) {

@@ -9,7 +9,7 @@
 
 namespace titon\libs\storage\cache;
 
-use \titon\libs\storage\StorageAbstract;
+use titon\libs\storage\StorageAbstract;
 
 /**
  * A lightweight caching engine that stores data in memory for the duration of the HTTP request. 

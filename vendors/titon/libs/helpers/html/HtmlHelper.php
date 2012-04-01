@@ -9,9 +9,9 @@
 
 namespace titon\libs\helpers\html;
 
-use \titon\Titon;
-use \titon\libs\helpers\HelperAbstract;
-use \titon\utility\Encrypt;
+use titon\Titon;
+use titon\libs\helpers\HelperAbstract;
+use titon\utility\Encrypt;
 
 /**
  * The HtmlHelper is primarily used for dynamic HTML tag creation within templates.

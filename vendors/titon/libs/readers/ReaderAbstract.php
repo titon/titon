@@ -9,9 +9,9 @@
 
 namespace titon\libs\readers;
 
-use \titon\base\Base;
-use \titon\libs\readers\Reader;
-use \titon\utility\Inflector;
+use titon\base\Base;
+use titon\libs\readers\Reader;
+use titon\utility\Inflector;
 
 /**
  * Abstract class that implements the extension detection for Readers.
