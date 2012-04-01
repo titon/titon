@@ -7,12 +7,12 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-include_once '../../../../bootstrap.php';
+include_once '../../../../../bootstrap.php';
 
-use \titon\libs\bundles\messages\JsonMessageBundle;
+use \titon\libs\bundles\messages\core\JsonMessageBundle;
 
 /**
- * Test class for \titon\libs\bundles\messages\JsonMessageBundle.
+ * Test class for \titon\libs\bundles\messages\core\JsonMessageBundle.
  */
 class JsonMessageBundleTest extends \PHPUnit_Framework_TestCase {
 

@@ -7,20 +7,20 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-include_once '../../../../bootstrap.php';
+include_once '../../../../../bootstrap.php';
 
-use \titon\libs\bundles\messages\IniMessageBundle;
+use \titon\libs\bundles\messages\core\PhpMessageBundle;
 
 /**
- * Test class for \titon\libs\bundles\messages\IniMessageBundle.
+ * Test class for \titon\libs\bundles\messages\core\PhpMessageBundle.
  */
-class IniMessageBundleTest extends \PHPUnit_Framework_TestCase {
+class PhpMessageBundleTest extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * Setup message bundles.
 	 */
 	public function setUp() {
-		$this->object = new IniMessageBundle(array(
+		$this->object = new PhpMessageBundle(array(
 			'bundle' => 'en_US'
 		));
 	}
@@ -30,11 +30,11 @@ class IniMessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testBundleDetection() {
 		try {
-			$fakeBundle = new IniMessageBundle(array(
+			$fakeBundle = new PhpMessageBundle(array(
 				'bundle' => 'en'
 			));
 
-			$fakeBundle = new IniMessageBundle(array(
+			$fakeBundle = new PhpMessageBundle(array(
 				'bundle' => 'doesntExist'
 			));
 
@@ -55,7 +55,7 @@ class IniMessageBundleTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(array(
 			'titon' => 'Titon',
 			'test' => 'Test',
-			'type' => 'ini'
+			'type' => 'php'
 		), $messages);
 
 		$messages = $this->object->loadFile('doesntExist');

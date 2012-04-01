@@ -7,12 +7,12 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-include_once '../../../../bootstrap.php';
+include_once '../../../../../bootstrap.php';
 
-use \titon\libs\bundles\messages\XmlMessageBundle;
+use \titon\libs\bundles\messages\core\XmlMessageBundle;
 
 /**
- * Test class for \titon\libs\bundles\messages\XmlMessageBundle.
+ * Test class for \titon\libs\bundles\messages\core\XmlMessageBundle.
  */
 class XmlMessageBundleTest extends \PHPUnit_Framework_TestCase {
 
