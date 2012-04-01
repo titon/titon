@@ -7,14 +7,14 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
  
-namespace titon\libs\bundles\messages;
+namespace titon\libs\bundles\messages\core;
 
 use \titon\libs\bundles\messages\MessageBundleAbstract;
 
 /**
  * Bundle used for loading PHP files.
  *
- * @package	titon.libs.bundles.messages
+ * @package	titon.libs.bundles.messages.core
  */
 class PhpMessageBundle extends MessageBundleAbstract {
 

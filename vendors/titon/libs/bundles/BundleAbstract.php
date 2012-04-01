@@ -18,6 +18,7 @@ use \titon\utility\Inflector;
  * @todo
  *
  * @package	titon.libs.bundles
+ * @uses	\titon\utility\Inflector
  * @abstract
  */
 abstract class BundleAbstract extends Base implements Bundle {
@@ -38,6 +39,38 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @var string
 	 */
 	protected $_path;
+
+	/**
+	 * Attempt to find the resource bundle within the resource locations.
+	 *
+	 * @access public
+	 * @param array $locations
+	 * @return void
+	 * @throws \titon\libs\bundles\BundleException
+	 */
+	public function findBundle(array $locations) {
+		$config = $this->config();
+
+		$this->_locations = array_map(function($value) use ($config) {
+			foreach ($config as $key => $val) {
+				$value = str_replace('{' . $key . '}', $val, $value);
+			}
+
+			return $value;
+		}, $locations);
+
+		foreach ($this->_locations as $location) {
+			if (file_exists($location)) {
+				$this->_path = $location;
+				return;
+			}
+		}
+
+		// Remove so that we can throw a reasonable exception
+		unset($config['initialize']);
+
+		throw new BundleException(sprintf('Resource bundle %s could not be located.', implode(':', $config)));
+	}
 
 	/**
 	 * List of all filenames within the resource bundle.
@@ -74,36 +107,14 @@ abstract class BundleAbstract extends Base implements Bundle {
 	}
 
 	/**
-	 * Attempt to find the resource bundle within the resource locations.
+	 * Check if the file exists within the bundle.
 	 *
 	 * @access public
-	 * @return void
-	 * @throws \titon\libs\bundles\BundleException
+	 * @param $key
+	 * @return boolean
 	 */
-	public function initialize() {
-		$config = $this->config();
-
-		$locations = array_map(function($value) use ($config) {
-			foreach ($config as $key => $val) {
-				$value = str_replace('{' . $key . '}', $val, $value);
-			}
-
-			return $value;
-		}, $this->getLocations());
-
-		$this->_locations = $locations;
-
-		foreach ($locations as $location) {
-			if (file_exists($location)) {
-				$this->_path = $location;
-				return;
-			}
-		}
-
-		// Remove so that we can throw a reasonable exception
-		unset($config['initialize']);
-
-		throw new BundleException(sprintf('Resource bundle %s could not be located.', implode(':', $config)));
+	public function hasFile($key) {
+		return in_array(Inflector::filename($key, static::EXT, false), $this->getFiles());
 	}
 
 	/**
@@ -119,10 +130,8 @@ abstract class BundleAbstract extends Base implements Bundle {
 			return $this->_config[$key];
 		}
 
-		$filename = Inflector::filename($key, static::EXT, false);
-
-		if (in_array($filename, $this->getFiles())) {
-			$data = $this->parseFile($this->getPath() . $filename);
+		if ($this->hasFile($key)) {
+			$data = $this->parseFile($this->getPath() . Inflector::filename($key, static::EXT, false));
 		} else {
 			$data = array();
 		}

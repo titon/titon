@@ -7,21 +7,21 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
  
-namespace titon\libs\bundles\messages;
+namespace titon\libs\bundles\messages\core;
 
 use \titon\libs\bundles\messages\MessageBundleAbstract;
 
 /**
- * Bundle used for loading XML files.
+ * Bundle used for loading INI files.
  *
- * @package	titon.libs.bundles.messages
+ * @package	titon.libs.bundles.messages.core
  */
-class XmlMessageBundle extends MessageBundleAbstract {
+class IniMessageBundle extends MessageBundleAbstract {
 
 	/**
 	 * Bundle file extension.
 	 */
-	const EXT = 'xml';
+	const EXT = 'ini';
 
 	/**
 	 * Parse the file at the given path and return the result.
@@ -31,14 +31,7 @@ class XmlMessageBundle extends MessageBundleAbstract {
 	 * @return array
 	 */
 	public function parseFile($path) {
-		$xml = simplexml_load_file($path);
-		$array = array();
-
-		foreach ($xml->children() as $key => $value) {
-			$array[$key] = (string) $value;
-		}
-
-		return $array;
+		return parse_ini_file($path, false, INI_SCANNER_NORMAL);
 	}
 
 }

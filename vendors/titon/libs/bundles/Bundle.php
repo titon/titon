@@ -17,6 +17,15 @@ namespace titon\libs\bundles;
 interface Bundle {
 
 	/**
+	 * Attempt to find the resource bundle within the resource locations.
+	 *
+	 * @access public
+	 * @param array $locations
+	 * @return void
+	 */
+	public function findBundle(array $locations);
+
+	/**
 	 * List of all filenames within the resource bundle.
 	 *
 	 * @access public
@@ -39,6 +48,15 @@ interface Bundle {
 	 * @return string
 	 */
 	public function getPath();
+
+	/**
+	 * Check if the file exists within the bundle.
+	 *
+	 * @access public
+	 * @param $key
+	 * @return boolean
+	 */
+	public function hasFile($key);
 
 	/**
 	 * Load the file from the resource bundle and parse its contents.
