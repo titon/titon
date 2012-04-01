@@ -32,7 +32,10 @@ class LocaleBundle extends BundleAbstract {
 	 * @var array
 	 */
 	protected $_config = array(
-		'bundle' => ''
+		'bundle' => '',
+		'locale' => array(),
+		'inflections' => array(),
+		'validations' => array()
 	);
 
 	/**
@@ -90,19 +93,13 @@ class LocaleBundle extends BundleAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->_locations = array(
+		$this->findBundle(array(
 			APP_RESOURCES . 'locales/{bundle}/',
 			TITON_RESOURCES . 'locales/{bundle}/'
-		);
-
-		parent::initialize();
+		));
 
 		// Load locale file and load parent if one exists
 		$locale = $this->getLocale();
-
-		echo $locale['id'] . "...\n";
-		echo $locale['parent'] . "...\n\n";
-
 		$locale = Locale::parseLocale($locale['id']) + $locale;
 
 		if (isset($locale['parent'])) {
@@ -110,10 +107,12 @@ class LocaleBundle extends BundleAbstract {
 				'bundle' => $locale['parent']
 			));
 
-			$locale = $locale + $this->_parent->getLocale();
+			if ($this->_parent) {
+				$locale = $locale + $this->_parent->getLocale();
+			}
 		}
 
-		$this->configure('locale', $locale);
+		$this->_config['locale'] = $locale;
 	}
 
 	/**
@@ -135,7 +134,7 @@ class LocaleBundle extends BundleAbstract {
 			$data = $data + $parent->loadFile($key);
 		}
 
-		$this->configure($key, $data);
+		$this->_config[$key] = $data;
 
 		return $data;
 	}

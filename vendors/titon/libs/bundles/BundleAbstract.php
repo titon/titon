@@ -136,7 +136,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 			$data = array();
 		}
 
-		$this->configure($key, $data);
+		$this->_config[$key] = $data;
 
 		return $data;
 	}
