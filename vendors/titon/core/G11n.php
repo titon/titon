@@ -222,7 +222,7 @@ class G11n {
 	 * @return boolean
 	 */
 	public function is($key) {
-		$locale = $this->current()->locale();
+		$locale = $this->current()->getLocale();
 
 		return ($locale['key'] == $key || $locale['id'] == $key);
 	}
