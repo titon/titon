@@ -9,27 +9,29 @@
 
 namespace titon\libs\translators\core;
 
+use titon\libs\bundles\messages\core\JsonMessageBundle;
 use titon\libs\translators\TranslatorAbstract;
 
 /**
  * Translator used for parsing JSON files into an array of translated messages.
  * 
  * @package	titon.libs.translators.core
- * 
- * @link	http://php.net/json_decode
  */
 class JsonTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a catalog from a specific module.
-	 * 
+	 * Load the correct resource bundle for the associated file type.
+	 *
 	 * @access public
 	 * @param string $module
-	 * @param string $catalog
-	 * @return array
+	 * @param string $locale
+	 * @return titon\libs\bundles\Bundle
 	 */
-	public function parseFile($module, $catalog) {
-		return json_decode(file_get_contents($this->getFilePath($module, $catalog, 'json')), true);
+	public function loadBundle($module, $locale) {
+		return new JsonMessageBundle(array(
+			'module' => $module,
+			'bundle' => $locale
+		));
 	}
 
 }

@@ -9,6 +9,8 @@
 
 namespace titon\libs\translators;
 
+use titon\libs\storage\Storage;
+
 /**
  * Interface for G11N string translators.
  * 
@@ -24,17 +26,6 @@ interface Translator {
 	 * @return array
 	 */
 	public function getFileCycle();
-	
-	/**
-	 * Determine the file path by looping through all the locale options.
-	 * 
-	 * @access public
-	 * @param string $module
-	 * @param string $catalog
-	 * @param string $ext
-	 * @return string 
-	 */
-	public function getFilePath($module, $catalog, $ext);
 
 	/**
 	 * Locate the key within the catalog. If the catalog has not been loaded, 
@@ -47,15 +38,15 @@ interface Translator {
 	public function getMessage($key);
 
 	/**
-	 * Load a catalog from a specific module using a resource bundle.
-	 * 
+	 * Load the correct resource bundle for the associated file type.
+	 *
 	 * @access public
 	 * @param string $module
-	 * @param string $catalog
-	 * @return array
+	 * @param string $locale
+	 * @return titon\libs\bundles\Bundle
 	 */
-	public function loadCatalog($module, $catalog);
-	
+	public function loadBundle($module, $locale);
+
 	/**
 	 * Parse out the module, catalog and key for string lookup.
 	 * 
@@ -64,6 +55,16 @@ interface Translator {
 	 * @return string
 	 */
 	public function parseKey($key);
+
+	/**
+	 * Set the storage engine to use for catalog caching.
+	 *
+	 * @access public
+	 * @param titon\libs\storage\Storage $storage
+	 * @return titon\libs\translators\Translator
+	 * @chainable
+	 */
+	public function setStorage(Storage $storage);
 	
 	/**
 	 * Process the located string with dynamic parameters if necessary.

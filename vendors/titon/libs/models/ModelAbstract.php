@@ -16,8 +16,9 @@ use titon\libs\models\ModelException;
  * @todo
  *
  * @package	titon.libs.models
+ * @abstract
  */
-class ModelAbstract implements Model {
+abstract class ModelAbstract implements Model {
 
 	/**
 	 * Current data representation of a database row result.

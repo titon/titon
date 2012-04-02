@@ -15,6 +15,8 @@ use titon\libs\bundles\messages\MessageBundleAbstract;
  * Bundle used for loading INI files.
  *
  * @package	titon.libs.bundles.messages.core
+ *
+ * @link	http://php.net/parse_ini_file
  */
 class IniMessageBundle extends MessageBundleAbstract {
 

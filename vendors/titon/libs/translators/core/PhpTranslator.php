@@ -9,35 +9,29 @@
 
 namespace titon\libs\translators\core;
 
-use titon\libs\bundles\messages\PhpMessageBundle;
+use titon\libs\bundles\messages\core\PhpMessageBundle;
 use titon\libs\translators\TranslatorAbstract;
 
 /**
  * Translator used for parsing PHP files into an array of translated messages.
  * 
  * @package	titon.libs.translators.core
- * 
- * @link	http://php.net/manual/function.include.php
  */
 class PhpTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a catalog from a specific module using a resource bundle.
-	 * 
+	 * Load the correct resource bundle for the associated file type.
+	 *
 	 * @access public
 	 * @param string $module
-	 * @param string $catalog
-	 * @return array
+	 * @param string $locale
+	 * @return titon\libs\bundles\Bundle
 	 */
-	public function loadCatalog($module, $catalog) {
-		if (!isset($this->_bundles[$module . '.' . $catalog])) {
-			$this->_bundles[$module . '.' . $catalog] = new PhpMessageBundle(array(
-				'module' => $module,
-				'catalog' => $catalog
-			));
-		}
-
-		$bundle = $this->_bundles[$module . '.' . $catalog];
+	public function loadBundle($module, $locale) {
+		return new PhpMessageBundle(array(
+			'module' => $module,
+			'bundle' => $locale
+		));
 	}
 
 }

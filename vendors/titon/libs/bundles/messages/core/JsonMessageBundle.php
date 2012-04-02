@@ -15,6 +15,8 @@ use titon\libs\bundles\messages\MessageBundleAbstract;
  * Bundle used for loading JSON files.
  *
  * @package	titon.libs.bundles.messages.core
+ *
+ * @link	http://php.net/json_decode
  */
 class JsonMessageBundle extends MessageBundleAbstract {
 

@@ -9,27 +9,29 @@
 
 namespace titon\libs\translators\core;
 
+use titon\libs\bundles\messages\core\IniMessageBundle;
 use titon\libs\translators\TranslatorAbstract;
 
 /**
  * Translator used for parsing INI files into an array of translated messages.
  * 
  * @package	titon.libs.translators.core
- * 
- * @link	http://php.net/parse_ini_file
  */
 class IniTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a catalog from a specific module.
-	 * 
+	 * Load the correct resource bundle for the associated file type.
+	 *
 	 * @access public
 	 * @param string $module
-	 * @param string $catalog
-	 * @return array
+	 * @param string $locale
+	 * @return titon\libs\bundles\Bundle
 	 */
-	public function parseFile($module, $catalog) {
-		return parse_ini_file($this->getFilePath($module, $catalog, 'ini'), false, INI_SCANNER_NORMAL);
+	public function loadBundle($module, $locale) {
+		return new IniMessageBundle(array(
+			'module' => $module,
+			'bundle' => $locale
+		));
 	}
 
 }

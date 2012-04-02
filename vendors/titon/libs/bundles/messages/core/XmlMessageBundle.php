@@ -15,6 +15,8 @@ use titon\libs\bundles\messages\MessageBundleAbstract;
  * Bundle used for loading XML files.
  *
  * @package	titon.libs.bundles.messages.core
+ *
+ * @link	http://php.net/simplexml
  */
 class XmlMessageBundle extends MessageBundleAbstract {
 

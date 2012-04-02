@@ -11,7 +11,6 @@ namespace titon\core;
 
 use titon\core\CoreException;
 use titon\libs\bundles\locales\LocaleBundle;
-use titon\libs\storage\Storage;
 use titon\libs\translators\Translator;
 use \Locale;
 
@@ -26,7 +25,6 @@ use \Locale;
  * @package	titon.core
  * @uses	titon\core\CoreException
  * @uses	titon\libs\bundles\locales\LocaleBundle
- * @uses	titon\libs\storage\Storage
  * @uses	titon\libs\translators\Translator
  */
 class G11n {
@@ -61,14 +59,6 @@ class G11n {
 	 * @var array
 	 */
 	protected $_locales = array();
-
-	/**
-	 * Storage engine for caching.
-	 * 
-	 * @access protected
-	 * @var titon\libs\storage\Storage
-	 */
-	protected $_storage;
 
 	/**
 	 * Translator used for string fetching and parsing.
@@ -391,21 +381,6 @@ class G11n {
 	}
 	
 	/**
-	 * Set the storage engine to use for catalog caching.
-	 * 
-	 * @access public
-	 * @param titon\libs\storage\Storage $storage
-	 * @return titon\core\G11n
-	 * @chainable
-	 */
-	public function setStorage(Storage $storage) {
-		$this->_storage = $storage;
-		$this->_storage->configure('storage', 'g11n');
-
-		return $this;
-	}
-	
-	/**
 	 * Return a translated string using the translator.
 	 * If a storage engine is present, read and write from the cache.
 	 * 
@@ -415,22 +390,7 @@ class G11n {
 	 * @return string
 	 */
 	public function translate($key, array $params = array()) {	
-		list($module, $catalog) = $this->_translator->parseKey($key);
-		
-		/*$cacheKey = $module . '.' . $catalog . '.' . $this->current('id');
-
-		if ($this->_storage instanceof Storage) {
-			$messages = $this->_storage->get($cacheKey);
-			
-			if (empty($messages)) {
-				$messages = $this->_translator->translate($key, $params);
-				$this->_storage->set($cacheKey, $messages);
-			}
-		} else {
-			$messages = $this->_translator->translate($key, $params);
-		}
-		
-		return $messages;*/
+		return $this->_translator->translate($key, $params);
 	}
 
 }

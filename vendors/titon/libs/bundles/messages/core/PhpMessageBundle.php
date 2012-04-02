@@ -15,6 +15,8 @@ use titon\libs\bundles\messages\MessageBundleAbstract;
  * Bundle used for loading PHP files.
  *
  * @package	titon.libs.bundles.messages.core
+ *
+ * @link	http://php.net/manual/function.include.php
  */
 class PhpMessageBundle extends MessageBundleAbstract {
 

@@ -9,34 +9,29 @@
 
 namespace titon\libs\translators\core;
 
+use titon\libs\bundles\messages\core\XmlMessageBundle;
 use titon\libs\translators\TranslatorAbstract;
 
 /**
  * Translator used for parsing XML files into an array of translated messages.
  * 
  * @package	titon.libs.translators.core
- * 
- * @link	http://php.net/simplexml
  */
 class XmlTranslator extends TranslatorAbstract {
 
 	/**
-	 * Load a catalog from a specific module.
-	 * 
+	 * Load the correct resource bundle for the associated file type.
+	 *
 	 * @access public
 	 * @param string $module
-	 * @param string $catalog
-	 * @return array
+	 * @param string $locale
+	 * @return titon\libs\bundles\Bundle
 	 */
-	public function parseFile($module, $catalog) {
-		$xml = simplexml_load_file($this->getFilePath($module, $catalog, 'xml'));
-		$array = array();
-		
-		foreach ($xml->children() as $key => $value) {
-			$array[$key] = (string) $value;
-		}
-		
-		return $array;
+	public function loadBundle($module, $locale) {
+		return new XmlMessageBundle(array(
+			'module' => $module,
+			'bundle' => $locale
+		));
 	}
 
 }
