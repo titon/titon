@@ -55,7 +55,7 @@ class PoMessageBundleTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(array(
 			'basic' => 'Basic message',
 			'multiline' => "Multiline message\nMore message here\nAnd more message again",
-			'plurals' => array('plural', 'plurals', 'pluralss'),
+			'plurals' => array('plural', 'plurals'),
 			'context' => 'Context message'
 		), $messages);
 

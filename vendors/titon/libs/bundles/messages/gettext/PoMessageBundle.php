@@ -62,7 +62,7 @@ class PoMessageBundle extends MessageBundleAbstract {
 			// Key
 			} else if (strpos($line, 'msgid') === 0) {
 				// Save the previous value
-				if (!empty($value)) {
+				if ($key != '' && !empty($value)) {
 					$data[$key] = $value;
 					$value = '';
 				}
@@ -90,7 +90,7 @@ class PoMessageBundle extends MessageBundleAbstract {
 		}
 
 		// Grab the last value
-		if (!empty($value)) {
+		if ($key != '' && !empty($value)) {
 			$data[$key] = $value;
 		}
 
