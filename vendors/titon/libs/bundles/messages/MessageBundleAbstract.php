@@ -38,9 +38,7 @@ abstract class MessageBundleAbstract extends BundleAbstract {
 	 */
 	public function initialize() {
 		$this->findBundle(array(
-			APP_MODULES . '{module}/resources/messages/{bundle}/LC_MESSAGES/',
 			APP_MODULES . '{module}/resources/messages/{bundle}/',
-			APP_RESOURCES . 'messages/{bundle}/LC_MESSAGES/',
 			APP_RESOURCES . 'messages/{bundle}/',
 			TITON_RESOURCES . 'messages/{bundle}/'
 		));

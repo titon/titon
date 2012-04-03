@@ -43,7 +43,7 @@ class Dispatch {
 	 * @return void
 	 */
 	public function run() {
-		$params = Titon::router()->current()->params();
+		$params = Titon::router()->current()->getParams();
 		$dispatcher = null;
 
 		if (!empty($this->_mapping)) {

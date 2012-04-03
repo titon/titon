@@ -35,6 +35,7 @@ class G11n {
 	const FORMAT_1 = 1;
 	const FORMAT_2 = 2;
 	const FORMAT_3 = 3;
+	const FORMAT_4 = 3;
 	
 	/**
 	 * Currently active locale bundle based on the client.
@@ -94,6 +95,9 @@ class G11n {
 				break;
 				case self::FORMAT_3:
 					$return .= '_' . strtoupper($parts[1]);
+				break;
+				case self::FORMAT_4:
+					$return .= strtoupper($parts[1]);
 				break;
 			}
 		}

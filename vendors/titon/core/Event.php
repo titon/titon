@@ -124,11 +124,11 @@ class Event {
 	 * @return void
 	 */
 	public function notify($event, $object = null) {
-		if (empty($this->_listeners)) {
+		$route = Titon::router()->current();
+
+		if (!$route || empty($this->_listeners)) {
 			return;
 		}
-
-		$route = Titon::router()->current();
 
 		foreach ($this->_listeners as &$listener) {
 			if (isset($listener['executed'][$event])) {
