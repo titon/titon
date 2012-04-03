@@ -32,10 +32,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @var array
 	 */
 	protected $_config = array(
-		'bundle' => '',
-		'locale' => array(),
-		'inflections' => array(),
-		'validations' => array()
+		'bundle' => ''
 	);
 
 	/**

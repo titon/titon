@@ -1,0 +1,21 @@
+# GNU gettext PO file
+msgid "basic"
+msgstr "Basic message"
+
+#: Reference comment
+msgid "multiline"
+msgstr "Multiline message"
+"More message here"
+"And more message again"
+
+#. Extracted comment
+msgid "plurals"
+msgid_plural "plurals"
+msgstr[0] "plural"
+msgstr[1] "plurals"
+msgstr[2] "pluralss"
+
+# Context test (ignored)
+msgctxt context
+msgid "context"
+msgstr "Context message"

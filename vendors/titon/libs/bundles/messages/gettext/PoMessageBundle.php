@@ -44,7 +44,68 @@ class PoMessageBundle extends MessageBundleAbstract {
 	 * @return array
 	 */
 	public function parseFile($path) {
-		return; // @todo
+		$lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$data = array();
+		$key = '';
+		$value = '';
+		$plural = false;
+
+		foreach ($lines as $line) {
+			// Comment or empty line
+			if ($line[0] == '#' || empty($line)) {
+				continue;
+
+			// Multiline value
+			} else if ($line[0] == '"') {
+				$value .= "\n" . $this->_dequote($line);
+
+			// Key
+			} else if (strpos($line, 'msgid') === 0) {
+				// Save the previous value
+				if (!empty($value)) {
+					$data[$key] = $value;
+					$value = '';
+				}
+
+				$key = $this->_dequote($line);
+
+			// Message
+			} else if (strpos($line, 'msgstr') === 0) {
+				// msgstr[n]
+				if ($line[6] == '[') {
+					$val = $this->_dequote($line);
+
+					if ($plural) {
+						$value[] = $val;
+					} else {
+						$value = array($val);
+						$plural = true;
+					}
+				// msgstr
+				} else {
+					$value = $this->_dequote($line);
+					$plural = false;
+				}
+			}
+		}
+
+		// Grab the last value
+		if (!empty($value)) {
+			$data[$key] = $value;
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Remove the quotes from a message string.
+	 *
+	 * @access public
+	 * @param $string
+	 * @return string
+	 */
+	protected function _dequote($string) {
+		return substr(substr($string, strpos($string, '"')), 1, -1);
 	}
 
 }
