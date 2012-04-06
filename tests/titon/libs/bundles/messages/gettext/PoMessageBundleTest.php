@@ -21,7 +21,7 @@ class PoMessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function setUp() {
 		$this->object = new PoMessageBundle(array(
-			'bundle' => 'en_US'
+			'bundle' => 'ex'
 		));
 	}
 

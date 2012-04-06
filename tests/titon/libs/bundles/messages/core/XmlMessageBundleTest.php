@@ -12,7 +12,7 @@ include_once '../../../../../bootstrap.php';
 use titon\libs\bundles\messages\core\XmlMessageBundle;
 
 /**
- * Test class for \titon\libs\bundles\messages\core\XmlMessageBundle.
+ * Test class for titon\libs\bundles\messages\core\XmlMessageBundle.
  */
 class XmlMessageBundleTest extends \PHPUnit_Framework_TestCase {
 
@@ -21,7 +21,7 @@ class XmlMessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function setUp() {
 		$this->object = new XmlMessageBundle(array(
-			'bundle' => 'en_US'
+			'bundle' => 'ex'
 		));
 	}
 

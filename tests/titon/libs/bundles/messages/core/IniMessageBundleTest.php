@@ -12,7 +12,7 @@ include_once '../../../../../bootstrap.php';
 use titon\libs\bundles\messages\core\IniMessageBundle;
 
 /**
- * Test class for \titon\libs\bundles\messages\core\IniMessageBundle.
+ * Test class for titon\libs\bundles\messages\core\IniMessageBundle.
  */
 class IniMessageBundleTest extends \PHPUnit_Framework_TestCase {
 
@@ -21,7 +21,7 @@ class IniMessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function setUp() {
 		$this->object = new IniMessageBundle(array(
-			'bundle' => 'en_US'
+			'bundle' => 'ex'
 		));
 	}
 

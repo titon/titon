@@ -111,6 +111,17 @@ class Registry {
 	}
 
 	/**
+	 * Return the object assigned to the given key.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return object
+	 */
+	public function get($key) {
+		return $this->_registered[$key];
+	}
+
+	/**
 	 * Checks to see if an object has been registered (instantiated).
 	 *
 	 * @access public

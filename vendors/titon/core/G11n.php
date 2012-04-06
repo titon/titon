@@ -9,6 +9,7 @@
 
 namespace titon\core;
 
+use titon\Titon;
 use titon\core\CoreException;
 use titon\libs\bundles\locales\LocaleBundle;
 use titon\libs\translators\Translator;
@@ -75,6 +76,7 @@ class G11n {
 	 *	FORMAT_1 - en-us
 	 *	FORMAT_2 - en-US
 	 *	FORMAT_3 - en_US
+	 * 	FORMAT_4 - enUS
 	 * 
 	 * @access public
 	 * @param string $key
@@ -242,30 +244,6 @@ class G11n {
 	}
 
 	/**
-	 * Find the locale within the list of supported locale resource bundles.
-	 * If a locale has a parent, merge the parent into the child to gain its values.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @param array $config
-	 * @return titon\libs\bundles\locales\LocaleBundle
-	 * @throws titon\core\CoreException
-	 */
-	public function loadBundle($key, array $config = array()) {
-		$bundle = new LocaleBundle(array(
-			'bundle' => $this->canonicalize($key, self::FORMAT_3),
-		));
-
-		$config['key'] = $key;
-
-		foreach ($config as $key => $value) {
-			$bundle->configure('locale.' . $key, $value);
-		}
-
-		return $bundle;
-	}
-
-	/**
 	 * Set the locale using PHPs built in setlocale().
 	 *
 	 * @link http://php.net/setlocale
@@ -346,7 +324,19 @@ class G11n {
 	public function setup($key, array $config = array()) {
 		$urlKey = $this->canonicalize($key);
 
-		$this->_locales[$urlKey] = $this->loadBundle($key, $config);
+		// Load the bundle
+		$bundle = new LocaleBundle(array(
+			'bundle' => $this->canonicalize($key, self::FORMAT_3),
+		));
+
+		$config['key'] = $key;
+
+		foreach ($config as $key => $value) {
+			$bundle->configure('locale.' . $key, $value);
+		}
+
+		// Cache the bundle
+		$this->_locales[$urlKey] = Titon::registry()->store($bundle, 'g11n.bundle.locale.' . $bundle->config('locale.id'));
 
 		// Set fallback if none defined
 		if (empty($this->_fallback)) {

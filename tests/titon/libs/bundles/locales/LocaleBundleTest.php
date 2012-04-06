@@ -12,7 +12,7 @@ include_once '../../../../bootstrap.php';
 use titon\libs\bundles\locales\LocaleBundle;
 
 /**
- * Test class for \titon\libs\bundles\locales\LocaleBundleTest.
+ * Test class for titon\libs\bundles\locales\LocaleBundleTest.
  */
 class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 
@@ -20,42 +20,199 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 	 * Setup bundles for specific conditions.
 	 */
 	public function setUp() {
-		$this->withParent = new LocaleBundle(array(
-			'bundle' => 'en_US'
+		$this->parentBundle = new LocaleBundle(array(
+			'bundle' => 'ex'
 		));
 
-		// Currently has no inflections, validations
-		$this->noParent = new LocaleBundle(array(
-			'bundle' => 'es'
+		$this->bundleFormats = new LocaleBundle(array(
+			'bundle' => 'ex_FM'
+		));
+
+		$this->bundleInflections = new LocaleBundle(array(
+			'bundle' => 'ex_IN'
+		));
+
+		$this->bundleValidations = new LocaleBundle(array(
+			'bundle' => 'ex_VA'
 		));
 	}
 
 	/**
-	 * Test that parents and child merge inflections. If no inflections exist, an empty array should be present.
+	 * Test that the locale meta data is parsed correctly.
+	 * If the bundle has a parent, also test that the values between the two are merged correctly.
+	 */
+	public function testGetLocale() {
+		$parentBundle = $this->parentBundle->getLocale();
+		$bundleFormats = $this->bundleFormats->getLocale();
+		$bundleInflections = $this->bundleInflections->getLocale();
+		$bundleValidations = $this->bundleValidations->getLocale();
+
+		// Parent
+		$this->assertTrue(is_array($parentBundle));
+		$this->assertEquals(array(
+			'language' => 'ex',
+			'id' => 'ex',
+			'iso2' => 'ex',
+			'iso3' => 'exp',
+			'timezone' => '',
+			'title' => 'Example Parent'
+		), $parentBundle);
+
+		// Formats
+		$this->assertTrue(is_array($bundleFormats));
+		$this->assertEquals(array(
+			'language' => 'ex',
+			'region' => 'FM',
+			'id' => 'ex_FM',
+			'iso2' => 'ex',
+			'iso3' => 'frm',
+			'timezone' => '',
+			'title' => 'Example for Formats',
+			'parent' => 'ex'
+		), $bundleFormats);
+
+		// Inflections
+		$this->assertTrue(is_array($bundleInflections));
+		$this->assertEquals(array(
+			'language' => 'ex',
+			'region' => 'IN',
+			'id' => 'ex_IN',
+			'iso2' => 'ex',
+			'iso3' => 'inf',
+			'timezone' => '',
+			'title' => 'Example for Inflections',
+			'parent' => 'ex'
+		), $bundleInflections);
+
+		// Validations
+		$this->assertTrue(is_array($bundleValidations));
+		$this->assertEquals(array(
+			'language' => 'ex',
+			'region' => 'VA',
+			'id' => 'ex_VA',
+			'iso2' => 'ex',
+			'iso3' => 'val',
+			'timezone' => '',
+			'title' => 'Example for Validations',
+			'parent' => 'ex'
+		), $bundleValidations);
+	}
+
+	/**
+	 * Test that the formatting rules are parsed correctly.
+	 * If the bundle has a parent, also test that the values between the two are merged correctly.
+	 */
+	public function testGetFormats() {
+		$parentBundle = $this->parentBundle->getFormats();
+		$bundleFormats = $this->bundleFormats->getFormats();
+		$bundleInflections = $this->bundleInflections->getFormats();
+		$bundleValidations = $this->bundleValidations->getFormats();
+
+		$parentFormat = array(
+			'date' => 'ex',
+			'time' => 'ex',
+			'datetime' => 'ex',
+			'pluralForms' => 2,
+			'pluralRule' => function() { }
+		);
+
+		// Parent
+		$this->assertTrue(is_array($parentBundle));
+		$this->assertEquals($parentFormat, $parentBundle);
+
+		// Formats
+		$this->assertTrue(is_array($bundleFormats));
+		$this->assertEquals(array(
+			'date' => 'ex_FM',
+			'time' => 'ex',
+			'datetime' => 'ex',
+			'pluralForms' => 3,
+			'pluralRule' => function() { }
+		), $bundleFormats);
+
+		// Inflections
+		$this->assertTrue(is_array($bundleInflections));
+		$this->assertEquals($parentFormat, $bundleInflections);
+
+		// Validations
+		$this->assertTrue(is_array($bundleValidations));
+		$this->assertEquals($parentFormat, $bundleValidations);
+	}
+
+	/**
+	 * Test that the inflection rules are parsed correctly.
+	 * If the bundle has a parent, also test that the values between the two are merged correctly.
 	 */
 	public function testGetInflections() {
-		$inflections = $this->withParent->getInflections();
+		$parentBundle = $this->parentBundle->getInflections();
+		$bundleFormats = $this->bundleFormats->getInflections();
+		$bundleInflections = $this->bundleInflections->getInflections();
+		$bundleValidations = $this->bundleValidations->getInflections();
 
-		$this->assertTrue(is_array($inflections));
-		$this->assertEquals(array('irregular', 'uninflected', 'plural', 'singular'), array_keys($inflections));
+		$parentInflections = array(
+			'irregular' => array('ex' => 'irregular'),
+			'uninflected' => array('ex'),
+			'plural' => array('ex' => 'plural'),
+			'singular' => array('ex' => 'singular')
+		);
 
-		//$inflections = $this->noParent->getInflections();
+		// Parent
+		$this->assertTrue(is_array($parentBundle));
+		$this->assertEquals($parentInflections, $parentBundle);
 
-		//$this->assertTrue(is_array($inflections));
-		//$this->assertEmpty($inflections);
+		// Formats
+		$this->assertTrue(is_array($bundleFormats));
+		$this->assertEquals($parentInflections, $bundleFormats);
 
-		//print_r($this->withParent);
-		//print_r($this->noParent);
+		// Inflections
+		$this->assertTrue(is_array($bundleInflections));
+		$this->assertEquals(array(
+			'irregular' => array('ex_IN' => 'irregular'),
+			'uninflected' => array('ex'),
+			'plural' => array('ex_IN' => 'plural'),
+			'singular' => array('ex_IN' => 'singular')
+		), $bundleInflections);
+
+		// Validations
+		$this->assertTrue(is_array($bundleValidations));
+		$this->assertEquals($parentInflections, $bundleValidations);
 	}
 
 	/**
-	 * Test that parent detection works correctly.
+	 * Test that the validation rules are parsed correctly.
+	 * If the bundle has a parent, also test that the values between the two are merged correctly.
 	 */
-	public function testGetParents() {
-		//print_r($this->withParent);
-		//print_r($this->noParent);
-		//$this->assertInstanceOf('\titon\libs\bundles\locales\LocaleBundle', $this->withParent->getParent());
-		//$this->assertEquals(null, $this->noParent->getParent());
+	public function testGetValidations() {
+		$parentBundle = $this->parentBundle->getValidations();
+		$bundleFormats = $this->bundleFormats->getValidations();
+		$bundleInflections = $this->bundleInflections->getValidations();
+		$bundleValidations = $this->bundleValidations->getValidations();
+
+		$parentValidations = array(
+			'phone' => 'ex',
+			'postalCode' => 'ex',
+			'ssn' => 'ex'
+		);
+
+		// Parent
+		$this->assertTrue(is_array($parentBundle));
+		$this->assertEquals($parentValidations, $parentBundle);
+
+		// Formats
+		$this->assertTrue(is_array($bundleFormats));
+		$this->assertEquals($parentValidations, $bundleFormats);
+
+		// Inflections
+		$this->assertTrue(is_array($bundleInflections));
+		$this->assertEquals($parentValidations, $bundleInflections);
+
+		// Validations
+		$this->assertTrue(is_array($bundleValidations));
+		$this->assertEquals(array(
+			'phone' => 'ex_VA',
+			'postalCode' => 'ex',
+			'ssn' => 'ex_VA'
+		), $bundleValidations);
 	}
 
 }

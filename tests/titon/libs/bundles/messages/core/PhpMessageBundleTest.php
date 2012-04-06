@@ -12,7 +12,7 @@ include_once '../../../../../bootstrap.php';
 use titon\libs\bundles\messages\core\PhpMessageBundle;
 
 /**
- * Test class for \titon\libs\bundles\messages\core\PhpMessageBundle.
+ * Test class for titon\libs\bundles\messages\core\PhpMessageBundle.
  */
 class PhpMessageBundleTest extends \PHPUnit_Framework_TestCase {
 
@@ -21,7 +21,7 @@ class PhpMessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function setUp() {
 		$this->object = new PhpMessageBundle(array(
-			'bundle' => 'en_US'
+			'bundle' => 'ex'
 		));
 	}
 
