@@ -15,7 +15,8 @@ use \Locale;
 
 /**
  * The LocaleBundle manages the loading of locale resources which contain locale specific configuration,
- * validation rules (phone numbers, zip codes, etc) and inflection rules (plurals, singulars, irregulars, etc).
+ * validation rules (phone numbers, zip codes, etc), inflection rules (plurals, singulars, irregulars, etc)
+ * and formatting rules (dates, times, etc).
  *
  * @package	titon.libs.bundles.locales
  */
@@ -118,7 +119,7 @@ class LocaleBundle extends BundleAbstract {
 			if ($registry->has($registryKey)) {
 				$parent = $registry->get($registryKey);
 			} else {
-				$parent = $registry->store(new LocaleBundle(array(
+				$parent = $registry->set(new LocaleBundle(array(
 					'bundle' => $locale['parent']
 				)), $registryKey);
 			}

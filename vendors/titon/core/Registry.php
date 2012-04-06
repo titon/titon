@@ -69,23 +69,18 @@ class Registry {
 	 */
 	public function factory($key, array $config = array(), $store = true) {
 		if ($this->has($key)) {
-			return $this->_registered[$key];
+			return $this->get($key);
 		}
-
-		$namespace = Titon::loader()->toNamespace($key);
 
 		if (isset($this->_configs[$key])) {
 			$config = $config + $this->_configs[$key];
 		}
 
-		if (empty($config)) {
-			$object = new $namespace();
-		} else {
-			$object = new $namespace($config);
-		}
+		$namespace = Titon::loader()->toNamespace($key);
+		$object = new $namespace($config);
 
 		if ($store) {
-			return $this->store($object, $key);
+			return $this->set($object, $key);
 		}
 
 		return $object;
@@ -118,7 +113,11 @@ class Registry {
 	 * @return object
 	 */
 	public function get($key) {
-		return $this->_registered[$key];
+		if ($this->has($key)) {
+			return $this->_registered[$key];
+		}
+
+		throw new CoreException(sprintf('Object %s does not exist in the registry.', $key));
 	}
 
 	/**
@@ -168,7 +167,7 @@ class Registry {
 	 * @return object
 	 * @throws titon\core\CoreException
 	 */
-	public function store($object, $key = null) {
+	public function set($object, $key = null) {
 		if (!is_object($object)) {
 			throw new CoreException('The object passed must be instantiated.');
 		}

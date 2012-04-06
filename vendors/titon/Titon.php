@@ -26,7 +26,6 @@ use titon\core\Router;
  * The primary framework class contains all core classes that manipulate and power the application, or add quick convenience.
  *
  * @package	titon.system
- * @uses	titon\Titon
  */
 class Titon {
 
@@ -139,9 +138,9 @@ class Titon {
 	 */
 	public static function run() {
 		self::startup();
-		self::event()->execute('startup');
+		self::event()->notify('startup');
 		self::dispatch()->run();
-		self::event()->execute('shutdown');
+		self::event()->notify('shutdown');
 		self::shutdown();
 	}
 
