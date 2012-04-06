@@ -29,11 +29,11 @@ class IniMessageBundle extends MessageBundleAbstract {
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
-	 * @param $path
+	 * @param string $filename
 	 * @return array
 	 */
-	public function parseFile($path) {
-		return parse_ini_file($path, false, INI_SCANNER_NORMAL);
+	public function parseFile($filename) {
+		return parse_ini_file($this->getPath() . $filename, false, INI_SCANNER_NORMAL);
 	}
 
 }

@@ -29,11 +29,11 @@ class PhpMessageBundle extends MessageBundleAbstract {
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
-	 * @param $path
+	 * @param string $filename
 	 * @return array
 	 */
-	public function parseFile($path) {
-		return include_once $path;
+	public function parseFile($filename) {
+		return include_once $this->getPath() . $filename;
 	}
 
 }

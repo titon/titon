@@ -29,11 +29,11 @@ class JsonMessageBundle extends MessageBundleAbstract {
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
-	 * @param $path
+	 * @param string $filename
 	 * @return array
 	 */
-	public function parseFile($path) {
-		return json_decode(file_get_contents($path), true);
+	public function parseFile($filename) {
+		return json_decode(file_get_contents($this->getPath() . $filename), true);
 	}
 
 }

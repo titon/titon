@@ -40,11 +40,11 @@ class PoMessageBundle extends MessageBundleAbstract {
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
-	 * @param $path
+	 * @param string $filename
 	 * @return array
 	 */
-	public function parseFile($path) {
-		$lines = file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+	public function parseFile($filename) {
+		$lines = file($this->getPath() . $filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		$data = array();
 		$key = '';
 		$value = '';
@@ -101,7 +101,7 @@ class PoMessageBundle extends MessageBundleAbstract {
 	 * Remove the quotes from a message string.
 	 *
 	 * @access public
-	 * @param $string
+	 * @param string $string
 	 * @return string
 	 */
 	protected function _dequote($string) {

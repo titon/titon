@@ -73,6 +73,25 @@ abstract class BundleAbstract extends Base implements Bundle {
 	}
 
 	/**
+	 * Return data based on a key. If data does not exist, load it from the file that matches the key.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return array
+	 */
+	public function get($key) {
+		if (isset($this->_config[$key])) {
+			return $this->_config[$key];
+		}
+
+		$filename = Inflector::filename($key, static::EXT, false);
+
+		$this->_config[$key] = $this->loadFile($filename);
+
+		return $this->_config[$key];
+	}
+
+	/**
 	 * List of all filenames within the resource bundle.
 	 *
 	 * @access public
@@ -110,11 +129,11 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * Check if the file exists within the bundle.
 	 *
 	 * @access public
-	 * @param $key
+	 * @param string $filename
 	 * @return boolean
 	 */
-	public function hasFile($key) {
-		return in_array(Inflector::filename($key, static::EXT, false), $this->getFiles());
+	public function hasFile($filename) {
+		return in_array($filename, $this->getFiles());
 	}
 
 	/**
@@ -122,21 +141,15 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * If file does not exist, return an empty array.
 	 *
 	 * @access public
-	 * @param string $key
+	 * @param string $filename
 	 * @return array
 	 */
-	public function loadFile($key) {
-		if (isset($this->_config[$key])) {
-			return $this->_config[$key];
-		}
-
-		if ($this->hasFile($key)) {
-			$data = $this->parseFile($this->getPath() . Inflector::filename($key, static::EXT, false));
+	public function loadFile($filename) {
+		if ($this->hasFile($filename)) {
+			$data = $this->parseFile($filename);
 		} else {
 			$data = array();
 		}
-
-		$this->_config[$key] = $data;
 
 		return $data;
 	}
@@ -145,11 +158,11 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
-	 * @param $path
+	 * @param string $filename
 	 * @return array
 	 * @throws titon\libs\bundles\BundleException
 	 */
-	public function parseFile($path) {
+	public function parseFile($filename) {
 		throw new BundleException(sprintf('You must define the parseFile() method within your %s.', get_class($this)));
 	}
 

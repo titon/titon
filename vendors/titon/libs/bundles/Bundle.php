@@ -26,6 +26,15 @@ interface Bundle {
 	public function findBundle(array $locations);
 
 	/**
+	 * Return data based on a key. If data does not exist, load it from the file that matches the key.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return array
+	 */
+	public function get($key);
+
+	/**
 	 * List of all filenames within the resource bundle.
 	 *
 	 * @access public
@@ -53,28 +62,28 @@ interface Bundle {
 	 * Check if the file exists within the bundle.
 	 *
 	 * @access public
-	 * @param $key
+	 * @param string $filename
 	 * @return boolean
 	 */
-	public function hasFile($key);
+	public function hasFile($filename);
 
 	/**
 	 * Load the file from the resource bundle and parse its contents.
 	 * If file does not exist, return an empty array.
 	 *
 	 * @access public
-	 * @param string $key
+	 * @param string $filename
 	 * @return array
 	 */
-	public function loadFile($key);
+	public function loadFile($filename);
 
 	/**
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
-	 * @param $path
+	 * @param string $filename
 	 * @return array
 	 */
-	public function parseFile($path);
+	public function parseFile($filename);
 
 }

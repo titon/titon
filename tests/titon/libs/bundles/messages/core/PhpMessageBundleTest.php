@@ -48,7 +48,7 @@ class PhpMessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 * Test that loading messages from a catalog work.
 	 */
 	public function testMessageLoading() {
-		$messages = $this->object->loadFile('default');
+		$messages = $this->object->get('default');
 
 		$this->assertTrue(is_array($messages));
 		$this->assertEquals(array('titon', 'test', 'type'), array_keys($messages));
@@ -58,7 +58,7 @@ class PhpMessageBundleTest extends \PHPUnit_Framework_TestCase {
 			'type' => 'php'
 		), $messages);
 
-		$messages = $this->object->loadFile('doesntExist');
+		$messages = $this->object->get('doesntExist');
 
 		$this->assertTrue(is_array($messages));
 		$this->assertEmpty($messages);

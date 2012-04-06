@@ -50,7 +50,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return array
 	 */
 	public function getInflections() {
-		return $this->loadFile('inflections');
+		return $this->get('inflections');
 	}
 
 	/**
@@ -60,7 +60,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return array
 	 */
 	public function getLocale() {
-		return $this->loadFile('locale');
+		return $this->get('locale');
 	}
 
 	/**
@@ -80,7 +80,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return array
 	 */
 	public function getValidations() {
-		return $this->loadFile('validations');
+		return $this->get('validations');
 	}
 
 	/**
@@ -120,15 +120,15 @@ class LocaleBundle extends BundleAbstract {
 	 * @param string $key
 	 * @return array
 	 */
-	public function loadFile($key) {
+	public function get($key) {
 		if (isset($this->_config[$key])) {
 			return $this->_config[$key];
 		}
 
-		$data = parent::loadFile($key);
+		$data = parent::get($key);
 
 		if ($parent = $this->getParent()) {
-			$data = $data + $parent->loadFile($key);
+			$data = $data + $parent->get($key);
 		}
 
 		$this->_config[$key] = $data;
@@ -140,11 +140,11 @@ class LocaleBundle extends BundleAbstract {
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
-	 * @param $path
+	 * @param string $filename
 	 * @return array
 	 */
-	public function parseFile($path) {
-		return include_once $path;
+	public function parseFile($filename) {
+		return include_once $this->getPath() . $filename;
 	}
 
 }

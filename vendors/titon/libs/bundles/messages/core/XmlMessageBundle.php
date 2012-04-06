@@ -29,11 +29,11 @@ class XmlMessageBundle extends MessageBundleAbstract {
 	 * Parse the file at the given path and return the result.
 	 *
 	 * @access public
-	 * @param $path
+	 * @param string $filename
 	 * @return array
 	 */
-	public function parseFile($path) {
-		$xml = simplexml_load_file($path);
+	public function parseFile($filename) {
+		$xml = simplexml_load_file($this->getPath() . $filename);
 		$array = array();
 
 		foreach ($xml->children() as $key => $value) {
