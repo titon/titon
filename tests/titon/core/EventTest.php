@@ -13,7 +13,7 @@ use titon\libs\controllers\Controller;
 use titon\libs\engines\Engine;
 
 /**
- * Test class for \titon\core\Event.
+ * Test class for titon\core\Event.
  */
 class EventTest extends \PHPUnit_Framework_TestCase {
 
@@ -21,8 +21,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		\titon\Titon::router()->initialize();
-		\titon\Titon::app()->setup('test', '/', array(
+		titon\Titon::router()->initialize();
+		titon\Titon::app()->setup('test', '/', array(
 			'index' => 'IndexController'
 		));
 	}
@@ -32,7 +32,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testExecute() {
 		// test events by name
-		$event1 = new \titon\core\Event();
+		$event1 = new titon\core\Event();
 		$event1->addListener(new MockListener());
 		$event1->addListener(new MockListener());
 		$event1->addCallback(function() {}, array('startup', 'shutdown', 'testEvent1'));
@@ -73,7 +73,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
 		// test events by scope
 		/* @todo
-		 * $event2 = new \titon\core\Event();
+		 * $event2 = new titon\core\Event();
 		$event2->addListener(new MockListener(), array('controller' => 'test'));
 		$event2->addListener(new MockListener());
 		$event2->addCallback(function() {}, array(), array('action' => 'action'));
@@ -81,16 +81,16 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
 		$_SERVER['PHP_SELF'] = 'index.php/test/index/action/';
 		$_SERVER['REQUEST_URI'] = 'http://localhost/test/index/action/';
-		\titon\Titon::router()->initialize();
+		titon\Titon::router()->initialize();
 
-		print_r(\titon\Titon::router()->current()); */
+		print_r(titon\Titon::router()->current()); */
 	}
 
 	/**
 	 * Test that listeners return the correct data.
 	 */
 	public function testListeners() {
-		$event = new \titon\core\Event();
+		$event = new titon\core\Event();
 		$event->addListener(new MockListener());
 		$event->addCallback(function() {});
 
@@ -111,7 +111,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 * Test that registering an event listener works.
 	 */
 	public function testRegisterListener() {
-		$event = new \titon\core\Event();
+		$event = new titon\core\Event();
 		$event->addListener(new MockListener());
 		$event->addListener(new MockListener());
 
@@ -132,7 +132,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 * Test that registering an event closure callback works.
 	 */
 	public function testRegisterCallback() {
-		$event = new \titon\core\Event();
+		$event = new titon\core\Event();
 		$event->addCallback(function() {});
 		$event->addCallback(function() {});
 		$event->addCallback(function() {});
@@ -154,7 +154,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 * Test that adding new events work correctly.
 	 */
 	public function testSetup() {
-		$event = new \titon\core\Event();
+		$event = new titon\core\Event();
 		$baseEvents = array('startup', 'shutdown', 'preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
 		$testEvents = array('testEvent1', 'testEvent2');
 
@@ -167,7 +167,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class MockListener extends \titon\libs\listeners\ListenerAbstract {
+class MockListener extends titon\libs\listeners\ListenerAbstract {
 
 	public function startup() {}
 	public function shutdown() {}

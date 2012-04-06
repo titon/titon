@@ -10,7 +10,7 @@
 include_once dirname(dirname(dirname(__DIR__))) . '/bootstrap.php';
 
 /**
- * Test class for \titon\base\types\Object.
+ * Test class for titon\base\types\Object.
  */
 class ObjectTest extends \PHPUnit_Framework_TestCase {
 
@@ -20,7 +20,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = new \titon\base\types\Object(array(
+		$this->object = new titon\base\types\Object(array(
 			'property' => 'instantiatedProperty',
 			'method' => function() {
 				return 'instantiatedMethod';

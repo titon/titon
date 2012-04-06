@@ -9,6 +9,7 @@
  
 namespace titon\libs\bundles\locales;
 
+use titon\Titon;
 use titon\libs\bundles\BundleAbstract;
 use \Locale;
 
@@ -42,6 +43,16 @@ class LocaleBundle extends BundleAbstract {
 	 * @var titon\libs\bundles\locales\LocaleBundle
 	 */
 	protected $_parent;
+
+	/**
+	 * Convenience method to return the formatting rules.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getFormats() {
+		return $this->get('formats');
+	}
 
 	/**
 	 * Convenience method to return the inflection rules.
@@ -99,13 +110,22 @@ class LocaleBundle extends BundleAbstract {
 		$locale = $this->getLocale();
 		$locale = Locale::parseLocale($locale['id']) + $locale;
 
-		if (isset($locale['parent'])) {
-			$this->_parent = new LocaleBundle(array(
-				'bundle' => $locale['parent']
-			));
+		// Cache the parent to ease overhead
+		if (!empty($locale['parent'])) {
+			$registry = Titon::registry();
+			$registryKey = 'g11n.bundle.locale.' . $locale['parent'];
 
-			if ($this->_parent) {
-				$locale = $locale + $this->_parent->getLocale();
+			if ($registry->has($registryKey)) {
+				$parent = $registry->get($registryKey);
+			} else {
+				$parent = $registry->store(new LocaleBundle(array(
+					'bundle' => $locale['parent']
+				)), $registryKey);
+			}
+
+			if ($parent instanceof LocaleBundle) {
+				$locale = $locale + $parent->getLocale();
+				$this->_parent = $parent;
 			}
 		}
 
@@ -144,7 +164,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return array
 	 */
 	public function parseFile($filename) {
-		return include_once $this->getPath() . $filename;
+		return include $this->getPath() . $filename;
 	}
 
 }

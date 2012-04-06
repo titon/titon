@@ -10,7 +10,7 @@
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
 /**
- * Test class for \titon\core\Registry.
+ * Test class for titon\core\Registry.
  */
 class RegistryTest extends \PHPUnit_Framework_TestCase {
 
@@ -20,7 +20,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = \titon\Titon::registry();
+		$this->object = titon\Titon::registry();
 	}
 
 	/**
@@ -47,7 +47,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	public function testFactory() {
 		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon\base\Base', array(), false));
 		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon/base/Base', array(), false));
-		$this->assertInstanceOf('titon\base\Base', $this->object->factory('\titon\base\Base', array(), false));
+		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon\base\Base', array(), false));
 		$this->assertInstanceOf('titon\base\Base', $this->object->factory('/titon/base/Base', array(), false));
 
 		$this->object->flush();
@@ -60,7 +60,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 		$test = array();
 
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->store(new \titon\base\Base(), 'key' . $i);
+			$this->object->store(new titon\base\Base(), 'key' . $i);
 			$test[] = 'key' . $i;
 		}
 
@@ -81,7 +81,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testHasAndStore() {
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->store(new \titon\base\Base(), 'key' . $i);
+			$this->object->store(new titon\base\Base(), 'key' . $i);
 		}
 
 		$this->assertTrue($this->object->has('key1'));
@@ -97,7 +97,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testRemove() {
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->store(new \titon\base\Base(), 'key' . $i);
+			$this->object->store(new titon\base\Base(), 'key' . $i);
 		}
 
 		$this->assertTrue($this->object->has('key1'));

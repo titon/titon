@@ -12,7 +12,7 @@ include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 use titon\core\Environment;
 
 /**
- * Test class for \titon\core\Environment.
+ * Test class for titon\core\Environment.
  */
 class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 
@@ -22,7 +22,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = \titon\Titon::environment();
+		$this->object = titon\Titon::environment();
 		$this->object->setup('dev', Environment::DEVELOPMENT, array('dev', '123.0.0.0'));
 		$this->object->setup('prod', Environment::PRODUCTION, array('prod', '123.456.0.0'));
 		$this->object->setup('staging', Environment::STAGING, array('staging', '123.456.789.0'));
@@ -111,7 +111,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 * Testing that the correction environment is found is tested in testCurrent().
 	 */
 	public function testInitialize() {
-		$config = \titon\Titon::config();
+		$config = titon\Titon::config();
 
 		$_SERVER['HTTP_HOST'] = 'dev';
 		$this->object->initialize();

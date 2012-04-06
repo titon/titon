@@ -10,7 +10,7 @@
 include_once dirname(dirname(dirname(__DIR__))) . '/bootstrap.php';
 
 /**
- * Test class for \titon\base\types\Enum.
+ * Test class for titon\base\types\Enum.
  */
 class EnumTest extends \PHPUnit_Framework_TestCase {
 
@@ -77,7 +77,7 @@ class EnumTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class MockEnum extends \titon\base\types\Enum {
+class MockEnum extends titon\base\types\Enum {
 
 	const FOO = 0;
 	const BAR = 1;

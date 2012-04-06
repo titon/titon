@@ -10,7 +10,7 @@
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
 /**
- * Test class for \titon\core\Loader.
+ * Test class for titon\core\Loader.
  */
 class LoaderTest extends \PHPUnit_Framework_TestCase {
 
@@ -20,7 +20,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = \titon\Titon::loader();
+		$this->object = titon\Titon::loader();
 	}
 
 	/**
@@ -68,7 +68,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase {
 	 * Test that file importing returns true or false if file inclusion works.
 	 */
 	public function testImport() {
-		$this->assertTrue($this->object->import('\titon\base\types\Enum'));
+		$this->assertTrue($this->object->import('titon\base\types\Enum'));
 		$this->assertTrue($this->object->import('/titon/base/types/Float.php'));
 		$this->assertFalse($this->object->import('\some\fake\ClassName'));
 		$this->assertFalse($this->object->import('/some/fake/filePath.php'));

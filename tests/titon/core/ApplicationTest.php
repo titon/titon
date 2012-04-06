@@ -10,7 +10,7 @@
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
 /**
- * Test class for \titon\core\Application.
+ * Test class for titon\core\Application.
  */
 class ApplicationTest extends \PHPUnit_Framework_TestCase {
 
@@ -29,9 +29,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->path = \titon\Titon::loader()->ds(__DIR__ . '/');
+		$this->path = titon\Titon::loader()->ds(__DIR__ . '/');
 
-		$this->object = \titon\Titon::app();
+		$this->object = titon\Titon::app();
 		$this->object->setup($this->module, $this->path, $this->controllers);
 		$this->object->setup('otherModule', $this->path, array());
 	}

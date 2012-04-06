@@ -10,7 +10,7 @@
 include_once dirname(dirname(dirname(__DIR__))) . '/bootstrap.php';
 
 /**
- * Test class for \titon\libs\actions\Action.
+ * Test class for titon\libs\actions\Action.
  */
 class ActionTest extends \PHPUnit_Framework_TestCase {
 
@@ -36,11 +36,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class TitonLibsActionsMockController extends \titon\libs\controllers\ControllerAbstract {
+class TitonLibsActionsMockController extends titon\libs\controllers\ControllerAbstract {
 
 }
 
-class TitonLibsActionsMockAction extends \titon\libs\actions\ActionAbstract {
+class TitonLibsActionsMockAction extends titon\libs\actions\ActionAbstract {
 
 	public function run() {
 		$this->controller->configure(array(

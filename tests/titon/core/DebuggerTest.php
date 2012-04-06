@@ -10,7 +10,7 @@
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
 /**
- * Test class for \titon\core\Debugger.
+ * Test class for titon\core\Debugger.
  */
 class DebuggerTest extends \PHPUnit_Framework_TestCase {
 
@@ -20,7 +20,7 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = \titon\Titon::debugger();
+		$this->object = titon\Titon::debugger();
 	}
 
 	/**

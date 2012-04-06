@@ -10,7 +10,7 @@
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
 /**
- * Test class for \titon\core\Config.
+ * Test class for titon\core\Config.
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase {
 
@@ -47,7 +47,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = \titon\Titon::config();
+		$this->object = titon\Titon::config();
 		$this->object->set('App', $this->app);
 		$this->object->set('Debug', $this->debug);
 		$this->object->set('Test', $this->test);
@@ -113,7 +113,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 	 * Config file php.php is found within the app/config/sets/php.php file and uses the data from $test.
 	 */
 	public function testLoad() {
-		$reader = new \titon\libs\readers\core\PhpReader('php');
+		$reader = new titon\libs\readers\core\PhpReader('php');
 
 		$this->object->load('Php', $reader);
 		$this->assertArrayHasKey('Php', $this->object->get());
@@ -123,7 +123,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($data, $this->test);
 
 		try {
-			$missingReader = new \titon\libs\readers\core\PhpReader('fakePhp');
+			$missingReader = new titon\libs\readers\core\PhpReader('fakePhp');
 			$this->object->load('fakePhp', $missingReader);
 		} catch (\Exception $e) {
 			$this->assertTrue(true);
