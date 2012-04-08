@@ -9,8 +9,10 @@
 
 namespace titon\core;
 
+use titon\Titon;
 use titon\libs\routes\Route;
 use titon\libs\routes\core\DefaultRoute;
+use titon\libs\routes\g11n\LocaleRoute;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -247,11 +249,13 @@ class Router {
 		));
 
 		// Map default internal routes
-		$this->map('moduleControllerActionExt', new DefaultRoute('/{module}/{controller}/{action}.{ext}'));
-		$this->map('moduleControllerAction', new DefaultRoute('/{module}/{controller}/{action}'));
-		$this->map('moduleController', new DefaultRoute('/{module}/{controller}'));
-		$this->map('module', new DefaultRoute('/{module}'));
-		$this->map('root', new DefaultRoute('/', array(), array('static' => true)));
+		$routeClass = Titon::g11n()->isEnabled() ? 'LocaleRoute' : 'DefaultRoute';
+
+		$this->map('moduleControllerActionExt', new $routeClass('/{module}/{controller}/{action}.{ext}'));
+		$this->map('moduleControllerAction', new $routeClass('/{module}/{controller}/{action}'));
+		$this->map('moduleController', new $routeClass('/{module}/{controller}'));
+		$this->map('module', new $routeClass('/{module}'));
+		$this->map('root', new $routeClass('/', array(), array('static' => true)));
 
 		// Match the current URL to a route
 		$this->_current = $this->match($path);

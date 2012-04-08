@@ -137,27 +137,24 @@ abstract class RouteAbstract extends Base implements Route {
 			
 			if (!empty($matches)) {
 				foreach ($matches as $match) {
-					switch (true) {
-						case ($match[1] == '{' && $match[3] == '}'):
-							$compiled = str_replace($match[0], self::ALPHA, $compiled);
-						break;
+					$m1 = isset($match[1]) ? $match[1] : '';
+					$m2 = isset($match[2]) ? $match[2] : '';
+					$m3 = isset($match[3]) ? $match[3] : '';
 
-						case ($match[1] == '[' && $match[3] == ']'):
-							$compiled = str_replace($match[0], self::NUMERIC, $compiled);
-						break;
+					if ($m1 == '{' && $m3 == '}') {
+						$compiled = str_replace($match[0], self::ALPHA, $compiled);
 
-						case ($match[1] == '(' && $match[3] == ')'):
-							$compiled = str_replace($match[0], self::WILDCARD, $compiled);
-						break;
+					} else if ($m1 == '[' && $m3 == ']') {
+						$compiled = str_replace($match[0], self::NUMERIC, $compiled);
 
-						case ($match[1] == '<' && $match[3] == '>'):
-							if (isset($patterns[$match[2]])) {
-								$compiled = str_replace($match[0], $patterns[$match[2]], $compiled);
-							}
-						break;
+					} else if ($m1 == '(' && $m3 == ')') {
+						$compiled = str_replace($match[0], self::WILDCARD, $compiled);
+
+					} else if ($m1 == '<' && $m3 == '>' && isset($patterns[$m2])) {
+						$compiled = str_replace($match[0], $patterns[$m2], $compiled);
 					}
 
-					$this->_tokens[] = $match[2];
+					$this->_tokens[] = $m2;
 				}
 			} else {
 				$this->configure('static', true);
@@ -198,7 +195,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * Compile the route and attach the request object.
 	 * 
 	 * @access public
-	 * @return array
+	 * @return void
 	 */
 	public function initialize() {
 		$this->compile();
@@ -222,7 +219,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * Attempt to match the object against a passed URL.
 	 * If a match is found, extract pattern values and parameters.
 	 *
-	 * @acccess public
+	 * @access public
 	 * @param string $url
 	 * @return boolean
 	 */
@@ -237,11 +234,20 @@ abstract class RouteAbstract extends Base implements Route {
 
 			// Get pattern values
 			if (!empty($matches) && !empty($this->_tokens)) {
+				$locales = Titon::g11n()->listing();
 				$modules = Titon::app()->getModules();
 				$controllers = Titon::app()->getControllers();
 
 				foreach ($this->_tokens as $token) {
 					switch ($token) {
+						case 'locale':
+							// Is their a locale? Has it been setup?
+							if (in_array($matches[0], $locales)) {
+								$this->_route['locale'] = array_shift($matches);
+							} else {
+								array_shift($matches);
+							}
+						break;
 						case 'module':
 							// Is it a module? Check against the installed modules.
 							if (in_array($matches[0], $modules)) {
@@ -331,7 +337,7 @@ abstract class RouteAbstract extends Base implements Route {
 	/**
 	 * Validate the URL, it's supported HTTP method and secure connection.
 	 *
-	 * @acccess public
+	 * @access public
 	 * @param string $url
 	 * @return boolean
 	 */

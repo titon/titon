@@ -234,13 +234,34 @@ class G11n {
 	}
 	
 	/**
-	 * G11n will be enabled if a locale has been setup.
+	 * G11n will be enabled if more than 1 locale has been setup, excluding family chains.
 	 * 
 	 * @access public
-	 * @return boolean 
+	 * @return boolean
+	 *
+	 * @todo use Memoizer
 	 */
 	public function isEnabled() {
-		return !empty($this->_locales);
+		$loaded = array();
+
+		if (!empty($this->_locales)) {
+			foreach ($this->_locales as $locale) {
+				$config = $locale->getLocale();
+				$loaded[] = isset($config['parent']) ? $config['parent'] : $config['id'];
+			}
+		}
+
+		return (count(array_unique($loaded)) > 1);
+	}
+
+	/**
+	 * Return an array of setup locale keys.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function listing() {
+		return array_keys($this->_locales);
 	}
 
 	/**
@@ -337,6 +358,13 @@ class G11n {
 
 		// Cache the bundle
 		$this->_locales[$urlKey] = Titon::registry()->set($bundle, 'g11n.bundle.locale.' . $bundle->config('locale.id'));
+
+		// Set the parent as well
+		$config = $bundle->getLocale();
+
+		if (isset($config['parent']) && !isset($this->_locales[$config['parent']])) {
+			$this->setup($config['parent']);
+		}
 
 		// Set fallback if none defined
 		if (empty($this->_fallback)) {

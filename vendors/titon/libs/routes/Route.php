@@ -28,7 +28,7 @@ interface Route {
 	 * Attempt to match the class against a passed URL.
 	 * If a match is found, extract pattern values and parameters.
 	 *
-	 * @acccess public
+	 * @access public
 	 * @param string $url
 	 * @return boolean
 	 */

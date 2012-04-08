@@ -67,7 +67,7 @@ class Registry {
 	 * @param boolean $store
 	 * @return object
 	 */
-	public function factory($key, array $config = array(), $store = true) {
+	public function &factory($key, array $config = array(), $store = true) {
 		if ($this->has($key)) {
 			return $this->get($key);
 		}
@@ -112,7 +112,7 @@ class Registry {
 	 * @param string $key
 	 * @return object
 	 */
-	public function get($key) {
+	public function &get($key) {
 		if ($this->has($key)) {
 			return $this->_registered[$key];
 		}
