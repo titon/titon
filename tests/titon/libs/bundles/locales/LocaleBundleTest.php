@@ -215,4 +215,14 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 		), $bundleValidations);
 	}
 
+	/**
+	 * Test that parent bundles are loaded.
+	 */
+	public function testGetParent() {
+		$this->assertEquals(null, $this->parentBundle->getParent());
+		$this->assertInstanceOf('titon\libs\bundles\Bundle', $this->bundleFormats->getParent());
+		$this->assertInstanceOf('titon\libs\bundles\Bundle', $this->bundleInflections->getParent());
+		$this->assertInstanceOf('titon\libs\bundles\Bundle', $this->bundleValidations->getParent());
+	}
+
 }
