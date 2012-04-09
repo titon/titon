@@ -8,11 +8,11 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 Globalization
 
-* core/G11n
-* libs/bundles
-* libs/translators
-* resources/locales
-* resources/messages
+* core/G11n - 90%
+* libs/bundles - 90%
+* libs/translators - 75%
+* resources/locales - 65%
+* resources/messages - 75%
 
 ### Upcoming Systems ###
 

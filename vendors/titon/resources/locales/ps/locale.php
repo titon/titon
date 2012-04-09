@@ -13,5 +13,5 @@ return array(
 	'iso2' => 'ps',
 	'iso3' => 'pus',
 	'timezone' => '',
-	'title' => 'Pushto',
+	'title' => 'Pashto',
 );
