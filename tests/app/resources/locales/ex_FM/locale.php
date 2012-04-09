@@ -9,7 +9,7 @@
 
 return array(
 	'id' => 'ex_FM',
-	'iso3' => 'frm',
+	'iso3' => array('exf', 'frm'),
 	'parent' => 'ex',
 	'timezone' => '',
 	'title' => 'Example for Formats',

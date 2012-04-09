@@ -325,9 +325,11 @@ class G11n {
 			$options[] = $locale['id'];
 
 			if (!empty($locale['iso3'])) {
-				$options[] = $locale['iso3'] . '.UTF8';
-				$options[] = $locale['iso3'] . '.UTF-8';
-				$options[] = $locale['iso3'];
+				foreach ((array) $locale['iso3'] as $iso3) {
+					$options[] = $iso3 . '.UTF8';
+					$options[] = $iso3 . '.UTF-8';
+					$options[] = $iso3;
+				}
 			}
 
 			if (!empty($locale['iso2'])) {
