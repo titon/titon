@@ -12,6 +12,7 @@ namespace titon\core;
 use titon\Titon;
 use titon\core\CoreException;
 use titon\libs\bundles\locales\LocaleBundle;
+use titon\libs\traits\Memoizer;
 use titon\libs\translators\Translator;
 use \Locale;
 
@@ -32,12 +33,17 @@ class G11n {
 
 	/**
 	 * Possible formats for locale keys.
+	 *
+	 *	FORMAT_1 - en-us (URL format)
+	 *	FORMAT_2 - en-US
+	 *	FORMAT_3 - en_US (Preferred)
+	 * 	FORMAT_4 - enUS
 	 */
 	const FORMAT_1 = 1;
 	const FORMAT_2 = 2;
 	const FORMAT_3 = 3;
 	const FORMAT_4 = 3;
-	
+
 	/**
 	 * Currently active locale bundle based on the client.
 	 * 
@@ -45,7 +51,7 @@ class G11n {
 	 * @var string
 	 */
 	protected $_current;
-	
+
 	/**
 	 * Fallback locale key if none can be found.
 	 * 
@@ -53,7 +59,7 @@ class G11n {
 	 * @var string
 	 */
 	protected $_fallback;
-	
+
 	/**
 	 * Loaded locale bundles.
 	 * 
@@ -69,14 +75,9 @@ class G11n {
 	 * @var titon\libs\translators\Translator
 	 */
 	protected $_translator;
-	
+
 	/**
 	 * Convert a locale key to 3 possible formats.
-	 * 
-	 *	FORMAT_1 - en-us
-	 *	FORMAT_2 - en-US
-	 *	FORMAT_3 - en_US
-	 * 	FORMAT_4 - enUS
 	 * 
 	 * @access public
 	 * @param string $key
@@ -86,7 +87,7 @@ class G11n {
 	public function canonicalize($key, $format = self::FORMAT_1) {
 		$parts = explode('-', str_replace('_', '-', strtolower($key)));
 		$return = $parts[0];
-		
+
 		if (isset($parts[1])) {
 			switch ($format) {
 				case self::FORMAT_1:
@@ -108,6 +109,22 @@ class G11n {
 	}
 
 	/**
+	 * Get a list of locales and fallback locales in descending order starting from the current locale.
+	 *
+	 * @access public
+	 * @return array
+	 * @todo use Memoizer
+	 */
+	public function cascade() {
+		$cycle = array();
+
+		$this->_cascade($this->current(), $cycle);
+		$this->_cascade($this->getFallback(), $cycle);
+
+		return array_unique($cycle);
+	}
+
+	/**
 	 * Takes an array of key-values and returns a correctly ordered and delimited locale ID.
 	 *
 	 * @access public
@@ -117,7 +134,7 @@ class G11n {
 	public function compose(array $tags) {
 		return Locale::composeLocale($tags);
 	}
-	
+
 	/**
 	 * Return the current locale config, or a certain value.
 	 * 
@@ -127,7 +144,18 @@ class G11n {
 	public function current() {
 		return $this->_current;
 	}
-	
+
+	/**
+	 * Parses a locale string and returns an array of key-value locale tags.
+	 *
+	 * @access public
+	 * @param string $locale
+	 * @return string
+	 */
+	public function decompose($locale) {
+		return Locale::parseLocale($locale);
+	}
+
 	/**
 	 * Define the fallback language if none can be found or is not supported.
 	 * 
@@ -150,7 +178,7 @@ class G11n {
 		
 		return $this;
 	}
-	
+
 	/**
 	 * Return the fallback locale bundle.
 	 * 
@@ -162,10 +190,10 @@ class G11n {
 		if (empty($this->_fallback) || !isset($this->_locales[$this->_fallback])) {
 			throw new CoreException('Fallback locale has not been setup.');
 		}
-		
+
 		return $this->_locales[$this->_fallback];
 	}
-	
+
 	/**
 	 * Returns the setup locales bundles.
 	 * 
@@ -187,16 +215,16 @@ class G11n {
 		if (!$this->isEnabled()) {
 			return;
 		}
-		
+
 		$header = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 
 		if (strpos($header, ';') !== false) {
 			$header = strstr($header, ';', true);
 		}
-		
+
 		$header = explode(',', $header);
 		$current = null;
-		
+
 		if (count($header) > 0) {
 			foreach ($header as $locale) {
 				if (isset($this->_locales[$locale])) {
@@ -205,12 +233,12 @@ class G11n {
 				}
 			}
 		}
-		
+
 		// Set current to the fallback if none found
 		if ($current == null) {
 			$current = $this->_fallback;
 		}
-		
+
 		// Apply the locale
 		$this->set($current);
 		
@@ -219,7 +247,7 @@ class G11n {
 			throw new CoreException('A translator is required for G11n message parsing.');
 		}
 	}
-	
+
 	/**
 	 * Does the current locale matched the passed key?
 	 * 
@@ -232,7 +260,7 @@ class G11n {
 
 		return ($locale['key'] == $key || $locale['id'] == $key);
 	}
-	
+
 	/**
 	 * G11n will be enabled if more than 1 locale has been setup, excluding family chains.
 	 * 
@@ -242,13 +270,15 @@ class G11n {
 	 * @todo use Memoizer
 	 */
 	public function isEnabled() {
+		if (empty($this->_locales)) {
+			return false;
+		}
+
 		$loaded = array();
 
-		if (!empty($this->_locales)) {
-			foreach ($this->_locales as $locale) {
-				$config = $locale->getLocale();
-				$loaded[] = isset($config['parent']) ? $config['parent'] : $config['id'];
-			}
+		foreach ($this->_locales as $bundle) {
+			$locale = $bundle->getLocale();
+			$loaded[] = isset($locale['parent']) ? $locale['parent'] : $locale['id'];
 		}
 
 		return (count(array_unique($loaded)) > 1);
@@ -284,41 +314,32 @@ class G11n {
 		}
 
 		$bundle = $this->_locales[$key];
-		$locale = $bundle->getLocale();
+		$bundles = array($bundle, $this->getFallback());
+		$options = array();
 
-		// Build array of options to set
-		$options = array(
-			$locale['id'] . '.UTF8',
-			$locale['id'] . '.UTF-8',
-			$locale['id']
-		);
+		foreach ($bundles as $tempBundle) {
+			$locale = $tempBundle->getLocale();
 
-		if (!empty($locale['iso3'])) {
-			$options = array_merge($options, array(
-				$locale['iso3'] . '.UTF8',
-				$locale['iso3'] . '.UTF-8',
-				$locale['iso3']
-			));
+			$options[] = $locale['id'] . '.UTF8';
+			$options[] = $locale['id'] . '.UTF-8';
+			$options[] = $locale['id'];
+
+			if (!empty($locale['iso3'])) {
+				$options[] = $locale['iso3'] . '.UTF8';
+				$options[] = $locale['iso3'] . '.UTF-8';
+				$options[] = $locale['iso3'];
+			}
+
+			if (!empty($locale['iso2'])) {
+				$options[] = $locale['iso2'] . '.UTF8';
+				$options[] = $locale['iso2'] . '.UTF-8';
+				$options[] = $locale['iso2'];
+			}
 		}
-
-		if (!empty($locale['iso2'])) {
-			$options = array_merge($options, array(
-				$locale['iso2'] . '.UTF8',
-				$locale['iso2'] . '.UTF-8',
-				$locale['iso2']
-			));
-		}
-
-		// Use fallback options
-		$fallbackLocale = $this->getFallback()->getLocale();
-
-		$options = array_merge($options, array(
-			$fallbackLocale['id'] . '.UTF8',
-			$fallbackLocale['id'] . '.UTF-8',
-			$fallbackLocale['id']
-		));
 
 		// Set environment
+		$locale = $bundle->getLocale();
+
 		putenv('LC_ALL=' . $locale['id']);
 		setlocale(LC_ALL, $options);
 		Locale::setDefault($locale['id']);
@@ -345,6 +366,10 @@ class G11n {
 	public function setup($key, array $config = array()) {
 		$urlKey = $this->canonicalize($key);
 
+		if (isset($this->_locales[$urlKey])) {
+			return $this;
+		}
+
 		// Load the bundle
 		$bundle = new LocaleBundle(array(
 			'bundle' => $this->canonicalize($key, self::FORMAT_3),
@@ -370,7 +395,7 @@ class G11n {
 		if (empty($this->_fallback)) {
 			$this->_fallback = $urlKey;
 		}
-		
+
 		return $this;
 	}
 
@@ -387,7 +412,7 @@ class G11n {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Sets the translator to use in the string locating and translating process.
 	 * 
@@ -398,10 +423,10 @@ class G11n {
 	 */
 	public function setTranslator(Translator $translator) {
 		$this->_translator = $translator;
-		
+
 		return $this;
 	}
-	
+
 	/**
 	 * Return a translated string using the translator.
 	 * If a storage engine is present, read and write from the cache.
@@ -411,8 +436,26 @@ class G11n {
 	 * @param array $params
 	 * @return string
 	 */
-	public function translate($key, array $params = array()) {	
+	public function translate($key, array $params = array()) {
 		return $this->_translator->translate($key, $params);
+	}
+
+	/**
+	 * Protected method to build the cascade() array.
+	 *
+	 * @access protected
+	 * @param titon\libs\bundles\locales\LocaleBundle $bundle
+	 * @param array $cycle
+	 * @return void
+	 */
+	protected function _cascade($bundle, &$cycle) {
+		$locale = $bundle->getLocale();
+
+		$cycle[] = $locale['id'];
+
+		if ($parent = $bundle->getParent()) {
+			$this->_cascade($parent, $cycle);
+		}
 	}
 
 }

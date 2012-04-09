@@ -54,35 +54,6 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	protected $_storage;
 
 	/**
-	 * Get a list of locales and fallback locales in descending order starting from the current locale. 
-	 * This will be used to cycle through the respective bundles and catalogs to find a match.
-	 * 
-	 * @access public
-	 * @return array
-	 */
-	public function getFileCycle() {
-		return $this->cacheMethod(__FUNCTION__, null, function($self) {
-			$cycle = array();
-
-			function addToCycle($bundle, &$cycle) {
-				$locale = $bundle->getLocale();
-				$parent = $bundle->getParent();
-
-				$cycle[] = $locale['id'];
-
-				if ($parent) {
-					addToCycle($parent, $cycle);
-				}
-			}
-
-			addToCycle(Titon::g11n()->current(), $cycle);
-			addToCycle(Titon::g11n()->getFallback(), $cycle);
-
-			return array_unique($cycle);
-		});
-	}
-
-	/**
 	 * Locate the key within the catalog. If the catalog has not been loaded, 
 	 * load it and cache the collection of strings.
 	 * 
@@ -211,5 +182,5 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	public function translate($key, array $params = array()) {	
 		return MessageFormatter::formatMessage(Locale::DEFAULT_LOCALE, $this->getMessage($key), $params);
 	}
-	
+
 }

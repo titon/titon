@@ -17,15 +17,6 @@ use titon\libs\storage\Storage;
  * @package	titon.libs.translators
  */
 interface Translator {
-	
-	/**
-	 * Get a list of locales and fallback locales in descending order starting from the current locale. 
-	 * This will be used to cycle through the respective catalogs to find a match.
-	 * 
-	 * @access public
-	 * @return array
-	 */
-	public function getFileCycle();
 
 	/**
 	 * Locate the key within the catalog. If the catalog has not been loaded, 
