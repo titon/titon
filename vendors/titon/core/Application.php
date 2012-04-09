@@ -20,7 +20,7 @@ use titon\core\CoreException;
  * @uses	titon\Titon
  */
 class Application {
-	
+
 	/**
 	 * List of controllers per module.
 	 * 

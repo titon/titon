@@ -80,7 +80,7 @@ class Registry {
 		$object = new $namespace($config);
 
 		if ($store) {
-			return $this->set($object, $key);
+			$this->set($object, $key);
 		}
 
 		return $object;

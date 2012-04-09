@@ -11,8 +11,6 @@ namespace titon\core;
 
 use titon\Titon;
 use titon\libs\routes\Route;
-use titon\libs\routes\core\DefaultRoute;
-use titon\libs\routes\g11n\LocaleRoute;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -249,7 +247,9 @@ class Router {
 		));
 
 		// Map default internal routes
-		$routeClass = Titon::g11n()->isEnabled() ? 'LocaleRoute' : 'DefaultRoute';
+		$routeClass = Titon::g11n()->isEnabled()
+			? 'titon\libs\routes\g11n\LocaleRoute'
+			: 'titon\libs\routes\core\DefaultRoute';
 
 		$this->map('moduleControllerActionExt', new $routeClass('/{module}/{controller}/{action}.{ext}'));
 		$this->map('moduleControllerAction', new $routeClass('/{module}/{controller}/{action}'));

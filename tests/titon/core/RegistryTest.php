@@ -60,7 +60,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 		$test = array();
 
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->store(new titon\base\Base(), 'key' . $i);
+			$this->object->set(new titon\base\Base(), 'key' . $i);
 			$test[] = 'key' . $i;
 		}
 
@@ -77,11 +77,11 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Test that has returns a boolean if the correct object has been stored.
+	 * Test that has returns a boolean if the correct object has been set.
 	 */
-	public function testHasAndStore() {
+	public function testHasAndSet() {
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->store(new titon\base\Base(), 'key' . $i);
+			$this->object->set(new titon\base\Base(), 'key' . $i);
 		}
 
 		$this->assertTrue($this->object->has('key1'));
@@ -97,7 +97,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testRemove() {
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->store(new titon\base\Base(), 'key' . $i);
+			$this->object->set(new titon\base\Base(), 'key' . $i);
 		}
 
 		$this->assertTrue($this->object->has('key1'));
