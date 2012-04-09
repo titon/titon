@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ru_MO',
 	'parent' => 'ru',
-	'timezone' => '',
+	'timezone' => 'Europe/Moscow',
 	'title' => 'Russian (Moldavia)',
 );

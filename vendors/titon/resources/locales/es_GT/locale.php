@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_GT',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Guatemala',
 	'title' => 'Spanish (Guatemala)',
 );

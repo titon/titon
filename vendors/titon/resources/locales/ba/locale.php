@@ -12,6 +12,6 @@ return array(
 	'id' => 'ba',
 	'iso2' => 'ba',
 	'iso3' => 'bak',
-	'timezone' => '',
+	'timezone' => 'Asia/Almaty',
 	'title' => 'Bashkir',
 );

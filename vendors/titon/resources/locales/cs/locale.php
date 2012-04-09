@@ -12,6 +12,6 @@ return array(
 	'id' => 'cs',
 	'iso2' => 'cs',
 	'iso3' => array('ces', 'cze'),
-	'timezone' => '',
+	'timezone' => 'Europe/Prague',
 	'title' => 'Czech',
 );

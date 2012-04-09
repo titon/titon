@@ -12,6 +12,6 @@ return array(
 	'id' => 'da',
 	'iso2' => 'da',
 	'iso3' => 'dan',
-	'timezone' => '',
+	'timezone' => 'Europe/Copenhagen',
 	'title' => 'Danish',
 );

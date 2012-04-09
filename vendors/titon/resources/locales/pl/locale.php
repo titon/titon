@@ -12,6 +12,6 @@ return array(
 	'id' => 'pl',
 	'iso2' => 'pl',
 	'iso3' => 'pol',
-	'timezone' => '',
+	'timezone' => 'Europe/Warsaw',
 	'title' => 'Polish',
 );

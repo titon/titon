@@ -12,6 +12,6 @@ return array(
 	'id' => 'kn',
 	'iso2' => 'kn',
 	'iso3' => 'kan',
-	'timezone' => '',
+	'timezone' => 'Asia/Calcutta',
 	'title' => 'Kannada',
 );

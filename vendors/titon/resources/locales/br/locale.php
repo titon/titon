@@ -12,6 +12,6 @@ return array(
 	'id' => 'br',
 	'iso2' => 'br',
 	'iso3' => 'bre',
-	'timezone' => '',
+	'timezone' => 'Europe/Paris',
 	'title' => 'Breton',
 );

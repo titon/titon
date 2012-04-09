@@ -11,6 +11,6 @@
 return array(
 	'id' => 'zh_TW',
 	'parent' => 'zh',
-	'timezone' => '',
+	'timezone' => 'Asia/Taipei',
 	'title' => 'Chinese (Taiwan)',
 );

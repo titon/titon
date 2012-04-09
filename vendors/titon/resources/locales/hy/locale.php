@@ -12,6 +12,6 @@ return array(
 	'id' => 'hy',
 	'iso2' => 'hy',
 	'iso3' => array('arm', 'hye'),
-	'timezone' => '',
+	'timezone' => 'Asia/Yerevan',
 	'title' => 'Armenian',
 );

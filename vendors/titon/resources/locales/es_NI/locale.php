@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_NI',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Managua',
 	'title' => 'Spanish (Nicaragua)',
 );

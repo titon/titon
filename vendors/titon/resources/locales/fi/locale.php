@@ -12,6 +12,6 @@ return array(
 	'id' => 'fi',
 	'iso2' => 'fi',
 	'iso3' => 'fin',
-	'timezone' => '',
+	'timezone' => 'Europe/Helsinki',
 	'title' => 'Finnish',
 );

@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_CB',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'America/Nassau',
 	'title' => 'English (Caribbean)',
 );

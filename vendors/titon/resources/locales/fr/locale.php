@@ -12,6 +12,6 @@ return array(
 	'id' => 'fr',
 	'iso2' => 'fr',
 	'iso3' => array('fra', 'fre'),
-	'timezone' => '',
+	'timezone' => 'Europe/Paris',
 	'title' => 'French (Standard)',
 );

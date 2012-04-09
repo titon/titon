@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_UY',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Montevideo',
 	'title' => 'Spanish (Uruguay)',
 );

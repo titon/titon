@@ -12,6 +12,6 @@ return array(
 	'id' => 'ug',
 	'iso2' => 'ug',
 	'iso3' => 'uig',
-	'timezone' => '',
+	'timezone' => 'Asia/Shanghai',
 	'title' => 'Uighur',
 );

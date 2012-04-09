@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_EC',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Guayaquil',
 	'title' => 'Spanish (Ecuador)',
 );

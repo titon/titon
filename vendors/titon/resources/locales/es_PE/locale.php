@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_PE',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Lima',
 	'title' => 'Spanish (Peru)',
 );

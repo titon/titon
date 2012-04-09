@@ -11,6 +11,6 @@
 return array(
 	'id' => 'fr_CH',
 	'parent' => 'fr',
-	'timezone' => '',
+	'timezone' => 'Europe/Zurich',
 	'title' => 'French (Swiss)',
 );

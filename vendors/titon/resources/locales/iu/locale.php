@@ -12,6 +12,6 @@ return array(
 	'id' => 'iu',
 	'iso2' => 'iu',
 	'iso3' => 'iku',
-	'timezone' => '',
+	'timezone' => 'Canada/Pacific',
 	'title' => 'Inuktitut',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'sk',
 	'iso2' => 'sk',
 	'iso3' => array('slk', 'slo'),
-	'timezone' => '',
+	'timezone' => 'Europe/Bratislava',
 	'title' => 'Slovak',
 );

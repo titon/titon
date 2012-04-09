@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_PA',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Panama',
 	'title' => 'Spanish (Panama)',
 );

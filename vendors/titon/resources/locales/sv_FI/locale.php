@@ -11,6 +11,6 @@
 return array(
 	'id' => 'sv_FI',
 	'parent' => 'sv',
-	'timezone' => '',
+	'timezone' => 'Europe/Helsinki',
 	'title' => 'Swedish (Finland)',
 );

@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_ES',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'Europe/Madrid',
 	'title' => 'Spanish (Spain)',
 );

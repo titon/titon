@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_VE',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Caracas',
 	'title' => 'Spanish (Venezuela)',
 );

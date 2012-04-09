@@ -11,6 +11,6 @@
 return array(
 	'id' => 'de_LU',
 	'parent' => 'de',
-	'timezone' => '',
+	'timezone' => 'Europe/Luxembourg',
 	'title' => 'German (Luxembourg)',
 );

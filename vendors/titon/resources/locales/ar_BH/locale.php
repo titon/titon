@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_BH',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Asia/Bahrain',
 	'title' => 'Arabic (Bahrain)',
 );

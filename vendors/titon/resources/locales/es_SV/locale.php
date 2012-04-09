@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_SV',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/El_Salvador',
 	'title' => 'Spanish (El Salvador)',
 );

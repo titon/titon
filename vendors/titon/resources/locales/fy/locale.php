@@ -12,6 +12,6 @@ return array(
 	'id' => 'fy',
 	'iso2' => 'fy',
 	'iso3' => 'fry',
-	'timezone' => '',
+	'timezone' => 'Europe/Amsterdam',
 	'title' => 'Frisian',
 );

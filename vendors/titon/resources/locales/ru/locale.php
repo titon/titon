@@ -12,6 +12,6 @@ return array(
 	'id' => 'ru',
 	'iso2' => 'ru',
 	'iso3' => 'rus',
-	'timezone' => '',
+	'timezone' => 'Europe/Moscow',
 	'title' => 'Russian',
 );

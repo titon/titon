@@ -11,6 +11,6 @@
 return array(
 	'id' => 'az_AZ',
 	'parent' => 'az',
-	'timezone' => '',
+	'timezone' => 'Asia/Baku',
 	'title' => 'Azerbaijani (Cyrillic)',
 );

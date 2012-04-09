@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_SA',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Asia/Riyadh',
 	'title' => 'Arabic (Saudi Arabia)',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'ml',
 	'iso2' => 'ml',
 	'iso3' => 'mal',
-	'timezone' => '',
+	'timezone' => 'Asia/Kolkata',
 	'title' => 'Malayalam',
 );

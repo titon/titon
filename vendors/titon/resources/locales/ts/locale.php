@@ -12,6 +12,6 @@ return array(
 	'id' => 'ts',
 	'iso2' => 'ts',
 	'iso3' => 'tso',
-	'timezone' => '',
+	'timezone' => '	Africa/Maputo',
 	'title' => 'Tsonga',
 );

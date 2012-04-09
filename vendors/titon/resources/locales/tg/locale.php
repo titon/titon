@@ -12,6 +12,6 @@ return array(
 	'id' => 'tg',
 	'iso2' => 'tg',
 	'iso3' => 'tgk',
-	'timezone' => '',
+	'timezone' => 'Asia/Dushanbe',
 	'title' => 'Tajik',
 );

@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_BZ',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'America/Belize',
 	'title' => 'English (Belize)',
 );

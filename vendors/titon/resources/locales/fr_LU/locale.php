@@ -11,6 +11,6 @@
 return array(
 	'id' => 'fr_LU',
 	'parent' => 'fr',
-	'timezone' => '',
+	'timezone' => 'Europe/Luxembourg',
 	'title' => 'French (Luxembourg)',
 );

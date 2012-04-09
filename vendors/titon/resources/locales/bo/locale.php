@@ -12,6 +12,6 @@ return array(
 	'id' => 'bo',
 	'iso2' => 'bo',
 	'iso3' => array('tib', 'bod'),
-	'timezone' => '',
+	'timezone' => 'Asia/Kathmandu',
 	'title' => 'Tibetan',
 );

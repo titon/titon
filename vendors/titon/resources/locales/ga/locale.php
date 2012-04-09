@@ -12,6 +12,6 @@ return array(
 	'id' => 'ga',
 	'iso2' => 'ga',
 	'iso3' => 'gle',
-	'timezone' => '',
+	'timezone' => 'Europe/Dublin',
 	'title' => 'Irish',
 );

@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_KW',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Asia/Kuwait',
 	'title' => 'Arabic (Kuwait)',
 );

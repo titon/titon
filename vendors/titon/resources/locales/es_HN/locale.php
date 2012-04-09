@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_HN',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Tegucigalpa',
 	'title' => 'Spanish (Honduras)',
 );

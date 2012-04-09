@@ -12,6 +12,6 @@ return array(
 	'id' => 'tn',
 	'iso2' => 'tn',
 	'iso3' => 'tsn',
-	'timezone' => '',
+	'timezone' => 'Africa/Gaborone',
 	'title' => 'Tswana',
 );

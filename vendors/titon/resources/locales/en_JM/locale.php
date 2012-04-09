@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_JM',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'America/Jamaica',
 	'title' => 'English (Jamaica)',
 );

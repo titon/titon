@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_CO',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Bogota',
 	'title' => 'Spanish (Colombia)',
 );

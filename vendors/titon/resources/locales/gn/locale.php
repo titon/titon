@@ -12,6 +12,6 @@ return array(
 	'id' => 'gn',
 	'iso2' => 'gn',
 	'iso3' => 'grn',
-	'timezone' => '',
+	'timezone' => 'America/Asuncion',
 	'title' => 'Guarani',
 );

@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_TT',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'America/Caracas',
 	'title' => 'English (Trinidad)',
 );

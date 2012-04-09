@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_SY',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Asia/Damascus',
 	'title' => 'Arabic (Syria)',
 );

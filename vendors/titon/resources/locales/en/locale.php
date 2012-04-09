@@ -12,6 +12,6 @@ return array(
 	'id' => 'en',
 	'iso2' => 'en',
 	'iso3' => 'eng',
-	'timezone' => '',
+	'timezone' => 'America/New_York',
 	'title' => 'English',
 );

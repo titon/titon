@@ -12,6 +12,6 @@ return array(
 	'id' => 'nb',
 	'iso2' => 'nb',
 	'iso3' => 'nob',
-	'timezone' => '',
+	'timezone' => 'Europe/Oslo',
 	'title' => 'Norwegian Bokmal',
 );

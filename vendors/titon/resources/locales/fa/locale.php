@@ -12,6 +12,6 @@ return array(
 	'id' => 'fa',
 	'iso2' => 'fa',
 	'iso3' => array('fas', 'per'),
-	'timezone' => '',
+	'timezone' => 'Asia/Tehran',
 	'title' => 'Farsi / Persian',
 );

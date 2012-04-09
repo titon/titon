@@ -12,6 +12,6 @@ return array(
 	'id' => 'om',
 	'iso2' => 'om',
 	'iso3' => 'orm',
-	'timezone' => '',
+	'timezone' => 'Africa/Addis_Ababa',
 	'title' => 'Oromo',
 );

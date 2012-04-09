@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ro_MO',
 	'parent' => 'ro',
-	'timezone' => '',
+	'timezone' => 'Europe/Bucharest',
 	'title' => 'Romanian (Moldavia)',
 );

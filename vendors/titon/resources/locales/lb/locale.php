@@ -12,6 +12,6 @@ return array(
 	'id' => 'lb',
 	'iso2' => 'lb',
 	'iso3' => 'ltz',
-	'timezone' => '',
+	'timezone' => 'Europe/Luxembourg',
 	'title' => 'Luxembourgish',
 );

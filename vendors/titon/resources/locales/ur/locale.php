@@ -12,6 +12,6 @@ return array(
 	'id' => 'ur',
 	'iso2' => 'ur',
 	'iso3' => 'urd',
-	'timezone' => '',
+	'timezone' => 'Asia/Calcutta',
 	'title' => 'Urdu',
 );

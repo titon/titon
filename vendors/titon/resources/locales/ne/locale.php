@@ -12,6 +12,6 @@ return array(
 	'id' => 'ne',
 	'iso2' => 'ne',
 	'iso3' => 'nep',
-	'timezone' => '',
+	'timezone' => 'Asia/Kathmandu',
 	'title' => 'Nepali',
 );

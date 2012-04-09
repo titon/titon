@@ -11,6 +11,6 @@
 return array(
 	'id' => 'fr_FR',
 	'parent' => 'fr',
-	'timezone' => '',
+	'timezone' => 'Europe/Paris',
 	'title' => 'French (France)',
 );

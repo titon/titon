@@ -12,6 +12,6 @@ return array(
 	'id' => 'tr',
 	'iso2' => 'tr',
 	'iso3' => 'tur',
-	'timezone' => '',
+	'timezone' => 'Asia/Istanbul',
 	'title' => 'Turkish',
 );

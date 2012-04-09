@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_JO',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Asia/Amman',
 	'title' => 'Arabic (Jordan)',
 );

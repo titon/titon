@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_PY',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Asuncion',
 	'title' => 'Spanish (Paraguay)',
 );

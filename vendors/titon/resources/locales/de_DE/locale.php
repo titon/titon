@@ -11,6 +11,6 @@
 return array(
 	'id' => 'de_DE',
 	'parent' => 'de',
-	'timezone' => '',
+	'timezone' => 'Europe/Berlin',
 	'title' => 'German (Germany)',
 );

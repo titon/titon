@@ -12,6 +12,6 @@ return array(
 	'id' => 'hu',
 	'iso2' => 'hu',
 	'iso3' => 'hun',
-	'timezone' => '',
+	'timezone' => 'Europe/Budapest',
 	'title' => 'Hungarian',
 );

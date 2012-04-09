@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_MA',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Africa/Casablanca',
 	'title' => 'Arabic (Morocco)',
 );

@@ -11,6 +11,6 @@
 return array(
 	'id' => 'bo_CN',
 	'parent' => 'bo',
-	'timezone' => '',
+	'timezone' => 'Asia/Kathmandu',
 	'title' => 'Tibetan (China)',
 );

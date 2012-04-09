@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_NZ',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'Pacific/Auckland',
 	'title' => 'English (New Zealand)',
 );

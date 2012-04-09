@@ -12,6 +12,6 @@ return array(
 	'id' => 'ro',
 	'iso2' => 'ro',
 	'iso3' => array('ron', 'rum'),
-	'timezone' => '',
+	'timezone' => 'Europe/Bucharest',
 	'title' => 'Romanian',
 );

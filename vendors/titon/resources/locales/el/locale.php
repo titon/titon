@@ -12,6 +12,6 @@ return array(
 	'id' => 'el',
 	'iso2' => 'el',
 	'iso3' => array('gre', 'ell'),
-	'timezone' => '',
+	'timezone' => 'Europe/Athens',
 	'title' => 'Greek',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'mt',
 	'iso2' => 'mt',
 	'iso3' => 'mlt',
-	'timezone' => '',
+	'timezone' => 'Europe/Rome',
 	'title' => 'Maltese',
 );

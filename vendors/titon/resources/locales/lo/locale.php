@@ -12,6 +12,6 @@ return array(
 	'id' => 'lo',
 	'iso2' => 'lo',
 	'iso3' => 'lao',
-	'timezone' => '',
+	'timezone' => 'Asia/Vientiane',
 	'title' => 'Lao',
 );

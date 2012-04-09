@@ -12,6 +12,6 @@ return array(
 	'id' => 'ko',
 	'iso2' => 'ko',
 	'iso3' => 'kor',
-	'timezone' => '',
+	'timezone' => 'Asia/Seoul',
 	'title' => 'Korean',
 );

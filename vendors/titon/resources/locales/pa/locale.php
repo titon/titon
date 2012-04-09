@@ -12,6 +12,6 @@ return array(
 	'id' => 'pa',
 	'iso2' => 'pa',
 	'iso3' => 'pan',
-	'timezone' => '',
+	'timezone' => 'Asia/Karachi',
 	'title' => 'Punjabi',
 );

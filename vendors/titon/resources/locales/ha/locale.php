@@ -12,6 +12,6 @@ return array(
 	'id' => 'ha',
 	'iso2' => 'ha',
 	'iso3' => 'hau',
-	'timezone' => '',
+	'timezone' => 'Africa/Niamey',
 	'title' => 'Hausa',
 );

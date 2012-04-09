@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_ZA',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'Africa/Johannesburg',
 	'title' => 'English (South Africa)',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'es',
 	'iso2' => 'es',
 	'iso3' => 'spa',
-	'timezone' => '',
+	'timezone' => 'Europe/Madrid',
 	'title' => 'Spanish (Spain - Traditional)',
 );

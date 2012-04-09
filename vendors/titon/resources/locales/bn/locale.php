@@ -12,6 +12,6 @@ return array(
 	'id' => 'bn',
 	'iso2' => 'bn',
 	'iso3' => 'ben',
-	'timezone' => '',
+	'timezone' => 'Asia/Dhaka',
 	'title' => 'Bengali',
 );

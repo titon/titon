@@ -12,6 +12,6 @@ return array(
 	'id' => 'tt',
 	'iso2' => 'tt',
 	'iso3' => 'tat',
-	'timezone' => '',
+	'timezone' => 'Europe/Moscow',
 	'title' => 'Tatar',
 );

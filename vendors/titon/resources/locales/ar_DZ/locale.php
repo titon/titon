@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_DZ',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Africa/Algiers',
 	'title' => 'Arabic (Algeria)',
 );

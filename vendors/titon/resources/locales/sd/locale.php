@@ -12,6 +12,6 @@ return array(
 	'id' => 'sd',
 	'iso2' => 'sd',
 	'iso3' => 'snd',
-	'timezone' => '',
+	'timezone' => 'Asia/Karachi',
 	'title' => 'Sindhi',
 );

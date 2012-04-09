@@ -12,6 +12,6 @@ return array(
 	'id' => 'cy',
 	'iso2' => 'cy',
 	'iso3' => array('wel', 'cym'),
-	'timezone' => '',
+	'timezone' => 'Europe/London',
 	'title' => 'Welsh',
 );

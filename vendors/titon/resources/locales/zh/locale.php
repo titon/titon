@@ -12,6 +12,6 @@ return array(
 	'id' => 'zh',
 	'iso2' => 'zh',
 	'iso3' => array('chi', 'zho'),
-	'timezone' => '',
+	'timezone' => 'Asia/Shanghai',
 	'title' => 'Chinese',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'ig',
 	'iso2' => 'ig',
 	'iso3' => 'ibo',
-	'timezone' => '',
+	'timezone' => 'Africa/Lagos',
 	'title' => 'Igbo',
 );

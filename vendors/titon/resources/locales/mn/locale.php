@@ -12,6 +12,6 @@ return array(
 	'id' => 'mn',
 	'iso2' => 'mn',
 	'iso3' => 'mon',
-	'timezone' => '',
+	'timezone' => 'Asia/Ulan_Bator',
 	'title' => 'Mongolian',
 );

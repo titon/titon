@@ -12,6 +12,6 @@ return array(
 	'id' => 'ms',
 	'iso2' => 'ms',
 	'iso3' => array('msa', 'may'),
-	'timezone' => '',
+	'timezone' => 'Asia/Kuala_Lumpur',
 	'title' => 'Malaysian',
 );

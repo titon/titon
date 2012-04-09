@@ -12,6 +12,6 @@ return array(
 	'id' => 'qu',
 	'iso2' => 'qu',
 	'iso3' => 'que',
-	'timezone' => '',
+	'timezone' => 'America/Lima',
 	'title' => 'Quechua',
 );

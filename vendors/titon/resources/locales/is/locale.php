@@ -12,6 +12,6 @@ return array(
 	'id' => 'is',
 	'iso2' => 'is',
 	'iso3' => array('isl', 'ice'),
-	'timezone' => '',
+	'timezone' => 'Atlantic/Reykjavik',
 	'title' => 'Icelandic',
 );

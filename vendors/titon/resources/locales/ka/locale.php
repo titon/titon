@@ -12,6 +12,6 @@ return array(
 	'id' => 'ka',
 	'iso2' => 'ka',
 	'iso3' => array('kat', 'geo'),
-	'timezone' => '',
+	'timezone' => 'Asia/Tbilisi',
 	'title' => 'Georgian',
 );

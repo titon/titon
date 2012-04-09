@@ -12,6 +12,6 @@ return array(
 	'id' => 'zu',
 	'iso2' => 'zu',
 	'iso3' => 'zul',
-	'timezone' => '',
+	'timezone' => 'Africa/Harare',
 	'title' => 'Zulu',
 );

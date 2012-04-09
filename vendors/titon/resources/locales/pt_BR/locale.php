@@ -11,6 +11,6 @@
 return array(
 	'id' => 'pt_BR',
 	'parent' => 'pt',
-	'timezone' => '',
+	'timezone' => 'America/Sao_Paulo',
 	'title' => 'Portuguese (Brazil)',
 );

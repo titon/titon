@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_PH',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'Asia/Manila',
 	'title' => 'English (Phillippines)',
 );

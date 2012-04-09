@@ -12,6 +12,6 @@ return array(
 	'id' => 'so',
 	'iso2' => 'so',
 	'iso3' => 'som',
-	'timezone' => '',
+	'timezone' => 'Africa/Mogadishu',
 	'title' => 'Somali',
 );

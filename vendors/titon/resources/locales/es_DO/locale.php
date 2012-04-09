@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_DO',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Santo_Domingo',
 	'title' => 'Spanish (Dominican Republic)',
 );

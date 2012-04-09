@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_LY',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Africa/Tripoli',
 	'title' => 'Arabic (Libya)',
 );

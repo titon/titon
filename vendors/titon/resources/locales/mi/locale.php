@@ -12,6 +12,6 @@ return array(
 	'id' => 'mi',
 	'iso2' => 'mi',
 	'iso3' => array('mri', 'mao'),
-	'timezone' => '',
+	'timezone' => 'Pacific/Auckland',
 	'title' => 'Maori',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'si',
 	'iso2' => 'si',
 	'iso3' => 'sin',
-	'timezone' => '',
+	'timezone' => 'Asia/Colombo',
 	'title' => 'Sinhala',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'ar',
 	'iso2' => 'ar',
 	'iso3' => 'ara',
-	'timezone' => '',
+	'timezone' => 'Africa/Cairo',
 	'title' => 'Arabic',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'rm',
 	'iso2' => 'rm',
 	'iso3' => 'roh',
-	'timezone' => '',
+	'timezone' => 'Europe/Rome',
 	'title' => 'Rhaeto-Romanic',
 );

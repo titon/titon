@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ms_BN',
 	'parent' => 'ms',
-	'timezone' => '',
+	'timezone' => 'Asia/Brunei',
 	'title' => 'Malaysian (Brunei)',
 );

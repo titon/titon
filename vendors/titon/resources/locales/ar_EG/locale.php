@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ar_EG',
 	'parent' => 'ar',
-	'timezone' => '',
+	'timezone' => 'Africa/Cairo',
 	'title' => 'Arabic (Egypt)',
 );

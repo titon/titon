@@ -12,6 +12,6 @@ return array(
 	'id' => 'fo',
 	'iso2' => 'fo',
 	'iso3' => 'fao',
-	'timezone' => '',
-	'title' => 'Faeroese',
+	'timezone' => 'Europe/Copenhagen',
+	'title' => 'Faroese',
 );

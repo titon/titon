@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_US',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'America/New_York',
 	'title' => 'English (United States)',
 );

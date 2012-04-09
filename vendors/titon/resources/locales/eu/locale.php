@@ -12,6 +12,6 @@ return array(
 	'id' => 'eu',
 	'iso2' => 'eu',
 	'iso3' => array('baq', 'eus'),
-	'timezone' => '',
+	'timezone' => 'Europe/Madrid',
 	'title' => 'Basque',
 );

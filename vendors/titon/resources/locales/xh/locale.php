@@ -12,6 +12,6 @@ return array(
 	'id' => 'xh',
 	'iso2' => 'xh',
 	'iso3' => 'xho',
-	'timezone' => '',
+	'timezone' => 'Africa/Johannesburg',
 	'title' => 'Xhosa',
 );

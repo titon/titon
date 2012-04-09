@@ -12,6 +12,6 @@ return array(
 	'id' => 'sq',
 	'iso2' => 'sq',
 	'iso3' => array('alb', 'sqi'),
-	'timezone' => '',
+	'timezone' => 'Europe/Tirane',
 	'title' => 'Albanian',
 );

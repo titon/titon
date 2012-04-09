@@ -12,6 +12,6 @@ return array(
 	'id' => 'rw',
 	'iso2' => 'rw',
 	'iso3' => 'kin',
-	'timezone' => '',
+	'timezone' => 'Africa/Kigali',
 	'title' => 'Kinyarwanda',
 );

@@ -11,6 +11,6 @@
 return array(
 	'id' => 'nl_BE',
 	'parent' => 'nl',
-	'timezone' => '',
+	'timezone' => 'Europe/Brussels',
 	'title' => 'Dutch (Belgium)',
 );

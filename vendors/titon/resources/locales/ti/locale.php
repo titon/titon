@@ -12,6 +12,6 @@ return array(
 	'id' => 'ti',
 	'iso2' => 'ti',
 	'iso3' => 'tir',
-	'timezone' => '',
+	'timezone' => 'Africa/Asmara',
 	'title' => 'Tigrinya',
 );

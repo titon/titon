@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_BO',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Asuncion',
 	'title' => 'Spanish (Bolivia)',
 );

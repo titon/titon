@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_IN',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'Indian/Mahe',
 	'title' => 'English (India)',
 );

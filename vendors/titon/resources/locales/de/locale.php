@@ -12,6 +12,6 @@ return array(
 	'id' => 'de',
 	'iso2' => 'de',
 	'iso3' => array('ger', 'deu'),
-	'timezone' => '',
+	'timezone' => 'Europe/Berlin',
 	'title' => 'German (Standard)',
 );

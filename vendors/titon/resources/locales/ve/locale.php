@@ -12,6 +12,6 @@ return array(
 	'id' => 've',
 	'iso2' => 've',
 	'iso3' => 'ven',
-	'timezone' => '',
+	'timezone' => 'Africa/Johannesburg',
 	'title' => 'Venda',
 );

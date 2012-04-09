@@ -11,6 +11,6 @@
 return array(
 	'id' => 'de_LI',
 	'parent' => 'de',
-	'timezone' => '',
+	'timezone' => 'Europe/Vaduz',
 	'title' => 'German (Liechtenstein)',
 );

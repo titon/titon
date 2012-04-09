@@ -11,6 +11,6 @@
 return array(
 	'id' => 'es_CR',
 	'parent' => 'es',
-	'timezone' => '',
+	'timezone' => 'America/Managua',
 	'title' => 'Spanish (Costa Rica)',
 );

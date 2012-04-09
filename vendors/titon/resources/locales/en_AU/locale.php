@@ -11,6 +11,6 @@
 return array(
 	'id' => 'en_AU',
 	'parent' => 'en',
-	'timezone' => '',
+	'timezone' => 'Australia/Melbourne',
 	'title' => 'English (Australian)',
 );

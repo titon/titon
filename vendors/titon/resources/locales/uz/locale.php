@@ -12,6 +12,6 @@ return array(
 	'id' => 'uz',
 	'iso2' => 'uz',
 	'iso3' => 'uzb',
-	'timezone' => '',
+	'timezone' => 'Asia/Tashkent',
 	'title' => 'Uzbek',
 );

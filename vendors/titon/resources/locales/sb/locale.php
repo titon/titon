@@ -12,6 +12,6 @@ return array(
 	'id' => 'sb',
 	'iso2' => 'sb',
 	'iso3' => 'wen',
-	'timezone' => '',
+	'timezone' => 'Europe/Berlin',
 	'title' => 'Sorbian',
 );

@@ -12,6 +12,6 @@ return array(
 	'id' => 'no',
 	'iso2' => 'no',
 	'iso3' => 'nor',
-	'timezone' => '',
+	'timezone' => 'Europe/Oslo',
 	'title' => 'Norwegian',
 );

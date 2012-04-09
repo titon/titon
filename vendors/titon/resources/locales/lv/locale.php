@@ -12,6 +12,6 @@ return array(
 	'id' => 'lv',
 	'iso2' => 'lv',
 	'iso3' => 'lav',
-	'timezone' => '',
+	'timezone' => 'Europe/Riga',
 	'title' => 'Latvian',
 );

@@ -11,6 +11,6 @@
 return array(
 	'id' => 'ko_KR',
 	'parent' => 'ko',
-	'timezone' => '',
+	'timezone' => 'Asia/Seoul',
 	'title' => 'Korea (South)',
 );
