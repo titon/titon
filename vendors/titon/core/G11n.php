@@ -37,7 +37,7 @@ class G11n {
 	 *	FORMAT_1 - en-us (URL format)
 	 *	FORMAT_2 - en-US
 	 *	FORMAT_3 - en_US (Preferred)
-	 * 	FORMAT_4 - enUS
+	 *	FORMAT_4 - enUS
 	 */
 	const FORMAT_1 = 1;
 	const FORMAT_2 = 2;

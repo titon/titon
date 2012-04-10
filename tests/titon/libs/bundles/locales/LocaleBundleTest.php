@@ -65,7 +65,7 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'region' => 'FM',
 			'id' => 'ex_FM',
 			'iso2' => 'ex',
-			'iso3' => 'frm',
+			'iso3' => array('exf', 'frm'),
 			'timezone' => '',
 			'title' => 'Example for Formats',
 			'parent' => 'ex'
@@ -96,6 +96,13 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'title' => 'Example for Validations',
 			'parent' => 'ex'
 		), $bundleValidations);
+
+		// By key
+		$this->assertEquals('ex', $this->parentBundle->getLocale('id'));
+		$this->assertEquals('ex', $this->parentBundle->getLocale('iso2'));
+		$this->assertEquals('exp', $this->parentBundle->getLocale('iso3'));
+		$this->assertEquals('', $this->parentBundle->getLocale('timezone'));
+		$this->assertEquals(null, $this->parentBundle->getLocale('fakeKey'));
 	}
 
 	/**
@@ -137,6 +144,13 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 		// Validations
 		$this->assertTrue(is_array($bundleValidations));
 		$this->assertEquals($parentFormat, $bundleValidations);
+
+		// By key
+		$this->assertEquals('ex_FM', $this->bundleFormats->getFormats('date'));
+		$this->assertEquals('ex', $this->bundleFormats->getFormats('time'));
+		$this->assertEquals('ex', $this->bundleFormats->getFormats('datetime'));
+		$this->assertEquals(3, $this->bundleFormats->getFormats('pluralForms'));
+		$this->assertEquals(null, $this->bundleFormats->getFormats('fakeKey'));
 	}
 
 	/**
@@ -176,6 +190,13 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 		// Validations
 		$this->assertTrue(is_array($bundleValidations));
 		$this->assertEquals($parentInflections, $bundleValidations);
+
+		// By key
+		$this->assertEquals(array('ex_IN' => 'irregular'), $this->bundleInflections->getInflections('irregular'));
+		$this->assertEquals(array('ex_IN' => 'plural'), $this->bundleInflections->getInflections('plural'));
+		$this->assertEquals(array('ex_IN' => 'singular'), $this->bundleInflections->getInflections('singular'));
+		$this->assertEquals(array('ex'), $this->bundleInflections->getInflections('uninflected'));
+		$this->assertEquals(null, $this->bundleInflections->getInflections('fakeKey'));
 	}
 
 	/**
@@ -213,6 +234,12 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'postalCode' => 'ex',
 			'ssn' => 'ex_VA'
 		), $bundleValidations);
+
+		// By key
+		$this->assertEquals('ex_VA', $this->bundleValidations->getValidations('phone'));
+		$this->assertEquals('ex_VA', $this->bundleValidations->getValidations('ssn'));
+		$this->assertEquals('ex', $this->bundleValidations->getValidations('postalCode'));
+		$this->assertEquals(null, $this->bundleValidations->getValidations('fakeKey'));
 	}
 
 	/**
@@ -220,9 +247,9 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testGetParent() {
 		$this->assertEquals(null, $this->parentBundle->getParent());
-		$this->assertInstanceOf('titon\libs\bundles\Bundle', $this->bundleFormats->getParent());
-		$this->assertInstanceOf('titon\libs\bundles\Bundle', $this->bundleInflections->getParent());
-		$this->assertInstanceOf('titon\libs\bundles\Bundle', $this->bundleValidations->getParent());
+		$this->assertInstanceOf('titon\libs\bundles\locales\LocaleBundle', $this->bundleFormats->getParent());
+		$this->assertInstanceOf('titon\libs\bundles\locales\LocaleBundle', $this->bundleInflections->getParent());
+		$this->assertInstanceOf('titon\libs\bundles\locales\LocaleBundle', $this->bundleValidations->getParent());
 	}
 
 }

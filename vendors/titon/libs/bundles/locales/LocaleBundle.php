@@ -49,30 +49,51 @@ class LocaleBundle extends BundleAbstract {
 	 * Convenience method to return the formatting rules.
 	 *
 	 * @access public
-	 * @return array
+	 * @param string|null $key
+	 * @return mixed
 	 */
-	public function getFormats() {
-		return $this->get('formats');
+	public function getFormats($key = null) {
+		$data = $this->get('formats');
+
+		if ($key) {
+			return isset($data[$key]) ? $data[$key] : null;
+		}
+
+		return $data;
 	}
 
 	/**
 	 * Convenience method to return the inflection rules.
 	 *
 	 * @access public
-	 * @return array
+	 * @param string|null $key
+	 * @return mixed
 	 */
-	public function getInflections() {
-		return $this->get('inflections');
+	public function getInflections($key = null) {
+		$data = $this->get('inflections');
+
+		if ($key) {
+			return isset($data[$key]) ? $data[$key] : null;
+		}
+
+		return $data;
 	}
 
 	/**
 	 * Convenience method to return the locale configuration.
 	 *
 	 * @access public
-	 * @return array
+	 * @param string|null $key
+	 * @return mixed
 	 */
-	public function getLocale() {
-		return $this->get('locale');
+	public function getLocale($key = null) {
+		$data = $this->get('locale');
+
+		if ($key) {
+			return isset($data[$key]) ? $data[$key] : null;
+		}
+
+		return $data;
 	}
 
 	/**
@@ -89,10 +110,17 @@ class LocaleBundle extends BundleAbstract {
 	 * Convenience method to return the validation rules.
 	 *
 	 * @access public
-	 * @return array
+	 * @param string|null $key
+	 * @return mixed
 	 */
-	public function getValidations() {
-		return $this->get('validations');
+	public function getValidations($key = null) {
+		$data = $this->get('validations');
+
+		if ($key) {
+			return isset($data[$key]) ? $data[$key] : null;
+		}
+
+		return $data;
 	}
 
 	/**
