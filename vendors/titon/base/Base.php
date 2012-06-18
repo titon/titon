@@ -12,8 +12,7 @@ namespace titon\base;
 use titon\Titon;
 use titon\base\BaseException;
 use titon\libs\augments\ConfigAugment;
-use \ReflectionClass;
-use \ReflectionMethod;
+use titon\libs\augments\InfoAugment;
 
 /**
  * Primary class for all framework classes to extend. All child classes will inherit the $_config property,
@@ -32,6 +31,14 @@ class Base {
 	public $config;
 
 	/**
+	 * The information object.
+	 *
+	 * @access public
+	 * @var titon\libs\augments\InfoAugment
+	 */
+	public $info;
+
+	/**
 	 * An array of configuration settings for the current class.
 	 *
 	 * @access protected
@@ -48,6 +55,7 @@ class Base {
 	 */
 	public function __construct(array $config = array()) {
 		$this->config = new ConfigAugment($config, $this->_config + array('initialize' => true));
+		$this->info = new InfoAugment($this);
 
 		if ($this->config->initialize) {
 			$this->initialize();
@@ -97,46 +105,6 @@ class Base {
 	}
 
 	/**
-	 * Return all relevant meta data regarding the current class. This includes file path, namespace package,
-	 * class name, constants, methods and properties (with visibility) and much more.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function meta() {
-		$callback = function($self) {
-			$class = get_class($self);
-			$reflection = new ReflectionClass($self);
-
-			return array(
-				'filePath' => Titon::loader()->toPath($class),
-				'className' => $class,
-				'shortClassName' => $reflection->getShortName(),
-				'namespace' => $reflection->getNamespaceName(),
-				'publicMethods' => $reflection->getMethods(ReflectionMethod::IS_PUBLIC),
-				'protectedMethods' => $reflection->getMethods(ReflectionMethod::IS_PROTECTED),
-				'privateMethods' => $reflection->getMethods(ReflectionMethod::IS_PRIVATE),
-				'staticMethods' => $reflection->getMethods(ReflectionMethod::IS_STATIC),
-				'publicProperties' => $reflection->getProperties(ReflectionMethod::IS_PUBLIC),
-				'protectedProperties' => $reflection->getProperties(ReflectionMethod::IS_PROTECTED),
-				'privateProperties' => $reflection->getProperties(ReflectionMethod::IS_PRIVATE),
-				'staticProperties' => $reflection->getProperties(ReflectionMethod::IS_STATIC),
-				'constants' => $reflection->getConstants(),
-				'interfaces' => $reflection->getInterfaceNames(),
-				'traits' => $reflection->getTraitNames(),
-				'parent' => $reflection->getParentClass()
-			);
-		};
-
-		// Use Memoizer if available
-		if (method_exists($this, 'cacheMethod')) {
-			return $this->cacheMethod(__FUNCTION__, null, $callback);
-		}
-
-		return $callback($this);
-	}
-
-	/**
 	 * A dummy function for no operation.
 	 *
 	 * @access public
@@ -153,7 +121,7 @@ class Base {
 	 * @return string
 	 */
 	public function toString() {
-		return get_class($this);
+		return $this->info->className;
 	}
 
 }
