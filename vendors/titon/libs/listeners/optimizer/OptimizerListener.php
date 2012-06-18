@@ -21,7 +21,7 @@ class OptimizerListener extends ListenerAbstract {
 
 	/**
 	 * Configuration.
-	 * 
+	 *
 	 *	gc 			- Toggle garbage collection
 	 *	gzip 		- Toggle GZIP compression
 	 *	gzipLevel 	- GZIP compression level
@@ -54,7 +54,7 @@ class OptimizerListener extends ListenerAbstract {
 	 * @return void
 	 */
 	public function enableGarbageCollection() {
-		if ($this->config('gc') && !gc_enabled()) {
+		if ($this->config->gc && !gc_enabled()) {
 			gc_enable();
 		}
 	}
@@ -66,7 +66,7 @@ class OptimizerListener extends ListenerAbstract {
 	 * @return void
 	 */
 	public function enableGzipCompression() {
-		if ($this->config('gzip')) {
+		if ($this->config->gzip) {
 			$loaded = true;
 
 			if (!extension_loaded('zlib')) {
@@ -83,7 +83,7 @@ class OptimizerListener extends ListenerAbstract {
 
 			if ($loaded) {
 				ini_set('zlib.output_compression', true);
-				ini_set('zlib.output_compression_level', $this->config('gzipLevel'));
+				ini_set('zlib.output_compression_level', $this->config->gzipLevel);
 			}
 		}
 	}

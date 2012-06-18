@@ -54,9 +54,9 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	protected $_storage;
 
 	/**
-	 * Locate the key within the catalog. If the catalog has not been loaded, 
+	 * Locate the key within the catalog. If the catalog has not been loaded,
 	 * load it and cache the collection of strings.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return string
@@ -126,7 +126,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 
 	/**
 	 * Parse out the module, catalog and key for string lookup.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return array
@@ -166,20 +166,20 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 */
 	public function setStorage(Storage $storage) {
 		$this->_storage = $storage;
-		$this->_storage->configure('storage', 'g11n');
+		$this->_storage->config->storage = 'g11n';
 
 		return $this;
 	}
 
 	/**
 	 * Process the located string with dynamic parameters if necessary.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param array $params
 	 * @return string
 	 */
-	public function translate($key, array $params = array()) {	
+	public function translate($key, array $params = array()) {
 		return MessageFormatter::formatMessage(Locale::DEFAULT_LOCALE, $this->getMessage($key), $params);
 	}
 

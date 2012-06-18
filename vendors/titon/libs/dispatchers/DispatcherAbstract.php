@@ -46,7 +46,7 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 
 	/**
 	 * Load the controller based on the routing params. If the controller does not exist, throw exceptions.
-	 * 
+	 *
 	 * @access public
 	 * @return titon\libs\controllers\Controller
 	 * @throws titon\libs\dispatchers\DispatcherException
@@ -75,7 +75,7 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 		$controller = $this->controller;
 
 		if ($controller->hasObject('response')) {
-			if ($type = $controller->config('ext')) {
+			if ($type = $controller->config->ext) {
 				$controller->response->type($type);
 			}
 

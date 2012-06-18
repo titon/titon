@@ -15,12 +15,12 @@ use titon\libs\storage\StorageException;
 /**
  * A storage engine that uses the servers local filesystem to store its cached items.
  * This engine can be installed using the Cache::setup() method.
- * 
+ *
  *		new FileSystemStorage(array(
  *			'prefix' => 'sql_',
  *			'expires' => '+1 day'
  *		));
- * 
+ *
  * A sample configuration can be found above, and the following options are available: prefix, expires.
  *
  * @package	titon.libs.storage.cache
@@ -38,7 +38,7 @@ class FileSystemStorage extends StorageAbstract {
 
 	/**
 	 * Decrement a value within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param int $step
@@ -48,20 +48,20 @@ class FileSystemStorage extends StorageAbstract {
 		if ($value = $this->get($key)) {
 			return $this->set($key, ((int) $value - (int) $step));
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Empty the cache. An optional expiration time can be passed to delete older files only.
-	 * 
+	 *
 	 * @access public
 	 * @param mixed $expires
 	 * @return boolean
 	 */
 	public function flush($expires = null) {
 		$dir = dir($this->_getPath());
-		
+
 		if ($expires !== null) {
 			$expires = $this->expires($expires);
 		}
@@ -70,28 +70,28 @@ class FileSystemStorage extends StorageAbstract {
 			if ($file == '.' || $file == '..') {
 				continue;
 			}
-			
+
 			$path = $this->_getPath() . $file;
-			
+
 			if (file_exists($path)) {
 				if ($expires) {
 					if (filemtime($path) >= $expires) {
 						unlink($path);
 					}
 				} else {
-					unlink($path);	
+					unlink($path);
 				}
 			}
 		}
-		
+
 		$dir->close();
-		
+
 		clearstatcache();
 	}
-	
+
 	/**
 	 * Get data from the cache if it exists.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return mixed
@@ -108,13 +108,13 @@ class FileSystemStorage extends StorageAbstract {
 				$this->remove($key);
 			}
 		}
-		
+
 		return null;
 	}
-	
+
 	/**
 	 * Check if the item exists within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
@@ -122,10 +122,10 @@ class FileSystemStorage extends StorageAbstract {
 	public function has($key) {
 		return file_exists($this->_getPath($key));
 	}
-	
+
 	/**
 	 * Increment a value within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param int $step
@@ -135,23 +135,23 @@ class FileSystemStorage extends StorageAbstract {
 		if ($value = $this->get($key)) {
 			return $this->set($key, ((int) $value + (int) $step));
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Always use serialization with file system caching.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
-		$this->configure('serialize', true);
+		$this->config->serialize = true;
 	}
-	
+
 	/**
 	 * Remove the item if it exists and return true, else return false.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
@@ -160,18 +160,18 @@ class FileSystemStorage extends StorageAbstract {
 		if ($this->has($key)) {
 			return unlink($this->_getPath($key));
 		}
-		
+
 		clearstatcache();
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Set data to the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
-	 * @param mixed $value 
+	 * @param mixed $value
 	 * @param mixed $expires
 	 * @return boolean
 	 */
@@ -180,10 +180,10 @@ class FileSystemStorage extends StorageAbstract {
 
 		return file_put_contents($this->_getPath($key), $value, LOCK_EX);
 	}
-	
+
 	/**
 	 * Return the full path to the cache directory.
-	 * 
+	 *
 	 * @access protected
 	 * @param string $key
 	 * @return string
@@ -193,12 +193,12 @@ class FileSystemStorage extends StorageAbstract {
 			$this->_checkPath();
 		}
 
-		$path = APP_TEMP . 'cache/' . $this->config('storage') . '/';
+		$path = APP_TEMP . 'cache/' . $this->config->storage . '/';
 
 		if ($key) {
 			$path .= $this->key($key) . '.cache';
 		}
-		
+
 		return $path;
 	}
 
@@ -222,5 +222,5 @@ class FileSystemStorage extends StorageAbstract {
 
 		$this->_ready = true;
 	}
-	
+
 }

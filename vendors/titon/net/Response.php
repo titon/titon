@@ -29,7 +29,7 @@ class Response extends Base {
 	 * Configuration.
 	 *
 	 *	buffer - The range in which to break up the body into chunks.
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
@@ -85,7 +85,7 @@ class Response extends Base {
 
 	/**
 	 * Force the clients browser to cache the current request.
-	 * 
+	 *
 	 * @access public
 	 * @param int|string $expires
 	 * @return titon\net\Response
@@ -212,7 +212,7 @@ class Response extends Base {
 
 		// Body
 		if (!empty($this->_body)) {
-			$body = str_split($this->_body, $this->config('buffer'));
+			$body = str_split($this->_body, $this->config->buffer);
 
 			foreach ($body as $chunk) {
 				echo $chunk;

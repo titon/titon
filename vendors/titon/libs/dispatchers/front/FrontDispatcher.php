@@ -49,13 +49,13 @@ class FrontDispatcher extends DispatcherAbstract {
 		} catch (Exception $e) {
 			debug($e->getCode());
 		}
-		
+
 		$controller->postProcess();
 		$event->notify('postProcess', $controller);
 
-		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+		if ($controller->hasObject('engine') && $controller->engine->config->render) {
 			$engine = $controller->engine;
-			
+
 			$engine->preRender();
 			$event->notify('preRender', $engine);
 

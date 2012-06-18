@@ -15,9 +15,9 @@ use titon\utility\Inflector;
 use titon\utility\Set;
 
 /**
- * The Formhelper is used for HTML form creation. Data is passed to the associated input fields 
+ * The Formhelper is used for HTML form creation. Data is passed to the associated input fields
  * if a value is present with the Request object ($_POST, $_GET and $_FILES).
- * 
+ *
  * @package	titon.libs.helpers.html
  * @uses	titon\Titon
  * @uses	titon\utility\Inflector
@@ -35,7 +35,7 @@ class FormHelper extends HelperAbstract {
 
 	/**
 	 * Fields that have failed validatio.
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
@@ -99,7 +99,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function checkbox($input, $label, array $attributes = array()) {
 		$value = isset($attributes['value']) ? $attributes['value'] : 1;
-		unset($attributes['default']);		
+		unset($attributes['default']);
 
 		$attributes = $this->_prepare(array('name' => $input, 'type' => 'checkbox', 'value' => $value), $attributes);
 		$selected = $this->_selected($attributes);
@@ -229,16 +229,16 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function day($input, array $attributes = array()) {
 		$attributes = $this->_prepare(array('name' => $input), $attributes);
-		$format = isset($attributes['dayFormat']) ? $attributes['dayFormat'] : $this->config('dayFormat');
+		$format = isset($attributes['dayFormat']) ? $attributes['dayFormat'] : $this->config->dayFormat;
 		$options = array();
 
 		for ($i = 1; $i <= 31; ++$i) {
-			$options[$i] = date($format, mktime(0, 0, 0, $this->config('month'), $i, $this->config('year')));
+			$options[$i] = date($format, mktime(0, 0, 0, $this->config->month, $i, $this->config->year));
 		}
 
 		return $this->tag('select',
 			$this->attributes($attributes, array('value')),
-			$this->_options($options, $this->_selected($attributes, 'defaultDay', $this->config('day')))
+			$this->_options($options, $this->_selected($attributes, 'defaultDay', $this->config->day))
 		);
 	}
 
@@ -253,7 +253,7 @@ class FormHelper extends HelperAbstract {
 	public function file($input, array $attributes = array()) {
 		$attributes = $this->_prepare(array('name' => $input, 'type' => 'file'), $attributes);
 
-		return $this->tag('input', 
+		return $this->tag('input',
 			$this->attributes($attributes)
 		);
 	}
@@ -269,7 +269,7 @@ class FormHelper extends HelperAbstract {
 	public function hidden($input, array $attributes = array()) {
 		$attributes = $this->_prepare(array('name' => $input, 'type' => 'hidden'), $attributes);
 
-		return $this->tag('input', 
+		return $this->tag('input',
 			$this->attributes($attributes)
 		);
 	}
@@ -294,14 +294,14 @@ class FormHelper extends HelperAbstract {
 			$end = 23;
 
 			if ($selected === null) {
-				$selected = $this->config('hour24');
+				$selected = $this->config->hour24;
 			}
 		} else {
 			$start = 1;
 			$end = 12;
 
 			if ($selected === null) {
-				$selected = $this->config('hour');
+				$selected = $this->config->hour;
 			}
 		}
 
@@ -326,7 +326,7 @@ class FormHelper extends HelperAbstract {
 	public function image($input, array $attributes = array()) {
 		$attributes = $this->_prepare(array('name' => $input, 'type' => 'image'), $attributes);
 
-		return $this->tag('input', 
+		return $this->tag('input',
 			$this->attributes($attributes)
 		);
 	}
@@ -341,8 +341,8 @@ class FormHelper extends HelperAbstract {
 		$this->attachObject('request', function() {
 			return Titon::registry()->factory('titon\net\Request');
 		});
-		
-		$this->configure(array_diff_key(array(
+
+		$this->config->set(array_diff_key(array(
 			'day' => date('j'),
 			'dayFormat' => 'j',
 			'month' => date('n'),
@@ -392,7 +392,7 @@ class FormHelper extends HelperAbstract {
 
 		return $this->tag('select',
 			$this->attributes($attributes, array('value')),
-			$this->_options($options, $this->_selected($attributes, 'defaultMeridiem', $this->config('meridiem')))
+			$this->_options($options, $this->_selected($attributes, 'defaultMeridiem', $this->config->meridiem))
 		);
 	}
 
@@ -415,7 +415,7 @@ class FormHelper extends HelperAbstract {
 
 		return $this->tag('select',
 			$this->attributes($attributes, array('value')),
-			$this->_options($options, $this->_selected($attributes, 'defaultMinute', $this->config('minute')))
+			$this->_options($options, $this->_selected($attributes, 'defaultMinute', $this->config->minute))
 		);
 	}
 
@@ -431,16 +431,16 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function month($input, array $attributes = array()) {
 		$attributes = $this->_prepare(array('name' => $input), $attributes);
-		$format = isset($attributes['monthFormat']) ? $attributes['monthFormat'] : $this->config('monthFormat');
+		$format = isset($attributes['monthFormat']) ? $attributes['monthFormat'] : $this->config->monthFormat;
 		$options = array();
 
 		for ($i = 1; $i <= 12; ++$i) {
-			$options[$i] = date($format, mktime(0, 0, 0, $i, $this->config('day'), $this->config('year')));
+			$options[$i] = date($format, mktime(0, 0, 0, $i, $this->config->day, $this->config->year));
 		}
 
 		return $this->tag('select',
 			$this->attributes($attributes, array('value')),
-			$this->_options($options, $this->_selected($attributes, 'defaultMonth', $this->config('month')))
+			$this->_options($options, $this->_selected($attributes, 'defaultMonth', $this->config->month))
 		);
 	}
 
@@ -582,7 +582,7 @@ class FormHelper extends HelperAbstract {
 
 		return $this->tag('select',
 			$this->attributes($attributes, array('value')),
-			$this->_options($options, $this->_selected($attributes, 'defaultSecond', $this->config('second')))
+			$this->_options($options, $this->_selected($attributes, 'defaultSecond', $this->config->second))
 		);
 	}
 
@@ -642,7 +642,7 @@ class FormHelper extends HelperAbstract {
 	public function text($input, array $attributes = array()) {
 		$attributes = $this->_prepare(array('name' => $input, 'type' => 'text'), $attributes);
 
-		return $this->tag('input', 
+		return $this->tag('input',
 			$this->attributes($attributes)
 		);
 	}
@@ -834,7 +834,7 @@ class FormHelper extends HelperAbstract {
 
 	/**
 	 * Return the currently selected value, or return a default value.
-	 * 
+	 *
 	 * @access protected
 	 * @param array $attributes
 	 * @param string $key

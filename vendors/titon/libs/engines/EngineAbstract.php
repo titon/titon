@@ -20,7 +20,7 @@ use \Closure;
 
 /**
  * The Engine acts as a base for all child Engines to inherit. The view engine acts as the renderer of data
- * (set by the controller) to markup (the view templates), using a templating system. 
+ * (set by the controller) to markup (the view templates), using a templating system.
  * The order of process is as follows:
  *
  *  - The engine inherits the configuration and variables that were set in the Controller
@@ -47,7 +47,7 @@ abstract class EngineAbstract extends Base implements Engine {
 
 	/**
 	 * Configuration. Can be overwritten in the Controller.
-	 * 
+	 *
 	 *	type 		- The content type to respond as (defaults to html)
 	 *	template 	- An array containing the module, controller, and action
 	 *	render 		- Toggle the rendering process
@@ -77,7 +77,7 @@ abstract class EngineAbstract extends Base implements Engine {
 
 	/**
 	 * Dynamic data set from the controller.
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
@@ -85,7 +85,7 @@ abstract class EngineAbstract extends Base implements Engine {
 
 	/**
 	 * List of added helpers.
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
@@ -101,7 +101,7 @@ abstract class EngineAbstract extends Base implements Engine {
 
 	/**
 	 * Add a helper to the view rendering engine.
-	 * 
+	 *
 	 * @access public
 	 * @param string $alias
 	 * @param Closure $helper
@@ -219,7 +219,7 @@ abstract class EngineAbstract extends Base implements Engine {
 
 	/**
 	 * Return the data based on the given key.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return string
@@ -279,8 +279,8 @@ abstract class EngineAbstract extends Base implements Engine {
 	}
 
 	/**
-	 * Begins the staged rendering process. First stage, the system must render the template based on the module, 
-	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
+	 * Begins the staged rendering process. First stage, the system must render the template based on the module,
+	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage,
 	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
@@ -321,21 +321,21 @@ abstract class EngineAbstract extends Base implements Engine {
 	 */
 	public function setup($options) {
 		if ($options === false || $options === null) {
-			$this->configure('render', false);
+			$this->config->render = false;
 
 		} else if (is_string($options)) {
-			$this->configure('template.action', $options);
+			$this->config->set('template.action', $options);
 
 		} else if (is_array($options)) {
 			foreach ($options as $key => $value) {
 				if ($key == 'template') {
 					if (is_array($value)) {
-						$this->configure('template', $value + $this->config('template'));
+						$this->config->template = $value + $this->config->template;
 					} else {
-						$this->configure('template.action', $value);
+						$this->config->set('template.action', $value);
 					}
 				} else {
-					$this->configure($key, $value);
+					$this->config->set($key, $value);
 				}
 			}
 		}

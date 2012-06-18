@@ -6,7 +6,7 @@
  * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
- 
+
 namespace titon\libs\controllers;
 
 use titon\Titon;
@@ -45,7 +45,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 
 	/**
 	 * Configuration.
-	 * 
+	 *
 	 *	module 			- Current application module
 	 *	controller 		- Current controller within the module
 	 *	action 			- Current action within the controller
@@ -74,11 +74,11 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 */
 	public function dispatchAction($action = null, array $args = array()) {
 		if (empty($action)) {
-			$action = $this->config('action');
+			$action = $this->config->action;
 		}
 
 		if (empty($args)) {
-			$args = $this->config('args');
+			$args = $this->config->args;
 		}
 
 		// Do not include the base controller methods
@@ -100,8 +100,8 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return mixed
 	 */
 	public function forwardAction($action, array $args = array()) {
+		$this->config->action = $action;
 		$this->engine->setup($action);
-		$this->configure('action', $action);
 		$this->dispatchAction($action, $args);
 	}
 
@@ -119,14 +119,14 @@ abstract class ControllerAbstract extends Base implements Controller {
 		$this->attachObject('response', function() {
 			return Titon::registry()->factory('titon\net\Response');
 		});
-		
+
 		$this->setEngine(function($self) {
 			$config = $self->config();
 			unset($config['args']);
 
 			$engine = new ViewEngine();
 			$engine->setup(array('template' => $config));
-			
+
 			return $engine;
 		});
 	}
@@ -177,7 +177,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 			'template' => $action
 		));
 	}
-	
+
 	/**
 	 * Triggered before the Controller processes the requested Action.
 	 *

@@ -46,7 +46,7 @@ class G11n {
 
 	/**
 	 * Currently active locale bundle based on the client.
-	 * 
+	 *
 	 * @access protected
 	 * @var string
 	 */
@@ -54,7 +54,7 @@ class G11n {
 
 	/**
 	 * Fallback locale key if none can be found.
-	 * 
+	 *
 	 * @access protected
 	 * @var string
 	 */
@@ -62,7 +62,7 @@ class G11n {
 
 	/**
 	 * Loaded locale bundles.
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
@@ -70,7 +70,7 @@ class G11n {
 
 	/**
 	 * Translator used for string fetching and parsing.
-	 * 
+	 *
 	 * @access protected
 	 * @var titon\libs\translators\Translator
 	 */
@@ -78,7 +78,7 @@ class G11n {
 
 	/**
 	 * Convert a locale key to 3 possible formats.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param int $format
@@ -137,7 +137,7 @@ class G11n {
 
 	/**
 	 * Return the current locale config, or a certain value.
-	 * 
+	 *
 	 * @access public
 	 * @return titon\libs\bundles\locales\LocaleBundle
 	 */
@@ -158,7 +158,7 @@ class G11n {
 
 	/**
 	 * Define the fallback language if none can be found or is not supported.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return titon\core\G11n
@@ -175,13 +175,13 @@ class G11n {
 		$this->_fallback = $key;
 
 		ini_set('intl.default_locale', $this->_locales[$key]->config('locale.id'));
-		
+
 		return $this;
 	}
 
 	/**
 	 * Return the fallback locale bundle.
-	 * 
+	 *
 	 * @access public
 	 * @return titon\libs\bundles\locales\LocaleBundle
 	 * @throws titon\core\CoreException
@@ -196,7 +196,7 @@ class G11n {
 
 	/**
 	 * Returns the setup locales bundles.
-	 * 
+	 *
 	 * @access public
 	 * @return array
 	 */
@@ -206,7 +206,7 @@ class G11n {
 
 	/**
 	 * Detect which locale to use based on the clients Accept-Language header.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 * @throws titon\core\CoreException
@@ -241,7 +241,7 @@ class G11n {
 
 		// Apply the locale
 		$this->set($current);
-		
+
 		// Check for a translator
 		if (empty($this->_translator)) {
 			throw new CoreException('A translator is required for G11n message parsing.');
@@ -250,7 +250,7 @@ class G11n {
 
 	/**
 	 * Does the current locale matched the passed key?
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
@@ -263,7 +263,7 @@ class G11n {
 
 	/**
 	 * G11n will be enabled if more than 1 locale has been setup, excluding family chains.
-	 * 
+	 *
 	 * @access public
 	 * @return boolean
 	 *
@@ -358,7 +358,7 @@ class G11n {
 	/**
 	 * Sets up the application with the defined locale key; the key will be formatted to a lowercase dashed URL friendly format.
 	 * The system will then attempt to load the locale resource bundle and finalize configuration settings.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param array $config
@@ -380,7 +380,7 @@ class G11n {
 		$config['key'] = $key;
 
 		foreach ($config as $key => $value) {
-			$bundle->configure('locale.' . $key, $value);
+			$bundle->config->set('locale.' . $key, $value);
 		}
 
 		// Cache the bundle
@@ -417,7 +417,7 @@ class G11n {
 
 	/**
 	 * Sets the translator to use in the string locating and translating process.
-	 * 
+	 *
 	 * @access public
 	 * @param titon\libs\translators\Translator $translator
 	 * @return titon\core\G11n
@@ -432,7 +432,7 @@ class G11n {
 	/**
 	 * Return a translated string using the translator.
 	 * If a storage engine is present, read and write from the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param array $params

@@ -18,7 +18,7 @@ use titon\libs\readers\ReaderException;
  *
  * @package	titon.libs.readers.core
  * @uses	titon\libs\readers\ReaderException
- * 
+ *
  * @link	http://php.net/simplexml
  */
 class XmlReader extends ReaderAbstract {
@@ -39,7 +39,7 @@ class XmlReader extends ReaderAbstract {
 		$data = @simplexml_load_file($this->getPath());
 
 		if ($data !== false) {
-			$this->configure($this->toArray($data));
+			$this->config->set($this->toArray($data));
 		} else {
 			throw new ReaderException('Reader failed to parse XML configuration.');
 		}

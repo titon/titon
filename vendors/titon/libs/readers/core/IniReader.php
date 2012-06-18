@@ -14,7 +14,7 @@ use titon\libs\readers\ReaderException;
 use titon\utility\Set;
 
 /**
- * A reader that loads its configuration from an INI file.
+ * A file reader that parses INI files.
  *
  * @package	titon.libs.readers.core
  * @uses	titon\libs\readers\ReaderException
@@ -32,17 +32,17 @@ class IniReader extends ReaderAbstract {
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		$data = parse_ini_file($this->getPath(), true, INI_SCANNER_NORMAL);
 
 		if (is_array($data)) {
-			$this->configure(Set::expand($data));
-		} else {
-			throw new ReaderException('Reader failed to parse INI configuration.');
+			return Set::expand($data);
 		}
+
+		throw new ReaderException('File reader failed to parse INI file.');
 	}
 
 }

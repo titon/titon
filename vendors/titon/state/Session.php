@@ -16,7 +16,7 @@ use titon\utility\Set;
 
 /**
  * Primary library class to manage all session data. Applies appropriate ini settings depending on the environment setting.
- * Implements security walls to check for session highjacking and defines adapters for different save handlers.
+ * Implements security walls to check for session hi-jacking and defines adapters for different save handlers.
  *
  * @package	titon.state
  * @uses	titon\Titon
@@ -34,20 +34,20 @@ class Session extends Base {
 
 	/**
 	 * Configuration.
-	 * 
+	 *
 	 *	checkUserAgent 			- Validate the user agent hasn't changed between requests
 	 *	checkInactivity 		- Regenerate the client session if they are idle
-	 *	checkReferer 			- Validate the host in the referrer
-	 *	inactivityThreshold 	- The alotted time the client can be inactive
+	 *	checkReferrer 			- Validate the host in the referrer
+	 *	inactivityThreshold 	- The allotted time the client can be inactive
 	 *	sessionLifetime 		- Lifetime of the session cookie
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_config = array(
 		'checkUserAgent' => true,
 		'checkInactivity' => true,
-		'checkReferer' => true,
+		'checkReferrer' => true,
 		'inactivityThreshold' => '+5 minutes',
 		'sessionLifetime' => '+10 minutes'
 	);
@@ -80,7 +80,7 @@ class Session extends Base {
 		if (!headers_sent()) {
 			$this->regenerate();
 		}
-		
+
 		if ($this->_adapter instanceof SessionAdapter) {
 			$this->_adapter->register();
 		}
@@ -134,7 +134,6 @@ class Session extends Base {
 	 * @return void
 	 */
 	public function initialize() {
-		$config = $this->config();
 		$segments = Titon::router()->segments();
 
 		ini_set('url_rewriter.tags', '');
@@ -148,14 +147,16 @@ class Session extends Base {
 			ini_set('session.cookie_secure', true);
 		}
 
-		if ($config['checkReferer']) {
+		if ($this->config->checkReferrer) {
 			ini_set('session.referer_check', $segments['host']);
 		}
 
-		if (is_int($config['sessionLifetime'])) {
-			$timeout = $config['sessionLifetime'];
+		$lifetime = $this->config->sessionLifetime;
+
+		if (is_int($lifetime)) {
+			$timeout = $lifetime;
 		} else {
-			$timeout = strtotime($config['sessionLifetime']) - time();
+			$timeout = strtotime($lifetime) - time();
 		}
 
 		ini_set('session.cookie_lifetime', $timeout);
@@ -216,7 +217,7 @@ class Session extends Base {
 
 	/**
 	 * Set the SessionAdapter to use.
-	 * 
+	 *
 	 * @access public
 	 * @param titon\libs\adapters\SessionAdapter $adapter
 	 * @return titon\state\Session
@@ -227,16 +228,16 @@ class Session extends Base {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Startup and save the session security params.
-	 * 
+	 *
 	 * @access protected
 	 * @return void
 	 */
 	protected function _startup() {
 		$this->set('Security', array(
-			'time' => strtotime($this->config('inactivityThreshold')),
+			'time' => strtotime($this->config->inactivityThreshold),
 			'host' => Titon::router()->segments('host'),
 			'agent' => md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])
 		));
@@ -244,22 +245,20 @@ class Session extends Base {
 
 	/**
 	 * Validate the session and regenerate or destroy if necessary.
-	 * 
+	 *
 	 * @access protected
 	 * @return void
 	 */
 	protected function _validate() {
-		$config = $this->config();
-
 		if ($this->has('Security')) {
 			$session = $this->get('Security');
 
-			if ($config['checkUserAgent'] && $session['agent'] != md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])) {
+			if ($this->config->checkUserAgent && $session['agent'] != md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])) {
 				$this->destroy();
 				$this->_startup();
 			}
 
-			if ($config['checkInactivity'] && $session['time'] <= time()) {
+			if ($this->config->checkInactivity && $session['time'] <= time()) {
 				$this->regenerate();
 				$this->_startup();
 			}

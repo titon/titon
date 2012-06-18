@@ -10,7 +10,7 @@
 namespace titon\libs\readers;
 
 /**
- * Interface for the config readers library.
+ * Interface for the file readers library.
  *
  * @package	titon.libs.renders
  */
@@ -25,7 +25,17 @@ interface Reader {
 	public function fileExists();
 
 	/**
-	 * Returns the final path.
+	 * Return the formatted filename.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getFilename();
+
+	public function getFullPath();
+
+	/**
+	 * Return the folder location.
 	 *
 	 * @access public
 	 * @return string
@@ -36,8 +46,17 @@ interface Reader {
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function parseFile();
+
+	/**
+	 * Set the folder location of the file.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @return void
+	 */
+	public function setPath($path);
 
 }

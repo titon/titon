@@ -13,19 +13,19 @@ use titon\libs\storage\StorageAbstract;
 use titon\libs\storage\StorageException;
 
 /**
- * A storage engine that uses the APC extension for a cache store; requires pecl/apc. 
+ * A storage engine that uses the APC extension for a cache store; requires pecl/apc.
  * This engine can be installed using the Cache::setup() method. No configuration options are available for this engine.
  *
  * @package	titon.libs.storage.cache
  * @uses	titon\libs\storage\StorageException
- * 
+ *
  * @link	http://pecl.php.net/package/apc
  */
 class ApcStorage extends StorageAbstract {
 
 	/**
 	 * Decrement a value within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param int $step
@@ -34,20 +34,20 @@ class ApcStorage extends StorageAbstract {
 	public function decrement($key, $step = 1) {
 		return apc_dec($this->key($key), (int) $step);
 	}
-		
+
 	/**
 	 * Empty the cache.
-	 * 
+	 *
 	 * @access public
 	 * @return boolean
 	 */
 	public function flush() {
 		return apc_clear_cache('user');
 	}
-	
+
 	/**
 	 * Get data from the cache if it exists.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return mixed
@@ -55,10 +55,10 @@ class ApcStorage extends StorageAbstract {
 	public function get($key) {
 		return $this->unserialize(apc_fetch($this->key($key)));
 	}
-	
+
 	/**
 	 * Check if the item exists within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
@@ -66,10 +66,10 @@ class ApcStorage extends StorageAbstract {
 	public function has($key) {
 		return apc_exists($this->key($key));
 	}
-	
+
 	/**
 	 * Increment a value within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param int $step
@@ -78,10 +78,10 @@ class ApcStorage extends StorageAbstract {
 	public function increment($key, $step = 1) {
 		return apc_inc($this->key($key), (int) $step);
 	}
-	
+
 	/**
 	 * Validate that APC is installed.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 * @throws StorageException
@@ -90,14 +90,14 @@ class ApcStorage extends StorageAbstract {
 		if (!extension_loaded('apc')) {
 			throw new StorageException('APC extension does not exist.');
 		}
-		
+
 		// Always use serialization with APC
-		$this->configure('serialize', true);
+		$this->config->serialize = true;
 	}
-	
+
 	/**
 	 * Remove the item if it exists and return true, else return false.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
@@ -105,13 +105,13 @@ class ApcStorage extends StorageAbstract {
 	public function remove($key) {
 		return apc_delete($this->key($key));
 	}
-	
+
 	/**
 	 * Set data to the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
-	 * @param mixed $value 
+	 * @param mixed $value
 	 * @param mixed $expires
 	 * @return boolean
 	 */
@@ -120,5 +120,5 @@ class ApcStorage extends StorageAbstract {
 
 		return apc_store($this->key($key), $this->serialize($value), $expires);
 	}
-	
+
 }

@@ -16,7 +16,7 @@ use titon\libs\storage\Storage;
 /**
  * Caches session data using one of the built in cache storage engines.
  * A storage engine can be setup using Titon::cache()->setup().
- * 
+ *
  * @package	titon.libs.adapters.session
  * @uses	titon\Titon
  */
@@ -24,28 +24,28 @@ class CacheAdapter extends SessionAdapterAbstract {
 
 	/**
 	 * Storage engine instance.
-	 * 
+	 *
 	 * @access protected
 	 * @var Storage
 	 */
 	protected $_storage;
-	
+
 	/**
 	 * Inject the storage engine.
-	 * 
+	 *
 	 * @access public
 	 * @param titon\libs\storage\Storage $storage
 	 */
 	final public function __construct(Storage $storage) {
 		parent::__construct();
-		
+
 		$this->_storage = $storage;
-		$this->_storage->configure('storage', 'session');
+		$this->_storage->config->storage = 'session';
 	}
 
 	/**
 	 * Triggered when a session is destroyed.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return void
@@ -56,7 +56,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 
 	/**
 	 * Triggered when the sessions garbage collector activates.
-	 * 
+	 *
 	 * @access public
 	 * @param int $maxLifetime
 	 * @return void
@@ -67,7 +67,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 
 	/**
 	 * Read value from the session handler.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return string
@@ -78,7 +78,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 
 	/**
 	 * Write data to the session handler.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
@@ -86,6 +86,6 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 */
 	public function write($key, $value) {
 		return $this->_storage->set($key, $value, null);
-	}	
-	
+	}
+
 }

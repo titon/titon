@@ -67,8 +67,8 @@ class Dispatch {
 		}
 
 		if ($dispatcher instanceof Dispatcher) {
-			$dispatcher->configure($params);
-			
+			$dispatcher->config->set($params);
+
 		} else if (Titon::environment()->isDevelopment()) {
 			$dispatcher = new FrontDevDispatcher($params);
 
@@ -90,7 +90,7 @@ class Dispatch {
 	 */
 	public function setup(Dispatcher $dispatcher, array $scope = array()) {
 		$scope = $scope + array(
-			'module' => '*', 
+			'module' => '*',
 			'controller' => '*'
 		);
 

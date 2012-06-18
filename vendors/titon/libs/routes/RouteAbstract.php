@@ -38,12 +38,12 @@ abstract class RouteAbstract extends Base implements Route {
 
 	/**
 	 * Configuration.
-	 * 
+	 *
 	 *	secure 		- When true, will only match if under HTTPS
 	 *	static 		- A static route that contains no patterns
 	 *	method 		- The types of acceptable HTTP methods (defaults to all)
 	 *	patterns 	- Custom defined regex patterns
-	 * 
+	 *
 	 * @access public
 	 * @var array
 	 */
@@ -53,7 +53,7 @@ abstract class RouteAbstract extends Base implements Route {
 		'method' => array(),
 		'patterns' => array()
 	);
-	
+
 	/**
 	 * The compiled regex pattern.
 	 *
@@ -130,11 +130,11 @@ abstract class RouteAbstract extends Base implements Route {
 
 		$path = ($this->_path != '/') ? rtrim($this->_path, '/') : $this->_path;
 		$compiled = str_replace(array('/', '.'), array('\/', '\.'), $path);
-		$patterns = $this->config('patterns');
+		$patterns = $this->config->patterns;
 
 		if (!$this->isStatic()) {
 			preg_match_all('/([\{|\(|\[|\<])([a-z]+)([\}|\)|\]|\>])/i', $this->_path, $matches, PREG_SET_ORDER);
-			
+
 			if (!empty($matches)) {
 				foreach ($matches as $match) {
 					$m1 = isset($match[1]) ? $match[1] : '';
@@ -157,7 +157,7 @@ abstract class RouteAbstract extends Base implements Route {
 					$this->_tokens[] = $m2;
 				}
 			} else {
-				$this->configure('static', true);
+				$this->config->static = true;
 			}
 		}
 
@@ -190,10 +190,10 @@ abstract class RouteAbstract extends Base implements Route {
 	public function getParams() {
 		return $this->_route;
 	}
-	
+
 	/**
 	 * Compile the route and attach the request object.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
@@ -301,12 +301,12 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @return boolean
 	 */
 	public function isMethod() {
-		$method = (array) $this->config('method');
-		
+		$method = (array) $this->config->method;
+
 		if (!empty($method) && !in_array($this->request->method(), $method)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -317,10 +317,10 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @return boolean
 	 */
 	public function isSecure() {
-		if ($this->config('secure') && !$this->request->isSecure()) {
+		if ($this->config->secure && !$this->request->isSecure()) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
@@ -331,7 +331,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @return boolean
 	 */
 	public function isStatic() {
-		return $this->config('static');
+		return $this->config->static;
 	}
 
 	/**

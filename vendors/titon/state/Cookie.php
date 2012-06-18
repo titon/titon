@@ -23,14 +23,14 @@ class Cookie extends Base {
 
 	/**
 	 * Configuration.
-	 * 
-	 *	domain 		- What domain the cookie should be useable on
+	 *
+	 *	domain 		- What domain the cookie should be usable on
 	 *	expires 	- How much time until the cookie expires
 	 *	path 		- Which path should the cookie only be accessible to
-	 *	secure 		- Should the cookie only be useable across an HTTPS connection
-	 *	httponly 	- Should the cookie only be accessable through PHP and not the Javascript layer
+	 *	secure 		- Should the cookie only be usable across an HTTPS connection
+	 *	httpOnly 	- Should the cookie only be accessible through PHP and not the Javascript layer
 	 *	encrypt 	- Should the cookies be encrypted and decrypted
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
@@ -39,7 +39,7 @@ class Cookie extends Base {
 		'expires' => '+1 week',
 		'path' => '/',
 		'secure' => false,
-		'httponly' => true,
+		'httpOnly' => true,
 		'encrypt' => true
 	);
 
@@ -54,7 +54,7 @@ class Cookie extends Base {
 		if ($this->has($key)) {
 			$value = $_COOKIE[$key];
 
-			if ($this->config('encrypt')) {	
+			if ($this->config->encrypt) {
 				$salt = md5(Titon::config()->salt());
 				$value = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $salt, base64_decode($value), MCRYPT_MODE_CBC, $salt), "\0");
 			}
@@ -66,8 +66,29 @@ class Cookie extends Base {
 	}
 
 	/**
+	 * Set a cookie. Can take an optional 3rd argument to overwrite the default cookie parameters.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param string $value
+	 * @param array $config
+	 * @return boolean
+	 */
+	public function set($key, $value, array $config = array()) {
+		$config = $config + $this->config->get();
+		$expires = is_int($config['expires']) ? $config['expires'] : strtotime($config['expires']);
+
+		if ($this->config->encrypt) {
+			$salt = md5(Titon::config()->salt());
+			$value = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $salt, $value, MCRYPT_MODE_CBC, $salt));
+		}
+
+		return setcookie($key, $value, $expires, $config['path'], $config['domain'], $config['secure'], $config['httpOnly']);
+	}
+
+	/**
 	 * Check to see if a certain key exists.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
@@ -84,30 +105,9 @@ class Cookie extends Base {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		$config = $this->config();
+		$config = $this->config->get();
 
-		return setcookie($key, '', time(), $config['path'], $config['domain'], $config['secure'], $config['httponly']);
-	}
-
-	/**
-	 * Set a cookie. Can take an optional 3rd argument to overwrite the default cookie parameters.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @param string $value
-	 * @param array $config
-	 * @return boolean
-	 */
-	public function set($key, $value, array $config = array()) {
-		$config = $config + $this->config();
-		$expires = is_int($config['expires']) ? $config['expires'] : strtotime($config['expires']);
-
-		if ($this->config('encrypt')) {
-			$salt = md5(Titon::config()->salt());
-			$value = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $salt, $value, MCRYPT_MODE_CBC, $salt));
-		}
-
-		return setcookie($key, $value, $expires, $config['path'], $config['domain'], $config['secure'], $config['httponly']);
+		return setcookie($key, '', time(), $config['path'], $config['domain'], $config['secure'], $config['httpOnly']);
 	}
 
 }

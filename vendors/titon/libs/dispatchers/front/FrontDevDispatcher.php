@@ -33,7 +33,7 @@ class FrontDevDispatcher extends DispatcherAbstract {
 	public function run() {
 		$controller = $this->controller;
 		$event = Titon::event();
-		
+
 		Benchmark::start('Dispatcher');
 		$event->notify('preDispatch');
 
@@ -61,7 +61,7 @@ class FrontDevDispatcher extends DispatcherAbstract {
 		$event->notify('postProcess', $controller);
 		Benchmark::stop('Controller');
 
-		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+		if ($controller->hasObject('engine') && $controller->engine->config->render) {
 			$engine = $controller->engine;
 
 			Benchmark::start('View');

@@ -48,28 +48,14 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @return void
 	 * @throws titon\libs\bundles\BundleException
 	 */
-	public function findBundle(array $locations) {
-		$config = $this->config();
+	public function findFile($filename) {
+		foreach ($this->getLocations() as $location) {
+			if ($this->hasFile($location, $filename)) {
 
-		$this->_locations = array_map(function($value) use ($config) {
-			foreach ($config as $key => $val) {
-				$value = str_replace('{' . $key . '}', $val, $value);
-			}
-
-			return $value;
-		}, $locations);
-
-		foreach ($this->_locations as $location) {
-			if (file_exists($location)) {
-				$this->_path = $location;
-				return;
 			}
 		}
 
-		// Remove so that we can throw a reasonable exception
-		unset($config['initialize']);
-
-		throw new BundleException(sprintf('Resource bundle %s could not be located.', implode(':', $config)));
+		throw new BundleException(sprintf('Could not locate %s within any ', implode(':', $config)));
 	}
 
 	/**
@@ -164,6 +150,25 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 */
 	public function parseFile($filename) {
 		throw new BundleException(sprintf('You must define the parseFile() method within your %s.', get_class($this)));
+	}
+
+	/**
+	 * Set the folder locations to use for cycling through.
+	 *
+	 * @access public
+	 * @param array $locations
+	 * @return void
+	 */
+	public function setLocations(array $locations) {
+		$config = $this->config();
+
+		$this->_locations = array_map(function($value) use ($config) {
+			foreach ($config as $key => $val) {
+				$value = str_replace('{' . $key . '}', $val, $value);
+			}
+
+			return $value;
+		}, $locations);
 	}
 
 }

@@ -18,7 +18,7 @@ use titon\libs\readers\ReaderException;
  *
  * @package	titon.libs.readers.core
  * @uses	titon\libs\readers\ReaderException
- * 
+ *
  * @link	http://php.net/yaml
  */
 class YamlReader extends ReaderAbstract {
@@ -39,11 +39,11 @@ class YamlReader extends ReaderAbstract {
 		if (!extension_loaded('yaml')) {
 			throw new ReaderException('YAML PECL extension must be installed to use the YamlReader.');
 		}
-		
+
 		$data = yaml_parse_file($this->getPath());
 
 		if (is_array($data)) {
-			$this->configure($data);
+			$this->config->set($data);
 		} else {
 			throw new ReaderException('Reader failed to parse YAML configuration.');
 		}

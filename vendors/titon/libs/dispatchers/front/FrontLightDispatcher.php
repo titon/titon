@@ -14,7 +14,7 @@ use titon\libs\exceptions\HttpException;
 use \Exception;
 
 /**
- * FrontLightDispatcher is a very lightweight replacement for the FrontDispatcher. 
+ * FrontLightDispatcher is a very lightweight replacement for the FrontDispatcher.
  * Provides the full dispatching functionality, without the benchmarking and event listening.
  *
  * @package	titon.libs.dispatchers.front
@@ -45,12 +45,12 @@ class FrontLightDispatcher extends DispatcherAbstract {
 
 		$controller->postProcess();
 
-		if ($controller->hasObject('engine') && $controller->engine->config('render')) {
+		if ($controller->hasObject('engine') && $controller->engine->config->render) {
 			$engine = $controller->engine;
 			$engine->preRender();
 			$engine->run();
 			$engine->postRender();
 		}
 	}
-	
+
 }

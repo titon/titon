@@ -13,7 +13,7 @@ use titon\libs\readers\ReaderAbstract;
 use titon\libs\readers\ReaderException;
 
 /**
- * A reader that loads its configuration from a PHP file.
+ * A file reader that parses PHP files.
  * The PHP file must contain a return statement that returns an array.
  *
  * @package	titon.libs.readers.core
@@ -32,17 +32,19 @@ class PhpReader extends ReaderAbstract {
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
-		$data = include_once $this->getPath();
-		
-		if (is_array($data)) {
-			$this->configure($data);
-		} else {
-			throw new ReaderException('Reader failed to import PHP configuration.');
+		if ($this->fileExists()) {
+			$data = include_once $this->getPath();
+
+			if (is_array($data)) {
+				return $data;
+			}
 		}
+
+		throw new ReaderException(sprintf('File reader failed to include PHP file: %s', $this->getFilename()));
 	}
 
 }
