@@ -11,6 +11,8 @@ namespace titon\libs\augments;
 
 use titon\libs\augments\AugmentException;
 use titon\utility\Set;
+use \ArrayAccess;
+use \Iterator;
 
 /**
  * An augment that supplies configuration options for primary classes.
@@ -18,8 +20,9 @@ use titon\utility\Set;
  * which can be used to autobox values anytime a config is written.
  *
  * @package	titon.libs.augments
+ * @uses	titon\utility\Set
  */
-class ConfigAugment implements \ArrayAccess, \Iterator {
+class ConfigAugment implements ArrayAccess, Iterator {
 
 	/**
 	 * Custom configuration.
@@ -144,9 +147,7 @@ class ConfigAugment implements \ArrayAccess, \Iterator {
 				$this->set($k, $v);
 			}
 		} else {
-			if (isset($this->_defaults[$key])) {
-				$default = $this->_defaults[$key];
-
+			if ($default = Set::extract($this->_config, $key)) {
 				if (is_numeric($default)) {
 					$value = (int) $value;
 				} else if (is_bool($default)) {

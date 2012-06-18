@@ -13,6 +13,7 @@ use titon\Titon;
 use titon\base\BaseException;
 use titon\libs\augments\ConfigAugment;
 use titon\libs\augments\InfoAugment;
+use \Serializable;
 
 /**
  * Primary class for all framework classes to extend. All child classes will inherit the $_config property,
@@ -20,7 +21,7 @@ use titon\libs\augments\InfoAugment;
  *
  * @package	titon.base
  */
-class Base {
+class Base implements Serializable {
 
 	/**
 	 * The configuration object.
@@ -63,28 +64,6 @@ class Base {
 	}
 
 	/**
-	 * Serialize the configuration.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function __sleep() {
-		return array('_config');
-	}
-
-	/**
-	 * Reconstruct the class once unserialized.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function __wakeup() {
-		if ($this->config->initialize) {
-			$this->initialize();
-		}
-	}
-
-	/**
 	 * Magic method for toString().
 	 *
 	 * @access public
@@ -92,6 +71,27 @@ class Base {
 	 */
 	public function __toString() {
 		return $this->toString();
+	}
+
+	/**
+	 * Serialize the configuration.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function serialize() {
+		return serialize($this->config->get());
+	}
+
+	/**
+	 * Reconstruct the class once unserialized.
+	 *
+	 * @access public
+	 * @param array $data
+	 * @return void
+	 */
+	public function unserialize($data) {
+		$this->__construct($data);
 	}
 
 	/**
@@ -115,7 +115,7 @@ class Base {
 	}
 
 	/**
-	 * Return the classname when called as a string.
+	 * Return the class name when called as a string.
 	 *
 	 * @access public
 	 * @return string
