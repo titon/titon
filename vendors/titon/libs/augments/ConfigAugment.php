@@ -148,7 +148,9 @@ class ConfigAugment implements ArrayAccess, Iterator {
 			}
 		} else {
 			if ($default = Set::extract($this->_config, $key)) {
-				if (is_numeric($default)) {
+				if (is_float($default)) {
+					$value = (float) $value;
+				} else if (is_numeric($default)) {
 					$value = (int) $value;
 				} else if (is_bool($default)) {
 					$value = (bool) $value;

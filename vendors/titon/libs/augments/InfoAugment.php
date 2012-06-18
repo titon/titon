@@ -58,18 +58,27 @@ class InfoAugment {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @param array $args
 	 * @return mixed
 	 * @throws titon\libs\augments\AugmentException
 	 */
-	public function __call($name, $args) {
-		return $this->cacheMethod($name, null, function($self) use ($name, $args) {
+	public function __get($name) {
+		return $this->cacheMethod($name, null, function($self) use ($name) {
 			if (method_exists($self, $name)) {
-				return call_user_func_array(array($self, $name), $args);
+				return call_user_func_array(array($self, $name), array());
 			}
 
 			throw new AugmentException(sprintf('Information descriptor %s does not exist.', $name));
 		});
+	}
+
+	/**
+	 * Return the reflection object.
+	 *
+	 * @access public
+	 * @return \ReflectionClass
+	 */
+	public function reflection() {
+		return $this->_reflection;
 	}
 
 	/**
@@ -120,12 +129,12 @@ class InfoAugment {
 	 */
 	public function methods() {
 		return $this->cacheMethod(__METHOD__, null, function($self) {
-			return array_merge(
+			return array_unique(array_merge(
 				$self->publicMethods(),
 				$self->protectedMethods(),
 				$self->privateMethods(),
 				$self->staticMethods()
-			);
+			));
 		});
 	}
 
@@ -136,7 +145,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function publicMethods() {
-		return $this->_reflection->getMethods(ReflectionMethod::IS_PUBLIC);
+		return $this->_methods(__METHOD__, ReflectionMethod::IS_PUBLIC);
 	}
 
 	/**
@@ -146,7 +155,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function protectedMethods() {
-		return $this->_reflection->getMethods(ReflectionMethod::IS_PROTECTED);
+		return $this->_methods(__METHOD__, ReflectionMethod::IS_PROTECTED);
 	}
 
 	/**
@@ -156,7 +165,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function privateMethods() {
-		return $this->_reflection->getMethods(ReflectionMethod::IS_PRIVATE);
+		return $this->_methods(__METHOD__, ReflectionMethod::IS_PRIVATE);
 	}
 
 	/**
@@ -166,7 +175,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function staticMethods() {
-		return $this->_reflection->getMethods(ReflectionMethod::IS_STATIC);
+		return $this->_methods(__METHOD__, ReflectionMethod::IS_STATIC);
 	}
 
 	/**
@@ -177,12 +186,12 @@ class InfoAugment {
 	 */
 	public function properties() {
 		return $this->cacheMethod(__METHOD__, null, function($self) {
-			return array_merge(
+			return array_unique(array_merge(
 				$self->publicProperties(),
 				$self->protectedProperties(),
 				$self->privateProperties(),
 				$self->staticProperties()
-			);
+			));
 		});
 	}
 
@@ -193,7 +202,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function publicProperties() {
-		return $this->_properties(ReflectionProperty::IS_PUBLIC);
+		return $this->_properties(__METHOD__, ReflectionProperty::IS_PUBLIC);
 	}
 
 	/**
@@ -203,7 +212,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function protectedProperties() {
-		return $this->_properties(ReflectionProperty::IS_PROTECTED);
+		return $this->_properties(__METHOD__, ReflectionProperty::IS_PROTECTED);
 	}
 
 	/**
@@ -213,7 +222,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function privateProperties() {
-		return $this->_properties(ReflectionProperty::IS_PRIVATE);
+		return $this->_properties(__METHOD__, ReflectionProperty::IS_PRIVATE);
 	}
 
 	/**
@@ -223,7 +232,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function staticProperties() {
-		return $this->_properties(ReflectionProperty::IS_STATIC);
+		return $this->_properties(__METHOD__, ReflectionProperty::IS_STATIC);
 	}
 
 	/**
@@ -270,11 +279,32 @@ class InfoAugment {
 	 * Return an array of properties for the defined scope.
 	 *
 	 * @access protected
+	 * @param string $key
 	 * @param mixed $scope
 	 * @return array
 	 */
-	protected function _properties($scope) {
-		return $this->cacheMethod(__METHOD__, null, function($self) use ($scope) {
+	protected function _methods($key, $scope) {
+		return $this->cacheMethod($key, null, function($self) use ($scope) {
+			$methods = array();
+
+			foreach ($self->_reflection->getMethods($scope) as $method) {
+				$methods[] = $method->getName();
+			}
+
+			return $methods;
+		});
+	}
+
+	/**
+	 * Return an array of properties for the defined scope.
+	 *
+	 * @access protected
+	 * @param string $key
+	 * @param mixed $scope
+	 * @return array
+	 */
+	protected function _properties($key, $scope) {
+		return $this->cacheMethod($key, null, function($self) use ($scope) {
 			$props = array();
 
 			foreach ($self->_reflection->getProperties($scope) as $prop) {
