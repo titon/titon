@@ -18,6 +18,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 
 * Action - Re-usable and de-coupled controller actions, packaged as a stand alone class.
 * Adapter - Handles the case of adapting a specific class to another class.
+* Augment - Miniature classes used to encapsulate specific functionality for primary classes.
 * Behavior - Defines a behavior pattern for Dao callbacks.
 * Bundle - Manages the loading and manipulating of resources and their locations.
 * Controller - Handles the HTTP request and returns the HTTP response, within the dispatch cycle.
