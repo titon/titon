@@ -16,7 +16,6 @@ use titon\libs\readers\ReaderException;
  * A file reader that parses JSON files; must have the JSON module installed.
  *
  * @package	titon.libs.readers.core
- * @uses	titon\libs\readers\ReaderException
  *
  * @link	http://php.net/json_decode
  */

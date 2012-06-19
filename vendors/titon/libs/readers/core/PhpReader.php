@@ -17,7 +17,6 @@ use titon\libs\readers\ReaderException;
  * The PHP file must contain a return statement that returns an array.
  *
  * @package	titon.libs.readers.core
- * @uses	titon\libs\readers\ReaderException
  *
  * @link	http://php.net/manual/function.include.php
  */

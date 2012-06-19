@@ -7,25 +7,23 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\libs\readers\core;
+namespace titon\libs\readers\gettext;
 
 use titon\libs\readers\ReaderAbstract;
 use titon\libs\readers\ReaderException;
 
 /**
- * A reader that loads its configuration from an YAML file.
- * Must have the PECL YAML module installed.
+ * A file reader that parses gettext MO files.
  *
- * @package	titon.libs.readers.core
- *
- * @link	http://php.net/yaml
+ * @package	titon.libs.readers.gettext
+ * @uses	titon\libs\readers\ReaderException
  */
-class YamlReader extends ReaderAbstract {
+class MoReader extends ReaderAbstract {
 
 	/**
 	 * File type extension.
 	 */
-	const EXT = 'yaml';
+	const EXT = 'mo';
 
 	/**
 	 * Parse the file contents.
@@ -35,11 +33,7 @@ class YamlReader extends ReaderAbstract {
 	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
-		if (!extension_loaded('yaml')) {
-			throw new ReaderException('YAML PECL extension must be installed to use the YamlReader.');
-		}
-
-		return yaml_parse_file($this->getFullPath());
+		throw new ReaderException('MoReader::parseFile() has not yet been implemented.');
 	}
 
 }

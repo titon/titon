@@ -11,13 +11,11 @@ namespace titon\libs\readers\core;
 
 use titon\libs\readers\ReaderAbstract;
 use titon\libs\readers\ReaderException;
-use titon\utility\Set;
 
 /**
  * A file reader that parses INI files.
  *
  * @package	titon.libs.readers.core
- * @uses	titon\libs\readers\ReaderException
  *
  * @link	http://php.net/parse_ini_file
  */
