@@ -18,7 +18,7 @@ use titon\libs\readers\ReaderException;
  *
  * @package	titon.libs.readers.core
  * @uses	titon\libs\readers\ReaderException
- * 
+ *
  * @link	http://php.net/manual/function.include.php
  */
 class PhpReader extends ReaderAbstract {
@@ -33,18 +33,9 @@ class PhpReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return array
-	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
-		if ($this->fileExists()) {
-			$data = include_once $this->getPath();
-
-			if (is_array($data)) {
-				return $data;
-			}
-		}
-
-		throw new ReaderException(sprintf('File reader failed to include PHP file: %s', $this->getFilename()));
+		return include $this->getFullPath();
 	}
 
 }

@@ -10,10 +10,10 @@
 namespace titon\libs\readers;
 
 /**
- * Exception for the config readers library.
+ * Exception for the file readers library.
  *
  * @package	titon.libs.readers
  */
-class ReaderException extends \titon\Exception {  
+class ReaderException extends \titon\Exception {
 
 }

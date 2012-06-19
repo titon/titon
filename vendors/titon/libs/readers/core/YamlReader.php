@@ -32,7 +32,7 @@ class YamlReader extends ReaderAbstract {
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
@@ -40,13 +40,7 @@ class YamlReader extends ReaderAbstract {
 			throw new ReaderException('YAML PECL extension must be installed to use the YamlReader.');
 		}
 
-		$data = yaml_parse_file($this->getPath());
-
-		if (is_array($data)) {
-			$this->config->set($data);
-		} else {
-			throw new ReaderException('Reader failed to parse YAML configuration.');
-		}
+		return yaml_parse_file($this->getFullPath());
 	}
 
 }

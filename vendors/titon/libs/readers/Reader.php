@@ -12,7 +12,7 @@ namespace titon\libs\readers;
 /**
  * Interface for the file readers library.
  *
- * @package	titon.libs.renders
+ * @package	titon.libs.readers
  */
 interface Reader {
 
@@ -25,17 +25,23 @@ interface Reader {
 	public function fileExists();
 
 	/**
-	 * Return the formatted filename.
+	 * Return the filename.
 	 *
 	 * @access public
 	 * @return string
 	 */
 	public function getFilename();
 
+	/**
+	 * Return the full file path including filename and extension.
+	 *
+	 * @access public
+	 * @return string
+	 */
 	public function getFullPath();
 
 	/**
-	 * Return the folder location.
+	 * Return the file path.
 	 *
 	 * @access public
 	 * @return string
@@ -51,12 +57,11 @@ interface Reader {
 	public function parseFile();
 
 	/**
-	 * Set the folder location of the file.
+	 * Read the file after checking for existence.
 	 *
 	 * @access public
-	 * @param string $path
-	 * @return void
+	 * @return array
 	 */
-	public function setPath($path);
+	public function readFile();
 
 }

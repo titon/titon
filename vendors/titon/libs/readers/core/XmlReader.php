@@ -32,17 +32,17 @@ class XmlReader extends ReaderAbstract {
 	 * Parse the file contents.
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
 		$data = @simplexml_load_file($this->getPath());
 
 		if ($data !== false) {
-			$this->config->set($this->toArray($data));
-		} else {
-			throw new ReaderException('Reader failed to parse XML configuration.');
+			return $this->toArray($data);
 		}
+
+		throw new ReaderException('Reader failed to parse XML configuration.');
 	}
 
 	/**

@@ -17,7 +17,7 @@ use titon\libs\readers\ReaderException;
  *
  * @package	titon.libs.readers.core
  * @uses	titon\libs\readers\ReaderException
- * 
+ *
  * @link	http://php.net/json_decode
  */
 class JsonReader extends ReaderAbstract {
@@ -32,16 +32,9 @@ class JsonReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return array
-	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
-		$data = @json_decode(file_get_contents($this->getPath()), true);
-
-		if (is_array($data)) {
-			return $data;
-		}
-
-		throw new ReaderException('File reader failed to decode JSON file.');
+		return @json_decode(file_get_contents($this->getFullPath()), true);
 	}
 
 }

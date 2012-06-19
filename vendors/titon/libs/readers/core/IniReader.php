@@ -18,7 +18,7 @@ use titon\utility\Set;
  *
  * @package	titon.libs.readers.core
  * @uses	titon\libs\readers\ReaderException
- * 
+ *
  * @link	http://php.net/parse_ini_file
  */
 class IniReader extends ReaderAbstract {
@@ -33,16 +33,9 @@ class IniReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return array
-	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function parseFile() {
-		$data = parse_ini_file($this->getPath(), true, INI_SCANNER_NORMAL);
-
-		if (is_array($data)) {
-			return Set::expand($data);
-		}
-
-		throw new ReaderException('File reader failed to parse INI file.');
+		return parse_ini_file($this->getFullPath(), true, INI_SCANNER_NORMAL);
 	}
 
 }
