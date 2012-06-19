@@ -6,7 +6,7 @@
  * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
- 
+
 namespace titon\libs\bundles\locales;
 
 use titon\Titon;
@@ -131,8 +131,8 @@ class LocaleBundle extends BundleAbstract {
 	 */
 	public function initialize() {
 		$this->findBundle(array(
-			APP_RESOURCES . 'locales/{bundle}/',
-			TITON_RESOURCES . 'locales/{bundle}/'
+			TITON_RESOURCES . 'locales/{bundle}/',
+			APP_RESOURCES . 'locales/{bundle}/'
 		));
 
 		// Load locale file and load parent if one exists

@@ -6,8 +6,10 @@
  * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
- 
+
 namespace titon\libs\bundles;
+
+use titon\libs\readers\Reader;
 
 /**
  * Interface for the bundles library.
@@ -17,73 +19,21 @@ namespace titon\libs\bundles;
 interface Bundle {
 
 	/**
-	 * Attempt to find the resource bundle within the resource locations.
+	 * Add a file reader to use.
+	 *
+	 * @access public
+	 * @param titon\libs\readers\Reader $reader
+	 * @return titon\libs\bundles\Bundle
+	 */
+	public function addReader(Reader $reader);
+
+	/**
+	 * Set the folder locations to use for cycling through.
 	 *
 	 * @access public
 	 * @param array $locations
-	 * @return void
+	 * @return titon\libs\bundles\Bundle
 	 */
-	public function findBundle(array $locations);
-
-	/**
-	 * Return data based on a key. If data does not exist, load it from the file that matches the key.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return array
-	 */
-	public function get($key);
-
-	/**
-	 * List of all filenames within the resource bundle.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function getFiles();
-
-	/**
-	 * List of locations to find the resource bundle in.
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function getLocations();
-
-	/**
-	 * Returns the final resource bundle path.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getPath();
-
-	/**
-	 * Check if the file exists within the bundle.
-	 *
-	 * @access public
-	 * @param string $filename
-	 * @return boolean
-	 */
-	public function hasFile($filename);
-
-	/**
-	 * Load the file from the resource bundle and parse its contents.
-	 * If file does not exist, return an empty array.
-	 *
-	 * @access public
-	 * @param string $filename
-	 * @return array
-	 */
-	public function loadFile($filename);
-
-	/**
-	 * Parse the file at the given path and return the result.
-	 *
-	 * @access public
-	 * @param string $filename
-	 * @return array
-	 */
-	public function parseFile($filename);
+	public function setLocations(array $locations);
 
 }

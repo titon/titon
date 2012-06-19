@@ -6,7 +6,7 @@
  * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
- 
+
 namespace titon\libs\bundles\messages;
 
 use titon\libs\bundles\BundleAbstract;
@@ -15,9 +15,8 @@ use titon\libs\bundles\BundleAbstract;
  * The MessageBundle manages the loading of message catalogs for localization.
  *
  * @package	titon.libs.bundles.messages
- * @abstract
  */
-abstract class MessageBundleAbstract extends BundleAbstract {
+class MessageBundle extends BundleAbstract {
 
 	/**
 	 * Configuration.
@@ -38,9 +37,9 @@ abstract class MessageBundleAbstract extends BundleAbstract {
 	 */
 	public function initialize() {
 		$this->findBundle(array(
-			APP_MODULES . '{module}/resources/messages/{bundle}/',
+			TITON_RESOURCES . 'messages/{bundle}/',
 			APP_RESOURCES . 'messages/{bundle}/',
-			TITON_RESOURCES . 'messages/{bundle}/'
+			APP_MODULES . '{module}/resources/messages/{bundle}/',
 		));
 	}
 
