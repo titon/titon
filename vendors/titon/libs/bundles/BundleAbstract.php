@@ -6,7 +6,7 @@
  * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
- 
+
 namespace titon\libs\bundles;
 
 use titon\base\Base;
@@ -160,7 +160,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @return void
 	 */
 	public function setLocations(array $locations) {
-		$config = $this->config();
+		$config = $this->config->get();
 
 		$this->_locations = array_map(function($value) use ($config) {
 			foreach ($config as $key => $val) {

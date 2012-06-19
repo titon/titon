@@ -111,7 +111,7 @@ class MemcacheStorage extends StorageAbstract {
 			throw new StorageException('Memcache extension does not exist.');
 		}
 
-		$config = $this->config();
+		$config = $this->config->get();
 
 		if (empty($config['servers'])) {
 			return;

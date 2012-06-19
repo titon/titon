@@ -82,7 +82,7 @@ class Titon {
 		if (isset(self::$__memory[$key])) {
 			return self::$__memory[$key];
 		}
-		
+
 		throw new Exception(sprintf('Object %s has not been installed into Titon.', $key));
 	}
 
@@ -115,6 +115,7 @@ class Titon {
 	 * @param object $object
 	 * @param boolean $lock
 	 * @return void
+	 * @throws titon\Exception
 	 * @static
 	 */
 	public static function install($key, $object, $lock = false) {

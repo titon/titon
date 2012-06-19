@@ -82,7 +82,7 @@ class Config {
 		if ($reader->fileExists()) {
 			$reader->parseFile();
 
-			$this->_config[$key] = $reader->config();
+			$this->_config[$key] = $reader->config->get();
 
 		} else {
 			throw new CoreException(sprintf('Configuration file %s does not exist.', basename($reader->getPath())));

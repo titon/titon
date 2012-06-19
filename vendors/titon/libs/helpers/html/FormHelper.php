@@ -354,7 +354,7 @@ class FormHelper extends HelperAbstract {
 			'minute' => date('i'),
 			'second' => date('s'),
 			'meridiem' => date('a')
-		), $this->config()));
+		), $this->config->get()));
 	}
 
 	/**
@@ -720,7 +720,7 @@ class FormHelper extends HelperAbstract {
 	public function year($input, array $attributes = array()) {
 		$attributes = $this->_prepare(array('name' => $input), $attributes);
 		$options = array();
-		$config = $this->config();
+		$config = $this->config->get();
 
 		$reverse = isset($attributes['reverseYear']) ? $attributes['reverseYear'] : false;
 		$format	= isset($attributes['yearFormat']) ? $attributes['yearFormat'] : $config['yearFormat'];

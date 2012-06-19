@@ -49,7 +49,7 @@ class ViewEngine extends EngineAbstract {
 	 */
 	public function render($path, array $variables = array()) {
 		if (!empty($variables)) {
-			extract($variables, EXTR_SKIP);	
+			extract($variables, EXTR_SKIP);
 		}
 
 		ob_start();
@@ -60,8 +60,8 @@ class ViewEngine extends EngineAbstract {
 	}
 
 	/**
-	 * Begins the staged rendering process. First stage, the system must render the template based on the module, 
-	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
+	 * Begins the staged rendering process. First stage, the system must render the template based on the module,
+	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage,
 	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
@@ -69,7 +69,7 @@ class ViewEngine extends EngineAbstract {
 	 * @throws EngineException
 	 */
 	public function run() {
-		$config = $this->config();
+		$config = $this->config->get();
 
 		if (!$config['render'] || $this->_rendered) {
 			return;
@@ -79,16 +79,16 @@ class ViewEngine extends EngineAbstract {
 		$data = $this->data();
 		$path = null;
 		$renders = array(
-			self::TYPE_TPL => 'template', 
-			self::TYPE_WRAPPER => 'wrapper', 
+			self::TYPE_TPL => 'template',
+			self::TYPE_WRAPPER => 'wrapper',
 			self::TYPE_LAYOUT => 'layout'
 		);
-		
+
 		foreach ($renders as $type => $render) {
 			if (empty($config[$render])) {
 				continue;
 			}
-			
+
 			if ($path = $this->buildPath($type)) {
 				$this->_content = $this->render($path, $data);
 			} else {

@@ -88,7 +88,7 @@ class Base implements Serializable {
 	 *
 	 * @access public
 	 * @param array $data
-	 * @return void
+	 * @return mixed|void
 	 */
 	public function unserialize($data) {
 		$this->__construct($data);

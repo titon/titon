@@ -127,7 +127,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 */
 	public function buildPath($type = self::TYPE_TPL, $path = null) {
 		$paths = array();
-		$config = $this->config();
+		$config = $this->config->get();
 		$template = $config['template'];
 
 		if ($config['error']) {

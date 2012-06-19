@@ -121,7 +121,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 		});
 
 		$this->setEngine(function($self) {
-			$config = $self->config();
+			$config = $self->config->get();
 			unset($config['args']);
 
 			$engine = new ViewEngine();
