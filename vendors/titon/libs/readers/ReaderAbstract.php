@@ -47,22 +47,23 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @param string $filename
 	 * @param string $path
 	 */
-	public function __construct($filename, $path = APP_CONFIG) {
+	public function __construct($filename = null, $path = APP_CONFIG) {
 		parent::__construct();
 
-		if (substr($path, -1) !== '/') {
-			$path = '/';
+		if ($filename) {
+			$this->setPath($path);
+
+			if (strpos($filename, '/') !== false) {
+				$paths = explode('/', trim($filename, '/'));
+
+				$filename = array_pop($paths);
+				$path = $this->getPath() . implode('/', $paths) . '/';
+
+				$this->setPath($path);
+			}
+
+			$this->setFilename($filename);
 		}
-
-		if (strpos($filename, '/') !== false) {
-			$paths = explode('/', trim($filename, '/'));
-
-			$filename = array_pop($paths);
-			$path = $path . implode('/', $paths) . '/';
-		}
-
-		$this->_filename = Inflector::filename($filename, static::EXT, false);
-		$this->_path = Titon::loader()->ds($path);
 	}
 
 	/**
@@ -73,6 +74,16 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 */
 	public function fileExists() {
 		return file_exists($this->getPath() . $this->getFilename());
+	}
+
+	/**
+	 * Return the file extension for the reader.
+	 *
+	 * @access protected
+	 * @return mixed
+	 */
+	public function getExtension() {
+		return static::EXT;
 	}
 
 	/**
@@ -113,9 +124,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @throws titon\libs\readers\ReaderException
 	 */
 	public function readFile() {
-		$ext = static::EXT;
-
-		return $this->cacheMethod(__METHOD__, $ext, function($self) use ($ext) {
+		return $this->cacheMethod(__METHOD__, $this->getFullPath(), function($self) {
 			if ($self->fileExists()) {
 				$data = $self->parseFile();
 
@@ -124,8 +133,38 @@ abstract class ReaderAbstract extends Base implements Reader {
 				}
 			}
 
-			throw new ReaderException(sprintf('File reader failed to parse %s file %s.', $ext, $self->getFilename()));
+			throw new ReaderException(sprintf('File reader failed to parse %s file %s.', $self->getExtension(), $self->getFilename()));
 		});
+	}
+
+	/**
+	 * Set the filename.
+	 *
+	 * @access public
+	 * @param string $filename
+	 * @return titon\libs\readers\Reader
+	 */
+	public function setFilename($filename) {
+		$this->_filename = Inflector::filename($filename, $this->getExtension(), false);
+
+		return $this;
+	}
+
+	/**
+	 * Set the file path.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @return titon\libs\readers\Reader
+	 */
+	public function setPath($path) {
+		if (substr($path, -1) !== '/') {
+			$path = '/';
+		}
+
+		$this->_path = Titon::loader()->ds($path);
+
+		return $this;
 	}
 
 }

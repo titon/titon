@@ -25,6 +25,14 @@ interface Reader {
 	public function fileExists();
 
 	/**
+	 * Return the file extension for the reader.
+	 *
+	 * @access protected
+	 * @return mixed
+	 */
+	public function getExtension();
+
+	/**
 	 * Return the filename.
 	 *
 	 * @access public
@@ -63,5 +71,23 @@ interface Reader {
 	 * @return array
 	 */
 	public function readFile();
+
+	/**
+	 * Set the filename.
+	 *
+	 * @access public
+	 * @param string $filename
+	 * @return titon\libs\readers\Reader
+	 */
+	public function setFilename($filename);
+
+	/**
+	 * Set the file path.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @return titon\libs\readers\Reader
+	 */
+	public function setPath($path);
 
 }
