@@ -29,7 +29,12 @@ class Event {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_events = array('startup', 'shutdown', 'preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
+	protected $_events = array(
+		'titon.startup', 'titon.shutdown',
+		'dispatch.preDispatch', 'dispatch.postDispatch',
+		'controller.preProcess', 'controller.postProcess',
+		'view.preRender', 'view.postRender'
+	);
 
 	/**
 	 * Listeners that will be executed.
@@ -159,7 +164,7 @@ class Event {
 
 	/**
 	 * Add custom events to the system.
-	 * 
+	 *
 	 * @access public
 	 * @param array $events
 	 * @return titon\core\Event
@@ -167,7 +172,7 @@ class Event {
 	 */
 	public function setup(array $events) {
 		$this->_events = $events + $this->_events;
-		
+
 		return $this;
 	}
 

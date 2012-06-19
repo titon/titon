@@ -139,9 +139,9 @@ class Titon {
 	 */
 	public static function run() {
 		self::startup();
-		self::event()->notify('startup');
+		self::event()->notify('titon.startup');
 		self::dispatch()->run();
-		self::event()->notify('shutdown');
+		self::event()->notify('titon.shutdown');
 		self::shutdown();
 	}
 
