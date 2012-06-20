@@ -130,35 +130,35 @@ class Logger {
 		if (!empty($message)) {
 			switch ($level) {
 				case self::CRITICAL:
-					$type = 'Critical'; 
+					$type = 'Critical';
 				break;
 				case self::ALERT:
-					$type = 'Alert'; 
+					$type = 'Alert';
 				break;
 				case self::WARNING:
-					$type = 'Warning'; 
+					$type = 'Warning';
 				break;
 				case self::NOTICE:
-					$type = 'Notice'; 
+					$type = 'Notice';
 				break;
 				case self::INFO:
-					$type = 'Info'; 
+					$type = 'Info';
 				break;
 				case self::DEBUG:
-					$type = 'Debug'; 
+					$type = 'Debug';
 				break;
 				default:
 					$type = 'Internal';
 				break;
 			}
 
-			if ($level == self::DEBUG) {
+			if ($level === self::DEBUG) {
 				$file = self::DEBUG_LOG;
 			} else {
 				$file = self::ERROR_LOG;
 				$message = '[' . $type . '] ' . $message;
 			}
-			
+
 			file_put_contents(APP_TEMP. $file, $message ."\n", FILE_APPEND | LOCK_EX);
 
 			if ($level >= self::WARNING) {

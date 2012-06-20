@@ -28,7 +28,7 @@ class LocaleRoute extends RouteAbstract {
 	 * @param array $config
 	 */
 	public function __construct($path, array $route = array(), array $config = array()) {
-		if (substr($path, -9) != '/<locale>') {
+		if (substr($path, -9) !== '/<locale>') {
 			$path = '/<locale>' . $path;
 		}
 

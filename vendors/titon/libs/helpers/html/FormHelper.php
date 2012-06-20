@@ -105,7 +105,7 @@ class FormHelper extends HelperAbstract {
 		$selected = $this->_selected($attributes);
 
 		if ($selected !== null) {
-			if (is_array($selected) && in_array($value, $selected) || $value == $selected) {
+			if (is_array($selected) && in_array($value, $selected) || $value === $selected) {
 				$attributes['checked'] = 'checked';
 			}
 		}
@@ -460,7 +460,7 @@ class FormHelper extends HelperAbstract {
 
 		// Form type
 		if (isset($attributes['type'])) {
-			if ($attributes['type'] == 'file') {
+			if ($attributes['type'] === 'file') {
 				$attributes['enctype'] = 'multipart/form-data';
 			}
 			unset($attributes['type']);
@@ -756,7 +756,7 @@ class FormHelper extends HelperAbstract {
 
 		if (!empty($options)) {
 			foreach ($options as $value => $option) {
-				if ($value == 'emptyValue') {
+				if ($value === 'emptyValue') {
 					$value = '';
 				}
 
@@ -772,7 +772,7 @@ class FormHelper extends HelperAbstract {
 					$attributes = array('value' => $value);
 
 					if ($selected !== null) {
-						if (is_array($selected) && in_array($value, $selected) || $value == $selected) {
+						if (is_array($selected) && in_array($value, $selected) || $value === $selected) {
 							$attributes['selected'] = 'selected';
 						}
 					}
@@ -800,7 +800,7 @@ class FormHelper extends HelperAbstract {
 		$attributes = $attributes + $defaults;
 		$input = $attributes['name'];
 
-		if ($this->_model != 'Form') {
+		if ($this->_model !== 'Form') {
 			$attributes['name'] = $this->_model . '.' . $attributes['name'];
 		}
 
@@ -817,7 +817,7 @@ class FormHelper extends HelperAbstract {
 
 		foreach (array('disabled', 'readonly', 'multiple') as $attr) {
 			if (isset($attributes[$attr])) {
-				if ($attributes[$attr] === true || $attributes[$attr] == $attr) {
+				if ($attributes[$attr] === true || $attributes[$attr] === $attr) {
 					$attributes[$attr] = $attr;
 				} else {
 					unset($attributes[$attr]);

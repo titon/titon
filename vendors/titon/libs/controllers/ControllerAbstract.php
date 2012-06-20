@@ -84,7 +84,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 		// Do not include the base controller methods
 		$methods = array_diff(get_class_methods($this), get_class_methods(__CLASS__));
 
-		if (!in_array($action, $methods) || substr($action, 0, 1) == '_') {
+		if (!in_array($action, $methods) || substr($action, 0, 1) === '_') {
 			throw new ControllerException('Your action does not exist, or is not public, or is found within the parent Controller.');
 		}
 

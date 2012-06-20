@@ -94,11 +94,11 @@ class Dispatch {
 			'controller' => '*'
 		);
 
-		if ($scope['module'] != '*') {
+		if ($scope['module'] !== '*') {
 			$scope['module'] = Inflector::slugify($scope['module']);
 		}
 
-		if ($scope['controller'] != '*') {
+		if ($scope['controller'] !== '*') {
 			$scope['controller'] = Inflector::slugify($scope['controller']);
 		}
 

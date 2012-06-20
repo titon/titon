@@ -23,7 +23,7 @@ class Application {
 
 	/**
 	 * List of controllers per module.
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
@@ -104,25 +104,25 @@ class Application {
 	public function setup($module, $path, array $controllers) {
 		if (empty($path)) {
 			throw new CoreException(sprintf('The path for the %s module is required.', $module));
-			
+
 		} else if (!file_exists($path)) {
 			throw new CoreException(sprintf('Module directory does not exist: %s', $path));
 		}
-		
+
 		$path = Titon::loader()->ds($path);
-		
-		if (substr($path, -1) != '/') {
+
+		if (substr($path, -1) !== '/') {
 			$path .= '/';
 		}
-		
+
 		$this->_modules[$module] = array(
 			'name' => $module,
 			'path' => $path,
 			'controllers' => $controllers
 		);
-		
+
 		$this->_controllers[$module] = $controllers;
-		
+
 		return $this;
 	}
 

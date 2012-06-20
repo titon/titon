@@ -151,7 +151,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 			if ($count < 2) {
 				throw new TranslatorException(sprintf('No module or catalog present for %s key.', $key));
 
-			} else if ($count == 2) {
+			} else if ($count === 2) {
 				$catalog = $parts[0];
 				$key = $parts[1];
 

@@ -74,7 +74,7 @@ class GettextTranslator extends TranslatorAbstract {
 
 		$message = dgettext($catalog, $id);
 
-		if ($message != $id) {
+		if ($message !== $id) {
 			$this->_cache[$key] = $message;
 
 			return $message;

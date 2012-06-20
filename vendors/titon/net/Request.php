@@ -6,7 +6,7 @@
  * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
- 
+
 namespace titon\net;
 
 use titon\Titon;
@@ -18,7 +18,7 @@ use titon\libs\traits\Memoizer;
 /**
  * The Request object is the primary source of data and state management for the environment.
  * It extracts and cleans the GET, POST and FILES data from the current HTTP request.
- * 
+ *
  * @package	titon.net
  * @uses	titon\Titon
  * @uses	titon\constant\Http
@@ -26,7 +26,7 @@ use titon\libs\traits\Memoizer;
  */
 class Request extends Base {
 	//use Memoizer;
-	
+
 	/**
 	 * An combined array of $_POST and $_FILES data for the current request.
 	 *
@@ -100,7 +100,7 @@ class Request extends Base {
 		}
 
 		foreach ($this->_accepts('Accept-Charset') as $set) {
-			if (strtolower($charset) == strtolower($set['type'])) {
+			if (strtolower($charset) === strtolower($set['type'])) {
 				return true;
 			}
 		}
@@ -139,7 +139,7 @@ class Request extends Base {
 	public function clientIp() {
 		return $this->cacheMethod(__FUNCTION__, null, function($self) {
 			foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
-				if (($address = $self->env($key)) != null) {
+				if (($address = $self->env($key)) !== null) {
 					return $address;
 				}
 			}
@@ -147,7 +147,7 @@ class Request extends Base {
 			return null;
 		});
 	}
-	
+
 	/**
 	 * Get the value of a header by searching through the HTTP headers, $_SERVER and $_ENV globals.
 	 *
@@ -204,7 +204,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isAjax() {
-		return (strtolower($this->env('HTTP_X_REQUESTED_WITH')) == 'xmlhttprequest');
+		return (strtolower($this->env('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest');
 	}
 
 	/**
@@ -277,7 +277,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isMethod($type = 'post') {
-		return (strtolower($type) == $this->method());
+		return (strtolower($type) === $this->method());
 	}
 
 	/**
@@ -324,7 +324,7 @@ class Request extends Base {
 	 */
 	public function isSecure() {
 		return $this->cacheMethod(__FUNCTION__, null, function($self) {
-			return ($self->env('HTTPS') == 'on' || $self->env('SERVER_PORT') == 443);
+			return ($self->env('HTTPS') === 'on' || $self->env('SERVER_PORT') === 443);
 		});
 	}
 
@@ -388,7 +388,7 @@ class Request extends Base {
 	 *
 	 * @link http://php.net/get_browser
 	 * @link http://php.net/manual/misc.configuration.php#ini.browscap
-	 * 
+	 *
 	 * @access public
 	 * @param boolean $explicit
 	 * @return array|string
@@ -412,10 +412,10 @@ class Request extends Base {
 			return $agent;
 		});
 	}
-	
+
 	/**
 	 * Lazy loading functionality for extracting Accept header information and parsing it.
-	 * 
+	 *
 	 * @access protected
 	 * @param string $header
 	 * @return array
@@ -439,7 +439,7 @@ class Request extends Base {
 					);
 				}
 			}
-			
+
 			return $data;
 		});
 	}

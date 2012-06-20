@@ -20,17 +20,17 @@ use titon\utility\Inflector;
  * @uses	titon\utility\Inflector
  */
 class Environment {
-	
+
 	/**
 	 * Types of environments.
 	 */
 	const DEVELOPMENT = 1;
 	const STAGING = 2;
 	const PRODUCTION = 3;
-	
+
 	/**
 	 * Currently active environment.
-	 * 
+	 *
 	 * @access protected
 	 * @var string
 	 */
@@ -77,11 +77,11 @@ class Environment {
 	 */
 	public function current($key = null) {
 		$environment = $this->_environments[$this->_current];
-		
+
 		if (isset($environment[$key])) {
 			return $environment[$key];
 		}
-		
+
 		return $environment;
 	}
 
@@ -127,46 +127,46 @@ class Environment {
 			include_once $path;
 		}
 	}
-	
+
 	/**
 	 * Does the current environment match the passed key?
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
 	 */
 	public function is($key) {
-		return ($this->current('name') == $key);
+		return ($this->current('name') === $key);
 	}
-	
+
 	/**
 	 * Is the current environment development?
-	 * 
+	 *
 	 * @access public
 	 * @return boolean
 	 */
 	public function isDevelopment() {
-		return ($this->current('type') == self::DEVELOPMENT);
+		return ($this->current('type') === self::DEVELOPMENT);
 	}
-	
+
 	/**
 	 * Is the current environment production?
-	 * 
+	 *
 	 * @access public
 	 * @return boolean
 	 */
 	public function isProduction() {
-		return ($this->current('type') == self::PRODUCTION);
+		return ($this->current('type') === self::PRODUCTION);
 	}
-	
+
 	/**
 	 * Is the current environment staging?
-	 * 
+	 *
 	 * @access public
 	 * @return boolean
 	 */
 	public function isStaging() {
-		return ($this->current('type') == self::STAGING);
+		return ($this->current('type') === self::STAGING);
 	}
 
 	/**
@@ -184,11 +184,11 @@ class Environment {
 		if (empty($hosts)) {
 			throw new CoreException(sprintf('A host mapping is required for the %s environment.', $key));
 		}
-		
-		if ($type != self::DEVELOPMENT && $type != self::PRODUCTION && $type != self::STAGING) {
+
+		if ($type !== self::DEVELOPMENT && $type !== self::PRODUCTION && $type !== self::STAGING) {
 			throw new CoreException(sprintf('Invalid environment type detected for %s.', $key));
 		}
-		
+
 		$this->_environments[$key] = array(
 			'name' => $key,
 			'type' => $type,

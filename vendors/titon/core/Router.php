@@ -105,7 +105,7 @@ class Router {
 		if (!empty($route['ext'])) {
 			$path[] = $route['action'] . '.' . $route['ext'];
 
-		} else if ($route['action'] != 'index' || !empty($route['params'])) {
+		} else if ($route['action'] !== 'index' || !empty($route['params'])) {
 			$path[] = $route['action'];
 		}
 
@@ -200,7 +200,7 @@ class Router {
 		if (is_array($url)) {
 			if (isset($url['slug'])) {
 				$route = $this->slugs($url['slug']);
-				
+
 				if ($route) {
 					unset($url['slug']);
 					$route = $url + $route;
@@ -213,11 +213,11 @@ class Router {
 		} else {
 			$route = $url;
 		}
-		
+
 		if (is_array($route)) {
 			$route = $this->build($route);
 		}
-		
+
 		return $route;
 	}
 
@@ -240,7 +240,7 @@ class Router {
 
 		// Store the current URL and query as router segments
 		$this->_segments = array_merge(parse_url($_SERVER['REQUEST_URI']), array(
-			'scheme' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'https' : 'http',
+			'scheme' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http',
 			'query' => $_GET,
 			'host' => $_SERVER['HTTP_HOST'],
 			'path' => $path

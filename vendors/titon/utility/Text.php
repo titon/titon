@@ -51,11 +51,11 @@ class Text {
 	public static function listing($items, $and = 'and') {
 		if (is_array($items)) {
 			$lastItem = array_pop($items);
-			
-			if (count($items) == 1) {
+
+			if (count($items) === 1) {
 				return $lastItem;
 			}
-			
+
 			$items = implode(', ', $items);
 			$items = $items . ' ' . $and . ' ' . $lastItem;
 		}

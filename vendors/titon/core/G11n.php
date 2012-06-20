@@ -236,7 +236,7 @@ class G11n {
 		}
 
 		// Set current to the fallback if none found
-		if ($current == null) {
+		if ($current === null) {
 			$current = $this->_fallback;
 		}
 
@@ -259,7 +259,7 @@ class G11n {
 	public function is($key) {
 		$locale = $this->current()->getLocale();
 
-		return ($locale['key'] == $key || $locale['id'] == $key);
+		return ($locale['key'] === $key || $locale['id'] === $key);
 	}
 
 	/**

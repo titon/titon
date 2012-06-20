@@ -12,7 +12,7 @@ namespace titon\base\types;
 use titon\base\types\Type;
 
 /**
- * The String type allows for the modification and manipulation of a string as if it was an object. 
+ * The String type allows for the modification and manipulation of a string as if it was an object.
  * One can also modify the string using a series of chained method calls that sequentially alter the initial value.
  *
  * @package	titon.base.types
@@ -52,7 +52,7 @@ class String extends Type {
 	 * @access public
 	 * @param string $value
 	 * @return titon\base\types\String
-	 * @chainable 
+	 * @chainable
 	 */
 	public function append($value) {
 		$this->_value .= (string) $value;
@@ -116,7 +116,7 @@ class String extends Type {
 
 			return strcmp($this->_value, $value);
 		}
-		
+
 		if ($length > 0) {
 			return strncasecmp($this->_value, $value, (int) $length);
 		}
@@ -161,7 +161,7 @@ class String extends Type {
 	 * @return boolean
 	 */
 	public function endsWith($value) {
-		return ($this->extract(-strlen($value)) == $value);
+		return ($this->extract(-strlen($value)) === $value);
 	}
 
 	/**
@@ -228,7 +228,7 @@ class String extends Type {
 	 * @access public
 	 * @return boolean
 	 */
-	public function isBlank() { 
+	public function isBlank() {
 		return (trim($this->_value) === '');
 	}
 
@@ -238,7 +238,7 @@ class String extends Type {
 	 * @access public
 	 * @return boolean
 	 */
-	public function isEmpty() { 
+	public function isEmpty() {
 		return ($this->_value === '');
 	}
 
@@ -248,7 +248,7 @@ class String extends Type {
 	 * @access public
 	 * @return boolean
 	 */
-	public function isNotBlank() { 
+	public function isNotBlank() {
 		return !$this->isBlank();
 	}
 
@@ -258,7 +258,7 @@ class String extends Type {
 	 * @access public
 	 * @return boolean
 	 */
-	public function isNotEmpty() { 
+	public function isNotEmpty() {
 		return !$this->isEmpty();
 	}
 
@@ -419,7 +419,7 @@ class String extends Type {
 	 * @return boolean
 	 */
 	public function startsWith($value) {
-		return ($this->extract(0, strlen($value)) == $value);
+		return ($this->extract(0, strlen($value)) === $value);
 	}
 
 	/**

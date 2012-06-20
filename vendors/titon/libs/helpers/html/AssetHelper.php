@@ -14,7 +14,7 @@ use titon\libs\helpers\HelperAbstract;
 
 /**
  * The AssetHelper aids in the process of including external stylesheets and scripts.
- * 
+ *
  * @package	titon.libs.helpers.html
  * @uses	titon\Titon
  */
@@ -45,7 +45,7 @@ class AssetHelper extends HelperAbstract {
 	 * @return void
 	 */
 	public function addScript($script, $order = null) {
-		if (substr($script, -3) != '.js') {
+		if (substr($script, -3) !== '.js') {
 			$script .= '.js';
 		}
 
@@ -66,7 +66,7 @@ class AssetHelper extends HelperAbstract {
 	 * @return void
 	 */
 	public function addStylesheet($sheet, $media = 'screen', $order = null) {
-		if (substr($sheet, -4) != '.css') {
+		if (substr($sheet, -4) !== '.css') {
 			$sheet .= '.css';
 		}
 
@@ -82,7 +82,7 @@ class AssetHelper extends HelperAbstract {
 
 	/**
 	 * Attach the HtmlHelper.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */

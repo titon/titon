@@ -143,7 +143,7 @@ class Session extends Base {
 		ini_set('session.use_only_cookies', true);
 		ini_set('session.cookie_domain', $segments['host']);
 
-		if ($segments['scheme'] == 'https') {
+		if ($segments['scheme'] === 'https') {
 			ini_set('session.cookie_secure', true);
 		}
 
@@ -253,7 +253,7 @@ class Session extends Base {
 		if ($this->has('Security')) {
 			$session = $this->get('Security');
 
-			if ($this->config->checkUserAgent && $session['agent'] != md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])) {
+			if ($this->config->checkUserAgent && $session['agent'] !== md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])) {
 				$this->destroy();
 				$this->_startup();
 			}

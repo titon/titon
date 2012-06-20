@@ -160,7 +160,7 @@ abstract class EngineAbstract extends Base implements Engine {
 			case self::TYPE_INCLUDE:
 				$path = $this->_preparePath($path);
 
-				if (substr($path, -4) == '.tpl') {
+				if (substr($path, -4) === '.tpl') {
 					$path = substr($path, 0, (strlen($path) - 4));
 				}
 
@@ -225,7 +225,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return string
 	 */
 	public function data($key = null) {
-		if ($key == null) {
+		if ($key === null) {
 			return $this->_data;
 		}
 
@@ -328,7 +328,7 @@ abstract class EngineAbstract extends Base implements Engine {
 
 		} else if (is_array($options)) {
 			foreach ($options as $key => $value) {
-				if ($key == 'template') {
+				if ($key === 'template') {
 					if (is_array($value)) {
 						$this->config->template = $value + $this->config->template;
 					} else {
@@ -352,7 +352,7 @@ abstract class EngineAbstract extends Base implements Engine {
 		return $this->cacheMethod(__FUNCTION__, $path, function($self) use ($path) {
 			$path = Titon::loader()->ds($path);
 
-			if (substr($path, -4) == '.tpl') {
+			if (substr($path, -4) === '.tpl') {
 				$path = substr($path, 0, (strlen($path) - 4));
 			}
 

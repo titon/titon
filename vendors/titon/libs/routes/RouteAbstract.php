@@ -128,7 +128,7 @@ abstract class RouteAbstract extends Base implements Route {
 			return $this->_compiled;
 		}
 
-		$path = ($this->_path != '/') ? rtrim($this->_path, '/') : $this->_path;
+		$path = ($this->_path !== '/') ? rtrim($this->_path, '/') : $this->_path;
 		$compiled = str_replace(array('/', '.'), array('\/', '\.'), $path);
 		$patterns = $this->config->patterns;
 
@@ -141,16 +141,16 @@ abstract class RouteAbstract extends Base implements Route {
 					$m2 = isset($match[2]) ? $match[2] : '';
 					$m3 = isset($match[3]) ? $match[3] : '';
 
-					if ($m1 == '{' && $m3 == '}') {
+					if ($m1 === '{' && $m3 === '}') {
 						$compiled = str_replace($match[0], self::ALPHA, $compiled);
 
-					} else if ($m1 == '[' && $m3 == ']') {
+					} else if ($m1 === '[' && $m3 === ']') {
 						$compiled = str_replace($match[0], self::NUMERIC, $compiled);
 
-					} else if ($m1 == '(' && $m3 == ')') {
+					} else if ($m1 === '(' && $m3 === ')') {
 						$compiled = str_replace($match[0], self::WILDCARD, $compiled);
 
-					} else if ($m1 == '<' && $m3 == '>' && isset($patterns[$m2])) {
+					} else if ($m1 === '<' && $m3 === '>' && isset($patterns[$m2])) {
 						$compiled = str_replace($match[0], $patterns[$m2], $compiled);
 					}
 
@@ -224,7 +224,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @return boolean
 	 */
 	public function isMatch($url) {
-		if ($this->_path == $url) {
+		if ($this->_path === $url) {
 			return true;
 		}
 
@@ -272,7 +272,7 @@ abstract class RouteAbstract extends Base implements Route {
 			}
 
 			// Detect query string and parameters
-			if (!empty($matches[0]) && $matches[0] != '/') {
+			if (!empty($matches[0]) && $matches[0] !== '/') {
 				$parts = explode('/', trim($matches[0], '/'));
 
 				foreach ($parts as $part) {

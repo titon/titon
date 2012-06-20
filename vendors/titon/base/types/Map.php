@@ -197,7 +197,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 
 	/**
 	 * Checks if a value exists in the array.
-	 * 
+	 *
 	 * @access public
 	 * @param mixed $value
 	 * @return boolean
@@ -442,7 +442,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 
 					} else if ($default instanceof Closure) {
 						$this->_value[$key] = $default($key, $value);
-						
+
 					} else {
 						$this->_value[$key] = $default;
 					}
@@ -490,7 +490,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 
 		if ($this->isNotEmpty()) {
 			foreach ($this->_value as $index => $value) {
-				if ($index == $key) {
+				if ($index === $key) {
 					return $count;
 				}
 
@@ -520,10 +520,10 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	public function isNotEmpty() {
 		return !$this->isEmpty();
 	}
-	
+
 	/**
 	 * Return all the keys or a subset of the keys of the array.
-	 * 
+	 *
 	 * @access public
 	 * @return array
 	 */
@@ -544,14 +544,14 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 			$counter = 1;
 
 			foreach ($this->_value as $value) {
-				if ($counter == $length) {
+				if ($counter === $length) {
 					return $value;
 				}
 
 				++$counter;
 			}
 		}
-		
+
 		return array_pop($this->_value);
 	}
 
@@ -568,7 +568,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 
 		if ($this->isNotEmpty()) {
 			foreach ($this->_value as $index => $value) {
-				if ($index == $key) {
+				if ($index === $key) {
 					$last = $count;
 				}
 
@@ -751,7 +751,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 		if (!$length && $length !== 0) {
 			$length = abs($offset);
 		}
-		
+
 		return array_slice($this->_value, (int) $offset, (int) $length, $preserve);
 	}
 
@@ -890,12 +890,12 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	public function splice($offset, $length, array $replacement) {
 		return array_splice($this->_value, (int) $offset, (int) $length, $replacement);
 	}
-	
+
 	/**
 	 * Calculate the sum of values in the array.
-	 * 
+	 *
 	 * @access public
-	 * @return int 
+	 * @return int
 	 */
 	public function sum() {
 		return array_sum($this->_value);
@@ -920,26 +920,26 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 			$key = $paths[0];
 
 			// Within the last path
-			if ($total == 1) {
-				if ($command == self::INSERT) {
+			if ($total === 1) {
+				if ($command === self::INSERT) {
 					$search[$key] = $value;
 
-				} else if ($command == self::REMOVE) {
+				} else if ($command === self::REMOVE) {
 					unset($search[$key]);
 
-				} else if ($command == self::EXISTS) {
+				} else if ($command === self::EXISTS) {
 					return isset($search[$key]);
 
-				} else if ($command == self::EXTRACT) {
+				} else if ($command === self::EXTRACT) {
 					return $search[$key] ?: null;
 				}
 
 			// Break out of unexistent paths early
 			} else if (!is_array($search[$key]) && $command !== self::INSERT) {
-				if ($command == self::EXISTS) {
+				if ($command === self::EXISTS) {
 					return false;
 
-				} else if ($command == self::EXTRACT) {
+				} else if ($command === self::EXTRACT) {
 					return null;
 
 				} else {

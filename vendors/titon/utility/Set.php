@@ -140,7 +140,7 @@ class Set {
 			$data[$path] = self::traverse(self::EXTRACT, $set, $path);
 		}
 
-		if (count($data) == 1) {
+		if (count($data) === 1) {
 			return $data[$paths[0]];
 		} else {
 			return $data;
@@ -542,16 +542,16 @@ class Set {
 			$key = $paths[0];
 
 			// Within the last path
-			if ($total == 1) {
+			if ($total === 1) {
 				if ($command === self::INSERT) {
 					$search[$key] = $value;
 
 				} else if ($command === self::REMOVE) {
 					unset($search[$key]);
-					
+
 				} else if ($command === self::EXISTS) {
 					return isset($search[$key]);
-					
+
 				} else if ($command === self::EXTRACT) {
 					return isset($search[$key]) ? $search[$key] : null;
 				}
@@ -560,7 +560,7 @@ class Set {
 			} else if (isset($search[$key]) && !is_array($search[$key]) && $command !== self::INSERT) {
 				if ($command === self::EXISTS) {
 					return false;
-					
+
 				} else if ($command === self::EXTRACT) {
 					return null;
 

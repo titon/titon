@@ -120,7 +120,7 @@ class Loader {
 
 			if (file_exists($source)) {
 				include_once $source;
-				
+
 				return true;
 			}
 		}
@@ -230,7 +230,7 @@ class Loader {
 		$file = array_pop($dirs);
 		$path = implode('/', $dirs) . '/' . str_replace('_', '/', $file);
 
-		if ($ext && substr($path, -strlen($ext)) != $ext) {
+		if ($ext && substr($path, -strlen($ext)) !== $ext) {
 			$path .= '.' . $ext;
 		}
 

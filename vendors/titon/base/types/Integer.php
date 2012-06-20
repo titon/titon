@@ -28,7 +28,7 @@ class Integer extends Type {
 	 * @var int
 	 */
 	protected $_base = 10;
-	
+
 	/**
 	 * Store the number value and base.
 	 *
@@ -69,7 +69,7 @@ class Integer extends Type {
 	 * @return int
 	 */
 	public function bitCount() {
-		$value = ($this->_base != 2) ? $this->toBinary() : $this->_value;
+		$value = ($this->_base !== 2) ? $this->toBinary() : $this->_value;
 
 		return substr_count($value, '1');
 	}
@@ -91,7 +91,7 @@ class Integer extends Type {
 	/**
 	 * Compares against another number. If both values are equal, 0 is returned,
 	 * if base value is greater 1 is returned, if base value is less -1 is returned.
-	 * 
+	 *
 	 * @access public
 	 * @param int $no
 	 * @return boolean
@@ -308,7 +308,7 @@ class Integer extends Type {
 		if ($this->_value > $max) {
 			$this->_value = $max;
 		}
-		
+
 		return $this;
 	}
 
@@ -336,7 +336,7 @@ class Integer extends Type {
 	 */
 	public function modulus($no) {
 		$this->_value = $this->_value % $no;
-		
+
 		return $this;
 	}
 
@@ -387,7 +387,7 @@ class Integer extends Type {
 	public function reverse() {
 		$value = $this->_value;
 
-		if ($this->_base != 2) {
+		if ($this->_base !== 2) {
 			$value = $this->toBinary();
 		}
 

@@ -67,7 +67,7 @@ class FileSystemStorage extends StorageAbstract {
 		}
 
 		while (($file = $dir->read()) !== false) {
-			if ($file == '.' || $file == '..') {
+			if ($file === '.' || $file === '..') {
 				continue;
 			}
 
