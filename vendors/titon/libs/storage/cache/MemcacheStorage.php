@@ -166,7 +166,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @param mixed $expires
 	 * @return boolean
 	 */
-	public function set($key, $value = null, $expires = null) {
+	public function set($key, $value, $expires = null) {
 		return $this->connection->set($this->key($key), $this->serialize($value), $this->config->compress, $this->expires($expires));
 	}
 

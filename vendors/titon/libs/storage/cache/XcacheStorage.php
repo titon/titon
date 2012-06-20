@@ -150,7 +150,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @param mixed $expires
 	 * @return boolean
 	 */
-	public function set($key, $value = null, $expires = null) {
+	public function set($key, $value, $expires = null) {
 		$expires = ($this->expires($expires) - time()) / 60;
 
 		return xcache_set($this->key($key), $this->serialize($value), $expires);

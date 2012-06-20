@@ -12,15 +12,15 @@ namespace titon\libs\storage\cache;
 use titon\libs\storage\StorageAbstract;
 
 /**
- * A lightweight caching engine that stores data in memory for the duration of the HTTP request. 
+ * A lightweight caching engine that stores data in memory for the duration of the HTTP request.
  *
  * @package	titon.libs.storage.cache
  */
 class MemoryStorage extends StorageAbstract {
-	
+
 	/**
 	 * A container for all the cached items.
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
@@ -28,7 +28,7 @@ class MemoryStorage extends StorageAbstract {
 
 	/**
 	 * Decrement a value within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param int $step
@@ -40,25 +40,25 @@ class MemoryStorage extends StorageAbstract {
 		} else {
 			$this->set($key, (0 - (int) $step));
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Empty the cache.
-	 * 
+	 *
 	 * @access public
 	 * @return boolean
 	 */
 	public function flush() {
 		$this->_cache = array();
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Get data from the cache if it exists.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return mixed
@@ -68,10 +68,10 @@ class MemoryStorage extends StorageAbstract {
 
 		return $this->unserialize($value);
 	}
-	
+
 	/**
 	 * Check if the item exists within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
@@ -82,7 +82,7 @@ class MemoryStorage extends StorageAbstract {
 
 	/**
 	 * Increment a value within the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param int $step
@@ -94,13 +94,13 @@ class MemoryStorage extends StorageAbstract {
 		} else {
 			$this->set($key, (0 + (int) $step));
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Remove the item if it exists and return true, else return false.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return boolean
@@ -108,26 +108,26 @@ class MemoryStorage extends StorageAbstract {
 	public function remove($key) {
 		if ($this->has($key)) {
 			unset($this->_cache[$key]);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Set data to the cache.
-	 * 
+	 *
 	 * @access public
 	 * @param string|array $key
-	 * @param mixed $value 
+	 * @param mixed $value
 	 * @param mixed $expires
 	 * @return boolean
 	 */
-	public function set($key, $value = null, $expires = null) {
+	public function set($key, $value, $expires = null) {
 		$this->_cache[$key] = $this->serialize($value);
-		
+
 		return true;
 	}
-	
+
 }
