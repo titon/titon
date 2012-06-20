@@ -37,7 +37,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @access protected
 	 * @return mixed
 	 */
-	public function extension() {
+	public function getExtension() {
 		return static::EXT;
 	}
 

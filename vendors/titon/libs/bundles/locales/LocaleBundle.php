@@ -49,7 +49,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return mixed
 	 */
 	public function getFormats($key = null) {
-		$data = $this->get('formats');
+		$data = $this->loadResource('formats');
 
 		if ($key) {
 			return isset($data[$key]) ? $data[$key] : null;
@@ -66,7 +66,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return mixed
 	 */
 	public function getInflections($key = null) {
-		$data = $this->get('inflections');
+		$data = $this->loadResource('inflections');
 
 		if ($key) {
 			return isset($data[$key]) ? $data[$key] : null;
@@ -83,7 +83,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return mixed
 	 */
 	public function getLocale($key = null) {
-		$data = $this->get('locale');
+		$data = $this->loadResource('locale');
 
 		if ($key) {
 			return isset($data[$key]) ? $data[$key] : null;
@@ -110,7 +110,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return mixed
 	 */
 	public function getValidations($key = null) {
-		$data = $this->get('validations');
+		$data = $this->loadResource('validations');
 
 		if ($key) {
 			return isset($data[$key]) ? $data[$key] : null;
@@ -144,18 +144,17 @@ class LocaleBundle extends BundleAbstract {
 			if ($registry->has($registryKey)) {
 				$parent = $registry->get($registryKey);
 			} else {
-				$parent = $registry->set(new LocaleBundle(array(
-					'bundle' => $locale['parent']
-				)), $registryKey);
+				$parent = $registry->set(new LocaleBundle(array('bundle' => $locale['parent'])), $registryKey);
 			}
 
 			if ($parent instanceof LocaleBundle) {
 				$locale = $locale + $parent->getLocale();
+
 				$this->_parent = $parent;
 			}
 		}
 
-		$this->_config['locale'] = $locale;
+		$this->_data['locale'] = $locale;
 	}
 
 	/**
@@ -163,21 +162,15 @@ class LocaleBundle extends BundleAbstract {
 	 * If the bundle has a parent, merge its content with the child.
 	 *
 	 * @access public
-	 * @param string $key
+	 * @param string $resource
 	 * @return array
 	 */
-	public function get($key) {
-		if (isset($this->_config[$key])) {
-			return $this->_config[$key];
-		}
-
-		$data = parent::get($key);
+	public function loadResource($resource) {
+		$data = parent::loadResource($resource);
 
 		if ($parent = $this->getParent()) {
-			$data = $data + $parent->get($key);
+			$data = array_merge($parent->loadResource($resource), $data);
 		}
-
-		$this->_config[$key] = $data;
 
 		return $data;
 	}

@@ -9,21 +9,30 @@
 
 namespace titon\libs\bundles;
 
+use titon\Titon;
 use titon\base\Base;
 use titon\libs\bundles\Bundle;
 use titon\libs\bundles\BundleException;
 use titon\libs\readers\Reader;
-use titon\libs\traits\Memoizer;
 use titon\utility\Inflector;
 
 /**
- * @todo
+ * Abstract class that handles the loading of Readers and file locations.
+ * The bundle can then search for a resource by name by cycling through each location
+ * and parsing out the files contents.
  *
  * @package	titon.libs.bundles
  * @abstract
  */
 abstract class BundleAbstract extends Base implements Bundle {
-	use Memoizer;
+
+	/**
+	 * Cached file contents by resource name.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_data = array();
 
 	/**
 	 * Resource locations.
@@ -58,7 +67,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 				$locations = str_replace('{' . $key . '}', $value, $locations);
 			}
 
-			$this->_locations[] = $locations;
+			$this->_locations[] = Titon::loader()->ds($locations, true);
 		}
 
 		return $this;
@@ -72,7 +81,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @return titon\libs\bundles\Bundle
 	 */
 	public function addReader(Reader $reader) {
-		$this->_readers[$reader->extension()] = $reader;
+		$this->_readers[$reader->getExtension()] = $reader;
 
 		return $this;
 	}
@@ -113,23 +122,27 @@ abstract class BundleAbstract extends Base implements Bundle {
 			throw new BundleException('A Reader must be loaded to read Bundle resources.');
 		}
 
-		return $this->cacheMethod(__FUNCTION__, $resource, function($self) use ($resource) {
-			$contents = array();
+		if (isset($this->_data[$resource])) {
+			return $this->_data[$resource];
+		}
 
-			foreach ($self->getLocations() as $location) {
-				foreach ($self->getReaders() as $ext => $reader) {
-					$path = $location . Inflector::filename($resource, $ext, false);
+		$contents = array();
 
-					if (file_exists($path)) {
-						if ($data = $reader->read($path)) {
-							$contents = array_merge($contents, $data);
-						}
+		foreach ($this->getLocations() as $location) {
+			foreach ($this->getReaders() as $ext => $reader) {
+				$path = $location . Inflector::filename($resource, $ext, false);
+
+				if (file_exists($path)) {
+					if ($data = $reader->read($path)) {
+						$contents = array_merge($contents, $data);
 					}
 				}
 			}
+		}
 
-			return $contents;
-		});
+		$this->_data[$resource] = $contents;
+
+		return $contents;
 	}
 
 }

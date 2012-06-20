@@ -22,7 +22,7 @@ interface Reader {
 	 * @access protected
 	 * @return mixed
 	 */
-	public function extension();
+	public function getExtension();
 
 	/**
 	 * Parse the file contents.
