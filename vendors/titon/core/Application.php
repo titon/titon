@@ -53,6 +53,7 @@ class Application {
 	 * @access public
 	 * @param string $module
 	 * @return array
+	 * @throws titon\core\CoreException
 	 */
 	public function getModule($module) {
 		if (isset($this->_modules[$module])) {
@@ -109,15 +110,9 @@ class Application {
 			throw new CoreException(sprintf('Module directory does not exist: %s', $path));
 		}
 
-		$path = Titon::loader()->ds($path);
-
-		if (substr($path, -1) !== '/') {
-			$path .= '/';
-		}
-
 		$this->_modules[$module] = array(
 			'name' => $module,
-			'path' => $path,
+			'path' => Titon::loader()->ds($path, true),
 			'controllers' => $controllers
 		);
 

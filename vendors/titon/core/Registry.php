@@ -111,6 +111,7 @@ class Registry {
 	 * @access public
 	 * @param string $key
 	 * @return object
+	 * @throws titon\core\CoreException
 	 */
 	public function &get($key) {
 		if ($this->has($key)) {
@@ -169,7 +170,7 @@ class Registry {
 	 */
 	public function set($object, $key = null) {
 		if (!is_object($object)) {
-			throw new CoreException('The object passed must be instantiated.');
+			throw new CoreException('The object to register must be instantiated.');
 		}
 
 		if (!$key) {

@@ -43,9 +43,11 @@ class Environment {
 	 * @var array
 	 */
 	protected $_environments = array(
-		'name' => 'dev',
-		'type' => self::DEVELOPMENT,
-		'hosts' => array('localhost', '127.0.0.1', '::1')
+		'dev' => array(
+			'name' => 'dev',
+			'type' => self::DEVELOPMENT,
+			'hosts' => array('localhost', '127.0.0.1', '::1')
+		)
 	);
 
 	/**

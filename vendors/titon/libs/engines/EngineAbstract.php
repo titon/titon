@@ -186,7 +186,7 @@ abstract class EngineAbstract extends Base implements Engine {
 					'views',
 					'public',
 					$template['controller'],
-					Titon::loader()->ds($template['action'])
+					Titon::loader()->ds($template['action'], true)
 				);
 
 				$path  = APP_MODULES . implode('/', $parts);

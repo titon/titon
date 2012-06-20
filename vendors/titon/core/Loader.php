@@ -100,10 +100,17 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string $path
+	 * @param boolean $endSlash
 	 * @return string
 	 */
-	public function ds($path) {
-		return str_replace('\\', '/', $path);
+	public function ds($path, $endSlash = false) {
+		$path = str_replace('\\', '/', $path);
+
+		if ($endSlash && substr($path, -1) !== '/') {
+			$path .= '/';
+		}
+
+		return $path;
 	}
 
 	/**
