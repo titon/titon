@@ -14,7 +14,7 @@ use titon\libs\bundles\Bundle;
 use titon\libs\bundles\BundleException;
 use titon\libs\readers\Reader;
 use titon\libs\traits\Memoizer;
-use \DirectoryIterator;
+use titon\utility\Inflector;
 
 /**
  * @todo
@@ -42,67 +42,94 @@ abstract class BundleAbstract extends Base implements Bundle {
 	protected $_readers = array();
 
 	/**
-	 * Add a file reader to use.
+	 * Add a folder location to use during the lookup cycle.
+	 *
+	 * @access public
+	 * @param array|string $locations
+	 * @return titon\libs\bundles\Bundle
+	 */
+	public function addLocation($locations) {
+		if (is_array($locations)) {
+			foreach ($locations as $location) {
+				$this->addLocation($location);
+			}
+		} else {
+			foreach ($this->config->get() as $key => $value) {
+				$locations = str_replace('{' . $key . '}', $value, $locations);
+			}
+
+			$this->_locations[] = $locations;
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Add a file reader to use for resource parsing.
 	 *
 	 * @access public
 	 * @param titon\libs\readers\Reader $reader
 	 * @return titon\libs\bundles\Bundle
 	 */
 	public function addReader(Reader $reader) {
-		$this->_readers[$reader->getExtension()] = $reader;
+		$this->_readers[$reader->extension()] = $reader;
 
 		return $this;
 	}
 
+	/**
+	 * Return all defined locations.
+	 *
+	 * @access public
+	 * @return array
+	 */
 	public function getLocations() {
 		return $this->_locations;
 	}
 
+	/**
+	 * Return all loaded Readers.
+	 *
+	 * @access public
+	 * @return array
+	 */
 	public function getReaders() {
 		return $this->_readers;
 	}
 
+	/**
+	 * Parse the contents of every file that matches the resource name.
+	 * Begin by looping through all resource locations and all Readers.
+	 * If a resource is found that matches the name and a loaded Reader extension,
+	 * parse the file and merge its contents with the previous resource of the same name.
+	 *
+	 * @access public
+	 * @param string $resource
+	 * @return array
+	 * @throws titon\libs\bundles\BundleException
+	 */
 	public function loadResource($resource) {
 		if (empty($this->_readers)) {
-			throw new BundleException('A reader must be loaded to read bundle resources.');
+			throw new BundleException('A Reader must be loaded to read Bundle resources.');
 		}
 
 		return $this->cacheMethod(__FUNCTION__, $resource, function($self) use ($resource) {
 			$contents = array();
 
 			foreach ($self->getLocations() as $location) {
-				foreach ($self->getReaders() as $reader) {
-					$reader->setPath($location)->setFilename($resource);
+				foreach ($self->getReaders() as $ext => $reader) {
+					$path = $location . Inflector::filename($resource, $ext, false);
 
-					if ($reader->fileExists()) {
-						$contents = array_merge($contents, $reader->readFile());
+					if (file_exists($path)) {
+						if ($data = $reader->read($path)) {
+							$contents = array_merge($contents, $data);
+						}
 					}
 				}
 			}
 
 			return $contents;
 		});
-	}
-
-	/**
-	 * Set the folder locations to use for cycling through.
-	 *
-	 * @access public
-	 * @param array $locations
-	 * @return titon\libs\bundles\Bundle
-	 */
-	public function setLocations(array $locations) {
-		$config = $this->config->get();
-
-		foreach ($locations as $location) {
-			foreach ($config as $key => $value) {
-				$location = str_replace('{' . $key . '}', $value, $location);
-			}
-
-			$this->_locations[] = $location;
-		}
-
-		return $this;
 	}
 
 }

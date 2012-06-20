@@ -13,7 +13,7 @@ namespace titon\utility;
  * String and grammar inflection. Converts strings to a certain format. Camel cased, singular, plural etc.
  *
  * @package	titon.utility
- * 
+ *
  * @link	http://php.net/manual/book.mbstring.php
  */
 class Inflector {
@@ -48,15 +48,15 @@ class Inflector {
 		}
 
 		$path = self::camelize($string);
-		
+
 		if (!$capitalize) {
 			$path = lcfirst($path);
 		}
 
-		if (substr($path, -(strlen($ext) + 1)) != '.' . $ext) {
+		if (substr($path, -(strlen($ext) + 1)) !== '.' . $ext) {
 			$path .= '.' . $ext;
 		}
-		
+
 		return $path;
 	}
 

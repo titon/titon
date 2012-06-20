@@ -9,19 +9,20 @@
 
 namespace titon\libs\translators;
 
+use titon\libs\readers\Reader;
 use titon\libs\storage\Storage;
 
 /**
  * Interface for G11N string translators.
- * 
+ *
  * @package	titon.libs.translators
  */
 interface Translator {
 
 	/**
-	 * Locate the key within the catalog. If the catalog has not been loaded, 
+	 * Locate the key within the catalog. If the catalog has not been loaded,
 	 * load it and cache the collection of strings.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return string
@@ -40,12 +41,22 @@ interface Translator {
 
 	/**
 	 * Parse out the module, catalog and key for string lookup.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return string
 	 */
 	public function parseKey($key);
+
+	/**
+	 * Set the file reader to use for resource parsing.
+	 *
+	 * @access public
+	 * @param titon\libs\readers\Reader $reader
+	 * @return titon\libs\translators\Translator
+	 * @chainable
+	 */
+	public function setReader(Reader $reader);
 
 	/**
 	 * Set the storage engine to use for catalog caching.
@@ -56,15 +67,15 @@ interface Translator {
 	 * @chainable
 	 */
 	public function setStorage(Storage $storage);
-	
+
 	/**
 	 * Process the located string with dynamic parameters if necessary.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param array $params
 	 * @return string
 	 */
-	public function translate($key, array $params);
-	
+	public function translate($key, array $params = array());
+
 }

@@ -11,6 +11,7 @@ namespace titon\libs\bundles\locales;
 
 use titon\Titon;
 use titon\libs\bundles\BundleAbstract;
+use titon\libs\readers\core\PhpReader;
 use \Locale;
 
 /**
@@ -125,7 +126,8 @@ class LocaleBundle extends BundleAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->setLocations(array(
+		$this->addReader(new PhpReader());
+		$this->addLocation(array(
 			TITON_RESOURCES . 'locales/{bundle}/',
 			APP_RESOURCES . 'locales/{bundle}/'
 		));

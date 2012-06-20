@@ -11,6 +11,7 @@ namespace titon\libs\translators;
 
 use titon\Titon;
 use titon\base\Base;
+use titon\libs\readers\Reader;
 use titon\libs\storage\Storage;
 use titon\libs\traits\Memoizer;
 use titon\libs\translators\Translator;
@@ -27,7 +28,7 @@ use \Locale;
  * @abstract
  */
 abstract class TranslatorAbstract extends Base implements Translator {
-	//use Memoizer;
+	use Memoizer;
 
 	/**
 	 * List of MessageBundle's.
@@ -44,6 +45,14 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @var array
 	 */
 	protected $_cache = array();
+
+	/**
+	 * File reader used for parsing.
+	 *
+	 * @access protected
+	 * @var titon\libs\readers\Reader
+	 */
+	protected $_reader;
 
 	/**
 	 * Storage engine for caching.
@@ -73,7 +82,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 		$locales = $this->getFileCycle();
 
 		foreach ($locales as $locale) {
-			$cacheKey = 'g11n.' . ($module == null ? 'root' : $module) . '.' . $catalog . '.' . $locale;
+			$cacheKey = 'g11n.' . ($module === null ? 'root' : $module) . '.' . $catalog . '.' . $locale;
 			$messages = array();
 
 			// Check within the cache first
@@ -92,24 +101,24 @@ abstract class TranslatorAbstract extends Base implements Translator {
 				$bundle = $this->_bundles[$bundleKey];
 
 				// If the catalog doesn't exist, try the next locale
-				if ($bundle->hasFile($catalog)) {
-					$messages = $bundle->loadFile($catalog);
+				if ($data = $bundle->loadResource($catalog)) {
+					$messages = $data;
 				}
+			}
+
+			if (!empty($messages) && $this->_storage instanceof Storage) {
+				$this->_storage->set($cacheKey, $messages);
 			}
 
 			// Return message if it exists, else continue cycle
 			if (isset($messages[$id])) {
-				if ($this->_storage instanceof Storage) {
-					$this->_storage->set($cacheKey, $messages);
-				}
-
 				$this->_cache[$key] = $messages[$id];
 
 				return $messages[$id];
 			}
 		}
 
-		throw new TranslatorException(sprintf('Message key %s does not exist in: %s.', $key, implode(', ', $locales)));
+		throw new TranslatorException(sprintf('Message key %s does not exist in %s.', $key, implode(', ', $locales)));
 	}
 
 	/**
@@ -154,6 +163,20 @@ abstract class TranslatorAbstract extends Base implements Translator {
 
 			return array($module, $catalog, $key);
 		});
+	}
+
+	/**
+	 * Set the file reader to use for resource parsing.
+	 *
+	 * @access public
+	 * @param titon\libs\readers\Reader $reader
+	 * @return titon\libs\translators\Translator
+	 * @chainable
+	 */
+	public function setReader(Reader $reader) {
+		$this->_reader = $reader;
+
+		return $this;
 	}
 
 	/**

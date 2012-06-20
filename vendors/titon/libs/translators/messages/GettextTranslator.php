@@ -7,18 +7,19 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\libs\translators\gettext;
+namespace titon\libs\translators\messages;
 
 use titon\Titon;
 use titon\libs\translators\TranslatorAbstract;
+use titon\libs\translators\TranslatorException;
 use \Locale;
 
 /**
  * Translator used for hooking into the GNU gettext library and fetching messages from locale domain files.
- * 
- * @package	titon.libs.translators.gettext
+ *
+ * @package	titon.libs.translators.messages
  */
-class DomainTranslator extends TranslatorAbstract {
+class GettextTranslator extends TranslatorAbstract {
 
 	/**
 	 * Cached domain lookups.
@@ -79,7 +80,7 @@ class DomainTranslator extends TranslatorAbstract {
 			return $message;
 		}
 
-		throw new TranslatorException(sprintf('Message key %s does not exist in: %s.', $key, Locale::DEFAULT_LOCALE));
+		throw new TranslatorException(sprintf('Message key %s does not exist in %s.', $key, Locale::DEFAULT_LOCALE));
 	}
 
 }

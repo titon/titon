@@ -19,7 +19,16 @@ use titon\libs\readers\Reader;
 interface Bundle {
 
 	/**
-	 * Add a file reader to use.
+	 * Add a folder location to use during the lookup cycle.
+	 *
+	 * @access public
+	 * @param array|string $locations
+	 * @return titon\libs\bundles\Bundle
+	 */
+	public function addLocation($locations);
+
+	/**
+	 * Add a file reader to use for resource parsing.
 	 *
 	 * @access public
 	 * @param titon\libs\readers\Reader $reader
@@ -28,12 +37,32 @@ interface Bundle {
 	public function addReader(Reader $reader);
 
 	/**
-	 * Set the folder locations to use for cycling through.
+	 * Return all defined locations.
 	 *
 	 * @access public
-	 * @param array $locations
-	 * @return titon\libs\bundles\Bundle
+	 * @return array
 	 */
-	public function setLocations(array $locations);
+	public function getLocations();
+
+	/**
+	 * Return all loaded Readers.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getReaders();
+
+	/**
+	 * Parse the contents of every file that matches the resource name.
+	 * Begin by looping through all resource locations and all Readers.
+	 * If a resource is found that matches the name and a loaded Reader extension,
+	 * parse the file and merge its contents with the previous resource of the same name.
+	 *
+	 * @access public
+	 * @param string $resource
+	 * @return array
+	 * @throws titon\libs\bundles\BundleException
+	 */
+	public function loadResource($resource);
 
 }

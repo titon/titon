@@ -14,6 +14,7 @@ use titon\core\CoreException;
 use titon\libs\bundles\locales\LocaleBundle;
 use titon\libs\traits\Memoizer;
 use titon\libs\translators\Translator;
+use titon\libs\traits\Memoizer;
 use \Locale;
 
 /**
@@ -30,6 +31,7 @@ use \Locale;
  * @uses	titon\libs\translators\Translator
  */
 class G11n {
+	use Memoizer;
 
 	/**
 	 * Possible formats for locale keys.
@@ -113,7 +115,6 @@ class G11n {
 	 *
 	 * @access public
 	 * @return array
-	 * @todo use Memoizer
 	 */
 	public function cascade() {
 		$cycle = array();
