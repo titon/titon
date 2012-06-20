@@ -10,7 +10,6 @@
 namespace titon\libs\readers\gettext;
 
 use titon\libs\readers\ReaderAbstract;
-use titon\libs\readers\ReaderException;
 
 /**
  * A file reader that parses gettext PO files.
@@ -31,8 +30,8 @@ class PoReader extends ReaderAbstract {
 	 * @access public
 	 * @return array
 	 */
-	public function parseFile() {
-		$lines = file($this->getFullPath(), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+	public function parse() {
+		$lines = file($this->_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		$data = array();
 		$key = '';
 		$value = '';

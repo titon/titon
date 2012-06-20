@@ -10,7 +10,6 @@
 namespace titon\libs\readers\core;
 
 use titon\libs\readers\ReaderAbstract;
-use titon\libs\readers\ReaderException;
 
 /**
  * A reader that loads its configuration from an XML file.
@@ -33,16 +32,9 @@ class XmlReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return array
-	 * @throws titon\libs\readers\ReaderException
 	 */
-	public function parseFile() {
-		$data = @simplexml_load_file($this->getPath());
-
-		if ($data !== false) {
-			return $this->toArray($data);
-		}
-
-		throw new ReaderException('Reader failed to parse XML configuration.');
+	public function parse() {
+		return $this->toArray(@simplexml_load_file($this->_path));
 	}
 
 	/**
@@ -53,6 +45,10 @@ class XmlReader extends ReaderAbstract {
 	 * @return array
 	 */
 	public function toArray($xml) {
+		if (!$xml) {
+			return false;
+		}
+
 		if (is_string($xml)) {
 			$xml = @simplexml_load_string($xml);
 		}

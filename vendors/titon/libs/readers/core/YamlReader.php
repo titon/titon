@@ -34,12 +34,12 @@ class YamlReader extends ReaderAbstract {
 	 * @return array
 	 * @throws titon\libs\readers\ReaderException
 	 */
-	public function parseFile() {
+	public function parse() {
 		if (!extension_loaded('yaml')) {
 			throw new ReaderException('YAML PECL extension must be installed to use the YamlReader.');
 		}
 
-		return yaml_parse_file($this->getFullPath());
+		return yaml_parse_file($this->_path);
 	}
 
 }

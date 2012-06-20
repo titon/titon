@@ -10,7 +10,6 @@
 namespace titon\libs\readers\core;
 
 use titon\libs\readers\ReaderAbstract;
-use titon\libs\readers\ReaderException;
 
 /**
  * A file reader that parses JSON files; must have the JSON module installed.
@@ -32,8 +31,8 @@ class JsonReader extends ReaderAbstract {
 	 * @access public
 	 * @return array
 	 */
-	public function parseFile() {
-		return @json_decode(file_get_contents($this->getFullPath()), true);
+	public function parse() {
+		return @json_decode(file_get_contents($this->_path), true);
 	}
 
 }

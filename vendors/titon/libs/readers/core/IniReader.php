@@ -10,7 +10,6 @@
 namespace titon\libs\readers\core;
 
 use titon\libs\readers\ReaderAbstract;
-use titon\libs\readers\ReaderException;
 
 /**
  * A file reader that parses INI files.
@@ -32,8 +31,8 @@ class IniReader extends ReaderAbstract {
 	 * @access public
 	 * @return array
 	 */
-	public function parseFile() {
-		return parse_ini_file($this->getFullPath(), true, INI_SCANNER_NORMAL);
+	public function parse() {
+		return parse_ini_file($this->_path, true, INI_SCANNER_NORMAL);
 	}
 
 }

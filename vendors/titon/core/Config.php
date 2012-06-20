@@ -79,14 +79,9 @@ class Config {
 	 * @chainable
 	 */
 	public function load($key, Reader $reader) {
-		if ($reader->fileExists()) {
-			$reader->parseFile();
+		$path = APP_CONFIG . 'sets/' . Inflector::filename($key, $reader->extension(), false);
 
-			$this->_config[$key] = $reader->config->get();
-
-		} else {
-			throw new CoreException(sprintf('Configuration file %s does not exist.', basename($reader->getPath())));
-		}
+		$this->_config[$key] = $reader->read($path);
 
 		return $this;
 	}

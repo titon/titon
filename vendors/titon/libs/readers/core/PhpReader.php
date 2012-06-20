@@ -10,7 +10,6 @@
 namespace titon\libs\readers\core;
 
 use titon\libs\readers\ReaderAbstract;
-use titon\libs\readers\ReaderException;
 
 /**
  * A file reader that parses PHP files.
@@ -33,8 +32,8 @@ class PhpReader extends ReaderAbstract {
 	 * @access public
 	 * @return array
 	 */
-	public function parseFile() {
-		return include $this->getFullPath();
+	public function parse() {
+		return include $this->_path;
 	}
 
 }

@@ -32,7 +32,7 @@ class MoReader extends ReaderAbstract {
 	 * @return array
 	 * @throws titon\libs\readers\ReaderException
 	 */
-	public function parseFile() {
+	public function parse() {
 		throw new ReaderException('MoReader::parseFile() has not yet been implemented.');
 	}
 
