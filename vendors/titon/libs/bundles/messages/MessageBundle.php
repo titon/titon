@@ -36,7 +36,7 @@ class MessageBundle extends BundleAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->findBundle(array(
+		$this->setLocations(array(
 			TITON_RESOURCES . 'messages/{bundle}/',
 			APP_RESOURCES . 'messages/{bundle}/',
 			APP_MODULES . '{module}/resources/messages/{bundle}/',

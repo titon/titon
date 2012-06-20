@@ -384,7 +384,7 @@ class G11n {
 		}
 
 		// Cache the bundle
-		$this->_locales[$urlKey] = Titon::registry()->set($bundle, 'g11n.bundle.locale.' . $bundle->config('locale.id'));
+		$this->_locales[$urlKey] = Titon::registry()->set($bundle, 'g11n.bundle.locale.' . $bundle->config->get('locale.id'));
 
 		// Set the parent as well
 		$config = $bundle->getLocale();

@@ -14,6 +14,7 @@ use titon\libs\bundles\Bundle;
 use titon\libs\bundles\BundleException;
 use titon\libs\readers\Reader;
 use titon\libs\traits\Memoizer;
+use \DirectoryIterator;
 
 /**
  * @todo
@@ -51,6 +52,36 @@ abstract class BundleAbstract extends Base implements Bundle {
 		$this->_readers[$reader->getExtension()] = $reader;
 
 		return $this;
+	}
+
+	public function getLocations() {
+		return $this->_locations;
+	}
+
+	public function getReaders() {
+		return $this->_readers;
+	}
+
+	public function loadResource($resource) {
+		if (empty($this->_readers)) {
+			throw new BundleException('A reader must be loaded to read bundle resources.');
+		}
+
+		return $this->cacheMethod(__FUNCTION__, $resource, function($self) use ($resource) {
+			$contents = array();
+
+			foreach ($self->getLocations() as $location) {
+				foreach ($self->getReaders() as $reader) {
+					$reader->setPath($location)->setFilename($resource);
+
+					if ($reader->fileExists()) {
+						$contents = array_merge($contents, $reader->readFile());
+					}
+				}
+			}
+
+			return $contents;
+		});
 	}
 
 	/**

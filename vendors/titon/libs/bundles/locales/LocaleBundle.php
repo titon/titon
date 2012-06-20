@@ -23,11 +23,6 @@ use \Locale;
 class LocaleBundle extends BundleAbstract {
 
 	/**
-	 * Bundle file extension.
-	 */
-	const EXT = 'php';
-
-	/**
 	 * Configuration.
 	 *
 	 * @access protected
@@ -130,7 +125,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->findBundle(array(
+		$this->setLocations(array(
 			TITON_RESOURCES . 'locales/{bundle}/',
 			APP_RESOURCES . 'locales/{bundle}/'
 		));
@@ -183,17 +178,6 @@ class LocaleBundle extends BundleAbstract {
 		$this->_config[$key] = $data;
 
 		return $data;
-	}
-
-	/**
-	 * Parse the file at the given path and return the result.
-	 *
-	 * @access public
-	 * @param string $filename
-	 * @return array
-	 */
-	public function parseFile($filename) {
-		return include $this->getPath() . $filename;
 	}
 
 }

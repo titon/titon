@@ -73,7 +73,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @return boolean
 	 */
 	public function fileExists() {
-		return file_exists($this->getPath() . $this->getFilename());
+		return file_exists($this->getFullPath());
 	}
 
 	/**
