@@ -20,7 +20,7 @@ use titon\libs\traits\Memoizer;
  * @abstract
  */
 abstract class StorageAbstract extends Base implements Storage {
-	//use Memoizer;
+	use Memoizer;
 
 	/**
 	 * The third-party class instance.

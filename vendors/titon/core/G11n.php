@@ -14,7 +14,6 @@ use titon\core\CoreException;
 use titon\libs\bundles\locales\LocaleBundle;
 use titon\libs\traits\Memoizer;
 use titon\libs\translators\Translator;
-use titon\libs\traits\Memoizer;
 use \Locale;
 
 /**

@@ -24,7 +24,7 @@ use titon\libs\traits\Decorator;
  * @abstract
  */
 abstract class HelperAbstract extends Base implements Helper {
-	//use Decorator;
+	use Decorator;
 
 	/**
 	 * Mapping of HTML tags.
@@ -36,7 +36,7 @@ abstract class HelperAbstract extends Base implements Helper {
 
 	/**
 	 * Engine object.
-	 * 
+	 *
 	 * @access protected
 	 * @var Engine
 	 */

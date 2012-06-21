@@ -25,7 +25,7 @@ use titon\libs\traits\Decorator;
  * @abstract
  */
 abstract class ActionAbstract extends Base implements Action {
-	//use Decorator;
+	use Decorator;
 
 	/**
 	 * Controller object.

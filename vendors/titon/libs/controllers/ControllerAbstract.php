@@ -41,7 +41,7 @@ use \Closure;
  * @abstract
  */
 abstract class ControllerAbstract extends Base implements Controller {
-	//use Decorator;
+	use Decorator;
 
 	/**
 	 * Configuration.

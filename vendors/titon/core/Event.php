@@ -147,12 +147,17 @@ class Event {
 			}
 
 			$obj = $listener['object'];
+			$method = $event;
+
+			if (strpos($event, '.') !== false) {
+				list($scope, $method) = explode('.', $event);
+			}
 
 			if ($obj instanceof Closure && in_array($event, $listener['events'])) {
 				$obj($event, $object);
 
-			} else if (method_exists($obj, $event)) {
-				$obj->{$event}($object);
+			} else if (method_exists($obj, $method)) {
+				$obj->{$method}($object);
 
 			} else {
 				continue;

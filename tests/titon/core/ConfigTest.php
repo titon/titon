@@ -113,7 +113,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 	 * Config file php.php is found within the app/config/sets/php.php file and uses the data from $test.
 	 */
 	public function testLoad() {
-		$reader = new titon\libs\readers\core\PhpReader('php');
+		$reader = new titon\libs\readers\core\PhpReader();
 
 		$this->object->load('Php', $reader);
 		$this->assertArrayHasKey('Php', $this->object->get());
@@ -123,8 +123,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($data, $this->test);
 
 		try {
-			$missingReader = new titon\libs\readers\core\PhpReader('fakePhp');
-			$this->object->load('fakePhp', $missingReader);
+			$this->object->load('fakePhp', $reader);
 		} catch (\Exception $e) {
 			$this->assertTrue(true);
 		}

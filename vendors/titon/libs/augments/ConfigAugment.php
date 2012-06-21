@@ -147,7 +147,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 				$this->set($k, $v);
 			}
 		} else {
-			if ($default = Set::extract($this->_config, $key)) {
+			if ($default = Set::extract($this->_defaults, $key)) {
 				if (is_float($default)) {
 					$value = (float) $value;
 				} else if (is_numeric($default)) {
@@ -258,7 +258,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 	 * Reset the current key in the loop.
 	 *
 	 * @access public
-	 * @return string
+	 * @return mixed
 	 */
 	public function key() {
 		return key($this->_config);

@@ -25,7 +25,7 @@ use titon\libs\traits\Memoizer;
  * @uses	titon\net\NetException
  */
 class Request extends Base {
-	//use Memoizer;
+	use Memoizer;
 
 	/**
 	 * An combined array of $_POST and $_FILES data for the current request.

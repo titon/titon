@@ -35,10 +35,10 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$event1 = new titon\core\Event();
 		$event1->addListener(new MockListener());
 		$event1->addListener(new MockListener());
-		$event1->addCallback(function() {}, array('startup', 'shutdown', 'testEvent1'));
-		$event1->addCallback(function() {}, array('startup', 'testEvent1', 'testEvent2'));
-		$event1->notify('startup');
-		$event1->notify('shutdown');
+		$event1->addCallback(function() {}, array('titon.startup', 'titon.shutdown', 'testEvent1'));
+		$event1->addCallback(function() {}, array('titon.startup', 'testEvent1', 'testEvent2'));
+		$event1->notify('titon.startup');
+		$event1->notify('titon.shutdown');
 		$event1->notify('testEvent1');
 		$event1->notify('testEvent2');
 
@@ -49,11 +49,11 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$testEvent2 = 0;
 
 		foreach ($listeners as $listener) {
-			if (isset($listener['executed']['startup'])) {
+			if (isset($listener['executed']['titon.startup'])) {
 				$startup++;
 			}
 
-			if (isset($listener['executed']['shutdown'])) {
+			if (isset($listener['executed']['titon.shutdown'])) {
 				$shutdown++;
 			}
 
@@ -155,7 +155,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testSetup() {
 		$event = new titon\core\Event();
-		$baseEvents = array('startup', 'shutdown', 'preDispatch', 'postDispatch', 'preProcess', 'postProcess', 'preRender', 'postRender');
+		$baseEvents = array('titon.startup', 'titon.shutdown', 'dispatch.preDispatch', 'dispatch.postDispatch', 'controller.preProcess', 'controller.postProcess', 'view.preRender', 'view.postRender');
 		$testEvents = array('testEvent1', 'testEvent2');
 
 		$this->assertEquals($baseEvents, $event->getEvents());

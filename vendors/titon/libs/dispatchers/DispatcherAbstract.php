@@ -26,7 +26,7 @@ use titon\libs\traits\Decorator;
  * @abstract
  */
 abstract class DispatcherAbstract extends Base implements Dispatcher {
-	//use Decorator;
+	use Decorator;
 
 	/**
 	 * Lazy load the controller object. Do not allow overrides.

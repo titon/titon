@@ -22,16 +22,16 @@ class ActionTest extends \PHPUnit_Framework_TestCase {
 			'foo' => 'bar'
 		));
 
-		$this->assertEquals('bar', $controller->config('foo'));
-		$this->assertArrayNotHasKey('test', $controller->config());
+		$this->assertEquals('bar', $controller->config->foo);
+		$this->assertArrayNotHasKey('test', $controller->config->get());
 
 		$action = new TitonLibsActionsMockAction();
 		$action->setController($controller);
 		$action->run();
 
-		$this->assertNotEquals('bar', $controller->config('foo'));
-		$this->assertEquals('baz', $controller->config('foo'));
-		$this->assertArrayHasKey('test', $controller->config());
+		$this->assertNotEquals('bar', $controller->config->foo);
+		$this->assertEquals('baz', $controller->config->foo);
+		$this->assertArrayHasKey('test', $controller->config->get());
 	}
 
 }
@@ -43,7 +43,7 @@ class TitonLibsActionsMockController extends titon\libs\controllers\ControllerAb
 class TitonLibsActionsMockAction extends titon\libs\actions\ActionAbstract {
 
 	public function run() {
-		$this->controller->configure(array(
+		$this->controller->config->set(array(
 			'foo' => 'baz',
 			'test' => 'value'
 		));

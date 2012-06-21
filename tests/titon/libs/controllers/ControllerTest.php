@@ -67,29 +67,29 @@ class ControllerTest extends \PHPUnit_Framework_TestCase {
 
 		$this->object->forwardAction('action1');
 
-		$this->assertEquals('action1', $this->object->config('action'));
-		$this->assertEquals('action1', $this->object->engine->config('template.action'));
+		$this->assertEquals('action1', $this->object->config->action);
+		$this->assertEquals('action1', $this->object->engine->config->get('template.action'));
 
 		$this->object->forwardAction('action2');
 
-		$this->assertEquals('action2', $this->object->config('action'));
-		$this->assertEquals('action2', $this->object->engine->config('template.action'));
+		$this->assertEquals('action2', $this->object->config->action);
+		$this->assertEquals('action2', $this->object->engine->config->get('template.action'));
 	}
 
 	/**
 	 * Test that runAction() correctly executes and modifies the passed controller.
 	 */
 	public function testRunAction() {
-		$this->object->configure('foo', 'bar');
+		$this->object->config->foo = 'bar';
 
-		$this->assertEquals('bar', $this->object->config('foo'));
-		$this->assertArrayNotHasKey('test', $this->object->config());
+		$this->assertEquals('bar', $this->object->config->foo);
+		$this->assertArrayNotHasKey('test', $this->object->config->get());
 
 		$this->object->runAction(new TitonLibsControllersMockAction());
 
-		$this->assertNotEquals('bar', $this->object->config('foo'));
-		$this->assertEquals('baz', $this->object->config('foo'));
-		$this->assertArrayHasKey('test', $this->object->config());
+		$this->assertNotEquals('bar', $this->object->config->foo);
+		$this->assertEquals('baz', $this->object->config->foo);
+		$this->assertArrayHasKey('test', $this->object->config->get());
 	}
 
 	/**
@@ -99,24 +99,24 @@ class ControllerTest extends \PHPUnit_Framework_TestCase {
 		$this->object->throwError(404);
 
 		$this->assertEquals('404 - Not Found', $this->object->engine->data('pageTitle'));
-		$this->assertEquals('404', $this->object->engine->config('template.action'));
-		$this->assertEquals('error', $this->object->engine->config('layout'));
-		$this->assertTrue($this->object->engine->config('error'));
+		$this->assertEquals('404', $this->object->engine->config->get('template.action'));
+		$this->assertEquals('error', $this->object->engine->config->layout);
+		$this->assertTrue($this->object->engine->config->error);
 
 		$this->object->throwError(500);
 
 		$this->assertEquals('500 - Internal Server Error', $this->object->engine->data('pageTitle'));
-		$this->assertEquals('500', $this->object->engine->config('template.action'));
+		$this->assertEquals('500', $this->object->engine->config->get('template.action'));
 
 		$this->object->throwError('customError', array('pageTitle' => 'Custom Error'));
 
 		$this->assertEquals('Custom Error', $this->object->engine->data('pageTitle'));
-		$this->assertEquals('customError', $this->object->engine->config('template.action'));
+		$this->assertEquals('customError', $this->object->engine->config->get('template.action'));
 
 		$this->object->throwError('another_error');
 
 		$this->assertEquals('Another Error', $this->object->engine->data('pageTitle'));
-		$this->assertEquals('another_error', $this->object->engine->config('template.action'));
+		$this->assertEquals('another_error', $this->object->engine->config->get('template.action'));
 	}
 
 }
@@ -140,7 +140,7 @@ class TitonLibsControllersMockController extends titon\libs\controllers\Controll
 class TitonLibsControllersMockAction extends titon\libs\actions\ActionAbstract {
 
 	public function run() {
-		$this->controller->configure(array(
+		$this->controller->config->set(array(
 			'foo' => 'baz',
 			'test' => 'value'
 		));
