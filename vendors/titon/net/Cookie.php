@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\state;
+namespace titon\net;
 
 use titon\Titon;
 use titon\base\Base;
@@ -16,7 +16,7 @@ use \Closure;
 /**
  * Primary library class to manage and produce cookies with customizable encryption and decryption.
  *
- * @package	titon.state
+ * @package	titon.net
  * @uses	titon\Titon
  */
 class Cookie extends Base {
