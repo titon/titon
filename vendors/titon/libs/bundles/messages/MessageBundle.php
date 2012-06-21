@@ -10,6 +10,7 @@
 namespace titon\libs\bundles\messages;
 
 use titon\libs\bundles\BundleAbstract;
+use titon\libs\readers\Reader;
 
 /**
  * The MessageBundle manages the loading of message catalogs for localization.
@@ -41,6 +42,29 @@ class MessageBundle extends BundleAbstract {
 			APP_RESOURCES . 'messages/{bundle}/',
 			APP_MODULES . '{module}/resources/messages/{bundle}/',
 		));
+	}
+
+	/**
+	 * Add a file reader to use for resource parsing.
+	 * If PoReader or MoReader is passed, use alternate lookup locations.
+	 *
+	 * @access public
+	 * @param titon\libs\readers\Reader $reader
+	 * @return titon\libs\bundles\Bundle
+	 */
+	public function addReader(Reader $reader) {
+		$ext = $reader->getExtension();
+
+		if (in_array($ext, array('po', 'mo')) && empty($this->_readers[$ext])) {
+			$this->_locations = array();
+
+			$this->addLocation(array(
+				APP_RESOURCES . 'messages/{bundle}/LC_MESSAGES/',
+				APP_MODULES . '{module}/resources/messages/{bundle}/LC_MESSAGES/'
+			));
+		}
+
+		return parent::addReader($reader);
 	}
 
 }

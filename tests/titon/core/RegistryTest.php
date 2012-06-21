@@ -31,12 +31,12 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 
 		$object1 = $this->object->factory('titon\base\Base');
 
-		$this->assertArrayHasKey('foo', $object1->config());
-		$this->assertEquals('bar', $object1->config('foo'));
+		$this->assertArrayHasKey('foo', $object1->config->get());
+		$this->assertEquals('bar', $object1->config->foo);
 
 		$object2 = $this->object->factory('titon\libs\controllers\core\DefaultController');
 
-		$this->assertArrayNotHasKey('foo', $object2->config());
+		$this->assertArrayNotHasKey('foo', $object2->config->get());
 
 		$this->object->flush();
 	}

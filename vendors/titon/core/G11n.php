@@ -174,7 +174,7 @@ class G11n {
 
 		$this->_fallback = $key;
 
-		ini_set('intl.default_locale', $this->_locales[$key]->config('locale.id'));
+		ini_set('intl.default_locale', $this->_locales[$key]->getLocale('id'));
 
 		return $this;
 	}
@@ -377,14 +377,16 @@ class G11n {
 			'bundle' => $this->canonicalize($key, self::FORMAT_3),
 		));
 
-		$config['key'] = $key;
+		/*
+		 * @todo
+		 $config['key'] = $key;
 
 		foreach ($config as $key => $value) {
 			$bundle->config->set('locale.' . $key, $value);
-		}
+		}*/
 
 		// Cache the bundle
-		$this->_locales[$urlKey] = Titon::registry()->set($bundle, 'g11n.bundle.locale.' . $bundle->config->get('locale.id'));
+		$this->_locales[$urlKey] = Titon::registry()->set($bundle, 'g11n.bundle.locale.' . $bundle->getLocale('id'));
 
 		// Set the parent as well
 		$config = $bundle->getLocale();

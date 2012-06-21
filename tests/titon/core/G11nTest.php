@@ -10,7 +10,7 @@
 include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
 
 use titon\core\G11n;
-use titon\libs\translators\core\PhpTranslator;
+use titon\libs\translators\messages\MessageTranslator;
 
 /**
  * Test class for titon\core\G11n.
@@ -29,7 +29,7 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 		$this->object->setup('ex-in');
 		$this->object->setup('no'); // Needs 2 types of locales
 		$this->object->fallbackAs('ex');
-		$this->object->setTranslator(new PhpTranslator());
+		$this->object->setTranslator(new MessageTranslator());
 	}
 
 	/**
@@ -114,10 +114,10 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 			$this->object->initialize();
 
 			$current = $this->object->current();
-			$config = $current->config();
+			$config = $current->getLocale();
 
 			$this->assertInstanceOf('titon\libs\bundles\locales\LocaleBundle', $current);
-			$this->assertEquals($localeId, $config['locale']['id']);
+			$this->assertEquals($localeId, $config['id']);
 		}
 	}
 
@@ -154,13 +154,13 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testFallbackAs() {
 		$this->object->fallbackAs('ex-va');
-		$this->assertEquals('ex_VA', $this->object->getFallback()->config('locale.id'));
+		$this->assertEquals('ex_VA', $this->object->getFallback()->getLocale('id'));
 
 		$this->object->fallbackAs('ex-IN');
-		$this->assertEquals('ex_IN', $this->object->getFallback()->config('locale.id'));
+		$this->assertEquals('ex_IN', $this->object->getFallback()->getLocale('id'));
 
 		$this->object->fallbackAs('ex_FM');
-		$this->assertEquals('ex_FM', $this->object->getFallback()->config('locale.id'));
+		$this->assertEquals('ex_FM', $this->object->getFallback()->getLocale('id'));
 
 		try {
 			$this->object->fallbackAs('fakeKey');
@@ -209,16 +209,16 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testSet() {
 		$this->object->set('ex');
-		$this->assertEquals('ex', $this->object->current()->config('locale.id'));
+		$this->assertEquals('ex', $this->object->current()->getLocale('id'));
 
 		$this->object->set('ex_VA');
-		$this->assertEquals('ex_VA', $this->object->current()->config('locale.id'));
+		$this->assertEquals('ex_VA', $this->object->current()->getLocale('id'));
 
 		$this->object->set('ex-IN');
-		$this->assertEquals('ex_IN', $this->object->current()->config('locale.id'));
+		$this->assertEquals('ex_IN', $this->object->current()->getLocale('id'));
 
 		$this->object->set('ex_fm');
-		$this->assertEquals('ex_FM', $this->object->current()->config('locale.id'));
+		$this->assertEquals('ex_FM', $this->object->current()->getLocale('id'));
 
 		try {
 			$this->object->set('fakeKey');

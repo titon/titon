@@ -132,7 +132,7 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testPoBundles() {
 		$bundle = new MessageBundle(array('bundle' => 'ex'));
-		$bundle->addReader(new titon\libs\readers\core\XmlReader());
+		$bundle->addReader(new titon\libs\readers\gettext\PoReader());
 
 		$messages = $bundle->loadResource('default');
 

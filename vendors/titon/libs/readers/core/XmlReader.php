@@ -45,7 +45,7 @@ class XmlReader extends ReaderAbstract {
 	 * @return array
 	 */
 	public function toArray($xml) {
-		if (!$xml) {
+		if ($xml === false) {
 			return false;
 		}
 
