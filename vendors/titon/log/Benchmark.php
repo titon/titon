@@ -50,7 +50,7 @@ class Benchmark {
 	public static function get($key = null) {
 		if (empty($key)) {
 			$benchmarks = self::$_benchmarks;
-			
+
 		} else if (isset(self::$_benchmarks[$key])) {
 			$benchmarks = array(self::$_benchmarks[$key]);
 		}
@@ -79,16 +79,17 @@ class Benchmark {
 	 * @static
 	 */
 	public static function output($key = null) {
-		if (empty(self::$_benchmarks[$key])) {
-			return false;
+		$benchmark = self::get($key);
+
+		if (!empty($benchmark)) {
+			$result  = 'Benchmark [' . $key . '] - ';
+			$result .= 'Time: ' . number_format($benchmark['avgTime'], 4) . ' - ';
+			$result .= 'Memory: ' . $benchmark['avgMemory'] . ' (Max: ' . $benchmark['peakMemory'] . ')';
+
+			return $result;
 		}
 
-		$benchmark = self::get($key);
-		$result  = 'Benchmark [' . $key . '] - ';
-		$result .= 'Time: ' . number_format($benchmark['avgTime'], 4) . ' - ';
-		$result .= 'Memory: ' . $benchmark['avgMemory'] . ' (Max: ' . $benchmark['peakMemory'] . ')';
-
-		return $result;
+		return null;
 	}
 
 	/**
@@ -129,7 +130,7 @@ class Benchmark {
 			) + self::$_benchmarks[$key];
 
 			if ($log) {
-				Logger::debug(self::display($key));
+				Logger::debug(self::output($key));
 			}
 
 			return self::$_benchmarks[$key];

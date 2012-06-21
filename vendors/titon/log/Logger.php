@@ -10,32 +10,31 @@
 namespace titon\log;
 
 use titon\Titon;
+use titon\utility\Inflector;
 
 /**
  * A simple class that handles the logging of errors and debug messages to the filesystem.
  * Logs are categorized based on threat level, which determines the location of where it is to be written.
- * There are two files in which the logger uses: debug.log and error.log, both of which are located in the app/temp.
  *
  * @package	titon.log
  * @uses	titon\Titon
+ * @uses	titon\utility\Inflector
  */
 class Logger {
 
 	/**
-	 * Log filenames.
-	 */
-	const ERROR_LOG = 'error.log';
-	const DEBUG_LOG = 'debug.log';
-
-	/**
 	 * Types of logging threat levels.
+	 *
+	 * @link http://en.wikipedia.org/wiki/Syslog#Severity_levels
 	 */
-	const CRITICAL = 1;
-	const ALERT = 2;
-	const WARNING = 3;
-	const NOTICE = 4;
-	const INFO = 5;
-	const DEBUG = 6;
+	const EMERGENCY = 0;
+	const ALERT = 1;
+	const CRITICAL = 2;
+	const ERROR = 3;
+	const WARNING = 4;
+	const NOTICE = 5;
+	const INFO = 6;
+	const DEBUG = 7;
 
 	/**
 	 * Disable the class to enforce static methods.
@@ -43,6 +42,18 @@ class Logger {
 	 * @access private
 	 */
 	private function __construct() { }
+
+	/**
+	 * Wrapper function to log emergency errors.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function emergency($message) {
+		self::write($message, self::EMERGENCY);
+	}
 
 	/**
 	 * Wrapper function to log alerted errors.
@@ -53,7 +64,7 @@ class Logger {
 	 * @static
 	 */
 	public static function alert($message) {
-		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::ALERT);
+		self::write($message, self::ALERT);
 	}
 
 	/**
@@ -65,43 +76,19 @@ class Logger {
 	 * @static
 	 */
 	public static function critical($message) {
-		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::CRITICAL);
+		self::write($message, self::CRITICAL);
 	}
 
 	/**
-	 * Wrapper function to log debug messages.
+	 * Wrapper function to log error messages.
 	 *
 	 * @access public
 	 * @param string $message
 	 * @return void
 	 * @static
 	 */
-	public static function debug($message) {
-		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::DEBUG);
-	}
-
-	/**
-	 * Wrapper function to log informational messages.
-	 *
-	 * @access public
-	 * @param string $message
-	 * @return void
-	 * @static
-	 */
-	public static function info($message) {
-		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::INFO);
-	}
-
-	/**
-	 * Wrapper function to log notices.
-	 *
-	 * @access public
-	 * @param string $message
-	 * @return void
-	 * @static
-	 */
-	public static function notice($message) {
-		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::NOTICE);
+	public static function error($message) {
+		self::write($message, self::ERROR);
 	}
 
 	/**
@@ -113,7 +100,43 @@ class Logger {
 	 * @static
 	 */
 	public static function warning($message) {
-		self::write('[' . date('d-M-Y H:i:s') . '] ' . $message, self::WARNING);
+		self::write($message, self::WARNING);
+	}
+
+	/**
+	 * Wrapper function to log notices.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function notice($message) {
+		self::write($message, self::NOTICE);
+	}
+
+	/**
+	 * Wrapper function to log informational messages.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function info($message) {
+		self::write($message, self::INFO);
+	}
+
+	/**
+	 * Wrapper function to log debug messages.
+	 *
+	 * @access public
+	 * @param string $message
+	 * @return void
+	 * @static
+	 */
+	public static function debug($message) {
+		self::write($message, self::DEBUG);
 	}
 
 	/**
@@ -126,47 +149,40 @@ class Logger {
 	 * @return void
 	 * @static
 	 */
-	public static function write($message, $level = 0) {
-		if (!empty($message)) {
-			switch ($level) {
-				case self::CRITICAL:
-					$type = 'Critical';
-				break;
-				case self::ALERT:
-					$type = 'Alert';
-				break;
-				case self::WARNING:
-					$type = 'Warning';
-				break;
-				case self::NOTICE:
-					$type = 'Notice';
-				break;
-				case self::INFO:
-					$type = 'Info';
-				break;
-				case self::DEBUG:
-					$type = 'Debug';
-				break;
-				default:
-					$type = 'Internal';
-				break;
-			}
+	public static function write($message, $level = self::DEBUG) {
+		if (empty($message)) {
+			return;
+		}
 
-			if ($level === self::DEBUG) {
-				$file = self::DEBUG_LOG;
-			} else {
-				$file = self::ERROR_LOG;
-				$message = '[' . $type . '] ' . $message;
-			}
+		$types = array(
+			self::EMERGENCY => 'Emergency',
+			self::ALERT 	=> 'Alert',
+			self::CRITICAL 	=> 'Critical',
+			self::ERROR 	=> 'Error',
+			self::WARNING 	=> 'Warning',
+			self::NOTICE 	=> 'Notice',
+			self::INFO 		=> 'Info',
+			self::DEBUG 	=> 'Debug'
+		);
 
-			file_put_contents(APP_TEMP. $file, $message ."\n", FILE_APPEND | LOCK_EX);
+		if (isset($types[$level])) {
+			$type = $types[$level];
+		} else {
+			$type = 'Internal';
+		}
 
-			if ($level >= self::WARNING) {
-				$email = Titon::config()->get('Debug.email');
+		if (is_array($message)) {
+			$message = print_r($message, true);
+		}
 
-				if (!empty($email)) {
-					mail($email, '[Titon Error] ' . $type, $message);
-				}
+		$file = Inflector::filename($type, 'log', false);
+		$message = '[' . date('Y-m-d H:i:s') . '] ' . $message;
+
+		file_put_contents(APP_TEMP. $file, $message . "\n", FILE_APPEND | LOCK_EX);
+
+		if ($level > self::WARNING) {
+			if ($email = Titon::config()->get('Debug.email')) {
+				mail($email, '[Titon Error] ' . $type, $message);
 			}
 		}
 	}
