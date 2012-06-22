@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+date_default_timezone_set('America/New_York');
+
 /**
  * Define primary constants.
  */

@@ -7,8 +7,6 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-include_once dirname(dirname(dirname(__DIR__))) . '/bootstrap.php';
-
 /**
  * Test class for titon\libs\actions\Action.
  */

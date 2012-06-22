@@ -112,7 +112,7 @@ class FormHelper extends HelperAbstract {
 
 		// Prepare for multiple checkboxes
 		if (isset($attributes['multiple']) && $attributes['multiple']) {
-			$append = Inflector::camelize($value);
+			$append = Inflector::camelCase($value);
 
 			$input .= ' ' . $append;
 			$attributes['id'] .= $append;
@@ -368,7 +368,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function label($input, $title, array $attributes = array()) {
 		$attributes = $attributes + array(
-			'for' => $this->_model . Inflector::camelize($input),
+			'for' => $this->_model . Inflector::camelCase($input),
 		);
 
 		return $this->tag('label',
@@ -524,7 +524,7 @@ class FormHelper extends HelperAbstract {
 
 		foreach ($options as $value => $option) {
 			$radio = $attributes;
-			$radio['id'] = $radio['id'] . Inflector::camelize($value);
+			$radio['id'] = $radio['id'] . Inflector::camelCase($value);
 			$radio['value'] = $value;
 
 			if ($selected === $value) {
@@ -810,7 +810,7 @@ class FormHelper extends HelperAbstract {
 
 		if (!empty($parts)) {
 			foreach ($parts as $part) {
-				$id .= Inflector::camelize($part);
+				$id .= Inflector::camelCase($part);
 				$name .= '[' . $part . ']';
 			}
 		}

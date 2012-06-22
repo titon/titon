@@ -7,8 +7,6 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-include_once dirname(dirname(__DIR__)) . '/bootstrap.php';
-
 use titon\libs\controllers\Controller;
 use titon\libs\engines\Engine;
 

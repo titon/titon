@@ -158,7 +158,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 			if (is_numeric($action)) {
 				$args['pageTitle'] = $action . ' - ' . Http::getStatusCode($action);
 			} else {
-				$args['pageTitle'] = Inflector::normalize($action);
+				$args['pageTitle'] = Inflector::titleCase($action);
 			}
 		}
 

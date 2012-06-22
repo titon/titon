@@ -9,31 +9,50 @@
 
 namespace titon\utility;
 
+use titon\Titon;
+
 /**
  * String and grammar inflection. Converts strings to a certain format. Camel cased, singular, plural etc.
  *
  * @package	titon.utility
+ * @uses	titon\Titon
  *
  * @link	http://php.net/manual/book.mbstring.php
  */
 class Inflector {
 
 	/**
+	 * Cached pluralized strings for fast lookup.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected static $_pluralized = array();
+
+	/**
+	 * Cached singularized strings for fast lookup.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected static $_singularized = array();
+
+	/**
 	 * Inflect a word to a camel case form with the first letter being capitalized.
-	 * Example: Non-Camel Cased String = NonCamelCasedString
+	 * Example: Non-camel cased string = NonCamelCasedString
 	 *
 	 * @access public
 	 * @param string $string
 	 * @return string
 	 * @static
 	 */
-	public static function camelize($string) {
-		return str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $string)))));
+	public static function camelCase($string) {
+		return str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)))));
 	}
 
 	/**
-	 * Inflect a word for a filename. Camel cased and capitalized.
-	 * Example: file_Name = FileName.php
+	 * Inflect a word for a filename. Studly cased and capitalized.
+	 * Example: file_Name = FileName.php (or fileName.php)
 	 *
 	 * @access public
 	 * @param string $string
@@ -47,7 +66,7 @@ class Inflector {
 			$string = substr($string, 0, strrpos($string, '.'));
 		}
 
-		$path = self::camelize($string);
+		$path = self::camelCase($string);
 
 		if (!$capitalize) {
 			$path = lcfirst($path);
@@ -70,27 +89,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function modelize($string) {
-		return self::camelize($string);
+		return self::camelCase(self::singularize($string));
 	}
 
 	/**
-	 * Inflect a word to a normal human readable string. Can uppercase the first letter of all words or the first word.
+	 * Inflect a word to a human readable string with only the first word capitalized.
 	 * Example: non_human_readable_word = Non human readable word
 	 *
 	 * @access public
 	 * @param string $string
-	 * @param string $callback
 	 * @return string
 	 * @static
 	 */
-	public static function normalize($string, $callback = 'ucwords') {
-		$string = strtolower(str_replace('_', ' ', $string));
-
-		if ($callback && function_exists($callback)) {
-			$string = $callback($string);
-		}
-
-		return $string;
+	public static function normalCase($string) {
+		return ucfirst(strtolower(str_replace('_', ' ', $string)));
 	}
 
 	/**
@@ -103,27 +115,44 @@ class Inflector {
 	 * @static
 	 */
 	public static function pluralize($string) {
-		/*$locale = self::getLocale();
-		$string = strtolower($string);
-
-		if (isset(self::$__pluralized[$string])) {
-			return self::$__pluralized[$string];
-		}else if (isset(self::$__uninflected[$locale]) && in_array($string, self::$__uninflected[$locale])) {
+		if (!Titon::g11n()->isEnabled()) {
 			return $string;
-		} else if (isset(self::$__irregular[$locale]) && isset(self::$__irregular[$locale][$string])) {
-			return self::$__irregular[$locale][$string];
 		}
 
-		if (isset(self::$__plural[$locale])) {
-			foreach (self::$__plural[$locale] as $pattern => $replacement) {
+		$string = strtolower($string);
+		$return = null;
+
+		if (isset(self::$_pluralized[$string])) {
+			return self::$_pluralized[$string];
+		}
+
+		$inflections = Titon::g11n()->current()->getInflections();
+
+		if (empty($inflections)) {
+			return $string;
+
+		} else if (!empty($inflections['uninflected']) && in_array($string, $inflections['uninflected'])) {
+			$return = $string;
+
+		} else if (!empty($inflections['irregular']) && in_array($string, $inflections['irregular'])) {
+			$return = array_search($string, $inflections['irregular']);
+
+		} else if (!empty($inflections['plural'])) {
+			foreach ($inflections['plural'] as $pattern => $replacement) {
 				if (preg_match($pattern, $string)) {
-					self::$__pluralized[$string] = preg_replace($pattern, $replacement, $string);
-					return self::$__pluralized[$string];
+					$return = preg_replace($pattern, $replacement, $string);
+					break;
 				}
 			}
 		}
 
-		return $string;*/
+		if (empty($return)) {
+			$return = $string;
+		}
+
+		self::$_pluralized[$string] = $return;
+
+		return $return;
 	}
 
 	/**
@@ -136,41 +165,57 @@ class Inflector {
 	 * @static
 	 */
 	public static function singularize($string) {
-		/*$locale = self::getLocale();
-		$string = strtolower($string);
-
-		if (isset(self::$__singularized[$string])) {
-			return self::$__singularized[$string];
-		} else if (isset(self::$__uninflected[$locale]) && in_array($string, self::$__uninflected[$locale])) {
+		if (!Titon::g11n()->isEnabled()) {
 			return $string;
-		} else if (isset(self::$__irregular[$locale]) && in_array($string, self::$__irregular[$locale])) {
-			return array_search($string, self::$__irregular[$locale]);
 		}
 
-		if (isset(self::$__singular[$locale])) {
-			foreach (self::$__singular[$locale] as $pattern => $replacement) {
+		$string = strtolower($string);
+		$return = null;
+
+		if (isset(self::$_singularized[$string])) {
+			return self::$_singularized[$string];
+		}
+
+		$inflections = Titon::g11n()->current()->getInflections();
+
+		if (empty($inflections)) {
+			return $string;
+
+		} else if (!empty($inflections['uninflected']) && in_array($string, $inflections['uninflected'])) {
+			$return = $string;
+
+		} else if (!empty($inflections['irregular']) && in_array($string, $inflections['irregular'])) {
+			$return = array_search($string, $inflections['irregular']);
+
+		} else if (!empty($inflections['singular'])) {
+			foreach ($inflections['singular'] as $pattern => $replacement) {
 				if (preg_match($pattern, $string)) {
-					self::$__singularized[$string] = preg_replace($pattern, $replacement, $string);
-					return self::$__singularized[$string];
+					$return = preg_replace($pattern, $replacement, $string);
+					break;
 				}
 			}
 		}
 
-		self::$__singularized[$string] = $string;
-		return $string;*/
+		if (empty($return)) {
+			$return = $string;
+		}
+
+		self::$_singularized[$string] = $return;
+
+		return $return;
 	}
 
 	/**
 	 * Inflect a word to a URL friendly slug. Removes all punctuation and replaces spaces with dashes.
-	 * Example: Some non-slugged word = Some-Non_slugged-Word
+	 * Example: Some non-slugged word = some-non_slugged-word
 	 *
 	 * @access public
 	 * @param string $string
 	 * @return string
 	 * @static
 	 */
-	public static function slugify($string) {
-		return strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-A-Za-z0-9\s]+/', '', $string))));
+	public static function slug($string) {
+		return strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-a-z0-9\s]+/i', '', $string))));
 	}
 
 	/**
@@ -183,7 +228,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function tableize($string) {
-		return lcfirst(self::camelize(self::pluralize($string)));
+		return lcfirst(self::camelCase(self::pluralize($string)));
+	}
+
+	/**
+	 * Inflect a word to a human readable string with all words capitalized.
+	 * Example: non_human_readable_word = Non Human Readable Word
+	 *
+	 * @access public
+	 * @param string $string
+	 * @return string
+	 * @static
+	 */
+	public static function titleCase($string) {
+		return ucwords(strtolower(str_replace('_', ' ', $string)));
 	}
 
 	/**
@@ -196,7 +254,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function underscore($string) {
-		return strtolower(preg_replace('/(\w)([A-Z]{1})/', '$1_$2', preg_replace('/[^_A-Za-z0-9\s]+/', '', $string)));
+		return trim(strtolower(str_replace('__', '_', preg_replace('/([A-Z]{1})/', '_$1', preg_replace('/[^_a-z0-9]+/i', '', preg_replace('/[\s]+/', '_', $string))))), '_');
 	}
 
 	/**
@@ -209,7 +267,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function variable($string) {
-		$string = preg_replace('/[^_A-Za-z0-9]+/', '', $string);
+		$string = preg_replace('/[^_a-z0-9]+/i', '', $string);
 
 		if (is_numeric(substr($string, 0, 1))) {
 			$string = '_' . $string;

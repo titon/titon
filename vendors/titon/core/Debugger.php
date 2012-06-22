@@ -55,10 +55,10 @@ class Debugger {
 	 * @var array
 	 */
 	protected $_errors = array();
-	
+
 	/**
 	 * The last uncaught exception.
-	 * 
+	 *
 	 * @access protected
 	 * @var Exception
 	 */
@@ -72,11 +72,11 @@ class Debugger {
 	public function __construct() {
 		ini_set('log_errors', true);
 		ini_set('report_memleaks', true);
-		ini_set('error_log', APP_TEMP . Logger::ERROR_LOG);
+		ini_set('error_log', APP_TEMP . 'error.log');
 
 		set_error_handler(array($this, 'error'), E_ALL | E_STRICT);
 		set_exception_handler(array($this, 'uncaught'));
-		
+
 		$this->enable();
 	}
 
@@ -118,7 +118,7 @@ class Debugger {
 		if (error_reporting() > 0) {
 			$this->output($number, $message, $file, $line, $context);
 		} else {
-			Logger::write(sprintf('[%s] %s: %s in %s on line %s.', date('d-M-Y H:i:s'), $this->errorType($number), $message, $file, $line));
+			Logger::error(sprintf('%s: %s in %s on line %s.', $this->errorType($number), $message, $file, $line));
 		}
 	}
 
@@ -133,11 +133,11 @@ class Debugger {
 		if (isset($this->errorTypes[$code])) {
 			return $this->errorTypes[$code];
 		}
-		
+
 		if ($this->_exception instanceof Exception) {
 			return Titon::loader()->baseClass(get_class($this->_exception));
 		}
-		
+
 		return 'Unknown Error';
 	}
 
@@ -194,7 +194,7 @@ class Debugger {
 				if (!empty($trace['line'])) {
 					$output .= ' (' . $trace['line'] . ')';
 				}
-				
+
 				$output .= '</td></tr>';
 
 				if (!empty($trace['args'])) {
@@ -214,7 +214,7 @@ class Debugger {
 		}
 
 		$output .= '</div>';
-		
+
 		echo $output;
 	}
 
@@ -310,11 +310,11 @@ class Debugger {
 					}
 
 					$method = $trace['function'];
-					
+
 					if (isset($trace['class'])) {
 						$method = $trace['class'] . $trace['type'] . $method;
 					}
-					
+
 					$current['method'] = $method;
 
 					$args = array();
@@ -351,17 +351,17 @@ class Debugger {
 	 */
 	public function uncaught(Exception $exception) {
 		$this->_exception = $exception;
-		
+
 		$trace = $exception->getTrace();
 		$method = '';
 
 		if (isset($trace[0]['class'])) {
 			$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] . '()';
-			
+
 		} else if (strpos($trace[0]['function'], 'closure') !== false) {
 			$method = get_class($trace[0]['args'][0]) . '[Closure]';
 		}
-		
+
 		$response = $method . ': ' . $exception->getMessage();
 		$code = $exception->getCode();
 

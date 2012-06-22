@@ -95,11 +95,11 @@ class Dispatch {
 		);
 
 		if ($scope['module'] !== '*') {
-			$scope['module'] = Inflector::slugify($scope['module']);
+			$scope['module'] = Inflector::slug($scope['module']);
 		}
 
 		if ($scope['controller'] !== '*') {
-			$scope['controller'] = Inflector::slugify($scope['controller']);
+			$scope['controller'] = Inflector::slug($scope['controller']);
 		}
 
 		$this->_mapping[$scope['module'] . '.' . $scope['controller']] = $dispatcher;
