@@ -88,6 +88,7 @@ Getters and setters should use singular words when dealing with a single record,
 * set() - Setting data based on a key (will overwrite)
 * add() - Adding data to an array without the need for a key (will append)
 * remove() - Remove data based on a key
+* create() - Create or generate some data or values
 * flush() - Remove all data
 * listing() - Return all data
 * has() - Checks if a key/index exists within an array

@@ -10,6 +10,7 @@
 namespace titon\utility;
 
 use titon\Titon;
+use titon\libs\traits\Cacheable;
 
 /**
  * String and grammar inflection. Converts strings to a certain format. Camel cased, singular, plural etc.
@@ -20,26 +21,10 @@ use titon\Titon;
  * @link	http://php.net/manual/book.mbstring.php
  */
 class Inflector {
-
-	/**
-	 * Cached pluralized strings for fast lookup.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected static $_pluralized = array();
-
-	/**
-	 * Cached singularized strings for fast lookup.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected static $_singularized = array();
+	use Cacheable;
 
 	/**
 	 * Inflect a word to a camel case form with the first letter being capitalized.
-	 * Example: Non-camel cased string = NonCamelCasedString
 	 *
 	 * @access public
 	 * @param string $string
@@ -47,12 +32,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function camelCase($string) {
-		return str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)))));
+		$key = array(__METHOD__, $string);
+
+		if ($cache = self::getCache($key)) {
+			return $cache;
+		}
+
+		return self::setCache(
+			$key,
+			str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)))))
+		);
 	}
 
 	/**
 	 * Inflect a word for a filename. Studly cased and capitalized.
-	 * Example: file_Name = FileName.php (or fileName.php)
 	 *
 	 * @access public
 	 * @param string $string
@@ -81,7 +74,6 @@ class Inflector {
 
 	/**
 	 * Inflect a word to a model name. Singular camel cased form.
-	 * Example: People = Person
 	 *
 	 * @access public
 	 * @param string $string
@@ -89,12 +81,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function modelize($string) {
-		return self::camelCase(self::singularize($string));
+		$key = array(__METHOD__, $string);
+
+		if ($cache = self::getCache($key)) {
+			return $cache;
+		}
+
+		return self::setCache(
+			$key,
+			self::camelCase(self::singularize($string))
+		);
 	}
 
 	/**
-	 * Inflect a word to a human readable string with only the first word capitalized.
-	 * Example: non_human_readable_word = Non human readable word
+	 * Inflect a word to a human readable string with only the first word capitalized and the rest lowercased.
 	 *
 	 * @access public
 	 * @param string $string
@@ -102,12 +102,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function normalCase($string) {
-		return ucfirst(strtolower(str_replace('_', ' ', $string)));
+		$key = array(__METHOD__, $string);
+
+		if ($cache = self::getCache($key)) {
+			return $cache;
+		}
+
+		return self::setCache(
+			$key,
+			ucfirst(strtolower(str_replace('_', ' ', $string)))
+		);
 	}
 
 	/**
 	 * Inflect a form to its pluralized form. Applies special rules to determine uninflected, irregular or regular forms.
-	 * Example: Person = People
 	 *
 	 * @access public
 	 * @param string $string
@@ -120,10 +128,11 @@ class Inflector {
 		}
 
 		$string = strtolower($string);
-		$return = null;
+		$result = null;
+		$key = array(__METHOD__, $string);
 
-		if (isset(self::$_pluralized[$string])) {
-			return self::$_pluralized[$string];
+		if ($cache = self::getCache($key)) {
+			return $cache;
 		}
 
 		$inflections = Titon::g11n()->current()->getInflections();
@@ -132,32 +141,29 @@ class Inflector {
 			return $string;
 
 		} else if (!empty($inflections['uninflected']) && in_array($string, $inflections['uninflected'])) {
-			$return = $string;
+			$result = $string;
 
 		} else if (!empty($inflections['irregular']) && in_array($string, $inflections['irregular'])) {
-			$return = array_search($string, $inflections['irregular']);
+			$result = array_search($string, $inflections['irregular']);
 
 		} else if (!empty($inflections['plural'])) {
 			foreach ($inflections['plural'] as $pattern => $replacement) {
 				if (preg_match($pattern, $string)) {
-					$return = preg_replace($pattern, $replacement, $string);
+					$result = preg_replace($pattern, $replacement, $string);
 					break;
 				}
 			}
 		}
 
-		if (empty($return)) {
-			$return = $string;
+		if (empty($result)) {
+			$result = $string;
 		}
 
-		self::$_pluralized[$string] = $return;
-
-		return $return;
+		return self::setCache($key, $result);
 	}
 
 	/**
 	 * Inflect a form to its pluralized form. Applies special rules to determine uninflected, irregular or regular forms.
-	 * Example: People = Person
 	 *
 	 * @access public
 	 * @param string $string
@@ -170,10 +176,11 @@ class Inflector {
 		}
 
 		$string = strtolower($string);
-		$return = null;
+		$result = null;
+		$key = array(__METHOD__, $string);
 
-		if (isset(self::$_singularized[$string])) {
-			return self::$_singularized[$string];
+		if ($cache = self::getCache($key)) {
+			return $cache;
 		}
 
 		$inflections = Titon::g11n()->current()->getInflections();
@@ -182,32 +189,29 @@ class Inflector {
 			return $string;
 
 		} else if (!empty($inflections['uninflected']) && in_array($string, $inflections['uninflected'])) {
-			$return = $string;
+			$result = $string;
 
 		} else if (!empty($inflections['irregular']) && in_array($string, $inflections['irregular'])) {
-			$return = array_search($string, $inflections['irregular']);
+			$result = array_search($string, $inflections['irregular']);
 
 		} else if (!empty($inflections['singular'])) {
 			foreach ($inflections['singular'] as $pattern => $replacement) {
 				if (preg_match($pattern, $string)) {
-					$return = preg_replace($pattern, $replacement, $string);
+					$result = preg_replace($pattern, $replacement, $string);
 					break;
 				}
 			}
 		}
 
-		if (empty($return)) {
-			$return = $string;
+		if (empty($result)) {
+			$result = $string;
 		}
 
-		self::$_singularized[$string] = $return;
-
-		return $return;
+		return self::setCache($key, $result);
 	}
 
 	/**
-	 * Inflect a word to a URL friendly slug. Removes all punctuation and replaces spaces with dashes.
-	 * Example: Some non-slugged word = some-non_slugged-word
+	 * Inflect a word to a URL friendly slug. Removes all punctuation, replaces dashes with underscores and spaces with dashes.
 	 *
 	 * @access public
 	 * @param string $string
@@ -215,12 +219,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function slug($string) {
-		return strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-a-z0-9\s]+/i', '', $string))));
+		$key = array(__METHOD__, $string);
+
+		if ($cache = self::getCache($key)) {
+			return $cache;
+		}
+
+		return self::setCache(
+			$key,
+			strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-a-z0-9\s]+/i', '', $string))))
+		);
 	}
 
 	/**
-	 * Inflect a word for a database table name. Formatted as plural and camel case with the first word lowercase.
-	 * Example: User Profile = userProfiles
+	 * Inflect a word for a database table name. Formatted as plural and camel case with the first letter lowercase.
 	 *
 	 * @access public
 	 * @param string $string
@@ -228,12 +240,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function tableize($string) {
-		return lcfirst(self::camelCase(self::pluralize($string)));
+		$key = array(__METHOD__, $string);
+
+		if ($cache = self::getCache($key)) {
+			return $cache;
+		}
+
+		return self::setCache(
+			$key,
+			lcfirst(self::camelCase(self::pluralize($string)))
+		);
 	}
 
 	/**
 	 * Inflect a word to a human readable string with all words capitalized.
-	 * Example: non_human_readable_word = Non Human Readable Word
 	 *
 	 * @access public
 	 * @param string $string
@@ -241,12 +261,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function titleCase($string) {
-		return ucwords(strtolower(str_replace('_', ' ', $string)));
+		$key = array(__METHOD__, $string);
+
+		if ($cache = self::getCache($key)) {
+			return $cache;
+		}
+
+		return self::setCache(
+			$key,
+			ucwords(strtolower(str_replace('_', ' ', $string)))
+		);
 	}
 
 	/**
 	 * Inflect a word to an underscore form that strips all punctuation and special characters and converts spaces to underscores.
-	 * Example: Non-Underscore'd String = nonunderscored_string
 	 *
 	 * @access public
 	 * @param string $string
@@ -254,12 +282,20 @@ class Inflector {
 	 * @static
 	 */
 	public static function underscore($string) {
-		return trim(strtolower(str_replace('__', '_', preg_replace('/([A-Z]{1})/', '_$1', preg_replace('/[^_a-z0-9]+/i', '', preg_replace('/[\s]+/', '_', $string))))), '_');
+		$key = array(__METHOD__, $string);
+
+		if ($cache = self::getCache($key)) {
+			return $cache;
+		}
+
+		return self::setCache(
+			$key,
+			trim(strtolower(str_replace('__', '_', preg_replace('/([A-Z]{1})/', '_$1', preg_replace('/[^_a-z0-9]+/i', '', preg_replace('/[\s]+/', '_', $string))))), '_')
+		);
 	}
 
 	/**
 	 * Inflect a word to be used as a PHP variable. Strip all but letters, numbers and underscores. Add an underscore if the first letter is numeric.
-	 * Example: 1some Variable = _1someVariable
 	 *
 	 * @access public
 	 * @param string $string

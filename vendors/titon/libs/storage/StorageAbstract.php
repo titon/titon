@@ -87,7 +87,7 @@ abstract class StorageAbstract extends Base implements Storage {
 	 * @return string
 	 */
 	public function key($key) {
-		return $this->cacheMethod(__FUNCTION__, $key, function($self) use ($key) {
+		return $this->cacheMethod(array(__METHOD__, $key), function($self) use ($key) {
 			$key = $self->config->prefix . (string) $key;
 
 			return trim(preg_replace('/[^a-z0-9\-_\.]+/is', '', str_replace(array('\\', '::'), '.', $key)), '.');

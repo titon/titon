@@ -18,36 +18,38 @@ use \Closure;
  * @package	titon.libs.traits
  */
 trait Memoizer {
-	
+
 	/**
 	 * Store the methods return value after evaluating.
-	 * 
+	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_methodCaches = array();
-	
+
 	/**
 	 * Execute the method and cache the result when executed. If the data has already been cached, return that instead.
-	 * 
+	 *
 	 * @access public
-	 * @param string $method
-	 * @param mixed $id
+	 * @param string|array $key
 	 * @param Closure $callback
-	 * @return mixed 
+	 * @return mixed
 	 */
-	public function cacheMethod($method, $id, Closure $callback) {
-		if ($id) {
-			$method .= ':' . $id;
+	public function cacheMethod($key, Closure $callback) {
+		if (method_exists(get_class($this), 'createCacheKey')) {
+			$key = self::createCacheKey($key);
+
+		} else if (is_array($key)) {
+			$key = implode('-', $key);
 		}
-		
-		if (isset($this->_methodCaches[$method])) {
-			return $this->_methodCaches[$method];
+
+		if (isset($this->_methodCaches[$key])) {
+			return $this->_methodCaches[$key];
 		}
-		
-		$this->_methodCaches[$method] = $callback($this);
-		
-		return $this->_methodCaches[$method];
+
+		$this->_methodCaches[$key] = $callback($this);
+
+		return $this->_methodCaches[$key];
 	}
-	
+
 }

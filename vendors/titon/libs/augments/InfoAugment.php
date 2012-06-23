@@ -62,7 +62,7 @@ class InfoAugment {
 	 * @throws titon\libs\augments\AugmentException
 	 */
 	public function __get($name) {
-		return $this->cacheMethod($name, null, function($self) use ($name) {
+		return $this->cacheMethod($name, function($self) use ($name) {
 			if (method_exists($self, $name)) {
 				return call_user_func_array(array($self, $name), array());
 			}
@@ -128,7 +128,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function methods() {
-		return $this->cacheMethod(__METHOD__, null, function($self) {
+		return $this->cacheMethod(__METHOD__, function($self) {
 			return array_unique(array_merge(
 				$self->publicMethods(),
 				$self->protectedMethods(),
@@ -185,7 +185,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function properties() {
-		return $this->cacheMethod(__METHOD__, null, function($self) {
+		return $this->cacheMethod(__METHOD__, function($self) {
 			return array_unique(array_merge(
 				$self->publicProperties(),
 				$self->protectedProperties(),
@@ -284,7 +284,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	protected function _methods($key, $scope) {
-		return $this->cacheMethod($key, null, function($self) use ($scope) {
+		return $this->cacheMethod($key, function($self) use ($scope) {
 			$methods = array();
 
 			foreach ($self->_reflection->getMethods($scope) as $method) {
@@ -304,7 +304,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	protected function _properties($key, $scope) {
-		return $this->cacheMethod($key, null, function($self) use ($scope) {
+		return $this->cacheMethod($key, function($self) use ($scope) {
 			$props = array();
 
 			foreach ($self->_reflection->getProperties($scope) as $prop) {

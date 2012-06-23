@@ -142,7 +142,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @throws titon\libs\translators\TranslatorException
 	 */
 	public function parseKey($key) {
-		return $this->cacheMethod(__FUNCTION__, $key, function($self) use ($key) {
+		return $this->cacheMethod(array(__METHOD__, $key), function($self) use ($key) {
 			$parts = explode('.', $key);
 			$count = count($parts);
 			$module = null;
