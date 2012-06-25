@@ -17,7 +17,7 @@ use titon\libs\controllers\Controller;
 use titon\libs\controllers\ControllerException;
 use titon\libs\engines\Engine;
 use titon\libs\engines\core\ViewEngine;
-use titon\libs\traits\Decorator;
+use titon\libs\traits\Attachable;
 use titon\utility\Inflector;
 use titon\utility\Set;
 use \Closure;
@@ -30,7 +30,7 @@ use \Closure;
  * The Controller receives an instance of the View object allowing the Controller to set data to the view,
  * overwrite the View and Engine configuration, attach helpers, etc.
  *
- * Furthermore, the Controller inherits all functionality from the Decorator class, allowing you to attach
+ * Furthermore, the Controller inherits all functionality from the Attachable class, allowing you to attach
  * external classes to use their functionality and trigger specific callbacks.
  *
  * @package	titon.libs.controllers
@@ -41,7 +41,7 @@ use \Closure;
  * @abstract
  */
 abstract class ControllerAbstract extends Base implements Controller {
-	use Decorator;
+	use Attachable;
 
 	/**
 	 * Configuration.

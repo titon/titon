@@ -13,7 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\libs\engines\Engine;
 use titon\libs\engines\EngineException;
-use titon\libs\traits\Decorator;
+use titon\libs\traits\Attachable;
 use titon\libs\traits\Memoizer;
 use titon\utility\Inflector;
 use \Closure;
@@ -34,7 +34,7 @@ use \Closure;
  * @abstract
  */
 abstract class EngineAbstract extends Base implements Engine {
-	use Memoizer, Decorator;
+	use Memoizer, Attachable;
 
 	/**
 	 * Constants for all the possible types of templates.

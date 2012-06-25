@@ -13,7 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\libs\dispatchers\Dispatcher;
 use titon\libs\dispatchers\DispatcherException;
-use titon\libs\traits\Decorator;
+use titon\libs\traits\Attachable;
 
 /**
  * The Dispatcher acts as the base for all child dispatchers. The Dispatcher should not be confused with Dispatch.
@@ -26,7 +26,7 @@ use titon\libs\traits\Decorator;
  * @abstract
  */
 abstract class DispatcherAbstract extends Base implements Dispatcher {
-	use Decorator;
+	use Attachable;
 
 	/**
 	 * Lazy load the controller object. Do not allow overrides.

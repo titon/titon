@@ -71,7 +71,7 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('[app]', $this->object->parseFile(TITON_APP));
 		$this->assertEquals('[app]modules/controllers/TestController.php', $this->object->parseFile(TITON_APP . 'modules/controllers/TestController.php'));
 		$this->assertEquals('[libs]', $this->object->parseFile(TITON_LIBS));
-		$this->assertEquals('[libs]traits/Decorator.php', $this->object->parseFile(TITON_LIBS . 'traits/Decorator.php'));
+		$this->assertEquals('[libs]traits/Attachable.php', $this->object->parseFile(TITON_LIBS . 'traits/Attachable.php'));
 	}
 
 }

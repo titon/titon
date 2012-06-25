@@ -12,21 +12,19 @@ namespace titon\libs\traits;
 use titon\Titon;
 use titon\libs\traits\TraitException;
 use titon\utility\Inflector;
-use titon\utility\Set;
 use \Closure;
 
 /**
- * The Decorator is an inheritable trait for all classes that need dependency or functionality from other classes.
+ * Attachable is an inheritable trait for all classes that need dependency or functionality from other classes.
  * It allows you to attach classes to the parent class, while encapsulating the attaching class in a Closure,
- * enabling the objects to only be instantiated when triggered; also known as, lazy loading.
+ * enabling the objects to only be instantiated when triggered; also known as lazy loading.
  *
  * @package	titon.libs.traits
  * @uses	titon\Titon
- * @uses	titon\base\TraitException
+ * @uses	titon\libs\traits\TraitException
  * @uses	titon\utility\Inflector
- * @uses	titon\utility\Set
  */
-trait Decorator {
+trait Attachable {
 
 	/**
 	 * Classes and their options / namespaces to load for dependencies.
@@ -37,12 +35,12 @@ trait Decorator {
 	protected $_classes = array();
 
 	/**
-	 * Classes that have been instantiated when called using getObject().
+	 * Classes that have been instantiated when called with getObject().
 	 *
 	 * @access protected
 	 * @var array
 	 */
-	protected $_loaded = array();
+	protected $_attached = array();
 
 	/**
 	 * Classes that have been loaded, but are unable to be used within the current scope.
@@ -61,7 +59,7 @@ trait Decorator {
 	private $__objectMap = array();
 
 	/**
-	 * Magic method for Decorator::getObject().
+	 * Magic method for getObject().
 	 *
 	 * @access public
 	 * @param string $class
@@ -71,9 +69,9 @@ trait Decorator {
 	final public function __get($class) {
 		return $this->getObject($class);
 	}
-	
+
 	/**
-	 * Magic method for Decorator::getObject().
+	 * Magic method for getObject().
 	 *
 	 * @access public
 	 * @param string $class
@@ -86,7 +84,7 @@ trait Decorator {
 	}
 
 	/**
-	 * Magic method for Decorator::hasObject().
+	 * Magic method for hasObject().
 	 *
 	 * @access public
 	 * @param string $class
@@ -98,7 +96,7 @@ trait Decorator {
 	}
 
 	/**
-	 * Magic method for Decorator::detachObject().
+	 * Magic method for detachObject().
 	 *
 	 * @access public
 	 * @param string $class
@@ -114,7 +112,7 @@ trait Decorator {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return titon\libs\traits\Decorator
+	 * @return titon\libs\traits\Attachable
 	 * @chainable
 	 */
 	public function allowObject($classes) {
@@ -131,7 +129,7 @@ trait Decorator {
 	 * @access public
 	 * @param array|string $options
 	 * @param Closure $closure
-	 * @return titon\libs\traits\Decorator
+	 * @return titon\libs\traits\Attachable
 	 * @throws titon\libs\traits\TraitException
 	 * @chainable
 	 */
@@ -164,38 +162,16 @@ trait Decorator {
 	}
 
 	/**
-	 * Parses the $_classes property and attaches any defined classes.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function decorate() {
-		if (!empty($this->_classes)) {
-			foreach ($this->_classes as $class => $options) {
-				if (is_string($options)) {
-					$options = array('class' => $options);
-				}
-
-				if (empty($options['alias'])) {
-					$options['alias'] = is_string($class) ? $class : Titon::loader()->baseClass($options['class']);
-				}
-
-				$this->attachObject($options);
-			}
-		}
-	}
-
-	/**
-	 * Remove an object permanently from the $_loaded, $_classes and $__objectMap properties.
+	 * Remove an object permanently from the $_attached, $_classes and $__objectMap properties.
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return titon\libs\traits\Decorator
+	 * @return titon\libs\traits\Attachable
 	 * @chainable
 	 */
 	public function detachObject($class) {
 		if (isset($this->_classes[$class])) {
-			unset($this->_classes[$class], $this->_loaded[$class], $this->__objectMap[$class]);
+			unset($this->_classes[$class], $this->_attached[$class], $this->__objectMap[$class]);
 		}
 
 		return $this;
@@ -214,8 +190,8 @@ trait Decorator {
 		if (in_array($class, $this->_restricted)) {
 			return null;
 
-		} else if (isset($this->_loaded[$class])) {
-			return $this->_loaded[$class];
+		} else if (isset($this->_attached[$class])) {
+			return $this->_attached[$class];
 
 		} else if (!isset($this->_classes[$class])) {
 			throw new TraitException(sprintf('No class configuration could be found for %s.', $class));
@@ -239,14 +215,14 @@ trait Decorator {
 				$object = new $options['class']();
 			}
 		}
-		
+
 		if ($options['interface'] && !($object instanceof $options['interface'])) {
 			throw new TraitException(sprintf('%s does not implement the %s interface.', get_class($object), $options['interface']));
 		}
 
-		$this->_loaded[$class] =& $object;
+		$this->_attached[$class] =& $object;
 
-		return $this->_loaded[$class];
+		return $this->_attached[$class];
 	}
 
 	/**
@@ -257,23 +233,7 @@ trait Decorator {
 	 * @return boolean
 	 */
 	public function hasObject($class) {
-		return (isset($this->_loaded[$class]) || isset($this->__objectMap[$class]));
-	}
-
-	/**
-	 * Restrict a class from being used within the current scope, or until the class is allowed again.
-	 *
-	 * @access public
-	 * @param string|array $classes
-	 * @return titon\libs\traits\Decorator
-	 * @chainable
-	 */
-	public function restrictObject($classes) {
-		foreach ((array) $classes as $class){
-			$this->_restricted[$class] = $class;
-		}
-
-		return $this;
+		return (isset($this->_attached[$class]) || isset($this->__objectMap[$class]));
 	}
 
 	/**
@@ -281,10 +241,11 @@ trait Decorator {
 	 *
 	 * @access public
 	 * @param string $method
-	 * @return void
+	 * @return titon\libs\traits\Attachable
+	 * @chainable
 	 */
-	public function triggerObjects($method) {
-		if (is_string($method) && !empty($this->_classes)) {
+	public function notifyObjects($method) {
+		if (!empty($this->_classes)) {
 			foreach ($this->_classes as $options) {
 				if ($options['callback']) {
 					$object = $this->getObject($options['alias']);
@@ -295,6 +256,24 @@ trait Decorator {
 				}
 			}
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Restrict a class from being used within the current scope, or until the class is allowed again.
+	 *
+	 * @access public
+	 * @param string|array $classes
+	 * @return titon\libs\traits\Attachable
+	 * @chainable
+	 */
+	public function restrictObject($classes) {
+		foreach ((array) $classes as $class){
+			$this->_restricted[$class] = $class;
+		}
+
+		return $this;
 	}
 
 }

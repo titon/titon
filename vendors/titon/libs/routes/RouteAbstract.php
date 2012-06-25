@@ -13,7 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\libs\routes\Route;
 use titon\libs\routes\RouteException;
-use titon\libs\traits\Decorator;
+use titon\libs\traits\Attachable;
 
 /**
  * Represents the skeleton for an individual route. A route matches an internal URL that gets analyzed into multiple parts:
@@ -26,7 +26,7 @@ use titon\libs\traits\Decorator;
  * @abstract
  */
 abstract class RouteAbstract extends Base implements Route {
-	use Decorator;
+	use Attachable;
 
 	/**
 	 * Pre-defined regex patterns.
