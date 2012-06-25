@@ -39,8 +39,8 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 		$this->attachObject(array(
 			'alias' => 'controller',
 			'interface' => '\titon\libs\controllers\Controller'
-		), function($self) {
-			return $self->loadController();
+		), function() {
+			return $this->loadController();
 		});
 	}
 

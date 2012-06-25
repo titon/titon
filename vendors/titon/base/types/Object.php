@@ -13,7 +13,7 @@ use titon\base\BaseException;
 use \Closure;
 
 /**
- * The Object type allows for the dynamic creation of classes during runtime, with support for properties and methods. 
+ * The Object type allows for the dynamic creation of classes during runtime, with support for properties and methods.
  * This class should not be used as a replacement for standard classes, but as a way to mock up objects when needed.
  *
  * @package	titon.base.types
@@ -131,7 +131,7 @@ class Object {
 			throw new BaseException(sprintf('Method %s already exists.', $name));
 		}
 
-		$this->_methods[$name] = $method;
+		$this->_methods[$name] = Closure::bind($method, $this, __CLASS__);
 
 		return $this;
 	}
@@ -174,29 +174,7 @@ class Object {
 				$args = array($args);
 			}
 
-			switch (count($args)) {
-				case 6:
-					return $this->_methods[$name]($this, $args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);
-				break;
-				case 5:
-					return $this->_methods[$name]($this, $args[0], $args[1], $args[2], $args[3], $args[4]);
-				break;
-				case 4:
-					return $this->_methods[$name]($this, $args[0], $args[1], $args[2], $args[3]);
-				break;
-				case 3:
-					return $this->_methods[$name]($this, $args[0], $args[1], $args[2]);
-				break;
-				case 2:
-					return $this->_methods[$name]($this, $args[0], $args[1]);
-				break;
-				case 1:
-					return $this->_methods[$name]($this, $args[0]);
-				break;
-				default:
-					return $this->_methods[$name]($this);
-				break;
-			}
+			return call_user_func_array($this->_methods[$name], $args);
 		}
 
 		throw new BaseException(sprintf('Method %s does not exist.', $name));
@@ -279,7 +257,7 @@ class Object {
 	 */
 	public function setMethod($name, Closure $method) {
 		if ($this->hasMethod($name)) {
-			$this->_methods[$name] = $method;
+			$this->_methods[$name] = Closure::bind($method, $this, __CLASS__);
 
 		} else {
 			$this->addMethod($name, $method);
@@ -300,7 +278,7 @@ class Object {
 	public function setProperty($name, $value) {
 		if ($this->hasProperty($name)) {
 			$this->_properties[$name] = $value;
-			
+
 		} else {
 			$this->addProperty($name, $value);
 		}

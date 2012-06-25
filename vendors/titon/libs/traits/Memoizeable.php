@@ -49,7 +49,7 @@ trait Memoizeable {
 
 		$callback = Closure::bind($callback, $this, __CLASS__);
 
-		$this->_methodCaches[$key] = $callback($this);
+		$this->_methodCaches[$key] = $callback();
 
 		return $this->_methodCaches[$key];
 	}

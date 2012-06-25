@@ -52,15 +52,15 @@ abstract class ReaderAbstract extends Base implements Reader {
 	public function read($path) {
 		$this->_path = $path;
 
-		return $this->cacheMethod(array(__METHOD__, $path), function($self) use ($path) {
-			$ext = $self->getExtension();
+		return $this->cacheMethod(array(__METHOD__, $path), function() use ($path) {
+			$ext = $this->getExtension();
 
 			if (substr($path, -strlen($ext)) !== $ext) {
 				throw new ReaderException(sprintf('Reader will only parse %s files.', $ext));
 			}
 
 			if (file_exists($path)) {
-				$data = $self->parse();
+				$data = $this->parse();
 
 				if (is_array($data)) {
 					return $data;

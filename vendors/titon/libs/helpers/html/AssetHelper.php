@@ -87,7 +87,7 @@ class AssetHelper extends HelperAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->attachObject('html', function($self) {
+		$this->attachObject('html', function() {
 			return Titon::registry()->factory('titon\libs\helpers\html\HtmlHelper');
 		});
 	}

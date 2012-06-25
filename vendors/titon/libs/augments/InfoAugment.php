@@ -62,9 +62,9 @@ class InfoAugment {
 	 * @throws titon\libs\augments\AugmentException
 	 */
 	public function __get($name) {
-		return $this->cacheMethod($name, function($self) use ($name) {
-			if (method_exists($self, $name)) {
-				return call_user_func_array(array($self, $name), array());
+		return $this->cacheMethod($name, function() use ($name) {
+			if (method_exists($this, $name)) {
+				return call_user_func_array(array($this, $name), array());
 			}
 
 			throw new AugmentException(sprintf('Information descriptor %s does not exist.', $name));
@@ -128,12 +128,12 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function methods() {
-		return $this->cacheMethod(__METHOD__, function($self) {
+		return $this->cacheMethod(__METHOD__, function() {
 			return array_unique(array_merge(
-				$self->publicMethods(),
-				$self->protectedMethods(),
-				$self->privateMethods(),
-				$self->staticMethods()
+				$this->publicMethods(),
+				$this->protectedMethods(),
+				$this->privateMethods(),
+				$this->staticMethods()
 			));
 		});
 	}
@@ -185,12 +185,12 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function properties() {
-		return $this->cacheMethod(__METHOD__, function($self) {
+		return $this->cacheMethod(__METHOD__, function() {
 			return array_unique(array_merge(
-				$self->publicProperties(),
-				$self->protectedProperties(),
-				$self->privateProperties(),
-				$self->staticProperties()
+				$this->publicProperties(),
+				$this->protectedProperties(),
+				$this->privateProperties(),
+				$this->staticProperties()
 			));
 		});
 	}
@@ -284,10 +284,10 @@ class InfoAugment {
 	 * @return array
 	 */
 	protected function _methods($key, $scope) {
-		return $this->cacheMethod($key, function($self) use ($scope) {
+		return $this->cacheMethod($key, function() use ($scope) {
 			$methods = array();
 
-			foreach ($self->_reflection->getMethods($scope) as $method) {
+			foreach ($this->_reflection->getMethods($scope) as $method) {
 				$methods[] = $method->getName();
 			}
 
@@ -304,10 +304,10 @@ class InfoAugment {
 	 * @return array
 	 */
 	protected function _properties($key, $scope) {
-		return $this->cacheMethod($key, function($self) use ($scope) {
+		return $this->cacheMethod($key, function() use ($scope) {
 			$props = array();
 
-			foreach ($self->_reflection->getProperties($scope) as $prop) {
+			foreach ($this->_reflection->getProperties($scope) as $prop) {
 				$props[] = $prop->getName();
 			}
 

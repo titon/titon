@@ -128,12 +128,12 @@ trait Attachable {
 	 *
 	 * @access public
 	 * @param array|string $options
-	 * @param Closure $closure
+	 * @param Closure $callback
 	 * @return titon\libs\traits\Attachable
 	 * @throws titon\libs\traits\TraitException
 	 * @chainable
 	 */
-	public function attachObject($options, Closure $closure = null) {
+	public function attachObject($options, Closure $callback = null) {
 		if (is_string($options)) {
 			$options = array('alias' => $options);
 		}
@@ -154,8 +154,8 @@ trait Attachable {
 
 		$this->_classes[$options['alias']] = $options;
 
-		if ($closure !== null && $closure instanceof Closure) {
-			$this->__objectMap[$options['alias']] = $closure;
+		if ($callback !== null && $callback instanceof Closure) {
+			$this->__objectMap[$options['alias']] = Closure::bind($callback, $this, __CLASS__);
 		}
 
 		return $this;
@@ -202,7 +202,7 @@ trait Attachable {
 
 		// Load the object
 		if (isset($this->__objectMap[$class])) {
-			$object = $this->__objectMap[$class]($this);
+			$object = $this->__objectMap[$class]();
 
 			$this->_classes[$class]['class'] = get_class($object);
 

@@ -14,19 +14,19 @@ use titon\libs\helpers\html\AssetHelper as HtmlAssetHelper;
 
 /**
  * The AssetHelper aids in the process of including external stylesheets and scripts.
- * 
+ *
  * @package	titon.libs.helpers.xhtml
  */
 class AssetHelper extends HtmlAssetHelper {
 
 	/**
 	 * Attach the XhtmlHelper.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
-		$this->attachObject('html', function($self) {
+		$this->attachObject('html', function() {
 			return Titon::registry()->factory('titon\libs\helpers\xhtml\XhtmlHelper');
 		});
 	}

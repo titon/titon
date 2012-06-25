@@ -30,23 +30,23 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
 	 * Test that adding, removing, setting and calling methods work correctly.
 	 */
 	public function testMethods() {
-		$this->object->addMethod('testMethod', function($self, $arg1, $arg2 = 0) {
+		$this->object->addMethod('testMethod', function($arg1, $arg2 = 0) {
 			return $arg1 + $arg2;
 		});
 
-		$this->object->addMethod('testSelf', function($self) {
-			return $self;
+		$this->object->addMethod('testSelf', function() {
+			return $this;
 		});
 
 		try {
-			$this->object->addMethod('testMethod', function($self) {});
+			$this->object->addMethod('testMethod', function() {});
 			$this->assertFalse(true);
 		} catch (\Exception $e) {
 			$this->assertTrue(true, $e->getMessage());
 		}
 
 		try {
-			$this->object->addMethod(12345, function($self) {});
+			$this->object->addMethod(12345, function() {});
 			$this->assertFalse(true);
 		} catch (\Exception $e) {
 			$this->assertTrue(true, $e->getMessage());
@@ -72,7 +72,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
 		$this->assertFalse($this->object->hasMethod('fooBar'));
 
 		// override previous method
-		$this->object->setMethod('testMethod', function($self, $arg1 = '', $arg2 = '') {
+		$this->object->setMethod('testMethod', function($arg1 = '', $arg2 = '') {
 			return $arg1 . $arg2;
 		});
 

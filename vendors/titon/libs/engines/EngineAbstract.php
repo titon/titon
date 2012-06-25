@@ -252,7 +252,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return void
 	 */
 	public function preRender() {
-		$this->triggerObjects('preRender');
+		$this->notifyObjects('preRender');
 	}
 
 	/**
@@ -262,7 +262,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return void
 	 */
 	public function postRender() {
-		$this->triggerObjects('postRender');
+		$this->notifyObjects('postRender');
 	}
 
 	/**
@@ -349,7 +349,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return string
 	 */
 	protected function _preparePath($path) {
-		return $this->cacheMethod(array(__METHOD__, $path), function($self) use ($path) {
+		return $this->cacheMethod(array(__METHOD__, $path), function() use ($path) {
 			$path = Titon::loader()->ds($path);
 
 			if (substr($path, -4) === '.tpl') {

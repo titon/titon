@@ -39,7 +39,7 @@ class BreadcrumbHelper extends HelperAbstract {
 	 */
 	public function add($title, $url, array $attributes = array()) {
 		$this->_breadcrumbs[] = array($title, $url, $attributes);
-		
+
 		return $this;
 	}
 
@@ -63,12 +63,12 @@ class BreadcrumbHelper extends HelperAbstract {
 
 	/**
 	 * Attach the HtmlHelper.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
-		$this->attachObject('html', function($self) {
+		$this->attachObject('html', function() {
 			return Titon::registry()->factory('titon\libs\helpers\html\HtmlHelper');
 		});
 	}

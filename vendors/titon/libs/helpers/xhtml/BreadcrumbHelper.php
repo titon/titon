@@ -21,12 +21,12 @@ class BreadcrumbHelper extends HtmlBreadcrumbHelper {
 
 	/**
 	 * Attach the XhtmlHelper.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
-		$this->attachObject('html', function($self) {
+		$this->attachObject('html', function() {
 			return Titon::registry()->factory('titon\libs\helpers\xhtml\XhtmlHelper');
 		});
 	}

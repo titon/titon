@@ -137,9 +137,9 @@ class Request extends Base {
 	 * @return string
 	 */
 	public function clientIp() {
-		return $this->cacheMethod(__METHOD__, function($self) {
+		return $this->cacheMethod(__METHOD__, function() {
 			foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
-				if (($address = $self->env($key)) !== null) {
+				if (($address = $this->env($key)) !== null) {
 					return $address;
 				}
 			}
@@ -244,8 +244,8 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isFlash() {
-		return $this->cacheMethod(__METHOD__, function($self) {
-			return (bool) preg_match('/^(Shockwave|Adobe) Flash/', $self->userAgent(false));
+		return $this->cacheMethod(__METHOD__, function() {
+			return (bool) preg_match('/^(Shockwave|Adobe) Flash/', $this->userAgent(false));
 		});
 	}
 
@@ -287,12 +287,12 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isMobile() {
-		return $this->cacheMethod(__METHOD__, function($self) {
+		return $this->cacheMethod(__METHOD__, function() {
 			$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|';
 			$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
 			$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
 
-			return (bool) preg_match('/(' . $mobiles . ')/i', $self->userAgent(false));
+			return (bool) preg_match('/(' . $mobiles . ')/i', $this->userAgent(false));
 		});
 	}
 
@@ -323,8 +323,8 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isSecure() {
-		return $this->cacheMethod(__METHOD__, function($self) {
-			return ($self->env('HTTPS') === 'on' || $self->env('SERVER_PORT') === 443);
+		return $this->cacheMethod(__METHOD__, function() {
+			return ($this->env('HTTPS') === 'on' || $this->env('SERVER_PORT') === 443);
 		});
 	}
 
@@ -355,17 +355,17 @@ class Request extends Base {
 	 * @return string
 	 */
 	public function referrer() {
-		return $this->cacheMethod(__METHOD__, function($self) {
-			$referrer = $self->env('HTTP_REFERER');
+		return $this->cacheMethod(__METHOD__, function() {
+			$referrer = $this->env('HTTP_REFERER');
 
 			if (empty($referrer)) {
 				return '';
 			}
 
-			$host = $self->env('HTTP_HOST');
+			$host = $this->env('HTTP_HOST');
 
 			if (strpos($referrer, $host) !== false) {
-				$referrer = str_replace($self->protocol() . '://' . $host, '', $referrer);
+				$referrer = str_replace($this->protocol() . '://' . $host, '', $referrer);
 			}
 
 			return trim($referrer);
@@ -394,8 +394,8 @@ class Request extends Base {
 	 * @return array|string
 	 */
 	public function userAgent($explicit = false) {
-		return $this->cacheMethod([__METHOD__, $explicit], function($self) use ($explicit) {
-			$agent = $self->env('HTTP_USER_AGENT');
+		return $this->cacheMethod([__METHOD__, $explicit], function() use ($explicit) {
+			$agent = $this->env('HTTP_USER_AGENT');
 
 			if ($explicit && function_exists('get_browser')) {
 				$browser = get_browser($agent, true);
@@ -421,8 +421,8 @@ class Request extends Base {
 	 * @return array
 	 */
 	protected function _accepts($header) {
-		return $this->cacheMethod([__METHOD__, $header], function($self) use ($header) {
-			$accept = explode(',', $self->env($header));
+		return $this->cacheMethod([__METHOD__, $header], function() use ($header) {
+			$accept = explode(',', $this->env($header));
 			$data = array();
 
 			if (count($accept) > 0) {
