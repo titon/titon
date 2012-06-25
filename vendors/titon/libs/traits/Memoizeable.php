@@ -12,12 +12,12 @@ namespace titon\libs\traits;
 use \Closure;
 
 /**
- * The Memoizer provides functionality to speed up processing time by having method calls avoid repeat
+ * Memoizeable provides functionality to speed up processing time by having method calls avoid repeat
  * executions by caching the results. This process is widely known as Memoization.
  *
  * @package	titon.libs.traits
  */
-trait Memoizer {
+trait Memoizeable {
 
 	/**
 	 * Store the methods return value after evaluating.
@@ -36,7 +36,7 @@ trait Memoizer {
 	 * @return mixed
 	 */
 	public function cacheMethod($key, Closure $callback) {
-		if (method_exists(get_class($this), 'createCacheKey')) {
+		if (method_exists(__CLASS__, 'createCacheKey')) {
 			$key = self::createCacheKey($key);
 
 		} else if (is_array($key)) {
@@ -46,6 +46,8 @@ trait Memoizer {
 		if (isset($this->_methodCaches[$key])) {
 			return $this->_methodCaches[$key];
 		}
+
+		$callback = Closure::bind($callback, $this, __CLASS__);
 
 		$this->_methodCaches[$key] = $callback($this);
 

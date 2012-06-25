@@ -12,7 +12,7 @@ namespace titon\core;
 use titon\Titon;
 use titon\core\CoreException;
 use titon\libs\bundles\locales\LocaleBundle;
-use titon\libs\traits\Memoizer;
+use titon\libs\traits\Memoizeable;
 use titon\libs\translators\Translator;
 use \Locale;
 
@@ -30,7 +30,7 @@ use \Locale;
  * @uses	titon\libs\translators\Translator
  */
 class G11n {
-	use Memoizer;
+	use Memoizeable;
 
 	/**
 	 * Possible formats for locale keys.
@@ -116,12 +116,14 @@ class G11n {
 	 * @return array
 	 */
 	public function cascade() {
-		$cycle = array();
+		return $this->cacheMethod(__METHOD__, function() {
+			$cycle = array();
 
-		$this->_cascade($this->current(), $cycle);
-		$this->_cascade($this->getFallback(), $cycle);
+			$this->_cascade($this->current(), $cycle);
+			$this->_cascade($this->getFallback(), $cycle);
 
-		return array_unique($cycle);
+			return array_unique($cycle);
+		});
 	}
 
 	/**
@@ -266,22 +268,24 @@ class G11n {
 	 *
 	 * @access public
 	 * @return boolean
-	 *
-	 * @todo use Memoizer
 	 */
 	public function isEnabled() {
-		if (empty($this->_locales)) {
-			return false;
-		}
+		return $this->cacheMethod(__METHOD__, function() {
+			$locales = $this->getLocales();
 
-		$loaded = array();
+			if (empty($locales)) {
+				return false;
+			}
 
-		foreach ($this->_locales as $bundle) {
-			$locale = $bundle->getLocale();
-			$loaded[] = isset($locale['parent']) ? $locale['parent'] : $locale['id'];
-		}
+			$loaded = array();
 
-		return (count(array_unique($loaded)) > 1);
+			foreach ($locales as $bundle) {
+				$locale = $bundle->getLocale();
+				$loaded[] = isset($locale['parent']) ? $locale['parent'] : $locale['id'];
+			}
+
+			return (count(array_unique($loaded)) > 1);
+		});
 	}
 
 	/**

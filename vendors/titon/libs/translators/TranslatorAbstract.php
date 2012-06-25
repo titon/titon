@@ -13,7 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\libs\readers\Reader;
 use titon\libs\storage\Storage;
-use titon\libs\traits\Memoizer;
+use titon\libs\traits\Memoizeable;
 use titon\libs\translators\Translator;
 use titon\libs\translators\TranslatorException;
 use \MessageFormatter;
@@ -28,7 +28,7 @@ use \Locale;
  * @abstract
  */
 abstract class TranslatorAbstract extends Base implements Translator {
-	use Memoizer;
+	use Memoizeable;
 
 	/**
 	 * List of MessageBundle's.

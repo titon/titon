@@ -12,7 +12,7 @@ namespace titon\libs\readers;
 use titon\Titon;
 use titon\base\Base;
 use titon\libs\readers\Reader;
-use titon\libs\traits\Memoizer;
+use titon\libs\traits\Memoizeable;
 
 /**
  * Abstract class that implements the extension and file detection for Readers.
@@ -21,7 +21,7 @@ use titon\libs\traits\Memoizer;
  * @abstract
  */
 abstract class ReaderAbstract extends Base implements Reader {
-	use Memoizer;
+	use Memoizeable;
 
 	/**
 	 * Path to the current file to read.

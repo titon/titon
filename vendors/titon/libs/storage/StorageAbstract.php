@@ -11,7 +11,7 @@ namespace titon\libs\storage;
 
 use titon\base\Base;
 use titon\libs\storage\Storage;
-use titon\libs\traits\Memoizer;
+use titon\libs\traits\Memoizeable;
 
 /**
  * Primary class for all storage engines to extend. Provides functionality from the Base class and the Storage interface.
@@ -20,7 +20,7 @@ use titon\libs\traits\Memoizer;
  * @abstract
  */
 abstract class StorageAbstract extends Base implements Storage {
-	use Memoizer;
+	use Memoizeable;
 
 	/**
 	 * The third-party class instance.

@@ -13,7 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\constant\Http;
 use titon\net\NetException;
-use titon\libs\traits\Memoizer;
+use titon\libs\traits\Memoizeable;
 
 /**
  * The Request object is the primary source of data and state management for the environment.
@@ -25,7 +25,7 @@ use titon\libs\traits\Memoizer;
  * @uses	titon\net\NetException
  */
 class Request extends Base {
-	use Memoizer;
+	use Memoizeable;
 
 	/**
 	 * An combined array of $_POST and $_FILES data for the current request.

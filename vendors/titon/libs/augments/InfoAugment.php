@@ -10,7 +10,7 @@
 namespace titon\libs\augments;
 
 use titon\Titon;
-use titon\libs\traits\Memoizer;
+use titon\libs\traits\Memoizeable;
 use \ReflectionClass;
 use \ReflectionMethod;
 use \ReflectionProperty;
@@ -24,7 +24,7 @@ use \ReflectionProperty;
  * @uses	titon\Titon
  */
 class InfoAugment {
-	use Memoizer;
+	use Memoizeable;
 
 	/**
 	 * Class to introspect.
