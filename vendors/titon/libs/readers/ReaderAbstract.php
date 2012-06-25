@@ -32,6 +32,16 @@ abstract class ReaderAbstract extends Base implements Reader {
 	protected $_path;
 
 	/**
+	 * Set the path during construction.
+	 *
+	 * @access public
+	 * @param string $path
+	 */
+	public function __construct($path = null) {
+		$this->_path = $path;
+	}
+
+	/**
 	 * Return the file extension for the reader.
 	 *
 	 * @access protected
@@ -49,8 +59,12 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @return array
 	 * @throws titon\libs\readers\ReaderException
 	 */
-	public function read($path) {
-		$this->_path = $path;
+	public function read($path = null) {
+		if ($path) {
+			$this->_path = $path;
+		} else {
+			$path = $this->_path;
+		}
 
 		return $this->cacheMethod(array(__METHOD__, $path), function() use ($path) {
 			$ext = $this->getExtension();

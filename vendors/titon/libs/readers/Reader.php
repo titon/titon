@@ -39,6 +39,6 @@ interface Reader {
 	 * @param string $path
 	 * @return array
 	 */
-	public function read($path);
+	public function read($path = null);
 
 }
