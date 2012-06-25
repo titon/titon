@@ -14,6 +14,7 @@ use titon\base\Base;
 use titon\libs\bundles\Bundle;
 use titon\libs\bundles\BundleException;
 use titon\libs\readers\Reader;
+use titon\libs\traits\Cacheable;
 use titon\utility\Inflector;
 
 /**
@@ -25,14 +26,7 @@ use titon\utility\Inflector;
  * @abstract
  */
 abstract class BundleAbstract extends Base implements Bundle {
-
-	/**
-	 * Cached file contents by resource name.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_data = array();
+	use Cacheable;
 
 	/**
 	 * Resource locations.
@@ -122,8 +116,8 @@ abstract class BundleAbstract extends Base implements Bundle {
 			throw new BundleException('A Reader must be loaded to read Bundle resources.');
 		}
 
-		if (isset($this->_data[$resource])) {
-			return $this->_data[$resource];
+		if ($cache = self::getCache($resource)) {
+			return $cache;
 		}
 
 		$contents = array();
@@ -140,9 +134,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 			}
 		}
 
-		$this->_data[$resource] = $contents;
-
-		return $contents;
+		return self::setCache($resource, $contents);
 	}
 
 }
