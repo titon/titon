@@ -22,37 +22,25 @@ use \Locale;
 class GettextTranslator extends TranslatorAbstract {
 
 	/**
-	 * Cached domain lookups.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_domains = array();
-
-	/**
 	 * Bind domain locations if they have not been setup.
 	 *
 	 * @access public
 	 * @param string $module
 	 * @param string $catalog
-	 * @return void
+	 * @return boolean
 	 */
 	public function bindDomains($module, $catalog) {
-		$domainKey = $module . '.' . $catalog;
-
 		bind_textdomain_codeset($catalog, Titon::config()->encoding());
 
-		if (isset($this->_domains[$domainKey])) {
-			return;
-		}
+		return $this->cache([__METHOD__, $module, $catalog], function() use ($module, $catalog) {
+			if ($module) {
+				bindtextdomain($catalog, APP_MODULES . $module . '/resources/messages');
+			}
 
-		if ($module) {
-			bindtextdomain($catalog, APP_MODULES . $module . '/resources/messages');
-		}
+			bindtextdomain($catalog, APP_RESOURCES  . 'messages');
 
-		bindtextdomain($catalog, APP_RESOURCES  . 'messages');
-
-		$this->_domains[$domainKey] = true;
+			return true;
+		});
 	}
 
 	/**
@@ -64,23 +52,19 @@ class GettextTranslator extends TranslatorAbstract {
 	 * @throws titon\libs\translators\TranslatorException
 	 */
 	public function getMessage($key) {
-		if (isset($this->_cache[$key])) {
-			return $this->_cache[$key];
-		}
+		return $this->cache([__METHOD__, $key], function() use ($key) {
+			list($module, $catalog, $id) = $this->parseKey($key);
 
-		list($module, $catalog, $id) = $this->parseKey($key);
+			$this->bindDomains($module, $catalog);
 
-		$this->bindDomains($module, $catalog);
+			$message = dgettext($catalog, $id);
 
-		$message = dgettext($catalog, $id);
+			if ($message !== $id) {
+				return $message;
+			}
 
-		if ($message !== $id) {
-			$this->_cache[$key] = $message;
-
-			return $message;
-		}
-
-		throw new TranslatorException(sprintf('Message key %s does not exist in %s.', $key, Locale::DEFAULT_LOCALE));
+			throw new TranslatorException(sprintf('Message key %s does not exist in %s.', $key, Locale::DEFAULT_LOCALE));
+		});
 	}
 
 }
