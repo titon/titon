@@ -10,7 +10,7 @@
 namespace titon\libs\augments;
 
 use titon\Titon;
-use titon\libs\traits\Memoizeable;
+use titon\libs\traits\Cacheable;
 use \ReflectionClass;
 use \ReflectionMethod;
 use \ReflectionProperty;
@@ -24,7 +24,7 @@ use \ReflectionProperty;
  * @uses	titon\Titon
  */
 class InfoAugment {
-	use Memoizeable;
+	use Cacheable;
 
 	/**
 	 * Class to introspect.
@@ -62,7 +62,7 @@ class InfoAugment {
 	 * @throws titon\libs\augments\AugmentException
 	 */
 	public function __get($name) {
-		return $this->cacheMethod($name, function() use ($name) {
+		return $this->cache($name, function() use ($name) {
 			if (method_exists($this, $name)) {
 				return call_user_func_array(array($this, $name), array());
 			}
@@ -128,7 +128,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function methods() {
-		return $this->cacheMethod(__METHOD__, function() {
+		return $this->cache(__METHOD__, function() {
 			return array_unique(array_merge(
 				$this->publicMethods(),
 				$this->protectedMethods(),
@@ -185,7 +185,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function properties() {
-		return $this->cacheMethod(__METHOD__, function() {
+		return $this->cache(__METHOD__, function() {
 			return array_unique(array_merge(
 				$this->publicProperties(),
 				$this->protectedProperties(),
@@ -284,7 +284,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	protected function _methods($key, $scope) {
-		return $this->cacheMethod($key, function() use ($scope) {
+		return $this->cache($key, function() use ($scope) {
 			$methods = array();
 
 			foreach ($this->_reflection->getMethods($scope) as $method) {
@@ -304,7 +304,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	protected function _properties($key, $scope) {
-		return $this->cacheMethod($key, function() use ($scope) {
+		return $this->cache($key, function() use ($scope) {
 			$props = array();
 
 			foreach ($this->_reflection->getProperties($scope) as $prop) {

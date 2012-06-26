@@ -64,6 +64,10 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 			$this->object->initialize();
 
 			$this->assertEquals($localeId, $this->object->cascade());
+
+			// Delete the cache since we are doing repeat checks
+			// This wouldn't happen in production
+			$this->object->removeCache('titon\core\G11n::cascade');
 		}
 	}
 

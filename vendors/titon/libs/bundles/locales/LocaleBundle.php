@@ -34,12 +34,33 @@ class LocaleBundle extends BundleAbstract {
 	);
 
 	/**
+	 * Locale digest configuration overrides.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_override = array();
+
+	/**
 	 * Parent locale bundle.
 	 *
 	 * @access protected
 	 * @var titon\libs\bundles\locales\LocaleBundle
 	 */
 	protected $_parent;
+
+	/**
+	 * Apply the configuration and overrides.
+	 *
+	 * @access public
+	 * @param array $config
+	 * @param array $override
+	 */
+	public function __construct(array $config = array(), array $override = array()) {
+		parent::__construct($config);
+
+		$this->_override = $override;
+	}
 
 	/**
 	 * Convenience method to return the formatting rules.
@@ -49,7 +70,9 @@ class LocaleBundle extends BundleAbstract {
 	 * @return mixed
 	 */
 	public function getFormats($key = null) {
-		$data = $this->loadResource('formats');
+		$data = $this->cache(__METHOD__, function() {
+			return $this->loadResource('formats');
+		});
 
 		if ($key) {
 			return isset($data[$key]) ? $data[$key] : null;
@@ -66,7 +89,9 @@ class LocaleBundle extends BundleAbstract {
 	 * @return mixed
 	 */
 	public function getInflections($key = null) {
-		$data = $this->loadResource('inflections');
+		$data = $this->cache(__METHOD__, function() {
+			return $this->loadResource('inflections');
+		});
 
 		if ($key) {
 			return isset($data[$key]) ? $data[$key] : null;
@@ -83,7 +108,9 @@ class LocaleBundle extends BundleAbstract {
 	 * @return mixed
 	 */
 	public function getLocale($key = null) {
-		$data = $this->loadResource('locale');
+		$data = $this->cache(__METHOD__, function() {
+			return $this->loadResource('locale');
+		});
 
 		if ($key) {
 			return isset($data[$key]) ? $data[$key] : null;
@@ -110,7 +137,9 @@ class LocaleBundle extends BundleAbstract {
 	 * @return mixed
 	 */
 	public function getValidations($key = null) {
-		$data = $this->loadResource('validations');
+		$data = $this->cache(__METHOD__, function() {
+			return $this->loadResource('validations');
+		});
 
 		if ($key) {
 			return isset($data[$key]) ? $data[$key] : null;
@@ -126,8 +155,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->addReader(new PhpReader());
-		$this->addLocation(array(
+		$this->addReader(new PhpReader())->addLocation(array(
 			TITON_RESOURCES . 'locales/{bundle}/',
 			APP_RESOURCES . 'locales/{bundle}/'
 		));
@@ -135,16 +163,23 @@ class LocaleBundle extends BundleAbstract {
 		// Load locale file and load parent if one exists
 		$locale = $this->getLocale();
 		$locale = Locale::parseLocale($locale['id']) + $locale;
+		$locale['key'] = Titon::g11n()->canonicalize($locale['id']);
+
+		// Apply overrides, but do not allow id
+		if (!empty($this->_override)) {
+			unset($this->_override['id']);
+
+			$locale = $this->_override + $locale;
+		}
 
 		// Cache the parent to ease overhead
 		if (!empty($locale['parent'])) {
-			$registry = Titon::registry();
-			$registryKey = 'g11n.bundle.locale.' . $locale['parent'];
+			$key = 'g11n.bundle.locale.' . $locale['parent'];
 
-			if ($registry->has($registryKey)) {
-				$parent = $registry->get($registryKey);
+			if (Titon::registry()->has($key)) {
+				$parent = Titon::registry()->get($key);
 			} else {
-				$parent = $registry->set(new LocaleBundle(array('bundle' => $locale['parent'])), $registryKey);
+				$parent = Titon::registry()->set(new LocaleBundle(array('bundle' => $locale['parent'])), $key);
 			}
 
 			if ($parent instanceof LocaleBundle) {
@@ -154,7 +189,7 @@ class LocaleBundle extends BundleAbstract {
 			}
 		}
 
-		$this->_data['locale'] = $locale;
+		$this->setCache('titon\libs\bundles\locales\LocaleBundle::getLocale', $locale);
 	}
 
 	/**

@@ -11,7 +11,7 @@ namespace titon\libs\storage;
 
 use titon\base\Base;
 use titon\libs\storage\Storage;
-use titon\libs\traits\Memoizeable;
+use titon\libs\traits\Cacheable;
 
 /**
  * Primary class for all storage engines to extend. Provides functionality from the Base class and the Storage interface.
@@ -20,7 +20,7 @@ use titon\libs\traits\Memoizeable;
  * @abstract
  */
 abstract class StorageAbstract extends Base implements Storage {
-	use Memoizeable;
+	use Cacheable;
 
 	/**
 	 * The third-party class instance.
@@ -87,7 +87,7 @@ abstract class StorageAbstract extends Base implements Storage {
 	 * @return string
 	 */
 	public function key($key) {
-		return $this->cacheMethod(array(__METHOD__, $key), function() use ($key) {
+		return $this->cache(array(__METHOD__, $key), function() use ($key) {
 			$key = $this->config->prefix . (string) $key;
 
 			return trim(preg_replace('/[^a-z0-9\-_\.]+/is', '', str_replace(array('\\', '::'), '.', $key)), '.');

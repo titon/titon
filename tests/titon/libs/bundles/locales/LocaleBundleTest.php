@@ -53,7 +53,8 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'iso2' => 'ex',
 			'iso3' => 'exp',
 			'timezone' => '',
-			'title' => 'Example Parent'
+			'title' => 'Example Parent',
+			'key' => 'ex'
 		), $parentBundle);
 
 		// Formats
@@ -66,7 +67,8 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'iso3' => array('exf', 'frm'),
 			'timezone' => '',
 			'title' => 'Example for Formats',
-			'parent' => 'ex'
+			'parent' => 'ex',
+			'key' => 'ex-fm'
 		), $bundleFormats);
 
 		// Inflections
@@ -79,7 +81,8 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'iso3' => 'inf',
 			'timezone' => '',
 			'title' => 'Example for Inflections',
-			'parent' => 'ex'
+			'parent' => 'ex',
+			'key' => 'ex-in'
 		), $bundleInflections);
 
 		// Validations
@@ -92,7 +95,8 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'iso3' => 'val',
 			'timezone' => '',
 			'title' => 'Example for Validations',
-			'parent' => 'ex'
+			'parent' => 'ex',
+			'key' => 'ex-va'
 		), $bundleValidations);
 
 		// By key

@@ -14,7 +14,7 @@ use titon\base\Base;
 use titon\libs\engines\Engine;
 use titon\libs\engines\EngineException;
 use titon\libs\traits\Attachable;
-use titon\libs\traits\Memoizeable;
+use titon\libs\traits\Cacheable;
 use titon\utility\Inflector;
 use \Closure;
 
@@ -34,7 +34,7 @@ use \Closure;
  * @abstract
  */
 abstract class EngineAbstract extends Base implements Engine {
-	use Memoizeable, Attachable;
+	use Cacheable, Attachable;
 
 	/**
 	 * Constants for all the possible types of templates.
@@ -349,7 +349,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return string
 	 */
 	protected function _preparePath($path) {
-		return $this->cacheMethod(array(__METHOD__, $path), function() use ($path) {
+		return $this->cache(array(__METHOD__, $path), function() use ($path) {
 			$path = Titon::loader()->ds($path);
 
 			if (substr($path, -4) === '.tpl') {

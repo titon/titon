@@ -9,9 +9,11 @@
 
 namespace titon\libs\traits;
 
+use \Closure;
+
 /**
- * The Cacheable trait provides static methods which provide functionality to cache any
- * data from the class layer. All data is unique and represented by a generated cache key.
+ * The Cacheable trait provides functionality to cache any data from the class layer.
+ * All data is unique and represented by a generated cache key.
  *
  * @package	titon.libs.traits
  */
@@ -23,7 +25,31 @@ trait Cacheable {
 	 * @access public
 	 * @var array
 	 */
-	public static $_cache = array();
+	public $_cache = array();
+
+	/**
+	 * Dynamically read and write from the cache at once. If the cache exists with the key return it, else execute and save the result.
+	 * If the value happens to be a closure, evaluate the closure and save the result.
+	 *
+	 * @access public
+	 * @param array|string $key
+	 * @param mixed|Closure $value
+	 * @return mixed
+	 */
+	public function cache($key, $value) {
+		$key = $this->createCacheKey($key);
+
+		if ($cache = $this->getCache($key)) {
+			return $cache;
+		}
+
+		if ($value instanceof Closure) {
+			$callback = Closure::bind($value, $this, $this);
+			$value = $callback();
+		}
+
+		return $this->setCache($key, $value);
+	}
 
 	/**
 	 * Generate a cache key. If an array is passed, drill down and form a key.
@@ -31,9 +57,8 @@ trait Cacheable {
 	 * @access public
 	 * @param string|array $keys
 	 * @return string
-	 * @static
 	 */
-	public static function createCacheKey($keys) {
+	public function createCacheKey($keys) {
 		if (is_array($keys)) {
 			$key = array_shift($keys);
 
@@ -60,11 +85,11 @@ trait Cacheable {
 	 * @param string|array $key
 	 * @return mixed
 	 */
-	public static function getCache($key) {
-		$key = self::createCacheKey($key);
+	public function getCache($key) {
+		$key = $this->createCacheKey($key);
 
-		if (isset(self::$_cache[$key])) {
-			return self::$_cache[$key];
+		if (isset($this->_cache[$key])) {
+			return $this->_cache[$key];
 		}
 
 		return null;
@@ -80,8 +105,8 @@ trait Cacheable {
 	 * @param mixed $value
 	 * @return mixed
 	 */
-	public static function setCache($key, $value) {
-		self::$_cache[self::createCacheKey($key)] = $value;
+	public function setCache($key, $value) {
+		$this->_cache[$this->createCacheKey($key)] = $value;
 
 		return $value;
 	}
@@ -93,11 +118,11 @@ trait Cacheable {
 	 * @param string|array $key
 	 * @return boolean
 	 */
-	public static function removeCache($key) {
-		$key = self::createCacheKey($key);
+	public function removeCache($key) {
+		$key = $this->createCacheKey($key);
 
-		if (isset(self::$_cache[$key])) {
-			unset(self::$_cache[$key]);
+		if (isset($this->_cache[$key])) {
+			unset($this->_cache[$key]);
 
 			return true;
 		}

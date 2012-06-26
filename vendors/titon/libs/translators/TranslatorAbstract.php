@@ -13,7 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\libs\readers\Reader;
 use titon\libs\storage\Storage;
-use titon\libs\traits\Memoizeable;
+use titon\libs\traits\Cacheable;
 use titon\libs\translators\Translator;
 use titon\libs\translators\TranslatorException;
 use \MessageFormatter;
@@ -28,7 +28,7 @@ use \Locale;
  * @abstract
  */
 abstract class TranslatorAbstract extends Base implements Translator {
-	use Memoizeable;
+	use Cacheable;
 
 	/**
 	 * List of MessageBundle's.
@@ -37,14 +37,6 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @var array
 	 */
 	protected $_bundles = array();
-
-	/**
-	 * Cache the messages for easy lookup.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_cache = array();
 
 	/**
 	 * File reader used for parsing.
@@ -72,8 +64,8 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @throws titon\libs\translators\TranslatorException
 	 */
 	public function getMessage($key) {
-		if (isset($this->_cache[$key])) {
-			return $this->_cache[$key];
+		if ($cache = $this->getCache($key)) {
+			return $cache;
 		}
 
 		list($module, $catalog, $id) = $this->parseKey($key);
@@ -112,9 +104,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 
 			// Return message if it exists, else continue cycle
 			if (isset($messages[$id])) {
-				$this->_cache[$key] = $messages[$id];
-
-				return $messages[$id];
+				return $this->setCache($key, $messages[$id]);
 			}
 		}
 
@@ -142,7 +132,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @throws titon\libs\translators\TranslatorException
 	 */
 	public function parseKey($key) {
-		return $this->cacheMethod(array(__METHOD__, $key), function() use ($key) {
+		return $this->cache(array(__METHOD__, $key), function() use ($key) {
 			$parts = explode('.', $key);
 			$count = count($parts);
 			$module = null;

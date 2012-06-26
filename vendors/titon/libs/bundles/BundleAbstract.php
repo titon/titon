@@ -114,9 +114,8 @@ abstract class BundleAbstract extends Base implements Bundle {
 	public function loadResource($resource) {
 		if (empty($this->_readers)) {
 			throw new BundleException('A Reader must be loaded to read Bundle resources.');
-		}
 
-		if ($cache = self::getCache($resource)) {
+		} else if ($cache = $this->getCache(array(__METHOD__, $resource))) {
 			return $cache;
 		}
 
@@ -134,7 +133,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 			}
 		}
 
-		return self::setCache($resource, $contents);
+		return $this->setCache(array(__METHOD__, $resource), $contents);
 	}
 
 }

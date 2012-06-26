@@ -12,7 +12,7 @@ namespace titon\core;
 use titon\Titon;
 use titon\core\CoreException;
 use titon\libs\bundles\locales\LocaleBundle;
-use titon\libs\traits\Memoizeable;
+use titon\libs\traits\Cacheable;
 use titon\libs\translators\Translator;
 use \Locale;
 
@@ -30,7 +30,7 @@ use \Locale;
  * @uses	titon\libs\translators\Translator
  */
 class G11n {
-	use Memoizeable;
+	use Cacheable;
 
 	/**
 	 * Possible formats for locale keys.
@@ -86,27 +86,29 @@ class G11n {
 	 * @return string
 	 */
 	public function canonicalize($key, $format = self::FORMAT_1) {
-		$parts = explode('-', str_replace('_', '-', strtolower($key)));
-		$return = $parts[0];
+		return $this->cache(array(__METHOD__, $key, $format), function() use ($key, $format) {
+			$parts = explode('-', str_replace('_', '-', strtolower($key)));
+			$return = $parts[0];
 
-		if (isset($parts[1])) {
-			switch ($format) {
-				case self::FORMAT_1:
-					$return .= '-' . $parts[1];
-				break;
-				case self::FORMAT_2:
-					$return .= '-' . strtoupper($parts[1]);
-				break;
-				case self::FORMAT_3:
-					$return .= '_' . strtoupper($parts[1]);
-				break;
-				case self::FORMAT_4:
-					$return .= strtoupper($parts[1]);
-				break;
+			if (isset($parts[1])) {
+				switch ($format) {
+					case self::FORMAT_1:
+						$return .= '-' . $parts[1];
+					break;
+					case self::FORMAT_2:
+						$return .= '-' . strtoupper($parts[1]);
+					break;
+					case self::FORMAT_3:
+						$return .= '_' . strtoupper($parts[1]);
+					break;
+					case self::FORMAT_4:
+						$return .= strtoupper($parts[1]);
+					break;
+				}
 			}
-		}
 
-		return $return;
+			return $return;
+		});
 	}
 
 	/**
@@ -116,11 +118,16 @@ class G11n {
 	 * @return array
 	 */
 	public function cascade() {
-		return $this->cacheMethod(__METHOD__, function() {
+		return $this->cache(__METHOD__, function() {
 			$cycle = array();
 
-			$this->_cascade($this->current(), $cycle);
-			$this->_cascade($this->getFallback(), $cycle);
+			foreach (array($this->current(), $this->getFallback()) as $bundle) {
+				while ($bundle instanceof LocaleBundle) {
+					$cycle[] = $bundle->getLocale('id');
+
+					$bundle = $bundle->getParent();
+				}
+			}
 
 			return array_unique($cycle);
 		});
@@ -270,7 +277,7 @@ class G11n {
 	 * @return boolean
 	 */
 	public function isEnabled() {
-		return $this->cacheMethod(__METHOD__, function() {
+		return $this->cache(__METHOD__, function() {
 			$locales = $this->getLocales();
 
 			if (empty($locales)) {
@@ -379,15 +386,7 @@ class G11n {
 		// Load the bundle
 		$bundle = new LocaleBundle(array(
 			'bundle' => $this->canonicalize($key, self::FORMAT_3),
-		));
-
-		/*
-		 * @todo
-		 $config['key'] = $key;
-
-		foreach ($config as $key => $value) {
-			$bundle->config->set('locale.' . $key, $value);
-		}*/
+		), $config);
 
 		// Cache the bundle
 		$this->_locales[$urlKey] = Titon::registry()->set($bundle, 'g11n.bundle.locale.' . $bundle->getLocale('id'));
@@ -446,24 +445,6 @@ class G11n {
 	 */
 	public function translate($key, array $params = array()) {
 		return $this->_translator->translate($key, $params);
-	}
-
-	/**
-	 * Protected method to build the cascade() array.
-	 *
-	 * @access protected
-	 * @param titon\libs\bundles\locales\LocaleBundle $bundle
-	 * @param array $cycle
-	 * @return void
-	 */
-	protected function _cascade($bundle, &$cycle) {
-		$locale = $bundle->getLocale();
-
-		$cycle[] = $locale['id'];
-
-		if ($parent = $bundle->getParent()) {
-			$this->_cascade($parent, $cycle);
-		}
 	}
 
 }

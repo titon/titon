@@ -12,7 +12,7 @@ namespace titon\libs\readers;
 use titon\Titon;
 use titon\base\Base;
 use titon\libs\readers\Reader;
-use titon\libs\traits\Memoizeable;
+use titon\libs\traits\Cacheable;
 
 /**
  * Abstract class that implements the extension and file detection for Readers.
@@ -21,7 +21,7 @@ use titon\libs\traits\Memoizeable;
  * @abstract
  */
 abstract class ReaderAbstract extends Base implements Reader {
-	use Memoizeable;
+	use Cacheable;
 
 	/**
 	 * Path to the current file to read.
@@ -66,7 +66,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 			$path = $this->_path;
 		}
 
-		return $this->cacheMethod(array(__METHOD__, $path), function() use ($path) {
+		return $this->cache(array(__METHOD__, $path), function() use ($path) {
 			$ext = $this->getExtension();
 
 			if (substr($path, -strlen($ext)) !== $ext) {
