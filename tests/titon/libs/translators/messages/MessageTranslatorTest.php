@@ -31,6 +31,35 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Test that parsing a translation key returns the correct module, catalog and id.
+	 */
+	public function testParseKey() {
+		$object = new MessageTranslator();
+
+		$this->assertEquals(array('module', 'catalog', 'id'), $object->parseKey('module.catalog.id'));
+		$this->assertEquals(array('module', 'catalog', 'id.multi.part'), $object->parseKey('module.catalog.id.multi.part'));
+		$this->assertEquals(array('module', 'catalog', 'id-dashed'), $object->parseKey('module.catalog.id-dashed'));
+		$this->assertEquals(array('module', 'catalog', 'idspecial27304characters'), $object->parseKey('module.catalog.id * special )*&2)*7304 characters'));
+		$this->assertEquals(array('Module', 'Catalog', 'id.CamelCase'), $object->parseKey('Module.Catalog.id.CamelCase'));
+		$this->assertEquals(array('m', 'c', 'i'), $object->parseKey('m.c.i'));
+		$this->assertEquals(array(1, 2, 3), $object->parseKey('1.2.3'));
+
+		$this->assertEquals(array(null, 'catalog', 'id'), $object->parseKey('catalog.id'));
+		$this->assertEquals(array(null, 'root', 'id'), $object->parseKey('root.id'));
+		$this->assertEquals(array(null, 'test', 'key'), $object->parseKey('test.key'));
+		$this->assertEquals(array(null, 1, 2), $object->parseKey('1.2'));
+
+		try {
+			$object->parseKey('noModuleOrCatalog');
+			$object->parseKey('not-using-correct-notation');
+
+			$this->assertTrue(false);
+		} catch (Exception $e) {
+			$this->assertTrue(true);
+		}
+	}
+
+	/**
 	 * Test reading keys from php message bundles.
 	 */
 	public function testPhpMessages() {

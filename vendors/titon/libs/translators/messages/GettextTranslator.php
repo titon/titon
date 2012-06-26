@@ -57,7 +57,9 @@ class GettextTranslator extends TranslatorAbstract {
 
 			$this->bindDomains($module, $catalog);
 
-			$message = dgettext($catalog, $id);
+			textdomain($catalog);
+
+			$message = gettext($id);
 
 			if ($message !== $id) {
 				return $message;

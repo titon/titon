@@ -130,10 +130,11 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @param string $key
 	 * @return array
 	 * @throws titon\libs\translators\TranslatorException
+	 * @final
 	 */
-	public function parseKey($key) {
+	final public function parseKey($key) {
 		return $this->cache(array(__METHOD__, $key), function() use ($key) {
-			$parts = explode('.', $key);
+			$parts = explode('.', preg_replace('/[^-a-z0-9\.]+/i', '', $key));
 			$count = count($parts);
 			$module = null;
 			$catalog = null;
