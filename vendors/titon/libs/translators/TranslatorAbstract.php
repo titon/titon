@@ -71,14 +71,14 @@ abstract class TranslatorAbstract extends Base implements Translator {
 		list($module, $catalog, $id) = $this->parseKey($key);
 
 		// Cycle through each locale till a message is found
-		$locales = $this->getFileCycle();
+		$locales = Titon::g11n()->cascade();
 
 		foreach ($locales as $locale) {
 			$cacheKey = 'g11n.' . ($module === null ? 'root' : $module) . '.' . $catalog . '.' . $locale;
 			$messages = array();
 
 			// Check within the cache first
-			if ($this->_storage instanceof Storage) {
+			if ($this->_storage) {
 				$messages = $this->_storage->get($cacheKey);
 			}
 
@@ -96,10 +96,10 @@ abstract class TranslatorAbstract extends Base implements Translator {
 				if ($data = $bundle->loadResource($catalog)) {
 					$messages = $data;
 				}
-			}
 
-			if (!empty($messages) && $this->_storage instanceof Storage) {
-				$this->_storage->set($cacheKey, $messages);
+				if ($this->_storage) {
+					$this->_storage->set($cacheKey, $messages);
+				}
 			}
 
 			// Return message if it exists, else continue cycle

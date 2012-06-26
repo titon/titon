@@ -6,22 +6,14 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 ### Systems In Development ###
 
-Globalization
-
-* core/G11n - 90%
-* libs/bundles - 90%
-* libs/translators - 75%
-* resources/locales - 65%
-* resources/messages - 75%
-
-### Upcoming Systems ###
-
 Dispatch Cycle
 
 * core/Dispatch
 * core/Router
 * libs/controllers
 * libs/routes
+
+### Upcoming Systems ###
 
 View Rendering
 

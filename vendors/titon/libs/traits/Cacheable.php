@@ -79,6 +79,19 @@ trait Cacheable {
 	}
 
 	/**
+	 * Empty the cache.
+	 *
+	 * @access public
+	 * @return titon\libs\traits\Cacheable
+	 * @chainable
+	 */
+	public function flushCache() {
+		$this->_cache = [];
+
+		return $this;
+	}
+
+	/**
 	 * Return a cached item if it exists, else return null.
 	 *
 	 * @access public

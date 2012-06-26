@@ -43,11 +43,12 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('titon', 'test', 'type'), array_keys($messages));
+		$this->assertEquals(array('titon', 'test', 'type', 'format'), array_keys($messages));
 		$this->assertEquals(array(
 			'titon' => 'Titon',
 			'test' => 'Test',
-			'type' => 'php'
+			'type' => 'php',
+			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
 		), $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
@@ -66,11 +67,12 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('titon', 'test', 'type'), array_keys($messages));
+		$this->assertEquals(array('titon', 'test', 'type', 'format'), array_keys($messages));
 		$this->assertEquals(array(
 			'titon' => 'Titon',
 			'test' => 'Test',
-			'type' => 'ini'
+			'type' => 'ini',
+			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
 		), $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
@@ -89,11 +91,12 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('titon', 'test', 'type'), array_keys($messages));
+		$this->assertEquals(array('titon', 'test', 'type', 'format'), array_keys($messages));
 		$this->assertEquals(array(
 			'titon' => 'Titon',
 			'test' => 'Test',
-			'type' => 'json'
+			'type' => 'json',
+			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
 		), $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
@@ -112,11 +115,12 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('titon', 'test', 'type'), array_keys($messages));
+		$this->assertEquals(array('titon', 'test', 'type', 'format'), array_keys($messages));
 		$this->assertEquals(array(
 			'titon' => 'Titon',
 			'test' => 'Test',
-			'type' => 'xml'
+			'type' => 'xml',
+			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
 		), $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
@@ -135,12 +139,13 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('basic', 'multiline', 'plurals', 'context'), array_keys($messages));
+		$this->assertEquals(array('basic', 'multiline', 'plurals', 'context', 'format'), array_keys($messages));
 		$this->assertEquals(array(
 			'basic' => 'Basic message',
 			'multiline' => "Multiline message\nMore message here\nAnd more message again",
 			'plurals' => array('plural', 'plurals'),
-			'context' => 'Context message'
+			'context' => 'Context message',
+			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
 		), $messages);
 
 		$messages = $bundle->loadResource('doesntExist');

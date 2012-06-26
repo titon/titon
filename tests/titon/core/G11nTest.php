@@ -116,10 +116,9 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 			$this->object->initialize();
 
 			$current = $this->object->current();
-			$config = $current->getLocale();
 
 			$this->assertInstanceOf('titon\libs\bundles\locales\LocaleBundle', $current);
-			$this->assertEquals($localeId, $config['id']);
+			$this->assertEquals($localeId, $current->getLocale('id'));
 		}
 	}
 
@@ -154,7 +153,7 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test that setting fallbacks work.
 	 */
-	public function testFallbackAs() {
+	public function testFallback() {
 		$this->object->fallbackAs('ex-va');
 		$this->assertEquals('ex_VA', $this->object->getFallback()->getLocale('id'));
 

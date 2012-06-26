@@ -19,14 +19,6 @@ use titon\libs\storage\StorageAbstract;
 class MemoryStorage extends StorageAbstract {
 
 	/**
-	 * A container for all the cached items.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_cache = array();
-
-	/**
 	 * Decrement a value within the cache.
 	 *
 	 * @access public
@@ -35,10 +27,10 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		if ($this->has($key)) {
-			$this->set($key, ($this->get($key) - (int) $step));
+		if ($data = $this->getCache($key)) {
+			$this->setCache($key, ($data - (int) $step));
 		} else {
-			$this->set($key, (0 - (int) $step));
+			$this->setCache($key, (0 - (int) $step));
 		}
 
 		return true;
@@ -51,9 +43,7 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function flush() {
-		$this->_cache = array();
-
-		return true;
+		return $this->flushCache();
 	}
 
 	/**
@@ -64,9 +54,11 @@ class MemoryStorage extends StorageAbstract {
 	 * @return mixed
 	 */
 	public function get($key) {
-		$value = $this->has($key) ? $this->_cache[$key] : null;
+		if ($value = $this->getCache($key)) {
+			return $this->unserialize($value);
+		}
 
-		return $this->unserialize($value);
+		return null;
 	}
 
 	/**
@@ -77,7 +69,7 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return isset($this->_cache[$key]);
+		return (bool) $this->getCache($key);
 	}
 
 	/**
@@ -89,13 +81,13 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function increment($key, $step = 1) {
-		if ($this->has($key)) {
-			$this->set($key, ($this->get($key) + (int) $step));
+		if ($data = $this->getCache($key)) {
+			$this->setCache($key, ($data + (int) $step));
 		} else {
-			$this->set($key, (0 + (int) $step));
+			$this->setCache($key, (0 + (int) $step));
 		}
 
-		return true;
+		return $this;
 	}
 
 	/**
@@ -106,13 +98,7 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function remove($key) {
-		if ($this->has($key)) {
-			unset($this->_cache[$key]);
-
-			return true;
-		}
-
-		return false;
+		return $this->removeCache($key);
 	}
 
 	/**
@@ -125,9 +111,9 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		$this->_cache[$key] = $this->serialize($value);
+		$this->setCache($key, $this->serialize($value));
 
-		return true;
+		return $this;
 	}
 
 }
