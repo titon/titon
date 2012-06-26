@@ -8,10 +8,10 @@
  */
 
 // Breton
-return array(
+return [
 	'id' => 'br',
 	'iso2' => 'br',
 	'iso3' => 'bre',
 	'timezone' => 'Europe/Paris',
 	'title' => 'Breton',
-);
+];

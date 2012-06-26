@@ -66,7 +66,7 @@ use titon\example\ExampleException;
 
 class ExampleController implements Controller {
 
-	protected $_protectedProp = array();
+	protected $_protectedProp = [];
 
 	public function publicMethod($var) {
 		throw new ExampleException();

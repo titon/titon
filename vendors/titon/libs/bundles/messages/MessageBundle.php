@@ -25,10 +25,10 @@ class MessageBundle extends BundleAbstract {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
+	protected $_config = [
 		'module' => '',
 		'bundle' => ''
-	);
+	];
 
 	/**
 	 * Define the locations for the message resources.
@@ -37,11 +37,11 @@ class MessageBundle extends BundleAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->addLocation(array(
+		$this->addLocation([
 			TITON_RESOURCES . 'messages/{bundle}/',
 			APP_RESOURCES . 'messages/{bundle}/',
 			APP_MODULES . '{module}/resources/messages/{bundle}/',
-		));
+		]);
 	}
 
 	/**
@@ -55,13 +55,13 @@ class MessageBundle extends BundleAbstract {
 	public function addReader(Reader $reader) {
 		$ext = $reader->getExtension();
 
-		if (in_array($ext, array('po', 'mo')) && empty($this->_readers[$ext])) {
-			$this->_locations = array();
+		if (in_array($ext, ['po', 'mo']) && empty($this->_readers[$ext])) {
+			$this->_locations = [];
 
-			$this->addLocation(array(
+			$this->addLocation([
 				APP_RESOURCES . 'messages/{bundle}/LC_MESSAGES/',
 				APP_MODULES . '{module}/resources/messages/{bundle}/LC_MESSAGES/'
-			));
+			]);
 		}
 
 		return parent::addReader($reader);

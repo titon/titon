@@ -36,18 +36,18 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase {
 	public function testParseKey() {
 		$object = new MessageTranslator();
 
-		$this->assertEquals(array('module', 'catalog', 'id'), $object->parseKey('module.catalog.id'));
-		$this->assertEquals(array('module', 'catalog', 'id.multi.part'), $object->parseKey('module.catalog.id.multi.part'));
-		$this->assertEquals(array('module', 'catalog', 'id-dashed'), $object->parseKey('module.catalog.id-dashed'));
-		$this->assertEquals(array('module', 'catalog', 'idspecial27304characters'), $object->parseKey('module.catalog.id * special )*&2)*7304 characters'));
-		$this->assertEquals(array('Module', 'Catalog', 'id.CamelCase'), $object->parseKey('Module.Catalog.id.CamelCase'));
-		$this->assertEquals(array('m', 'c', 'i'), $object->parseKey('m.c.i'));
-		$this->assertEquals(array(1, 2, 3), $object->parseKey('1.2.3'));
+		$this->assertEquals(['module', 'catalog', 'id'], $object->parseKey('module.catalog.id'));
+		$this->assertEquals(['module', 'catalog', 'id.multi.part'], $object->parseKey('module.catalog.id.multi.part'));
+		$this->assertEquals(['module', 'catalog', 'id-dashed'], $object->parseKey('module.catalog.id-dashed'));
+		$this->assertEquals(['module', 'catalog', 'idspecial27304characters'], $object->parseKey('module.catalog.id * special )*&2)*7304 characters'));
+		$this->assertEquals(['Module', 'Catalog', 'id.CamelCase'], $object->parseKey('Module.Catalog.id.CamelCase'));
+		$this->assertEquals(['m', 'c', 'i'], $object->parseKey('m.c.i'));
+		$this->assertEquals([1, 2, 3], $object->parseKey('1.2.3'));
 
-		$this->assertEquals(array(null, 'catalog', 'id'), $object->parseKey('catalog.id'));
-		$this->assertEquals(array(null, 'root', 'id'), $object->parseKey('root.id'));
-		$this->assertEquals(array(null, 'test', 'key'), $object->parseKey('test.key'));
-		$this->assertEquals(array(null, 1, 2), $object->parseKey('1.2'));
+		$this->assertEquals([null, 'catalog', 'id'], $object->parseKey('catalog.id'));
+		$this->assertEquals([null, 'root', 'id'], $object->parseKey('root.id'));
+		$this->assertEquals([null, 'test', 'key'], $object->parseKey('test.key'));
+		$this->assertEquals([null, 1, 2], $object->parseKey('1.2'));
 
 		try {
 			$object->parseKey('noModuleOrCatalog');
@@ -78,7 +78,7 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('Titon', $object->translate('default.titon'));
 		$this->assertEquals('Test', $object->translate('default.test'));
 		$this->assertEquals('php', $object->translate('default.type'));
-		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', array(1337, 666, 255)));
+		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', [1337, 666, 255]));
 	}
 
 	/**
@@ -100,7 +100,7 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('Titon', $object->translate('default.titon'));
 		$this->assertEquals('Test', $object->translate('default.test'));
 		$this->assertEquals('ini', $object->translate('default.type'));
-		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', array(1337, 666, 255)));
+		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', [1337, 666, 255]));
 	}
 
 	/**
@@ -122,7 +122,7 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('Titon', $object->translate('default.titon'));
 		$this->assertEquals('Test', $object->translate('default.test'));
 		$this->assertEquals('xml', $object->translate('default.type'));
-		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', array(1337, 666, 255)));
+		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', [1337, 666, 255]));
 	}
 
 	/**
@@ -144,7 +144,7 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('Titon', $object->translate('default.titon'));
 		$this->assertEquals('Test', $object->translate('default.test'));
 		$this->assertEquals('json', $object->translate('default.type'));
-		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', array(1337, 666, 255)));
+		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', [1337, 666, 255]));
 	}
 
 	/**
@@ -163,7 +163,7 @@ class MessageTranslatorTest extends \PHPUnit_Framework_TestCase {
 
 		Titon::g11n()->set('en');
 
-		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', array(1337, 666, 255)));
+		$this->assertEquals('1,337 health, 666 energy, 255 damage', $object->translate('default.format', [1337, 666, 255]));
 	}
 
 }

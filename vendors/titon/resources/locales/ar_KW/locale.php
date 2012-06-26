@@ -8,9 +8,9 @@
  */
 
 // Arabic (Kuwait)
-return array(
+return [
 	'id' => 'ar_KW',
 	'parent' => 'ar',
 	'timezone' => 'Asia/Kuwait',
 	'title' => 'Arabic (Kuwait)',
-);
+];

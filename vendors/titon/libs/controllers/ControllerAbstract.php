@@ -55,13 +55,13 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
+	protected $_config = [
 		'module' => '',
 		'controller' => '',
 		'action' => '',
 		'ext' => '',
-		'args' => array()
-	);
+		'args' => []
+	];
 
 	/**
 	 * Dispatch the request to the correct controller action. Checks to see if the action exists and is not protected.
@@ -72,7 +72,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return mixed
 	 * @throws titon\libs\controllers\ControllerException
 	 */
-	public function dispatchAction($action = null, array $args = array()) {
+	public function dispatchAction($action = null, array $args = []) {
 		if (empty($action)) {
 			$action = $this->config->action;
 		}
@@ -88,7 +88,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 			throw new ControllerException('Your action does not exist, or is not public, or is found within the parent Controller.');
 		}
 
-		return call_user_func_array(array($this, $action), $args);
+		return call_user_func_array([$this, $action], $args);
 	}
 
 	/**
@@ -99,7 +99,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @param array $args
 	 * @return mixed
 	 */
-	public function forwardAction($action, array $args = array()) {
+	public function forwardAction($action, array $args = []) {
 		$this->config->action = $action;
 		$this->engine->setup($action);
 		$this->dispatchAction($action, $args);
@@ -125,7 +125,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 			unset($config['args']);
 
 			$engine = new ViewEngine();
-			$engine->setup(array('template' => $config));
+			$engine->setup(['template' => $config]);
 
 			return $engine;
 		});
@@ -153,7 +153,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @param array $args
 	 * @return void
 	 */
-	public function throwError($action, array $args = array()) {
+	public function throwError($action, array $args = []) {
 		if (empty($args['pageTitle'])) {
 			if (is_numeric($action)) {
 				$args['pageTitle'] = $action . ' - ' . Http::getStatusCode($action);
@@ -171,11 +171,11 @@ abstract class ControllerAbstract extends Base implements Controller {
 		$args['url'] = Titon::router()->segments(true);
 
 		$this->engine->set($args);
-		$this->engine->setup(array(
+		$this->engine->setup([
 			'error' => true,
 			'layout' => 'error',
 			'template' => $action
-		));
+		]);
 	}
 
 	/**
@@ -207,10 +207,10 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @final
 	 */
 	final public function setEngine(Closure $engine) {
-		$this->attachObject(array(
+		$this->attachObject([
 			'alias' => 'engine',
 			'interface' => '\titon\libs\engines\Engine'
-		), $engine);
+		], $engine);
 	}
 
 }

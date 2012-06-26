@@ -7,10 +7,10 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-return array(
+return [
 	'id' => 'ex',
 	'iso2' => 'ex',
 	'iso3' => 'exp',
 	'timezone' => '',
 	'title' => 'Example Parent',
-);
+];

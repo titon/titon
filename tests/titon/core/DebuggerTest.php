@@ -55,9 +55,9 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('titon\core\Debugger', $this->object->parseArg($this->object));
 		$this->assertEquals("'string'", $this->object->parseArg('string'));
 		$this->assertEquals("'" . htmlentities('<b>string</b>') . "'", $this->object->parseArg('<b>string</b>'));
-		$this->assertEquals('array()', $this->object->parseArg(array()));
-		$this->assertEquals("array(123, 'foo', null, true)", $this->object->parseArg(array(123, 'foo', null, true)));
-		$this->assertEquals("array([Truncated])", $this->object->parseArg(array(123, 'foo', null, true), true));
+		$this->assertEquals('[]', $this->object->parseArg([]));
+		$this->assertEquals("[123, 'foo', null, true]", $this->object->parseArg([123, 'foo', null, true]));
+		$this->assertEquals("[Truncated]", $this->object->parseArg([123, 'foo', null, true], true));
 	}
 
 	/**

@@ -8,10 +8,10 @@
  */
 
 // Maori
-return array(
+return [
 	'id' => 'mi',
 	'iso2' => 'mi',
-	'iso3' => array('mri', 'mao'),
+	'iso3' => ['mri', 'mao'],
 	'timezone' => 'Pacific/Auckland',
 	'title' => 'Maori',
-);
+];

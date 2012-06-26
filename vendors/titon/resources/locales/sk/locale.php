@@ -8,10 +8,10 @@
  */
 
 // Slovak
-return array(
+return [
 	'id' => 'sk',
 	'iso2' => 'sk',
-	'iso3' => array('slk', 'slo'),
+	'iso3' => ['slk', 'slo'],
 	'timezone' => 'Europe/Bratislava',
 	'title' => 'Slovak',
-);
+];

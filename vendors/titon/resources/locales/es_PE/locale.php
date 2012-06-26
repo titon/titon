@@ -8,9 +8,9 @@
  */
 
 // Spanish (Peru)
-return array(
+return [
 	'id' => 'es_PE',
 	'parent' => 'es',
 	'timezone' => 'America/Lima',
 	'title' => 'Spanish (Peru)',
-);
+];

@@ -18,10 +18,10 @@ class InflectorTest extends \PHPUnit_Framework_TestCase {
 	 * Test that strings are returned as camel case.
 	 */
 	public function testCamelCase() {
-		$camelCase = array(
+		$camelCase = [
 			'foo Bar', 'fOo Bar', 'foo_Bar', ' foo-_--_BAR',
 			'foo-BAR', 'FOO-BAR', 'foo     bar   '
-		);
+		];
 
 		foreach ($camelCase as $value) {
 			$this->assertEquals('FooBar', Inflector::camelCase($value));

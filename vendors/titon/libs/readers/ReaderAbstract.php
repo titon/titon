@@ -66,7 +66,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 			$path = $this->_path;
 		}
 
-		return $this->cache(array(__METHOD__, $path), function() use ($path) {
+		return $this->cache([__METHOD__, $path], function() use ($path) {
 			$ext = $this->getExtension();
 
 			if (substr($path, -strlen($ext)) !== $ext) {

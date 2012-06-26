@@ -32,7 +32,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_tags = array();
+	protected $_tags = [];
 
 	/**
 	 * Engine object.
@@ -50,7 +50,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * @param array $remove
 	 * @return string
 	 */
-	public function attributes(array $attributes, array $remove = array()) {
+	public function attributes(array $attributes, array $remove = []) {
 		$parsed = '';
 		$escape = true;
 

@@ -33,7 +33,7 @@ class Request extends Base {
 	 * @access public
 	 * @var array
 	 */
-	public $data = array();
+	public $data = [];
 
 	/**
 	 * The cleaned $_FILES global.
@@ -41,7 +41,7 @@ class Request extends Base {
 	 * @access public
 	 * @var array
 	 */
-	public $files = array();
+	public $files = [];
 
 	/**
 	 * The cleaned $_GET global.
@@ -49,7 +49,7 @@ class Request extends Base {
 	 * @access public
 	 * @var array
 	 */
-	public $get = array();
+	public $get = [];
 
 	/**
 	 * The cleaned $_POST global.
@@ -57,7 +57,7 @@ class Request extends Base {
 	 * @access public
 	 * @var array
 	 */
-	public $post = array();
+	public $post = [];
 
 	/**
 	 * The current HTTP method used.
@@ -138,7 +138,7 @@ class Request extends Base {
 	 */
 	public function clientIp() {
 		return $this->cache(__METHOD__, function() {
-			foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR') as $key) {
+			foreach (['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $key) {
 				if (($address = $this->env($key)) !== null) {
 					return $address;
 				}
@@ -158,7 +158,7 @@ class Request extends Base {
 	public function env($header) {
 		$headerAlt = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
 
-		foreach (array($_SERVER, $_ENV) as $data) {
+		foreach ([$_SERVER, $_ENV] as $data) {
 			if (isset($data[$header])) {
 				return $data[$header];
 
@@ -179,7 +179,7 @@ class Request extends Base {
 	public function initialize() {
 		$get = $_GET;
 		$post = $_POST;
-		$files = array();
+		$files = [];
 
 		if (!empty($_FILES)) {
 			foreach ($_FILES as $model => $data) {
@@ -400,13 +400,13 @@ class Request extends Base {
 			if ($explicit && function_exists('get_browser')) {
 				$browser = get_browser($agent, true);
 
-				return array(
+				return [
 					'browser' => $browser['browser'],
 					'version' => $browser['version'],
 					'cookies' => $browser['cookies'],
 					'agent' => $agent,
 					'os' => $browser['platform']
-				);
+				];
 			}
 
 			return $agent;
@@ -423,7 +423,7 @@ class Request extends Base {
 	protected function _accepts($header) {
 		return $this->cache([__METHOD__, $header], function() use ($header) {
 			$accept = explode(',', $this->env($header));
-			$data = array();
+			$data = [];
 
 			if (count($accept) > 0) {
 				foreach ($accept as $type) {
@@ -433,10 +433,10 @@ class Request extends Base {
 						$quality = 1;
 					}
 
-					$data[] = array(
+					$data[] = [
 						'type' => $type,
 						'quality' => str_replace('q=', '', $quality)
-					);
+					];
 				}
 			}
 

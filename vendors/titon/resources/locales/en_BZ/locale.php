@@ -8,9 +8,9 @@
  */
 
 // English (Belize)
-return array(
+return [
 	'id' => 'en_BZ',
 	'parent' => 'en',
 	'timezone' => 'America/Belize',
 	'title' => 'English (Belize)',
-);
+];

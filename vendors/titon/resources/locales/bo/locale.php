@@ -8,10 +8,10 @@
  */
 
 // Tibetan
-return array(
+return [
 	'id' => 'bo',
 	'iso2' => 'bo',
-	'iso3' => array('tib', 'bod'),
+	'iso3' => ['tib', 'bod'],
 	'timezone' => 'Asia/Kathmandu',
 	'title' => 'Tibetan',
-);
+];

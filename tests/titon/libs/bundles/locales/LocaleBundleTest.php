@@ -18,21 +18,10 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 	 * Setup bundles for specific conditions.
 	 */
 	public function setUp() {
-		$this->parentBundle = new LocaleBundle(array(
-			'bundle' => 'ex'
-		));
-
-		$this->bundleFormats = new LocaleBundle(array(
-			'bundle' => 'ex_FM'
-		));
-
-		$this->bundleInflections = new LocaleBundle(array(
-			'bundle' => 'ex_IN'
-		));
-
-		$this->bundleValidations = new LocaleBundle(array(
-			'bundle' => 'ex_VA'
-		));
+		$this->parentBundle = new LocaleBundle(['bundle' => 'ex']);
+		$this->bundleFormats = new LocaleBundle(['bundle' => 'ex_FM']);
+		$this->bundleInflections = new LocaleBundle(['bundle' => 'ex_IN']);
+		$this->bundleValidations = new LocaleBundle(['bundle' => 'ex_VA']);
 	}
 
 	/**
@@ -47,7 +36,7 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 
 		// Parent
 		$this->assertTrue(is_array($parentBundle));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'language' => 'ex',
 			'id' => 'ex',
 			'iso2' => 'ex',
@@ -55,25 +44,25 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'timezone' => '',
 			'title' => 'Example Parent',
 			'key' => 'ex'
-		), $parentBundle);
+		], $parentBundle);
 
 		// Formats
 		$this->assertTrue(is_array($bundleFormats));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'language' => 'ex',
 			'region' => 'FM',
 			'id' => 'ex_FM',
 			'iso2' => 'ex',
-			'iso3' => array('exf', 'frm'),
+			'iso3' => ['exf', 'frm'],
 			'timezone' => '',
 			'title' => 'Example for Formats',
 			'parent' => 'ex',
 			'key' => 'ex-fm'
-		), $bundleFormats);
+		], $bundleFormats);
 
 		// Inflections
 		$this->assertTrue(is_array($bundleInflections));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'language' => 'ex',
 			'region' => 'IN',
 			'id' => 'ex_IN',
@@ -83,11 +72,11 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'title' => 'Example for Inflections',
 			'parent' => 'ex',
 			'key' => 'ex-in'
-		), $bundleInflections);
+		], $bundleInflections);
 
 		// Validations
 		$this->assertTrue(is_array($bundleValidations));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'language' => 'ex',
 			'region' => 'VA',
 			'id' => 'ex_VA',
@@ -97,7 +86,7 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 			'title' => 'Example for Validations',
 			'parent' => 'ex',
 			'key' => 'ex-va'
-		), $bundleValidations);
+		], $bundleValidations);
 
 		// By key
 		$this->assertEquals('ex', $this->parentBundle->getLocale('id'));
@@ -117,13 +106,13 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 		$bundleInflections = $this->bundleInflections->getFormats();
 		$bundleValidations = $this->bundleValidations->getFormats();
 
-		$parentFormat = array(
+		$parentFormat = [
 			'date' => 'ex',
 			'time' => 'ex',
 			'datetime' => 'ex',
 			'pluralForms' => 2,
 			'pluralRule' => function() { }
-		);
+		];
 
 		// Parent
 		$this->assertTrue(is_array($parentBundle));
@@ -131,13 +120,13 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 
 		// Formats
 		$this->assertTrue(is_array($bundleFormats));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'date' => 'ex_FM',
 			'time' => 'ex',
 			'datetime' => 'ex',
 			'pluralForms' => 3,
 			'pluralRule' => function() { }
-		), $bundleFormats);
+		], $bundleFormats);
 
 		// Inflections
 		$this->assertTrue(is_array($bundleInflections));
@@ -165,12 +154,12 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 		$bundleInflections = $this->bundleInflections->getInflections();
 		$bundleValidations = $this->bundleValidations->getInflections();
 
-		$parentInflections = array(
-			'irregular' => array('ex' => 'irregular'),
-			'uninflected' => array('ex'),
-			'plural' => array('ex' => 'plural'),
-			'singular' => array('ex' => 'singular')
-		);
+		$parentInflections = [
+			'irregular' => ['ex' => 'irregular'],
+			'uninflected' => ['ex'],
+			'plural' => ['ex' => 'plural'],
+			'singular' => ['ex' => 'singular']
+		];
 
 		// Parent
 		$this->assertTrue(is_array($parentBundle));
@@ -182,22 +171,22 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 
 		// Inflections
 		$this->assertTrue(is_array($bundleInflections));
-		$this->assertEquals(array(
-			'irregular' => array('ex_IN' => 'irregular'),
-			'uninflected' => array('ex'),
-			'plural' => array('ex_IN' => 'plural'),
-			'singular' => array('ex_IN' => 'singular')
-		), $bundleInflections);
+		$this->assertEquals([
+			'irregular' => ['ex_IN' => 'irregular'],
+			'uninflected' => ['ex'],
+			'plural' => ['ex_IN' => 'plural'],
+			'singular' => ['ex_IN' => 'singular']
+		], $bundleInflections);
 
 		// Validations
 		$this->assertTrue(is_array($bundleValidations));
 		$this->assertEquals($parentInflections, $bundleValidations);
 
 		// By key
-		$this->assertEquals(array('ex_IN' => 'irregular'), $this->bundleInflections->getInflections('irregular'));
-		$this->assertEquals(array('ex_IN' => 'plural'), $this->bundleInflections->getInflections('plural'));
-		$this->assertEquals(array('ex_IN' => 'singular'), $this->bundleInflections->getInflections('singular'));
-		$this->assertEquals(array('ex'), $this->bundleInflections->getInflections('uninflected'));
+		$this->assertEquals(['ex_IN' => 'irregular'], $this->bundleInflections->getInflections('irregular'));
+		$this->assertEquals(['ex_IN' => 'plural'], $this->bundleInflections->getInflections('plural'));
+		$this->assertEquals(['ex_IN' => 'singular'], $this->bundleInflections->getInflections('singular'));
+		$this->assertEquals(['ex'], $this->bundleInflections->getInflections('uninflected'));
 		$this->assertEquals(null, $this->bundleInflections->getInflections('fakeKey'));
 	}
 
@@ -211,11 +200,11 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 		$bundleInflections = $this->bundleInflections->getValidations();
 		$bundleValidations = $this->bundleValidations->getValidations();
 
-		$parentValidations = array(
+		$parentValidations = [
 			'phone' => 'ex',
 			'postalCode' => 'ex',
 			'ssn' => 'ex'
-		);
+		];
 
 		// Parent
 		$this->assertTrue(is_array($parentBundle));
@@ -231,11 +220,11 @@ class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
 
 		// Validations
 		$this->assertTrue(is_array($bundleValidations));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'phone' => 'ex_VA',
 			'postalCode' => 'ex',
 			'ssn' => 'ex_VA'
-		), $bundleValidations);
+		], $bundleValidations);
 
 		// By key
 		$this->assertEquals('ex_VA', $this->bundleValidations->getValidations('phone'));

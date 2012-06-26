@@ -29,11 +29,11 @@ class OptimizerListener extends ListenerAbstract {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
+	protected $_config = [
 		'gc' => true,
 		'gzip' => true,
 		'gzipLevel' => 5
-	);
+	];
 
 	/**
 	 * Disable the garbage collection cycle.

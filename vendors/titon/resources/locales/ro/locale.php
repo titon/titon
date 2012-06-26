@@ -8,10 +8,10 @@
  */
 
 // Romanian
-return array(
+return [
 	'id' => 'ro',
 	'iso2' => 'ro',
-	'iso3' => array('ron', 'rum'),
+	'iso3' => ['ron', 'rum'],
 	'timezone' => 'Europe/Bucharest',
 	'title' => 'Romanian',
-);
+];

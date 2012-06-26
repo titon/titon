@@ -12,32 +12,32 @@
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase {
 
-	public $app = array(
+	public $app = [
 		'name' => 'Titon',
 		'salt' => '66c63d989368170aff46040ab2353923',
 		'seed' => 'nsdASDn7012dn1dsjSa',
 		'encoding' => 'UTF-8'
-	);
+	];
 
-	public $debug = array(
+	public $debug = [
 		'level' => 2,
 		'email' => ''
-	);
+	];
 
-	public $test = array(
+	public $test = [
 		'integer' => 1234567890,
 		'number' => '1234567890',
 		'character' => 'abcdefg',
-		'emptyArray' => array(),
-		'array' => array(
+		'emptyArray' => [],
+		'array' => [
 			'one' => true,
 			'two' => false,
-		),
+		],
 		'false' => false,
 		'true' => true,
 		'null' => null,
 		'zero' => 0
-	);
+	];
 
 	protected $object;
 
@@ -171,8 +171,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue(is_array($this->object->get('Set.level4.level4.level4')));
 		$this->assertFalse($this->object->get('Set.level4.level4') === 'falsey');
 
-		$this->object->set('Set.level4.array', array('key' => 'value'));
-		$this->assertEquals($this->object->get('Set.level4.array'), array('key' => 'value'));
+		$this->object->set('Set.level4.array', ['key' => 'value']);
+		$this->assertEquals($this->object->get('Set.level4.array'), ['key' => 'value']);
 		$this->assertEquals($this->object->get('Set.level4.array.key'), 'value');
 
 		$this->object->set('Set.level4', 'Flattened!');

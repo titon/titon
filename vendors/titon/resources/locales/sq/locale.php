@@ -8,10 +8,10 @@
  */
 
 // Albanian
-return array(
+return [
 	'id' => 'sq',
 	'iso2' => 'sq',
-	'iso3' => array('alb', 'sqi'),
+	'iso3' => ['alb', 'sqi'],
 	'timezone' => 'Europe/Tirane',
 	'title' => 'Albanian',
-);
+];

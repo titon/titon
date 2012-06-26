@@ -16,10 +16,12 @@ use titon\libs\storage\StorageException;
  * A storage engine that uses the servers local filesystem to store its cached items.
  * This engine can be installed using the Cache::setup() method.
  *
- *		new FileSystemStorage(array(
+ * {{{
+ *		new FileSystemStorage([
  *			'prefix' => 'sql_',
  *			'expires' => '+1 day'
- *		));
+ *		]);
+ * }}}
  *
  * A sample configuration can be found above, and the following options are available: prefix, expires.
  *

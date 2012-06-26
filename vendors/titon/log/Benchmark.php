@@ -29,7 +29,7 @@ class Benchmark {
 	 * @var array
 	 * @static
 	 */
-	protected static $_benchmarks = array();
+	protected static $_benchmarks = [];
 
 	/**
 	 * Disable the class to enforce static methods.
@@ -52,7 +52,7 @@ class Benchmark {
 			$benchmarks = self::$_benchmarks;
 
 		} else if (isset(self::$_benchmarks[$key])) {
-			$benchmarks = array(self::$_benchmarks[$key]);
+			$benchmarks = [self::$_benchmarks[$key]];
 		}
 
 		if (isset($benchmarks)) {
@@ -102,10 +102,10 @@ class Benchmark {
 	 */
 	public static function start($key = 'benchmark') {
 		if (error_reporting() > 0) {
-			self::$_benchmarks[$key] = array(
+			self::$_benchmarks[$key] = [
 				'startTime'		=> microtime(true),
 				'startMemory'	=> memory_get_usage(true),
-			);
+			];
 		}
 	}
 
@@ -124,10 +124,10 @@ class Benchmark {
 				return false;
 			}
 
-			self::$_benchmarks[$key] = array(
+			self::$_benchmarks[$key] = [
 				'endTime'	=> microtime(true),
 				'endMemory'	=> memory_get_usage(true)
-			) + self::$_benchmarks[$key];
+			] + self::$_benchmarks[$key];
 
 			if ($log) {
 				Logger::debug(self::output($key));

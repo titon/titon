@@ -47,12 +47,12 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @access public
 	 * @var array
 	 */
-	protected $_config = array(
+	protected $_config = [
 		'secure' => false,
 		'static' => false,
-		'method' => array(),
-		'patterns' => array()
-	);
+		'method' => [],
+		'patterns' => []
+	];
 
 	/**
 	 * The compiled regex pattern.
@@ -68,7 +68,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_matches = array();
+	protected $_matches = [];
 
 	/**
 	 * The path to match.
@@ -84,7 +84,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_route = array();
+	protected $_route = [];
 
 	/**
 	 * Custom defined tokens.
@@ -92,7 +92,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_tokens = array();
+	protected $_tokens = [];
 
 	/**
 	 * The corresponding URL when a match is found.
@@ -110,7 +110,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @param array $route
 	 * @param array $config
 	 */
-	public function __construct($path, array $route = array(), array $config = array()) {
+	public function __construct($path, array $route = [], array $config = []) {
 		$this->_path = $path;
 		$this->_route = Titon::router()->defaults($route);
 
@@ -129,7 +129,7 @@ abstract class RouteAbstract extends Base implements Route {
 		}
 
 		$path = ($this->_path !== '/') ? rtrim($this->_path, '/') : $this->_path;
-		$compiled = str_replace(array('/', '.'), array('\/', '\.'), $path);
+		$compiled = str_replace(['/', '.'], ['\/', '\.'], $path);
 		$patterns = $this->config->patterns;
 
 		if (!$this->isStatic()) {

@@ -57,10 +57,10 @@ class XmlReader extends ReaderAbstract {
 			return (string) $xml;
 		}
 
-		$array = array();
+		$array = [];
 
 		foreach ($xml->children() as $element => $node) {
-			$data = array();
+			$data = [];
 
 			if (!isset($array[$element])) {
 				$array[$element] = "";

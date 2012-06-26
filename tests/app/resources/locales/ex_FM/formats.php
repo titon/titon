@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-return array(
+return [
 	'date' => 'ex_FM',
 	// Removed time
 	// Removed datetime
@@ -15,4 +15,4 @@ return array(
 	'pluralRule' => function ($n) {
 		return $n != 1 ? 1 : 0;
 	}
-);
+];

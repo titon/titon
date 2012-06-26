@@ -8,9 +8,9 @@
  */
 
 // Arabic (U.A.E.)
-return array(
+return [
 	'id' => 'ar_AE',
 	'parent' => 'ar',
 	'timezone' => 'Asia/Dubai',
 	'title' => 'Arabic (U.A.E.)',
-);
+];

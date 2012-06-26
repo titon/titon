@@ -14,12 +14,12 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 
 	public $module = 'module';
 	public $path = __DIR__;
-	public $controllers = array(
+	public $controllers = [
 		'index' => 'IndexController',
 		'test' => 'TestController',
 		'foo' => 'FooController',
 		'bar' => 'BarController'
-	);
+	];
 
 	protected $object;
 
@@ -31,7 +31,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 
 		$this->object = titon\Titon::app();
 		$this->object->setup($this->module, $this->path, $this->controllers);
-		$this->object->setup('otherModule', $this->path, array());
+		$this->object->setup('otherModule', $this->path, []);
 	}
 
 	/**

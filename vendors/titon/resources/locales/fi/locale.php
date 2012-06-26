@@ -8,10 +8,10 @@
  */
 
 // Finnish
-return array(
+return [
 	'id' => 'fi',
 	'iso2' => 'fi',
 	'iso3' => 'fin',
 	'timezone' => 'Europe/Helsinki',
 	'title' => 'Finnish',
-);
+];

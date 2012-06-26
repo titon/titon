@@ -21,9 +21,9 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	protected function setUp() {
 		$this->object = titon\Titon::environment();
-		$this->object->setup('dev', Environment::DEVELOPMENT, array('dev', '123.0.0.0'));
-		$this->object->setup('prod', Environment::PRODUCTION, array('prod', '123.456.0.0'));
-		$this->object->setup('staging', Environment::STAGING, array('staging', '123.456.789.0'));
+		$this->object->setup('dev', Environment::DEVELOPMENT, ['dev', '123.0.0.0']);
+		$this->object->setup('prod', Environment::PRODUCTION, ['prod', '123.456.0.0']);
+		$this->object->setup('staging', Environment::STAGING, ['staging', '123.456.789.0']);
 	}
 
 	/**
@@ -35,11 +35,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$this->object->initialize();
 		$this->assertEquals('dev', $this->object->current('name'));
 		$this->assertEquals(Environment::DEVELOPMENT, $this->object->current('type'));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			 'name' => 'dev',
 			 'type' => Environment::DEVELOPMENT,
-			 'hosts' => array('dev', '123.0.0.0')
-		), $this->object->current());
+			 'hosts' => ['dev', '123.0.0.0']
+		], $this->object->current());
 
 		// dev ip
 		$_SERVER['HTTP_HOST'] = '123.0.0.0';
@@ -51,11 +51,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$this->object->initialize();
 		$this->assertEquals('prod', $this->object->current('name'));
 		$this->assertEquals(Environment::PRODUCTION, $this->object->current('type'));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			 'name' => 'prod',
 			 'type' => Environment::PRODUCTION,
-			 'hosts' => array('prod', '123.456.0.0')
-		), $this->object->current());
+			 'hosts' => ['prod', '123.456.0.0']
+		], $this->object->current());
 
 		// prod ip
 		$_SERVER['HTTP_HOST'] = '123.456.0.0';
@@ -67,11 +67,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$this->object->initialize();
 		$this->assertEquals('staging', $this->object->current('name'));
 		$this->assertEquals(Environment::STAGING, $this->object->current('type'));
-		$this->assertEquals(array(
+		$this->assertEquals([
 			 'name' => 'staging',
 			 'type' => Environment::STAGING,
-			 'hosts' => array('staging', '123.456.789.0')
-		), $this->object->current());
+			 'hosts' => ['staging', '123.456.789.0']
+		], $this->object->current());
 
 		// staging ip
 		$_SERVER['HTTP_HOST'] = '123.456.789.0';
@@ -115,13 +115,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 		$this->object->initialize();
 
 		$this->assertTrue(is_array($config->get('EnvironmentDevTest')));
-		$this->assertEquals(array('name' => 'dev'), $config->get('EnvironmentDevTest'));
+		$this->assertEquals(['name' => 'dev'], $config->get('EnvironmentDevTest'));
 
 		$_SERVER['HTTP_HOST'] = 'prod';
 		$this->object->initialize();
 
 		$this->assertTrue(is_array($config->get('EnvironmentProdTest')));
-		$this->assertEquals(array('name' => 'prod'), $config->get('EnvironmentProdTest'));
+		$this->assertEquals(['name' => 'prod'], $config->get('EnvironmentProdTest'));
 
 		// Should be falsey values since staging doesn't exist
 		$_SERVER['HTTP_HOST'] = 'staging';
@@ -217,13 +217,13 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testSetup() {
 		try {
-			$this->object->setup('noHosts', Environment::DEVELOPMENT, array());
+			$this->object->setup('noHosts', Environment::DEVELOPMENT, []);
 		} catch (\Exception $e) {
 			$this->assertTrue(true);
 		}
 
 		try {
-			$this->object->setup('wrongType', 5, array('host'));
+			$this->object->setup('wrongType', 5, ['host']);
 		} catch (\Exception $e) {
 			$this->assertTrue(true);
 		}

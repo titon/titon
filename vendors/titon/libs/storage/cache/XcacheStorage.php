@@ -50,15 +50,15 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function flush() {
-		$backup = array(
+		$backup = [
 			'PHP_AUTH_USER' => !empty($_SERVER['PHP_AUTH_USER']) ? $_SERVER['PHP_AUTH_USER'] : '',
 			'PHP_AUTH_PW' => !empty($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '',
-		);
+		];
 
-		$auth = array(
+		$auth = [
 			'PHP_AUTH_USER' => $this->config->username,
 			'PHP_AUTH_PW' => $this->config->password
-		);
+		];
 
 		// Set auth
 		$_SERVER = $auth + $_SERVER;

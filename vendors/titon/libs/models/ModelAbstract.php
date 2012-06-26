@@ -26,7 +26,7 @@ abstract class ModelAbstract implements Model {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_data = array();
+	protected $_data = [];
 
 	/**
 	 * Mapping of getters for fields.
@@ -34,7 +34,7 @@ abstract class ModelAbstract implements Model {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_getters = array();
+	protected $_getters = [];
 
 	/**
 	 * Mapping of setters for fields.
@@ -42,7 +42,7 @@ abstract class ModelAbstract implements Model {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_setters = array();
+	protected $_setters = [];
 
 	/**
 	 * Database schema that this model represents.
@@ -50,7 +50,7 @@ abstract class ModelAbstract implements Model {
 	 * @access private
 	 * @var array
 	 */
-	private $__schema = array();
+	private $__schema = [];
 
 	/**
 	 * Dynamically set a data row result through the constructor.
@@ -58,7 +58,7 @@ abstract class ModelAbstract implements Model {
 	 * @access public
 	 * @param array $data
 	 */
-	public function __construct(array $data = array()) {
+	public function __construct(array $data = []) {
 		foreach ($data as $field => $value) {
 			$this->set($field, $value);
 		}
@@ -132,7 +132,7 @@ abstract class ModelAbstract implements Model {
 		$value = $this->_data[$field];
 
 		if (isset($this->_getters[$field])) {
-			$value = call_user_func_array(array($this, $this->_getters[$field]), array($value));
+			$value = call_user_func_array([$this, $this->_getters[$field]], [$value]);
 		}
 
 		return $value;
@@ -175,7 +175,7 @@ abstract class ModelAbstract implements Model {
 		}
 
 		if (isset($this->_setters[$field])) {
-			$value = call_user_func_array(array($this, $this->_setters[$field]), array($value));
+			$value = call_user_func_array([$this, $this->_setters[$field]], [$value]);
 		}
 
 		$this->_data[$field] = $value;

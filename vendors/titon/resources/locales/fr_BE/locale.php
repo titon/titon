@@ -8,9 +8,9 @@
  */
 
 // French (Belgium)
-return array(
+return [
 	'id' => 'fr_BE',
 	'parent' => 'fr',
 	'timezone' => 'Europe/Brussels',
 	'title' => 'French (Belgium)',
-);
+];

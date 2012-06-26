@@ -8,10 +8,10 @@
  */
 
 // German (Standard)
-return array(
+return [
 	'id' => 'de',
 	'iso2' => 'de',
-	'iso3' => array('ger', 'deu'),
+	'iso3' => ['ger', 'deu'],
 	'timezone' => 'Europe/Berlin',
 	'title' => 'German (Standard)',
-);
+];

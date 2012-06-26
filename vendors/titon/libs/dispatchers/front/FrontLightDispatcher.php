@@ -35,9 +35,9 @@ class FrontLightDispatcher extends DispatcherAbstract {
 			$controller->dispatchAction();
 
 		} catch (HttpException $e) {
-			$controller->throwError($e->getCode(), array(
+			$controller->throwError($e->getCode(), [
 				'message' => $e->getMessage()
-			));
+			]);
 
 		} catch (Exception $e) {
 			debug($e->getCode());

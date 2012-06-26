@@ -8,9 +8,9 @@
  */
 
 // Arabic (Lebanon)
-return array(
+return [
 	'id' => 'ar_LB',
 	'parent' => 'ar',
 	'timezone' => 'Asia/Beirut',
 	'title' => 'Arabic (Lebanon)',
-);
+];

@@ -1,5 +1,5 @@
 <?php
 
-\titon\Titon::config()->set('EnvironmentDevTest', array(
+\titon\Titon::config()->set('EnvironmentDevTest', [
 	'name' => 'dev'
-));
+]);

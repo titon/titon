@@ -8,10 +8,10 @@
  */
 
 // Greek
-return array(
+return [
 	'id' => 'el',
 	'iso2' => 'el',
-	'iso3' => array('gre', 'ell'),
+	'iso3' => ['gre', 'ell'],
 	'timezone' => 'Europe/Athens',
 	'title' => 'Greek',
-);
+];

@@ -1,5 +1,5 @@
 <?php
 
-\titon\Titon::config()->set('EnvironmentProdTest', array(
+\titon\Titon::config()->set('EnvironmentProdTest', [
 	'name' => 'prod'
-));
+]);

@@ -29,7 +29,7 @@ class Float extends Integer {
 	public function __construct($value, $base = 10) {
 		parent::__construct((float) $value);
 
-		if (!in_array($base, array(2, 8, 10, 16, 32))) {
+		if (!in_array($base, [2, 8, 10, 16, 32])) {
 			throw new BaseException(sprintf('Unsupported base type %d, allowed types: 2, 8, 10, 16, 32', $base));
 		}
 
@@ -245,7 +245,7 @@ class Float extends Integer {
 
 		return $this;
 	}
-	
+
 	/**
 	 * Check to see if the current float is finite.
 	 *

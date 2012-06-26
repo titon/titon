@@ -8,9 +8,9 @@
  */
 
 // Spanish (Chile)
-return array(
+return [
 	'id' => 'es_CL',
 	'parent' => 'es',
 	'timezone' => 'America/Santiago',
 	'title' => 'Spanish (Chile)',
-);
+];

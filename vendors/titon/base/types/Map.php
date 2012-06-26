@@ -107,7 +107,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @chainable
 	 */
 	public function clear() {
-		$this->_value = array();
+		$this->_value = [];
 
 		return $this;
 	}
@@ -225,7 +225,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @param boolean $save
 	 * @return int
 	 */
-	public function depth(array $set = array(), $save = true) {
+	public function depth(array $set = [], $save = true) {
 		if ($this->_depth !== null) {
 			return $this->_depth;
 		}
@@ -603,7 +603,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return titon\base\types\Map
 	 * @chainable
 	 */
-	public function map(Closure $callback, array $data = array()) {
+	public function map(Closure $callback, array $data = []) {
 		$this->_value = array_map($callback, $this->_value, $data);
 
 		return $this;

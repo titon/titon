@@ -467,7 +467,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toCamelCase() {
-		$this->_value = str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $this->_value)))));
+		$this->_value = str_replace(' ', '', ucwords(strtolower(str_replace(['_', '-'], ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $this->_value)))));
 
 		return $this;
 	}

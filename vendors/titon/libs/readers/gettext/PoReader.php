@@ -32,7 +32,7 @@ class PoReader extends ReaderAbstract {
 	 */
 	public function parse() {
 		$lines = file($this->_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-		$data = array();
+		$data = [];
 		$key = '';
 		$value = '';
 		$plural = false;
@@ -65,7 +65,7 @@ class PoReader extends ReaderAbstract {
 					if ($plural) {
 						$value[] = $val;
 					} else {
-						$value = array($val);
+						$value = [$val];
 						$plural = true;
 					}
 

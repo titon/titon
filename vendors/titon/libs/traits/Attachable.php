@@ -32,7 +32,7 @@ trait Attachable {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_classes = array();
+	protected $_classes = [];
 
 	/**
 	 * Classes that have been instantiated when called with getObject().
@@ -40,7 +40,7 @@ trait Attachable {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_attached = array();
+	protected $_attached = [];
 
 	/**
 	 * Classes that have been loaded, but are unable to be used within the current scope.
@@ -48,7 +48,7 @@ trait Attachable {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_restricted = array();
+	protected $_restricted = [];
 
 	/**
 	 * Object map that relates a Closure object to a defined class, to allow for easy lazy-loading.
@@ -56,7 +56,7 @@ trait Attachable {
 	 * @access private
 	 * @var array
 	 */
-	private $__objectMap = array();
+	private $__objectMap = [];
 
 	/**
 	 * Magic method for getObject().
@@ -135,16 +135,16 @@ trait Attachable {
 	 */
 	public function attachObject($options, Closure $callback = null) {
 		if (is_string($options)) {
-			$options = array('alias' => $options);
+			$options = ['alias' => $options];
 		}
 
-		$options = $options + array(
+		$options = $options + [
 			'alias' => null,
 			'class' => null,
 			'register' => true,
 			'callback' => true,
 			'interface' => null
-		);
+		];
 
 		if (empty($options['alias'])) {
 			throw new TraitException('You must define an alias to reference the attached object.');

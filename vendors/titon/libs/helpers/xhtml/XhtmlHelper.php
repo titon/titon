@@ -24,14 +24,14 @@ class XhtmlHelper extends HtmlHelper {
 	 * @access protected
 	 * @var string
 	 */
-	protected $_tags = array(
+	protected $_tags = [
 		'anchor'	=> '<a%s>%s</a>',
 		'link'		=> '<link%s />',
 		'meta'		=> '<meta%s />',
 		'script'	=> '<script%s>%s</script>',
 		'style'		=> '<style%s>%s</style>',
 		'image'		=> '<img%s />'
-	);
+	];
 
 	/**
 	 * Return the XHTML doctype.
@@ -47,12 +47,12 @@ class XhtmlHelper extends HtmlHelper {
 			$type = 'trans';
 		}
 
-		$docTypes = array(
+		$docTypes = [
 			'strict'	=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">',
 			'trans'		=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">',
 			'frameset'	=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">',
 			'default'	=> '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">'
-		);
+		];
 
 		if (!isset($docTypes[$type])) {
 			$type = 'default';

@@ -8,10 +8,10 @@
  */
 
 // Norwegian
-return array(
+return [
 	'id' => 'no',
 	'iso2' => 'no',
 	'iso3' => 'nor',
 	'timezone' => 'Europe/Oslo',
 	'title' => 'Norwegian',
-);
+];

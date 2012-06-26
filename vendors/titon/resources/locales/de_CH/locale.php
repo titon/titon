@@ -8,9 +8,9 @@
  */
 
 // German (Swiss)
-return array(
+return [
 	'id' => 'de_CH',
 	'parent' => 'de',
 	'timezone' => 'Europe/Zurich',
 	'title' => 'German (Swiss)',
-);
+];

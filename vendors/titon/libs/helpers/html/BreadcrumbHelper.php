@@ -26,7 +26,7 @@ class BreadcrumbHelper extends HelperAbstract {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_breadcrumbs = array();
+	protected $_breadcrumbs = [];
 
 	/**
 	 * Add a link to the breadcrumbs.
@@ -37,8 +37,8 @@ class BreadcrumbHelper extends HelperAbstract {
 	 * @param array $attributes
 	 * @return BreadcrumbHelper
 	 */
-	public function add($title, $url, array $attributes = array()) {
-		$this->_breadcrumbs[] = array($title, $url, $attributes);
+	public function add($title, $url, array $attributes = []) {
+		$this->_breadcrumbs[] = [$title, $url, $attributes];
 
 		return $this;
 	}
@@ -50,7 +50,7 @@ class BreadcrumbHelper extends HelperAbstract {
 	 * @return array
 	 */
 	public function generate() {
-		$trail = array();
+		$trail = [];
 
 		if (!empty($this->_breadcrumbs)) {
 			foreach ($this->_breadcrumbs as $crumb) {

@@ -86,7 +86,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase {
 		$this->object->includePath($selfPath1);
 		$this->assertEquals($baseIncludePath . PATH_SEPARATOR . $selfPath1, get_include_path());
 
-		$this->object->includePath(array($selfPath2, $selfPath3));
+		$this->object->includePath([$selfPath2, $selfPath3]);
 		$this->assertEquals($baseIncludePath . PATH_SEPARATOR . $selfPath1 . PATH_SEPARATOR . $selfPath2 . PATH_SEPARATOR . $selfPath3, get_include_path());
 	}
 

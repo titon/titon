@@ -27,7 +27,7 @@ class Loader {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_loaders = array();
+	protected $_loaders = [];
 
 	/**
 	 * Define autoloader and attempt to autoload from include_paths first.
@@ -37,7 +37,7 @@ class Loader {
 	public function __construct() {
 		spl_autoload_extensions('.php');
 		spl_autoload_register();
-		spl_autoload_register(array($this, 'autoload'));
+		spl_autoload_register([$this, 'autoload']);
 
 		// Add default loader
 		$this->setup('default', function($class) {
@@ -45,9 +45,7 @@ class Loader {
 		});
 
 		// Set default include paths
-		$this->includePath(array(
-			TITON_APP, TITON_SOURCE, TITON_LIBS, TITON_VENDORS
-		));
+		$this->includePath([TITON_APP, TITON_SOURCE, TITON_LIBS, TITON_VENDORS]);
 	}
 
 	/**
@@ -122,7 +120,7 @@ class Loader {
 	 * @return boolean
 	 */
 	public function import($path) {
-		foreach (array(TITON_APP, TITON_SOURCE, TITON_VENDORS, TITON_LIBS) as $root) {
+		foreach ([TITON_APP, TITON_SOURCE, TITON_VENDORS, TITON_LIBS] as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
 			if (file_exists($source)) {
@@ -144,7 +142,7 @@ class Loader {
 	 * @chainable
 	 */
 	public function includePath($paths) {
-		$current = array(get_include_path());
+		$current = [get_include_path()];
 
 		if (is_array($paths)) {
 			foreach ($paths as $path) {

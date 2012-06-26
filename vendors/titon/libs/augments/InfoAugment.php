@@ -64,7 +64,7 @@ class InfoAugment {
 	public function __get($name) {
 		return $this->cache($name, function() use ($name) {
 			if (method_exists($this, $name)) {
-				return call_user_func_array(array($this, $name), array());
+				return call_user_func_array([$this, $name], []);
 			}
 
 			throw new AugmentException(sprintf('Information descriptor %s does not exist.', $name));
@@ -285,7 +285,7 @@ class InfoAugment {
 	 */
 	protected function _methods($key, $scope) {
 		return $this->cache($key, function() use ($scope) {
-			$methods = array();
+			$methods = [];
 
 			foreach ($this->_reflection->getMethods($scope) as $method) {
 				$methods[] = $method->getName();
@@ -305,7 +305,7 @@ class InfoAugment {
 	 */
 	protected function _properties($key, $scope) {
 		return $this->cache($key, function() use ($scope) {
-			$props = array();
+			$props = [];
 
 			foreach ($this->_reflection->getProperties($scope) as $prop) {
 				$props[] = $prop->getName();

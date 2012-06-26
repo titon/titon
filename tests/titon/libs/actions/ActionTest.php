@@ -16,9 +16,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase {
 	 * Test that run correctly executes and modifies the passed controller.
 	 */
 	public function testRun() {
-		$controller = new TitonLibsActionsMockController(array(
-			'foo' => 'bar'
-		));
+		$controller = new TitonLibsActionsMockController(['foo' => 'bar']);
 
 		$this->assertEquals('bar', $controller->config->foo);
 		$this->assertArrayNotHasKey('test', $controller->config->get());
@@ -41,10 +39,10 @@ class TitonLibsActionsMockController extends titon\libs\controllers\ControllerAb
 class TitonLibsActionsMockAction extends titon\libs\actions\ActionAbstract {
 
 	public function run() {
-		$this->controller->config->set(array(
+		$this->controller->config->set([
 			'foo' => 'baz',
 			'test' => 'value'
-		));
+		]);
 	}
 
 }

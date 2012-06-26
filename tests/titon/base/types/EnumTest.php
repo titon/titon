@@ -81,11 +81,11 @@ class MockEnum extends titon\base\types\Enum {
 	const BAR = 1;
 	const BAZ = 2;
 
-	protected $_enums = array(
-		self::FOO => array('Foo', 123),
-		self::BAR => array('Bar'),
-		self::BAZ => array('Baz', 789, true)
-	);
+	protected $_enums = [
+		self::FOO => ['Foo', 123],
+		self::BAR => ['Bar'],
+		self::BAZ => ['Baz', 789, true]
+	];
 
 	public function initialize($name, $id = null, $bool = false) {
 		$this->name = $name;

@@ -8,9 +8,9 @@
  */
 
 // Spanish (Ecuador)
-return array(
+return [
 	'id' => 'es_EC',
 	'parent' => 'es',
 	'timezone' => 'America/Guayaquil',
 	'title' => 'Spanish (Ecuador)',
-);
+];

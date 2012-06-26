@@ -104,7 +104,7 @@ class Set {
 			return false;
 		}
 
-		$data = array();
+		$data = [];
 
 		if (!empty($set)) {
 			foreach ($set as $key => $value) {
@@ -131,10 +131,10 @@ class Set {
 		}
 
 		if (!is_array($paths)) {
-			$paths = array($paths);
+			$paths = [$paths];
 		}
 
-		$data = array();
+		$data = [];
 
 		foreach ($paths as $path) {
 			$data[$path] = self::traverse(self::EXTRACT, $set, $path);
@@ -191,7 +191,7 @@ class Set {
 			$path = $path . '.';
 		}
 
-		$data = array();
+		$data = [];
 
 		foreach ($set as $key => $value) {
 			if (is_array($value)) {
@@ -289,7 +289,7 @@ class Set {
 	 * @return array
 	 * @static
 	 */
-	public static function map($set, $function, $args = array()) {
+	public static function map($set, $function, $args = []) {
 		if (is_array($function)) {
 			if (!class_exists(get_class($function[0])) || !method_exists($function[0], $function[1])) {
 				return $set;
@@ -342,7 +342,7 @@ class Set {
 	 */
 	public static function merge() {
 		$sets = func_get_args();
-		$set = array();
+		$set = [];
 		$total = count($sets) - 1;
 
 		if (!empty($sets)) {
@@ -397,7 +397,7 @@ class Set {
 	 * @static
 	 */
 	public static function range($start, $stop, $step = 1) {
-		$array = array();
+		$array = [];
 
 		if ($stop > $start) {
 			for ($i = (int)$start; $i <= (int)$stop; $i += (int)$step) {
@@ -445,7 +445,7 @@ class Set {
 			return $set;
 		}
 
-		$data = array();
+		$data = [];
 
 		foreach ($set as $key => $value) {
 			if (is_array($value)) {
@@ -478,7 +478,7 @@ class Set {
 			return $object;
 		}
 
-		return array_map(array(__CLASS__, 'toArray'), get_object_vars($object));
+		return array_map([__CLASS__, 'toArray'], get_object_vars($object));
 	}
 
 	/**
@@ -494,7 +494,7 @@ class Set {
 			return $array;
 		}
 
-		return (object) array_map(array(__CLASS__, 'toObject'), $array);
+		return (object) array_map([__CLASS__, 'toObject'], $array);
 	}
 
 	/**

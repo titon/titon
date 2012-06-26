@@ -8,10 +8,10 @@
  */
 
 // Farsi / Persian
-return array(
+return [
 	'id' => 'fa',
 	'iso2' => 'fa',
-	'iso3' => array('fas', 'per'),
+	'iso3' => ['fas', 'per'],
 	'timezone' => 'Asia/Tehran',
 	'title' => 'Farsi / Persian',
-);
+];

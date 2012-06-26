@@ -122,7 +122,7 @@ class MemcacheStorage extends StorageAbstract {
 		}
 
 		if (!is_array($config['servers'])) {
-			$config['servers'] = array($config['servers']);
+			$config['servers'] = [$config['servers']];
 		}
 
 		$this->connection = $this->connection ?: new Memcache();

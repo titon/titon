@@ -8,9 +8,9 @@
  */
 
 // Arabic (Saudi Arabia)
-return array(
+return [
 	'id' => 'ar_SA',
 	'parent' => 'ar',
 	'timezone' => 'Asia/Riyadh',
 	'title' => 'Arabic (Saudi Arabia)',
-);
+];

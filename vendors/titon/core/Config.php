@@ -33,7 +33,7 @@ class Config {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array();
+	protected $_config = [];
 
 	/**
 	 * Get the currently defined encoding for the application.

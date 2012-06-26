@@ -47,9 +47,9 @@ abstract class StorageAbstract extends Base implements Storage {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
+	protected $_config = [
 		'id' => '',
-		'servers' => array(),
+		'servers' => [],
 		'serialize' => false,
 		'compress' => false,
 		'persistent' => true,
@@ -59,7 +59,7 @@ abstract class StorageAbstract extends Base implements Storage {
 		'password' => '',
 		'storage' => '',
 		'initialize' => true
-	);
+	];
 
 	/**
 	 * Convert the expires date into a valid UNIX timestamp.
@@ -87,10 +87,10 @@ abstract class StorageAbstract extends Base implements Storage {
 	 * @return string
 	 */
 	public function key($key) {
-		return $this->cache(array(__METHOD__, $key), function() use ($key) {
+		return $this->cache([__METHOD__, $key], function() use ($key) {
 			$key = $this->config->prefix . (string) $this->createCacheKey($key);
 
-			return trim(preg_replace('/[^a-z0-9\-_\.]+/is', '', str_replace(array('\\', '::'), '.', $key)), '.');
+			return trim(preg_replace('/[^a-z0-9\-_\.]+/is', '', str_replace(['\\', '::'], '.', $key)), '.');
 		});
 	}
 

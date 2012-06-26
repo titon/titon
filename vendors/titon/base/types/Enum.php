@@ -12,9 +12,9 @@ namespace titon\base\types;
 use titon\base\BaseException;
 
 /**
- * The Enum type provides a basic interface to mimic enum based classes. Enums are first defined using class constants, 
- * with their values denoted as integers, and finally added as an argument to the $_enums property. This property also 
- * accepts an array of arguments that will be triggered using initialize() when the class is instantiated. 
+ * The Enum type provides a basic interface to mimic enum based classes. Enums are first defined using class constants,
+ * with their values denoted as integers, and finally added as an argument to the $_enums property. This property also
+ * accepts an array of arguments that will be triggered using initialize() when the class is instantiated.
  *
  * @package	titon.base.types
  */
@@ -26,7 +26,7 @@ class Enum {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_enums = array();
+	protected $_enums = [];
 
 	/**
 	 * The current enum type.
@@ -53,13 +53,13 @@ class Enum {
 		$this->_type = (int) $type;
 
 		if (method_exists($this, 'initialize')) {
-			call_user_func_array(array($this, 'initialize'), $this->_enums[$type]);
+			call_user_func_array([$this, 'initialize'], $this->_enums[$type]);
 		}
 	}
-	
+
 	/**
 	 * Return type when called as a string.
-	 * 
+	 *
 	 * @access public
 	 * @return string
 	 */
@@ -89,5 +89,5 @@ class Enum {
 	final public function value() {
 		return $this->_type;
 	}
-	
+
 }

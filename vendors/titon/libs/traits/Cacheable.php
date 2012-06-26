@@ -25,7 +25,7 @@ trait Cacheable {
 	 * @access public
 	 * @var array
 	 */
-	public $_cache = array();
+	public $_cache = [];
 
 	/**
 	 * Dynamically read and write from the cache at once. If the cache exists with the key return it, else execute and save the result.

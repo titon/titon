@@ -8,10 +8,10 @@
  */
 
 // Czech
-return array(
+return [
 	'id' => 'cs',
 	'iso2' => 'cs',
-	'iso3' => array('ces', 'cze'),
+	'iso3' => ['ces', 'cze'],
 	'timezone' => 'Europe/Prague',
 	'title' => 'Czech',
-);
+];

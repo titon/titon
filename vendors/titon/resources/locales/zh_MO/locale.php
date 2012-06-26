@@ -8,9 +8,9 @@
  */
 
 // Chinese (Macau)
-return array(
+return [
 	'id' => 'zh_MO',
 	'parent' => 'zh',
 	'timezone' => 'Asia/Macau',
 	'title' => 'Chinese (Macau)',
-);
+];

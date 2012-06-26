@@ -76,6 +76,6 @@ interface Translator {
 	 * @param array $params
 	 * @return string
 	 */
-	public function translate($key, array $params = array());
+	public function translate($key, array $params = []);
 
 }

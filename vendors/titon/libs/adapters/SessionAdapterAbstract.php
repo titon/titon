@@ -13,15 +13,15 @@ use titon\libs\adapters\SessionAdapter;
 
 /**
  * Primary class for all session adapters extend. Automatically registers the handler when set into the Session class.
- * 
+ *
  * @package	titon.libs.adapters
  * @abstract
  */
 abstract class SessionAdapterAbstract implements SessionAdapter {
-	
+
 	/**
 	 * Register the handler before the session is started.
-	 * 
+	 *
 	 * @access public
 	 */
 	public function __construct() {
@@ -30,7 +30,7 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 
 	/**
 	 * Close the session handler.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 */
@@ -40,7 +40,7 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 
 	/**
 	 * Triggered when a session is destroyed.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return void
@@ -51,7 +51,7 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 
 	/**
 	 * Triggered when the sessions garbage collector activates.
-	 * 
+	 *
 	 * @access public
 	 * @param int $maxLifetime
 	 * @return void
@@ -62,7 +62,7 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 
 	/**
 	 * Open the session handler.
-	 * 
+	 *
 	 * @access public
 	 * @param string $savePath
 	 * @param string $sessionName
@@ -74,7 +74,7 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 
 	/**
 	 * Read value from the session handler.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @return string
@@ -82,28 +82,28 @@ abstract class SessionAdapterAbstract implements SessionAdapter {
 	public function read($key) {
 		return;
 	}
-	
+
 	/**
 	 * Register the session handler.
-	 * 
+	 *
 	 * @access public
 	 * @return void
 	 * @final
 	 */
 	final public function register() {
 		session_set_save_handler(
-			array($this, 'open'),
-			array($this, 'close'),
-			array($this, 'read'),
-			array($this, 'write'),
-			array($this, 'destroy'),
-			array($this, 'gc')
+			[$this, 'open'],
+			[$this, 'close'],
+			[$this, 'read'],
+			[$this, 'write'],
+			[$this, 'destroy'],
+			[$this, 'gc']
 		);
 	}
 
 	/**
 	 * Write data to the session handler.
-	 * 
+	 *
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value

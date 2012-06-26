@@ -7,10 +7,10 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-return array(
+return [
 	'id' => 'ex_IN',
 	'iso3' => 'inf',
 	'parent' => 'ex',
 	'timezone' => '',
 	'title' => 'Example for Inflections',
-);
+];

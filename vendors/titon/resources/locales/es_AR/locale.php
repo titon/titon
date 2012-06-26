@@ -8,9 +8,9 @@
  */
 
 // Spanish (Argentina)
-return array(
+return [
 	'id' => 'es_AR',
 	'parent' => 'es',
 	'timezone' => 'America/Argentina/Buenos_Aires',
 	'title' => 'Spanish (Argentina)',
-);
+];

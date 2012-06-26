@@ -23,33 +23,33 @@ class Email extends Base {
 
 	const CHAR_LIMIT_SHOULD = 78;
 
-	protected $_config = array(
+	protected $_config = [
 		'validEmailOnly' => true
-	);
+	];
 
-	protected $_to = array();
+	protected $_to = [];
 
-	protected $_from = array();
+	protected $_from = [];
 
-	protected $_cc = array();
+	protected $_cc = [];
 
-	protected $_bcc = array();
+	protected $_bcc = [];
 
 	// prefixed with X- RFC2822 Section 4.7.5
-	protected $_headers = array();
+	protected $_headers = [];
 
 	// http://www.faqs.org/rfcs/rfc2047.html
 	protected $_subject = '';
 
 	protected $_body = '';
 
-	protected $_replyTo = array();
+	protected $_replyTo = [];
 
-	protected $_sender = array();
+	protected $_sender = [];
 
-	protected $_readReceipt = array();
+	protected $_readReceipt = [];
 
-	protected $_attachments = array();
+	protected $_attachments = [];
 
 	public function to($email, $name = '') {
 		$this->_to = $this->_formatEmails($email, $name) + $this->_to;
@@ -80,7 +80,7 @@ class Email extends Base {
 	}
 
 	protected function _formatEmails($email, $name = '') {
-		$emails = array();
+		$emails = [];
 		$config = $this->config->get();
 
 		if (is_array($email)) {
@@ -98,17 +98,17 @@ class Email extends Base {
 					continue;
 				}
 
-				$emails[] = array(
+				$emails[] = [
 					'email' => $mail,
 					'name' => $name
-				);
+				];
 			}
 		} else {
 			if ($config['validEmailOnly'] && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				$emails[] = array(
+				$emails[] = [
 					'email' => $email,
 					'name' => $name
-				);
+				];
 			}
 		}
 

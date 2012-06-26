@@ -30,7 +30,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array();
+	protected $_config = [];
 
 	/**
 	 * Default configuration.
@@ -38,7 +38,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_defaults = array();
+	protected $_defaults = [];
 
 	/**
 	 * Apply defaults and merge the custom configuration in.
@@ -46,7 +46,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 	 * @param array $config
 	 * @param array $defaults
 	 */
-	public function __construct(array $config, array $defaults = array()) {
+	public function __construct(array $config, array $defaults = []) {
 		$this->_defaults = $defaults;
 		$this->set($config + $defaults);
 	}

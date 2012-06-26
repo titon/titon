@@ -8,9 +8,9 @@
  */
 
 // Spanish (Panama)
-return array(
+return [
 	'id' => 'es_PA',
 	'parent' => 'es',
 	'timezone' => 'America/Panama',
 	'title' => 'Spanish (Panama)',
-);
+];

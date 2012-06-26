@@ -154,7 +154,7 @@ class Logger {
 			return;
 		}
 
-		$types = array(
+		$types = [
 			self::EMERGENCY => 'Emergency',
 			self::ALERT 	=> 'Alert',
 			self::CRITICAL 	=> 'Critical',
@@ -163,7 +163,7 @@ class Logger {
 			self::NOTICE 	=> 'Notice',
 			self::INFO 		=> 'Info',
 			self::DEBUG 	=> 'Debug'
-		);
+		];
 
 		if (isset($types[$level])) {
 			$type = $types[$level];

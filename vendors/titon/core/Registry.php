@@ -28,7 +28,7 @@ class Registry {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_configs = array();
+	protected $_configs = [];
 
 	/**
 	 * Objects that have been registered into memory. The array index is represented by the namespace convention,
@@ -37,7 +37,7 @@ class Registry {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_registered = array();
+	protected $_registered = [];
 
 	/**
 	 * Defines an array of configuration that should be loaded into a class when its instantiated.
@@ -48,7 +48,7 @@ class Registry {
 	 * @return titon\core\Registry
 	 * @chainable
 	 */
-	public function configure($key, array $config = array()) {
+	public function configure($key, array $config = []) {
 		if (isset($this->_configs[$key])) {
 			$this->_configs[$key] = $config + $this->_configs[$key];
 		} else {
@@ -67,7 +67,7 @@ class Registry {
 	 * @param boolean $store
 	 * @return object
 	 */
-	public function &factory($key, array $config = array(), $store = true) {
+	public function &factory($key, array $config = [], $store = true) {
 		if ($this->has($key)) {
 			return $this->get($key);
 		}
@@ -94,7 +94,7 @@ class Registry {
 	 * @chainable
 	 */
 	public function flush() {
-		$this->_configs = array();
+		$this->_configs = [];
 
 		if (!empty($this->_registered)) {
 			foreach ($this->_registered as $key => $object) {

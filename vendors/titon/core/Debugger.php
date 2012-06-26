@@ -29,7 +29,7 @@ class Debugger {
 	 * @access public
 	 * @var array
 	 */
-	public $errorTypes = array(
+	public $errorTypes = [
 		E_ERROR				=> 'Error',
 		E_WARNING			=> 'Warning',
 		E_PARSE				=> 'Parsing Error',
@@ -46,7 +46,7 @@ class Debugger {
 		E_DEPRECATED		=> 'Deprecated',
 		E_USER_DEPRECATED	=> 'User Deprecated',
 		E_ALL				=> 'All'
-	);
+	];
 
 	/**
 	 * Errors received during the current request.
@@ -54,7 +54,7 @@ class Debugger {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_errors = array();
+	protected $_errors = [];
 
 	/**
 	 * The last uncaught exception.
@@ -74,8 +74,8 @@ class Debugger {
 		ini_set('report_memleaks', true);
 		ini_set('error_log', APP_TEMP . 'error.log');
 
-		set_error_handler(array($this, 'error'), E_ALL | E_STRICT);
-		set_exception_handler(array($this, 'uncaught'));
+		set_error_handler([$this, 'error'], E_ALL | E_STRICT);
+		set_exception_handler([$this, 'uncaught']);
 
 		$this->enable();
 	}
@@ -234,19 +234,19 @@ class Debugger {
 			return ($arg === true) ? 'true' : 'false';
 
 		} else if (is_string($arg)) {
-			return "'" . htmlentities($arg) . "'";
+			return "'" . htmlentities($arg, ENT_QUOTES, 'UTF-8') . "'";
 
 		} else if (is_array($arg)) {
 			if ($end === true) {
-				return 'array([Truncated])';
+				return '[Truncated]';
 			} else {
-				$args = array();
+				$args = [];
 
 				foreach ($arg as $a) {
 					$args[] = $this->parseArg($a, true);
 				}
 
-				return 'array(' . implode(', ', $args) . ')';
+				return '[' . implode(', ', $args) . ']';
 			}
 
 		} else if (is_null($arg)) {
@@ -277,7 +277,7 @@ class Debugger {
 
 		$path = Titon::loader()->ds($path);
 
-		foreach(array('titon_app', 'titon_libs', 'titon_vendors', 'titon_source') as $constant) {
+		foreach(['titon_app', 'titon_libs', 'titon_vendors', 'titon_source'] as $constant) {
 			$location = Titon::loader()->ds(constant(strtoupper($constant)));
 
 			if (strpos($path, $location) !== false) {
@@ -297,12 +297,12 @@ class Debugger {
 	 */
 	public function trace() {
 		$backtrace = debug_backtrace();
-		$response = array();
+		$response = [];
 
 		if (!empty($backtrace)) {
 			foreach ($backtrace as $trace) {
 				//if (!in_array($trace['function'], get_class_methods($this))) {
-					$current = array();
+					$current = [];
 					$current['file'] = isset($trace['file']) ? $trace['file'] : '[Internal]';
 
 					if (isset($trace['line'])) {
@@ -317,7 +317,7 @@ class Debugger {
 
 					$current['method'] = $method;
 
-					$args = array();
+					$args = [];
 
 					if (!empty($trace['args'])) {
 						foreach ($trace['args'] as $arg) {
@@ -327,12 +327,12 @@ class Debugger {
 
 					$current['args'] = $args;
 
-					$response[] = $current + array(
+					$response[] = $current + [
 						'line'	=> null,
 						'method'=> null,
 						'file'	=> null,
 						'args'	=> null
-					);
+					];
 				//}
 			}
 

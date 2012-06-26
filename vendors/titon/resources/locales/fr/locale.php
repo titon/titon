@@ -8,10 +8,10 @@
  */
 
 // French (Standard)
-return array(
+return [
 	'id' => 'fr',
 	'iso2' => 'fr',
-	'iso3' => array('fra', 'fre'),
+	'iso3' => ['fra', 'fre'],
 	'timezone' => 'Europe/Paris',
 	'title' => 'French (Standard)',
-);
+];

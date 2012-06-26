@@ -8,9 +8,9 @@
  */
 
 // English (Trinidad)
-return array(
+return [
 	'id' => 'en_TT',
 	'parent' => 'en',
 	'timezone' => 'America/Caracas',
 	'title' => 'English (Trinidad)',
-);
+];

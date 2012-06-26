@@ -8,10 +8,10 @@
  */
 
 // Chinese
-return array(
+return [
 	'id' => 'zh',
 	'iso2' => 'zh',
-	'iso3' => array('chi', 'zho'),
+	'iso3' => ['chi', 'zho'],
 	'timezone' => 'Asia/Shanghai',
 	'title' => 'Chinese',
-);
+];

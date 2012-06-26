@@ -8,9 +8,9 @@
  */
 
 // Chinese (Hong Kong)
-return array(
+return [
 	'id' => 'zh_HK',
 	'parent' => 'zh',
 	'timezone' => 'Asia/Hong_Kong',
 	'title' => 'Chinese (Hong Kong)',
-);
+];

@@ -8,9 +8,9 @@
  */
 
 // Chinese (Singapore)
-return array(
+return [
 	'id' => 'zh_SG',
 	'parent' => 'zh',
 	'timezone' => 'Asia/Singapore',
 	'title' => 'Chinese (Singapore)',
-);
+];

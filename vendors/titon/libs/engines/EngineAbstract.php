@@ -58,14 +58,14 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
+	protected $_config = [
 		'type'		=> null,
-		'template'	=> array(),
+		'template'	=> [],
 		'render'	=> true,
 		'layout'	=> 'default',
 		'wrapper'	=> null,
 		'error'		=> false
-	);
+	];
 
 	/**
 	 * The rendered content used within the wrapper or the layout.
@@ -81,7 +81,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_data = array();
+	protected $_data = [];
 
 	/**
 	 * List of added helpers.
@@ -89,7 +89,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_helpers = array();
+	protected $_helpers = [];
 
 	/**
 	 * Has the view been rendered.
@@ -111,10 +111,10 @@ abstract class EngineAbstract extends Base implements Engine {
 	final public function addHelper($alias, Closure $helper) {
 		$this->_helpers[] = $alias;
 
-		$this->attachObject(array(
+		$this->attachObject([
 			'alias' => $alias,
 			'interface' => '\titon\libs\helpers\Helper'
-		), $helper);
+		], $helper);
 	}
 
 	/**
@@ -126,7 +126,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return string|null
 	 */
 	public function buildPath($type = self::TYPE_TPL, $path = null) {
-		$paths = array();
+		$paths = [];
 		$config = $this->config->get();
 		$template = $config['template'];
 
@@ -139,10 +139,10 @@ abstract class EngineAbstract extends Base implements Engine {
 				if (!empty($config['layout'])) {
 					$layout = $this->_preparePath($config['layout']);
 
-					$paths = array(
+					$paths = [
 						APP_MODULES . $template['module'] . '/views/private/layouts/' . $layout . '.tpl',
 						APP_VIEWS . 'layouts/' . $layout . '.tpl'
-					);
+					];
 				}
 			break;
 
@@ -150,10 +150,10 @@ abstract class EngineAbstract extends Base implements Engine {
 				if (!empty($config['wrapper'])) {
 					$wrapper = $this->_preparePath($config['wrapper']);
 
-					$paths = array(
+					$paths = [
 						APP_MODULES . $template['module'] . '/views/private/wrappers/' . $wrapper . '.tpl',
 						APP_VIEWS . 'wrappers/' . $wrapper . '.tpl'
-					);
+					];
 				}
 			break;
 
@@ -164,35 +164,35 @@ abstract class EngineAbstract extends Base implements Engine {
 					$path = substr($path, 0, (strlen($path) - 4));
 				}
 
-				$paths = array(
+				$paths = [
 					APP_MODULES . $template['module'] . '/views/private/includes/' . $path . '.tpl',
 					APP_VIEWS . 'includes/' . $path . '.tpl'
-				);
+				];
 			break;
 
 			case self::TYPE_ERROR:
 				$error = $this->_preparePath($template['action']);
 
-				$paths = array(
+				$paths = [
 					APP_MODULES . $template['module'] . '/views/private/errors/' . $error . '.tpl',
 					APP_VIEWS . 'errors/' . $error . '.tpl'
-				);
+				];
 			break;
 
 			case self::TYPE_TPL:
 			default:
-				$parts = array(
+				$parts = [
 					$template['module'],
 					'views',
 					'public',
 					$template['controller'],
 					Titon::loader()->ds($template['action'], true)
-				);
+				];
 
 				$path  = APP_MODULES . implode('/', $parts);
 				$path .= empty($ext) ? '.tpl' : '.' . $ext . '.tpl';
 
-				$paths = array($path);
+				$paths = [$path];
 			break;
 		}
 
@@ -241,7 +241,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return string
 	 * @throws titon\libs\engines\EngineException
 	 */
-	public function open($path, array $variables = array()) {
+	public function open($path, array $variables = []) {
 		throw new EngineException('You must define the open() method within your engine.');
 	}
 
@@ -274,7 +274,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return string
 	 * @throws titon\libs\engines\EngineException
 	 */
-	public function render($path, array $variables = array()) {
+	public function render($path, array $variables = []) {
 		throw new EngineException('You must define the render() method within your Engine.');
 	}
 
@@ -349,7 +349,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return string
 	 */
 	protected function _preparePath($path) {
-		return $this->cache(array(__METHOD__, $path), function() use ($path) {
+		return $this->cache([__METHOD__, $path], function() use ($path) {
 			$path = Titon::loader()->ds($path);
 
 			if (substr($path, -4) === '.tpl') {

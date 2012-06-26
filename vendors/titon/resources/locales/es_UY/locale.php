@@ -8,9 +8,9 @@
  */
 
 // Spanish (Uruguay)
-return array(
+return [
 	'id' => 'es_UY',
 	'parent' => 'es',
 	'timezone' => 'America/Montevideo',
 	'title' => 'Spanish (Uruguay)',
-);
+];

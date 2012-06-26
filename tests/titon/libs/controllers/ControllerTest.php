@@ -18,12 +18,12 @@ class ControllerTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = new TitonLibsControllersMockController(array(
+		$this->object = new TitonLibsControllersMockController([
 			'module' => 'module',
 			'controller' => 'controller',
 			'action' => 'action',
-			'args' => array(100, 25)
-		));
+			'args' => [100, 25]
+		]);
 	}
 
 	/**
@@ -42,11 +42,11 @@ class ControllerTest extends \PHPUnit_Framework_TestCase {
 		}
 
 		$this->assertEquals('actionNoArgs', $this->object->dispatchAction('action1'));
-		$this->assertEquals('actionNoArgs', $this->object->dispatchAction('action1', array('foo', 'bar')));
+		$this->assertEquals('actionNoArgs', $this->object->dispatchAction('action1', ['foo', 'bar']));
 		$this->assertEquals(125, $this->object->dispatchAction('action2'));
-		$this->assertEquals(555, $this->object->dispatchAction('action2', array(505, 50)));
-		$this->assertEquals(335, $this->object->dispatchAction('action2', array(335)));
-		$this->assertEquals(0, $this->object->dispatchAction('action2', array('foo', 'bar')));
+		$this->assertEquals(555, $this->object->dispatchAction('action2', [505, 50]));
+		$this->assertEquals(335, $this->object->dispatchAction('action2', [335]));
+		$this->assertEquals(0, $this->object->dispatchAction('action2', ['foo', 'bar']));
 	}
 
 	/**
@@ -106,7 +106,7 @@ class ControllerTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('500 - Internal Server Error', $this->object->engine->data('pageTitle'));
 		$this->assertEquals('500', $this->object->engine->config->get('template.action'));
 
-		$this->object->throwError('customError', array('pageTitle' => 'Custom Error'));
+		$this->object->throwError('customError', ['pageTitle' => 'Custom Error']);
 
 		$this->assertEquals('Custom Error', $this->object->engine->data('pageTitle'));
 		$this->assertEquals('customError', $this->object->engine->config->get('template.action'));
@@ -138,10 +138,10 @@ class TitonLibsControllersMockController extends titon\libs\controllers\Controll
 class TitonLibsControllersMockAction extends titon\libs\actions\ActionAbstract {
 
 	public function run() {
-		$this->controller->config->set(array(
+		$this->controller->config->set([
 			'foo' => 'baz',
 			'test' => 'value'
-		));
+		]);
 	}
 
 }

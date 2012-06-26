@@ -29,9 +29,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
-		'bundle' => ''
-	);
+	protected $_config = ['bundle' => ''];
 
 	/**
 	 * Locale digest configuration overrides.
@@ -39,7 +37,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_override = array();
+	protected $_override = [];
 
 	/**
 	 * Parent locale bundle.
@@ -56,7 +54,7 @@ class LocaleBundle extends BundleAbstract {
 	 * @param array $config
 	 * @param array $override
 	 */
-	public function __construct(array $config = array(), array $override = array()) {
+	public function __construct(array $config = [], array $override = []) {
 		parent::__construct($config);
 
 		$this->_override = $override;
@@ -155,10 +153,10 @@ class LocaleBundle extends BundleAbstract {
 	 * @return void
 	 */
 	public function initialize() {
-		$this->addReader(new PhpReader())->addLocation(array(
+		$this->addReader(new PhpReader())->addLocation([
 			TITON_RESOURCES . 'locales/{bundle}/',
 			APP_RESOURCES . 'locales/{bundle}/'
-		));
+		]);
 
 		// Load locale file and load parent if one exists
 		$locale = $this->getLocale();
@@ -179,7 +177,7 @@ class LocaleBundle extends BundleAbstract {
 			if (Titon::registry()->has($key)) {
 				$parent = Titon::registry()->get($key);
 			} else {
-				$parent = Titon::registry()->set(new LocaleBundle(array('bundle' => $locale['parent'])), $key);
+				$parent = Titon::registry()->set(new LocaleBundle(['bundle' => $locale['parent']]), $key);
 			}
 
 			if ($parent instanceof LocaleBundle) {

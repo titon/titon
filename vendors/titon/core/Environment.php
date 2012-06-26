@@ -42,13 +42,13 @@ class Environment {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_environments = array(
-		'dev' => array(
+	protected $_environments = [
+		'dev' => [
 			'name' => 'dev',
 			'type' => self::DEVELOPMENT,
-			'hosts' => array('localhost', '127.0.0.1', '::1')
-		)
-	);
+			'hosts' => ['localhost', '127.0.0.1', '::1']
+		]
+	];
 
 	/**
 	 * Sets the fallback environment; defaults to development.
@@ -64,11 +64,11 @@ class Environment {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_hostMapping = array(
+	protected $_hostMapping = [
 		'localhost' => 'dev',
 		'127.0.0.1' => 'dev',
 		'::1' => 'dev'
-	);
+	];
 
 	/**
 	 * Return the current environment config, or a certain value.
@@ -113,7 +113,7 @@ class Environment {
 	 * @return void
 	 */
 	public function initialize() {
-		foreach (array($_SERVER['HTTP_HOST'], $_SERVER['SERVER_ADDR']) as $host) {
+		foreach ([$_SERVER['HTTP_HOST'], $_SERVER['SERVER_ADDR']] as $host) {
 			if (isset($this->_hostMapping[$host])) {
 				$this->_current = $this->_hostMapping[$host];
 			}
@@ -191,11 +191,11 @@ class Environment {
 			throw new CoreException(sprintf('Invalid environment type detected for %s.', $key));
 		}
 
-		$this->_environments[$key] = array(
+		$this->_environments[$key] = [
 			'name' => $key,
 			'type' => $type,
 			'hosts' => $hosts
-		);
+		];
 
 		foreach ($hosts as $host) {
 			$this->_hostMapping[$host] = $key;

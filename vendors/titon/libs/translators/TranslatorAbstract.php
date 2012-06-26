@@ -36,7 +36,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_bundles = array();
+	protected $_bundles = [];
 
 	/**
 	 * File reader used for parsing.
@@ -75,7 +75,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 
 		foreach ($locales as $locale) {
 			$cacheKey = 'g11n.' . ($module === null ? 'root' : $module) . '.' . $catalog . '.' . $locale;
-			$messages = array();
+			$messages = [];
 
 			// Check within the cache first
 			if ($this->_storage) {
@@ -133,7 +133,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @final
 	 */
 	final public function parseKey($key) {
-		return $this->cache(array(__METHOD__, $key), function() use ($key) {
+		return $this->cache([__METHOD__, $key], function() use ($key) {
 			$parts = explode('.', preg_replace('/[^-a-z0-9\.]+/i', '', $key));
 			$count = count($parts);
 			$module = null;
@@ -152,7 +152,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 				$key = implode('.', $parts);
 			}
 
-			return array($module, $catalog, $key);
+			return [$module, $catalog, $key];
 		});
 	}
 
@@ -193,7 +193,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @param array $params
 	 * @return string
 	 */
-	public function translate($key, array $params = array()) {
+	public function translate($key, array $params = []) {
 		return MessageFormatter::formatMessage(Locale::DEFAULT_LOCALE, $this->getMessage($key), $params);
 	}
 

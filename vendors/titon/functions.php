@@ -11,7 +11,7 @@ namespace titon;
 
 /**
  * Outputs multiple variables in an easily readable format.
- * 
+ *
  * @param mixed $var, $var, $var...
  */
 function debug() {
@@ -64,6 +64,6 @@ function dump() {
  * @param array $params
  * @return string
  */
-function msg($key, array $params = array()) {
+function msg($key, array $params = []) {
 	return \titon\Titon::g11n()->translate($key, $params);
 }

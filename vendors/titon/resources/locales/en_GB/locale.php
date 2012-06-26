@@ -8,9 +8,9 @@
  */
 
 // English (British)
-return array(
+return [
 	'id' => 'en_GB',
 	'parent' => 'en',
 	'timezone' => 'Europe/London',
 	'title' => 'English (British)',
-);
+];

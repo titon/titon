@@ -8,9 +8,9 @@
  */
 
 // English (India)
-return array(
+return [
 	'id' => 'en_IN',
 	'parent' => 'en',
 	'timezone' => 'Indian/Mahe',
 	'title' => 'English (India)',
-);
+];

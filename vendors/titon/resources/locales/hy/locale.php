@@ -8,10 +8,10 @@
  */
 
 // Armenian
-return array(
+return [
 	'id' => 'hy',
 	'iso2' => 'hy',
-	'iso3' => array('arm', 'hye'),
+	'iso3' => ['arm', 'hye'],
 	'timezone' => 'Asia/Yerevan',
 	'title' => 'Armenian',
-);
+];

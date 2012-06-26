@@ -8,9 +8,9 @@
  */
 
 // Gaelic (Irish)
-return array(
+return [
 	'id' => 'gd_IE',
 	'parent' => 'gd',
 	'timezone' => 'Europe/Dublin',
 	'title' => 'Gaelic (Irish)',
-);
+];

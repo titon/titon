@@ -8,9 +8,9 @@
  */
 
 // Arabic (Libya)
-return array(
+return [
 	'id' => 'ar_LY',
 	'parent' => 'ar',
 	'timezone' => 'Africa/Tripoli',
 	'title' => 'Arabic (Libya)',
-);
+];

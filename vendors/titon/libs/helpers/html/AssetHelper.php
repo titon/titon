@@ -26,7 +26,7 @@ class AssetHelper extends HelperAbstract {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_scripts = array();
+	protected $_scripts = [];
 
 	/**
 	 * A list of CSS stylesheets to include in the current page.
@@ -34,7 +34,7 @@ class AssetHelper extends HelperAbstract {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_stylesheets = array();
+	protected $_stylesheets = [];
 
 	/**
 	 * Add a JavaScript file to the current page request.
@@ -74,10 +74,10 @@ class AssetHelper extends HelperAbstract {
 			$order = count($this->_stylesheets);
 		}
 
-		$this->_stylesheets[$order] = array(
+		$this->_stylesheets[$order] = [
 			'path' => $sheet,
 			'media' => $media
-		);
+		];
 	}
 
 	/**
@@ -121,7 +121,7 @@ class AssetHelper extends HelperAbstract {
 
 		if (!empty($this->_stylesheets)) {
 			foreach ($this->_stylesheets as $sheet) {
-				$output .= $this->html->link($sheet['path'], array('media' => $sheet['media']));
+				$output .= $this->html->link($sheet['path'], ['media' => $sheet['media']]);
 			}
 		}
 

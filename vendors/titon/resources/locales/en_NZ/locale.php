@@ -8,9 +8,9 @@
  */
 
 // English (New Zealand)
-return array(
+return [
 	'id' => 'en_NZ',
 	'parent' => 'en',
 	'timezone' => 'Pacific/Auckland',
 	'title' => 'English (New Zealand)',
-);
+];

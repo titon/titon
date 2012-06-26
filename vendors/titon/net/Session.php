@@ -44,13 +44,13 @@ class Session extends Base {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
+	protected $_config = [
 		'checkUserAgent' => true,
 		'checkInactivity' => true,
 		'checkReferrer' => true,
 		'inactivityThreshold' => '+5 minutes',
 		'sessionLifetime' => '+10 minutes'
-	);
+	];
 
 	/**
 	 * The current session id.
@@ -67,7 +67,7 @@ class Session extends Base {
 	 * @return void
 	 */
 	public function destroy() {
-		$_SESSION = array();
+		$_SESSION = [];
 
 		if (isset($_COOKIE[session_name()])) {
 			$params = session_get_cookie_params();
@@ -162,7 +162,7 @@ class Session extends Base {
 		ini_set('session.cookie_lifetime', $timeout);
 
 		if (headers_sent()) {
-			$_SESSION = array();
+			$_SESSION = [];
 		} else {
 			session_start();
 		}
@@ -236,11 +236,11 @@ class Session extends Base {
 	 * @return void
 	 */
 	protected function _startup() {
-		$this->set('Security', array(
+		$this->set('Security', [
 			'time' => strtotime($this->config->inactivityThreshold),
 			'host' => Titon::router()->segments('host'),
 			'agent' => md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])
-		));
+		]);
 	}
 
 	/**

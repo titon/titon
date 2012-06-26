@@ -8,10 +8,10 @@
  */
 
 // Icelandic
-return array(
+return [
 	'id' => 'is',
 	'iso2' => 'is',
-	'iso3' => array('isl', 'ice'),
+	'iso3' => ['isl', 'ice'],
 	'timezone' => 'Atlantic/Reykjavik',
 	'title' => 'Icelandic',
-);
+];

@@ -19,13 +19,9 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testBundleDetection() {
 		try {
-			$fakeBundle = new MessageBundle(array(
-				'bundle' => 'en'
-			));
+			$fakeBundle = new MessageBundle(['bundle' => 'en']);
 
-			$fakeBundle = new MessageBundle(array(
-				'bundle' => 'doesntExist'
-			));
+			$fakeBundle = new MessageBundle(['bundle' => 'doesntExist']);
 
 			$this->assertTrue(false);
 		} catch (\Exception $e) {
@@ -37,19 +33,19 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 * Test that loading messages from php files work.
 	 */
 	public function testPhpBundles() {
-		$bundle = new MessageBundle(array('bundle' => 'ex'));
+		$bundle = new MessageBundle(['bundle' => 'ex']);
 		$bundle->addReader(new titon\libs\readers\core\PhpReader());
 
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('titon', 'test', 'type', 'format'), array_keys($messages));
-		$this->assertEquals(array(
+		$this->assertEquals(['titon', 'test', 'type', 'format'], array_keys($messages));
+		$this->assertEquals([
 			'titon' => 'Titon',
 			'test' => 'Test',
 			'type' => 'php',
 			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
-		), $messages);
+		], $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
 
@@ -61,19 +57,19 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 * Test that loading messages from ini files work.
 	 */
 	public function testIniBundles() {
-		$bundle = new MessageBundle(array('bundle' => 'ex'));
+		$bundle = new MessageBundle(['bundle' => 'ex']);
 		$bundle->addReader(new titon\libs\readers\core\IniReader());
 
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('titon', 'test', 'type', 'format'), array_keys($messages));
-		$this->assertEquals(array(
+		$this->assertEquals(['titon', 'test', 'type', 'format'], array_keys($messages));
+		$this->assertEquals([
 			'titon' => 'Titon',
 			'test' => 'Test',
 			'type' => 'ini',
 			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
-		), $messages);
+		], $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
 
@@ -85,19 +81,19 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 * Test that loading messages from json files work.
 	 */
 	public function testJsonBundles() {
-		$bundle = new MessageBundle(array('bundle' => 'ex'));
+		$bundle = new MessageBundle(['bundle' => 'ex']);
 		$bundle->addReader(new titon\libs\readers\core\JsonReader());
 
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('titon', 'test', 'type', 'format'), array_keys($messages));
-		$this->assertEquals(array(
+		$this->assertEquals(['titon', 'test', 'type', 'format'], array_keys($messages));
+		$this->assertEquals([
 			'titon' => 'Titon',
 			'test' => 'Test',
 			'type' => 'json',
 			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
-		), $messages);
+		], $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
 
@@ -109,19 +105,19 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 * Test that loading messages from xml files work.
 	 */
 	public function testXmlBundles() {
-		$bundle = new MessageBundle(array('bundle' => 'ex'));
+		$bundle = new MessageBundle(['bundle' => 'ex']);
 		$bundle->addReader(new titon\libs\readers\core\XmlReader());
 
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('titon', 'test', 'type', 'format'), array_keys($messages));
-		$this->assertEquals(array(
+		$this->assertEquals(['titon', 'test', 'type', 'format'], array_keys($messages));
+		$this->assertEquals([
 			'titon' => 'Titon',
 			'test' => 'Test',
 			'type' => 'xml',
 			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
-		), $messages);
+		], $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
 
@@ -133,20 +129,20 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 * Test that loading messages from xml files work.
 	 */
 	public function testPoBundles() {
-		$bundle = new MessageBundle(array('bundle' => 'ex'));
+		$bundle = new MessageBundle(['bundle' => 'ex']);
 		$bundle->addReader(new titon\libs\readers\gettext\PoReader());
 
 		$messages = $bundle->loadResource('default');
 
 		$this->assertTrue(is_array($messages));
-		$this->assertEquals(array('basic', 'multiline', 'plurals', 'context', 'format'), array_keys($messages));
-		$this->assertEquals(array(
+		$this->assertEquals(['basic', 'multiline', 'plurals', 'context', 'format'], array_keys($messages));
+		$this->assertEquals([
 			'basic' => 'Basic message',
 			'multiline' => "Multiline message\nMore message here\nAnd more message again",
-			'plurals' => array('plural', 'plurals'),
+			'plurals' => ['plural', 'plurals'],
 			'context' => 'Context message',
 			'format' => '{0,number,integer} health, {1,number,integer} energy, {2,number} damage'
-		), $messages);
+		], $messages);
 
 		$messages = $bundle->loadResource('doesntExist');
 

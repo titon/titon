@@ -8,9 +8,9 @@
  */
 
 // English (Ireland)
-return array(
+return [
 	'id' => 'en_IE',
 	'parent' => 'en',
 	'timezone' => 'Europe/Dublin',
 	'title' => 'English (Ireland)',
-);
+];

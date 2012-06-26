@@ -34,7 +34,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_locations = array();
+	protected $_locations = [];
 
 	/**
 	 * File readers.
@@ -42,7 +42,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_readers = array();
+	protected $_readers = [];
 
 	/**
 	 * Add a folder location to use during the lookup cycle.
@@ -115,11 +115,11 @@ abstract class BundleAbstract extends Base implements Bundle {
 		if (empty($this->_readers)) {
 			throw new BundleException('A Reader must be loaded to read Bundle resources.');
 
-		} else if ($cache = $this->getCache(array(__METHOD__, $resource))) {
+		} else if ($cache = $this->getCache([__METHOD__, $resource])) {
 			return $cache;
 		}
 
-		$contents = array();
+		$contents = [];
 
 		foreach ($this->getLocations() as $location) {
 			foreach ($this->getReaders() as $ext => $reader) {
@@ -133,7 +133,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 			}
 		}
 
-		return $this->setCache(array(__METHOD__, $resource), $contents);
+		return $this->setCache([__METHOD__, $resource], $contents);
 	}
 
 }

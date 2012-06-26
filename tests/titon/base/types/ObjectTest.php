@@ -18,12 +18,12 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = new titon\base\types\Object(array(
+		$this->object = new titon\base\types\Object([
 			'property' => 'instantiatedProperty',
 			'method' => function() {
 				return 'instantiatedMethod';
 			}
-		));
+		]);
 	}
 
 	/**
@@ -62,8 +62,8 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->object, $this->object->testSelf());
 
 		// by get()
-		$this->assertEquals(125, $this->object->getMethod('testMethod', array(25, 100)));
-		$this->assertEquals(25, $this->object->getMethod('testMethod', array(0, 25)));
+		$this->assertEquals(125, $this->object->getMethod('testMethod', [25, 100]));
+		$this->assertEquals(25, $this->object->getMethod('testMethod', [0, 25]));
 		$this->assertEquals($this->object, $this->object->getMethod('testSelf'));
 
 		// has
@@ -104,7 +104,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
 		$this->object->addProperty('string', 'foobar');
 		$this->object->addProperty('number', 123456);
 		$this->object->addProperty('boolean', true);
-		$this->object->addProperty('array', array());
+		$this->object->addProperty('array', []);
 
 		try {
 			$this->object->addProperty(12345);
@@ -129,7 +129,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('foobar', $this->object->string);
 		$this->assertEquals(123456, $this->object->number);
 		$this->assertEquals(true, $this->object->boolean);
-		$this->assertEquals(array(), $this->object->array);
+		$this->assertEquals([], $this->object->array);
 
 		// by get()
 		$this->assertTrue(is_string($this->object->getProperty('string')));
@@ -140,7 +140,7 @@ class ObjectTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('foobar', $this->object->getProperty('string'));
 		$this->assertEquals(123456, $this->object->getProperty('number'));
 		$this->assertEquals(true, $this->object->getProperty('boolean'));
-		$this->assertEquals(array(), $this->object->getProperty('array'));
+		$this->assertEquals([], $this->object->getProperty('array'));
 
 		// has
 		$this->assertTrue($this->object->hasProperty('string'));

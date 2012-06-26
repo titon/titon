@@ -40,16 +40,16 @@ class Http {
 	 * @var array
 	 * @static
 	 */
-	public static $contentTypes = array(
+	public static $contentTypes = [
 		'ai'			=> 'application/postscript',
 		'amf'			=> 'application/x-amf',
 		'atom'			=> 'application/atom+xml',
 		'css'			=> 'text/css',
-		'csv'			=> array('application/csv', 'application/vnd.ms-excel', 'text/plain'),
+		'csv'			=> ['application/csv', 'application/vnd.ms-excel', 'text/plain'],
 		'file'			=> 'multipart/form-data',
 		'form'			=> 'application/x-www-form-urlencoded',
 		'htm'			=> 'text/html',
-		'html'			=> array('text/html', '*/*'),
+		'html'			=> ['text/html', '*/*'],
 		'javascript'	=> 'text/javascript',
 		'js'			=> 'text/javascript',
 		'json'			=> 'application/json',
@@ -60,11 +60,11 @@ class Http {
 		'text'			=> 'text/plain',
 		'txt'			=> 'text/plain',
 		'vcf'			=> 'text/x-vcard',
-		'xhtml'			=> array('application/xhtml+xml', 'application/xhtml', 'text/xhtml'),
+		'xhtml'			=> ['application/xhtml+xml', 'application/xhtml', 'text/xhtml'],
 		'xhtml-mobile'	=> 'application/vnd.wap.xhtml+xml',
-		'xml'			=> array('application/xml', 'text/xml'),
+		'xml'			=> ['application/xml', 'text/xml'],
 		'zip'			=> 'application/x-zip'
-	);
+	];
 
 	/**
 	 * List of acceptable header types.
@@ -73,61 +73,61 @@ class Http {
 	 * @var array
 	 * @static
 	 */
-	public static $headerTypes = array(
-		'Accept', 
-		'Accept-Charset', 
-		'Accept-Encoding', 
-		'Accept-Language', 
+	public static $headerTypes = [
+		'Accept',
+		'Accept-Charset',
+		'Accept-Encoding',
+		'Accept-Language',
 		'Accept-Ranges',
-		'Age', 
-		'Allow', 
-		'Authentication-Info', 
-		'Authorization', 
-		'Cache-Control', 
+		'Age',
+		'Allow',
+		'Authentication-Info',
+		'Authorization',
+		'Cache-Control',
 		'Connection',
-		'Content-Disposition', 
-		'Content-Encoding', 
-		'Content-Language', 
+		'Content-Disposition',
+		'Content-Encoding',
+		'Content-Language',
 		'Content-Length',
-		'Content-Location', 
-		'Content-MD5', 
-		'Content-Range', 
-		'Content-Type', 
+		'Content-Location',
+		'Content-MD5',
+		'Content-Range',
+		'Content-Type',
 		'Cookie',
-		'Date', 
-		'ETag', 
-		'Expires', 
-		'Expect', 
-		'From', 
-		'Host', 
-		'If-Match', 
+		'Date',
+		'ETag',
+		'Expires',
+		'Expect',
+		'From',
+		'Host',
+		'If-Match',
 		'If-Modified-Since',
-		'If-None-Match', 
-		'If-Unmodified-Since', 
-		'If-Range', 
-		'Keep-Alive', 
+		'If-None-Match',
+		'If-Unmodified-Since',
+		'If-Range',
+		'Keep-Alive',
 		'Last-Modified',
-		'Location', 
-		'Max-Forwards', 
-		'Pragma', 
-		'Proxy-Authenticate', 
+		'Location',
+		'Max-Forwards',
+		'Pragma',
+		'Proxy-Authenticate',
 		'Proxy-Authorization',
-		'Range', 
-		'Referer', 
-		'Refresh', 
-		'Retry-After', 
-		'Server', 
-		'Set-Cookie', 
-		'TE', 
+		'Range',
+		'Referer',
+		'Refresh',
+		'Retry-After',
+		'Server',
+		'Set-Cookie',
+		'TE',
 		'Trailer',
-		'Transfer-Encoding', 
-		'Upgrade', 
-		'User-Agent', 
-		'Vary', 
-		'Via', 
-		'Warning', 
+		'Transfer-Encoding',
+		'Upgrade',
+		'User-Agent',
+		'Vary',
+		'Via',
+		'Warning',
 		'WWW-Authenticate'
-	);
+	];
 
 	/**
 	 * List of possible method types.
@@ -136,16 +136,16 @@ class Http {
 	 * @var array
 	 * @static
 	 */
-	public static $methodTypes = array(
-		'GET', 
-		'POST', 
-		'PUT', 
+	public static $methodTypes = [
+		'GET',
+		'POST',
+		'PUT',
 		'DELETE',
-		'HEAD', 
-		'TRACE', 
-		'OPTIONS', 
+		'HEAD',
+		'TRACE',
+		'OPTIONS',
 		'CONNECT'
-	);
+	];
 
 	/**
 	 * List of all available response status codes.
@@ -154,7 +154,7 @@ class Http {
 	 * @var array
 	 * @static
 	 */
-	public static $statusCodes = array(
+	public static $statusCodes = [
 		100 => 'Continue',
 		101 => 'Switching Protocols',
 		200 => 'OK',
@@ -195,7 +195,7 @@ class Http {
 		503 => 'Service Unavailable',
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported'
-	);
+	];
 
 	/**
 	 * Get a single content type.
@@ -213,7 +213,7 @@ class Http {
 
 		throw new ConstantException(sprintf('Content type %s is not supported.', $type));
 	}
-	
+
 	/**
 	 * Get all content types.
 	 *

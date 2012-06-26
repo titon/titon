@@ -8,10 +8,10 @@
  */
 
 // Georgian
-return array(
+return [
 	'id' => 'ka',
 	'iso2' => 'ka',
-	'iso3' => array('kat', 'geo'),
+	'iso3' => ['kat', 'geo'],
 	'timezone' => 'Asia/Tbilisi',
 	'title' => 'Georgian',
-);
+];

@@ -27,7 +27,7 @@ class Cache {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_storage = array();
+	protected $_storage = [];
 
 	/**
 	 * Decrement a value within the cache.

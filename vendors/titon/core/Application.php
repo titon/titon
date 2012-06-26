@@ -27,7 +27,7 @@ class Application {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_controllers = array();
+	protected $_controllers = [];
 
 	/**
 	 * List of modules.
@@ -35,7 +35,7 @@ class Application {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_modules = array();
+	protected $_modules = [];
 
 	/**
 	 * Return all controllers.
@@ -110,11 +110,11 @@ class Application {
 			throw new CoreException(sprintf('Module directory does not exist: %s', $path));
 		}
 
-		$this->_modules[$module] = array(
+		$this->_modules[$module] = [
 			'name' => $module,
 			'path' => Titon::loader()->ds($path, true),
 			'controllers' => $controllers
-		);
+		];
 
 		$this->_controllers[$module] = $controllers;
 

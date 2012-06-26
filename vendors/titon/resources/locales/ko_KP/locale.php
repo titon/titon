@@ -8,9 +8,9 @@
  */
 
 // Korea (North)
-return array(
+return [
 	'id' => 'ko_KP',
 	'parent' => 'ko',
 	'timezone' => 'Asia/Pyongyang',
 	'title' => 'Korea (North)',
-);
+];

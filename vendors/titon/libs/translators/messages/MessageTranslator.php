@@ -34,10 +34,10 @@ class MessageTranslator extends TranslatorAbstract {
 			throw new TranslatorException('No Reader has been loaded for message translating.');
 		}
 
-		$bundle = new MessageBundle(array(
+		$bundle = new MessageBundle([
 			'module' => $module,
 			'bundle' => $locale
-		));
+		]);
 
 		$bundle->addReader($this->_reader);
 

@@ -8,9 +8,9 @@
  */
 
 // German (Germany)
-return array(
+return [
 	'id' => 'de_DE',
 	'parent' => 'de',
 	'timezone' => 'Europe/Berlin',
 	'title' => 'German (Germany)',
-);
+];

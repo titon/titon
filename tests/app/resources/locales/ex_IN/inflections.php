@@ -7,9 +7,9 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-return array(
-	'irregular' => array('ex_IN' => 'irregular'),
+return [
+	'irregular' => ['ex_IN' => 'irregular'],
 	// Removing uninflected
-	'plural' => array('ex_IN' => 'plural'),
-	'singular' => array('ex_IN' => 'singular')
-);
+	'plural' => ['ex_IN' => 'plural'],
+	'singular' => ['ex_IN' => 'singular']
+];

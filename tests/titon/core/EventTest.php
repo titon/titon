@@ -20,9 +20,9 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	protected function setUp() {
 		titon\Titon::router()->initialize();
-		titon\Titon::app()->setup('test', '/', array(
+		titon\Titon::app()->setup('test', '/', [
 			'index' => 'IndexController'
-		));
+		]);
 	}
 
 	/**
@@ -33,8 +33,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		$event1 = new titon\core\Event();
 		$event1->addListener(new MockListener());
 		$event1->addListener(new MockListener());
-		$event1->addCallback(function() {}, array('titon.startup', 'titon.shutdown', 'testEvent1'));
-		$event1->addCallback(function() {}, array('titon.startup', 'testEvent1', 'testEvent2'));
+		$event1->addCallback(function() {}, ['titon.startup', 'titon.shutdown', 'testEvent1']);
+		$event1->addCallback(function() {}, ['titon.startup', 'testEvent1', 'testEvent2']);
 		$event1->notify('titon.startup');
 		$event1->notify('titon.shutdown');
 		$event1->notify('testEvent1');
@@ -72,9 +72,9 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 		// test events by scope
 		/* @todo
 		 * $event2 = new titon\core\Event();
-		$event2->addListener(new MockListener(), array('controller' => 'test'));
+		$event2->addListener(new MockListener(), ['controller' => 'test']);
 		$event2->addListener(new MockListener());
-		$event2->addCallback(function() {}, array(), array('action' => 'action'));
+		$event2->addCallback(function() {}, [], ['action' => 'action']);
 		$event2->addCallback(function() {});
 
 		$_SERVER['PHP_SELF'] = 'index.php/test/index/action/';
@@ -153,8 +153,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testSetup() {
 		$event = new titon\core\Event();
-		$baseEvents = array('titon.startup', 'titon.shutdown', 'dispatch.preDispatch', 'dispatch.postDispatch', 'controller.preProcess', 'controller.postProcess', 'view.preRender', 'view.postRender');
-		$testEvents = array('testEvent1', 'testEvent2');
+		$baseEvents = ['titon.startup', 'titon.shutdown', 'dispatch.preDispatch', 'dispatch.postDispatch', 'controller.preProcess', 'controller.postProcess', 'view.preRender', 'view.postRender'];
+		$testEvents = ['testEvent1', 'testEvent2'];
 
 		$this->assertEquals($baseEvents, $event->getEvents());
 

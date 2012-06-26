@@ -67,7 +67,7 @@ class G11n {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_locales = array();
+	protected $_locales = [];
 
 	/**
 	 * Translator used for string fetching and parsing.
@@ -86,7 +86,7 @@ class G11n {
 	 * @return string
 	 */
 	public function canonicalize($key, $format = self::FORMAT_1) {
-		return $this->cache(array(__METHOD__, $key, $format), function() use ($key, $format) {
+		return $this->cache([__METHOD__, $key, $format], function() use ($key, $format) {
 			$parts = explode('-', str_replace('_', '-', strtolower($key)));
 			$return = $parts[0];
 
@@ -119,9 +119,9 @@ class G11n {
 	 */
 	public function cascade() {
 		return $this->cache(__METHOD__, function() {
-			$cycle = array();
+			$cycle = [];
 
-			foreach (array($this->current(), $this->getFallback()) as $bundle) {
+			foreach ([$this->current(), $this->getFallback()] as $bundle) {
 				while ($bundle instanceof LocaleBundle) {
 					$cycle[] = $bundle->getLocale('id');
 
@@ -284,7 +284,7 @@ class G11n {
 				return false;
 			}
 
-			$loaded = array();
+			$loaded = [];
 
 			foreach ($locales as $bundle) {
 				$locale = $bundle->getLocale();
@@ -325,8 +325,8 @@ class G11n {
 		}
 
 		$bundle = $this->_locales[$key];
-		$bundles = array($bundle, $this->getFallback());
-		$options = array();
+		$bundles = [$bundle, $this->getFallback()];
+		$options = [];
 
 		foreach ($bundles as $tempBundle) {
 			$locale = $tempBundle->getLocale();
@@ -376,7 +376,7 @@ class G11n {
 	 * @return titon\core\G11n
 	 * @chainable
 	 */
-	public function setup($key, array $config = array()) {
+	public function setup($key, array $config = []) {
 		$urlKey = $this->canonicalize($key);
 
 		if (isset($this->_locales[$urlKey])) {
@@ -384,9 +384,7 @@ class G11n {
 		}
 
 		// Load the bundle
-		$bundle = new LocaleBundle(array(
-			'bundle' => $this->canonicalize($key, self::FORMAT_3),
-		), $config);
+		$bundle = new LocaleBundle(['bundle' => $this->canonicalize($key, self::FORMAT_3)], $config);
 
 		// Cache the bundle
 		$this->_locales[$urlKey] = Titon::registry()->set($bundle, 'g11n.bundle.locale.' . $bundle->getLocale('id'));
@@ -443,7 +441,7 @@ class G11n {
 	 * @param array $params
 	 * @return string
 	 */
-	public function translate($key, array $params = array()) {
+	public function translate($key, array $params = []) {
 		return $this->_translator->translate($key, $params);
 	}
 

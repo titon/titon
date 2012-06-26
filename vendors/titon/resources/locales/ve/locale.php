@@ -8,10 +8,10 @@
  */
 
 // Venda
-return array(
+return [
 	'id' => 've',
 	'iso2' => 've',
 	'iso3' => 'ven',
 	'timezone' => 'Africa/Johannesburg',
 	'title' => 'Venda',
-);
+];

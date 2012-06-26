@@ -44,7 +44,7 @@ class Router {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_mapped = array();
+	protected $_mapped = [];
 
 	/**
 	 * Manually defined aesthetic routes that re-route internally.
@@ -52,7 +52,7 @@ class Router {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_routes = array();
+	protected $_routes = [];
 
 	/**
 	 * The current URL broken up into multiple segments: protocol, host, route, query, base
@@ -60,7 +60,7 @@ class Router {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_segments = array();
+	protected $_segments = [];
 
 	/**
 	 * Manually defined slugs that re-route to an internal controller and action.
@@ -69,7 +69,7 @@ class Router {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_slugs = array();
+	protected $_slugs = [];
 
 	/**
 	 * Return the base URL if the app was not placed in the root directory.
@@ -95,7 +95,7 @@ class Router {
 			return $this->base();
 		}
 
-		$path = array();
+		$path = [];
 		$path[] = trim($this->base(), '/');
 
 		// Module, controller, action
@@ -166,12 +166,12 @@ class Router {
 	 * @param array $data
 	 * @return array
 	 */
-	public function defaults(array $data = array()) {
-		$data = $data + array(
+	public function defaults(array $data = []) {
+		$data = $data + [
 			'ext' => '',
 			'query' => $this->segments('query'),
-			'params' => array()
-		);
+			'params' => []
+		];
 
 		if (empty($data['module'])) {
 			$data['module'] = 'pages';
@@ -239,12 +239,12 @@ class Router {
 		}
 
 		// Store the current URL and query as router segments
-		$this->_segments = array_merge(parse_url($_SERVER['REQUEST_URI']), array(
+		$this->_segments = array_merge(parse_url($_SERVER['REQUEST_URI']), [
 			'scheme' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? 'https' : 'http',
 			'query' => $_GET,
 			'host' => $_SERVER['HTTP_HOST'],
 			'path' => $path
-		));
+		]);
 
 		// Map default internal routes
 		$routeClass = Titon::g11n()->isEnabled()
@@ -255,7 +255,7 @@ class Router {
 		$this->map('moduleControllerAction', new $routeClass('/{module}/{controller}/{action}'));
 		$this->map('moduleController', new $routeClass('/{module}/{controller}'));
 		$this->map('module', new $routeClass('/{module}'));
-		$this->map('root', new $routeClass('/', array(), array('static' => true)));
+		$this->map('root', new $routeClass('/', [], ['static' => true]));
 
 		// Match the current URL to a route
 		$this->_current = $this->match($path);
@@ -285,7 +285,7 @@ class Router {
 	 * @return titon\core\Router
 	 * @chainable
 	 */
-	public function mapSlug($key, $route = array()) {
+	public function mapSlug($key, $route = []) {
 		if (is_array($route)) {
 			$route = $this->defaults($route);
 		}

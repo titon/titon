@@ -29,7 +29,7 @@ class Inflector {
 	 * @var array
 	 * @static
 	 */
-	protected static $_cache = array();
+	protected static $_cache = [];
 
 	/**
 	 * Inflect a word to a camel case form with the first letter being capitalized.
@@ -40,8 +40,8 @@ class Inflector {
 	 * @static
 	 */
 	public static function camelCase($string) {
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
-			return str_replace(' ', '', ucwords(strtolower(str_replace(array('_', '-'), ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)))));
+		return self::_cache([__METHOD__, $string], function() use ($string) {
+			return str_replace(' ', '', ucwords(strtolower(str_replace(['_', '-'], ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)))));
 		});
 	}
 
@@ -82,7 +82,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function modelize($string) {
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
 			return self::camelCase(self::singularize($string));
 		});
 	}
@@ -96,7 +96,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function normalCase($string) {
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
 			return ucfirst(strtolower(str_replace('_', ' ', $string)));
 		});
 	}
@@ -114,7 +114,7 @@ class Inflector {
 			return $string;
 		}
 
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
 			$string = strtolower($string);
 			$result = null;
 			$inflections = Titon::g11n()->current()->getInflections();
@@ -158,7 +158,7 @@ class Inflector {
 			return $string;
 		}
 
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
 			$string = strtolower($string);
 			$result = null;
 			$inflections = Titon::g11n()->current()->getInflections();
@@ -198,7 +198,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function slug($string) {
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
 			return strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-a-z0-9\s]+/i', '', $string))));
 		});
 	}
@@ -212,7 +212,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function tableize($string) {
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
 			return lcfirst(self::camelCase(self::pluralize($string)));
 		});
 	}
@@ -226,7 +226,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function titleCase($string) {
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
 			return ucwords(strtolower(str_replace('_', ' ', $string)));
 		});
 	}
@@ -240,7 +240,7 @@ class Inflector {
 	 * @static
 	 */
 	public static function underscore($string) {
-		return self::_cache(array(__METHOD__, $string), function() use ($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
 			return trim(strtolower(str_replace('__', '_', preg_replace('/([A-Z]{1})/', '_$1', preg_replace('/[^_a-z0-9]+/i', '', preg_replace('/[\s]+/', '_', $string))))), '_');
 		});
 	}

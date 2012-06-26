@@ -8,9 +8,9 @@
  */
 
 // Arabic (Yemen)
-return array(
+return [
 	'id' => 'ar_YE',
 	'parent' => 'ar',
 	'timezone' => 'Asia/Riyadh',
 	'title' => 'Arabic (Yemen)',
-);
+];

@@ -8,9 +8,9 @@
  */
 
 // Spanish (Bolivia)
-return array(
+return [
 	'id' => 'es_BO',
 	'parent' => 'es',
 	'timezone' => 'America/Asuncion',
 	'title' => 'Spanish (Bolivia)',
-);
+];

@@ -8,10 +8,10 @@
  */
 
 // Welsh
-return array(
+return [
 	'id' => 'cy',
 	'iso2' => 'cy',
-	'iso3' => array('wel', 'cym'),
+	'iso3' => ['wel', 'cym'],
 	'timezone' => 'Europe/London',
 	'title' => 'Welsh',
-);
+];

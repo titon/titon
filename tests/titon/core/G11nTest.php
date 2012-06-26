@@ -51,13 +51,13 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 	 * Test that cascade returns a descending list of locale IDs.
 	 */
 	public function testCascade() {
-		$httpAccepts = array(
-			'ex-no,ex;q=0.5' => array('ex'),
-			'ex-in,ex;q=0.5' => array('ex_IN', 'ex'),
-			'ex-va,ex;q=0.5' => array('ex_VA', 'ex'),
-			'ex-fm,ex;q=0.5' => array('ex_FM', 'ex'),
-			'foobar' => array('ex') // Wont match and will use the fallback
-		);
+		$httpAccepts = [
+			'ex-no,ex;q=0.5' => ['ex'],
+			'ex-in,ex;q=0.5' => ['ex_IN', 'ex'],
+			'ex-va,ex;q=0.5' => ['ex_VA', 'ex'],
+			'ex-fm,ex;q=0.5' => ['ex_FM', 'ex'],
+			'foobar' => ['ex'] // Wont match and will use the fallback
+		];
 
 		foreach ($httpAccepts as $httpAccept => $localeId) {
 			$_SERVER['HTTP_ACCEPT_LANGUAGE'] = $httpAccept;
@@ -75,41 +75,41 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 	 * Test that composing locale tags return the correctly formatted key.
 	 */
 	public function testCompose() {
-		$this->assertEquals('en', $this->object->compose(array(
+		$this->assertEquals('en', $this->object->compose([
 			'language' => 'en'
-		)));
+		]));
 
-		$this->assertEquals('en_US', $this->object->compose(array(
+		$this->assertEquals('en_US', $this->object->compose([
 			'language' => 'en',
 			'region' => 'US'
-		)));
+		]));
 
-		$this->assertEquals('en_Hans_US', $this->object->compose(array(
+		$this->assertEquals('en_Hans_US', $this->object->compose([
 			'language' => 'en',
 			'region' => 'US',
 			'script' => 'Hans'
-		)));
+		]));
 
-		$this->assertEquals('en_Hans_US_NEDIS_x_prv1', $this->object->compose(array(
+		$this->assertEquals('en_Hans_US_NEDIS_x_prv1', $this->object->compose([
 			'language' => 'en',
 			'region' => 'US',
 			'script' => 'Hans',
 			'variant0' => 'NEDIS',
 			'private0' => 'prv1'
-		)));
+		]));
 	}
 
 	/**
 	 * Test that the correct locale bundle is set while parsing the HTTP accept language header.
 	 */
 	public function testCurrent() {
-		$httpAccepts = array(
+		$httpAccepts = [
 			'ex-no,ex;q=0.5' => 'ex',
 			'ex-in,ex;q=0.5' => 'ex_IN',
 			'ex-va,ex;q=0.5' => 'ex_VA',
 			'ex-fm,ex;q=0.5' => 'ex_FM',
 			'foobar' => 'ex' // Wont match and will use the fallback
-		);
+		];
 
 		foreach ($httpAccepts as $httpAccept => $localeId) {
 			$_SERVER['HTTP_ACCEPT_LANGUAGE'] = $httpAccept;
@@ -126,28 +126,28 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 	 * Test that decomposing a locale returns the correct array of tags.
 	 */
 	public function testDecompose() {
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'language' => 'en'
-		), $this->object->decompose('en'));
+		], $this->object->decompose('en'));
 
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'language' => 'en',
 			'region' => 'US'
-		), $this->object->decompose('en_US'));
+		], $this->object->decompose('en_US'));
 
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'language' => 'en',
 			'region' => 'US',
 			'script' => 'Hans'
-		), $this->object->decompose('en_Hans_US'));
+		], $this->object->decompose('en_Hans_US'));
 
-		$this->assertEquals(array(
+		$this->assertEquals([
 			'language' => 'en',
 			'script' => 'Hans',
 			'region' => 'US',
 			'variant0' => 'NEDIS',
 			'private0' => 'prv1'
-		), $this->object->decompose('en_Hans_US_nedis_x_prv1'));
+		], $this->object->decompose('en_Hans_US_nedis_x_prv1'));
 	}
 
 	/**
@@ -177,7 +177,7 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 		$bundles = $this->object->getLocales();
 
 		$this->assertEquals(5, count($bundles));
-		$this->assertEquals(array('ex-va', 'ex', 'ex-fm', 'ex-in', 'no'), array_keys($bundles));
+		$this->assertEquals(['ex-va', 'ex', 'ex-fm', 'ex-in', 'no'], array_keys($bundles));
 
 		foreach ($bundles as $bundle) {
 			$this->assertInstanceOf('titon\libs\bundles\locales\LocaleBundle', $bundle);
@@ -188,13 +188,13 @@ class G11nTest extends \PHPUnit_Framework_TestCase {
 	 * Test that is matches a given locale key or locale id to the current bundle.
 	 */
 	public function testIs() {
-		$httpAccepts = array(
-			'ex-no,ex;q=0.5' => array('ex', 'ex'),
-			'ex-in,ex;q=0.5' => array('ex_IN', 'ex-in'),
-			'ex-va,ex;q=0.5' => array('ex_VA', 'ex-va'),
-			'ex-fm,ex;q=0.5' => array('ex_FM', 'ex-fm'),
-			'foobar' => array('ex', 'ex') // Wont match and will use the fallback
-		);
+		$httpAccepts = [
+			'ex-no,ex;q=0.5' => ['ex', 'ex'],
+			'ex-in,ex;q=0.5' => ['ex_IN', 'ex-in'],
+			'ex-va,ex;q=0.5' => ['ex_VA', 'ex-va'],
+			'ex-fm,ex;q=0.5' => ['ex_FM', 'ex-fm'],
+			'foobar' => ['ex', 'ex'] // Wont match and will use the fallback
+		];
 
 		foreach ($httpAccepts as $httpAccept => $localeId) {
 			$_SERVER['HTTP_ACCEPT_LANGUAGE'] = $httpAccept;

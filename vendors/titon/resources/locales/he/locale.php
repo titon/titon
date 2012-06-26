@@ -8,10 +8,10 @@
  */
 
 // Hebrew
-return array(
+return [
 	'id' => 'he',
 	'iso2' => 'he',
 	'iso3' => 'heb',
 	'timezone' => 'Israel',
 	'title' => 'Hebrew',
-);
+];

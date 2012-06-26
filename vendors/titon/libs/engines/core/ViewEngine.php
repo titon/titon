@@ -28,7 +28,7 @@ class ViewEngine extends EngineAbstract {
 	 * @return string
 	 * @throws EngineException
 	 */
-	public function open($path, array $variables = array()) {
+	public function open($path, array $variables = []) {
 		$path = $this->buildPath(self::TYPE_INCLUDE, $path);
 		$variables = $variables + $this->data();
 
@@ -47,7 +47,7 @@ class ViewEngine extends EngineAbstract {
 	 * @param array $variables
 	 * @return string
 	 */
-	public function render($path, array $variables = array()) {
+	public function render($path, array $variables = []) {
 		if (!empty($variables)) {
 			extract($variables, EXTR_SKIP);
 		}
@@ -78,11 +78,11 @@ class ViewEngine extends EngineAbstract {
 		// Render the template, layout and wrappers
 		$data = $this->data();
 		$path = null;
-		$renders = array(
+		$renders = [
 			self::TYPE_TPL => 'template',
 			self::TYPE_WRAPPER => 'wrapper',
 			self::TYPE_LAYOUT => 'layout'
-		);
+		];
 
 		foreach ($renders as $type => $render) {
 			if (empty($config[$render])) {

@@ -8,9 +8,9 @@
  */
 
 // Arabic (Jordan)
-return array(
+return [
 	'id' => 'ar_JO',
 	'parent' => 'ar',
 	'timezone' => 'Asia/Amman',
 	'title' => 'Arabic (Jordan)',
-);
+];

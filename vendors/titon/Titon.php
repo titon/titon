@@ -45,7 +45,7 @@ class Titon {
 	 * @var array
 	 * @static
 	 */
-	private static $__locked = array();
+	private static $__locked = [];
 
 	/**
 	 * Installed objects.
@@ -54,7 +54,7 @@ class Titon {
 	 * @var array
 	 * @static
 	 */
-	private static $__memory = array();
+	private static $__memory = [];
 
 	/**
 	 * Allow the installed classes to be called as a method.
@@ -65,7 +65,7 @@ class Titon {
 	 * @return object
 	 * @static
 	 */
-	public static function __callStatic($key, $args = array()) {
+	public static function __callStatic($key, $args = []) {
 		return self::get($key);
 	}
 

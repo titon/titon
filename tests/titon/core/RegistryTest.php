@@ -25,7 +25,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 * Test that defining config sets get applied to the correct classes.
 	 */
 	public function testConfigure() {
-		$this->object->configure('titon\base\Base', array('foo' => 'bar'));
+		$this->object->configure('titon\base\Base', ['foo' => 'bar']);
 
 		$object1 = $this->object->factory('titon\base\Base');
 
@@ -43,10 +43,10 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 * Test that factory returns the correct object for the supplied namespace.
 	 */
 	public function testFactory() {
-		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon\base\Base', array(), false));
-		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon/base/Base', array(), false));
-		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon\base\Base', array(), false));
-		$this->assertInstanceOf('titon\base\Base', $this->object->factory('/titon/base/Base', array(), false));
+		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon\base\Base', [], false));
+		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon/base/Base', [], false));
+		$this->assertInstanceOf('titon\base\Base', $this->object->factory('titon\base\Base', [], false));
+		$this->assertInstanceOf('titon\base\Base', $this->object->factory('/titon/base/Base', [], false));
 
 		$this->object->flush();
 	}
@@ -55,7 +55,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 * Test that flush resets all data and that listing returns the correct keys.
 	 */
 	public function testFlushAndListing() {
-		$test = array();
+		$test = [];
 
 		for ($i = 1; $i <= 10; $i++) {
 			$this->object->set(new titon\base\Base(), 'key' . $i);

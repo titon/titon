@@ -33,7 +33,7 @@ class Dispatch {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_mapping = array();
+	protected $_mapping = [];
 
 	/**
 	 * Initialize dispatch and detect if a custom dispatcher should be used within the current scope.
@@ -88,11 +88,11 @@ class Dispatch {
 	 * @param array $scope
 	 * @return void
 	 */
-	public function setup(Dispatcher $dispatcher, array $scope = array()) {
-		$scope = $scope + array(
+	public function setup(Dispatcher $dispatcher, array $scope = []) {
+		$scope = $scope + [
 			'module' => '*',
 			'controller' => '*'
-		);
+		];
 
 		if ($scope['module'] !== '*') {
 			$scope['module'] = Inflector::slug($scope['module']);

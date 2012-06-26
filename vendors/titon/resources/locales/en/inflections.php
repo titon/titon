@@ -7,8 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-return array(
-	'irregular' => array(
+return [
+	'irregular' => [
 		'atlas' => 'atlases',
 		'beef' => 'beefs',
 		'brother' => 'brothers',
@@ -39,8 +39,8 @@ return array(
 		'trilby' => 'trilbys',
 		'turf' => 'turfs',
 		'woman' => 'women'
-	),
-	'uninflected' => array(
+	],
+	'uninflected' => [
 		'equipment', 'information', 'rice', 'money', 'species', 'series', 'fish', 'sheep',
 		'amoyese', 'bison', 'borghese', 'bream', 'breeches', 'britches', 'buffalo', 'cantus',
 		'carp', 'chassis', 'clippers', 'cod', 'coitus', 'congoese', 'contretemps', 'corps',
@@ -53,9 +53,9 @@ return array(
 		'proceedings', 'rabies', 'rice', 'rhinoceros', 'salmon', 'sarawakese', 'scissors',
 		'seabass', 'series', 'shavese', 'shears', 'siemens', 'species', 'swine', 'testes',
 		'trousers', 'trout', 'tuna', 'vermontese', 'wenchowese', 'whiting', 'wildebeest',
-	),
-	'plural' => array(
-		'/(quiz)$/i' => '\1zes',
+	],
+	'plural' => [
+		'/(quiz]$/i' => '\1zes',
 		'/^(ox)$/i' => '\1en',
 		'/([m|l])ouse$/i' => '\1ice',
 		'/(matr|vert|ind)ix|ex$/i' => '\1ices',
@@ -73,9 +73,9 @@ return array(
 		'/(ax|test)is$/i'=> '\1es',
 		'/s$/i'=> 's',
 		'/$/'=> 's'
-	),
-	'singular' => array(
-		'/(quiz)zes$/i' => '\1',
+	],
+	'singular' => [
+		'/(quiz]zes$/i' => '\1',
 		'/(matr)ices$/i' => '\1ix',
 		'/(vert|ind)ices$/i' => '\1ex',
 		'/^(ox)en/i' => '\1',
@@ -99,5 +99,5 @@ return array(
 		'/([ti])a$/i' => '\1um',
 		'/(n)ews$/i' => '\1ews',
 		'/s$/i' => ''
-	)
-);
+	]
+];

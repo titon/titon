@@ -8,10 +8,10 @@
  */
 
 // Basque
-return array(
+return [
 	'id' => 'eu',
 	'iso2' => 'eu',
-	'iso3' => array('baq', 'eus'),
+	'iso3' => ['baq', 'eus'],
 	'timezone' => 'Europe/Madrid',
 	'title' => 'Basque',
-);
+];

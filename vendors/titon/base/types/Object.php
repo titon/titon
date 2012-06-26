@@ -42,7 +42,7 @@ class Object {
 	 * @access public
 	 * @param array $params
 	 */
-	public function __construct(array $params = array()) {
+	public function __construct(array $params = []) {
 		if (!empty($params)) {
 			foreach ($params as $key => $value) {
 				if ($value instanceof Closure) {
@@ -63,7 +63,7 @@ class Object {
 	 * @param array $args
 	 * @return mixed
 	 */
-	public function __call($name, $args = array()) {
+	public function __call($name, $args = []) {
 		return $this->getMethod($name, $args);
 	}
 
@@ -168,10 +168,10 @@ class Object {
 	 * @throws titon\base\BaseException
 	 * @return mixed
 	 */
-	public function getMethod($name, $args = array()) {
+	public function getMethod($name, $args = []) {
 		if ($this->hasMethod($name)) {
 			if (!is_array($args)) {
-				$args = array($args);
+				$args = [$args];
 			}
 
 			return call_user_func_array($this->_methods[$name], $args);

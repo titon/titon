@@ -7,8 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-return array(
+return [
 	'phone' => 'ex_VA',
 	// Removing postalCode
 	'ssn' => 'ex_VA'
-);
+];

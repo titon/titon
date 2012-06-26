@@ -34,14 +34,14 @@ class Cookie extends Base {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
+	protected $_config = [
 		'domain' => '',
 		'expires' => '+1 week',
 		'path' => '/',
 		'secure' => false,
 		'httpOnly' => true,
 		'encrypt' => true
-	);
+	];
 
 	/**
 	 * Get a value from a cookie depending on the given key. Will decrypt the cookie if necessary.
@@ -74,7 +74,7 @@ class Cookie extends Base {
 	 * @param array $config
 	 * @return boolean
 	 */
-	public function set($key, $value, array $config = array()) {
+	public function set($key, $value, array $config = []) {
 		$config = $config + $this->config->get();
 		$expires = is_int($config['expires']) ? $config['expires'] : strtotime($config['expires']);
 

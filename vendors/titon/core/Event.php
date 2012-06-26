@@ -29,12 +29,12 @@ class Event {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_events = array(
+	protected $_events = [
 		'titon.startup', 'titon.shutdown',
 		'dispatch.preDispatch', 'dispatch.postDispatch',
 		'controller.preProcess', 'controller.postProcess',
 		'view.preRender', 'view.postRender'
-	);
+	];
 
 	/**
 	 * Listeners that will be executed.
@@ -42,7 +42,7 @@ class Event {
 	 * @access private
 	 * @var array
 	 */
-	protected $_listeners = array();
+	protected $_listeners = [];
 
 	/**
 	 * Register a basic callback using a Closure. This callback can be restricted in scope and a per event basis.
@@ -55,21 +55,21 @@ class Event {
 	 * @return titon\core\Event
 	 * @chainable
 	 */
-	public function addCallback(Closure $callback, array $events = array(), array $scope = array()) {
+	public function addCallback(Closure $callback, array $events = [], array $scope = []) {
 		if (empty($events)) {
 			$events = $this->_events;
 		}
 
-		$this->_listeners[] = array(
+		$this->_listeners[] = [
 			'object' => $callback,
-			'executed' => array(),
+			'executed' => [],
 			'events' => $events,
-			'scope' => $scope + array(
+			'scope' => $scope + [
 				'module' => '*',
 				'controller' => '*',
 				'action' => '*'
-			)
-		);
+			]
+		];
 
 		return $this;
 	}
@@ -84,17 +84,17 @@ class Event {
 	 * @return titon\core\Event
 	 * @chainable
 	 */
-	public function addListener(Listener $listener, array $scope = array()) {
-		$this->_listeners[] = array(
+	public function addListener(Listener $listener, array $scope = []) {
+		$this->_listeners[] = [
 			'object' => $listener,
-			'executed' => array(),
-			'events' => array(),
-			'scope' => $scope + array(
+			'executed' => [],
+			'events' => [],
+			'scope' => $scope + [
 				'module' => '*',
 				'controller' => '*',
 				'action' => '*'
-			)
-		);
+			]
+		];
 
 		return $this;
 	}
@@ -140,7 +140,7 @@ class Event {
 				continue;
 			}
 
-			foreach (array('module', 'controller', 'action') as $action) {
+			foreach (['module', 'controller', 'action'] as $action) {
 				if ($listener['scope'][$action] !== $route->getParam($action) || $listener['scope'][$action] !== '*') {
 					continue;
 				}

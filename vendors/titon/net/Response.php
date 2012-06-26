@@ -33,9 +33,7 @@ class Response extends Base {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array(
-		'buffer' => 8192
-	);
+	protected $_config = ['buffer' => 8192];
 
 	/**
 	 * The body content to be outputted.
@@ -51,7 +49,7 @@ class Response extends Base {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_headers = array();
+	protected $_headers = [];
 
 	/**
 	 * The content type to output.
@@ -94,10 +92,10 @@ class Response extends Base {
 	public function cache($expires = '+24 hours') {
 		$expires = is_int($expires) ? $expires : strtotime($expires);
 
-		$this->headers(array(
+		$this->headers([
 			'Expires' => gmdate(Http::DATE_FORMAT, $expires) . ' GMT',
 			'Cache-Control' => 'max-age=' . ($expires - time())
-		));
+		]);
 
 		return $this;
 	}
@@ -113,11 +111,11 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function header($header, $value, $replace = true) {
-		$this->_headers[] = array(
+		$this->_headers[] = [
 			'header' => $header,
 			'value' => $value,
 			'replace' => $replace
-		);
+		];
 
 		return $this;
 	}
@@ -130,7 +128,7 @@ class Response extends Base {
 	 * @return titon\net\Response
 	 * @chainable
 	 */
-	public function headers(array $headers = array()) {
+	public function headers(array $headers = []) {
 		if (is_array($headers)) {
 			foreach ($headers as $header => $value) {
 				if (is_array($value)) {
@@ -154,16 +152,16 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function noCache() {
-		$this->headers(array(
+		$this->headers([
 			'Expires' => 'Mon, 26 Jul 1997 05:00:00 GMT',
 			'Last-Modified' => gmdate(Http::DATE_FORMAT) . ' GMT',
-			'Cache-Control' => array(
+			'Cache-Control' => [
 				'no-store, no-cache, must-revalidate',
 				'post-check=0, pre-check=0',
 				'max-age=0'
-			),
+			],
 			'Pragma' => 'no-cache'
-		));
+		]);
 
 		return $this;
 	}

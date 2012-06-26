@@ -45,7 +45,7 @@ class Base implements Serializable {
 	 * @access protected
 	 * @var array
 	 */
-	protected $_config = array();
+	protected $_config = [];
 
 	/**
 	 * Merges the custom configuration with the defaults.
@@ -54,8 +54,8 @@ class Base implements Serializable {
 	 * @access public
 	 * @param array $config
 	 */
-	public function __construct(array $config = array()) {
-		$this->config = new ConfigAugment($config, $this->_config + array('initialize' => true));
+	public function __construct(array $config = []) {
+		$this->config = new ConfigAugment($config, $this->_config + ['initialize' => true]);
 		$this->info = new InfoAugment($this);
 
 		if ($this->config->initialize) {

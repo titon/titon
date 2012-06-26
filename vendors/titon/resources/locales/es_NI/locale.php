@@ -8,9 +8,9 @@
  */
 
 // Spanish (Nicaragua)
-return array(
+return [
 	'id' => 'es_NI',
 	'parent' => 'es',
 	'timezone' => 'America/Managua',
 	'title' => 'Spanish (Nicaragua)',
-);
+];

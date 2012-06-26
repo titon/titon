@@ -27,7 +27,7 @@ class LocaleRoute extends RouteAbstract {
 	 * @param array $route
 	 * @param array $config
 	 */
-	public function __construct($path, array $route = array(), array $config = array()) {
+	public function __construct($path, array $route = [], array $config = []) {
 		if (substr($path, -9) !== '/<locale>') {
 			$path = '/<locale>' . $path;
 		}
@@ -37,7 +37,7 @@ class LocaleRoute extends RouteAbstract {
 		if (isset($config['patterns'])) {
 			$config['patterns']['locale'] = $pattern;
 		} else {
-			$config['patterns'] = array('locale' => $pattern);
+			$config['patterns'] = ['locale' => $pattern];
 		}
 
 		parent::__construct($path, $route, $config);
