@@ -65,9 +65,9 @@ class DebuggerTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testParseFile() {
 		$this->assertEquals('[internal]', $this->object->parseFile(null));
-		$this->assertEquals('[vendors]', $this->object->parseFile(TITON_VENDORS));
-		$this->assertEquals('[vendors]titon/', $this->object->parseFile(TITON_SOURCE));
-		$this->assertEquals('[vendors]titon/core/Debugger.php', $this->object->parseFile(TITON_SOURCE . 'core/Debugger.php'));
+		$this->assertEquals('[vendors]', $this->object->parseFile(VENDORS));
+		$this->assertEquals('[titon]', $this->object->parseFile(TITON));
+		$this->assertEquals('[titon]core/Debugger.php', $this->object->parseFile(TITON . 'core/Debugger.php'));
 		$this->assertEquals('[app]', $this->object->parseFile(TITON_APP));
 		$this->assertEquals('[app]modules/controllers/TestController.php', $this->object->parseFile(TITON_APP . 'modules/controllers/TestController.php'));
 		$this->assertEquals('[libs]', $this->object->parseFile(TITON_LIBS));

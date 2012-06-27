@@ -10,9 +10,9 @@
 /**
  * Titon constants.
  */
-define('TITON_CONSOLE', TITON_SOURCE . 'console/');
-define('TITON_LIBS', TITON_SOURCE . 'libs/');
-define('TITON_RESOURCES', TITON_SOURCE . 'resources/');
+define('TITON_CONSOLE', TITON . 'console/');
+define('TITON_LIBS', TITON . 'libs/');
+define('TITON_RESOURCES', TITON . 'resources/');
 
 /**
  * App directory constants.
@@ -51,9 +51,9 @@ define('LIB_TRANSPORTERS', TITON_LIBS . 'transporters/');
 /**
  * Include the necessary classes to initialize the framework.
  */
-include_once TITON_SOURCE . 'functions.php';
-include_once TITON_SOURCE . 'Titon.php';
-include_once TITON_SOURCE . 'core/Loader.php';
+include_once TITON . 'functions.php';
+include_once TITON . 'Titon.php';
+include_once TITON . 'core/Loader.php';
 
 /**
  * Initialize Titon.

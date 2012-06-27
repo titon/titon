@@ -45,7 +45,7 @@ class Loader {
 		});
 
 		// Set default include paths
-		$this->includePath([TITON_APP, TITON_SOURCE, TITON_LIBS, TITON_VENDORS]);
+		$this->includePath([TITON_APP, TITON, TITON_LIBS, VENDORS]);
 	}
 
 	/**
@@ -120,7 +120,7 @@ class Loader {
 	 * @return boolean
 	 */
 	public function import($path) {
-		foreach ([TITON_APP, TITON_SOURCE, TITON_VENDORS, TITON_LIBS] as $root) {
+		foreach ([TITON_APP, TITON, VENDORS, TITON_LIBS] as $root) {
 			$source = $this->toPath($path, 'php', $root);
 
 			if (file_exists($source)) {
@@ -213,7 +213,7 @@ class Loader {
 		$path = $this->stripExt($path);
 
 		if (strpos($path, '/') !== false) {
-			$path = str_replace($this->ds(TITON_VENDORS), '', $this->ds($path));
+			$path = str_replace($this->ds(VENDORS), '', $this->ds($path));
 			$path = str_replace('/', '\\', $path);
 		}
 

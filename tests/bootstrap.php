@@ -12,15 +12,15 @@ date_default_timezone_set('America/New_York');
 /**
  * Define primary constants.
  */
+define('VENDORS', dirname(dirname(__DIR__)) . '/');
+define('TITON', VENDORS . 'titon/');
 define('TITON_APP', __DIR__ . '/app/');
-define('TITON_VENDORS', dirname(__DIR__) . '/vendors/');
-define('TITON_SOURCE', TITON_VENDORS . 'titon/');
 
 /**
  * Include scripts.
  */
 include_once 'PHPUnit/Autoload.php';
-include_once TITON_SOURCE . 'bootstrap.php';
+include_once TITON . 'bootstrap.php';
 
 /**
  * Start class with fake environment.
