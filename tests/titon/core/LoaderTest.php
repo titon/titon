@@ -61,6 +61,14 @@ class LoaderTest extends TestCase {
 		// windows
 		$this->assertEquals('C:/some/fake/folder/path/fileName.php', $this->object->ds('C:\some\fake\folder\path\fileName.php'));
 		$this->assertEquals('C:/some/fake/folder/path/fileName.php', $this->object->ds('C:\some/fake\folder/path\fileName.php'));
+
+		// linux
+		$this->assertEquals('/some/fake/folder/path/fileName/', $this->object->ds('/some/fake/folder/path/fileName', true));
+		$this->assertEquals('/some/fake/folder/path/fileName/', $this->object->ds('/some\fake/folder\path/fileName/', true));
+
+		// windows
+		$this->assertEquals('C:/some/fake/folder/path/fileName/', $this->object->ds('C:\some\fake\folder\path\fileName/'));
+		$this->assertEquals('C:/some/fake/folder/path/fileName/', $this->object->ds('C:\some/fake\folder/path\fileName\\'));
 	}
 
 	/**
