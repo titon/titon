@@ -10,18 +10,10 @@
 namespace titon\tests;
 
 /**
- * Primary class that all test cases should extend.
+ * Primary class that all fixtures should extend.
  *
  * @package	titon.tests
  */
-class TestCase extends \PHPUnit_Framework_TestCase {
-
-	/**
-	 * Object to be used for the duration of the test case.
-	 *
-	 * @access protected
-	 * @var object
-	 */
-	protected $object;
+class Fixture {
 
 }
