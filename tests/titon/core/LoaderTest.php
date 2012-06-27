@@ -7,18 +7,19 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\Titon;
+use titon\tests\TestCase;
+
 /**
  * Test class for titon\core\Loader.
  */
-class LoaderTest extends \PHPUnit_Framework_TestCase {
-
-	protected $object;
+class LoaderTest extends TestCase {
 
 	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = titon\Titon::loader();
+		$this->object = Titon::loader();
 	}
 
 	/**

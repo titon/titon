@@ -7,18 +7,19 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\tests\TestCase;
+use titon\base\types\Object;
+
 /**
  * Test class for titon\base\types\Object.
  */
-class ObjectTest extends \PHPUnit_Framework_TestCase {
-
-	protected $object;
+class ObjectTest extends TestCase {
 
 	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = new titon\base\types\Object([
+		$this->object = new Object([
 			'property' => 'instantiatedProperty',
 			'method' => function() {
 				return 'instantiatedMethod';

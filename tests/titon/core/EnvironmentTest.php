@@ -7,20 +7,20 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\Titon;
+use titon\tests\TestCase;
 use titon\core\Environment;
 
 /**
  * Test class for titon\core\Environment.
  */
-class EnvironmentTest extends \PHPUnit_Framework_TestCase {
-
-	protected $object;
+class EnvironmentTest extends TestCase {
 
 	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = titon\Titon::environment();
+		$this->object = Titon::environment();
 		$this->object->setup('dev', Environment::DEVELOPMENT, ['dev', '123.0.0.0']);
 		$this->object->setup('prod', Environment::PRODUCTION, ['prod', '123.456.0.0']);
 		$this->object->setup('staging', Environment::STAGING, ['staging', '123.456.789.0']);
@@ -109,7 +109,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase {
 	 * Testing that the correction environment is found is tested in testCurrent().
 	 */
 	public function testInitialize() {
-		$config = titon\Titon::config();
+		$config = Titon::config();
 
 		$_SERVER['HTTP_HOST'] = 'dev';
 		$this->object->initialize();

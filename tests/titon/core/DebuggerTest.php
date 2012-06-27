@@ -7,18 +7,19 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\Titon;
+use titon\tests\TestCase;
+
 /**
  * Test class for titon\core\Debugger.
  */
-class DebuggerTest extends \PHPUnit_Framework_TestCase {
-
-	protected $object;
+class DebuggerTest extends TestCase {
 
 	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = titon\Titon::debugger();
+		$this->object = Titon::debugger();
 	}
 
 	/**

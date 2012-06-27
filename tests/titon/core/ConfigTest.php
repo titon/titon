@@ -7,10 +7,14 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\Titon;
+use titon\tests\TestCase;
+use titon\libs\readers\core\PhpReader;
+
 /**
  * Test class for titon\core\Config.
  */
-class ConfigTest extends \PHPUnit_Framework_TestCase {
+class ConfigTest extends TestCase {
 
 	public $app = [
 		'name' => 'Titon',
@@ -39,13 +43,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 		'zero' => 0
 	];
 
-	protected $object;
-
 	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = titon\Titon::config();
+		$this->object = Titon::config();
 		$this->object->set('App', $this->app);
 		$this->object->set('Debug', $this->debug);
 		$this->object->set('Test', $this->test);
@@ -111,7 +113,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase {
 	 * Config file php.php is found within the app/config/sets/php.php file and uses the data from $test.
 	 */
 	public function testLoad() {
-		$reader = new titon\libs\readers\core\PhpReader();
+		$reader = new PhpReader();
 
 		$this->object->load('Php', $reader);
 		$this->assertArrayHasKey('Php', $this->object->get());

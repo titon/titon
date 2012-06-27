@@ -7,18 +7,20 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\Titon;
+use titon\base\Base;
+use titon\tests\TestCase;
+
 /**
  * Test class for titon\core\Registry.
  */
-class RegistryTest extends \PHPUnit_Framework_TestCase {
-
-	protected $object;
+class RegistryTest extends TestCase {
 
 	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = titon\Titon::registry();
+		$this->object = Titon::registry();
 	}
 
 	/**
@@ -58,7 +60,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 		$test = [];
 
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->set(new titon\base\Base(), 'key' . $i);
+			$this->object->set(new Base(), 'key' . $i);
 			$test[] = 'key' . $i;
 		}
 
@@ -79,7 +81,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testHasAndSet() {
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->set(new titon\base\Base(), 'key' . $i);
+			$this->object->set(new Base(), 'key' . $i);
 		}
 
 		$this->assertTrue($this->object->has('key1'));
@@ -95,7 +97,7 @@ class RegistryTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testRemove() {
 		for ($i = 1; $i <= 10; $i++) {
-			$this->object->set(new titon\base\Base(), 'key' . $i);
+			$this->object->set(new Base(), 'key' . $i);
 		}
 
 		$this->assertTrue($this->object->has('key1'));

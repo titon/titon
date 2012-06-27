@@ -9,11 +9,12 @@
 
 use titon\Titon;
 use titon\base\Base;
+use titon\tests\TestCase;
 
 /**
  * Test class for titon\Titon.
  */
-class TitonTest extends \PHPUnit_Framework_TestCase {
+class TitonTest extends TestCase {
 
 	/**
 	 * Test that get returns the correct installed object.

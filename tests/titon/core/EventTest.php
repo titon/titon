@@ -7,20 +7,23 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\Titon;
+use titon\core\Event;
+use titon\tests\TestCase;
 use titon\libs\controllers\Controller;
 use titon\libs\engines\Engine;
 
 /**
  * Test class for titon\core\Event.
  */
-class EventTest extends \PHPUnit_Framework_TestCase {
+class EventTest extends TestCase {
 
 	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		titon\Titon::router()->initialize();
-		titon\Titon::app()->setup('test', '/', [
+		Titon::router()->initialize();
+		Titon::app()->setup('test', '/', [
 			'index' => 'IndexController'
 		]);
 	}
@@ -28,9 +31,9 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test that execute triggers on the correct objects within the correct scope.
 	 */
-	public function testExecute() {
+	public function testNotify() {
 		// test events by name
-		$event1 = new titon\core\Event();
+		$event1 = new Event();
 		$event1->addListener(new MockListener());
 		$event1->addListener(new MockListener());
 		$event1->addCallback(function() {}, ['titon.startup', 'titon.shutdown', 'testEvent1']);
@@ -88,7 +91,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 * Test that listeners return the correct data.
 	 */
 	public function testListeners() {
-		$event = new titon\core\Event();
+		$event = new Event();
 		$event->addListener(new MockListener());
 		$event->addCallback(function() {});
 
@@ -108,8 +111,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test that registering an event listener works.
 	 */
-	public function testRegisterListener() {
-		$event = new titon\core\Event();
+	public function testAddListener() {
+		$event = new Event();
 		$event->addListener(new MockListener());
 		$event->addListener(new MockListener());
 
@@ -129,8 +132,8 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	/**
 	 * Test that registering an event closure callback works.
 	 */
-	public function testRegisterCallback() {
-		$event = new titon\core\Event();
+	public function testAddCallback() {
+		$event = new Event();
 		$event->addCallback(function() {});
 		$event->addCallback(function() {});
 		$event->addCallback(function() {});
@@ -152,7 +155,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 	 * Test that adding new events work correctly.
 	 */
 	public function testSetup() {
-		$event = new titon\core\Event();
+		$event = new Event();
 		$baseEvents = ['titon.startup', 'titon.shutdown', 'dispatch.preDispatch', 'dispatch.postDispatch', 'controller.preProcess', 'controller.postProcess', 'view.preRender', 'view.postRender'];
 		$testEvents = ['testEvent1', 'testEvent2'];
 
@@ -165,7 +168,7 @@ class EventTest extends \PHPUnit_Framework_TestCase {
 
 }
 
-class MockListener extends titon\libs\listeners\ListenerAbstract {
+class MockListener extends \titon\libs\listeners\ListenerAbstract {
 
 	public function startup() {}
 	public function shutdown() {}

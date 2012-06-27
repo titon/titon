@@ -7,12 +7,18 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\tests\TestCase;
 use titon\libs\bundles\messages\MessageBundle;
+use titon\libs\readers\core\PhpReader;
+use titon\libs\readers\core\IniReader;
+use titon\libs\readers\core\JsonReader;
+use titon\libs\readers\core\XmlReader;
+use titon\libs\readers\gettext\PoReader;
 
 /**
  * Test class for titon\libs\bundles\messages\MessageBundle.
  */
-class MessageBundleTest extends \PHPUnit_Framework_TestCase {
+class MessageBundleTest extends TestCase {
 
 	/**
 	 * Test that exceptions are thrown if a bundle doesn't exist.
@@ -20,7 +26,6 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	public function testBundleDetection() {
 		try {
 			$fakeBundle = new MessageBundle(['bundle' => 'en']);
-
 			$fakeBundle = new MessageBundle(['bundle' => 'doesntExist']);
 
 			$this->assertTrue(false);
@@ -34,7 +39,7 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testPhpBundles() {
 		$bundle = new MessageBundle(['bundle' => 'ex']);
-		$bundle->addReader(new titon\libs\readers\core\PhpReader());
+		$bundle->addReader(new PhpReader());
 
 		$messages = $bundle->loadResource('default');
 
@@ -58,7 +63,7 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testIniBundles() {
 		$bundle = new MessageBundle(['bundle' => 'ex']);
-		$bundle->addReader(new titon\libs\readers\core\IniReader());
+		$bundle->addReader(new IniReader());
 
 		$messages = $bundle->loadResource('default');
 
@@ -82,7 +87,7 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testJsonBundles() {
 		$bundle = new MessageBundle(['bundle' => 'ex']);
-		$bundle->addReader(new titon\libs\readers\core\JsonReader());
+		$bundle->addReader(new JsonReader());
 
 		$messages = $bundle->loadResource('default');
 
@@ -106,7 +111,7 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testXmlBundles() {
 		$bundle = new MessageBundle(['bundle' => 'ex']);
-		$bundle->addReader(new titon\libs\readers\core\XmlReader());
+		$bundle->addReader(new XmlReader());
 
 		$messages = $bundle->loadResource('default');
 
@@ -130,7 +135,7 @@ class MessageBundleTest extends \PHPUnit_Framework_TestCase {
 	 */
 	public function testPoBundles() {
 		$bundle = new MessageBundle(['bundle' => 'ex']);
-		$bundle->addReader(new titon\libs\readers\gettext\PoReader());
+		$bundle->addReader(new PoReader());
 
 		$messages = $bundle->loadResource('default');
 

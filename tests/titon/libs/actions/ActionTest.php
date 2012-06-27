@@ -7,10 +7,12 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\tests\TestCase;
+
 /**
  * Test class for titon\libs\actions\Action.
  */
-class ActionTest extends \PHPUnit_Framework_TestCase {
+class ActionTest extends TestCase {
 
 	/**
 	 * Test that run correctly executes and modifies the passed controller.

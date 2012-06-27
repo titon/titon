@@ -7,12 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\tests\TestCase;
 use titon\libs\bundles\locales\LocaleBundle;
 
 /**
  * Test class for titon\libs\bundles\locales\LocaleBundle.
  */
-class LocaleBundleTest extends \PHPUnit_Framework_TestCase {
+class LocaleBundleTest extends TestCase {
 
 	/**
 	 * Setup bundles for specific conditions.

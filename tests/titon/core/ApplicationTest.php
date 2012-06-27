@@ -7,10 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\Titon;
+use titon\tests\TestCase;
+
 /**
  * Test class for titon\core\Application.
  */
-class ApplicationTest extends \PHPUnit_Framework_TestCase {
+class ApplicationTest extends TestCase {
 
 	public $module = 'module';
 	public $path = __DIR__;
@@ -21,15 +24,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 		'bar' => 'BarController'
 	];
 
-	protected $object;
-
 	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->path = titon\Titon::loader()->ds(__DIR__ . '/');
+		$this->path = Titon::loader()->ds(__DIR__ . '/');
 
-		$this->object = titon\Titon::app();
+		$this->object = Titon::app();
 		$this->object->setup($this->module, $this->path, $this->controllers);
 		$this->object->setup('otherModule', $this->path, []);
 	}

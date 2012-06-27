@@ -7,12 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\tests\TestCase;
 use titon\utility\Inflector;
 
 /**
  * Test class for titon\utility\Inflector.
  */
-class InflectorTest extends \PHPUnit_Framework_TestCase {
+class InflectorTest extends TestCase {
 
 	/**
 	 * Test that strings are returned as camel case.

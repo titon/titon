@@ -8,6 +8,7 @@
  */
 
 use titon\Titon;
+use titon\tests\TestCase;
 use titon\libs\translators\messages\MessageTranslator;
 use titon\libs\storage\cache\MemoryStorage;
 use titon\libs\readers\core\PhpReader;
@@ -19,7 +20,7 @@ use titon\libs\readers\gettext\PoReader;
 /**
  * Test class for titon\libs\translators\messages\MessageTranslator.
  */
-class MessageTranslatorTest extends \PHPUnit_Framework_TestCase {
+class MessageTranslatorTest extends TestCase {
 
 	/**
 	 * This method is called before a test is executed.
