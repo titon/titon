@@ -36,7 +36,7 @@ class Titon {
 	 * @var string
 	 * @static
 	 */
-	public static $version = '0.4.0';
+	public static $version = '0.5.0';
 
 	/**
 	 * Installed objects that can not be uninstalled.
@@ -119,7 +119,9 @@ class Titon {
 	 * @static
 	 */
 	public static function install($key, $object, $lock = false) {
-		if (in_array($key, self::$__locked)) {
+		$locked = self::$__locked + get_class_methods(__CLASS__);
+
+		if (in_array($key, $locked)) {
 			throw new Exception(sprintf('Object cannot be installed as the key %s is locked.', $key));
 		}
 
