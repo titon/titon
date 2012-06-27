@@ -10,8 +10,7 @@
 use titon\Titon;
 use titon\core\Event;
 use titon\tests\TestCase;
-use titon\libs\controllers\Controller;
-use titon\libs\engines\Engine;
+use titon\tests\fixtures\ListenerFixture;
 
 /**
  * Test class for titon\core\Event.
@@ -34,8 +33,8 @@ class EventTest extends TestCase {
 	public function testNotify() {
 		// test events by name
 		$event1 = new Event();
-		$event1->addListener(new MockListener());
-		$event1->addListener(new MockListener());
+		$event1->addListener(new ListenerFixture());
+		$event1->addListener(new ListenerFixture());
 		$event1->addCallback(function() {}, ['titon.startup', 'titon.shutdown', 'testEvent1']);
 		$event1->addCallback(function() {}, ['titon.startup', 'testEvent1', 'testEvent2']);
 		$event1->notify('titon.startup');
@@ -92,7 +91,7 @@ class EventTest extends TestCase {
 	 */
 	public function testListeners() {
 		$event = new Event();
-		$event->addListener(new MockListener());
+		$event->addListener(new ListenerFixture());
 		$event->addCallback(function() {});
 
 		$listeners = $event->getListeners();
@@ -100,7 +99,7 @@ class EventTest extends TestCase {
 		$this->assertEquals(2, count($listeners));
 
 		foreach ($listeners as $listener) {
-			if ($listener['object'] instanceof MockListener || $listener['object'] instanceof Closure) {
+			if ($listener['object'] instanceof ListenerFixture || $listener['object'] instanceof Closure) {
 				$this->assertTrue(true);
 			} else {
 				$this->assertTrue(false);
@@ -113,15 +112,15 @@ class EventTest extends TestCase {
 	 */
 	public function testAddListener() {
 		$event = new Event();
-		$event->addListener(new MockListener());
-		$event->addListener(new MockListener());
+		$event->addListener(new ListenerFixture());
+		$event->addListener(new ListenerFixture());
 
 		$listeners = $event->getListeners();
 
 		$this->assertEquals(2, count($listeners));
 
 		foreach ($listeners as $listener) {
-			if ($listener['object'] instanceof MockListener) {
+			if ($listener['object'] instanceof ListenerFixture) {
 				$this->assertTrue(true);
 			} else {
 				$this->assertTrue(false);
@@ -165,18 +164,5 @@ class EventTest extends TestCase {
 
 		$this->assertEquals(($testEvents + $baseEvents), $event->getEvents());
 	}
-
-}
-
-class MockListener extends \titon\libs\listeners\ListenerAbstract {
-
-	public function startup() {}
-	public function shutdown() {}
-	public function preDispatch() {}
-	public function postDispatch() {}
-	public function preProcess(Controller $controller) {}
-	public function postProcess(Controller $controller) {}
-	public function preRender(Engine $engine) {}
-	public function postRender(Engine $engine) {}
 
 }

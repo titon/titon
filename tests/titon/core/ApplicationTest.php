@@ -28,7 +28,7 @@ class ApplicationTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->path = Titon::loader()->ds(__DIR__ . '/');
+		$this->path = Titon::loader()->ds($this->path, true);
 
 		$this->object = Titon::app();
 		$this->object->setup($this->module, $this->path, $this->controllers);
