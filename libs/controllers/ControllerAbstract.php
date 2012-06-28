@@ -19,7 +19,6 @@ use titon\libs\engines\Engine;
 use titon\libs\engines\core\ViewEngine;
 use titon\libs\traits\Attachable;
 use titon\utility\Inflector;
-use titon\utility\Set;
 use \Closure;
 
 /**
@@ -34,10 +33,6 @@ use \Closure;
  * external classes to use their functionality and trigger specific callbacks.
  *
  * @package	titon.libs.controllers
- * @uses	titon\Titon
- * @uses	titon\libs\controllers\ControllerException
- * @uses	titon\utility\Inflector
- * @uses	titon\utility\Set
  * @abstract
  */
 abstract class ControllerAbstract extends Base implements Controller {
@@ -72,11 +67,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return mixed
 	 * @throws titon\libs\controllers\ControllerException
 	 */
-	public function dispatchAction($action = null, array $args = []) {
-		if (empty($action)) {
-			$action = $this->config->action;
-		}
-
+	public function dispatchAction($action, array $args = []) {
 		if (empty($args)) {
 			$args = $this->config->args;
 		}
@@ -136,13 +127,12 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 *
 	 * @access public
 	 * @param titon\libs\actions\Action $action
-	 * @return void
+	 * @return titon\libs\actions\Action
 	 */
 	public function runAction(Action $action) {
-		$action->setController($this);
-		$action->run();
+		$action->setController($this)->run();
 
-		return;
+		return $action;
 	}
 
 	/**
@@ -209,7 +199,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	final public function setEngine(Closure $engine) {
 		$this->attachObject([
 			'alias' => 'engine',
-			'interface' => '\titon\libs\engines\Engine'
+			'interface' => 'titon\libs\engines\Engine'
 		], $engine);
 	}
 

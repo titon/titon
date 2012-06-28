@@ -14,6 +14,6 @@ namespace titon\libs\actions;
  *
  * @package	titon.libs.actions
  */
-class ActionException extends \titon\Exception {  
+class ActionException extends \titon\Exception {
 
 }

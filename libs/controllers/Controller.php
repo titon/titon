@@ -6,7 +6,7 @@
  * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
- 
+
 namespace titon\libs\controllers;
 
 use titon\libs\actions\Action;
@@ -27,7 +27,7 @@ interface Controller {
 	 * @param array $args
 	 * @return mixed
 	 */
-	public function dispatchAction($action, array $args);
+	public function dispatchAction($action, array $args = []);
 
 	/**
 	 * Forward the current request to a new action, instead of doing an additional HTTP request.
@@ -37,7 +37,7 @@ interface Controller {
 	 * @param array $args
 	 * @return mixed
 	 */
-	public function forwardAction($action, array $args);
+	public function forwardAction($action, array $args = []);
 
 	/**
 	 * Trigger a custom Action class.
@@ -56,7 +56,7 @@ interface Controller {
 	 * @param array $args
 	 * @return void
 	 */
-	public function throwError($action, array $args);
+	public function throwError($action, array $args = []);
 
 	/**
 	 * Triggered before the Controller processes the requested Action.

@@ -31,7 +31,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Listener - Objects that listen and wait to be triggered at specific events in the system.
 * Model - Represents a single entities data schema.
 * Package - A combination of library types into a single related entity.
-* Reader - Handles the loading of configuration file types: xml, json, yaml, etc
+* Reader - Handles the loading and parsing of file types: xml, json, yaml, etc
 * Route - Maps URLs to internal destinations.
 * Shell - Handles CLI execution and tasks.
 * Storage - Provides different methods of caching data.

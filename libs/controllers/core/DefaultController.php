@@ -6,7 +6,7 @@
  * @link		http://github.com/titon
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
- 
+
 namespace titon\libs\controllers\core;
 
 use titon\libs\controllers\ControllerAbstract;
@@ -17,5 +17,5 @@ use titon\libs\controllers\ControllerAbstract;
  * @package	titon.libs.controllers.core
  */
 class DefaultController extends ControllerAbstract {
-	
+
 }

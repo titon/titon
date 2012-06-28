@@ -8,6 +8,8 @@
  */
 
 use titon\tests\TestCase;
+use titon\tests\fixtures\ActionFixture;
+use titon\tests\fixtures\ControllerFixture;
 
 /**
  * Test class for titon\libs\actions\Action.
@@ -18,33 +20,17 @@ class ActionTest extends TestCase {
 	 * Test that run correctly executes and modifies the passed controller.
 	 */
 	public function testRun() {
-		$controller = new TitonLibsActionsMockController(['foo' => 'bar']);
+		$controller = new ControllerFixture(['foo' => 'bar']);
 
 		$this->assertEquals('bar', $controller->config->foo);
 		$this->assertArrayNotHasKey('test', $controller->config->get());
 
-		$action = new TitonLibsActionsMockAction();
-		$action->setController($controller);
-		$action->run();
+		$action = new ActionFixture();
+		$action->setController($controller)->run();
 
 		$this->assertNotEquals('bar', $controller->config->foo);
 		$this->assertEquals('baz', $controller->config->foo);
 		$this->assertArrayHasKey('test', $controller->config->get());
-	}
-
-}
-
-class TitonLibsActionsMockController extends titon\libs\controllers\ControllerAbstract {
-
-}
-
-class TitonLibsActionsMockAction extends titon\libs\actions\ActionAbstract {
-
-	public function run() {
-		$this->controller->config->set([
-			'foo' => 'baz',
-			'test' => 'value'
-		]);
 	}
 
 }

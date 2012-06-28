@@ -21,7 +21,6 @@ use titon\libs\traits\Attachable;
  * Controllers, encapsulating additional methods within the Action process, and defining its own attachments.
  *
  * @package	titon.libs.actions
- * @uses	titon\libs\actions\ActionException
  * @abstract
  */
 abstract class ActionAbstract extends Base implements Action {
@@ -30,21 +29,10 @@ abstract class ActionAbstract extends Base implements Action {
 	/**
 	 * Controller object.
 	 *
-	 * @access public
+	 * @access protected
 	 * @var titon\libs\controllers\Controller
 	 */
-	public $controller;
-
-	/**
-	 * Store the parent Controller.
-	 *
-	 * @access public
-	 * @param titon\libs\controllers\Controller $controller
-	 * @return void
-	 */
-	public function setController(Controller $controller) {
-		$this->controller = $controller;
-	}
+	protected $_controller;
 
 	/**
 	 * Method that is executed to trigger the actions logic.
@@ -55,6 +43,19 @@ abstract class ActionAbstract extends Base implements Action {
 	 */
 	public function run() {
 		throw new ActionException(sprintf('You must define the run() method within your %s Action.', get_class($this)));
+	}
+
+	/**
+	 * Store the parent Controller.
+	 *
+	 * @access public
+	 * @param titon\libs\controllers\Controller $controller
+	 * @return titon\libs\actions\Action
+	 */
+	public function setController(Controller $controller) {
+		$this->_controller = $controller;
+
+		return $this;
 	}
 
 }

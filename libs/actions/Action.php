@@ -9,6 +9,8 @@
 
 namespace titon\libs\actions;
 
+use titon\libs\controllers\Controller;
+
 /**
  * Interface for the actions library.
  *
@@ -23,5 +25,14 @@ interface Action {
 	 * @return void
 	 */
 	public function run();
+
+	/**
+	 * Store the parent Controller.
+	 *
+	 * @access public
+	 * @param titon\libs\controllers\Controller $controller
+	 * @return titon\libs\actions\Action
+	 */
+	public function setController(Controller $controller);
 
 }

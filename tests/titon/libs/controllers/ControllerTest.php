@@ -8,6 +8,8 @@
  */
 
 use titon\tests\TestCase;
+use titon\tests\fixtures\ActionFixture;
+use titon\tests\fixtures\ControllerFixture;
 
 /**
  * Test class for titon\libs\controllers\Controller.
@@ -18,7 +20,7 @@ class ControllerTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = new TitonLibsControllersMockController([
+		$this->object = new ControllerFixture([
 			'module' => 'module',
 			'controller' => 'controller',
 			'action' => 'action',
@@ -31,9 +33,11 @@ class ControllerTest extends TestCase {
 	 */
 	public function testDispatchAction() {
 		try {
-			$this->object->dispatchAction(); // wrong action name
+			$this->object->dispatchAction(null); // wrong action name
 			$this->object->dispatchAction('noAction'); // wrong action name
-			$this->object->dispatchAction('_private'); // underscored private action
+			$this->object->dispatchAction('_actionPseudoPrivate'); // underscored private action
+			$this->object->dispatchAction('actionProtected'); // protected action
+			$this->object->dispatchAction('actionPrivate'); // private action
 			$this->object->dispatchAction('dispatchAction'); // method from parent
 			$this->assertTrue(false);
 
@@ -41,12 +45,12 @@ class ControllerTest extends TestCase {
 			$this->assertTrue(true);
 		}
 
-		$this->assertEquals('actionNoArgs', $this->object->dispatchAction('action1'));
-		$this->assertEquals('actionNoArgs', $this->object->dispatchAction('action1', ['foo', 'bar']));
-		$this->assertEquals(125, $this->object->dispatchAction('action2'));
-		$this->assertEquals(555, $this->object->dispatchAction('action2', [505, 50]));
-		$this->assertEquals(335, $this->object->dispatchAction('action2', [335]));
-		$this->assertEquals(0, $this->object->dispatchAction('action2', ['foo', 'bar']));
+		$this->assertEquals('actionNoArgs', $this->object->dispatchAction('actionNoArgs'));
+		$this->assertEquals('actionNoArgs', $this->object->dispatchAction('actionNoArgs', ['foo', 'bar']));
+		$this->assertEquals(125, $this->object->dispatchAction('actionWithArgs'));
+		$this->assertEquals(555, $this->object->dispatchAction('actionWithArgs', [505, 50]));
+		$this->assertEquals(335, $this->object->dispatchAction('actionWithArgs', [335]));
+		$this->assertEquals(0, $this->object->dispatchAction('actionWithArgs', ['foo', 'bar']));
 	}
 
 	/**
@@ -54,8 +58,11 @@ class ControllerTest extends TestCase {
 	 */
 	public function testForwardAction() {
 		try {
+			$this->object->forwardAction(null);
 			$this->object->forwardAction('noAction');
-			$this->object->forwardAction('_private');
+			$this->object->forwardAction('_actionPseudoPrivate');
+			$this->object->forwardAction('actionProtected');
+			$this->object->forwardAction('actionPrivate');
 			$this->object->forwardAction('dispatchAction');
 			$this->assertTrue(false);
 
@@ -63,15 +70,15 @@ class ControllerTest extends TestCase {
 			$this->assertTrue(true);
 		}
 
-		$this->object->forwardAction('action1');
+		$this->object->forwardAction('actionNoArgs');
 
-		$this->assertEquals('action1', $this->object->config->action);
-		$this->assertEquals('action1', $this->object->engine->config->get('template.action'));
+		$this->assertEquals('actionNoArgs', $this->object->config->action);
+		$this->assertEquals('actionNoArgs', $this->object->engine->config->get('template.action'));
 
-		$this->object->forwardAction('action2');
+		$this->object->forwardAction('actionWithArgs');
 
-		$this->assertEquals('action2', $this->object->config->action);
-		$this->assertEquals('action2', $this->object->engine->config->get('template.action'));
+		$this->assertEquals('actionWithArgs', $this->object->config->action);
+		$this->assertEquals('actionWithArgs', $this->object->engine->config->get('template.action'));
 	}
 
 	/**
@@ -83,7 +90,7 @@ class ControllerTest extends TestCase {
 		$this->assertEquals('bar', $this->object->config->foo);
 		$this->assertArrayNotHasKey('test', $this->object->config->get());
 
-		$this->object->runAction(new TitonLibsControllersMockAction());
+		$this->object->runAction(new ActionFixture());
 
 		$this->assertNotEquals('bar', $this->object->config->foo);
 		$this->assertEquals('baz', $this->object->config->foo);
@@ -115,33 +122,6 @@ class ControllerTest extends TestCase {
 
 		$this->assertEquals('Another Error', $this->object->engine->data('pageTitle'));
 		$this->assertEquals('another_error', $this->object->engine->config->get('template.action'));
-	}
-
-}
-
-class TitonLibsControllersMockController extends titon\libs\controllers\ControllerAbstract {
-
-	public function action1() {
-		return 'actionNoArgs';
-	}
-
-	public function action2($arg1, $arg2 = 0) {
-		return $arg1 + $arg2;
-	}
-
-	public function _private() {
-		return 'wontBeCalled';
-	}
-
-}
-
-class TitonLibsControllersMockAction extends titon\libs\actions\ActionAbstract {
-
-	public function run() {
-		$this->controller->config->set([
-			'foo' => 'baz',
-			'test' => 'value'
-		]);
 	}
 
 }

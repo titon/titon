@@ -14,6 +14,6 @@ namespace titon\libs\controllers;
  *
  * @package	titon.libs.controllers
  */
-class ControllerException extends \titon\Exception {  
+class ControllerException extends \titon\Exception {
 
 }

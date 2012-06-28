@@ -8,10 +8,10 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 Dispatch Cycle
 
-* core/Dispatch
-* core/Router
-* libs/controllers
-* libs/routes
+* core/Dispatch - 50%
+* core/Router - 75%
+* libs/controllers - 99%
+* libs/routes - 99%
 
 ### Upcoming Systems ###
 
