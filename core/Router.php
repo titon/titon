@@ -11,6 +11,8 @@ namespace titon\core;
 
 use titon\Titon;
 use titon\libs\routes\Route;
+use titon\libs\traits\Cacheable;
+use titon\utility\Inflector;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -21,6 +23,7 @@ use titon\libs\routes\Route;
  * @package	titon.core
  */
 class Router {
+	use Cacheable;
 
 	/**
 	 * Base folder structure if the application was placed within a directory.
@@ -28,7 +31,7 @@ class Router {
 	 * @access protected
 	 * @var string
 	 */
-	protected $_base = '';
+	protected $_base = '/';
 
 	/**
 	 * The matched route object.
@@ -82,70 +85,86 @@ class Router {
 	}
 
 	/**
-	 * Takes a route in array format and processes it down into a single string that represents an interal URL path.
+	 * Takes a route in array format and processes it down into a single string that represents an internal URL path.
 	 *
 	 * @access public
 	 * @param array $route
 	 * @return string
 	 */
-	public function build(array $route) {
-		$route = $this->defaults($route);
+	public function build(array $route = []) {
+		if ($cache = $this->getCache(array(__METHOD__, $route))) {
+			return $cache;
+		}
 
-		if ($this->defaults() === $route) {
-			return $this->base();
+		$defaults = $this->defaults();
+		$route = $this->defaults($route);
+		$base = $this->base();
+
+		if ($defaults === $route) {
+			return $base;
 		}
 
 		$path = [];
-		$path[] = trim($this->base(), '/');
+		$args = [];
+		$query = [];
+		$fragment = '';
+
+		foreach ($route as $key => $value) {
+			if (in_array($key, array('module', 'controller', 'action', 'ext'))) {
+				continue;
+
+			} else if ($key === 'args') {
+				$args = $value + $args;
+
+			} else if ($key === 'query') {
+				$query = $value + $query;
+
+			} else if ($key === '#') {
+				$fragment = $value;
+
+			} else if (is_numeric($key)) {
+				$args[] = $value;
+
+			} else if (is_string($key)) {
+				$query[$key] = $value;
+			}
+
+			unset($route[$key]);
+		}
+
+		if ($base !== '/' && $base !== '') {
+			$path[] = trim($base, '/');
+		}
 
 		// Module, controller, action
-		$path[] = $route['module'];
-		$path[] = $route['controller'];
+		$path[] = Inflector::route($route['module']);
+		$path[] = Inflector::route($route['controller']);
 
 		if (!empty($route['ext'])) {
-			$path[] = $route['action'] . '.' . $route['ext'];
+			$path[] = Inflector::route($route['action']) . '.' . $route['ext'];
 
-		} else if ($route['action'] !== 'index' || !empty($route['params'])) {
-			$path[] = $route['action'];
-		}
-
-		unset($route['module'], $route['controller'], $route['action'], $route['ext']);
-
-		// Gather the params and query
-		if (!empty($route)) {
-			foreach ($route as $key => $value) {
-				if ($key === 'params' || $key === 'query' || $key === '#') {
-					continue;
-
-				} else if (is_numeric($key)) {
-					$route['params'][] = $value;
-
-				} else if (is_string($key)) {
-					$route['query'][$key] = $value;
-				}
-
-				unset($route[$key]);
-			}
-		}
-
-		// Action arguments / parameters
-		if (!empty($route['params'])) {
-			$path[] = implode('/', $route['params']);
-		}
-
-		if (!empty($route['query'])) {
-			foreach ($route['query'] as $key => $value) {
-				$path[] = str_replace(' ', '', $key) . ':' . urlencode($value);
-			}
-		}
-
-		if (!empty($route['#'])) {
-			$path[] = '#' . $route['#'];
+		} else if ($route['action'] !== 'index' || !empty($route['args'])) {
+			$path[] = Inflector::route($route['action']);
 		}
 
 		unset($route);
 
-		return '/' . implode('/', $path);
+		// Action arguments
+		if (!empty($args)) {
+			$path[] = implode('/', $args);
+		}
+
+		$path = '/' . implode('/', $path);
+
+		if (!empty($query)) {
+			$path .= '?' . http_build_query($query);
+		}
+
+		if (!empty($fragment)) {
+			$path .= '#' . $fragment;
+		}
+
+		return $path;
 	}
 
 	/**
@@ -166,11 +185,11 @@ class Router {
 	 * @param array $data
 	 * @return array
 	 */
-	public function defaults(array $data = []) {
+	public function defaults($data = []) {
 		$data = $data + [
 			'ext' => '',
 			'query' => $this->segments('query'),
-			'params' => []
+			'args' => []
 		];
 
 		if (empty($data['module'])) {

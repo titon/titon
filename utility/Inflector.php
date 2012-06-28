@@ -146,6 +146,20 @@ class Inflector {
 	}
 
 	/**
+	 * Inflect a word to a routeable format. All non-alphanumeric characters will be removed, and any spaces or underscores will be changed to dashes.
+	 *
+	 * @access public
+	 * @param string $string
+	 * @return string
+	 * @static
+	 */
+	public static function route($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
+			return str_replace([' ', '_'], '-', preg_replace('/[^-_a-z0-9\s]+/i', '', $string));
+		});
+	}
+
+	/**
 	 * Inflect a form to its pluralized form. Applies special rules to determine uninflected, irregular or regular forms.
 	 *
 	 * @access public
