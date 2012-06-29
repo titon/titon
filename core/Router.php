@@ -92,7 +92,9 @@ class Router {
 	 * @return string
 	 */
 	public function build(array $route = []) {
-		if ($cache = $this->getCache(array(__METHOD__, $route))) {
+		$cacheKey = $this->createCacheKey(array(__METHOD__, $route));
+
+		if ($cache = $this->getCache($cacheKey)) {
 			return $cache;
 		}
 
@@ -110,14 +112,14 @@ class Router {
 		$fragment = '';
 
 		foreach ($route as $key => $value) {
-			if (in_array($key, array('module', 'controller', 'action', 'ext'))) {
+			if (in_array($key, array('module', 'controller', 'action', 'ext'), true)) {
 				continue;
 
 			} else if ($key === 'args') {
-				$args = $value + $args;
+				$args = (array) $value + $args;
 
 			} else if ($key === 'query') {
-				$query = $value + $query;
+				$query = (array) $value + $query;
 
 			} else if ($key === '#') {
 				$fragment = $value;
@@ -137,34 +139,40 @@ class Router {
 		}
 
 		// Module, controller, action
-		$path[] = Inflector::route($route['module']);
-		$path[] = Inflector::route($route['controller']);
+		$path[] = $route['module'];
+		$path[] = $route['controller'];
 
 		if (!empty($route['ext'])) {
-			$path[] = Inflector::route($route['action']) . '.' . $route['ext'];
+			$path[] = $route['action'] . '.' . $route['ext'];
 
-		} else if ($route['action'] !== 'index' || !empty($route['args'])) {
-			$path[] = Inflector::route($route['action']);
+		} else if ($route['action'] !== 'index' || !empty($args)) {
+			$path[] = $route['action'];
 		}
 
 		unset($route);
 
 		// Action arguments
 		if (!empty($args)) {
-			$path[] = implode('/', $args);
+			foreach ($args as $arg) {
+				$path[] = urlencode($arg);
+			}
 		}
 
 		$path = '/' . implode('/', $path);
 
 		if (!empty($query)) {
-			$path .= '?' . http_build_query($query);
+			$path .= '?' . http_build_query($query, '', '&', PHP_QUERY_RFC1738);
 		}
 
 		if (!empty($fragment)) {
-			$path .= '#' . $fragment;
+			if (is_array($fragment)) {
+				$path .= '#' . http_build_query($fragment, '', '&', PHP_QUERY_RFC1738);
+			} else {
+				$path .= '#' . urlencode($fragment);
+			}
 		}
 
-		return $path;
+		return $this->setCache($cacheKey, $path);
 	}
 
 	/**
@@ -194,14 +202,20 @@ class Router {
 
 		if (empty($data['module'])) {
 			$data['module'] = 'pages';
+		} else {
+			$data['module'] = Inflector::route($data['module']);
 		}
 
 		if (empty($data['controller'])) {
 			$data['controller'] = 'index';
+		} else {
+			$data['controller'] = Inflector::route($data['controller']);
 		}
 
 		if (empty($data['action'])) {
 			$data['action'] = 'index';
+		} else {
+			$data['action'] = Inflector::route($data['action']);
 		}
 
 		return $data;
@@ -220,10 +234,14 @@ class Router {
 			if (isset($url['slug'])) {
 				$route = $this->slugs($url['slug']);
 
+				// Use array_merge to not remove numerical indices
 				if ($route) {
-					unset($url['slug']);
-					$route = $url + $route;
+					$route = array_merge($route, $url);
+				} else {
+					$route = $url;
 				}
+
+				unset($route['slug']);
 			} else {
 				$route = $url;
 			}
@@ -253,7 +271,7 @@ class Router {
 			$path = '/';
 		}
 
-		if (!empty($base)) {
+		if (!empty($base) && $base !== '/') {
 			$this->_base = rtrim($base, '/');
 		}
 
@@ -342,23 +360,13 @@ class Router {
 		if ($key === true) {
 			$segments = $this->segments();
 			$url = '';
-
-			if (isset($segments['scheme'])) {
-				$url .= $segments['scheme'] . '://';
-			}
-
-			if (isset($segments['host'])) {
-				$url .= $segments['host'];
-			}
-
+			$url .= $segments['scheme'] . '://';
+			$url .= $segments['host'];
 			$url .= $this->base();
-
-			if (isset($segments['path'])) {
-				$url .= $segments['path'];
-			}
+			$url .= $segments['path'];
 
 			if (!empty($segments['query'])) {
-				$url .= '?' . http_build_query($segments['query']);
+				$url .= '?' . http_build_query($segments['query'], '', '&', PHP_QUERY_RFC1738);
 			}
 
 			return $url;

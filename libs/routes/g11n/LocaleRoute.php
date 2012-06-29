@@ -55,9 +55,9 @@ class LocaleRoute extends RouteAbstract {
 	public function isMatch($url) {
 		$status = parent::isMatch($url);
 
-		if (!isset($this->_route['locale']) || empty($this->_route['locale'])) {
+		if (PHP_SAPI !== 'cli' && (!isset($this->_route['locale']) || empty($this->_route['locale']))) {
 			$redirect = $this->_route;
-			$redirect['locale'] = Titon::g11n()->getFallback()->config('key');
+			$redirect['locale'] = Titon::g11n()->getFallback()->getLocale('key');
 
 			Titon::registry()->factory('titon\net\Response')->redirect($redirect);
 		}
