@@ -359,14 +359,23 @@ class Router {
 	public function segments($key = false) {
 		if ($key === true) {
 			$segments = $this->segments();
-			$url = '';
-			$url .= $segments['scheme'] . '://';
+			$base = $this->base();
+
+			$url = $segments['scheme'] . '://';
 			$url .= $segments['host'];
-			$url .= $this->base();
+
+			if ($base !== '/') {
+				$url .= $base;
+			}
+
 			$url .= $segments['path'];
 
 			if (!empty($segments['query'])) {
 				$url .= '?' . http_build_query($segments['query'], '', '&', PHP_QUERY_RFC1738);
+			}
+
+			if (!empty($segments['fragment'])) {
+				$url .= '#' . $segments['fragment'];
 			}
 
 			return $url;

@@ -21,8 +21,6 @@ use titon\libs\traits\Attachable;
  * another internal destination.
  *
  * @package	titon.libs.routes
- * @uses	titon\Titon
- * @uses	titon\libs\routes\RouteException
  * @abstract
  */
 abstract class RouteAbstract extends Base implements Route {

@@ -17,5 +17,5 @@ use titon\libs\routes\RouteAbstract;
  * @package	titon.libs.routes.core
  */
 class DefaultRoute extends RouteAbstract {
-	
+
 }

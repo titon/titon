@@ -198,7 +198,7 @@ class Response extends Base {
 
 		// Content type
 		if (!empty($this->_type)) {
-			header('Content-Type: ' . $this->_type);
+			$this->header('Content-Type', $this->_type);
 		}
 
 		// HTTP headers

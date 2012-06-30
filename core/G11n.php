@@ -25,9 +25,6 @@ use \Locale;
  * @link http://loc.gov/standards/iso639-2/php/code_list.php
  *
  * @package	titon.core
- * @uses	titon\core\CoreException
- * @uses	titon\libs\bundles\locales\LocaleBundle
- * @uses	titon\libs\translators\Translator
  */
 class G11n {
 	use Cacheable;

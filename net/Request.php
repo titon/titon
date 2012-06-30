@@ -156,18 +156,20 @@ class Request extends Base {
 	 * @return string
 	 */
 	public function env($header) {
-		$headerAlt = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
+		return $this->cache([__METHOD__, $header], function() use ($header) {
+			$headerAlt = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
 
-		foreach ([$_SERVER, $_ENV] as $data) {
-			if (isset($data[$header])) {
-				return $data[$header];
+			foreach ([$_SERVER, $_ENV] as $data) {
+				if (isset($data[$header])) {
+					return $data[$header];
 
-			} else if (isset($data[$headerAlt])) {
-				return $data[$headerAlt];
+				} else if (isset($data[$headerAlt])) {
+					return $data[$headerAlt];
+				}
 			}
-		}
 
-		return null;
+			return null;
+		});
 	}
 
 	/**

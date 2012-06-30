@@ -55,7 +55,8 @@ class LocaleRoute extends RouteAbstract {
 	public function isMatch($url) {
 		$status = parent::isMatch($url);
 
-		if (PHP_SAPI !== 'cli' && (!isset($this->_route['locale']) || empty($this->_route['locale']))) {
+		// Redirect to the fallback URL
+		if (PHP_SAPI !== 'cli' && empty($this->_route['locale'])) {
 			$redirect = $this->_route;
 			$redirect['locale'] = Titon::g11n()->getFallback()->getLocale('key');
 

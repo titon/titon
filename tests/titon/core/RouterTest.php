@@ -229,4 +229,99 @@ class RouterTest extends TestCase {
 		], $this->object->slugs('queryFragment'));
 	}
 
+	/**
+	 * Test that initialize() pulls in the correct URL segments, base path and HTTP query.
+	 *
+	 * Run this method last as to not conflict with other tests.
+	 */
+	public function testInitializeAndSegmentsAndBase() {
+		$_SERVER['HTTP_HOST'] = 'localhost';
+		$_SERVER['PHP_SELF'] = '/index.php';
+		$_SERVER['REQUEST_URI'] = '/';
+
+		$this->object->initialize();
+		$this->assertEquals('/', $this->object->base());
+		$this->assertEquals('http://localhost/', $this->object->segments(true));
+		$this->assertEquals('/', $this->object->segments('path'));
+		$this->assertTrue(is_array($this->object->segments('query')));
+		$this->assertEquals([
+			'path' => '/',
+			'scheme' => 'http',
+			'query' => [],
+			'host' => 'localhost'
+		], $this->object->segments());
+
+		// module, controller
+		$_SERVER['HTTP_HOST'] = 'domain.com';
+		$_SERVER['PHP_SELF'] = '/index.php/module/index';
+		$_SERVER['REQUEST_URI'] = '/module/index';
+
+		$this->object->initialize();
+		$this->assertEquals('/', $this->object->base());
+		$this->assertEquals('http://domain.com/module/index', $this->object->segments(true));
+		$this->assertEquals('/module/index', $this->object->segments('path'));
+		$this->assertTrue(is_array($this->object->segments('query')));
+		$this->assertEquals([
+			'path' => '/module/index',
+			'scheme' => 'http',
+			'query' => [],
+			'host' => 'domain.com'
+		], $this->object->segments());
+
+		// module, controller, action, ext, base,
+		$_SERVER['HTTP_HOST'] = 'sub.domain.com';
+		$_SERVER['PHP_SELF'] = '/root/dir/index.php/module/controller/action.html';
+		$_SERVER['REQUEST_URI'] = '/module/controller/action.html';
+
+		$this->object->initialize();
+		$this->assertEquals('/root/dir', $this->object->base());
+		$this->assertEquals('http://sub.domain.com/root/dir/module/controller/action.html', $this->object->segments(true));
+		$this->assertEquals('/module/controller/action.html', $this->object->segments('path'));
+		$this->assertTrue(is_array($this->object->segments('query')));
+		$this->assertEquals([
+			'path' => '/module/controller/action.html',
+			'scheme' => 'http',
+			'query' => [],
+			'host' => 'sub.domain.com'
+		], $this->object->segments());
+
+		// module, controller, action, ext, base, query, https
+		$_SERVER['HTTP_HOST'] = 'subber.sub.domain.com';
+		$_SERVER['PHP_SELF'] = '/rooter/root/dir/index.php/module/controller/action.html'; // query doesn't show up here
+		$_SERVER['REQUEST_URI'] = '/module/controller/action.html?foo=bar&int=123';
+		$_SERVER['HTTPS'] = 'on';
+		$_GET = ['foo' => 'bar', 'int' => 123];
+
+		$this->object->initialize();
+		$this->assertEquals('/rooter/root/dir', $this->object->base());
+		$this->assertEquals('https://subber.sub.domain.com/rooter/root/dir/module/controller/action.html?foo=bar&int=123', $this->object->segments(true));
+		$this->assertEquals('/module/controller/action.html', $this->object->segments('path'));
+		$this->assertTrue(is_array($this->object->segments('query')));
+		$this->assertEquals([
+			'path' => '/module/controller/action.html',
+			'scheme' => 'https',
+			'query' => ['foo' => 'bar', 'int' => 123],
+			'host' => 'subber.sub.domain.com'
+		], $this->object->segments());
+
+		// module, controller, action, ext, base, query, https, args
+		$_SERVER['HTTP_HOST'] = 'subbest.subber.sub.domain.com';
+		$_SERVER['PHP_SELF'] = '/base/rooter/root/dir/index.php/module/controller/action.html/123/abc'; // query doesn't show up here
+		$_SERVER['REQUEST_URI'] = '/module/controller/action.html/123/abc?foo=bar&int=123';
+		$_SERVER['HTTPS'] = 'on';
+		$_GET = ['foo' => 'bar', 'int' => 123];
+
+		$this->object->initialize();
+		$this->assertEquals('/base/rooter/root/dir', $this->object->base());
+		$this->assertEquals('https://subbest.subber.sub.domain.com/base/rooter/root/dir/module/controller/action.html/123/abc?foo=bar&int=123', $this->object->segments(true));
+		$this->assertEquals('/module/controller/action.html/123/abc', $this->object->segments('path'));
+		$this->assertTrue(is_array($this->object->segments('query')));
+		$this->assertEquals([
+			'path' => '/module/controller/action.html/123/abc',
+			'scheme' => 'https',
+			'query' => ['foo' => 'bar', 'int' => 123],
+			'host' => 'subbest.subber.sub.domain.com'
+		], $this->object->segments());
+	}
+
 }

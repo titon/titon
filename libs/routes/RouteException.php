@@ -14,6 +14,6 @@ namespace titon\libs\routes;
  *
  * @package	titon.libs.routes
  */
-class RouteException extends \titon\Exception {  
+class RouteException extends \titon\Exception {
 
 }
