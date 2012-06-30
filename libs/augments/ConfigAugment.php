@@ -48,7 +48,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 	 */
 	public function __construct(array $config, array $defaults = []) {
 		$this->_defaults = $defaults;
-		$this->set($config + $defaults);
+		$this->set(array_merge($defaults, $config));
 	}
 
 	/**
@@ -147,7 +147,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 				$this->set($k, $v);
 			}
 		} else {
-			if ($default = Set::extract($this->_defaults, $key)) {
+			if (($default = Set::extract($this->_defaults, $key)) !== null) {
 				if (is_float($default)) {
 					$value = (float) $value;
 				} else if (is_numeric($default)) {
