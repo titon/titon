@@ -94,7 +94,7 @@ class Session extends Base {
 	 * @return mixed
 	 */
 	public function get($key = null) {
-		return Set::extract($_SESSION, $key);
+		return Set::get($_SESSION, $key);
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Session extends Base {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return Set::exists($_SESSION, $key);
+		return Set::has($_SESSION, $key);
 	}
 
 	/**
@@ -209,8 +209,8 @@ class Session extends Base {
 	 * @return titon\net\Session
 	 * @chainable
 	 */
-	public function set($key, $value) {
-		$_SESSION = Set::insert($_SESSION, $key, $value);
+	public function set($key, $value = null) {
+		$_SESSION = Set::set($_SESSION, $key, $value);
 
 		return $this;
 	}

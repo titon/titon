@@ -112,32 +112,6 @@ class SetTest extends TestCase {
 	}
 
 	/**
-	 * Test that exists() returns a boolean if the key exists based on the dot notated path.
-	 */
-	public function testExists() {
-		$data = $this->expanded;
-
-		$this->assertTrue(Set::exists($data, 'boolean'));
-		$this->assertTrue(Set::exists($data, 'empty'));
-		$this->assertTrue(Set::exists($data, 'one.depth'));
-		$this->assertTrue(Set::exists($data, 'one.two.depth'));
-		$this->assertTrue(Set::exists($data, 'one.two.three.false'));
-		$this->assertTrue(Set::exists($data, 'one.two.three.true'));
-		$this->assertTrue(Set::exists($data, 'one.two.three.four.five.six.seven.key'));
-		$this->assertTrue(Set::exists($data, 'one.two.three.null'));
-
-		$this->assertFalse(Set::exists($data, 'one.two.three.some.really.deep.depth'));
-		$this->assertFalse(Set::exists($data, 'foo'));
-		$this->assertFalse(Set::exists($data, 'foo.bar'));
-		$this->assertFalse(Set::exists($data, 'empty.key'));
-
-		foreach ([true, false, null, 123, 'foo'] as $type) {
-			$this->assertFalse(Set::exists($type, 'fake'));
-			$this->assertFalse(Set::exists($type, null));
-		}
-	}
-
-	/**
 	 * Test that expand() will expand a single-dimension array into a multi-dimension.
 	 */
 	public function testExpand() {
@@ -286,6 +260,44 @@ class SetTest extends TestCase {
 				]
 			]
 		], Set::flip($this->expanded));
+	}
+
+	/**
+	 * Test that get() returns the full set, or the set value based on the dot notated path.
+	 */
+	public function testGet() {
+		$data = $this->expanded;
+
+		$this->assertEquals($data, Set::get($data));
+		$this->assertEquals(true, Set::get($data, 'boolean'));
+		$this->assertEquals($data['one']['two']['three'], Set::get($data, 'one.two.three'));
+		$this->assertEquals($data['one']['two']['three']['four']['five']['six'], Set::get($data, 'one.two.three.four.five.six'));
+	}
+
+	/**
+	 * Test that has() returns a boolean if the key exists based on the dot notated path.
+	 */
+	public function testHas() {
+		$data = $this->expanded;
+
+		$this->assertTrue(Set::has($data, 'boolean'));
+		$this->assertTrue(Set::has($data, 'empty'));
+		$this->assertTrue(Set::has($data, 'one.depth'));
+		$this->assertTrue(Set::has($data, 'one.two.depth'));
+		$this->assertTrue(Set::has($data, 'one.two.three.false'));
+		$this->assertTrue(Set::has($data, 'one.two.three.true'));
+		$this->assertTrue(Set::has($data, 'one.two.three.four.five.six.seven.key'));
+		$this->assertTrue(Set::has($data, 'one.two.three.null'));
+
+		$this->assertFalse(Set::has($data, 'one.two.three.some.really.deep.depth'));
+		$this->assertFalse(Set::has($data, 'foo'));
+		$this->assertFalse(Set::has($data, 'foo.bar'));
+		$this->assertFalse(Set::has($data, 'empty.key'));
+
+		foreach ([true, false, null, 123, 'foo'] as $type) {
+			$this->assertFalse(Set::has($type, 'fake'));
+			$this->assertFalse(Set::has($type, null));
+		}
 	}
 
 	/**
@@ -572,6 +584,32 @@ class SetTest extends TestCase {
 			$data = Set::remove($data, $type);
 			$this->assertEquals($match, $data);
 		}
+	}
+
+	/**
+	 * Test that set() inserts data into the set based on the dot notated path; an array can also be passed.
+	 */
+	public function testSet() {
+		$data = $this->expanded;
+		$match = $data;
+
+		$data = Set::set($data, 'key', 'value');
+		$match['key'] = 'value';
+		$this->assertEquals($match, $data);
+
+		$data = Set::set($data, 'key.key', 'value');
+		$match['key'] = ['key' => 'value'];
+		$this->assertEquals($match, $data);
+
+		$data = Set::set($data, array(
+			'key.key.key' => 'value',
+			'true' => true,
+			'one.false' => false
+		));
+		$match['key']['key'] = ['key' => 'value'];
+		$match['true'] = true;
+		$match['one']['false'] = false;
+		$this->assertEquals($match, $data);
 	}
 
 	/**

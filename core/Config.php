@@ -53,7 +53,7 @@ class Config {
 	 * @return mixed
 	 */
 	public function get($key = null) {
-		return Set::extract($this->_config, $key);
+		return Set::get($this->_config, $key);
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Config {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return Set::exists($this->_config, $key);
+		return Set::has($this->_config, $key);
 	}
 
 	/**
@@ -116,12 +116,12 @@ class Config {
 	 * @return titon\core\Config
 	 * @chainable
 	 */
-	public function set($key, $value) {
+	public function set($key, $value = null) {
 		if ($key === 'Debug.level') {
-			Titon::debugger()->enable(((int) $value > 0));
+			Titon::debugger()->enable((int) $value > 0);
 		}
 
-		$this->_config = Set::insert($this->_config, $key, $value);
+		$this->_config = Set::set($this->_config, $key, $value);
 
 		return $this;
 	}

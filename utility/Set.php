@@ -75,46 +75,6 @@ class Set {
 	}
 
 	/**
-	 * Checks to see if a key/value pair exists within an array, determined by the given path.
-	 *
-	 * @access public
-	 * @param array $set
-	 * @param string $path
-	 * @return array
-	 * @static
-	 */
-	public static function exists($set, $path) {
-		if (!is_array($set) || empty($path)) {
-			return false;
-		}
-
-		$search =& $set;
-		$paths = explode('.', (string) $path);
-		$total = count($paths);
-
-		while ($total > 0) {
-			$key = $paths[0];
-
-			// Within the last path
-			if ($total === 1) {
-				return array_key_exists($key, $search);
-
-			// Break out of non-existent paths early
-			} else if (!array_key_exists($key, $search) || !is_array($search[$key])) {
-				return false;
-			}
-
-			$search =& $search[$key];
-			array_shift($paths);
-			$total--;
-		}
-
-		unset($search);
-
-		return false;
-	}
-
-	/**
 	 * Expand an array to a fully workable multi-dimensional array, where the values key is a dot notated path.
 	 *
 	 * @access public
@@ -264,6 +224,62 @@ class Set {
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Get a value from the set. If they path doesn't exist, return null, or if the path is empty, return the whole set.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param string $path
+	 * @return mixed
+	 */
+	public static function get($set, $path = null) {
+		if (empty($path)) {
+			return $set;
+		}
+
+		return self::extract($set, $path);
+	}
+
+	/**
+	 * Checks to see if a key/value pair exists within an array, determined by the given path.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param string $path
+	 * @return array
+	 * @static
+	 */
+	public static function has($set, $path) {
+		if (!is_array($set) || empty($path)) {
+			return false;
+		}
+
+		$search =& $set;
+		$paths = explode('.', (string) $path);
+		$total = count($paths);
+
+		while ($total > 0) {
+			$key = $paths[0];
+
+			// Within the last path
+			if ($total === 1) {
+				return array_key_exists($key, $search);
+
+				// Break out of non-existent paths early
+			} else if (!array_key_exists($key, $search) || !is_array($search[$key])) {
+				return false;
+			}
+
+			$search =& $search[$key];
+			array_shift($paths);
+			$total--;
+		}
+
+		unset($search);
+
+		return false;
 	}
 
 	/**
@@ -528,6 +544,27 @@ class Set {
 		}
 
 		unset($search);
+
+		return $set;
+	}
+
+	/**
+	 * Set a value into the result set. If the paths is an array, loop over each one and insert the value.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param array|string $path
+	 * @param mixed $value
+	 * @return array
+	 */
+	public static function set($set, $path, $value = null) {
+		if (is_array($path)) {
+			foreach ($path as $key => $value) {
+				$set = self::insert($set, $key, $value);
+			}
+		} else {
+			$set = self::insert($set, $path, $value);
+		}
 
 		return $set;
 	}
