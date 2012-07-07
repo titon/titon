@@ -9,20 +9,14 @@
 
 namespace titon\utility;
 
+use titon\utility\UtilityException;
+
 /**
- * Manipulates, manages and processes multiple types of result sets, primarily objects and arrays.
+ * Manipulates, manages and processes multiple types of result sets: objects and arrays.
  *
  * @package	titon.utility
  */
 class Set {
-
-	/**
-	 * Traversing constants.
-	 */
-	const EXTRACT = 1;
-	const EXISTS = 2;
-	const INSERT = 3;
-	const REMOVE = 4;
 
 	/**
 	 * Determines the total depth of a multi-dimensional array or object.
@@ -32,13 +26,19 @@ class Set {
 	 * @param array|object $set
 	 * @param boolean $recursive
 	 * @return int
+	 * @throws titon\utility\UtilityException
 	 * @static
 	 */
 	public static function depth($set, $recursive = false) {
+		if (is_object($set)) {
+			$set = self::toArray($set);
+
+		} else if (!is_array($set)) {
+			throw new UtilityException('Value passed must be an array.');
+		}
+
 		if (empty($set)) {
 			return 0;
-		} else if (is_object($set)) {
-			$set = self::toArray($set);
 		}
 
 		$depth = 1;
@@ -84,11 +84,34 @@ class Set {
 	 * @static
 	 */
 	public static function exists($set, $path) {
-		if (!is_array($set)) {
+		if (!is_array($set) || empty($path)) {
 			return false;
 		}
 
-		return self::traverse(self::EXISTS, $set, $path);
+		$search =& $set;
+		$paths = explode('.', (string) $path);
+		$total = count($paths);
+
+		while ($total > 0) {
+			$key = $paths[0];
+
+			// Within the last path
+			if ($total === 1) {
+				return array_key_exists($key, $search);
+
+			// Break out of non-existent paths early
+			} else if (!array_key_exists($key, $search) || !is_array($search[$key])) {
+				return false;
+			}
+
+			$search =& $search[$key];
+			array_shift($paths);
+			$total--;
+		}
+
+		unset($search);
+
+		return false;
 	}
 
 	/**
@@ -100,16 +123,10 @@ class Set {
 	 * @static
 	 */
 	public static function expand($set) {
-		if (!is_array($set)) {
-			return false;
-		}
-
 		$data = [];
 
-		if (!empty($set)) {
-			foreach ($set as $key => $value) {
-				$data = self::traverse(self::INSERT, $data, $key, $value);
-			}
+		foreach ((array) $set as $key => $value) {
+			$data = self::insert($data, $key, $value);
 		}
 
 		return $data;
@@ -121,30 +138,39 @@ class Set {
 	 *
 	 * @access public
 	 * @param array $set
-	 * @param array|string $paths
-	 * @return array|boolean
+	 * @param string $path
+	 * @return mixed
 	 * @static
 	 */
-	public static function extract($set, $paths) {
+	public static function extract($set, $path) {
 		if (!is_array($set) || empty($set)) {
-			return false;
+			return null;
 		}
 
-		if (!is_array($paths)) {
-			$paths = [$paths];
+		$search =& $set;
+		$paths = explode('.', (string) $path);
+		$total = count($paths);
+
+		while ($total > 0) {
+			$key = $paths[0];
+
+			// Within the last path
+			if ($total === 1) {
+				return array_key_exists($key, $search) ? $search[$key] : null;
+
+			// Break out of non-existent paths early
+			} else if (!array_key_exists($key, $search) || !is_array($search[$key])) {
+				return null;
+			}
+
+			$search =& $search[$key];
+			array_shift($paths);
+			$total--;
 		}
 
-		$data = [];
+		unset($search);
 
-		foreach ($paths as $path) {
-			$data[$path] = self::traverse(self::EXTRACT, $set, $path);
-		}
-
-		if (count($data) === 1) {
-			return $data[$paths[0]];
-		} else {
-			return $data;
-		}
+		return null;
 	}
 
 	/**
@@ -158,18 +184,18 @@ class Set {
 	 * @static
 	 */
 	public static function filter($set, $recursive = true) {
-		if (!is_array($set)) {
-			return $set;
-		}
+		$set = (array) $set;
 
-		if ($recursive === true) {
-			foreach ($set as &$value) {
-				$value = self::filter($value, $recursive);
+		if ($recursive) {
+			foreach ($set as $key => $value) {
+				if (is_array($value)) {
+					$set[$key] = self::filter($value, $recursive);
+				}
 			}
 		}
 
 		return array_filter($set, function($var) {
-			return (($var === 0) || ($var === '0') || (!empty($var)));
+			return ($var === 0 || $var === '0' || !empty($var));
 		});
 	}
 
@@ -183,17 +209,13 @@ class Set {
 	 * @static
 	 */
 	public static function flatten($set, $path = null) {
-		if (!is_array($set)) {
-			return $set;
-		}
-
 		if (!empty($path)) {
 			$path = $path . '.';
 		}
 
 		$data = [];
 
-		foreach ($set as $key => $value) {
+		foreach ((array) $set as $key => $value) {
 			if (is_array($value)) {
 				if (empty($value)) {
 					$data[$path . $key] = null;
@@ -209,21 +231,80 @@ class Set {
 	}
 
 	/**
+	 * Flip the array by replacing all array keys with their value, if the value is a string and the key is numeric.
+	 * If the value is empty/false/null and $truncate is true, that key will be removed.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param boolean $truncate
+	 * @return array
+	 * @static
+	 */
+	public static function flip($set, $truncate = true) {
+		if (!is_array($set)) {
+			return $set;
+		}
+
+		$data = [];
+
+		foreach ($set as $key => $value) {
+			$empty = ($value === '' || $value === false || $value === null);
+
+			if (is_array($value)) {
+				$data[$key] = self::flip($value, $truncate);
+
+			} else if (is_int($key) && !$empty) {
+				$data[$value] = '';
+
+			} else {
+				if ($truncate === true && !$empty) {
+					$data[$value] = $key;
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Inserts a value into the array set based on the given path.
 	 *
 	 * @access public
 	 * @param array $set
 	 * @param string $path
-	 * @param mixed $insert
+	 * @param mixed $value
 	 * @return array
 	 * @static
 	 */
-	public static function insert($set, $path, $insert) {
-		if (!is_array($set)) {
+	public static function insert($set, $path, $value) {
+		if (!is_array($set) || empty($path)) {
 			return $set;
 		}
 
-		return self::traverse(self::INSERT, $set, $path, $insert);
+		$search =& $set;
+		$paths = explode('.', $path);
+		$total = count($paths);
+
+		while ($total > 0) {
+			$key = $paths[0];
+
+			// Within the last path
+			if ($total === 1) {
+				$search[$key] = $value;
+
+			// Break out of non-existent paths early
+			} else if (!array_key_exists($key, $search) || !is_array($search[$key])) {
+				$search[$key] = [];
+			}
+
+			$search =& $search[$key];
+			array_shift($paths);
+			$total--;
+		}
+
+		unset($search);
+
+		return $set;
 	}
 
 	/**
@@ -237,11 +318,7 @@ class Set {
 	 * @static
 	 */
 	public static function isAlpha($set, $strict = true) {
-		if (!is_array($set)) {
-			return false;
-		}
-
-		foreach ($set as $value) {
+		foreach ((array) $set as $value) {
 			if (!is_string($value)) {
 				return false;
 			}
@@ -265,11 +342,7 @@ class Set {
 	 * @static
 	 */
 	public static function isNumeric($set) {
-		if (!is_array($set)) {
-			return false;
-		}
-
-		foreach ($set as $value) {
+		foreach ((array) $set as $value) {
 			if (!is_numeric($value)) {
 				return false;
 			}
@@ -284,33 +357,25 @@ class Set {
 	 *
 	 * @access public
 	 * @param array $set
-	 * @param string|array $function
+	 * @param string|Closure $function
 	 * @param array $args
 	 * @return array
 	 * @static
 	 */
 	public static function map($set, $function, $args = []) {
-		if (is_array($function)) {
-			if (!class_exists(get_class($function[0])) || !method_exists($function[0], $function[1])) {
-				return $set;
-			}
-		} else {
-			if (!function_exists($function)) {
-				return $set;
+		foreach ((array) $set as $key => $value) {
+			if (is_array($value)) {
+				$set[$key] = self::map($value, $function, $args);
+
+			} else {
+				$temp = $args;
+				array_unshift($temp, $value);
+
+				$set[$key] = call_user_func_array($function, $temp);
 			}
 		}
 
-		if (is_array($set)) {
-			foreach ($set as &$value) {
-				$value = self::map($value, $function, $args);
-			}
-
-			return $set;
-		}
-
-		array_unshift($args, $set);
-
-		return call_user_func_array($function, $args);
+		return $set;
 	}
 
 	/**
@@ -323,11 +388,7 @@ class Set {
 	 * @static
 	 */
 	public static function matches($set1, $set2) {
-		if (!is_array($set1) || !is_array($set2)) {
-			return false;
-		}
-
-		return ($set1 === $set2);
+		return ((array) $set1 === (array) $set2);
 	}
 
 	/**
@@ -335,42 +396,38 @@ class Set {
 	 * the previous value will be overwritten instead of being added into an array. The later array takes precedence when merging.
 	 *
 	 * @access public
-	 * @param array $set	- Array to be merged
-	 * @param array $set2	- Array to be merged...
 	 * @return array
 	 * @static
 	 */
 	public static function merge() {
 		$sets = func_get_args();
-		$set = [];
-		$total = count($sets) - 1;
+		$data = [];
 
 		if (!empty($sets)) {
-			for ($i = 0; $i <= $total; ++$i) {
-				foreach ($sets[$i] as $key => $value) {
-					if (isset($set[$key])) {
-						if (is_array($value) && is_array($set[$key])) {
-							$set[$key] = self::merge($set[$key], $value);
+			foreach ($sets as $set) {
+				foreach ((array) $set as $key => $value) {
+					if (isset($data[$key])) {
+						if (is_array($value) && is_array($data[$key])) {
+							$data[$key] = self::merge($data[$key], $value);
 
 						} else if (is_int($key)) {
-							array_push($set, $value);
+							array_push($data, $value);
 
 						} else {
-							$set[$key] = $value;
+							$data[$key] = $value;
 						}
 					} else {
-						$set[$key] = $value;
+						$data[$key] = $value;
 					}
 				}
 			}
 		}
 
-		return $set;
+		return $data;
 	}
 
 	/**
 	 * Works similar to merge(), except that it will only overwrite/merge values if the keys exist in the previous array.
-	 * Does not have support for multi-dimensional arrays or recursion.
 	 *
 	 * @access public
 	 * @param array $set1 - The base array
@@ -383,7 +440,19 @@ class Set {
 			return null;
 		}
 
-		return array_merge($set1, array_intersect_key($set2, $set1));
+		$overwrite = array_intersect_key($set2, $set1);
+
+		if (!empty($overwrite)) {
+			foreach ($overwrite as $key => $value) {
+				if (is_array($value)) {
+					$set1[$key] = self::overwrite($set1[$key], $value);
+				} else {
+					$set1[$key] = $value;
+				}
+			}
+		}
+
+		return $set1;
 	}
 
 	/**
@@ -393,20 +462,29 @@ class Set {
 	 * @param int $start
 	 * @param int $stop
 	 * @param int $step
+	 * @param boolean $index
 	 * @return array
 	 * @static
 	 */
-	public static function range($start, $stop, $step = 1) {
+	public static function range($start, $stop, $step = 1, $index = true) {
 		$array = [];
 
 		if ($stop > $start) {
-			for ($i = (int)$start; $i <= (int)$stop; $i += (int)$step) {
-				$array[$i] = $i;
+			for ($i = $start; $i <= $stop; $i += $step) {
+				if ($index) {
+					$array[$i] = $i;
+				} else {
+					$array[] = $i;
+				}
 			}
 
 		} else if ($stop < $start) {
-			for ($i = (int)$start; $i >= (int)$stop; $i -= (int)$step) {
-				$array[$i] = $i;
+			for ($i = $start; $i >= $stop; $i -= $step) {
+				if ($index) {
+					$array[$i] = $i;
+				} else {
+					$array[] = $i;
+				}
 			}
 		}
 
@@ -423,45 +501,35 @@ class Set {
 	 * @static
 	 */
 	public static function remove($set, $path) {
-		if (!is_array($set)) {
+		if (!is_array($set) || empty($path)) {
 			return $set;
 		}
 
-		return self::traverse(self::REMOVE, $set, $path);
-	}
+		$search =& $set;
+		$paths = explode('.', (string) $path);
+		$total = count($paths);
 
-	/**
-	 * Reverses the array by replacing all array keys with their value, if the value is a string and the key is numeric.
-	 * If the value is empty/null and $truncate is true, that key will be removed.
-	 *
-	 * @access public
-	 * @param array $set
-	 * @param boolean $truncate
-	 * @return array
-	 * @static
-	 */
-	public static function reverse($set, $truncate = true) {
-		if (!is_array($set)) {
-			return $set;
-		}
+		while ($total > 0) {
+			$key = $paths[0];
 
-		$data = [];
+			// Within the last path
+			if ($total === 1) {
+				unset($search[$key]);
+				return $set;
 
-		foreach ($set as $key => $value) {
-			if (is_array($value)) {
-				$data[$key] = self::reverse($value, $truncate);
-
-			} else if (is_int($key) && !empty($value)) {
-				$data[$value] = '';
-
-			} else {
-				if ($truncate === true && !empty($value)) {
-					$data[$key] = $value;
-				}
+			// Break out of non-existent paths early
+			} else if (!array_key_exists($key, $search) || !is_array($search[$key])) {
+				return $set;
 			}
+
+			$search =& $search[$key];
+			array_shift($paths);
+			$total--;
 		}
 
-		return $data;
+		unset($search);
+
+		return $set;
 	}
 
 	/**
@@ -471,14 +539,26 @@ class Set {
 	 * @access public
 	 * @param object $object
 	 * @return array
+	 * @throws titon\libs\utility\UtilityException
 	 * @static
 	 */
 	public static function toArray($object) {
-		if (is_array($object) || !is_object($object)) {
+		if (is_array($object)) {
 			return $object;
+
+		} else if (!is_object($object)) {
+			throw new UtilityException('Value passed must be an object.');
 		}
 
-		return array_map([__CLASS__, 'toArray'], get_object_vars($object));
+		$array = get_object_vars($object);
+
+		foreach ($array as $key => $value) {
+			if (is_object($value)) {
+				$array[$key] = self::toArray($value);
+			}
+		}
+
+		return $array;
 	}
 
 	/**
@@ -487,14 +567,26 @@ class Set {
 	 * @access public
 	 * @param array $array
 	 * @return object
+	 * @throws titon\libs\utility\UtilityException
 	 * @static
 	 */
 	public static function toObject($array) {
-		if (is_object($array) || !is_array($array)) {
+		if (is_object($array)) {
 			return $array;
+
+		} else if (!is_array($array)) {
+			throw new UtilityException('Value passed must be an array.');
 		}
 
-		return (object) array_map([__CLASS__, 'toObject'], $array);
+		$object = (object) $array;
+
+		foreach ($object as $key => $value) {
+			if (is_array($value)) {
+				$object->{$key} = self::toObject($value);
+			}
+		}
+
+		return $object;
 	}
 
 	/**
@@ -515,71 +607,6 @@ class Set {
 		} else {
 			return $set;
 		}
-	}
-
-	/**
-	 * Primary method used for all Set traversal and manipulation.
-	 * Used to insert, remove and extract keys/values from the array, determined by the given dot notated path.
-	 *
-	 * @access public
-	 * @param int $command
-	 * @param array $set
-	 * @param string $path
-	 * @param mixed $value
-	 * @return array
-	 * @static
-	 */
-	public static function traverse($command, $set, $path, $value = null) {
-		if (!is_array($set) || empty($path)) {
-			return $set;
-		}
-
-		$search =& $set;
-		$paths = explode('.', $path);
-		$total = count($paths);
-
-		while ($total > 0) {
-			$key = $paths[0];
-
-			// Within the last path
-			if ($total === 1) {
-				if ($command === self::INSERT) {
-					$search[$key] = $value;
-
-				} else if ($command === self::REMOVE) {
-					unset($search[$key]);
-
-				} else if ($command === self::EXISTS) {
-					return isset($search[$key]);
-
-				} else if ($command === self::EXTRACT) {
-					return isset($search[$key]) ? $search[$key] : null;
-				}
-
-			// Break out of non-existent paths early
-			} else if (isset($search[$key]) && !is_array($search[$key]) && $command !== self::INSERT) {
-				if ($command === self::EXISTS) {
-					return false;
-
-				} else if ($command === self::EXTRACT) {
-					return null;
-
-				} else {
-					return $set;
-				}
-
-			// Merge references
-			} else {
-				$search =& $search[$key];
-			}
-
-			array_shift($paths);
-			$total--;
-		}
-
-		unset($search);
-
-		return $set;
 	}
 
 }
