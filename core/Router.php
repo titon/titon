@@ -13,6 +13,7 @@ use titon\Titon;
 use titon\libs\routes\Route;
 use titon\libs\traits\Cacheable;
 use titon\utility\Inflector;
+use titon\utility\Set;
 
 /**
  * The Router determines the current routing request, based on the URL address and environment.
@@ -395,7 +396,7 @@ class Router {
 	 * @return array
 	 */
 	public function slugs($key) {
-		return isset($this->_slugs[$key]) ? $this->_slugs[$key] : null;
+		return Set::get($this->_slugs, $key);
 	}
 
 }

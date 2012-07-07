@@ -231,14 +231,14 @@ class Debugger {
 			return (int) $arg;
 
 		} else if (is_bool($arg)) {
-			return ($arg === true) ? 'true' : 'false';
+			return $arg ? 'true' : 'false';
 
 		} else if (is_string($arg)) {
 			return "'" . htmlentities($arg, ENT_QUOTES, 'UTF-8') . "'";
 
 		} else if (is_array($arg)) {
 			if ($end === true) {
-				return '[Truncated]';
+				return '[truncated]';
 			} else {
 				$args = [];
 

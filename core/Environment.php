@@ -11,6 +11,7 @@ namespace titon\core;
 
 use titon\core\CoreException;
 use titon\utility\Inflector;
+use titon\utility\Set;
 
 /**
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
@@ -78,13 +79,7 @@ class Environment {
 	 * @return string
 	 */
 	public function current($key = null) {
-		$environment = $this->_environments[$this->_current];
-
-		if (isset($environment[$key])) {
-			return $environment[$key];
-		}
-
-		return $environment;
+		return Set::get($this->_environments[$this->_current], $key);
 	}
 
 	/**
