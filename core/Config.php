@@ -13,7 +13,7 @@ use titon\Titon;
 use titon\core\CoreException;
 use titon\libs\readers\Reader;
 use titon\utility\Inflector;
-use titon\utility\Set;
+use titon\utility\Hash;
 
 /**
  * Stores the current configuration options for the application.
@@ -23,7 +23,7 @@ use titon\utility\Set;
  * @package	titon.core
  * @uses	titon\core\CoreException
  * @uses	titon\utility\Inflector
- * @uses	titon\utility\Set
+ * @uses	titon\utility\Hash
  */
 class Config {
 
@@ -53,7 +53,7 @@ class Config {
 	 * @return mixed
 	 */
 	public function get($key = null) {
-		return Set::get($this->_config, $key);
+		return Hash::get($this->_config, $key);
 	}
 
 	/**
@@ -64,7 +64,7 @@ class Config {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return Set::has($this->_config, $key);
+		return Hash::has($this->_config, $key);
 	}
 
 	/**
@@ -121,7 +121,7 @@ class Config {
 			Titon::debugger()->enable((int) $value > 0);
 		}
 
-		$this->_config = Set::set($this->_config, $key, $value);
+		$this->_config = Hash::set($this->_config, $key, $value);
 
 		return $this;
 	}

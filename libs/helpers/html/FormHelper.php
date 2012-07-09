@@ -12,7 +12,7 @@ namespace titon\libs\helpers\html;
 use titon\Titon;
 use titon\libs\helpers\HelperAbstract;
 use titon\utility\Inflector;
-use titon\utility\Set;
+use titon\utility\Hash;
 
 /**
  * The Formhelper is used for HTML form creation. Data is passed to the associated input fields
@@ -21,7 +21,7 @@ use titon\utility\Set;
  * @package	titon.libs.helpers.html
  * @uses	titon\Titon
  * @uses	titon\utility\Inflector
- * @uses	titon\utility\Set
+ * @uses	titon\utility\Hash
  */
 class FormHelper extends HelperAbstract {
 
@@ -701,7 +701,7 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function value($model, $field) {
-		return Set::extract($this->request->data, $model . '.' . $field);
+		return Hash::extract($this->request->data, $model . '.' . $field);
 	}
 
 	/**

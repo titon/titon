@@ -8,13 +8,13 @@
  */
 
 use titon\tests\TestCase;
-use titon\utility\Set;
+use titon\utility\Hash;
 use titon\utility\UtilityException;
 
 /**
- * Test class for titon\utility\Set.
+ * Test class for titon\utility\Hash.
  */
-class SetTest extends TestCase {
+class HashTest extends TestCase {
 
 	/**
 	 * Multi-dimension array.
@@ -88,23 +88,23 @@ class SetTest extends TestCase {
 		$data4->one = new stdClass();
 		$data4->one->foo = 'bar';
 
-		$this->assertEquals(0, Set::depth([]));
-		$this->assertEquals(8, Set::depth($data));
-		$this->assertEquals(4, Set::depth($data1));
-		$this->assertEquals(2, Set::depth($data2));
-		$this->assertEquals(3, Set::depth($data3));
-		$this->assertEquals(2, Set::depth($data4));
+		$this->assertEquals(0, Hash::depth([]));
+		$this->assertEquals(8, Hash::depth($data));
+		$this->assertEquals(4, Hash::depth($data1));
+		$this->assertEquals(2, Hash::depth($data2));
+		$this->assertEquals(3, Hash::depth($data3));
+		$this->assertEquals(2, Hash::depth($data4));
 
-		$this->assertEquals(0, Set::depth([], true));
-		$this->assertEquals(8, Set::depth($data, true));
-		$this->assertEquals(4, Set::depth($data1, true));
-		$this->assertEquals(2, Set::depth($data2, true));
-		$this->assertEquals(3, Set::depth($data3, true));
-		$this->assertEquals(2, Set::depth($data4, true));
+		$this->assertEquals(0, Hash::depth([], true));
+		$this->assertEquals(8, Hash::depth($data, true));
+		$this->assertEquals(4, Hash::depth($data1, true));
+		$this->assertEquals(2, Hash::depth($data2, true));
+		$this->assertEquals(3, Hash::depth($data3, true));
+		$this->assertEquals(2, Hash::depth($data4, true));
 
 		foreach ([true, false, null, 123, 'foo'] as $type) {
 			try {
-				$this->assertEquals(0, Set::depth($type));
+				$this->assertEquals(0, Hash::depth($type));
 			} catch (UtilityException $e) {
 				$this->assertTrue(true);
 			}
@@ -115,10 +115,10 @@ class SetTest extends TestCase {
 	 * Test that expand() will expand a single-dimension array into a multi-dimension.
 	 */
 	public function testExpand() {
-		$this->assertEquals($this->expanded, Set::expand($this->collapsed));
+		$this->assertEquals($this->expanded, Hash::expand($this->collapsed));
 
 		foreach ([true, false, null, 123, 'foo'] as $type) {
-			$this->assertEquals([], Set::expand($type));
+			$this->assertEquals([], Hash::expand($type));
 		}
 	}
 
@@ -129,17 +129,17 @@ class SetTest extends TestCase {
 		$data = $this->expanded;
 
 		foreach ($this->collapsed as $key => $value) {
-			$this->assertEquals($value, Set::extract($data, $key));
+			$this->assertEquals($value, Hash::extract($data, $key));
 		}
 
-		$this->assertEquals(null, Set::extract($data, null));
-		$this->assertEquals(null, Set::extract($data, 'fake.path'));
-		$this->assertEquals($data['one']['two']['three'], Set::extract($data, 'one.two.three'));
-		$this->assertEquals($data['one']['two']['three']['four']['five']['six'], Set::extract($data, 'one.two.three.four.five.six'));
+		$this->assertEquals(null, Hash::extract($data, null));
+		$this->assertEquals(null, Hash::extract($data, 'fake.path'));
+		$this->assertEquals($data['one']['two']['three'], Hash::extract($data, 'one.two.three'));
+		$this->assertEquals($data['one']['two']['three']['four']['five']['six'], Hash::extract($data, 'one.two.three.four.five.six'));
 
 		foreach ([true, false, null, 123, 'foo'] as $type) {
-			$this->assertEquals(null, Set::extract($type, 'boolean'));
-			$this->assertEquals(null, Set::extract($data, $type));
+			$this->assertEquals(null, Hash::extract($type, 'boolean'));
+			$this->assertEquals(null, Hash::extract($data, $type));
 		}
 	}
 
@@ -153,8 +153,8 @@ class SetTest extends TestCase {
 		$match2 = $data;
 		unset($match1['empty'], $match2['empty'], $match1['one']['two']['three']['false'], $match1['one']['two']['three']['null']);
 
-		$this->assertEquals($match1, Set::filter($data));
-		$this->assertEquals($match2, Set::filter($data, false));
+		$this->assertEquals($match1, Hash::filter($data));
+		$this->assertEquals($match2, Hash::filter($data, false));
 
 		$data = [
 			'true' => true,
@@ -174,7 +174,7 @@ class SetTest extends TestCase {
 			'true' => true,
 			'zero' => 0,
 			'stringZero' => '0'
-		], Set::filter($data));
+		], Hash::filter($data));
 	}
 
 	/**
@@ -184,7 +184,7 @@ class SetTest extends TestCase {
 		$match = $this->collapsed;
 		$match['empty'] = null;
 
-		$this->assertEquals($match, Set::flatten($this->expanded));
+		$this->assertEquals($match, Hash::flatten($this->expanded));
 	}
 
 	/**
@@ -212,7 +212,7 @@ class SetTest extends TestCase {
 			'array' => [
 				'empty' => []
 			]
-		], Set::flip($data));
+		], Hash::flip($data));
 
 		$data = [
 			'foo' => 'bar',
@@ -231,7 +231,7 @@ class SetTest extends TestCase {
 			'two' => '',
 			1 => '',
 			'value' => 'key'
-		], Set::flip($data));
+		], Hash::flip($data));
 
 		$this->assertEquals([
 			1 => 'boolean',
@@ -259,7 +259,7 @@ class SetTest extends TestCase {
 					]
 				]
 			]
-		], Set::flip($this->expanded));
+		], Hash::flip($this->expanded));
 	}
 
 	/**
@@ -268,10 +268,10 @@ class SetTest extends TestCase {
 	public function testGet() {
 		$data = $this->expanded;
 
-		$this->assertEquals($data, Set::get($data));
-		$this->assertEquals(true, Set::get($data, 'boolean'));
-		$this->assertEquals($data['one']['two']['three'], Set::get($data, 'one.two.three'));
-		$this->assertEquals($data['one']['two']['three']['four']['five']['six'], Set::get($data, 'one.two.three.four.five.six'));
+		$this->assertEquals($data, Hash::get($data));
+		$this->assertEquals(true, Hash::get($data, 'boolean'));
+		$this->assertEquals($data['one']['two']['three'], Hash::get($data, 'one.two.three'));
+		$this->assertEquals($data['one']['two']['three']['four']['five']['six'], Hash::get($data, 'one.two.three.four.five.six'));
 	}
 
 	/**
@@ -280,23 +280,23 @@ class SetTest extends TestCase {
 	public function testHas() {
 		$data = $this->expanded;
 
-		$this->assertTrue(Set::has($data, 'boolean'));
-		$this->assertTrue(Set::has($data, 'empty'));
-		$this->assertTrue(Set::has($data, 'one.depth'));
-		$this->assertTrue(Set::has($data, 'one.two.depth'));
-		$this->assertTrue(Set::has($data, 'one.two.three.false'));
-		$this->assertTrue(Set::has($data, 'one.two.three.true'));
-		$this->assertTrue(Set::has($data, 'one.two.three.four.five.six.seven.key'));
-		$this->assertTrue(Set::has($data, 'one.two.three.null'));
+		$this->assertTrue(Hash::has($data, 'boolean'));
+		$this->assertTrue(Hash::has($data, 'empty'));
+		$this->assertTrue(Hash::has($data, 'one.depth'));
+		$this->assertTrue(Hash::has($data, 'one.two.depth'));
+		$this->assertTrue(Hash::has($data, 'one.two.three.false'));
+		$this->assertTrue(Hash::has($data, 'one.two.three.true'));
+		$this->assertTrue(Hash::has($data, 'one.two.three.four.five.six.seven.key'));
+		$this->assertTrue(Hash::has($data, 'one.two.three.null'));
 
-		$this->assertFalse(Set::has($data, 'one.two.three.some.really.deep.depth'));
-		$this->assertFalse(Set::has($data, 'foo'));
-		$this->assertFalse(Set::has($data, 'foo.bar'));
-		$this->assertFalse(Set::has($data, 'empty.key'));
+		$this->assertFalse(Hash::has($data, 'one.two.three.some.really.deep.depth'));
+		$this->assertFalse(Hash::has($data, 'foo'));
+		$this->assertFalse(Hash::has($data, 'foo.bar'));
+		$this->assertFalse(Hash::has($data, 'empty.key'));
 
 		foreach ([true, false, null, 123, 'foo'] as $type) {
-			$this->assertFalse(Set::has($type, 'fake'));
-			$this->assertFalse(Set::has($type, null));
+			$this->assertFalse(Hash::has($type, 'fake'));
+			$this->assertFalse(Hash::has($type, null));
 		}
 	}
 
@@ -307,7 +307,7 @@ class SetTest extends TestCase {
 		$data = [];
 
 		foreach ($this->collapsed as $key => $value) {
-			$data = Set::insert($data, $key, $value);
+			$data = Hash::insert($data, $key, $value);
 		}
 
 		$this->assertEquals($this->expanded, $data);
@@ -317,35 +317,35 @@ class SetTest extends TestCase {
 	 * Test that isAlpha() returns true if all values are strings.
 	 */
 	public function testIsAlpha() {
-		$this->assertTrue(Set::isAlpha(['foo', 'bar']));
-		$this->assertTrue(Set::isAlpha(['foo' => 'bar', 'number' => '123'], false));
-		$this->assertTrue(Set::isAlpha(['bar', '123'], false));
+		$this->assertTrue(Hash::isAlpha(['foo', 'bar']));
+		$this->assertTrue(Hash::isAlpha(['foo' => 'bar', 'number' => '123'], false));
+		$this->assertTrue(Hash::isAlpha(['bar', '123'], false));
 
-		$this->assertFalse(Set::isAlpha(['foo' => 'bar', 'number' => '123']));
-		$this->assertFalse(Set::isAlpha(['bar', '123']));
-		$this->assertFalse(Set::isAlpha(['foo' => 123]));
-		$this->assertFalse(Set::isAlpha([null]));
-		$this->assertFalse(Set::isAlpha([true]));
-		$this->assertFalse(Set::isAlpha([false]));
-		$this->assertFalse(Set::isAlpha([[]]));
-		$this->assertFalse(Set::isAlpha([new stdClass()]));
+		$this->assertFalse(Hash::isAlpha(['foo' => 'bar', 'number' => '123']));
+		$this->assertFalse(Hash::isAlpha(['bar', '123']));
+		$this->assertFalse(Hash::isAlpha(['foo' => 123]));
+		$this->assertFalse(Hash::isAlpha([null]));
+		$this->assertFalse(Hash::isAlpha([true]));
+		$this->assertFalse(Hash::isAlpha([false]));
+		$this->assertFalse(Hash::isAlpha([[]]));
+		$this->assertFalse(Hash::isAlpha([new stdClass()]));
 	}
 
 	/**
 	 * Test that isNumeric() returns true if all values are numbers.
 	 */
 	public function testIsNumeric() {
-		$this->assertTrue(Set::isNumeric(['123', 456]));
-		$this->assertTrue(Set::isNumeric(['foo' => 123, 'number' => '456']));
+		$this->assertTrue(Hash::isNumeric(['123', 456]));
+		$this->assertTrue(Hash::isNumeric(['foo' => 123, 'number' => '456']));
 
-		$this->assertFalse(Set::isNumeric(['foo', 'bar']));
-		$this->assertFalse(Set::isNumeric(['foo' => 'bar', 'number' => '123']));
-		$this->assertFalse(Set::isNumeric(['bar', '123']));
-		$this->assertFalse(Set::isNumeric([null]));
-		$this->assertFalse(Set::isNumeric([true]));
-		$this->assertFalse(Set::isNumeric([false]));
-		$this->assertFalse(Set::isNumeric([[]]));
-		$this->assertFalse(Set::isNumeric([new stdClass()]));
+		$this->assertFalse(Hash::isNumeric(['foo', 'bar']));
+		$this->assertFalse(Hash::isNumeric(['foo' => 'bar', 'number' => '123']));
+		$this->assertFalse(Hash::isNumeric(['bar', '123']));
+		$this->assertFalse(Hash::isNumeric([null]));
+		$this->assertFalse(Hash::isNumeric([true]));
+		$this->assertFalse(Hash::isNumeric([false]));
+		$this->assertFalse(Hash::isNumeric([[]]));
+		$this->assertFalse(Hash::isNumeric([new stdClass()]));
 	}
 
 	/**
@@ -366,7 +366,7 @@ class SetTest extends TestCase {
 			'null' => null,
 			'array' => [],
 			'number' => 123
-		], Set::map($data, 'strtoupper'));
+		], Hash::map($data, 'strtoupper'));
 
 		$this->assertEquals([
 			'foo' => 0,
@@ -374,7 +374,7 @@ class SetTest extends TestCase {
 			'null' => 0,
 			'array' => [],
 			'number' => 123
-		], Set::map($data, 'intval'));
+		], Hash::map($data, 'intval'));
 
 		$this->assertEquals([
 			'foo' => 'string',
@@ -382,7 +382,7 @@ class SetTest extends TestCase {
 			'null' => 'null',
 			'array' => [],
 			'number' => 'number'
-		], Set::map($data, function($value) {
+		], Hash::map($data, function($value) {
 			if (is_numeric($value)) {
 				return 'number';
 			} else if (is_bool($value)) {
@@ -401,8 +401,8 @@ class SetTest extends TestCase {
 	 * Test that matches() returns true if 2 arrays are strict equal.
 	 */
 	public function testMatches() {
-		$this->assertTrue(Set::matches($this->expanded, $this->expanded));
-		$this->assertTrue(Set::matches([
+		$this->assertTrue(Hash::matches($this->expanded, $this->expanded));
+		$this->assertTrue(Hash::matches([
 			'foo' => 123,
 			'bar' => 'baz',
 			'array' => []
@@ -412,8 +412,8 @@ class SetTest extends TestCase {
 			'array' => []
 		]));
 
-		$this->assertFalse(Set::matches($this->expanded, $this->collapsed));
-		$this->assertFalse(Set::matches([
+		$this->assertFalse(Hash::matches($this->expanded, $this->collapsed));
+		$this->assertFalse(Hash::matches([
 			'foo' => '123',
 			'bar' => 'baz',
 			'array' => []
@@ -424,7 +424,7 @@ class SetTest extends TestCase {
 		]));
 
 		foreach ([true, false, null, 123, 'foo'] as $type) {
-			$this->assertFalse(Set::matches($this->expanded, $type));
+			$this->assertFalse(Hash::matches($this->expanded, $type));
 		}
 	}
 
@@ -455,7 +455,7 @@ class SetTest extends TestCase {
 			'number' => 456,
 			'one',
 			'two'
-		], Set::merge($data1, $data2));
+		], Hash::merge($data1, $data2));
 
 		$data1['array'] = [
 			'key' => 'value',
@@ -477,7 +477,7 @@ class SetTest extends TestCase {
 				123,
 				true
 			]
-		], Set::merge($data1, $data2));
+		], Hash::merge($data1, $data2));
 
 		$data2['array'] = [
 			'key' => 'base',
@@ -499,7 +499,7 @@ class SetTest extends TestCase {
 				true
 			],
 			'one'
-		], Set::merge($data2, $data1));
+		], Hash::merge($data2, $data1));
 	}
 
 	/**
@@ -531,24 +531,24 @@ class SetTest extends TestCase {
 				'boolean' => false,
 				'left' => 'left'
 			]
-		], Set::overwrite($data1, $data2));
+		], Hash::overwrite($data1, $data2));
 	}
 
 	/**
 	 * Test that range() generates an array of numbers based on the start and stop values.
 	 */
 	public function testRange() {
-		$this->assertEquals([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], Set::range(0, 10));
-		$this->assertEquals([0 => 0, 2 => 2, 4 => 4, 6 => 6, 8 => 8, 10 => 10], Set::range(0, 10, 2));
-		$this->assertEquals([0 => 0, 3 => 3, 6 => 6, 9 => 9], Set::range(0, 10, 3));
-		$this->assertEquals([0 => 0, 13 => 13, 26 => 26, 39 => 39, 52 => 52, 65 => 65, 78 => 78, 91 => 91], Set::range(0, 100, 13));
-		$this->assertEquals([23 => 23, 29 => 29, 35 => 35, 41 => 41, 47 => 47, 53 => 53, 59 => 59, 65 => 65], Set::range(23, 66, 6));
+		$this->assertEquals([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], Hash::range(0, 10));
+		$this->assertEquals([0 => 0, 2 => 2, 4 => 4, 6 => 6, 8 => 8, 10 => 10], Hash::range(0, 10, 2));
+		$this->assertEquals([0 => 0, 3 => 3, 6 => 6, 9 => 9], Hash::range(0, 10, 3));
+		$this->assertEquals([0 => 0, 13 => 13, 26 => 26, 39 => 39, 52 => 52, 65 => 65, 78 => 78, 91 => 91], Hash::range(0, 100, 13));
+		$this->assertEquals([23 => 23, 29 => 29, 35 => 35, 41 => 41, 47 => 47, 53 => 53, 59 => 59, 65 => 65], Hash::range(23, 66, 6));
 
-		$this->assertEquals([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], Set::range(0, 10, 1, false));
-		$this->assertEquals([0, 2, 4, 6, 8, 10], Set::range(0, 10, 2, false));
-		$this->assertEquals([0, 3, 6, 9], Set::range(0, 10, 3, false));
-		$this->assertEquals([0, 13, 26, 39, 52, 65, 78, 91], Set::range(0, 100, 13, false));
-		$this->assertEquals([23, 29, 35, 41, 47, 53, 59, 65], Set::range(23, 66, 6, false));
+		$this->assertEquals([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], Hash::range(0, 10, 1, false));
+		$this->assertEquals([0, 2, 4, 6, 8, 10], Hash::range(0, 10, 2, false));
+		$this->assertEquals([0, 3, 6, 9], Hash::range(0, 10, 3, false));
+		$this->assertEquals([0, 13, 26, 39, 52, 65, 78, 91], Hash::range(0, 100, 13, false));
+		$this->assertEquals([23, 29, 35, 41, 47, 53, 59, 65], Hash::range(23, 66, 6, false));
 	}
 
 	/**
@@ -559,29 +559,29 @@ class SetTest extends TestCase {
 		$match = $data;
 
 		unset($match['boolean']);
-		$data = Set::remove($data, 'boolean');
+		$data = Hash::remove($data, 'boolean');
 		$this->assertEquals($match, $data);
 
 		unset($match['one']['depth']);
-		$data = Set::remove($data, 'one.depth');
+		$data = Hash::remove($data, 'one.depth');
 		$this->assertEquals($match, $data);
 
 		unset($match['one']['two']['depth']);
-		$data = Set::remove($data, 'one.two.depth');
+		$data = Hash::remove($data, 'one.two.depth');
 		$this->assertEquals($match, $data);
 
 		unset($match['one']['two']['three']['depth'], $match['one']['two']['three']['zero'], $match['one']['two']['three']['null']);
-		$data = Set::remove($data, 'one.two.three.depth');
-		$data = Set::remove($data, 'one.two.three.zero');
-		$data = Set::remove($data, 'one.two.three.null');
+		$data = Hash::remove($data, 'one.two.three.depth');
+		$data = Hash::remove($data, 'one.two.three.zero');
+		$data = Hash::remove($data, 'one.two.three.null');
 		$this->assertEquals($match, $data);
 
 		unset($match['one']['two']['three']['four']['five']['six']['seven']['key']);
-		$data = Set::remove($data, 'one.two.three.four.five.six.seven.key');
+		$data = Hash::remove($data, 'one.two.three.four.five.six.seven.key');
 		$this->assertEquals($match, $data);
 
 		foreach ([true, false, null, 123, 'foo'] as $type) {
-			$data = Set::remove($data, $type);
+			$data = Hash::remove($data, $type);
 			$this->assertEquals($match, $data);
 		}
 	}
@@ -593,15 +593,15 @@ class SetTest extends TestCase {
 		$data = $this->expanded;
 		$match = $data;
 
-		$data = Set::set($data, 'key', 'value');
+		$data = Hash::set($data, 'key', 'value');
 		$match['key'] = 'value';
 		$this->assertEquals($match, $data);
 
-		$data = Set::set($data, 'key.key', 'value');
+		$data = Hash::set($data, 'key.key', 'value');
 		$match['key'] = ['key' => 'value'];
 		$this->assertEquals($match, $data);
 
-		$data = Set::set($data, array(
+		$data = Hash::set($data, array(
 			'key.key.key' => 'value',
 			'true' => true,
 			'one.false' => false
@@ -632,11 +632,11 @@ class SetTest extends TestCase {
 			]
 		];
 
-		$this->assertEquals($array, Set::toArray($object));
+		$this->assertEquals($array, Hash::toArray($object));
 
 		foreach ([true, false, null, 123, 'foo'] as $type) {
 			try {
-				$this->assertEquals($array, Set::toArray($type));
+				$this->assertEquals($array, Hash::toArray($type));
 			} catch (UtilityException $e) {
 				$this->assertTrue(true);
 			}
@@ -663,11 +663,11 @@ class SetTest extends TestCase {
 			]
 		];
 
-		$this->assertEquals($object, Set::toObject($array));
+		$this->assertEquals($object, Hash::toObject($array));
 
 		foreach ([true, false, null, 123, 'foo'] as $type) {
 			try {
-				$this->assertEquals($object, Set::toObject($type));
+				$this->assertEquals($object, Hash::toObject($type));
 			} catch (UtilityException $e) {
 				$this->assertTrue(true);
 			}

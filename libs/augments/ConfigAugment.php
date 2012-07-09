@@ -10,7 +10,7 @@
 namespace titon\libs\augments;
 
 use titon\libs\augments\AugmentException;
-use titon\utility\Set;
+use titon\utility\Hash;
 use \ArrayAccess;
 use \Iterator;
 
@@ -20,7 +20,7 @@ use \Iterator;
  * which can be used to autobox values anytime a config is written.
  *
  * @package	titon.libs.augments
- * @uses	titon\utility\Set
+ * @uses	titon\utility\Hash
  */
 class ConfigAugment implements ArrayAccess, Iterator {
 
@@ -126,7 +126,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 		} else if (isset($this->_config[$key])) {
 			return $this->_config[$key];
 
-		} else if ($value = Set::extract($this->_config, $key)) {
+		} else if ($value = Hash::extract($this->_config, $key)) {
 			return $value;
 		}
 
@@ -147,7 +147,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 				$this->set($k, $v);
 			}
 		} else {
-			if (($default = Set::extract($this->_defaults, $key)) !== null) {
+			if (($default = Hash::extract($this->_defaults, $key)) !== null) {
 				if (is_float($default)) {
 					$value = (float) $value;
 				} else if (is_numeric($default)) {
@@ -159,7 +159,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 				}
 			}
 
-			$this->_config = Set::insert($this->_config, $key, $value);
+			$this->_config = Hash::insert($this->_config, $key, $value);
 		}
 
 		return $this;

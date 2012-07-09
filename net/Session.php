@@ -12,7 +12,7 @@ namespace titon\net;
 use titon\Titon;
 use titon\base\Base;
 use titon\libs\adapters\SessionAdapter;
-use titon\utility\Set;
+use titon\utility\Hash;
 
 /**
  * Primary library class to manage all session data. Applies appropriate ini settings depending on the environment setting.
@@ -20,7 +20,7 @@ use titon\utility\Set;
  *
  * @package	titon.net
  * @uses	titon\Titon
- * @uses	titon\utility\Set
+ * @uses	titon\utility\Hash
  */
 class Session extends Base {
 
@@ -94,7 +94,7 @@ class Session extends Base {
 	 * @return mixed
 	 */
 	public function get($key = null) {
-		return Set::get($_SESSION, $key);
+		return Hash::get($_SESSION, $key);
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Session extends Base {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return Set::has($_SESSION, $key);
+		return Hash::has($_SESSION, $key);
 	}
 
 	/**
@@ -195,7 +195,7 @@ class Session extends Base {
 	 * @chainable
 	 */
 	public function remove($key) {
-		$_SESSION = Set::remove($_SESSION, $key);
+		$_SESSION = Hash::remove($_SESSION, $key);
 
 		return $this;
 	}
@@ -210,7 +210,7 @@ class Session extends Base {
 	 * @chainable
 	 */
 	public function set($key, $value = null) {
-		$_SESSION = Set::set($_SESSION, $key, $value);
+		$_SESSION = Hash::set($_SESSION, $key, $value);
 
 		return $this;
 	}

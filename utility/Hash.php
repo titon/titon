@@ -16,7 +16,7 @@ use titon\utility\UtilityException;
  *
  * @package	titon.utility
  */
-class Set {
+class Hash {
 
 	/**
 	 * Determines the total depth of a multi-dimensional array or object.
