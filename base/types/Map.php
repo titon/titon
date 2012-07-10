@@ -41,9 +41,11 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 */
 	public function append($value) {
 		if (is_array($value)) {
-			$this->_value = $this->_value + $value;
+			foreach ($value as $v) {
+				$this->append($v);
+			}
 		} else {
-			$this->_value[] = $value;
+			array_push($this->_value, $value);
 		}
 
 		return $this;
@@ -55,13 +57,10 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @access public
 	 * @param int $size
 	 * @param boolean $preserve
-	 * @return titon\base\types\Map
-	 * @chainable
+	 * @return array
 	 */
 	public function chunk($size, $preserve = false) {
-		$this->_value = array_chunk($this->_value, (int) $size, $preserve);
-
-		return $this;
+		return array_chunk($this->_value, (int) $size, $preserve);
 	}
 
 	/**
@@ -90,63 +89,80 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * the keys must match as well as the values. A callback can be passed to
 	 * further filter down the results.
 	 *
-	 * @access public
-	 * @param array $array
-	 * @param boolean $strict
-	 * @param Closure $callback
-	 * @return array
-	 */
-	public function compare(array $array, $strict = true, Closure $callback = null) {
-		if ($strict) {
-			if ($callback !== null) {
-				return array_intersect_uassoc($this->_value, $array, $callback);
-			} else {
-				return array_intersect_assoc($this->_value, $array);
-			}
-		}
-
-		return array_intersect($this->_value, $array);
-	}
-
-	/**
-	 * Works exactly to compare() except that it uses a callback to validate the values.
-	 * A second callback can be used to also compared against the array key.
-	 *
-	 * @access public
-	 * @param array $array
-	 * @param boolean $strict
-	 * @param Closure $callback
-	 * @param Closure $keyCallback
-	 * @return array
-	 */
-	public function compareByCallback(array $array, $strict, Closure $callback, Closure $keyCallback = null) {
-		if ($strict) {
-			if ($keyCallback !== null) {
-				return array_uintersect_uassoc($this->_value, $array, $callback, $keyCallback);
-			} else {
-				return array_uintersect_assoc($this->_value, $array, $callback);
-			}
-		}
-
-		return array_uintersect($this->_value, $array, $callback);
-	}
-
-	/**
+	 * If options:on equals "keys":
 	 * Compares the current array against the passed array and returns a new array
 	 * with all the values where keys are matched in both arrays.
 	 * Only differences from the class instance is returned.
 	 *
+	 * If options:valueCallback is set:
+	 * Works exactly like default compare() except that it uses a callback to validate the values.
+	 * A second callback can be used to also compared against the array key.
+	 *
 	 * @access public
 	 * @param array $array
-	 * @param Closure $callback
+	 * @param mixed $options
+	 * 		- strict: Will validate the array keys as well
+	 * 		- callback: Closure to compare keys with
+	 * 		- valeCallback: Closure to compare values with
+	 * 		- on: Either "keys" or "values"
 	 * @return array
 	 */
-	public function compareKeys(array $array, Closure $callback = null) {
-		if ($callback !== null) {
-			return array_intersect_ukey($this->_value, $array, $callback);
+	public function compare(array $array, $options = []) {
+		if ($options instanceof Closure) {
+			$options = array('callback' => $options);
+
+		} else if (is_bool($options)) {
+			$options = array('strict' => $options);
 		}
 
-		return array_intersect_key($this->_value, $array);
+		$options = (array) $options + array(
+			'strict' => true,
+			'callback' => null,
+			'valueCallback' => null,
+			'on' => 'values'
+		);
+
+		$callback = $options['callback'];
+		$valueCallback = $options['valueCallback'];
+
+		// Values
+		if ($options['on'] === 'values') {
+
+			// Compare with callback
+			if ($valueCallback instanceof Closure) {
+				if ($callback instanceof Closure) {
+					return array_uintersect_uassoc($this->_value, $array, $valueCallback, $callback);
+
+				} else if ($options['strict']) {
+					return array_uintersect_assoc($this->_value, $array, $valueCallback);
+
+				} else {
+					return array_uintersect($this->_value, $array, $valueCallback);
+				}
+
+			// Compare regular
+			} else {
+				if ($options['strict']) {
+					if ($callback instanceof Closure) {
+						return array_intersect_uassoc($this->_value, $array, $callback);
+
+					} else {
+						return array_intersect_assoc($this->_value, $array);
+					}
+				} else {
+					return array_intersect($this->_value, $array);
+				}
+			}
+
+		// Keys
+		} else {
+			if ($callback instanceof Closure) {
+				return array_intersect_ukey($this->_value, $array, $callback);
+
+			} else {
+				return array_intersect_key($this->_value, $array);
+			}
+		}
 	}
 
 	/**
@@ -204,63 +220,80 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * the keys must match as well as the values. A callback can be passed to
 	 * further filter down the results.
 	 *
-	 * @access public
-	 * @param array $array
-	 * @param boolean $strict
-	 * @param Closure $callback
-	 * @return array
-	 */
-	public function difference(array $array, $strict = true, Closure $callback = null) {
-		if ($strict) {
-			if ($callback !== null) {
-				return array_diff_uassoc($this->_value, $array, $callback);
-			} else {
-				return array_diff_assoc($this->_value, $array);
-			}
-		}
-
-		return array_diff($this->_value, $array);
-	}
-
-	/**
-	 * Works exactly to difference() except that it uses a callback to validate the values.
-	 * A second callback can be used to also compared against the array key.
-	 *
-	 * @access public
-	 * @param array $array
-	 * @param boolean $strict
-	 * @param Closure $callback
-	 * @param Closure $keyCallback
-	 * @return array
-	 */
-	public function differenceByCallback(array $array, $strict, Closure $callback, Closure $keyCallback = null) {
-		if ($strict) {
-			if ($keyCallback !== null) {
-				return array_udiff_uassoc($this->_value, $array, $callback, $keyCallback);
-			} else {
-				return array_udiff_assoc($this->_value, $array, $callback);
-			}
-		}
-
-		return array_udiff($this->_value, $array, $callback);
-	}
-
-	/**
+	 * If options:on equals "keys":
 	 * Compares the current array against the passed array and returns a new array
 	 * with all the values where keys are not matched in both arrays.
 	 * Only differences from the class instance is returned.
 	 *
+	 * If options:valueCallback is set:
+	 * Works exactly like default difference() except that it uses a callback to validate the values.
+	 * A second callback can be used to also compared against the array key.
+	 *
 	 * @access public
 	 * @param array $array
-	 * @param Closure $callback
+	 * @param mixed $options
+	 * 		- strict: Will validate the array keys as well
+	 * 		- callback: Closure to compare keys with
+	 * 		- valeCallback: Closure to compare values with
+	 * 		- on: Either "keys" or "values"
 	 * @return array
 	 */
-	public function differenceKeys(array $array, Closure $callback = null) {
-		if ($callback !== null) {
-			return array_diff_ukey($this->_value, $array, $callback);
+	public function difference(array $array, $options = []) {
+		if ($options instanceof Closure) {
+			$options = array('callback' => $options);
+
+		} else if (is_bool($options)) {
+			$options = array('strict' => $options);
 		}
 
-		return array_diff_key($this->_value, $array);
+		$options = (array) $options + array(
+			'strict' => true,
+			'callback' => null,
+			'valueCallback' => null,
+			'on' => 'values'
+		);
+
+		$callback = $options['callback'];
+		$valueCallback = $options['valueCallback'];
+
+		// Values
+		if ($options['on'] === 'values') {
+
+			// Compare with callback
+			if ($valueCallback instanceof Closure) {
+				if ($callback instanceof Closure) {
+					return array_udiff_uassoc($this->_value, $array, $valueCallback, $callback);
+
+				} else if ($options['strict']) {
+					return array_udiff_assoc($this->_value, $array, $valueCallback);
+
+				} else {
+					return array_udiff($this->_value, $array, $valueCallback);
+				}
+
+			// Compare regular
+			} else {
+				if ($options['strict']) {
+					if ($callback instanceof Closure) {
+						return array_diff_uassoc($this->_value, $array, $callback);
+
+					} else {
+						return array_diff_assoc($this->_value, $array);
+					}
+				} else {
+					return array_diff($this->_value, $array);
+				}
+			}
+
+			// Keys
+		} else {
+			if ($callback instanceof Closure) {
+				return array_diff_ukey($this->_value, $array, $callback);
+
+			} else {
+				return array_diff_key($this->_value, $array);
+			}
+		}
 	}
 
 	/**
@@ -695,28 +728,79 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	/**
-	 * Sort the values in the array based on a specific flag. Set $reverse to true to sort in reverse.
-	 * If $preserve is true, the indices will be left in tact.
+	 * Sort the values in the array based on the supplied options.
 	 *
 	 * @access public
-	 * @param boolean $reverse
-	 * @param boolean $preserve
-	 * @param int $flags
+	 * @param mixed $options
+	 * 		- reverse: Will reverse sort
+	 * 		- preserve: Indices will be left in tact
+	 * 		- flags: Sorting flags
+	 * 		- callback: Closure callback to sort with
+	 * 		- on: Either "keys" or "values"
 	 * @return titon\base\types\Map
 	 * @chainable
 	 */
-	public function sort($reverse = false, $preserve = true, $flags = SORT_REGULAR) {
-		if ($reverse) {
-			if ($preserve) {
-				arsort($this->_value, $flags);
+	public function sort($options = []) {
+		if ($options instanceof Closure) {
+			$options = array('callback' => $options);
+
+		} else if (is_bool($options)) {
+			$options = array('reverse' => $options);
+		}
+
+		$options = $options + array(
+			'reverse' => false,
+			'preserve' => true,
+			'flags' => SORT_REGULAR,
+			'callback' => null,
+			'on' => 'values'
+		);
+
+		$flags = $options['flags'];
+		$preserve = $options['preserve'];
+
+		// Sort by callback
+		if ($options['callback'] instanceof Closure) {
+
+			// Sort keys by callback
+			if ($options['on'] === 'keys') {
+				uksort($this->_value, $options['callback']);
+
+			// Sort values by callback
 			} else {
-				rsort($this->_value, $flags);
+				if ($preserve) {
+					uasort($this->_value, $options['callback']);
+				} else {
+					usort($this->_value, $options['callback']);
+				}
 			}
+
+		// Sort regular
 		} else {
-			if ($preserve) {
-				asort($this->_value, $flags);
+
+			// Sort by keys
+			if ($options['on'] === 'keys') {
+				if ($options['reverse']) {
+					krsort($this->_value, $flags);
+				} else {
+					ksort($this->_value, $flags);
+				}
+
+			// Sort by values
 			} else {
-				sort($this->_value, $flags);
+				if ($options['reverse']) {
+					if ($preserve) {
+						arsort($this->_value, $flags);
+					} else {
+						rsort($this->_value, $flags);
+					}
+				} else {
+					if ($preserve) {
+						asort($this->_value, $flags);
+					} else {
+						sort($this->_value, $flags);
+					}
+				}
 			}
 		}
 
@@ -724,60 +808,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	/**
-	 * Sort the values in the array using a custom defined callback.
-	 * If $preserve is true, the indices will be left in tact.
-	 *
-	 * @access public
-	 * @param Closure $callback
-	 * @param boolean $preserve
-	 * @return titon\base\types\Map
-	 * @chainable
-	 */
-	public function sortByCallback(Closure $callback, $preserve = true) {
-		if ($preserve) {
-			uasort($this->_value, $callback);
-		} else {
-			usort($this->_value, $callback);
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Sort the keys in the array based on a specific flag. Set $reverse to true to sort in reverse.
-	 *
-	 * @access public
-	 * @param boolean $reverse
-	 * @param int $flags
-	 * @return titon\base\types\Map
-	 * @chainable
-	 */
-	public function sortKeys($reverse = false, $flags = SORT_REGULAR) {
-		if ($reverse) {
-			krsort($this->_value, $flags);
-		} else {
-			ksort($this->_value, $flags);
-		}
-
-		return $this;
-	}
-
-	/**
-	 * Sort the keys in the array using a custom defined callback.
-	 *
-	 * @access public
-	 * @param Closure $callback
-	 * @return titon\base\types\Map
-	 * @chainable
-	 */
-	public function sortKeysByCallback(Closure $callback) {
-		uksort($this->_value, $callback);
-
-		return $this;
-	}
-
-	/**
-	 * Sort the array using a natural algorythm. This function implements a sort algorithm that orders
+	 * Sort the array using a natural algorithm. This function implements a sort algorithm that orders
 	 * alphanumeric strings in the way a human being would while maintaining key/value associations.
 	 *
 	 * @access public
