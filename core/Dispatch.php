@@ -43,7 +43,7 @@ class Dispatch {
 	 * @return void
 	 */
 	public function run() {
-		$params = Titon::router()->current()->getParams();
+		$params = Titon::router()->current()->param();
 		$dispatcher = null;
 
 		if (!empty($this->_mapping)) {
@@ -52,15 +52,15 @@ class Dispatch {
 			if (isset($this->_mapping[$params['module'] . '.' . $params['controller']])) {
 				$dispatcher = $this->_mapping[$params['module'] . '.' . $params['controller']];
 
-			// All controllers within a specific container
+			// All controllers within a specific module
 			} else if (isset($this->_mapping[$params['module'] . '.*'])) {
 				$dispatcher = $this->_mapping[$params['module'] . '.*'];
 
-			// Specific controller within any container
+			// Specific controller within any module
 			} else if (isset($this->_mapping['*.' . $params['controller']])) {
 				$dispatcher = $this->_mapping['*.' . $params['controller']];
 
-			// Apply to all controllers and containers
+			// Apply to all controllers and modules
 			} else if (isset($this->_mapping['*.*'])) {
 				$dispatcher = $this->_mapping['*.*'];
 			}
@@ -69,7 +69,7 @@ class Dispatch {
 		if ($dispatcher instanceof Dispatcher) {
 			$dispatcher->config->set($params);
 
-		} else if (Titon::environment()->isDevelopment()) {
+		} else if (Titon::env()->isDevelopment()) {
 			$dispatcher = new FrontDevDispatcher($params);
 
 		} else {
@@ -95,11 +95,11 @@ class Dispatch {
 		];
 
 		if ($scope['module'] !== '*') {
-			$scope['module'] = Inflector::slug($scope['module']);
+			$scope['module'] = Inflector::route($scope['module']);
 		}
 
 		if ($scope['controller'] !== '*') {
-			$scope['controller'] = Inflector::slug($scope['controller']);
+			$scope['controller'] = Inflector::route($scope['controller']);
 		}
 
 		$this->_mapping[$scope['module'] . '.' . $scope['controller']] = $dispatcher;

@@ -233,7 +233,7 @@ class Router {
 	public function detect($url) {
 		if (is_array($url)) {
 			if (isset($url['slug'])) {
-				$route = $this->slugs($url['slug']);
+				$route = $this->slug($url['slug']);
 
 				// Use array_merge to not remove numerical indices
 				if ($route) {
@@ -246,7 +246,7 @@ class Router {
 			} else {
 				$route = $url;
 			}
-		} else if ($slug = $this->slugs($url)) {
+		} else if ($slug = $this->slug($url)) {
 			$route = $slug;
 		} else {
 			$route = $url;
@@ -395,7 +395,7 @@ class Router {
 	 * @param string $key
 	 * @return array
 	 */
-	public function slugs($key) {
+	public function slug($key) {
 		return Hash::get($this->_slugs, $key);
 	}
 

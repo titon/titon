@@ -52,7 +52,7 @@ Names
 Properties and methods
 
 * Should be written in camelBack
-* Should be verbs
+* Should be verbs or the name of the property they are interacting with
 * Protected visibility should begin with a single underscore
 * Private visibility should begin with a double underscore
 * All properties should be protected excluding rare cases
@@ -102,7 +102,6 @@ Getters and setters should use singular words when dealing with a single record,
 Reserved names.
 
 * initialize() - Triggered immediately during class __construct() if extending titon\base\Base
-* decorate() - Used to initialize traits within classes
 * current() - Used to return the current instance from a collection
 * startup()
 * shutdown()

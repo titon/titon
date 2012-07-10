@@ -58,7 +58,7 @@ class DebuggerTest extends TestCase {
 		$this->assertEquals("'" . htmlentities('<b>string</b>') . "'", $this->object->parseArg('<b>string</b>'));
 		$this->assertEquals('[]', $this->object->parseArg([]));
 		$this->assertEquals("[123, 'foo', null, true]", $this->object->parseArg([123, 'foo', null, true]));
-		$this->assertEquals("[Truncated]", $this->object->parseArg([123, 'foo', null, true], true));
+		$this->assertEquals("[truncated]", $this->object->parseArg([123, 'foo', null, true], true));
 	}
 
 	/**

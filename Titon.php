@@ -102,7 +102,7 @@ class Titon {
 		self::install('registry', new Registry(), true);
 		self::install('router', new Router(), true);
 		self::install('g11n', new G11n(), true);
-		self::install('environment', new Environment(), true);
+		self::install('env', new Environment(), true);
 		self::install('event', new Event(), true);
 		self::install('dispatch', new Dispatch(), true);
 	}

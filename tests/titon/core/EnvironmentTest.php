@@ -20,7 +20,7 @@ class EnvironmentTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->object = Titon::environment();
+		$this->object = Titon::env();
 		$this->object->setup('dev', Environment::DEVELOPMENT, ['dev', '123.0.0.0']);
 		$this->object->setup('prod', Environment::PRODUCTION, ['prod', '123.456.0.0']);
 		$this->object->setup('staging', Environment::STAGING, ['staging', '123.456.789.0']);

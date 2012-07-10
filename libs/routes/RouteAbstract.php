@@ -14,6 +14,7 @@ use titon\base\Base;
 use titon\libs\routes\Route;
 use titon\libs\routes\RouteException;
 use titon\libs\traits\Attachable;
+use titon\utility\Hash;
 
 /**
  * Represents the skeleton for an individual route. A route matches an internal URL that gets analyzed into multiple parts:
@@ -169,27 +170,6 @@ abstract class RouteAbstract extends Base implements Route {
 	}
 
 	/**
-	 * Grab a param from the route.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return string|null
-	 */
-	public function getParam($key = null) {
-		return isset($this->_route[$key]) ? $this->_route[$key] : null;
-	}
-
-	/**
-	 * Return all route params.
-	 *
-	 * @access public
-	 * @return string|null
-	 */
-	public function getParams() {
-		return $this->_route;
-	}
-
-	/**
 	 * Compile the route and attach the request object.
 	 *
 	 * @access public
@@ -341,6 +321,17 @@ abstract class RouteAbstract extends Base implements Route {
 	 */
 	public function match($url) {
 		return ($this->isMatch($url) && $this->isMethod() && $this->isSecure());
+	}
+
+	/**
+	 * Grab a param from the route, or return all params.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return string|null
+	 */
+	public function param($key = null) {
+		return Hash::get($this->_route, $key);
 	}
 
 }

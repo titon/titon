@@ -176,8 +176,8 @@ class RouterTest extends TestCase {
 	 * Test that slugs() returns the fully qualified route array for the matching key.
 	 */
 	public function testSlugs() {
-		$this->assertEquals(null, $this->object->slugs('fakeSlug'));
-		$this->assertEquals('/some/static/url', $this->object->slugs('stringUrl'));
+		$this->assertEquals(null, $this->object->slug('fakeSlug'));
+		$this->assertEquals('/some/static/url', $this->object->slug('stringUrl'));
 
 		$this->assertEquals([
 			'module' => 'module',
@@ -186,7 +186,7 @@ class RouterTest extends TestCase {
 			'ext' => '',
 			'query' => [],
 			'args' => []
-		], $this->object->slugs('module'));
+		], $this->object->slug('module'));
 
 		$this->assertEquals([
 			'module' => 'pages',
@@ -195,7 +195,7 @@ class RouterTest extends TestCase {
 			'ext' => '',
 			'query' => [],
 			'args' => []
-		], $this->object->slugs('controller'));
+		], $this->object->slug('controller'));
 
 		$this->assertEquals([
 			'module' => 'pages',
@@ -204,7 +204,7 @@ class RouterTest extends TestCase {
 			'ext' => '',
 			'query' => [],
 			'args' => []
-		], $this->object->slugs('action'));
+		], $this->object->slug('action'));
 
 		$this->assertEquals([
 			'module' => 'pages',
@@ -215,7 +215,7 @@ class RouterTest extends TestCase {
 			'args' => [],
 			123,
 			'abc'
-		], $this->object->slugs('extArgs'));
+		], $this->object->slug('extArgs'));
 
 		$this->assertEquals([
 			'module' => 'pages',
@@ -226,7 +226,7 @@ class RouterTest extends TestCase {
 			'args' => [],
 			'foo' => 'bar',
 			'#' => 'fragment'
-		], $this->object->slugs('queryFragment'));
+		], $this->object->slug('queryFragment'));
 	}
 
 	/**
