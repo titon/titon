@@ -112,6 +112,76 @@ class HashTest extends TestCase {
 	}
 
 	/**
+	 * Test that each() runs the callback on every value.
+	 */
+	public function testEach() {
+		$data = [
+			'integer' => 123,
+			'number' => '456',
+			'foo' => 'bar',
+			'string' => 'test',
+			'boolean' => true,
+			'array' => [
+				525,
+				'boo'
+			]
+		];
+
+		$this->assertEquals([
+			'integer' => 246,
+			'number' => 912,
+			'foo' => 'barwtf',
+			'string' => 'testwtf',
+			'boolean' => true,
+			'array' => [
+				1050,
+				'boowtf'
+			]
+		], Hash::each($data, function($value, $key) {
+			if (is_numeric($value)) {
+				return $value * 2;
+			} else if (is_string($value)) {
+				return $value . 'wtf';
+			}
+
+			return $value;
+		}));
+
+		$this->assertEquals([
+			'integer' => 246,
+			'number' => 912,
+			'foo' => 'barwtf',
+			'string' => 'testwtf',
+			'boolean' => true,
+			'array' => [
+				525,
+				'boo'
+			]
+		], Hash::each($data, function($value, $key) {
+			if (is_numeric($value)) {
+				return $value * 2;
+			} else if (is_string($value)) {
+				return $value . 'wtf';
+			}
+
+			return $value;
+		}, false));
+	}
+
+	/**
+	 * Test that every() returns true if all elements pass the callback.
+	 */
+	public function testEvery() {
+		$callback = function($value, $key) {
+			return is_int($value);
+		};
+
+		$this->assertTrue(Hash::every([ 123, 456 ], $callback));
+		$this->assertFalse(Hash::every([ 123, '456' ], $callback));
+		$this->assertFalse(Hash::every([ 123, '456', 'foo' ], $callback));
+	}
+
+	/**
 	 * Test that expand() will expand a single-dimension array into a multi-dimension.
 	 */
 	public function testExpand() {
@@ -301,6 +371,17 @@ class HashTest extends TestCase {
 	}
 
 	/**
+	 * Test that inject() will only add a value if the key doesn't exist.
+	 */
+	public function testInject() {
+		$data = $this->expanded;
+		$this->assertEquals($data, Hash::inject($data, 'one.depth', 2));
+
+		$data['one']['foo'] = 'bar';
+		$this->assertEquals($data, Hash::inject($data, 'one.foo', 'bar'));
+	}
+
+	/**
 	 * Test that insert() adds data to the array based on the dot notated path.
 	 */
 	public function testInsert() {
@@ -346,6 +427,17 @@ class HashTest extends TestCase {
 		$this->assertFalse(Hash::isNumeric([false]));
 		$this->assertFalse(Hash::isNumeric([[]]));
 		$this->assertFalse(Hash::isNumeric([new stdClass()]));
+	}
+
+	/**
+	 * Test that keyOf() returns the key name based on the provided value; will drill down.
+	 */
+	public function testKeyOf() {
+		$data = $this->expanded;
+
+		$this->assertEquals(null, Hash::keyOf($data, 'fakeValue'));
+		$this->assertEquals('boolean', Hash::keyOf($data, true));
+		$this->assertEquals('one.two.three.depth', Hash::keyOf($data, 3));
 	}
 
 	/**
@@ -610,6 +702,19 @@ class HashTest extends TestCase {
 		$match['true'] = true;
 		$match['one']['false'] = false;
 		$this->assertEquals($match, $data);
+	}
+
+	/**
+	 * Test that some() returns true if one value matches the callback condition.
+	 */
+	public function testSome() {
+		$this->assertTrue(Hash::some([ 123, 'abc', true, null ], function($value, $key) {
+			return is_string($value);
+		}));
+
+		$this->assertFalse(Hash::some([ 123, true, null ], function($value, $key) {
+			return is_string($value);
+		}));
 	}
 
 	/**

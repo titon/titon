@@ -10,6 +10,7 @@
 namespace titon\utility;
 
 use titon\utility\UtilityException;
+use \Closure;
 
 /**
  * Manipulates, manages and processes multiple types of result sets: objects and arrays.
@@ -72,6 +73,50 @@ class Hash {
 
 			return $depth;
 		}
+	}
+
+	/**
+	 * Calls a function for each key-value pair in the set.
+	 * If recursive is true, will apply the callback to nested arrays as well.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param Closure $callback
+	 * @param boolean $recursive
+	 * @return array
+	 * @static
+	 */
+	public static function each($set, Closure $callback, $recursive = true) {
+		foreach ((array) $set as $key => $value) {
+			if (is_array($value) && $recursive) {
+				$set[$key] = self::each($value, $callback, $recursive);
+			} else {
+				$set[$key] = $callback($value, $key);
+			}
+		}
+
+		return $set;
+	}
+
+	/**
+	 * Returns true if every element in the array satisfies the provided testing function.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param Closure $callback
+	 * @return boolean
+	 * @static
+	 */
+	public static function every($set, Closure $callback) {
+		if (!empty($set)) {
+			foreach ((array) $set as $key => $value) {
+				if (!$callback($value, $key)) {
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -283,6 +328,23 @@ class Hash {
 	}
 
 	/**
+	 * Includes the specified key-value pair in the set if the key doesn't already exist.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param string $path
+	 * @param mixed $value
+	 * @return array
+	 */
+	public static function inject($set, $path, $value) {
+		if (self::has($set, $path)) {
+			return $set;
+		}
+
+		return self::insert($set, $path, $value);
+	}
+
+	/**
 	 * Inserts a value into the array set based on the given path.
 	 *
 	 * @access public
@@ -334,19 +396,19 @@ class Hash {
 	 * @static
 	 */
 	public static function isAlpha($set, $strict = true) {
-		foreach ((array) $set as $value) {
+		return self::every($set, function($value, $key) use ($strict) {
 			if (!is_string($value)) {
 				return false;
 			}
 
-			if ($strict === true) {
+			if ($strict) {
 				if (is_string($value) && is_numeric($value)) {
 					return false;
 				}
 			}
-		}
 
-		return true;
+			return true;
+		});
 	}
 
 	/**
@@ -358,13 +420,42 @@ class Hash {
 	 * @static
 	 */
 	public static function isNumeric($set) {
-		foreach ((array) $set as $value) {
-			if (!is_numeric($value)) {
-				return false;
+		return self::every($set, function($value, $key) {
+			return is_numeric($value);
+		});
+	}
+
+	/**
+	 * Returns the key of the specified value. Will recursively search if the first pass doesn't match.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param mixed $match
+	 * @return mixed
+	 */
+	public static function keyOf($set, $match) {
+		$return = null;
+		$isArray = [];
+
+		foreach ((array) $set as $key => $value) {
+			if ($value === $match) {
+				$return = $key;
+			}
+
+			if (is_array($value)) {
+				$isArray[] = $key;
 			}
 		}
 
-		return true;
+		if (empty($return) && !empty($isArray)) {
+			foreach ($isArray as $key) {
+				if ($value = self::keyOf($set[$key], $match)) {
+					$return = $key . '.' . $value;
+				}
+			}
+		}
+
+		return $return;
 	}
 
 	/**
@@ -556,6 +647,7 @@ class Hash {
 	 * @param array|string $path
 	 * @param mixed $value
 	 * @return array
+	 * @static
 	 */
 	public static function set($set, $path, $value = null) {
 		if (is_array($path)) {
@@ -567,6 +659,30 @@ class Hash {
 		}
 
 		return $set;
+	}
+
+	/**
+	 * Returns true if at least one element in the array satisfies the provided testing function.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param Closure $callback
+	 * @return boolean
+	 * @static
+	 */
+	public static function some($set, Closure $callback) {
+		$pass = false;
+
+		if (!empty($set)) {
+			foreach ((array) $set as $key => $value) {
+				if ($callback($value, $value)) {
+					$pass = true;
+					break;
+				}
+			}
+		}
+
+		return $pass;
 	}
 
 	/**
