@@ -20,9 +20,6 @@ use \Closure;
  * enabling the objects to only be instantiated when triggered; also known as lazy loading.
  *
  * @package	titon.libs.traits
- * @uses	titon\Titon
- * @uses	titon\libs\traits\TraitException
- * @uses	titon\utility\Inflector
  */
 trait Attachable {
 

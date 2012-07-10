@@ -20,7 +20,6 @@ use titon\libs\traits\Attachable;
  * Defines methods and properties for HTML tags and attribute generation.
  *
  * @package	titon.libs.helpers
- * @uses	titon\Titon
  * @abstract
  */
 abstract class HelperAbstract extends Base implements Helper {

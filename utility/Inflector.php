@@ -16,8 +16,6 @@ use \Closure;
  * String and grammar inflection. Converts strings to a certain format. Camel cased, singular, plural etc.
  *
  * @package	titon.utility
- * @uses	titon\Titon
- *
  * @link	http://php.net/manual/book.mbstring.php
  */
 class Inflector {

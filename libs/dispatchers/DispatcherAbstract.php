@@ -21,8 +21,6 @@ use titon\libs\traits\Attachable;
  * The Dispatcher has many default methods for locating and validating objects within the MVC paradigm.
  *
  * @package	titon.libs.dispatchers
- * @uses	titon\Titon
- * @uses	titon\libs\dispatchers\DispatcherException
  * @abstract
  */
 abstract class DispatcherAbstract extends Base implements Dispatcher {

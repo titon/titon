@@ -15,7 +15,6 @@ use titon\libs\readers\ReaderAbstract;
  * A file reader that parses gettext PO files.
  *
  * @package	titon.libs.readers.gettext
- * @uses	titon\libs\readers\ReaderException
  */
 class PoReader extends ReaderAbstract {
 

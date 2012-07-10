@@ -19,9 +19,6 @@ use titon\utility\Hash;
  * if a value is present with the Request object ($_POST, $_GET and $_FILES).
  *
  * @package	titon.libs.helpers.html
- * @uses	titon\Titon
- * @uses	titon\utility\Inflector
- * @uses	titon\utility\Hash
  */
 class FormHelper extends HelperAbstract {
 

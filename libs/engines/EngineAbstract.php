@@ -29,8 +29,6 @@ use \Closure;
  *  - Will trigger any callbacks and shutdown
  *
  * @package	titon.libs.engines
- * @uses	titon\libs\engines\EngineException
- * @uses	titon\utility\Inflector
  * @abstract
  */
 abstract class EngineAbstract extends Base implements Engine {

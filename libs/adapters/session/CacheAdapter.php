@@ -18,7 +18,6 @@ use titon\libs\storage\Storage;
  * A storage engine can be setup using Titon::cache()->setup().
  *
  * @package	titon.libs.adapters.session
- * @uses	titon\Titon
  */
 class CacheAdapter extends SessionAdapterAbstract {
 

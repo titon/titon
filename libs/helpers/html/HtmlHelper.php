@@ -17,8 +17,6 @@ use titon\utility\Encrypt;
  * The HtmlHelper is primarily used for dynamic HTML tag creation within templates.
  *
  * @package	titon.libs.helpers.html
- * @uses	titon\Titon
- * @uses	titon\utility\Encrypt
  */
 class HtmlHelper extends HelperAbstract {
 

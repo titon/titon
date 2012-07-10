@@ -17,7 +17,6 @@ use \Closure;
  * Primary library class to manage and produce cookies with customizable encryption and decryption.
  *
  * @package	titon.net
- * @uses	titon\Titon
  */
 class Cookie extends Base {
 

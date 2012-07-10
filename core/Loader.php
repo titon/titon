@@ -17,7 +17,6 @@ use \Closure;
  * Provides convenience functions for inflecting notation paths, namespace paths and file system paths.
  *
  * @package	titon.core
- * @uses	titon\Titon
  */
 class Loader {
 

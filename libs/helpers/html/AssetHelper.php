@@ -16,7 +16,6 @@ use titon\libs\helpers\HelperAbstract;
  * The AssetHelper aids in the process of including external stylesheets and scripts.
  *
  * @package	titon.libs.helpers.html
- * @uses	titon\Titon
  */
 class AssetHelper extends HelperAbstract {
 

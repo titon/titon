@@ -16,7 +16,6 @@ use titon\libs\helpers\HelperAbstract;
  * The BreadcrumbHelper is primarily used for adding and generating breadcrumb lists.
  *
  * @package	titon.libs.helpers.html
- * @uses	titon\Titon
  */
 class BreadcrumbHelper extends HelperAbstract {
 

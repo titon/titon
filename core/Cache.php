@@ -17,7 +17,6 @@ use titon\libs\storage\Storage;
  * to support different caching mechanisms: Memcache, APC, XCache, Memory, FileSystem.
  *
  * @package	titon.core
- * @uses	titon\core\CoreException
  */
 class Cache {
 

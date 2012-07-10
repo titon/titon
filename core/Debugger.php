@@ -18,8 +18,6 @@ use \Exception;
  * Errors are displayed with a custom backtrace as well as logged to the filesystem (if passed to the Logger).
  *
  * @package titon.log
- * @uses	titon\Titon
- * @uses	titon\log\Logger
  */
 class Debugger {
 

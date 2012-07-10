@@ -26,7 +26,6 @@ use titon\libs\storage\StorageException;
  * A sample configuration can be found above, and the following options are available: prefix, expires.
  *
  * @package	titon.libs.storage.cache
- * @uses	titon\libs\storage\StorageException
  */
 class FileSystemStorage extends StorageAbstract {
 

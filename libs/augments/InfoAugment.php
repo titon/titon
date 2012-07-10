@@ -21,7 +21,6 @@ use \ReflectionProperty;
  * which can be used to autobox values anytime a config is written.
  *
  * @package	titon.libs.augments
- * @uses	titon\Titon
  */
 class InfoAugment {
 	use Cacheable;

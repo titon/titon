@@ -17,8 +17,6 @@ use titon\core\CoreException;
  * It registers all objects into the class to store in memory and be re-useable later at any given time.
  *
  * @package	titon.core
- * @uses	titon\Titon
- * @uses	titon\core\CoreException
  */
 class Registry {
 

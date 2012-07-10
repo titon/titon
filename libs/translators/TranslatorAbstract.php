@@ -23,8 +23,6 @@ use \Locale;
  * Abstract class that implements the string translation functionality for Translators.
  *
  * @package	titon.libs.translators
- * @uses	titon\Titon
- * @uses	titon\libs\storage\Storage
  * @abstract
  */
 abstract class TranslatorAbstract extends Base implements Translator {

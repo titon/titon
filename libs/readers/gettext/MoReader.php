@@ -16,7 +16,6 @@ use titon\libs\readers\ReaderException;
  * A file reader that parses gettext MO files.
  *
  * @package	titon.libs.readers.gettext
- * @uses	titon\libs\readers\ReaderException
  */
 class MoReader extends ReaderAbstract {
 

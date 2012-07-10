@@ -17,8 +17,6 @@ use titon\utility\Inflector;
  * Logs are categorized based on threat level, which determines the location of where it is to be written.
  *
  * @package	titon.log
- * @uses	titon\Titon
- * @uses	titon\utility\Inflector
  */
 class Logger {
 

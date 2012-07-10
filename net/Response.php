@@ -19,9 +19,6 @@ use titon\net\NetException;
  * the content body, the content type and associated status code to print out.
  *
  * @package	titon.net
- * @uses	titon\Titon
- * @uses	titon\constant\Http
- * @uses	titon\net\NetException
  */
 class Response extends Base {
 

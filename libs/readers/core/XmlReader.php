@@ -16,8 +16,6 @@ use titon\libs\readers\ReaderAbstract;
  * Must have the SimpleXML module installed.
  *
  * @package	titon.libs.readers.core
- * @uses	titon\libs\readers\ReaderException
- *
  * @link	http://php.net/simplexml
  */
 class XmlReader extends ReaderAbstract {

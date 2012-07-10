@@ -20,9 +20,6 @@ use titon\libs\traits\Cacheable;
  * It extracts and cleans the GET, POST and FILES data from the current HTTP request.
  *
  * @package	titon.net
- * @uses	titon\Titon
- * @uses	titon\constant\Http
- * @uses	titon\net\NetException
  */
 class Request extends Base {
 	use Cacheable;

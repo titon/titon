@@ -27,8 +27,6 @@ use titon\libs\storage\StorageException;
  * servers (array or string), compress, persistent, serialize, expires.
  *
  * @package	titon.libs.storage.cache
- * @uses	titon\libs\storage\StorageException
- *
  * @link	http://pecl.php.net/package/memcached
  */
 class MemcacheStorage extends StorageAbstract {

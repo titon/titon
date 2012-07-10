@@ -17,8 +17,6 @@ use titon\log\Logger;
  * Benchmarks store the time difference and memory usage between two blocks during runtime.
  *
  * @package	titon.log
- * @uses	titon\Titon
- * @uses	titon\log\Logger
  */
 class Benchmark {
 

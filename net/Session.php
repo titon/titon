@@ -19,8 +19,6 @@ use titon\utility\Hash;
  * Implements security walls to check for session hi-jacking and defines adapters for different save handlers.
  *
  * @package	titon.net
- * @uses	titon\Titon
- * @uses	titon\utility\Hash
  */
 class Session extends Base {
 

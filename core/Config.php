@@ -21,9 +21,6 @@ use titon\utility\Hash;
  * Various readers can be used to import specific configuration files.
  *
  * @package	titon.core
- * @uses	titon\core\CoreException
- * @uses	titon\utility\Inflector
- * @uses	titon\utility\Hash
  */
 class Config {
 

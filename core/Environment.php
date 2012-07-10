@@ -17,8 +17,6 @@ use titon\utility\Hash;
  * A hub that allows you to store different environment configurations, which can be detected and initialized on runtime.
  *
  * @package	titon.core
- * @uses	titon\core\CoreException
- * @uses	titon\utility\Inflector
  */
 class Environment {
 

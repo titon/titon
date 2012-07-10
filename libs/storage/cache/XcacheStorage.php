@@ -25,8 +25,6 @@ use titon\libs\storage\StorageException;
  * serialize, compress, username/password (for flush()), expires.
  *
  * @package	titon.libs.storage.cache
- * @uses	titon\libs\storage\StorageException
- *
  * @link	http://xcache.lighttpd.net/
  */
 class XcacheStorage extends StorageAbstract {

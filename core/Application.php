@@ -17,7 +17,6 @@ use titon\core\CoreException;
  * to speed up the lookup process of its sub-classes.
  *
  * @package	titon.core
- * @uses	titon\Titon
  */
 class Application {
 

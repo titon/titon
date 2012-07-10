@@ -19,7 +19,6 @@ use \Closure;
  * thus allowing you to alter or add to the existing request.
  *
  * @package	titon.core
- * @uses	titon\Titon
  */
 class Event {
 

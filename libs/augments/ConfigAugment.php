@@ -20,7 +20,6 @@ use \Iterator;
  * which can be used to autobox values anytime a config is written.
  *
  * @package	titon.libs.augments
- * @uses	titon\utility\Hash
  */
 class ConfigAugment implements ArrayAccess, Iterator {
 
