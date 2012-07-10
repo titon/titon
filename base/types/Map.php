@@ -10,6 +10,7 @@
 namespace titon\base\types;
 
 use titon\base\types\Type;
+use titon\utility\Hash;
 use \Closure;
 
 /**
@@ -19,22 +20,6 @@ use \Closure;
  * @package	titon.base.types
  */
 class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
-
-	/**
-	 * Constants related to traverse()ing.
-	 */
-	const EXTRACT = 1;
-	const EXISTS = 2;
-	const INSERT = 3;
-	const REMOVE = 4;
-
-	/**
-	 * Depth of the array.
-	 *
-	 * @access protected
-	 * @var array
-	 */
-	protected $_depth = null;
 
 	/**
 	 * Type cast to an array.
@@ -95,19 +80,6 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 				}
 			}
 		}
-
-		return $this;
-	}
-
-	/**
-	 * Empty the array.
-	 *
-	 * @access public
-	 * @return titon\base\types\Map
-	 * @chainable
-	 */
-	public function clear() {
-		$this->_value = [];
 
 		return $this;
 	}
@@ -218,41 +190,12 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 
 	/**
 	 * Determines how deep the nested array is.
-	 * Caches the depth value instead of running it every time.
 	 *
 	 * @access public
-	 * @param array $set
-	 * @param boolean $save
 	 * @return int
 	 */
-	public function depth(array $set = [], $save = true) {
-		if ($this->_depth !== null) {
-			return $this->_depth;
-		}
-
-		if (empty($set)) {
-			$set = $this->_value;
-		}
-
-		$depth = 1;
-
-		if (!empty($set)) {
-			foreach ($set as $value) {
-				if (is_array($value)) {
-					$count = $this->depth($value, false) + 1;
-
-					if ($count > $depth) {
-						$depth = $count;
-					}
-				}
-			}
-		}
-
-		if ($save) {
-			$this->_depth = (int) $depth;
-		}
-
-		return $depth;
+	public function depth() {
+		return Hash::depth($this->_value);
 	}
 
 	/**
@@ -359,26 +302,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return boolean
 	 */
 	public function every(Closure $callback) {
-		if (!empty($this->_value)) {
-			foreach ($this->_value as $key => $value) {
-				if (!$callback($key, $value)) {
-					return false;
-				}
-			}
-		}
-
-		return true;
-	}
-
-	/**
-	 * Checks to see if a certain index exists. Accepts a dot notated path to filter down the depth.
-	 *
-	 * @access public
-	 * @param string $key
-	 * @return boolean
-	 */
-	public function exists($key) {
-		return $this->traverse(self::EXISTS, (string) $key);
+		return Hash::every($this->_value, $callback);
 	}
 
 	/**
@@ -389,7 +313,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return mixed
 	 */
 	public function extract($key) {
-		return $this->traverse(self::EXTRACT, (string) $key);
+		return Hash::get($this->_value, $key);
 	}
 
 	/**
@@ -425,30 +349,13 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 
 	/**
 	 * Flattens a multidimensional array into a single array.
-	 * If serialize is false, it returns the default value.
 	 *
 	 * @access public
-	 * @param boolean $serialize
-	 * @param mixed $default
 	 * @return titon\base\types\Map
 	 * @chainable
 	 */
-	public function flatten($serialize = true, $default = null) {
-		if (!empty($this->_value)) {
-			foreach ($this->_value as $key => $value) {
-				if (is_array($value)) {
-					if ($serialize) {
-						$this->_value[$key] = serialize($value);
-
-					} else if ($default instanceof Closure) {
-						$this->_value[$key] = $default($key, $value);
-
-					} else {
-						$this->_value[$key] = $default;
-					}
-				}
-			}
-		}
+	public function flatten() {
+		$this->_value = Hash::flatten($this->_value);
 
 		return $this;
 	}
@@ -457,11 +364,26 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Exchanges all keys with their associated values in the array.
 	 *
 	 * @access public
+	 * @param boolean $recursive
+	 * @param boolean $truncate
 	 * @return titon\base\types\Map
 	 * @chainable
 	 */
-	public function flip() {
-		$this->_value = array_flip($this->_value);
+	public function flip($recursive = true, $truncate = true) {
+		$this->_value = Hash::flip($this->_value, $recursive, $truncate);
+
+		return $this;
+	}
+
+	/**
+	 * Empty the array.
+	 *
+	 * @access public
+	 * @return titon\base\types\Map
+	 * @chainable
+	 */
+	public function flush() {
+		$this->_value = [];
 
 		return $this;
 	}
@@ -476,6 +398,17 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 */
 	public function &get($key) {
 		return isset($this->_value[$key]) ? $this->_value[$key] : null;
+	}
+
+	/**
+	 * Checks to see if a certain index exists. Accepts a dot notated path to filter down the depth.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function has($key) {
+		return Hash::has($this->_value, $key);
 	}
 
 	/**
@@ -614,16 +547,11 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param array $array
-	 * @param boolean $recursive
 	 * @return titon\base\types\Map
 	 * @chainable
 	 */
-	public function merge(array $array, $recursive = true) {
-		if ($recursive) {
-			$this->_value = array_merge_recursive($this->_value, $array);
-		} else {
-			$this->_value = array_merge($this->_value, $array);
-		}
+	public function merge(array $array) {
+		$this->_value = Hash::merge($this->_value, $array);
 
 		return $this;
 	}
@@ -693,7 +621,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @chainable
 	 */
 	public function remove($key) {
-		$this->traverse(self::REMOVE, (string) $key);
+		$this->_value = Hash::remove($this->_value, $key);
 
 		return $this;
 	}
@@ -763,18 +691,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return boolean
 	 */
 	public function some(Closure $callback) {
-		$pass = true;
-
-		if (!empty($this->_value)) {
-			foreach ($this->_value as $key => $value) {
-				if (!$callback($key, $value)) {
-					$pass = false;
-					break;
-				}
-			}
-		}
-
-		return $pass;
+		return Hash::some($this->_value, $callback);
 	}
 
 	/**
@@ -902,66 +819,6 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	/**
-	 * Used to insert, remove and extract keys/values from the array, determined by the given dot notated path.
-	 *
-	 * @access public
-	 * @param int $command
-	 * @param string $path
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	public function traverse($command, $path, $value = null) {
-		$set = $this->_value;
-		$search =& $set;
-		$paths = explode('.', $path);
-		$total = count($paths);
-
-		while ($total > 0) {
-			$key = $paths[0];
-
-			// Within the last path
-			if ($total === 1) {
-				if ($command === self::INSERT) {
-					$search[$key] = $value;
-
-				} else if ($command === self::REMOVE) {
-					unset($search[$key]);
-
-				} else if ($command === self::EXISTS) {
-					return isset($search[$key]);
-
-				} else if ($command === self::EXTRACT) {
-					return $search[$key] ?: null;
-				}
-
-			// Break out of unexistent paths early
-			} else if (!is_array($search[$key]) && $command !== self::INSERT) {
-				if ($command === self::EXISTS) {
-					return false;
-
-				} else if ($command === self::EXTRACT) {
-					return null;
-
-				} else {
-					$this->_value = $set;
-				}
-
-			// Merge references
-			} else {
-				$search =& $search[$key];
-			}
-
-			array_shift($paths);
-			$total--;
-		}
-
-		unset($search);
-		$this->_value = $set;
-
-		return true;
-	}
-
-	/**
 	 * Define basic to string.
 	 *
 	 * @access public
@@ -1024,8 +881,8 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return titon\base\types\Map
 	 * @chainable
 	 */
-	public function write($key, $value) {
-		$this->traverse(self::INSERT, (string) $key, $value);
+	public function set($key, $value) {
+		$this->_value = Hash::set($this->_value, $key, $value);
 
 		return $this;
 	}
@@ -1038,7 +895,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return boolean
 	 */
 	public function offsetExists($key) {
-		return $this->exists($key);
+		return $this->has($key);
 	}
 
 	/**
@@ -1064,7 +921,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 		if ($key === null) {
 			$this->append($value);
 		} else {
-			$this->write($key, $value);
+			$this->set($key, $value);
 		}
 	}
 

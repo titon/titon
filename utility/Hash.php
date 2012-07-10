@@ -241,11 +241,12 @@ class Hash {
 	 *
 	 * @access public
 	 * @param array $set
+	 * @param boolean $recursive
 	 * @param boolean $truncate
 	 * @return array
 	 * @static
 	 */
-	public static function flip($set, $truncate = true) {
+	public static function flip($set, $recursive = true, $truncate = true) {
 		if (!is_array($set)) {
 			return $set;
 		}
@@ -256,7 +257,9 @@ class Hash {
 			$empty = ($value === '' || $value === false || $value === null);
 
 			if (is_array($value)) {
-				$data[$key] = self::flip($value, $truncate);
+				if ($recursive) {
+					$data[$key] = self::flip($value, $truncate);
+				}
 
 			} else if (is_int($key) && !$empty) {
 				$data[$value] = '';
