@@ -22,10 +22,18 @@ trait Cacheable {
 	/**
 	 * Cached items indexed by key.
 	 *
-	 * @access public
+	 * @access protected
 	 * @var array
 	 */
-	public $_cache = [];
+	protected $_cache = [];
+
+	/**
+	 * Is cache on or off?
+	 *
+	 * @access private
+	 * @var int
+	 */
+	private $__cacheEnabled = true;
 
 	/**
 	 * Dynamically read and write from the cache at once. If the cache exists with the key return it, else execute and save the result.
@@ -46,6 +54,10 @@ trait Cacheable {
 		if ($value instanceof Closure) {
 			$callback = Closure::bind($value, $this, $this);
 			$value = $callback();
+		}
+
+		if (!$this->__cacheEnabled) {
+			return $value;
 		}
 
 		return $this->setCache($key, $value);
@@ -99,6 +111,10 @@ trait Cacheable {
 	 * @return mixed
 	 */
 	public function getCache($key) {
+		if (!$this->__cacheEnabled) {
+			return null;
+		}
+
 		$key = $this->createCacheKey($key);
 
 		if (isset($this->_cache[$key])) {
@@ -106,22 +122,6 @@ trait Cacheable {
 		}
 
 		return null;
-	}
-
-	/**
-	 * Set a value to the cache with the defined key.
-	 * This will overwrite any data with the same key.
-	 * The value being saved will be returned.
-	 *
-	 * @access public
-	 * @param string|array $key
-	 * @param mixed $value
-	 * @return mixed
-	 */
-	public function setCache($key, $value) {
-		$this->_cache[$this->createCacheKey($key)] = $value;
-
-		return $value;
 	}
 
 	/**
@@ -141,6 +141,36 @@ trait Cacheable {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Set a value to the cache with the defined key.
+	 * This will overwrite any data with the same key.
+	 * The value being saved will be returned.
+	 *
+	 * @access public
+	 * @param string|array $key
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public function setCache($key, $value) {
+		$this->_cache[$this->createCacheKey($key)] = $value;
+
+		return $value;
+	}
+
+	/**
+	 * Toggle cache on and off.
+	 *
+	 * @access public
+	 * @param boolean $on
+	 * @return titon\libs\traits\Cacheable
+	 * @chainable
+	 */
+	public function toggleCache($on = true) {
+		$this->__cacheEnabled = (bool) $on;
+
+		return $this;
 	}
 
 }
