@@ -140,7 +140,7 @@ class Event {
 			}
 
 			foreach (['module', 'controller', 'action'] as $action) {
-				if ($listener['scope'][$action] !== $route->getParam($action) || $listener['scope'][$action] !== '*') {
+				if ($listener['scope'][$action] !== $route->param($action) || $listener['scope'][$action] !== '*') {
 					continue;
 				}
 			}

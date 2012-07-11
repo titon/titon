@@ -185,6 +185,10 @@ abstract class RouteAbstract extends Base implements Route {
 		$this->attachObject('request', function() {
 			return Titon::registry()->factory('titon\net\Request');
 		});
+
+		$this->attachObject('response', function() {
+			return Titon::registry()->factory('titon\net\Response');
+		});
 	}
 
 	/**

@@ -32,12 +32,14 @@ class DefaultRouteTest extends TestCase {
 		$this->assertEquals('/^\/(.*)?/i', $root->compile());
 
 		$multi = new DefaultRoute('{alpha}/[numeric]/(wildcard)/');
+
 		$patterns = new DefaultRoute('<alnum>/<locale>', [], [
 			'patterns' => [
 				'alnum' => DefaultRoute::ALNUM,
 				'locale' => '([a-z]{2}(?:-[a-z]{2})?)'
 			]
 		]);
+
 		$allTypes = new DefaultRoute('/<locale>/{alpha}/(wildcard)/[numeric]/{alnum}', [], [
 			'patterns' => [
 				'alnum' => DefaultRoute::ALNUM,

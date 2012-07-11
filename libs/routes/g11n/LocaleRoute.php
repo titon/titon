@@ -13,7 +13,9 @@ use titon\Titon;
 use titon\libs\routes\RouteAbstract;
 
 /**
- * @todo
+ * This custom route is used when G11n is enabled and the application wants to support localization.
+ * It will prepend all routes with a locale pattern (if it does not exist), and will redirect
+ * a URL to a locale-friendly URL if the currently parsed route is invalid.
  *
  * @package	titon.libs.routes.g11n
  */
@@ -60,7 +62,7 @@ class LocaleRoute extends RouteAbstract {
 			$redirect = $this->_route;
 			$redirect['locale'] = Titon::g11n()->getFallback()->getLocale('key');
 
-			Titon::registry()->factory('titon\net\Response')->redirect($redirect);
+			$this->response->redirect($redirect);
 		}
 
 		return $status;
