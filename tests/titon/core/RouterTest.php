@@ -55,8 +55,8 @@ class RouterTest extends TestCase {
 		$this->assertEquals('/users/index/action/a/b/3', $this->object->build(['module' => 'users', 'action' => 'action', 'a', 'b', 3]));
 		$this->assertEquals('/pages/controller/index/a/1337', $this->object->build(['controller' => 'controller', 'args' => ['a'], 1337]));
 		$this->assertEquals('/args/with/spaces/a+b+c/special+%3A1%23%24%28%3B%5B%5D+chars', $this->object->build(['module' => 'args', 'controller' => 'with', 'action' => 'spaces', 'args' => ['a b c'], 'special :1#$(;[] chars']));
-		$this->assertEquals('/args/with/ext.html/123/456', $this->object->build(['module' => 'args', 'controller' => 'with', 'action' => 'ext', 'ext' => 'html', 123, 456]));
-		$this->assertEquals('/args/with/fragment.json/some+Arg+UMent#fragment', $this->object->build(['module' => 'args', 'controller' => 'with', 'action' => 'fragment', 'ext' => 'json', 'some Arg UMent', '#' => 'fragment']));
+		$this->assertEquals('/args/with/ext/123/456.html', $this->object->build(['module' => 'args', 'controller' => 'with', 'action' => 'ext', 'ext' => 'html', 123, 456]));
+		$this->assertEquals('/args/with/fragment/some+Arg+UMent.json#fragment', $this->object->build(['module' => 'args', 'controller' => 'with', 'action' => 'fragment', 'ext' => 'json', 'some Arg UMent', '#' => 'fragment']));
 
 		// query
 		$this->assertEquals('/pages/index?foo=bar&number=1', $this->object->build(['foo' => 'bar', 'number' => 1]));
@@ -73,9 +73,9 @@ class RouterTest extends TestCase {
 		$this->assertEquals('/pages/index/action#frag+ment', $this->object->build(['#' => 'frag ment', 'action' => 'action']));
 		$this->assertEquals('/pages/index/action.html#foo=bar&number=1', $this->object->build(['#' => ['foo' => 'bar', 'number' => 1], 'action' => 'action', 'ext' => 'html']));
 		$this->assertEquals('/pages/index/action/123/abc#fragment', $this->object->build(['#' => 'fragment', 'action' => 'action', 123, 'abc']));
-		$this->assertEquals('/pages/index/action.html/123/abc#foo=bar&number=1', $this->object->build(['#' => ['foo' => 'bar', 'number' => 1], 'action' => 'action', 'ext' => 'html', 'args' => [123], 'abc']));
+		$this->assertEquals('/pages/index/action/123/abc.html#foo=bar&number=1', $this->object->build(['#' => ['foo' => 'bar', 'number' => 1], 'action' => 'action', 'ext' => 'html', 'args' => [123], 'abc']));
 		$this->assertEquals('/pages/index/action/123/abc?foo=bar&int=123#fragment', $this->object->build(['#' => 'fragment', 'action' => 'action', 123, 'abc', 'foo' => 'bar', 'int' => 123]));
-		$this->assertEquals('/pages/index/action.html/123/abc?foo=bar&int=123#foo=bar&number=1', $this->object->build(['#' => ['foo' => 'bar', 'number' => 1], 'action' => 'action', 'ext' => 'html', 'args' => [123], 'abc', 'query' => ['foo' => 'bar'], 'int' => 123]));
+		$this->assertEquals('/pages/index/action/123/abc.html?foo=bar&int=123#foo=bar&number=1', $this->object->build(['#' => ['foo' => 'bar', 'number' => 1], 'action' => 'action', 'ext' => 'html', 'args' => [123], 'abc', 'query' => ['foo' => 'bar'], 'int' => 123]));
 	}
 
 	/**
@@ -168,14 +168,14 @@ class RouterTest extends TestCase {
 		$this->assertEquals('/pages/f-o-o-/b-a-r/b/a/z', $this->object->detect(['controller' => 'f o o ', 'action' => 'b a r', 'b', 'a', 'z']));
 
 		// slug via array
-		$this->assertEquals('/module/index/index.html/123/abc', $this->object->detect(['module' => 'module', 'slug' => 'extArgs']));
-		$this->assertEquals('/module/index/index.html/123/abc/567#fragment', $this->object->detect(['module' => 'module', 'slug' => 'extArgs', 567, '#' => 'fragment']));
+		$this->assertEquals('/module/index/index/123/abc.html', $this->object->detect(['module' => 'module', 'slug' => 'extArgs']));
+		$this->assertEquals('/module/index/index/123/abc/567.html#fragment', $this->object->detect(['module' => 'module', 'slug' => 'extArgs', 567, '#' => 'fragment']));
 	}
 
 	/**
 	 * Test that slugs() returns the fully qualified route array for the matching key.
 	 */
-	public function testSlugs() {
+	public function testSlug() {
 		$this->assertEquals(null, $this->object->slug('fakeSlug'));
 		$this->assertEquals('/some/static/url', $this->object->slug('stringUrl'));
 

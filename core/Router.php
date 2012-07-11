@@ -111,6 +111,7 @@ class Router {
 		$args = [];
 		$query = [];
 		$fragment = '';
+		$ext = '';
 
 		foreach ($route as $key => $value) {
 			if (in_array($key, array('module', 'controller', 'action', 'ext'), true)) {
@@ -143,11 +144,12 @@ class Router {
 		$path[] = $route['module'];
 		$path[] = $route['controller'];
 
-		if (!empty($route['ext'])) {
-			$path[] = $route['action'] . '.' . $route['ext'];
-
-		} else if ($route['action'] !== 'index' || !empty($args)) {
+		if ($route['action'] !== 'index' || !empty($args) || !empty($route['ext'])) {
 			$path[] = $route['action'];
+		}
+
+		if (!empty($route['ext'])) {
+			$ext = $route['ext'];
 		}
 
 		unset($route);
@@ -160,6 +162,10 @@ class Router {
 		}
 
 		$path = '/' . implode('/', $path);
+
+		if (!empty($ext)) {
+			$path .= '.' . $ext;
+		}
 
 		if (!empty($query)) {
 			$path .= '?' . http_build_query($query, '', '&', PHP_QUERY_RFC1738);
