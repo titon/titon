@@ -295,7 +295,6 @@ class Router {
 			? 'titon\libs\routes\g11n\LocaleRoute'
 			: 'titon\libs\routes\core\DefaultRoute';
 
-		$this->map('moduleControllerActionExt', new $routeClass('/{module}/{controller}/{action}.{ext}'));
 		$this->map('moduleControllerAction', new $routeClass('/{module}/{controller}/{action}'));
 		$this->map('moduleController', new $routeClass('/{module}/{controller}'));
 		$this->map('module', new $routeClass('/{module}'));
@@ -315,7 +314,9 @@ class Router {
 	 * @chainable
 	 */
 	public function map($key, Route $route) {
-		$this->_routes[$key] = $route;
+		$route->config->key = $key;
+
+		$this->_routes[] = $route;
 
 		return $this;
 	}
@@ -347,13 +348,15 @@ class Router {
 	 * @return titon\libs\routes\Route
 	 */
 	public function match($url) {
-		foreach ($this->_routes as $route) {
+		$routes = array_reverse($this->_routes);
+
+		foreach ($routes as $route) {
 			if ($route->match($url)) {
 				return $route;
 			}
 		}
 
-		return $this->_routes['root'];
+		return $this->_routes[0];
 	}
 
 	/**
