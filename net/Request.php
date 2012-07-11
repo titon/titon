@@ -57,14 +57,6 @@ class Request extends Base {
 	public $post = [];
 
 	/**
-	 * The current HTTP method used.
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $_method = 'get';
-
-	/**
 	 * Checks to see if the client accepts a certain content type, based on the Accept header.
 	 *
 	 * @access public
@@ -193,7 +185,6 @@ class Request extends Base {
 		$this->files = $files;
 		$this->get = $get;
 		$this->post = $post;
-		$this->_method = strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
 	}
 
 	/**
@@ -334,7 +325,7 @@ class Request extends Base {
 	 * @return string
 	 */
 	public function method() {
-		return $this->_method;
+		return strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
 	}
 
 	/**

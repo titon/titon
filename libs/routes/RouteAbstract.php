@@ -110,6 +110,10 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @param array $config
 	 */
 	public function __construct($path, array $route = [], array $config = []) {
+		if (substr($path, 0, 1) !== '/') {
+			$path = '/' . $path;
+		}
+
 		$this->_path = $path;
 		$this->_route = Titon::router()->defaults($route);
 
@@ -212,6 +216,12 @@ abstract class RouteAbstract extends Base implements Route {
 
 			// Get pattern values
 			if (!empty($matches) && !empty($this->_tokens)) {
+				foreach ($this->_tokens as $token) {
+					$this->_route[$token] = array_shift($matches);
+				}
+
+				/* Should we validate it anymore? If so, we can't do error checking later on.
+
 				$locales = Titon::g11n()->listing();
 				$modules = Titon::app()->getModules();
 				$controllers = Titon::app()->getControllers();
@@ -228,7 +238,7 @@ abstract class RouteAbstract extends Base implements Route {
 						break;
 						case 'module':
 							// Is it a module? Check against the installed modules.
-							if (in_array($matches[0], $modules)) {
+							if (isset($modules[$matches[0]])) {
 								$this->_route['module'] = array_shift($matches);
 							} else {
 								array_shift($matches);
@@ -236,7 +246,7 @@ abstract class RouteAbstract extends Base implements Route {
 						break;
 						case 'controller':
 							// Is it a controller? Check within the modules controllers.
-							if (isset($controllers[$this->_route['module']]) && in_array($matches[0], $controllers[$this->_route['module']])) {
+							if (isset($controllers[$this->_route['module']][$matches[0]])) {
 								$this->_route['controller'] = array_shift($matches);
 							} else {
 								array_shift($matches);
@@ -246,7 +256,7 @@ abstract class RouteAbstract extends Base implements Route {
 							$this->_route[$token] = array_shift($matches);
 						break;
 					}
-				}
+				}*/
 			}
 
 			// Detect query string and parameters
@@ -254,12 +264,17 @@ abstract class RouteAbstract extends Base implements Route {
 				$parts = explode('/', trim($matches[0], '/'));
 
 				foreach ($parts as $part) {
-					if (strpos($part, ':') !== false) {
-						list($key, $value) = explode(':', $part);
-						$this->_route['query'][$key] = $value;
+					if (substr($part, 0, 1) === '.') {
+						$this->_route['ext'] = trim($part, '.');
+
+					} else if (strpos($part, '.') !== false) {
+						list($arg, $ext) = explode('.', $part);
+
+						$this->_route['args'][] = $arg;
+						$this->_route['ext'] = $ext;
 
 					} else {
-						$this->_route['params'][] = $part;
+						$this->_route['args'][] = $part;
 					}
 				}
 
@@ -279,7 +294,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @return boolean
 	 */
 	public function isMethod() {
-		$method = (array) $this->config->method;
+		$method = array_map('strtolower', (array) $this->config->method);
 
 		if (!empty($method) && !in_array($this->request->method(), $method)) {
 			return false;
@@ -332,6 +347,16 @@ abstract class RouteAbstract extends Base implements Route {
 	 */
 	public function param($key = null) {
 		return Hash::get($this->_route, $key);
+	}
+
+	/**
+	 * Return the currently matched full URL.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function url() {
+		return $this->_url;
 	}
 
 }
