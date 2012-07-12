@@ -10,7 +10,6 @@
 namespace titon\core;
 
 use titon\Titon;
-use titon\libs\controllers\core\ErrorController;
 use titon\libs\dispatchers\Dispatcher;
 use titon\libs\dispatchers\front\FrontDispatcher;
 use titon\libs\dispatchers\front\FrontDevDispatcher;
@@ -42,9 +41,10 @@ class Dispatch {
 	 * If no scope is defined, the default front dispatcher will be instantiated.
 	 *
 	 * @access public
-	 * @return void
+	 * @param boolean $return
+	 * @return titon\libs\dispatchers\Dispatcher
 	 */
-	public function run() {
+	public function run($return = false) {
 		$params = Titon::router()->current()->param();
 		$dispatcher = null;
 
@@ -78,20 +78,14 @@ class Dispatch {
 			$dispatcher = new FrontDispatcher($params);
 		}
 
-		try {
-			$dispatcher->run();
-
-		} catch (Exception $e) {
-			$controller = new ErrorController($params);
-			$controller->throwError('error', [
-				'message' => $e->getMessage()
-			]);
-			$controller->engine->run();
-
-			$dispatcher->controller = $controller;
+		if ($return) {
+			return $dispatcher;
 		}
 
+		$dispatcher->run();
 		$dispatcher->output();
+
+		return null;
 	}
 
 	/**
@@ -100,7 +94,7 @@ class Dispatch {
 	 * @access public
 	 * @param titon\libs\dispatchers\Dispatcher $dispatcher
 	 * @param array $scope
-	 * @return void
+	 * @return titon\core\Dispatch
 	 */
 	public function setup(Dispatcher $dispatcher, array $scope = []) {
 		$scope = $scope + [
@@ -117,6 +111,8 @@ class Dispatch {
 		}
 
 		$this->_mapping[$scope['module'] . '.' . $scope['controller']] = $dispatcher;
+
+		return $this;
 	}
 
 }

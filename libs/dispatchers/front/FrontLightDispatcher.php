@@ -31,19 +31,7 @@ class FrontLightDispatcher extends DispatcherAbstract {
 		$controller = $this->controller;
 		$controller->preProcess();
 
-		try {
-			$controller->dispatchAction();
-
-		} catch (HttpException $e) {
-			$controller->throwError($e->getCode(), [
-				'message' => $e->getMessage()
-			]);
-
-		} catch (Exception $e) {
-			$controller->throwError('error', [
-				'message' => $e->getMessage()
-			]);
-		}
+		$this->process();
 
 		$controller->postProcess();
 

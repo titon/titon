@@ -35,37 +35,25 @@ class FrontDispatcher extends DispatcherAbstract {
 
 		$event->notify('dispatch.preDispatch');
 
-		$controller->preProcess();
-		$event->notify('controller.preProcess', $controller);
+			$controller->preProcess();
+			$event->notify('controller.preProcess', $controller);
 
-		try {
-			$controller->dispatchAction();
+				$this->process();
 
-		} catch (HttpException $e) {
-			$controller->throwError($e->getCode(), [
-				'message' => $e->getMessage()
-			]);
+			$controller->postProcess();
+			$event->notify('controller.postProcess', $controller);
 
-		} catch (Exception $e) {
-			$controller->throwError('error', [
-				'message' => $e->getMessage()
-			]);
-		}
+			if ($controller->hasObject('engine') && $controller->engine->config->render) {
+				$engine = $controller->engine;
 
-		$controller->postProcess();
-		$event->notify('controller.postProcess', $controller);
+				$engine->preRender();
+				$event->notify('view.preRender', $engine);
 
-		if ($controller->hasObject('engine') && $controller->engine->config->render) {
-			$engine = $controller->engine;
+					$engine->run();
 
-			$engine->preRender();
-			$event->notify('view.preRender', $engine);
-
-			$engine->run();
-
-			$engine->postRender();
-			$event->notify('view.postRender', $engine);
-		}
+				$engine->postRender();
+				$event->notify('view.postRender', $engine);
+			}
 
 		$event->notify('dispatch.postDispatch');
 	}

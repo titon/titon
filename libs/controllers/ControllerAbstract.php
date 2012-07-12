@@ -148,6 +148,10 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return void
 	 */
 	public function throwError($action, array $args = []) {
+		if (empty($action)) {
+			$action = 'error';
+		}
+
 		if (empty($args['pageTitle'])) {
 			if (is_numeric($action)) {
 				$args['pageTitle'] = $action . ' - ' . Http::getStatusCode($action);
@@ -196,7 +200,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 *
 	 * @access public
 	 * @param Closure $engine
-	 * @return void
+	 * @return titon\libs\controllers\Controller
 	 * @final
 	 */
 	final public function setEngine(Closure $engine) {
@@ -204,6 +208,8 @@ abstract class ControllerAbstract extends Base implements Controller {
 			'alias' => 'engine',
 			'interface' => 'titon\libs\engines\Engine'
 		], $engine);
+
+		return $this;
 	}
 
 }

@@ -16,21 +16,21 @@ use titon\libs\dispatchers\front\FrontDispatcher;
  */
 class FrontDispatcherTest extends TestCase {
 
+	/**
+	 * Setup test app.
+	 */
 	protected function setUp() {
-		$_SERVER['HTTP_HOST'] = 'domain.com';
-		$_SERVER['PHP_SELF'] = '/root/index.php/pages/index';
-		$_SERVER['REQUEST_URI'] = '/pages/index';
-
 		Titon::app()->setup('pages', TITON_APP . 'modules/pages/', [
 			'index' => 'IndexController',
 			'missing-file' => 'MissingFileController'
 		]);
 
+		// Use by Controller::throwError()
 		Titon::router()->initialize();
 	}
 
 	/**
-	 *
+	 * Test that run() renders the controller or throws exceptions.
 	 */
 	public function testRun() {
 		// not loaded controller
@@ -77,7 +77,7 @@ class FrontDispatcherTest extends TestCase {
 
 		$dispatcher->run();
 
-		\titon\debug($dispatcher->controller->engine->content());
+		$this->assertEquals('<layout>index.tpl</layout>', $dispatcher->controller->engine->content());
 	}
 
 }

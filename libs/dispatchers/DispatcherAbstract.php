@@ -11,9 +11,11 @@ namespace titon\libs\dispatchers;
 
 use titon\Titon;
 use titon\base\Base;
+use titon\libs\controllers\core\ErrorController;
 use titon\libs\dispatchers\Dispatcher;
 use titon\libs\dispatchers\DispatcherException;
 use titon\libs\traits\Attachable;
+use \Exception;
 
 /**
  * The Dispatcher acts as the base for all child dispatchers. The Dispatcher should not be confused with Dispatch.
@@ -38,7 +40,17 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 			'alias' => 'controller',
 			'interface' => 'titon\libs\controllers\Controller'
 		], function() {
-			return $this->loadController();
+			try {
+				return $this->loadController();
+
+			} catch (Exception $e) {
+				$controller = new ErrorController($this->config->get());
+				$controller->throwError('error', [
+					'message' => $e->getMessage()
+				]);
+
+				return $controller;
+			}
 		});
 
 		$this->attachObject('event', function() {
@@ -91,6 +103,30 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 			}
 
 			$controller->response->respond();
+		}
+	}
+
+	/**
+	 * Dispatch the controller action and process any exceptions thrown.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function process() {
+		$controller = $this->controller;
+
+		try {
+			$controller->dispatchAction();
+
+		} catch (HttpException $e) {
+			$controller->throwError($e->getCode(), [
+				'message' => $e->getMessage()
+			]);
+
+		} catch (Exception $e) {
+			$controller->throwError('error', [
+				'message' => $e->getMessage()
+			]);
 		}
 	}
 

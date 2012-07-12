@@ -37,45 +37,31 @@ class FrontDevDispatcher extends DispatcherAbstract {
 		Benchmark::start('Dispatcher');
 		$event->notify('dispatch.preDispatch');
 
-		Benchmark::start('Controller');
-		$controller->preProcess();
-		$event->notify('controller.preProcess', $controller);
+			Benchmark::start('Controller');
+			$controller->preProcess();
+			$event->notify('controller.preProcess', $controller);
 
-		Benchmark::start('Action');
+				Benchmark::start('Action');
+				$this->process();
+				Benchmark::stop('Action');
 
-		try {
-			$controller->dispatchAction();
+			$controller->postProcess();
+			$event->notify('controller.postProcess', $controller);
+			Benchmark::stop('Controller');
 
-		} catch (HttpException $e) {
-			$controller->throwError($e->getCode(), [
-				'message' => $e->getMessage()
-			]);
+			if ($controller->hasObject('engine') && $controller->engine->config->render) {
+				$engine = $controller->engine;
 
-		} catch (Exception $e) {
-			$controller->throwError('error', [
-				'message' => $e->getMessage()
-			]);
-		}
+				Benchmark::start('View');
+				$engine->preRender();
+				$event->notify('view.preRender', $engine);
 
-		Benchmark::stop('Action');
+					$engine->run();
 
-		$controller->postProcess();
-		$event->notify('controller.postProcess', $controller);
-		Benchmark::stop('Controller');
-
-		if ($controller->hasObject('engine') && $controller->engine->config->render) {
-			$engine = $controller->engine;
-
-			Benchmark::start('View');
-			$engine->preRender();
-			$event->notify('view.preRender', $engine);
-
-			$engine->run();
-
-			$engine->postRender();
-			$event->notify('view.postRender', $engine);
-			Benchmark::stop('View');
-		}
+				$engine->postRender();
+				$event->notify('view.postRender', $engine);
+				Benchmark::stop('View');
+			}
 
 		$event->notify('dispatch.postDispatch');
 		Benchmark::stop('Dispatcher');

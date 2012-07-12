@@ -8,8 +8,8 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 View Rendering
 
-* core/Dispatch
-* libs/dispatchers
+* core/Dispatch - 100%
+* libs/dispatchers - 100%
 * libs/engines - 100%
 * libs/helpers
 
@@ -17,7 +17,7 @@ View Rendering
 
 Dispatch Cycle
 
-* core/Dispatch - 50%
+* core/Dispatch - 100%
 * core/Router - 100%
 * libs/controllers - 100%
 * libs/routes - 100%
