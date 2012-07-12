@@ -76,6 +76,8 @@ class FrontDispatcherTest extends TestCase {
 		]);
 
 		$dispatcher->run();
+
+		\titon\debug($dispatcher->controller->engine->content());
 	}
 
 }

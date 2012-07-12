@@ -166,9 +166,8 @@ abstract class ControllerAbstract extends Base implements Controller {
 
 		$this->engine->set($args);
 		$this->engine->setup([
-			'error' => true,
-			'layout' => 'error',
-			'template' => $action
+			'error' => $action,
+			'layout' => 'error'
 		]);
 	}
 

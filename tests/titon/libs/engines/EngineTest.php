@@ -112,12 +112,12 @@ class EngineTest extends TestCase {
 				'action' => 'error',
 				'ext' => null
 			],
-			'error' => true
+			'error' => 'error'
 		]);
 
 		$this->assertEquals(APP_MODULES . 'pages/views/private/errors/error.tpl', $engine->buildPath(EngineFixture::ERROR));
 
-		$engine->config->set('template.action', '404');
+		$engine->config->error = 404;
 		$this->assertEquals(APP_MODULES . 'pages/views/private/errors/404.tpl', $engine->buildPath(EngineFixture::ERROR));
 
 		try {

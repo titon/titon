@@ -137,6 +137,20 @@ class ViewEngineTest extends TestCase {
 		]);
 
 		$this->assertEquals('view.xml.tpl', $engine->run());
+
+		// with error
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'index',
+				'ext' => null
+			],
+			'error' => '404',
+			'layout' => 'error'
+		]);
+
+		$this->assertEquals('<error>404.tpl</error>', $engine->run());
 	}
 
 }

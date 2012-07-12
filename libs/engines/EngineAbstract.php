@@ -52,7 +52,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 *	render 		- Toggle the rendering process
 	 *	layout 		- The layout template to use
 	 *	wrapper 	- The wrapper template to use
-	 *	error 		- True if its an error page
+	 *	error 		- The name of the error view to render
 	 *
 	 * @access protected
 	 * @var array
@@ -63,7 +63,7 @@ abstract class EngineAbstract extends Base implements Engine {
 		'render'	=> true,
 		'layout'	=> 'default',
 		'wrapper'	=> null,
-		'error'		=> false
+		'error'		=> null
 	];
 
 	/**
@@ -131,10 +131,6 @@ abstract class EngineAbstract extends Base implements Engine {
 		$template = $config['template'];
 		$ext = $template['ext'];
 
-		if ($config['error']) {
-			$type = self::ERROR;
-		}
-
 		switch ($type) {
 			case self::LAYOUT:
 				if (!empty($config['layout'])) {
@@ -168,12 +164,14 @@ abstract class EngineAbstract extends Base implements Engine {
 			break;
 
 			case self::ERROR:
-				$error = $this->_preparePath($template['action']);
+				if (!empty($config['error'])) {
+					$error = $this->_preparePath($config['error']);
 
-				$paths = [
-					APP_MODULES . $template['module'] . '/views/private/errors/' . $error . '.tpl',
-					APP_VIEWS . 'errors/' . $error . '.tpl'
-				];
+					$paths = [
+						APP_MODULES . $template['module'] . '/views/private/errors/' . $error . '.tpl',
+						APP_VIEWS . 'errors/' . $error . '.tpl'
+					];
+				}
 			break;
 
 			case self::VIEW:
