@@ -32,7 +32,7 @@ class FrontDevDispatcher extends DispatcherAbstract {
 	 */
 	public function run() {
 		$controller = $this->controller;
-		$event = Titon::event();
+		$event = $this->event;
 
 		Benchmark::start('Dispatcher');
 		$event->notify('dispatch.preDispatch');
@@ -52,7 +52,9 @@ class FrontDevDispatcher extends DispatcherAbstract {
 			]);
 
 		} catch (Exception $e) {
-			debug($e->getCode());
+			$controller->throwError('error', [
+				'message' => $e->getMessage()
+			]);
 		}
 
 		Benchmark::stop('Action');

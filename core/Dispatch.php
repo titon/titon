@@ -10,10 +10,12 @@
 namespace titon\core;
 
 use titon\Titon;
+use titon\libs\controllers\core\ErrorController;
 use titon\libs\dispatchers\Dispatcher;
 use titon\libs\dispatchers\front\FrontDispatcher;
 use titon\libs\dispatchers\front\FrontDevDispatcher;
 use titon\utility\Inflector;
+use \Exception;
 
 /**
  * The dispatch handles the HTTP request and response cycle. Once it receives the HTTP request,
@@ -76,7 +78,19 @@ class Dispatch {
 			$dispatcher = new FrontDispatcher($params);
 		}
 
-		$dispatcher->run();
+		try {
+			$dispatcher->run();
+
+		} catch (Exception $e) {
+			$controller = new ErrorController($params);
+			$controller->throwError('error', [
+				'message' => $e->getMessage()
+			]);
+			$controller->engine->run();
+
+			$dispatcher->controller = $controller;
+		}
+
 		$dispatcher->output();
 	}
 

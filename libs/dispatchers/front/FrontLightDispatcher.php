@@ -40,7 +40,9 @@ class FrontLightDispatcher extends DispatcherAbstract {
 			]);
 
 		} catch (Exception $e) {
-			debug($e->getCode());
+			$controller->throwError('error', [
+				'message' => $e->getMessage()
+			]);
 		}
 
 		$controller->postProcess();

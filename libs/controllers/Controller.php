@@ -27,7 +27,7 @@ interface Controller {
 	 * @param array $args
 	 * @return mixed
 	 */
-	public function dispatchAction($action, array $args = []);
+	public function dispatchAction($action = null, array $args = []);
 
 	/**
 	 * Forward the current request to a new action, instead of doing an additional HTTP request.

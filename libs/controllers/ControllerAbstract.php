@@ -67,7 +67,11 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return mixed
 	 * @throws titon\libs\controllers\ControllerException
 	 */
-	public function dispatchAction($action, array $args = []) {
+	public function dispatchAction($action = null, array $args = []) {
+		if (empty($action)) {
+			$action = $this->config->action;
+		}
+
 		if (empty($args)) {
 			$args = $this->config->args;
 		}
@@ -158,7 +162,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 		}
 
 		$args['referrer'] = $this->request->referrer();
-		$args['url'] = Titon::router()->segments(true);
+		$args['url'] = Titon::router()->current()->url();
 
 		$this->engine->set($args);
 		$this->engine->setup([

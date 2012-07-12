@@ -18,7 +18,7 @@ class LocaleRouteTest extends TestCase {
 	/**
 	 * Test that compile() appends the correct locale pattern.
 	 */
-	/*public function testCompile() {
+	public function testCompile() {
 		$moduleControllerActionExt = new LocaleRoute('/{module}/{controller}/{action}.{ext}');
 		$moduleControllerAction = new LocaleRoute('/{module}/{controller}/{action}');
 		$moduleController = new LocaleRoute('/{module}/{controller}');
@@ -57,7 +57,7 @@ class LocaleRouteTest extends TestCase {
 		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z0-9\_\-\+]+)\/([a-z]{2}(?:-[a-z]{2})?)(.*)?/i', $patterns->compile());
 		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z\_\-\+]+)\/(.*)\/([0-9]+)\/([a-z\_\-\+]+)(.*)?/i', $withPattern->compile());
 		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z\_\-\+]+)\/(.*)\/([0-9]+)\/([a-z\_\-\+]+)(.*)?/i', $withoutPattern->compile());
-	}*/
+	}
 
 	/**
 	 * Test that isMatch() returns a valid response.

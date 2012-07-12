@@ -295,10 +295,10 @@ class Router {
 			? 'titon\libs\routes\g11n\LocaleRoute'
 			: 'titon\libs\routes\core\DefaultRoute';
 
-		$this->map('moduleControllerAction', new $routeClass('/{module}/{controller}/{action}'));
-		$this->map('moduleController', new $routeClass('/{module}/{controller}'));
-		$this->map('module', new $routeClass('/{module}'));
 		$this->map('root', new $routeClass('/', [], ['static' => true]));
+		$this->map('module', new $routeClass('/{module}'));
+		$this->map('moduleController', new $routeClass('/{module}/{controller}'));
+		$this->map('moduleControllerAction', new $routeClass('/{module}/{controller}/{action}'));
 
 		// Match the current URL to a route
 		$this->_current = $this->match($path);

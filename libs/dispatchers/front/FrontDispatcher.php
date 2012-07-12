@@ -31,7 +31,7 @@ class FrontDispatcher extends DispatcherAbstract {
 	 */
 	public function run() {
 		$controller = $this->controller;
-		$event = Titon::event();
+		$event = $this->event;
 
 		$event->notify('dispatch.preDispatch');
 
@@ -47,7 +47,9 @@ class FrontDispatcher extends DispatcherAbstract {
 			]);
 
 		} catch (Exception $e) {
-			debug($e->getCode());
+			$controller->throwError('error', [
+				'message' => $e->getMessage()
+			]);
 		}
 
 		$controller->postProcess();
