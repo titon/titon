@@ -1,1 +1,1 @@
-add
+add.tpl

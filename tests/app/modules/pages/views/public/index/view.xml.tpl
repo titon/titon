@@ -1,1 +1,1 @@
-view.xml
+view.xml.tpl

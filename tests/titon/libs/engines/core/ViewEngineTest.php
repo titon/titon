@@ -17,10 +17,9 @@ use \Exception;
 class ViewEngineTest extends TestCase {
 
 	/**
-	 * Test that buildPath() generates correct file system paths, or throws exceptions.
+	 * Test that open() renders includes and it's variables.
 	 */
-	public function testBuildPath() {
-		// views
+	public function testOpen() {
 		$engine = new ViewEngine([
 			'template' => [
 				'module' => 'pages',
@@ -30,169 +29,114 @@ class ViewEngineTest extends TestCase {
 			]
 		]);
 
-		$this->assertEquals(APP_MODULES . 'pages/views/public/index/index.tpl', $engine->buildPath(ViewEngine::VIEW));
+		$engine->set('name', 'Titon');
 
-		$engine->config->set('template.action', 'add');
-		$this->assertEquals(APP_MODULES . 'pages/views/public/index/add.tpl', $engine->buildPath(ViewEngine::VIEW));
+		$this->assertEquals('include.tpl', $engine->open('include'));
+		$this->assertEquals('include.tpl', $engine->open('include.tpl'));
 
-		$engine->config->set('template.action', 'view');
-		$engine->config->set('template.ext', 'xml');
-		$this->assertEquals(APP_MODULES . 'pages/views/public/index/view.xml.tpl', $engine->buildPath(ViewEngine::VIEW));
+		$this->assertEquals('nested/include.tpl', $engine->open('nested/include'));
+		$this->assertEquals('nested/include.tpl', $engine->open('nested/include.tpl'));
 
-		try {
-			$engine->config->set('template.controller', 'invalidFile');
-			$engine->buildPath(ViewEngine::VIEW); // file doesn't exist
-		} catch (Exception $e) {
-			$this->assertTrue(true);
-		}
+		$data = [
+			'filename' => 'variables.tpl',
+			'type' => 'include'
+		];
 
-		// layouts
-		$engine = new ViewEngine([
-			'template' => [
-				'module' => 'pages',
-				'controller' => 'index',
-				'action' => 'index',
-				'ext' => null
-			]
-		]);
-
-		$this->assertEquals(APP_MODULES . 'pages/views/private/layouts/default.tpl', $engine->buildPath(ViewEngine::LAYOUT));
-
-		$engine->config->layout = 'fallback';
-		$this->assertEquals(APP_VIEWS . 'layouts/fallback.tpl', $engine->buildPath(ViewEngine::LAYOUT));
-
-		try {
-			$engine->config->layout = 'invalidFile';
-			$engine->buildPath(ViewEngine::LAYOUT); // file doesn't exist
-		} catch (Exception $e) {
-			$this->assertTrue(true);
-		}
-
-		try {
-			$engine->config->layout = null;
-			$engine->buildPath(ViewEngine::LAYOUT); // file doesn't exist
-		} catch (Exception $e) {
-			$this->assertTrue(true);
-		}
-
-		// errors
-		$engine = new ViewEngine([
-			'template' => [
-				'module' => 'pages',
-				'controller' => 'index',
-				'action' => 'error',
-				'ext' => null
-			],
-			'error' => true
-		]);
-
-		$this->assertEquals(APP_MODULES . 'pages/views/private/errors/error.tpl', $engine->buildPath(ViewEngine::ERROR));
-
-		$engine->config->set('template.action', '404');
-		$this->assertEquals(APP_MODULES . 'pages/views/private/errors/404.tpl', $engine->buildPath(ViewEngine::ERROR));
-
-		try {
-			$engine->config->set('template.action', 'invalidFile');
-			$engine->buildPath(ViewEngine::ERROR); // file doesn't exist
-		} catch (Exception $e) {
-			$this->assertTrue(true);
-		}
-
-		// wrappers
-		$engine = new ViewEngine([
-			'template' => [
-				'module' => 'pages',
-				'controller' => 'index',
-				'action' => 'index',
-				'ext' => null
-			],
-			'wrapper' => 'wrapper'
-		]);
-
-		$this->assertEquals(APP_MODULES . 'pages/views/private/wrappers/wrapper.tpl', $engine->buildPath(ViewEngine::WRAPPER));
-
-		$engine->config->wrapper = 'fallback';
-		$this->assertEquals(APP_VIEWS . 'wrappers/fallback.tpl', $engine->buildPath(ViewEngine::WRAPPER));
-
-		try {
-			$engine->config->wrapper = 'invalidFile';
-			$engine->buildPath(ViewEngine::WRAPPER); // file doesn't exist
-		} catch (Exception $e) {
-			$this->assertTrue(true);
-		}
-
-		try {
-			$engine->config->wrapper = null;
-			$engine->buildPath(ViewEngine::WRAPPER); // file doesn't exist
-		} catch (Exception $e) {
-			$this->assertTrue(true);
-		}
-
-		// includes
-		$engine = new ViewEngine([
-			'template' => [
-				'module' => 'pages',
-				'controller' => 'index',
-				'action' => 'index',
-				'ext' => null
-			],
-			'wrapper' => 'wrapper'
-		]);
-
-		$this->assertEquals(APP_MODULES . 'pages/views/private/includes/include.tpl', $engine->buildPath(ViewEngine::ELEMENT, 'include'));
-		$this->assertEquals(APP_MODULES . 'pages/views/private/includes/nested/include.tpl', $engine->buildPath(ViewEngine::ELEMENT, 'nested/include'));
-		$this->assertEquals(APP_MODULES . 'pages/views/private/includes/nested/include.tpl', $engine->buildPath(ViewEngine::ELEMENT, 'nested\include'));
-		$this->assertEquals(APP_MODULES . 'pages/views/private/includes/nested/include.tpl', $engine->buildPath(ViewEngine::ELEMENT, 'nested/include.tpl'));
-
-		try {
-			$engine->buildPath(ViewEngine::ELEMENT, 'invalidFile');
-		} catch (Exception $e) {
-			$this->assertTrue(true);
-		}
+		$this->assertEquals('Titon - include - variables.tpl', $engine->open('variables', $data));
+		$this->assertEquals('Titon - include - variables.tpl', $engine->open('variables.tpl', $data));
 	}
 
 	/**
-	 * Test that get() and set() handle data correctly. Variable names are inflected to be usable in the page.
+	 * Test that run() renders the layout, wrapper, view and includes in the correct sequence.
 	 */
-	public function testGetAndSet() {
-		$data = [
-			'integer' => 123,
-			'boolean' => true,
-			'string' => 'abc',
-			'null' => null,
-			'array' => [
-				'foo' => 'bar',
-				123
+	public function testRun() {
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'index',
+				'ext' => null
+			]
+		]);
+
+		$this->assertEquals('<layout>index.tpl</layout>', $engine->run());
+
+		// with wrapper
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'add',
+				'ext' => null
 			],
-			'invalid key' => 'value',
-			'123 numeric' => 456,
-			'invalid #$*)#)_#@ chars' => false
-		];
+			'wrapper' => 'wrapper'
+		]);
 
-		$engine = new ViewEngine();
-		$engine->set($data);
+		$this->assertEquals('<layout><wrapper>add.tpl</wrapper></layout>', $engine->run());
 
-		$this->assertEquals([
-			'integer' => 123,
-			'boolean' => true,
-			'string' => 'abc',
-			'null' => null,
-			'array' => [
-				'foo' => 'bar',
-				123
+		// with fallback layout
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'edit',
+				'ext' => null
 			],
-			'invalidkey' => 'value',
-			'_123numeric' => 456,
-			'invalid_chars' => false
-		], $engine->get());
+			'layout' => 'fallback'
+		]);
 
-		$engine->set('array', []);
-		$this->assertEquals([], $engine->get('array'));
+		$this->assertEquals('<fallbackLayout>edit.tpl</fallbackLayout>', $engine->run());
 
-		$engine->set('123456789', true);
-		$this->assertEquals(true, $engine->get('_123456789'));
+		// with fallback wrapper
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'view',
+				'ext' => null
+			],
+			'wrapper' => 'fallback'
+		]);
 
-		$this->assertEquals(null, $engine->get('fakeKey'));
+		$this->assertEquals('<layout><fallbackWrapper>view.tpl</fallbackWrapper></layout>', $engine->run());
+
+		// with include
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'test-include',
+				'ext' => null
+			]
+		]);
+
+		$this->assertEquals('<layout>test-include.tpl nested/include.tpl</layout>', $engine->run());
+
+		// with ext and no layout
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'view',
+				'ext' => 'xml'
+			],
+			'layout' => null
+		]);
+
+		$this->assertEquals('view.xml.tpl', $engine->run());
+
+		// with ext and blank layout
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'view',
+				'ext' => 'xml'
+			],
+			'layout' => 'blank'
+		]);
+
+		$this->assertEquals('view.xml.tpl', $engine->run());
 	}
 
 }

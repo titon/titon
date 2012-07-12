@@ -1,1 +1,1 @@
-edit
+edit.tpl

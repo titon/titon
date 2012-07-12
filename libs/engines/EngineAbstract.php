@@ -228,6 +228,16 @@ abstract class EngineAbstract extends Base implements Engine {
 	}
 
 	/**
+	 * Return the aliased helper names.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getHelpers() {
+		return $this->_helpers;
+	}
+
+	/**
 	 * Opens and renders a partial view element within the current document.
 	 *
 	 * @access public
@@ -315,8 +325,8 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return void
 	 */
 	public function setup($options) {
-		if ($options === false || $options === null) {
-			$this->config->render = false;
+		if ($options === false || $options === true || $options === null) {
+			$this->config->render = (bool) $options;
 
 		} else if (is_string($options)) {
 			$this->config->set('template.action', $options);

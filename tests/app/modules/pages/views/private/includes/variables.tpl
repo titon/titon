@@ -1,0 +1,1 @@
+<?php echo $name; ?> - <?php echo $type; ?> - <?php echo $filename; ?>

@@ -66,7 +66,7 @@ interface Engine {
 	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
 	public function run();
 

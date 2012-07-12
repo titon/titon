@@ -1,0 +1,1 @@
+test-include.tpl <?php echo $this->open('nested/include'); ?>

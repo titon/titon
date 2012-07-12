@@ -1,1 +1,1 @@
-<fallback><?php echo $this->content(); ?></fallback>
+<fallbackLayout><?php echo $this->content(); ?></fallbackLayout>

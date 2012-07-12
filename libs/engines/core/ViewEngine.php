@@ -28,7 +28,7 @@ class ViewEngine extends EngineAbstract {
 	 * @throws titon\libs\engines\EngineException
 	 */
 	public function open($path, array $variables = []) {
-		return $this->render($this->buildPath(self::ELEMENT, $path), $variables + $this->data());
+		return $this->render($this->buildPath(self::ELEMENT, $path), $variables + $this->get());
 	}
 
 	/**
@@ -57,18 +57,18 @@ class ViewEngine extends EngineAbstract {
 	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
-	 * @return void
+	 * @return string
 	 * @throws titon\libs\engines\EngineException
 	 */
 	public function run() {
 		$config = $this->config->get();
 
 		if (!$config['render'] || $this->_rendered) {
-			return;
+			return $this->_content;
 		}
 
 		// Render the template, layout and wrappers
-		$data = $this->data();
+		$data = $this->get();
 		$renders = [
 			self::VIEW => 'template',
 			self::WRAPPER => 'wrapper',
@@ -87,6 +87,8 @@ class ViewEngine extends EngineAbstract {
 		}
 
 		$this->_rendered = true;
+
+		return $this->_content;
 	}
 
 }
