@@ -22,6 +22,11 @@ use titon\libs\routes\RouteAbstract;
 class LocaleRoute extends RouteAbstract {
 
 	/**
+	 * Locale pattern: en-us.
+	 */
+	const LOCALE = '([a-z]{2}(?:-[a-z]{2})?)';
+
+	/**
 	 * Store the routing configuration and prepend the path with the locale match.
 	 *
 	 * @access public
@@ -30,16 +35,14 @@ class LocaleRoute extends RouteAbstract {
 	 * @param array $config
 	 */
 	public function __construct($path, array $route = [], array $config = []) {
-		if (substr($path, -9) !== '/<locale>') {
-			$path = '/<locale>' . $path;
+		if (substr($path, 0, 9) !== '/<locale>') {
+			$path = '/<locale>/' . ltrim($path, '/');
 		}
 
-		$pattern = '([a-z]{2}(?:-[a-z]{2})?)';
-
 		if (isset($config['patterns'])) {
-			$config['patterns']['locale'] = $pattern;
+			$config['patterns']['locale'] = self::LOCALE;
 		} else {
-			$config['patterns'] = ['locale' => $pattern];
+			$config['patterns'] = ['locale' => self::LOCALE];
 		}
 
 		parent::__construct($path, $route, $config);

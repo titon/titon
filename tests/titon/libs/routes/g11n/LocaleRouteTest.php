@@ -23,17 +23,19 @@ class LocaleRouteTest extends TestCase {
 		$moduleControllerAction = new LocaleRoute('/{module}/{controller}/{action}');
 		$moduleController = new LocaleRoute('/{module}/{controller}');
 		$module = new LocaleRoute('/{module}');
-		$root = new LocaleRoute('/', [], ['static' => true]);
+		$rootStatic = new LocaleRoute('/', [], ['static' => true]);
+		$root = new LocaleRoute('/');
 
 		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z\_\-\+]+)\/([a-z\_\-\+]+)\/([a-z\_\-\+]+)\.([a-z\_\-\+]+)(.*)?/i', $moduleControllerActionExt->compile());
 		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z\_\-\+]+)\/([a-z\_\-\+]+)\/([a-z\_\-\+]+)(.*)?/i', $moduleControllerAction->compile());
 		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z\_\-\+]+)\/([a-z\_\-\+]+)(.*)?/i', $moduleController->compile());
 		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)\/([a-z\_\-\+]+)(.*)?/i', $module->compile());
-		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)\/(.*)?/i', $root->compile());
+		$this->assertEquals('/^\/<locale>(.*)?/i', $rootStatic->compile());
+		$this->assertEquals('/^\/([a-z]{2}(?:-[a-z]{2})?)(.*)?/i', $root->compile());
 
 		$multi = new LocaleRoute('{alpha}/[numeric]/(wildcard)/');
 
-		$patterns = new LocaleRoute('<alnum>/<locale>', [], [
+		$patterns = new LocaleRoute('/<alnum>/<locale>', [], [
 			'patterns' => [
 				'alnum' => LocaleRoute::ALNUM,
 				'locale' => '([a-z]{2}(?:-[a-z]{2})?)'
