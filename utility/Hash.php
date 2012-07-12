@@ -566,6 +566,27 @@ class Hash {
 	}
 
 	/**
+	 * Pluck a value out of each child-array and return an array of the plucked values.
+	 *
+	 * @access public
+	 * @param array $set
+	 * @param string $path
+	 * @return array
+	 * @static
+	 */
+	public static function pluck($set, $path) {
+		$data = [];
+
+		foreach ((array) $set as $array) {
+			if ($value = self::extract($array, $path)) {
+				$data[] = $value;
+			}
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Generate an array with a range of numbers. Can apply a step interval to increase/decrease with larger increments.
 	 *
 	 * @access public

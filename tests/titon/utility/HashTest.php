@@ -627,6 +627,22 @@ class HashTest extends TestCase {
 	}
 
 	/**
+	 * Test that pluck() generates an array of all values found within path.
+	 */
+	public function testPluck() {
+		$data = [
+			[ 'name' => 'Miles', 'user' => [ 'id' => 1 ] ],
+			[ 'name' => 'Foo', 'user' => [ 'id' => 2] ],
+			[ 'key' => 'value', 'user' => [ 'id' => 3 ] ],
+			[ 'name' => 'Bar', 'user' => [ 'id' => 4 ] ],
+			[ 'name' => 'Baz', 'user' => [ 'id' => 5 ] ],
+		];
+
+		$this->assertEquals(['Miles', 'Foo', 'Bar', 'Baz'], Hash::pluck($data, 'name'));
+		$this->assertEquals([1, 2, 3, 4, 5], Hash::pluck($data, 'user.id'));
+	}
+
+	/**
 	 * Test that range() generates an array of numbers based on the start and stop values.
 	 */
 	public function testRange() {
