@@ -1,0 +1,1 @@
+<wrapper><?php echo $this->content(); ?></wrapper>

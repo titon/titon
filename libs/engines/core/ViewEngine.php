@@ -10,7 +10,6 @@
 namespace titon\libs\engines\core;
 
 use titon\libs\engines\EngineAbstract;
-use titon\libs\engines\EngineException;
 
 /**
  * Standard engine used for rendering views using pure PHP code.
@@ -26,17 +25,10 @@ class ViewEngine extends EngineAbstract {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
-	 * @throws EngineException
+	 * @throws titon\libs\engines\EngineException
 	 */
 	public function open($path, array $variables = []) {
-		$path = $this->buildPath(self::TYPE_INCLUDE, $path);
-		$variables = $variables + $this->data();
-
-		if (!$path) {
-			throw new EngineException(sprintf('The include template %s does not exist.', basename($path)));
-		}
-
-		return $this->render($path, $variables);
+		return $this->render($this->buildPath(self::ELEMENT, $path), $variables + $this->data());
 	}
 
 	/**
@@ -66,7 +58,7 @@ class ViewEngine extends EngineAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws EngineException
+	 * @throws titon\libs\engines\EngineException
 	 */
 	public function run() {
 		$config = $this->config->get();
@@ -77,11 +69,10 @@ class ViewEngine extends EngineAbstract {
 
 		// Render the template, layout and wrappers
 		$data = $this->data();
-		$path = null;
 		$renders = [
-			self::TYPE_TPL => 'template',
-			self::TYPE_WRAPPER => 'wrapper',
-			self::TYPE_LAYOUT => 'layout'
+			self::VIEW => 'template',
+			self::WRAPPER => 'wrapper',
+			self::LAYOUT => 'layout'
 		];
 
 		foreach ($renders as $type => $render) {
@@ -89,10 +80,9 @@ class ViewEngine extends EngineAbstract {
 				continue;
 			}
 
+			// Only if the file exists, in case wrapper or layout isn't being used
 			if ($path = $this->buildPath($type)) {
 				$this->_content = $this->render($path, $data);
-			} else {
-				throw new EngineException(sprintf('View template %s does not exist.', str_replace(APP, '', $path)));
 			}
 		}
 

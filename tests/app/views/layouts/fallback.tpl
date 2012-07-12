@@ -1,0 +1,1 @@
+<fallback><?php echo $this->content(); ?></fallback>

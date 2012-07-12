@@ -16,6 +16,7 @@ use titon\libs\engines\EngineException;
 use titon\libs\traits\Attachable;
 use titon\libs\traits\Cacheable;
 use titon\utility\Inflector;
+use titon\utility\Hash;
 use \Closure;
 
 /**
@@ -37,11 +38,11 @@ abstract class EngineAbstract extends Base implements Engine {
 	/**
 	 * Constants for all the possible types of templates.
 	 */
-	const TYPE_TPL = 1;
-	const TYPE_LAYOUT = 2;
-	const TYPE_WRAPPER = 3;
-	const TYPE_INCLUDE = 4;
-	const TYPE_ERROR = 5;
+	const VIEW = 1;
+	const LAYOUT = 2;
+	const WRAPPER = 3;
+	const ELEMENT = 4;
+	const ERROR = 5;
 
 	/**
 	 * Configuration. Can be overwritten in the Controller.
@@ -111,29 +112,31 @@ abstract class EngineAbstract extends Base implements Engine {
 
 		$this->attachObject([
 			'alias' => $alias,
-			'interface' => '\titon\libs\helpers\Helper'
+			'interface' => 'titon\libs\helpers\Helper'
 		], $helper);
 	}
 
 	/**
-	 * Get the filepath for a type of template: layout, wrapper, view, error, include
+	 * Get the file path for a type of template: layout, wrapper, view, error, include
 	 *
 	 * @access public
 	 * @param int $type
 	 * @param string|null $path
 	 * @return string|null
+	 * @throws titon\libs\engines\EngineException
 	 */
-	public function buildPath($type = self::TYPE_TPL, $path = null) {
+	public function buildPath($type = self::VIEW, $path = null) {
 		$paths = [];
 		$config = $this->config->get();
 		$template = $config['template'];
+		$ext = $template['ext'];
 
 		if ($config['error']) {
-			$type = self::TYPE_ERROR;
+			$type = self::ERROR;
 		}
 
 		switch ($type) {
-			case self::TYPE_LAYOUT:
+			case self::LAYOUT:
 				if (!empty($config['layout'])) {
 					$layout = $this->_preparePath($config['layout']);
 
@@ -144,7 +147,7 @@ abstract class EngineAbstract extends Base implements Engine {
 				}
 			break;
 
-			case self::TYPE_WRAPPER:
+			case self::WRAPPER:
 				if (!empty($config['wrapper'])) {
 					$wrapper = $this->_preparePath($config['wrapper']);
 
@@ -155,12 +158,8 @@ abstract class EngineAbstract extends Base implements Engine {
 				}
 			break;
 
-			case self::TYPE_INCLUDE:
+			case self::ELEMENT:
 				$path = $this->_preparePath($path);
-
-				if (substr($path, -4) === '.tpl') {
-					$path = substr($path, 0, (strlen($path) - 4));
-				}
 
 				$paths = [
 					APP_MODULES . $template['module'] . '/views/private/includes/' . $path . '.tpl',
@@ -168,7 +167,7 @@ abstract class EngineAbstract extends Base implements Engine {
 				];
 			break;
 
-			case self::TYPE_ERROR:
+			case self::ERROR:
 				$error = $this->_preparePath($template['action']);
 
 				$paths = [
@@ -177,14 +176,14 @@ abstract class EngineAbstract extends Base implements Engine {
 				];
 			break;
 
-			case self::TYPE_TPL:
+			case self::VIEW:
 			default:
 				$parts = [
 					$template['module'],
 					'views',
 					'public',
 					$template['controller'],
-					Titon::loader()->ds($template['action'], true)
+					Titon::loader()->ds($template['action'])
 				];
 
 				$path  = APP_MODULES . implode('/', $parts);
@@ -200,9 +199,11 @@ abstract class EngineAbstract extends Base implements Engine {
 					return $path;
 				}
 			}
+		} else {
+			return null;
 		}
 
-		return null;
+		throw new EngineException(sprintf('View template %s does not exist.', str_replace([APP_VIEWS, APP_MODULES], '', $paths[0])));
 	}
 
 	/**
@@ -216,18 +217,14 @@ abstract class EngineAbstract extends Base implements Engine {
 	}
 
 	/**
-	 * Return the data based on the given key.
+	 * Return the data based on the given key, or return all data.
 	 *
 	 * @access public
 	 * @param string $key
 	 * @return string
 	 */
-	public function data($key = null) {
-		if ($key === null) {
-			return $this->_data;
-		}
-
-		return isset($this->_data[$key]) ? $this->_data[$key] : null;
+	public function get($key = null) {
+		return Hash::get($this->_data, $key);
 	}
 
 	/**

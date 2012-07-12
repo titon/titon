@@ -11,7 +11,7 @@ namespace titon\libs\engines;
 
 /**
  * Interface for the engines library.
- * 
+ *
  * @package	titon.libs.engines
  */
 interface Engine {
@@ -32,7 +32,7 @@ interface Engine {
 	 * @param array $variables
 	 * @return string
 	 */
-	public function open($path, array $variables);
+	public function open($path, array $variables = []);
 
 	/**
 	 * Triggered before a template is rendered by the engine.
@@ -58,11 +58,11 @@ interface Engine {
 	 * @param array $variables
 	 * @return string
 	 */
-	public function render($path, array $variables);
+	public function render($path, array $variables = []);
 
 	/**
-	 * Begins the staged rendering process. First stage, the system must render the template based on the module, 
-	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage, 
+	 * Begins the staged rendering process. First stage, the system must render the template based on the module,
+	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage,
 	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public

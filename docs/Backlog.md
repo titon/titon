@@ -6,21 +6,21 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 ### Systems In Development ###
 
-Dispatch Cycle
-
-* core/Dispatch - 50%
-* core/Router - 100%
-* libs/controllers - 100%
-* libs/routes - 100%
-
-### Upcoming Systems ###
-
 View Rendering
 
 * core/Dispatch
 * libs/dispatchers
 * libs/engines
 * libs/helpers
+
+### Upcoming Systems ###
+
+Dispatch Cycle
+
+* core/Dispatch - 50%
+* core/Router - 100%
+* libs/controllers - 100%
+* libs/routes - 100%
 
 Database/Datasource Layer
 
