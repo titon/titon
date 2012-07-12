@@ -1,1 +1,1 @@
-error.tpl
+<?php echo $message; ?>

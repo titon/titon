@@ -13,4 +13,6 @@ use \titon\libs\controllers\ControllerAbstract;
 
 class IndexController extends ControllerAbstract {
 
+	public function index() {}
+
 }

@@ -146,6 +146,22 @@ class ViewEngineTest extends TestCase {
 				'action' => 'index',
 				'ext' => null
 			],
+			'error' => 'error',
+			'layout' => 'error'
+		]);
+
+		$engine->set('message', 'Error message!');
+
+		$this->assertEquals('<error>Error message!</error>', $engine->run());
+
+		// with http error
+		$engine = new ViewEngine([
+			'template' => [
+				'module' => 'pages',
+				'controller' => 'index',
+				'action' => 'index',
+				'ext' => null
+			],
 			'error' => '404',
 			'layout' => 'error'
 		]);

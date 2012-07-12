@@ -7,6 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+use titon\Titon;
 use titon\tests\TestCase;
 use titon\tests\fixtures\ActionFixture;
 use titon\tests\fixtures\ControllerFixture;
@@ -26,6 +27,9 @@ class ControllerTest extends TestCase {
 			'action' => 'action',
 			'args' => [100, 25]
 		]);
+
+		// Used by throwError()
+		Titon::router()->initialize();
 	}
 
 	/**
@@ -103,25 +107,25 @@ class ControllerTest extends TestCase {
 	public function testThrowError() {
 		$this->object->throwError(404);
 
-		$this->assertEquals('404 - Not Found', $this->object->engine->data('pageTitle'));
-		$this->assertEquals('404', $this->object->engine->config->get('template.action'));
+		$this->assertEquals('404 - Not Found', $this->object->engine->get('pageTitle'));
+		$this->assertEquals('404', $this->object->engine->config->error);
 		$this->assertEquals('error', $this->object->engine->config->layout);
-		$this->assertTrue($this->object->engine->config->error);
+		$this->assertNotEmpty($this->object->engine->config->error);
 
 		$this->object->throwError(500);
 
-		$this->assertEquals('500 - Internal Server Error', $this->object->engine->data('pageTitle'));
-		$this->assertEquals('500', $this->object->engine->config->get('template.action'));
+		$this->assertEquals('500 - Internal Server Error', $this->object->engine->get('pageTitle'));
+		$this->assertEquals('500', $this->object->engine->config->error);
 
 		$this->object->throwError('customError', ['pageTitle' => 'Custom Error']);
 
-		$this->assertEquals('Custom Error', $this->object->engine->data('pageTitle'));
-		$this->assertEquals('customError', $this->object->engine->config->get('template.action'));
+		$this->assertEquals('Custom Error', $this->object->engine->get('pageTitle'));
+		$this->assertEquals('customError', $this->object->engine->config->error);
 
 		$this->object->throwError('another_error');
 
-		$this->assertEquals('Another Error', $this->object->engine->data('pageTitle'));
-		$this->assertEquals('another_error', $this->object->engine->config->get('template.action'));
+		$this->assertEquals('Another Error', $this->object->engine->get('pageTitle'));
+		$this->assertEquals('another_error', $this->object->engine->config->error);
 	}
 
 }
