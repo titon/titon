@@ -25,12 +25,12 @@ class XhtmlHelper extends HtmlHelper {
 	 * @var string
 	 */
 	protected $_tags = [
-		'anchor'	=> '<a%s>%s</a>',
-		'link'		=> '<link%s />',
-		'meta'		=> '<meta%s />',
-		'script'	=> '<script%s>%s</script>',
-		'style'		=> '<style%s>%s</style>',
-		'image'		=> '<img%s />'
+		'anchor'	=> '<a{attr}>{body}</a>',
+		'link'		=> '<link{attr} />',
+		'meta'		=> '<meta{attr} />',
+		'script'	=> '<script{attr}>{body}</script>',
+		'style'		=> '<style{attr}>{body}</style>',
+		'image'		=> '<img{attr} />'
 	];
 
 	/**

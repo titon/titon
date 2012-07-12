@@ -27,12 +27,12 @@ class HtmlHelper extends HelperAbstract {
 	 * @var array
 	 */
 	protected $_tags = [
-		'anchor'	=> '<a%s>%s</a>',
-		'link'		=> '<link%s>',
-		'meta'		=> '<meta%s>',
-		'script'	=> '<script%s>%s</script>',
-		'style'		=> '<style%s>%s</style>',
-		'image'		=> '<img%s>'
+		'anchor'	=> '<a{attr}>{body}</a>',
+		'link'		=> '<link{attr}>',
+		'meta'		=> '<meta{attr}>',
+		'script'	=> '<script{attr}>{body}</script>',
+		'style'		=> '<style{attr}>{body}</style>',
+		'image'		=> '<img{attr}>'
 	];
 
 	/**
@@ -47,10 +47,10 @@ class HtmlHelper extends HelperAbstract {
 	public function anchor($title, $url, array $attributes = []) {
 		$attributes['href'] = Titon::router()->detect($url);
 
-		return $this->tag('anchor',
-			$this->attributes($attributes),
-			$title
-		);
+		return $this->tag('anchor', [
+			'attr' => $this->attributes($attributes),
+			'body' => $title
+		]);
 	}
 
 	/**
@@ -85,7 +85,9 @@ class HtmlHelper extends HelperAbstract {
 			unset($attributes['url']);
 		}
 
-		$image = $this->tag('image', $this->attributes($attributes));
+		$image = $this->tag('image', [
+			'attr' => $this->attributes($attributes)
+		]);
 
 		if ($url) {
 			return $this->anchor($image, $url, ['title' => $attributes['alt']]);
@@ -111,7 +113,9 @@ class HtmlHelper extends HelperAbstract {
 
 		$attributes['href'] = $path;
 
-		return $this->tag('link', $this->attributes($attributes));
+		return $this->tag('link', [
+			'attr' => $this->attributes($attributes)
+		]);
 	}
 
 	/**
@@ -179,7 +183,9 @@ class HtmlHelper extends HelperAbstract {
 			$attributes['content'] = $content;
 		}
 
-		return $this->tag('meta', $this->attributes($attributes));
+		return $this->tag('meta', [
+			'attr' => $this->attributes($attributes)
+		]);
 	}
 
 	/**
@@ -200,10 +206,10 @@ class HtmlHelper extends HelperAbstract {
 			$attributes['src'] = $source;
 		}
 
-		return $this->tag('script',
-			$this->attributes($attributes),
-			$content
-		);
+		return $this->tag('script', [
+			'attr' => $this->attributes($attributes),
+			'body' => $content
+		]);
 	}
 
 	/**
@@ -214,10 +220,10 @@ class HtmlHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function style($content) {
-		return $this->tag('style',
-			$this->attributes(['type' => 'text/css']),
-			$content
-		);
+		return $this->tag('style', [
+			'attr' => $this->attributes(['type' => 'text/css']),
+			'body' => $content
+		]);
 	}
 
 	/**
@@ -228,7 +234,7 @@ class HtmlHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function title($separator = ' - ') {
-		$pageTitle = $this->_engine->data('pageTitle');
+		$pageTitle = $this->_engine->get('pageTitle');
 
 		if (is_array($pageTitle)) {
 			return implode($separator, $pageTitle);

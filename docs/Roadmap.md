@@ -6,12 +6,12 @@ Each minor version will be incremented on a monthly basis, with 2 weeks (ish) of
 
 v0.5
 
-* Globalization [April 1st - 14th]
-* Dispatch Cycle [April 15th - 28th]
+* Globalization
+* Dispatch Cycle
 
 v0.6
 
-* View Rendering [April 29th - May 12th]
+* View Rendering [July]
 * Database/Datasource Layer [May 13th - May 26th]
 
 v0.7

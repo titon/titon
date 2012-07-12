@@ -15,7 +15,7 @@ use titon\utility\Inflector;
 use titon\utility\Hash;
 
 /**
- * The Formhelper is used for HTML form creation. Data is passed to the associated input fields
+ * The FormHelper is used for HTML form creation. Data is passed to the associated input fields
  * if a value is present with the Request object ($_POST, $_GET and $_FILES).
  *
  * @package	titon.libs.helpers.html
@@ -31,7 +31,7 @@ class FormHelper extends HelperAbstract {
 	protected $_forms = [];
 
 	/**
-	 * Fields that have failed validatio.
+	 * Fields that have failed validation.
 	 *
 	 * @access protected
 	 * @var array
@@ -53,15 +53,15 @@ class FormHelper extends HelperAbstract {
 	 * @var array
 	 */
 	protected $_tags = [
-		'input'			=> '<input%s>',
-		'textarea'		=> '<textarea%s>%s</textarea>',
-		'label'			=> '<label%s>%s</label>',
-		'select'		=> '<select%s>%s</select>',
-		'option'		=> '<option%s>%s</option>',
-		'optgroup'		=> '<optgroup%s>%s</optgroup>',
-		'button'		=> '<button%s>%s</button>',
-		'legend'		=> '<legend>%s</legend>',
-		'form_open'		=> '<form%s>',
+		'input'			=> '<input{attr}>',
+		'textarea'		=> '<textarea{attr}>{body}</textarea>',
+		'label'			=> '<label{attr}>{body}</label>',
+		'select'		=> '<select{attr}>{body}</select>',
+		'option'		=> '<option{attr}>{body}</option>',
+		'optgroup'		=> '<optgroup{attr}>{body}</optgroup>',
+		'button'		=> '<button{attr}>{body}</button>',
+		'legend'		=> '<legend>{body}</legend>',
+		'form_open'		=> '<form{attr}>',
 		'form_close'	=> '</form>',
 		'fieldset_open'	=> '<fieldset>',
 		'fieldset_close'=> '</fieldset>'
@@ -123,7 +123,9 @@ class FormHelper extends HelperAbstract {
 			$attributes['value'] = $value;
 		}
 
-		$output = $this->tag('input', $this->attributes($attributes));
+		$output = $this->tag('input', [
+			'attr' => $this->attributes($attributes)
+		]);
 
 		if ($label) {
 			$output .= $this->label($input, $label);
@@ -233,10 +235,10 @@ class FormHelper extends HelperAbstract {
 			$options[$i] = date($format, mktime(0, 0, 0, $this->config->month, $i, $this->config->year));
 		}
 
-		return $this->tag('select',
-			$this->attributes($attributes, ['value']),
-			$this->_options($options, $this->_selected($attributes, 'defaultDay', $this->config->day))
-		);
+		return $this->tag('select', [
+			'attr' => $this->attributes($attributes, ['value']),
+			'body' => $this->_options($options, $this->_selected($attributes, 'defaultDay', $this->config->day))
+		]);
 	}
 
 	/**
@@ -250,9 +252,9 @@ class FormHelper extends HelperAbstract {
 	public function file($input, array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'file'], $attributes);
 
-		return $this->tag('input',
-			$this->attributes($attributes)
-		);
+		return $this->tag('input', [
+			'attr' => $this->attributes($attributes)
+		]);
 	}
 
 	/**
@@ -266,9 +268,9 @@ class FormHelper extends HelperAbstract {
 	public function hidden($input, array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'hidden'], $attributes);
 
-		return $this->tag('input',
-			$this->attributes($attributes)
-		);
+		return $this->tag('input', [
+			'attr' => $this->attributes($attributes)
+		]);
 	}
 
 	/**
@@ -306,10 +308,10 @@ class FormHelper extends HelperAbstract {
 			$options[sprintf('%02d', $i)] = sprintf('%02d', $i);
 		}
 
-		return $this->tag('select',
-			$this->attributes($attributes, ['value']),
-			$this->_options($options, $this->_selected($attributes, 'defaultHour', $selected))
-		);
+		return $this->tag('select', [
+			'attr' => $this->attributes($attributes, ['value']),
+			'body' => $this->_options($options, $this->_selected($attributes, 'defaultHour', $selected))
+		]);
 	}
 
 	/**
@@ -323,9 +325,9 @@ class FormHelper extends HelperAbstract {
 	public function image($input, array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'image'], $attributes);
 
-		return $this->tag('input',
-			$this->attributes($attributes)
-		);
+		return $this->tag('input', [
+			'attr' => $this->attributes($attributes)
+		]);
 	}
 
 	/**
@@ -368,10 +370,10 @@ class FormHelper extends HelperAbstract {
 			'for' => $this->_model . Inflector::camelCase($input),
 		];
 
-		return $this->tag('label',
-			$this->attributes($attributes),
-			$title
-		);
+		return $this->tag('label', [
+			'attr' => $this->attributes($attributes),
+			'body' => $title
+		]);
 	}
 
 	/**
@@ -387,10 +389,10 @@ class FormHelper extends HelperAbstract {
 		$attributes = $this->_prepare(['name' => $input], $attributes);
 		$options = ['am' => 'AM', 'pm' => 'PM'];
 
-		return $this->tag('select',
-			$this->attributes($attributes, ['value']),
-			$this->_options($options, $this->_selected($attributes, 'defaultMeridiem', $this->config->meridiem))
-		);
+		return $this->tag('select', [
+			'attr' => $this->attributes($attributes, ['value']),
+			'body' => $this->_options($options, $this->_selected($attributes, 'defaultMeridiem', $this->config->meridiem))
+		]);
 	}
 
 	/**
@@ -410,10 +412,10 @@ class FormHelper extends HelperAbstract {
 			$options[sprintf('%02d', $i)] = sprintf('%02d', $i);
 		}
 
-		return $this->tag('select',
-			$this->attributes($attributes, ['value']),
-			$this->_options($options, $this->_selected($attributes, 'defaultMinute', $this->config->minute))
-		);
+		return $this->tag('select', [
+			'attr' => $this->attributes($attributes, ['value']),
+			'body' => $this->_options($options, $this->_selected($attributes, 'defaultMinute', $this->config->minute))
+		]);
 	}
 
 	/**
@@ -435,10 +437,10 @@ class FormHelper extends HelperAbstract {
 			$options[$i] = date($format, mktime(0, 0, 0, $i, $this->config->day, $this->config->year));
 		}
 
-		return $this->tag('select',
-			$this->attributes($attributes, ['value']),
-			$this->_options($options, $this->_selected($attributes, 'defaultMonth', $this->config->month))
-		);
+		return $this->tag('select', [
+			'attr' => $this->attributes($attributes, ['value']),
+			'body' => $this->_options($options, $this->_selected($attributes, 'defaultMonth', $this->config->month))
+		]);
 	}
 
 	/**
@@ -482,14 +484,18 @@ class FormHelper extends HelperAbstract {
 			$attributes['action'] = Titon::router()->detect($attributes['action']);
 		}
 
-		$output = $this->tag('form_open', $this->attributes($attributes));
+		$output = $this->tag('form_open', [
+			'attr' => $this->attributes($attributes)
+		]);
 
 		// If legend, add fieldset
 		if ($legend !== null) {
 			$attributes['legend'] = $legend;
 
 			$output .= $this->tag('fieldset_open');
-			$output .= $this->tag('legend', $legend);
+			$output .= $this->tag('legend', [
+				'body' => $legend
+			]);
 		}
 
 		// Save its state
@@ -528,7 +534,9 @@ class FormHelper extends HelperAbstract {
 				$radio['checked'] = 'checked';
 			}
 
-			$output = $this->tag('input', $this->attributes($radio));
+			$output = $this->tag('input', [
+				'attr' => $this->attributes($radio)
+			]);
 
 			if ($showLabel && $option !== '') {
 				$output .= $this->label($input . ' ' . $value, $option);
@@ -554,10 +562,10 @@ class FormHelper extends HelperAbstract {
 			'type' => 'reset'
 		];
 
-		return $this->tag('button',
-			$this->attributes($attributes),
-			$title
-		);
+		return $this->tag('button', [
+			'attr' => $this->attributes($attributes),
+			'body' => $title
+		]);
 	}
 
 	/**
@@ -577,10 +585,10 @@ class FormHelper extends HelperAbstract {
 			$options[sprintf('%02d', $i)] = sprintf('%02d', $i);
 		}
 
-		return $this->tag('select',
-			$this->attributes($attributes, ['value']),
-			$this->_options($options, $this->_selected($attributes, 'defaultSecond', $this->config->second))
-		);
+		return $this->tag('select', [
+			'attr' => $this->attributes($attributes, ['value']),
+			'body' => $this->_options($options, $this->_selected($attributes, 'defaultSecond', $this->config->second))
+		]);
 	}
 
 	/**
@@ -602,10 +610,10 @@ class FormHelper extends HelperAbstract {
 			unset($attributes['empty']);
 		}
 
-		return $this->tag('select',
-			$this->attributes($attributes, ['value', 'empty']),
-			$this->_options($options, $this->_selected($attributes))
-		);
+		return $this->tag('select', [
+			'attr' => $this->attributes($attributes, ['value', 'empty']),
+			'body' => $this->_options($options, $this->_selected($attributes))
+		]);
 	}
 
 	/**
@@ -622,10 +630,10 @@ class FormHelper extends HelperAbstract {
 			'type' => 'submit'
 		];
 
-		return $this->tag('button',
-			$this->attributes($attributes),
-			$title
-		);
+		return $this->tag('button', [
+			'attr' => $this->attributes($attributes),
+			'body' => $title
+		]);
 	}
 
 	/**
@@ -639,9 +647,9 @@ class FormHelper extends HelperAbstract {
 	public function text($input, array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'text'], $attributes);
 
-		return $this->tag('input',
-			$this->attributes($attributes)
-		);
+		return $this->tag('input', [
+			'attr' => $this->attributes($attributes)
+		]);
 	}
 
 	/**
@@ -655,10 +663,10 @@ class FormHelper extends HelperAbstract {
 	public function textarea($input, array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input, 'cols' => 25, 'rows' => 5], $attributes);
 
-		return $this->tag('textarea',
-			$this->attributes($attributes, ['value']),
-			$attributes['value']
-		);
+		return $this->tag('textarea', [
+			'attr' => $this->attributes($attributes, ['value']),
+			'body' => $attributes['value']
+		]);
 	}
 
 	/**
@@ -734,10 +742,10 @@ class FormHelper extends HelperAbstract {
 			}
 		}
 
-		return $this->tag('select',
-			$this->attributes($attributes, ['value']),
-			$this->_options($options, $this->_selected($attributes, 'defaultYear', $config['year']))
-		);
+		return $this->tag('select', [
+			'attr' => $this->attributes($attributes, ['value']),
+			'body' => $this->_options($options, $this->_selected($attributes, 'defaultYear', $config['year']))
+		]);
 	}
 
 	/**
@@ -759,10 +767,10 @@ class FormHelper extends HelperAbstract {
 
 				// Optgroup
 				if (is_array($option)) {
-					$output .= $this->tag('optgroup',
-					$this->attributes(['label' => $value]),
-						$this->_options($option, $selected)
-					);
+					$output .= $this->tag('optgroup', [
+						'attr' => $this->attributes(['label' => $value]),
+						'body' => $this->_options($option, $selected)
+					]);
 
 				// Option
 				} else {
@@ -774,10 +782,10 @@ class FormHelper extends HelperAbstract {
 						}
 					}
 
-					$output .= $this->tag('option',
-						$this->attributes($attributes),
-						$option
-					);
+					$output .= $this->tag('option', [
+						'attr' => $this->attributes($attributes),
+						'body' => $option
+					]);
 				}
 			}
 		}

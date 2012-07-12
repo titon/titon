@@ -26,15 +26,15 @@ class FormHelper extends HtmlFormHelper {
 	 * @var array
 	 */
 	protected $_tags = [
-		'input'			=> '<input%s />',
-		'textarea'		=> '<textarea%s>%s</textarea>',
-		'label'			=> '<label%s>%s</label>',
-		'select'		=> '<select%s>%s</select>',
-		'option'		=> '<option%s>%s</option>',
-		'optgroup'		=> '<optgroup%s>%s</optgroup>',
-		'button'		=> '<button%s>%s</button>',
-		'legend'		=> '<legend>%s</legend>',
-		'form_open'		=> '<form%s>',
+		'input'			=> '<input{attr} />',
+		'textarea'		=> '<textarea{attr}>{body}</textarea>',
+		'label'			=> '<label{attr}>{body}</label>',
+		'select'		=> '<select{attr}>{body}</select>',
+		'option'		=> '<option{attr}>{body}</option>',
+		'optgroup'		=> '<optgroup{attr}>{body}</optgroup>',
+		'button'		=> '<button{attr}>{body}</button>',
+		'legend'		=> '<legend>{body}</legend>',
+		'form_open'		=> '<form{attr}>',
 		'form_close'	=> '</form>',
 		'fieldset_open'	=> '<fieldset>',
 		'fieldset_close'=> '</fieldset>'

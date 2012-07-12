@@ -66,7 +66,7 @@ abstract class HelperAbstract extends Base implements Helper {
 				}
 
 				if ($escape) {
-					$value = htmlentities($value, ENT_COMPAT, Titon::config()->encoding());
+					$value = htmlentities($value, ENT_QUOTES, Titon::config()->encoding());
 				}
 
 				$parsed .= ' ' . strtolower($key) . '="' . $value . '"';
@@ -102,13 +102,18 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * Generates an HTML tag if it exists.
 	 *
 	 * @access public
+	 * @param string $tag
+	 * @param array $params
 	 * @return string
 	 */
-	public function tag() {
-		$args = func_get_args();
-		$tag = $this->_tags[array_shift($args)];
+	public function tag($tag, array $params = []) {
+		$tag = $this->_tags[$tag];
 
-		return vsprintf($tag, $args) . "\n";
+		foreach ($params as $param => $value) {
+			$tag = str_replace('{' . $param . '}', $value, $tag);
+		}
+
+		return $tag . "\n";
 	}
 
 }
