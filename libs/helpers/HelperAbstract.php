@@ -159,7 +159,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * @param mixed $url
 	 * @return string
 	 */
-	public function url($url) {
+	public function url($url = '/') {
 		return Titon::router()->detect($url);
 	}
 
