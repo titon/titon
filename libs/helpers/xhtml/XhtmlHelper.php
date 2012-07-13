@@ -9,6 +9,7 @@
 
 namespace titon\libs\helpers\xhtml;
 
+use titon\Titon;
 use titon\libs\helpers\html\HtmlHelper;
 
 /**
@@ -40,7 +41,7 @@ class XhtmlHelper extends HtmlHelper {
 	 * @param string $type
 	 * @return string
 	 */
-	public function docType($type = 'default') {
+	public function doctype($type = 'default') {
 		$type = strtolower($type);
 
 		if ($type === 'transitional') {
@@ -59,6 +60,26 @@ class XhtmlHelper extends HtmlHelper {
 		}
 
 		return $docTypes[$type] . "\n";
+	}
+
+	/**
+	 * Escape a value.
+	 *
+	 * @access public
+	 * @param string $value
+	 * @param boolean|null $escape
+	 * @return string
+	 */
+	public function escape($value, $escape = null) {
+		if ($escape === null) {
+			$escape = $this->config->escape;
+		}
+
+		if ($escape) {
+			$value = htmlentities($value, ENT_QUOTES | ENT_XHTML, Titon::config()->encoding());
+		}
+
+		return $value;
 	}
 
 }

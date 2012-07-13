@@ -54,19 +54,21 @@ abstract class HelperAbstract extends Base implements Helper {
 		$escape = true;
 
 		if (isset($attributes['escape'])) {
-			$escape = (bool) $attributes['escape'];
+			$escape = $attributes['escape'];
 			unset($attributes['escape']);
 		}
 
 		if (!empty($attributes)) {
+			ksort($attributes);
+
 			foreach ($attributes as $key => $value) {
 				if (in_array($key, $remove)) {
 					unset($attributes[$key]);
 					continue;
 				}
 
-				if ($escape) {
-					$value = htmlentities($value, ENT_QUOTES, Titon::config()->encoding());
+				if ((is_array($escape) && !in_array($key, $escape)) || ($escape === true)) {
+					$value = $this->escape($value, true);
 				}
 
 				$parsed .= ' ' . strtolower($key) . '="' . $value . '"';
@@ -74,6 +76,40 @@ abstract class HelperAbstract extends Base implements Helper {
 		}
 
 		return $parsed;
+	}
+
+	/**
+	 * Escape a value.
+	 *
+	 * @access public
+	 * @param string $value
+	 * @param boolean|null $escape
+	 * @return string
+	 */
+	public function escape($value, $escape = null) {
+		if ($escape === null) {
+			$escape = $this->config->escape;
+		}
+
+		if ($escape) {
+			$value = htmlentities($value, ENT_QUOTES, Titon::config()->encoding());
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Enable escaping if the config doesn't exist.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		parent::initialize();
+
+		if (!isset($this->config->escape)) {
+			$this->config->escape = true;
+		}
 	}
 
 	/**
@@ -114,6 +150,17 @@ abstract class HelperAbstract extends Base implements Helper {
 		}
 
 		return $tag . "\n";
+	}
+
+	/**
+	 * Return a router generated URL.
+	 *
+	 * @access public
+	 * @param mixed $url
+	 * @return string
+	 */
+	public function url($url) {
+		return Titon::router()->detect($url);
 	}
 
 }

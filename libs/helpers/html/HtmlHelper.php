@@ -45,11 +45,11 @@ class HtmlHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function anchor($title, $url, array $attributes = []) {
-		$attributes['href'] = Titon::router()->detect($url);
+		$attributes['href'] = $this->url($url);
 
 		return $this->tag('anchor', [
 			'attr' => $this->attributes($attributes),
-			'body' => $title
+			'body' => $this->escape($title)
 		]);
 	}
 
@@ -59,7 +59,7 @@ class HtmlHelper extends HelperAbstract {
 	 * @access public
 	 * @return string
 	 */
-	public function docType() {
+	public function doctype() {
 		return "<!DOCTYPE html>\n";
 	}
 
@@ -69,28 +69,26 @@ class HtmlHelper extends HelperAbstract {
 	 * @access public
 	 * @param string $path
 	 * @param array $attributes
+	 * @param mixed $url
 	 * @return string
 	 */
-	public function image($path, array $attributes = []) {
-		$attributes['src'] = $path;
-
+	public function image($path, array $attributes = [], $url = null) {
 		if (!isset($attributes['alt'])) {
 			$attributes['alt'] = '';
 		}
 
-		$url = null;
-
-		if (isset($attributes['url'])) {
-			$url = $attributes['url'];
-			unset($attributes['url']);
-		}
+		// @TODO - Router base URL and module paths
+		$attributes['src'] = $path;
 
 		$image = $this->tag('image', [
 			'attr' => $this->attributes($attributes)
 		]);
 
-		if ($url) {
-			return $this->anchor($image, $url, ['title' => $attributes['alt']]);
+		if (!empty($url)) {
+			return $this->tag('anchor', [
+				'attr' => $this->attributes(['href' => $this->url($url)]),
+				'body' => trim($image)
+			]);
 		}
 
 		return $image;
@@ -111,6 +109,7 @@ class HtmlHelper extends HelperAbstract {
 			'media' => 'screen'
 		];
 
+		// @TODO - Router base URL and module paths
 		$attributes['href'] = $path;
 
 		return $this->tag('link', [
@@ -133,9 +132,13 @@ class HtmlHelper extends HelperAbstract {
 			$attributes['title'] = '';
 		}
 
-		$attributes['escape'] = false;
+		$attributes['escape'] = array('href');
+		$attributes['href'] = 'mailto:' . $email;
 
-		return $this->anchor($email, 'mailto:' . $email, $attributes);
+		return $this->tag('anchor', [
+			'attr' => $this->attributes($attributes),
+			'body' => $email
+		]);
 	}
 
 	/**
@@ -148,8 +151,16 @@ class HtmlHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function meta($type, $content = null, array $attributes = []) {
+		if (is_array($type)) {
+			return $this->tag('meta', [
+				'attr' => $this->attributes($type)
+			]);
+		} else {
+			$type = strtolower($type);
+		}
+
 		if (empty($content)) {
-			switch (strtolower($type)) {
+			switch ($type) {
 				case 'content-script-type':
 					$content = 'text/javascript';
 				break;
@@ -171,13 +182,13 @@ class HtmlHelper extends HelperAbstract {
 			'description'			=> ['name' => 'description', 'content' => $content],
 			'author'				=> ['name' => 'author', 'content' => $content],
 			'robots'				=> ['name' => 'robots', 'content' => $content],
-			'rss'					=> ['type' => 'application/rss+xml', 'rel' => 'alternate', 'title' => $type, 'link' => $content],
-			'atom'					=> ['type' => 'application/atom+xml', 'title' => $type, 'link' => $content],
+			'rss'					=> ['type' => 'application/rss+xml', 'rel' => 'alternate', 'title' => '', 'link' => $content],
+			'atom'					=> ['type' => 'application/atom+xml', 'title' => '', 'link' => $content],
 			'icon'					=> ['type' => 'image/x-icon', 'rel' => 'icon', 'link' => $content],
 		];
 
-		if (isset($metaTypes[strtolower($type)])) {
-			$attributes = $attributes + $metaTypes[strtolower($type)];
+		if (isset($metaTypes[$type])) {
+			$attributes = $attributes + $metaTypes[$type];
 		} else {
 			$attributes['name'] = $type;
 			$attributes['content'] = $content;
@@ -203,6 +214,7 @@ class HtmlHelper extends HelperAbstract {
 		if ($isBlock) {
 			$content = '<![CDATA[' . $source . ']]>';
 		} else {
+			// @TODO PATH
 			$attributes['src'] = $source;
 		}
 
