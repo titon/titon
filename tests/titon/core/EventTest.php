@@ -7,10 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\core;
+
 use titon\Titon;
 use titon\core\Event;
 use titon\tests\TestCase;
 use titon\tests\fixtures\ListenerFixture;
+use \Closure;
 
 /**
  * Test class for titon\core\Event.

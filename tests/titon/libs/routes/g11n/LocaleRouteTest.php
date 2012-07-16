@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\libs\routes\g11n;
+
 use titon\tests\TestCase;
 use titon\libs\routes\g11n\LocaleRoute;
 

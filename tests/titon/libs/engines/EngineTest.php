@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\libs\engines;
+
 use titon\tests\TestCase;
 use titon\tests\fixtures\EngineFixture;
 use titon\libs\helpers\html\HtmlHelper;

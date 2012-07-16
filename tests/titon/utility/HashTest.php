@@ -7,9 +7,12 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\utility;
+
 use titon\tests\TestCase;
 use titon\utility\Hash;
 use titon\utility\UtilityException;
+use \stdClass;
 
 /**
  * Test class for titon\utility\Hash.

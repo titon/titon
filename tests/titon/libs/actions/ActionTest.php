@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\libs\actions;
+
 use titon\tests\TestCase;
 use titon\tests\fixtures\ActionFixture;
 use titon\tests\fixtures\ControllerFixture;

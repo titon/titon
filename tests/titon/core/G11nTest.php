@@ -7,10 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\core;
+
 use titon\Titon;
 use titon\tests\TestCase;
 use titon\core\G11n;
 use titon\libs\translators\messages\MessageTranslator;
+use \Exception;
 
 /**
  * Test class for titon\core\G11n.

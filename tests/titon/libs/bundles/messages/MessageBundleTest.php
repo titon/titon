@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\libs\bundles\messages;
+
 use titon\tests\TestCase;
 use titon\libs\bundles\messages\MessageBundle;
 use titon\libs\readers\core\PhpReader;

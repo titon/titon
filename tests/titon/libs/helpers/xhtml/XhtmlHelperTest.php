@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\libs\helpers\xhtml;
+
 use titon\tests\TestCase;
 use titon\libs\helpers\xhtml\XhtmlHelper;
 use titon\utility\Encrypt;
@@ -145,6 +147,5 @@ class XhtmlHelperTest extends TestCase {
 		$this->assertEquals('<style type="text/css">#id { color: red; }</style>' . PHP_EOL, $this->object->style('#id { color: red; }'));
 		$this->assertEquals('<style type="text/css">#id { color: red; }' . PHP_EOL . '.class { text-align: left; }</style>' . PHP_EOL, $this->object->style('#id { color: red; }' . PHP_EOL . '.class { text-align: left; }'));
 	}
-
 
 }

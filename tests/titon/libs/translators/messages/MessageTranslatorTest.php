@@ -7,6 +7,8 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
+namespace titon\tests\titon\libs\translators\messages;
+
 use titon\Titon;
 use titon\tests\TestCase;
 use titon\libs\translators\messages\MessageTranslator;
@@ -16,6 +18,7 @@ use titon\libs\readers\core\IniReader;
 use titon\libs\readers\core\XmlReader;
 use titon\libs\readers\core\JsonReader;
 use titon\libs\readers\gettext\PoReader;
+use \Exception;
 
 /**
  * Test class for titon\libs\translators\messages\MessageTranslator.
