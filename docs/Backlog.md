@@ -11,7 +11,7 @@ View Rendering
 * core/Dispatch - 100%
 * libs/dispatchers - 100%
 * libs/engines - 100%
-* libs/helpers
+* libs/helpers - 30%
 
 ### Upcoming Systems ###
 

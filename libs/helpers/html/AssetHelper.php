@@ -20,6 +20,12 @@ use titon\libs\helpers\HelperAbstract;
 class AssetHelper extends HelperAbstract {
 
 	/**
+	 * Default locations.
+	 */
+	const HEADER = 'header';
+	const FOOTER = 'footer';
+
+	/**
 	 * A list of JavaScript files to include in the current page.
 	 *
 	 * @access protected
@@ -40,19 +46,30 @@ class AssetHelper extends HelperAbstract {
 	 *
 	 * @access public
 	 * @param string $script
+	 * @param string $location
 	 * @param int $order
-	 * @return void
+	 * @return titon\libs\helpers\html\AssetHelper
 	 */
-	public function addScript($script, $order = null) {
+	public function addScript($script, $location = self::FOOTER, $order = null) {
 		if (substr($script, -3) !== '.js') {
 			$script .= '.js';
 		}
 
-		if (!is_numeric($order) || isset($this->_scripts[$order])) {
-			$order = count($this->_scripts);
+		if (!isset($this->_scripts[$location])) {
+			$this->_scripts[$location] = [];
 		}
 
-		$this->_scripts[$order] = $script;
+		if (!is_numeric($order)) {
+			$order = count($this->_scripts[$location]);
+		}
+
+		while (isset($this->_scripts[$location][$order])) {
+			$order++;
+		}
+
+		$this->_scripts[$location][$order] = $script;
+
+		return $this;
 	}
 
 	/**
@@ -62,21 +79,27 @@ class AssetHelper extends HelperAbstract {
 	 * @param string $sheet
 	 * @param string $media
 	 * @param int $order
-	 * @return void
+	 * @return titon\libs\helpers\html\AssetHelper
 	 */
 	public function addStylesheet($sheet, $media = 'screen', $order = null) {
 		if (substr($sheet, -4) !== '.css') {
 			$sheet .= '.css';
 		}
 
-		if (!is_numeric($order) || isset($this->_stylesheets[$order])) {
+		if (!is_numeric($order)) {
 			$order = count($this->_stylesheets);
+		}
+
+		while (isset($this->_stylesheets[$order])) {
+			$order++;
 		}
 
 		$this->_stylesheets[$order] = [
 			'path' => $sheet,
 			'media' => $media
 		];
+
+		return $this;
 	}
 
 	/**
@@ -95,13 +118,17 @@ class AssetHelper extends HelperAbstract {
 	 * Return all the attached scripts. Uses the HTML helper to build the HTML tags.
 	 *
 	 * @access public
+	 * @param string $location
 	 * @return string
 	 */
-	public function scripts() {
+	public function scripts($location = self::FOOTER) {
 		$output = null;
 
-		if (!empty($this->_scripts)) {
-			foreach ($this->_scripts as $script) {
+		if (!empty($this->_scripts[$location])) {
+			$scripts = $this->_scripts[$location];
+			ksort($scripts);
+
+			foreach ($scripts as $script) {
 				$output .= $this->html->script($script);
 			}
 		}
@@ -119,7 +146,10 @@ class AssetHelper extends HelperAbstract {
 		$output = null;
 
 		if (!empty($this->_stylesheets)) {
-			foreach ($this->_stylesheets as $sheet) {
+			$stylesheets = $this->_stylesheets;
+			ksort($stylesheets);
+
+			foreach ($stylesheets as $sheet) {
 				$output .= $this->html->link($sheet['path'], ['media' => $sheet['media']]);
 			}
 		}
