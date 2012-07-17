@@ -76,11 +76,11 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function attributes(array $attributes, array $remove = []) {
-		$remove = $remove + [
+		$remove = array_merge([
 			'defaultDay', 'dayFormat', 'defaultHour', 'military', 'defaultMeridiem', 'defaultSecond',
 			'defaultMinute', 'defaultMonth', 'monthFormat', 'options', 'default',
 			'defaultYear', 'yearFormat', 'reverseYear', 'startYear', 'endYear'
-		];
+		], $remove);
 
 		return parent::attributes($attributes, $remove);
 	}
@@ -96,30 +96,29 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function checkbox($input, $label, array $attributes = []) {
 		$value = isset($attributes['value']) ? $attributes['value'] : 1;
-		unset($attributes['default']);
-
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'checkbox', 'value' => $value], $attributes);
 		$selected = $this->_selected($attributes);
+		$multiple = isset($attributes['multiple']) && $attributes['multiple'];
 
 		if ($selected !== null) {
-			if (is_array($selected) && in_array($value, $selected) || $value === $selected) {
+			if (is_array($selected) && in_array($value, $selected) || $value == $selected) {
 				$attributes['checked'] = 'checked';
 			}
 		}
 
 		// Prepare for multiple checkboxes
-		if (isset($attributes['multiple']) && $attributes['multiple']) {
-			$append = Inflector::camelCase($value);
+		if ($multiple) {
+			$append = Inflector::slug($value);
 
-			$input .= ' ' . $append;
-			$attributes['id'] .= $append;
+			$input .= '.' . $append;
+			$attributes['id'] .= '-' . $append;
 			$attributes['name'] .= '[]';
 
 			unset($attributes['multiple']);
 		}
 
 		// Reset the value
-		if (is_array($attributes['value']) || !$attributes['value']) {
+		if (is_array($attributes['value']) || !$attributes['value'] || $multiple) {
 			$attributes['value'] = $value;
 		}
 
@@ -164,10 +163,10 @@ class FormHelper extends HelperAbstract {
 	 * @param mixed $submit
 	 * @return string
 	 */
-	public function close($submit = false) {
+	public function close($submit = null) {
 		$output = '';
 
-		if (!empty($submit)) {
+		if ($submit) {
 			$output .= $this->submit($submit);
 		}
 
@@ -178,6 +177,26 @@ class FormHelper extends HelperAbstract {
 		$output .= $this->tag('form_close');
 
 		return $output;
+	}
+
+	/**
+	 * Get a value from the attributes if it exists, else check the Helper config, and lastly return the default if nothing was found.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param array $attributes
+	 * @param mixed $default
+	 * @return mixed|null
+	 */
+	public function config($key, array $attributes, $default = null) {
+		if (isset($attributes[$key])) {
+			return $attributes[$key];
+
+		} else if ($value = $this->config->get($key)) {
+			return $value;
+		}
+
+		return $default;
 	}
 
 	/**
@@ -228,7 +247,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function day($input, array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input], $attributes);
-		$format = isset($attributes['dayFormat']) ? $attributes['dayFormat'] : $this->config->dayFormat;
+		$format = $this->config('dayFormat', $attributes, 'j');
 		$options = [];
 
 		for ($i = 1; $i <= 31; ++$i) {
@@ -253,7 +272,7 @@ class FormHelper extends HelperAbstract {
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'file'], $attributes);
 
 		return $this->tag('input', [
-			'attr' => $this->attributes($attributes)
+			'attr' => $this->attributes($attributes, ['value'])
 		]);
 	}
 
@@ -266,7 +285,12 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function hidden($input, array $attributes = []) {
+		$value = isset($attributes['value']) ? $attributes['value'] : null;
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'hidden'], $attributes);
+
+		if (!$attributes['value']) {
+			$attributes['value'] = $value;
+		}
 
 		return $this->tag('input', [
 			'attr' => $this->attributes($attributes)
@@ -337,6 +361,8 @@ class FormHelper extends HelperAbstract {
 	 * @return void
 	 */
 	public function initialize() {
+		parent::initialize();
+
 		$this->attachObject('request', function() {
 			return Titon::registry()->factory('titon\net\Request');
 		});
@@ -367,12 +393,12 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function label($input, $title, array $attributes = []) {
 		$attributes = $attributes + [
-			'for' => $this->_model . Inflector::camelCase($input),
+			'for' => $this->_id($this->_model . '.' . $input)
 		];
 
 		return $this->tag('label', [
 			'attr' => $this->attributes($attributes),
-			'body' => $title
+			'body' => $this->escape($title)
 		]);
 	}
 
@@ -430,7 +456,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function month($input, array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input], $attributes);
-		$format = isset($attributes['monthFormat']) ? $attributes['monthFormat'] : $this->config->monthFormat;
+		$format = $this->config('monthFormat', $attributes, 'F');
 		$options = [];
 
 		for ($i = 1; $i <= 12; ++$i) {
@@ -453,8 +479,9 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function open($model, array $attributes = []) {
 		if (!empty($model) && is_string($model)) {
-			$model = Inflector::modelize($model);
-			$this->_model = $model;
+			$this->_model = Inflector::modelize($model);
+		} else {
+			$this->_model = time();
 		}
 
 		// Form type
@@ -477,7 +504,7 @@ class FormHelper extends HelperAbstract {
 		$attributes = $attributes + [
 			'method' => 'post',
 			'action' => '',
-			'id' => $this->_model . 'Form'
+			'id' => $this->_id($this->_model . '.form')
 		];
 
 		if (isset($attributes['action'])) {
@@ -523,11 +550,12 @@ class FormHelper extends HelperAbstract {
 
 		if (isset($attributes['label'])) {
 			$showLabel = (bool) $attributes['label'];
+			unset($attributes['label']);
 		}
 
 		foreach ($options as $value => $option) {
 			$radio = $attributes;
-			$radio['id'] = $radio['id'] . Inflector::camelCase($value);
+			$radio['id'] = $this->_id($radio['id'] . '.' . $value);
 			$radio['value'] = $value;
 
 			if ($selected === $value) {
@@ -558,7 +586,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function reset($title, array $attributes = []) {
 		$attributes = $attributes + [
-			'id' => $this->_model . 'Reset',
+			'id' => $this->_id([$this->_model, 'reset']),
 			'type' => 'reset'
 		];
 
@@ -626,7 +654,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function submit($title, array $attributes = []) {
 		$attributes = $attributes + [
-			'id' => $this->_model . 'Submit',
+			'id' => $this->_id([$this->_model, 'submit']),
 			'type' => 'submit'
 		];
 
@@ -727,10 +755,10 @@ class FormHelper extends HelperAbstract {
 		$options = [];
 		$config = $this->config->get();
 
-		$reverse = isset($attributes['reverseYear']) ? $attributes['reverseYear'] : false;
-		$format	= isset($attributes['yearFormat']) ? $attributes['yearFormat'] : $config['yearFormat'];
-		$start = isset($attributes['startYear']) ? $attributes['startYear'] : $config['year'];
-		$end = isset($attributes['endYear']) ? $attributes['endYear'] : ($config['year'] + 10);
+		$reverse = $this->config('reverseYear', $attributes, false);
+		$format	= $this->config('yearFormat', $attributes, 'Y');
+		$start = $this->config('startYear', $attributes, $config['year']);
+		$end = $this->config('endYear', $attributes, ($config['year'] + 10));
 
 		if (!$reverse) {
 			for ($i = $start; $i <= $end; ++$i) {
@@ -749,22 +777,51 @@ class FormHelper extends HelperAbstract {
 	}
 
 	/**
+	 * Generate a CSS ID name.
+	 *
+	 * @access public
+	 * @param string $name
+	 * @return string
+	 */
+	protected function _id($name) {
+		if (!is_array($name)) {
+			$parts = explode('.', $name);
+		} else {
+			$parts = $name;
+		}
+
+		$id = [];
+
+		if (!empty($parts)) {
+			foreach ($parts as $part) {
+				$id[] = Inflector::slug($part);
+			}
+		}
+
+		return implode('-', $id);
+	}
+
+	/**
 	 * Create a list of options for a select dropdown. Can create an optgroup if a multi-dimensional array is used.
 	 *
 	 * @access protected
 	 * @param array $options
 	 * @param mixed $selected
+	 * @param mixed $empty
 	 * @return string
 	 */
-	protected function _options(array $options = [], $selected = null) {
-		$output = '';
+	protected function _options(array $options = [], $selected = null, $empty = null) {
+		$output = "\n";
+
+		if ($empty) {
+			$output .= $this->tag('option', [
+				'attr' => $this->attributes([]),
+				'body' => $empty
+			]);
+		}
 
 		if (!empty($options)) {
 			foreach ($options as $value => $option) {
-				if ($value === 'emptyValue') {
-					$value = '';
-				}
-
 				// Optgroup
 				if (is_array($option)) {
 					$output .= $this->tag('optgroup', [
@@ -777,7 +834,7 @@ class FormHelper extends HelperAbstract {
 					$attributes = ['value' => $value];
 
 					if ($selected !== null) {
-						if (is_array($selected) && in_array($value, $selected) || $value === $selected) {
+						if (is_array($selected) && in_array($value, $selected) || $value == $selected) {
 							$attributes['selected'] = 'selected';
 						}
 					}
@@ -805,17 +862,15 @@ class FormHelper extends HelperAbstract {
 		$attributes = $attributes + $defaults;
 		$input = $attributes['name'];
 
-		if ($this->_model !== 'Form') {
+		if ($this->_model) {
 			$attributes['name'] = $this->_model . '.' . $attributes['name'];
 		}
 
 		$parts = explode('.', $attributes['name']);
 		$name = array_shift($parts);
-		$id = $this->_model;
 
 		if (!empty($parts)) {
 			foreach ($parts as $part) {
-				$id .= Inflector::camelCase($part);
 				$name .= '[' . $part . ']';
 			}
 		}
@@ -830,7 +885,7 @@ class FormHelper extends HelperAbstract {
 			}
 		}
 
-		$attributes = $attributes + ['id' => $id];
+		$attributes = $attributes + ['id' => $this->_id($attributes['name'])];
 		$attributes['name'] = $name;
 		$attributes['value'] = $this->value($this->_model, $input);
 
@@ -861,7 +916,7 @@ class FormHelper extends HelperAbstract {
 					continue;
 
 				// Does exist
-				} else if ($attributes[$key]) {
+				} else if (isset($attributes[$key])) {
 					$selected = $attributes[$key];
 					break;
 				}
