@@ -77,7 +77,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function attributes(array $attributes, array $remove = []) {
 		$remove = array_merge([
-			'defaultDay', 'dayFormat', 'defaultHour', 'military', 'defaultMeridiem', 'defaultSecond',
+			'defaultDay', 'dayFormat', 'defaultHour', '24hour', 'defaultMeridiem', 'defaultSecond',
 			'defaultMinute', 'defaultMonth', 'monthFormat', 'options', 'default',
 			'defaultYear', 'yearFormat', 'reverseYear', 'startYear', 'endYear'
 		], $remove);
@@ -98,7 +98,7 @@ class FormHelper extends HelperAbstract {
 		$value = isset($attributes['value']) ? $attributes['value'] : 1;
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'checkbox', 'value' => $value], $attributes);
 		$selected = $this->_selected($attributes);
-		$multiple = isset($attributes['multiple']) && $attributes['multiple'];
+		$multiple = (isset($attributes['multiple']) && $attributes['multiple']);
 
 		if ($selected !== null) {
 			if (is_array($selected) && in_array($value, $selected) || $value == $selected) {
@@ -108,10 +108,7 @@ class FormHelper extends HelperAbstract {
 
 		// Prepare for multiple checkboxes
 		if ($multiple) {
-			$append = Inflector::slug($value);
-
-			$input .= '.' . $append;
-			$attributes['id'] .= '-' . $append;
+			$attributes['id'] .= '-' . Inflector::slug($value);
 			$attributes['name'] .= '[]';
 
 			unset($attributes['multiple']);
@@ -127,7 +124,9 @@ class FormHelper extends HelperAbstract {
 		]);
 
 		if ($label) {
-			$output .= $this->label($input, $label);
+			$output .= $this->label($input, $label, [
+				'for' => $attributes['id']
+			]);
 		}
 
 		return $output;
@@ -170,7 +169,7 @@ class FormHelper extends HelperAbstract {
 			$output .= $this->submit($submit);
 		}
 
-		if (isset($this->_forms[$this->_model]['legend'])) {
+		if (isset($this->_forms[$this->_model ? $this->_model : '_']['legend'])) {
 			$output .= $this->tag('fieldset_close');
 		}
 
@@ -303,7 +302,7 @@ class FormHelper extends HelperAbstract {
 	 * @access public
 	 * @param string $input
 	 * @param array $attributes
-	 *		military: Should the times be 0-23 or 1-12
+	 *		24hour: Should the times be 0-23 or 1-12
 	 *		defaultHour: The default selected hour
 	 * @return string
 	 */
@@ -312,7 +311,7 @@ class FormHelper extends HelperAbstract {
 		$selected = null;
 		$options = [];
 
-		if (isset($attributes['military']) && $attributes['military']) {
+		if (isset($attributes['24hour']) && $attributes['24hour']) {
 			$start = 0;
 			$end = 23;
 
@@ -347,10 +346,10 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function image($input, array $attributes = []) {
-		$attributes = $this->_prepare(['name' => $input, 'type' => 'image'], $attributes);
+		$attributes = $this->_prepare(['name' => $input, 'type' => 'image', 'src' => ''], $attributes);
 
 		return $this->tag('input', [
-			'attr' => $this->attributes($attributes)
+			'attr' => $this->attributes($attributes, ['value'])
 		]);
 	}
 
@@ -393,12 +392,12 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function label($input, $title, array $attributes = []) {
 		$attributes = $attributes + [
-			'for' => $this->_id($this->_model . '.' . $input)
+			'for' => $this->_id($input)
 		];
 
 		return $this->tag('label', [
 			'attr' => $this->attributes($attributes),
-			'body' => $this->escape($title)
+			'body' => $this->escape($title, $this->config('escape', $attributes, true))
 		]);
 	}
 
@@ -478,16 +477,17 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function open($model, array $attributes = []) {
-		if (!empty($model) && is_string($model)) {
+		if (!empty($model)) {
 			$this->_model = Inflector::modelize($model);
 		} else {
-			$this->_model = time();
+			$this->_model = null;
 		}
 
 		// Form type
 		if (isset($attributes['type'])) {
 			if ($attributes['type'] === 'file') {
 				$attributes['enctype'] = 'multipart/form-data';
+				$attributes['method'] = 'post';
 			}
 			unset($attributes['type']);
 		}
@@ -502,12 +502,13 @@ class FormHelper extends HelperAbstract {
 
 		// Attributes
 		$attributes = $attributes + [
+			'enctype' => 'application/x-www-form-urlencoded',
 			'method' => 'post',
 			'action' => '',
-			'id' => $this->_id($this->_model . '.form')
+			'id' => $this->_id('form')
 		];
 
-		if (isset($attributes['action'])) {
+		if (!empty($attributes['action'])) {
 			$attributes['action'] = Titon::router()->detect($attributes['action']);
 		}
 
@@ -526,13 +527,13 @@ class FormHelper extends HelperAbstract {
 		}
 
 		// Save its state
-		$this->_forms[$this->_model] = $attributes;
+		$this->_forms[$this->_model ? $this->_model : '_'] = $attributes;
 
 		return $output;
 	}
 
 	/**
-	 * Create a single checkbox element, or multiple checkboxes if an 'options' array is passed.
+	 * Create a multiple radio buttons based on the passed options.
 	 *
 	 * @access public
 	 * @param string $input
@@ -555,7 +556,7 @@ class FormHelper extends HelperAbstract {
 
 		foreach ($options as $value => $option) {
 			$radio = $attributes;
-			$radio['id'] = $this->_id($radio['id'] . '.' . $value);
+			$radio['id'] = $radio['id'] . '-' . Inflector::slug($value);
 			$radio['value'] = $value;
 
 			if ($selected === $value) {
@@ -586,7 +587,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function reset($title, array $attributes = []) {
 		$attributes = $attributes + [
-			'id' => $this->_id([$this->_model, 'reset']),
+			'id' => $this->_id('reset'),
 			'type' => 'reset'
 		];
 
@@ -654,7 +655,7 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function submit($title, array $attributes = []) {
 		$attributes = $attributes + [
-			'id' => $this->_id([$this->_model, 'submit']),
+			'id' => $this->_id('submit'),
 			'type' => 'submit'
 		];
 
@@ -734,7 +735,13 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function value($model, $field) {
-		return Hash::extract($this->request->data, $model . '.' . $field);
+		if ($model) {
+			$key = $model . '.' . $field;
+		} else {
+			$key = $field;
+		}
+
+		return Hash::extract($this->request->data, $key);
 	}
 
 	/**
@@ -784,12 +791,11 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	protected function _id($name) {
-		if (!is_array($name)) {
-			$parts = explode('.', $name);
-		} else {
-			$parts = $name;
+		if (strpos($name, '.') === false && $this->_model) {
+			$name = $this->_model . '.' . $name;
 		}
 
+		$parts = explode('.', $name);
 		$id = [];
 
 		if (!empty($parts)) {
@@ -885,7 +891,7 @@ class FormHelper extends HelperAbstract {
 			}
 		}
 
-		$attributes = $attributes + ['id' => $this->_id($attributes['name'])];
+		$attributes = $attributes + ['id' => $this->_id($input)];
 		$attributes['name'] = $name;
 		$attributes['value'] = $this->value($this->_model, $input);
 
