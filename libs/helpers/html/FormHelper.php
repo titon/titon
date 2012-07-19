@@ -191,8 +191,8 @@ class FormHelper extends HelperAbstract {
 		if (isset($attributes[$key])) {
 			return $attributes[$key];
 
-		} else if ($value = $this->config->get($key)) {
-			return $value;
+		} else if (isset($this->config->{$key})) {
+			return $this->config->get($key);
 		}
 
 		return $default;
@@ -543,7 +543,7 @@ class FormHelper extends HelperAbstract {
 	 *		label: Enable or disable the labels
 	 * @return string
 	 */
-	public function radio($input, array $options = [], array $attributes = []) {
+	public function radio($input, array $options, array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input, 'type' => 'radio'], $attributes);
 		$selected = $this->_selected($attributes);
 		$showLabel = true;
@@ -559,7 +559,7 @@ class FormHelper extends HelperAbstract {
 			$radio['id'] = $radio['id'] . '-' . Inflector::slug($value);
 			$radio['value'] = $value;
 
-			if ($selected === $value) {
+			if ($selected == $value) {
 				$radio['checked'] = 'checked';
 			}
 
@@ -568,7 +568,9 @@ class FormHelper extends HelperAbstract {
 			]);
 
 			if ($showLabel && $option !== '') {
-				$output .= $this->label($input . ' ' . $value, $option);
+				$output .= $this->label($input, $option, [
+					'for' => $radio['id']
+				]);
 			}
 
 			$radios[] = $output;
@@ -593,7 +595,7 @@ class FormHelper extends HelperAbstract {
 
 		return $this->tag('button', [
 			'attr' => $this->attributes($attributes),
-			'body' => $title
+			'body' => $this->escape($title, $this->config('escape', $attributes, true))
 		]);
 	}
 
@@ -629,19 +631,21 @@ class FormHelper extends HelperAbstract {
 	 * @param array $attributes
 	 *		default: The option to be selected by default
 	 *		empty: Display an empty option at the top of the list
+	 * 		multiple: Set to true to allow multiple selection
 	 * @return string
 	 */
 	public function select($input, array $options = [], array $attributes = []) {
 		$attributes = $this->_prepare(['name' => $input], $attributes);
+		$empty = null;
 
 		if (isset($attributes['empty'])) {
-			$options = array_merge(['emptyOption' => $attributes['empty']], $options);
+			$empty = $attributes['empty'];
 			unset($attributes['empty']);
 		}
 
 		return $this->tag('select', [
 			'attr' => $this->attributes($attributes, ['value', 'empty']),
-			'body' => $this->_options($options, $this->_selected($attributes))
+			'body' => $this->_options($options, $this->_selected($attributes), $empty)
 		]);
 	}
 
@@ -661,7 +665,7 @@ class FormHelper extends HelperAbstract {
 
 		return $this->tag('button', [
 			'attr' => $this->attributes($attributes),
-			'body' => $title
+			'body' => $this->escape($title, $this->config('escape', $attributes, true))
 		]);
 	}
 
@@ -708,22 +712,26 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function time($input, array $attributes = []) {
 		$hour = $this->hour($input . '.hour',
-			['name' => $input . '.hour'] + $attributes
+				['name' => $input . '.hour'] + $attributes
 		);
 
 		$minute = $this->minute($input . '.minute',
-			['name' => $input . '.minute'] + $attributes
+				['name' => $input . '.minute'] + $attributes
 		);
 
 		$second = $this->second($input . '.second',
-			['name' => $input . '.second'] + $attributes
+				['name' => $input . '.second'] + $attributes
 		);
 
-		$meridiem = $this->meridiem($input . '.meridiem',
-			['name' => $input . '.meridiem'] + $attributes
-		);
+		$output = $hour . ':' . $minute . ':' . $second;
 
-		return $hour . ':' . $minute . ':' . $second . $meridiem;
+		if (empty($attributes['24hour'])) {
+			$output .= $this->meridiem($input . '.meridiem',
+				['name' => $input . '.meridiem'] + $attributes
+			);
+		}
+
+		return $output;
 	}
 
 	/**
@@ -767,14 +775,12 @@ class FormHelper extends HelperAbstract {
 		$start = $this->config('startYear', $attributes, $config['year']);
 		$end = $this->config('endYear', $attributes, ($config['year'] + 10));
 
-		if (!$reverse) {
-			for ($i = $start; $i <= $end; ++$i) {
-				$options[$i] = date($format, mktime(0, 0, 0, $config['month'], $config['day'], $i));
-			}
-		} else {
-			for ($i = $end; $i >= $start; --$i) {
-				$options[$i] = date($format, mktime(0, 0, 0, $config['month'], $config['day'], $i));
-			}
+		for ($i = $start; $i <= $end; ++$i) {
+			$options[$i] = date($format, mktime(0, 0, 0, $config['month'], $config['day'], $i));
+		}
+
+		if ($reverse) {
+			$options = array_reverse($options, true);
 		}
 
 		return $this->tag('select', [
@@ -821,8 +827,8 @@ class FormHelper extends HelperAbstract {
 
 		if ($empty) {
 			$output .= $this->tag('option', [
-				'attr' => $this->attributes([]),
-				'body' => $empty
+				'attr' => $this->attributes(['value' => '']),
+				'body' => ($empty === true ? '' : $this->escape($empty))
 			]);
 		}
 
@@ -847,7 +853,7 @@ class FormHelper extends HelperAbstract {
 
 					$output .= $this->tag('option', [
 						'attr' => $this->attributes($attributes),
-						'body' => $option
+						'body' => $this->escape($option)
 					]);
 				}
 			}
@@ -881,7 +887,7 @@ class FormHelper extends HelperAbstract {
 			}
 		}
 
-		foreach (['disabled', 'readonly', 'multiple'] as $attr) {
+		foreach (['disabled', 'readonly', 'multiple', 'checked', 'selected'] as $attr) {
 			if (isset($attributes[$attr])) {
 				if ($attributes[$attr] === true || $attributes[$attr] === $attr) {
 					$attributes[$attr] = $attr;

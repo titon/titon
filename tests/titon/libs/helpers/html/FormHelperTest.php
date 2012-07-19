@@ -21,6 +21,7 @@ class FormHelperTest extends TestCase {
 	 * Setup live post data.
 	 */
 	protected function setUp() {
+		$_POST['input'] = 'test';
 		$_POST['Test'] = [
 			'checkbox' => 'no',
 			'checkboxes' => 'red',
@@ -31,7 +32,14 @@ class FormHelperTest extends TestCase {
 			'hour24' => 22,
 			'meridiem' => 'am',
 			'minute' => 19,
-			'month' => 2
+			'month' => 2,
+			'radio' => 'red',
+			'second' => 40,
+			'select' => 'mage',
+			'select_group' => ['sword', 'warrior'],
+			'text' => 'Titon',
+			'textarea' => 'Titon PHP Framework',
+			'year' => 2005
 		];
 	}
 
@@ -856,6 +864,561 @@ class FormHelperTest extends TestCase {
 			'<fieldset>' . PHP_EOL .
 			'<legend>Legend</legend>' . PHP_EOL
 		, $helper->open('Model', ['legend' => 'Legend']));
+	}
+
+	/**
+	 * Test that you can create radio buttons using radio().
+	 */
+	public function testRadio() {
+		$helper = new FormHelper();
+		$helper->open('Model');
+
+		$options = array('red' => 'Red', 'blue' => 'Blue', 'green' => 'Green');
+
+		// regular
+		$this->assertEquals([
+			'<input id="model-radio-red" name="Model[radio]" type="radio" value="red">' . PHP_EOL .
+			'<label for="model-radio-red">Red</label>' . PHP_EOL
+			,
+			'<input id="model-radio-blue" name="Model[radio]" type="radio" value="blue">' . PHP_EOL .
+			'<label for="model-radio-blue">Blue</label>' . PHP_EOL
+			,
+			'<input id="model-radio-green" name="Model[radio]" type="radio" value="green">' . PHP_EOL .
+			'<label for="model-radio-green">Green</label>' . PHP_EOL
+		], $helper->radio('radio', $options));
+
+		// default
+		$this->assertEquals([
+			'<input class="radio" id="model-radio-red" name="Model[radio]" type="radio" value="red">' . PHP_EOL .
+			'<label for="model-radio-red">Red</label>' . PHP_EOL
+			,
+			'<input class="radio" id="model-radio-blue" name="Model[radio]" type="radio" value="blue">' . PHP_EOL .
+			'<label for="model-radio-blue">Blue</label>' . PHP_EOL
+			,
+			'<input checked="checked" class="radio" id="model-radio-green" name="Model[radio]" type="radio" value="green">' . PHP_EOL .
+			'<label for="model-radio-green">Green</label>' . PHP_EOL
+		], $helper->radio('radio', $options, ['default' => 'green', 'class' => 'radio']));
+
+		// no label
+		$this->assertEquals([
+			'<input id="model-radio-red" name="Model[radio]" type="radio" value="red">' . PHP_EOL
+			,
+			'<input id="model-radio-blue" name="Model[radio]" type="radio" value="blue">' . PHP_EOL
+			,
+			'<input id="model-radio-green" name="Model[radio]" type="radio" value="green">' . PHP_EOL
+		], $helper->radio('radio', $options, ['label' => false]));
+
+		// with data
+		$helper = new FormHelper();
+		$helper->open('Test');
+
+		$this->assertEquals([
+			'<input checked="checked" id="test-radio-red" name="Test[radio]" type="radio" value="red">' . PHP_EOL .
+			'<label for="test-radio-red">Red</label>' . PHP_EOL
+			,
+			'<input id="test-radio-blue" name="Test[radio]" type="radio" value="blue">' . PHP_EOL .
+			'<label for="test-radio-blue">Blue</label>' . PHP_EOL
+			,
+			'<input id="test-radio-green" name="Test[radio]" type="radio" value="green">' . PHP_EOL .
+			'<label for="test-radio-green">Green</label>' . PHP_EOL
+		], $helper->radio('radio', $options));
+	}
+
+	/**
+	 * Test that you can create a reset button with reset().
+	 */
+	public function testReset() {
+		$helper = new FormHelper();
+		$helper->open('Model');
+
+		$this->assertEquals('<button id="model-reset" type="reset">Title</button>' . PHP_EOL, $helper->reset('Title'));
+
+		// escaping
+		$this->assertEquals('<button id="model-reset" type="reset">Title &quot;with&quot; quotes</button>' . PHP_EOL, $helper->reset('Title "with" quotes'));
+
+		// attributes
+		$this->assertEquals('<button class="reset" id="reset" type="reset">Title</button>' . PHP_EOL, $helper->reset('Title', ['class' => 'reset', 'id' => 'reset']));
+	}
+
+	/**
+	 * Test that you can create a select dropdown of seconds with second().
+	 */
+	public function testSecond() {
+		$helper = new FormHelper();
+		$helper->open('Model');
+
+		$this->assertEquals(
+			'<select id="model-second" name="Model[second]">' . PHP_EOL .
+			'<option value="01">01</option>' . PHP_EOL .
+			'<option value="02">02</option>' . PHP_EOL .
+			'<option value="03">03</option>' . PHP_EOL .
+			'<option value="04">04</option>' . PHP_EOL .
+			'<option value="05">05</option>' . PHP_EOL .
+			'<option value="06">06</option>' . PHP_EOL .
+			'<option value="07">07</option>' . PHP_EOL .
+			'<option value="08">08</option>' . PHP_EOL .
+			'<option value="09">09</option>' . PHP_EOL .
+			'<option value="10">10</option>' . PHP_EOL .
+			'<option value="11">11</option>' . PHP_EOL .
+			'<option value="12">12</option>' . PHP_EOL .
+			'<option value="13">13</option>' . PHP_EOL .
+			'<option value="14">14</option>' . PHP_EOL .
+			'<option value="15">15</option>' . PHP_EOL .
+			'<option value="16">16</option>' . PHP_EOL .
+			'<option value="17">17</option>' . PHP_EOL .
+			'<option value="18">18</option>' . PHP_EOL .
+			'<option value="19">19</option>' . PHP_EOL .
+			'<option value="20">20</option>' . PHP_EOL .
+			'<option value="21">21</option>' . PHP_EOL .
+			'<option value="22">22</option>' . PHP_EOL .
+			'<option value="23">23</option>' . PHP_EOL .
+			'<option value="24">24</option>' . PHP_EOL .
+			'<option value="25">25</option>' . PHP_EOL .
+			'<option value="26">26</option>' . PHP_EOL .
+			'<option value="27">27</option>' . PHP_EOL .
+			'<option value="28">28</option>' . PHP_EOL .
+			'<option value="29">29</option>' . PHP_EOL .
+			'<option value="30">30</option>' . PHP_EOL .
+			'<option value="31">31</option>' . PHP_EOL .
+			'<option value="32">32</option>' . PHP_EOL .
+			'<option value="33">33</option>' . PHP_EOL .
+			'<option value="34">34</option>' . PHP_EOL .
+			'<option value="35">35</option>' . PHP_EOL .
+			'<option value="36">36</option>' . PHP_EOL .
+			'<option value="37">37</option>' . PHP_EOL .
+			'<option value="38">38</option>' . PHP_EOL .
+			'<option value="39">39</option>' . PHP_EOL .
+			'<option value="40">40</option>' . PHP_EOL .
+			'<option value="41">41</option>' . PHP_EOL .
+			'<option value="42">42</option>' . PHP_EOL .
+			'<option value="43">43</option>' . PHP_EOL .
+			'<option value="44">44</option>' . PHP_EOL .
+			'<option value="45">45</option>' . PHP_EOL .
+			'<option value="46">46</option>' . PHP_EOL .
+			'<option value="47">47</option>' . PHP_EOL .
+			'<option value="48">48</option>' . PHP_EOL .
+			'<option value="49">49</option>' . PHP_EOL .
+			'<option value="50">50</option>' . PHP_EOL .
+			'<option value="51">51</option>' . PHP_EOL .
+			'<option value="52">52</option>' . PHP_EOL .
+			'<option value="53">53</option>' . PHP_EOL .
+			'<option value="54">54</option>' . PHP_EOL .
+			'<option value="55">55</option>' . PHP_EOL .
+			'<option value="56">56</option>' . PHP_EOL .
+			'<option value="57">57</option>' . PHP_EOL .
+			'<option value="58">58</option>' . PHP_EOL .
+			'<option value="59">59</option>' . PHP_EOL .
+			'<option value="60">60</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->second('second', ['defaultSecond' => '']));
+
+		// default
+		$this->assertEquals(
+			'<select id="model-second" name="Model[second]">' . PHP_EOL .
+			'<option value="01">01</option>' . PHP_EOL .
+			'<option value="02">02</option>' . PHP_EOL .
+			'<option value="03">03</option>' . PHP_EOL .
+			'<option value="04">04</option>' . PHP_EOL .
+			'<option value="05">05</option>' . PHP_EOL .
+			'<option value="06">06</option>' . PHP_EOL .
+			'<option value="07">07</option>' . PHP_EOL .
+			'<option value="08">08</option>' . PHP_EOL .
+			'<option value="09">09</option>' . PHP_EOL .
+			'<option value="10">10</option>' . PHP_EOL .
+			'<option value="11">11</option>' . PHP_EOL .
+			'<option value="12">12</option>' . PHP_EOL .
+			'<option value="13">13</option>' . PHP_EOL .
+			'<option value="14">14</option>' . PHP_EOL .
+			'<option value="15">15</option>' . PHP_EOL .
+			'<option value="16">16</option>' . PHP_EOL .
+			'<option value="17">17</option>' . PHP_EOL .
+			'<option value="18">18</option>' . PHP_EOL .
+			'<option value="19">19</option>' . PHP_EOL .
+			'<option value="20">20</option>' . PHP_EOL .
+			'<option value="21">21</option>' . PHP_EOL .
+			'<option value="22">22</option>' . PHP_EOL .
+			'<option value="23">23</option>' . PHP_EOL .
+			'<option value="24">24</option>' . PHP_EOL .
+			'<option value="25">25</option>' . PHP_EOL .
+			'<option value="26">26</option>' . PHP_EOL .
+			'<option value="27">27</option>' . PHP_EOL .
+			'<option value="28">28</option>' . PHP_EOL .
+			'<option value="29">29</option>' . PHP_EOL .
+			'<option value="30">30</option>' . PHP_EOL .
+			'<option value="31">31</option>' . PHP_EOL .
+			'<option value="32">32</option>' . PHP_EOL .
+			'<option value="33">33</option>' . PHP_EOL .
+			'<option value="34">34</option>' . PHP_EOL .
+			'<option value="35">35</option>' . PHP_EOL .
+			'<option value="36">36</option>' . PHP_EOL .
+			'<option value="37">37</option>' . PHP_EOL .
+			'<option value="38">38</option>' . PHP_EOL .
+			'<option value="39">39</option>' . PHP_EOL .
+			'<option value="40">40</option>' . PHP_EOL .
+			'<option value="41">41</option>' . PHP_EOL .
+			'<option value="42">42</option>' . PHP_EOL .
+			'<option value="43">43</option>' . PHP_EOL .
+			'<option value="44">44</option>' . PHP_EOL .
+			'<option value="45">45</option>' . PHP_EOL .
+			'<option value="46">46</option>' . PHP_EOL .
+			'<option value="47">47</option>' . PHP_EOL .
+			'<option value="48">48</option>' . PHP_EOL .
+			'<option value="49">49</option>' . PHP_EOL .
+			'<option value="50">50</option>' . PHP_EOL .
+			'<option value="51">51</option>' . PHP_EOL .
+			'<option value="52">52</option>' . PHP_EOL .
+			'<option value="53">53</option>' . PHP_EOL .
+			'<option value="54">54</option>' . PHP_EOL .
+			'<option value="55">55</option>' . PHP_EOL .
+			'<option value="56">56</option>' . PHP_EOL .
+			'<option value="57">57</option>' . PHP_EOL .
+			'<option selected="selected" value="58">58</option>' . PHP_EOL .
+			'<option value="59">59</option>' . PHP_EOL .
+			'<option value="60">60</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->second('second', ['defaultSecond' => 58]));
+
+		// with data
+		$helper = new FormHelper();
+		$helper->open('Test');
+
+		$this->assertEquals(
+			'<select id="test-second" name="Test[second]">' . PHP_EOL .
+			'<option value="01">01</option>' . PHP_EOL .
+			'<option value="02">02</option>' . PHP_EOL .
+			'<option value="03">03</option>' . PHP_EOL .
+			'<option value="04">04</option>' . PHP_EOL .
+			'<option value="05">05</option>' . PHP_EOL .
+			'<option value="06">06</option>' . PHP_EOL .
+			'<option value="07">07</option>' . PHP_EOL .
+			'<option value="08">08</option>' . PHP_EOL .
+			'<option value="09">09</option>' . PHP_EOL .
+			'<option value="10">10</option>' . PHP_EOL .
+			'<option value="11">11</option>' . PHP_EOL .
+			'<option value="12">12</option>' . PHP_EOL .
+			'<option value="13">13</option>' . PHP_EOL .
+			'<option value="14">14</option>' . PHP_EOL .
+			'<option value="15">15</option>' . PHP_EOL .
+			'<option value="16">16</option>' . PHP_EOL .
+			'<option value="17">17</option>' . PHP_EOL .
+			'<option value="18">18</option>' . PHP_EOL .
+			'<option value="19">19</option>' . PHP_EOL .
+			'<option value="20">20</option>' . PHP_EOL .
+			'<option value="21">21</option>' . PHP_EOL .
+			'<option value="22">22</option>' . PHP_EOL .
+			'<option value="23">23</option>' . PHP_EOL .
+			'<option value="24">24</option>' . PHP_EOL .
+			'<option value="25">25</option>' . PHP_EOL .
+			'<option value="26">26</option>' . PHP_EOL .
+			'<option value="27">27</option>' . PHP_EOL .
+			'<option value="28">28</option>' . PHP_EOL .
+			'<option value="29">29</option>' . PHP_EOL .
+			'<option value="30">30</option>' . PHP_EOL .
+			'<option value="31">31</option>' . PHP_EOL .
+			'<option value="32">32</option>' . PHP_EOL .
+			'<option value="33">33</option>' . PHP_EOL .
+			'<option value="34">34</option>' . PHP_EOL .
+			'<option value="35">35</option>' . PHP_EOL .
+			'<option value="36">36</option>' . PHP_EOL .
+			'<option value="37">37</option>' . PHP_EOL .
+			'<option value="38">38</option>' . PHP_EOL .
+			'<option value="39">39</option>' . PHP_EOL .
+			'<option selected="selected" value="40">40</option>' . PHP_EOL .
+			'<option value="41">41</option>' . PHP_EOL .
+			'<option value="42">42</option>' . PHP_EOL .
+			'<option value="43">43</option>' . PHP_EOL .
+			'<option value="44">44</option>' . PHP_EOL .
+			'<option value="45">45</option>' . PHP_EOL .
+			'<option value="46">46</option>' . PHP_EOL .
+			'<option value="47">47</option>' . PHP_EOL .
+			'<option value="48">48</option>' . PHP_EOL .
+			'<option value="49">49</option>' . PHP_EOL .
+			'<option value="50">50</option>' . PHP_EOL .
+			'<option value="51">51</option>' . PHP_EOL .
+			'<option value="52">52</option>' . PHP_EOL .
+			'<option value="53">53</option>' . PHP_EOL .
+			'<option value="54">54</option>' . PHP_EOL .
+			'<option value="55">55</option>' . PHP_EOL .
+			'<option value="56">56</option>' . PHP_EOL .
+			'<option value="57">57</option>' . PHP_EOL .
+			'<option value="58">58</option>' . PHP_EOL .
+			'<option value="59">59</option>' . PHP_EOL .
+			'<option value="60">60</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->second('second'));
+	}
+
+	/**
+	 * Test that you can create select menus (and optgroups) with select().
+	 */
+	public function testSelect() {
+		$helper = new FormHelper();
+		$helper->open('Model');
+
+		$options = array('warrior' => 'Warrior', 'ranger' => 'Ranger', 'mage' => 'Mage');
+
+		$this->assertEquals(
+			'<select id="model-select" name="Model[select]">' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option value="ranger">Ranger</option>' . PHP_EOL .
+			'<option value="mage">Mage</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select', $options));
+
+		// empty
+		$this->assertEquals(
+			'<select id="model-select" name="Model[select]">' . PHP_EOL .
+			'<option value=""></option>' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option value="ranger">Ranger</option>' . PHP_EOL .
+			'<option value="mage">Mage</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select', $options, ['empty' => true]));
+
+		$this->assertEquals(
+			'<select id="model-select" name="Model[select]">' . PHP_EOL .
+			'<option value="">-- None --</option>' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option value="ranger">Ranger</option>' . PHP_EOL .
+			'<option value="mage">Mage</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select', $options, ['empty' => '-- None --']));
+
+		// default
+		$this->assertEquals(
+			'<select id="model-select" name="Model[select]">' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option selected="selected" value="ranger">Ranger</option>' . PHP_EOL .
+			'<option value="mage">Mage</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select', $options, ['default' => 'ranger']));
+
+		// multiple
+		$this->assertEquals(
+			'<select id="model-select" multiple="multiple" name="Model[select]">' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option selected="selected" value="ranger">Ranger</option>' . PHP_EOL .
+			'<option selected="selected" value="mage">Mage</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select', $options, ['default' => ['ranger', 'mage'], 'multiple' => true]));
+
+		// optgroup
+		$optgroup = array(
+			'Weapons' => array(
+				'axe' => 'Axe',
+				'sword' => 'Sword',
+				'bow' => 'Bow',
+				'staff' => 'Staff'
+			),
+			'Classes' => $options
+		);
+
+		$this->assertEquals(
+			'<select id="model-selectgroup" name="Model[select_group]">' . PHP_EOL .
+			'<optgroup label="Weapons">' . PHP_EOL .
+			'<option value="axe">Axe</option>' . PHP_EOL .
+			'<option value="sword">Sword</option>' . PHP_EOL .
+			'<option value="bow">Bow</option>' . PHP_EOL .
+			'<option value="staff">Staff</option>' . PHP_EOL .
+			'</optgroup>' . PHP_EOL .
+			'<optgroup label="Classes">' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option value="ranger">Ranger</option>' . PHP_EOL .
+			'<option value="mage">Mage</option>' . PHP_EOL .
+			'</optgroup>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select_group', $optgroup));
+
+		$this->assertEquals(
+			'<select id="model-selectgroup" name="Model[select_group]">' . PHP_EOL .
+			'<optgroup label="Weapons">' . PHP_EOL .
+			'<option value="axe">Axe</option>' . PHP_EOL .
+			'<option value="sword">Sword</option>' . PHP_EOL .
+			'<option selected="selected" value="bow">Bow</option>' . PHP_EOL .
+			'<option value="staff">Staff</option>' . PHP_EOL .
+			'</optgroup>' . PHP_EOL .
+			'<optgroup label="Classes">' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option value="ranger">Ranger</option>' . PHP_EOL .
+			'<option value="mage">Mage</option>' . PHP_EOL .
+			'</optgroup>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select_group', $optgroup, ['default' => 'bow']));
+
+		$this->assertEquals(
+			'<select id="model-selectgroup" multiple="multiple" name="Model[select_group]">' . PHP_EOL .
+			'<optgroup label="Weapons">' . PHP_EOL .
+			'<option selected="selected" value="axe">Axe</option>' . PHP_EOL .
+			'<option value="sword">Sword</option>' . PHP_EOL .
+			'<option selected="selected" value="bow">Bow</option>' . PHP_EOL .
+			'<option value="staff">Staff</option>' . PHP_EOL .
+			'</optgroup>' . PHP_EOL .
+			'<optgroup label="Classes">' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option value="ranger">Ranger</option>' . PHP_EOL .
+			'<option selected="selected" value="mage">Mage</option>' . PHP_EOL .
+			'</optgroup>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select_group', $optgroup, ['default' => ['bow', 'axe', 'mage'], 'multiple' => 'multiple']));
+
+		// with data
+		$helper = new FormHelper();
+		$helper->open('Test');
+
+		$this->assertEquals(
+			'<select id="test-select" name="Test[select]">' . PHP_EOL .
+			'<option value="warrior">Warrior</option>' . PHP_EOL .
+			'<option value="ranger">Ranger</option>' . PHP_EOL .
+			'<option selected="selected" value="mage">Mage</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select', $options));
+
+		$this->assertEquals(
+			'<select id="test-selectgroup" multiple="multiple" name="Test[select_group]">' . PHP_EOL .
+			'<optgroup label="Weapons">' . PHP_EOL .
+			'<option value="axe">Axe</option>' . PHP_EOL .
+			'<option selected="selected" value="sword">Sword</option>' . PHP_EOL .
+			'<option value="bow">Bow</option>' . PHP_EOL .
+			'<option value="staff">Staff</option>' . PHP_EOL .
+			'</optgroup>' . PHP_EOL .
+			'<optgroup label="Classes">' . PHP_EOL .
+			'<option selected="selected" value="warrior">Warrior</option>' . PHP_EOL .
+			'<option value="ranger">Ranger</option>' . PHP_EOL .
+			'<option value="mage">Mage</option>' . PHP_EOL .
+			'</optgroup>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->select('select_group', $optgroup, ['multiple' => true]));
+	}
+
+	/**
+	 * Test that you can create a submit button with submit().
+	 */
+	public function testSubmit() {
+		$helper = new FormHelper();
+		$helper->open('Model');
+
+		$this->assertEquals('<button id="model-submit" type="submit">Title</button>' . PHP_EOL, $helper->submit('Title'));
+
+		// escaping
+		$this->assertEquals('<button id="model-submit" type="submit">Title &quot;with&quot; quotes</button>' . PHP_EOL, $helper->submit('Title "with" quotes'));
+
+		// attributes
+		$this->assertEquals('<button class="reset" id="reset" type="submit">Title</button>' . PHP_EOL, $helper->submit('Title', ['class' => 'reset', 'id' => 'reset']));
+	}
+
+	/**
+	 * Test that you can create a text input with text().
+	 */
+	public function testText() {
+		$helper = new FormHelper();
+		$helper->open('Model');
+
+		$this->assertEquals('<input id="model-text" name="Model[text]" type="text" value="">' . PHP_EOL, $helper->text('text'));
+		$this->assertEquals('<input class="input" id="model-text" name="Model[text]" placeholder="Testing &quot;quotes&quot; placeholder" readonly="readonly" type="text" value="">' . PHP_EOL, $helper->text('text', [
+			'placeholder' => 'Testing "quotes" placeholder',
+			'class' => 'input',
+			'readonly' => true
+		]));
+
+		// with data
+		$helper = new FormHelper();
+		$helper->open('Test');
+
+		$this->assertEquals('<input id="test-text" name="Test[text]" type="text" value="Titon">' . PHP_EOL, $helper->text('text'));
+	}
+
+	/**
+	 * Test that you can create a textarea with textarea().
+	 */
+	public function testTextarea() {
+		$helper = new FormHelper();
+		$helper->open('Model');
+
+		$this->assertEquals('<textarea cols="25" id="model-textarea" name="Model[textarea]" rows="5"></textarea>' . PHP_EOL, $helper->textarea('textarea'));
+		$this->assertEquals('<textarea class="input" cols="50" disabled="disabled" id="model-textarea" name="Model[textarea]" rows="10"></textarea>' . PHP_EOL, $helper->textarea('textarea', [
+			'class' => 'input',
+			'rows' => 10,
+			'cols' => 50,
+			'disabled' => true
+		]));
+
+		// with data
+		$helper = new FormHelper();
+		$helper->open('Test');
+
+		$this->assertEquals('<textarea cols="25" id="test-textarea" name="Test[textarea]" rows="5">Titon PHP Framework</textarea>' . PHP_EOL, $helper->textarea('textarea'));
+	}
+
+	/**
+	 * Test that you can grab a value from the request.
+	 */
+	public function testValue() {
+		$helper = new FormHelper();
+
+		$this->assertEquals('test', $helper->value(null, 'input'));
+		$this->assertEquals(null, $helper->value('Model', 'field'));
+		$this->assertEquals('no', $helper->value('Test', 'checkbox'));
+		$this->assertEquals(19, $helper->value('Test', 'minute'));
+		$this->assertEquals('Titon', $helper->value('Test', 'text'));
+		$this->assertEquals(['sword', 'warrior'], $helper->value('Test', 'select_group'));
+	}
+
+	/**
+	 * Test that you can create a select dropdown of years with year().
+	 */
+	public function testYear() {
+		$helper = new FormHelper();
+		$helper->open('Model');
+
+		$this->assertEquals(
+			'<select id="model-year" name="Model[year]">' . PHP_EOL .
+			'<option value="2005">2005</option>' . PHP_EOL .
+			'<option value="2006">2006</option>' . PHP_EOL .
+			'<option value="2007">2007</option>' . PHP_EOL .
+			'<option value="2008">2008</option>' . PHP_EOL .
+			'<option value="2009">2009</option>' . PHP_EOL .
+			'<option value="2010">2010</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->year('year', ['startYear' => 2005, 'endYear' => 2010]));
+
+		// reverse with default
+		$this->assertEquals(
+			'<select id="model-year" name="Model[year]">' . PHP_EOL .
+			'<option value="2010">2010</option>' . PHP_EOL .
+			'<option value="2009">2009</option>' . PHP_EOL .
+			'<option value="2008">2008</option>' . PHP_EOL .
+			'<option selected="selected" value="2007">2007</option>' . PHP_EOL .
+			'<option value="2006">2006</option>' . PHP_EOL .
+			'<option value="2005">2005</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->year('year', ['startYear' => 2005, 'endYear' => 2010, 'reverseYear' => true, 'defaultYear' => 2007]));
+
+		// reverse with format
+		$this->assertEquals(
+			'<select id="model-year" name="Model[year]">' . PHP_EOL .
+			'<option value="2010">10</option>' . PHP_EOL .
+			'<option value="2009">09</option>' . PHP_EOL .
+			'<option value="2008">08</option>' . PHP_EOL .
+			'<option value="2007">07</option>' . PHP_EOL .
+			'<option value="2006">06</option>' . PHP_EOL .
+			'<option value="2005">05</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->year('year', ['startYear' => 2005, 'endYear' => 2010, 'reverseYear' => true, 'yearFormat' => 'y']));
+
+		// with data
+		$helper = new FormHelper();
+		$helper->open('Test');
+
+		$this->assertEquals(
+			'<select id="test-year" name="Test[year]">' . PHP_EOL .
+			'<option value="2010">10</option>' . PHP_EOL .
+			'<option value="2009">09</option>' . PHP_EOL .
+			'<option value="2008">08</option>' . PHP_EOL .
+			'<option value="2007">07</option>' . PHP_EOL .
+			'<option value="2006">06</option>' . PHP_EOL .
+			'<option selected="selected" value="2005">05</option>' . PHP_EOL .
+			'</select>' . PHP_EOL
+		, $helper->year('year', ['startYear' => 2005, 'endYear' => 2010, 'reverseYear' => true, 'yearFormat' => 'y']));
 	}
 
 }
