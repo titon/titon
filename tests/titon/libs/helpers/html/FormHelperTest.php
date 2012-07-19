@@ -53,27 +53,27 @@ class FormHelperTest extends TestCase {
 
 		// regular
 		$this->assertEquals(
-			'<input id="model-checkbox" name="Model[checkbox]" type="checkbox" value="1">' . PHP_EOL .
+			'<input id="model-checkbox" name="checkbox" type="checkbox" value="1">' . PHP_EOL .
 			'<label for="model-checkbox">Title</label>' . PHP_EOL
 		, $helper->checkbox('checkbox', 'Title'));
 
 		// no label
-		$this->assertEquals('<input id="model-checkbox" name="Model[checkbox]" type="checkbox" value="1">' . PHP_EOL, $helper->checkbox('checkbox', null));
+		$this->assertEquals('<input id="model-checkbox" name="checkbox" type="checkbox" value="1">' . PHP_EOL, $helper->checkbox('checkbox', null));
 
 		// tiered depth
 		$this->assertEquals(
-			'<input id="check-box" name="Model[check][box]" type="checkbox" value="1">' . PHP_EOL .
-			'<label for="check-box">Title</label>' . PHP_EOL
+			'<input id="model-check-box" name="check[box]" type="checkbox" value="1">' . PHP_EOL .
+			'<label for="model-check-box">Title</label>' . PHP_EOL
 		, $helper->checkbox('check.box', 'Title'));
 
 		// attributes
-		$this->assertEquals('<input class="class-name" id="custom-id" name="Model[checkbox]" type="checkbox" value="1">' . PHP_EOL, $helper->checkbox('checkbox', null, [
+		$this->assertEquals('<input class="class-name" id="custom-id" name="checkbox" type="checkbox" value="1">' . PHP_EOL, $helper->checkbox('checkbox', null, [
 			'class' => 'class-name',
 			'id' => 'custom-id'
 		]));
 
 		// value
-		$this->assertEquals('<input id="model-checkbox" name="Model[checkbox]" type="checkbox" value="yes">' . PHP_EOL, $helper->checkbox('checkbox', null, [
+		$this->assertEquals('<input id="model-checkbox" name="checkbox" type="checkbox" value="yes">' . PHP_EOL, $helper->checkbox('checkbox', null, [
 			'value' => 'yes'
 		]));
 
@@ -81,7 +81,7 @@ class FormHelperTest extends TestCase {
 		$helper = new FormHelper();
 		$helper->open('Test');
 
-		$this->assertEquals('<input id="test-checkbox" name="Test[checkbox]" type="checkbox" value="no">' . PHP_EOL, $helper->checkbox('checkbox', null, [
+		$this->assertEquals('<input id="test-checkbox" name="Test[checkbox]" type="checkbox" value="no">' . PHP_EOL, $helper->checkbox('Test.checkbox', null, [
 			'value' => 'yes'
 		]));
 	}
@@ -97,25 +97,25 @@ class FormHelperTest extends TestCase {
 
 		// regular
 		$this->assertEquals([
-			'<input id="model-checkboxes-red" name="Model[checkboxes][]" type="checkbox" value="red">' . PHP_EOL .
+			'<input id="model-checkboxes-red" name="checkboxes[]" type="checkbox" value="red">' . PHP_EOL .
 			'<label for="model-checkboxes-red">Red</label>' . PHP_EOL
 			,
-			'<input id="model-checkboxes-blue" name="Model[checkboxes][]" type="checkbox" value="blue">' . PHP_EOL .
+			'<input id="model-checkboxes-blue" name="checkboxes[]" type="checkbox" value="blue">' . PHP_EOL .
 			'<label for="model-checkboxes-blue">Blue</label>' . PHP_EOL
 			,
-			'<input id="model-checkboxes-green" name="Model[checkboxes][]" type="checkbox" value="green">' . PHP_EOL .
+			'<input id="model-checkboxes-green" name="checkboxes[]" type="checkbox" value="green">' . PHP_EOL .
 			'<label for="model-checkboxes-green">Green</label>' . PHP_EOL
 		], $helper->checkboxes('checkboxes', $options));
 
 		// default
 		$this->assertEquals([
-			'<input id="model-checkboxes-red" name="Model[checkboxes][]" type="checkbox" value="red">' . PHP_EOL .
+			'<input id="model-checkboxes-red" name="checkboxes[]" type="checkbox" value="red">' . PHP_EOL .
 			'<label for="model-checkboxes-red">Red</label>' . PHP_EOL
 			,
-			'<input checked="checked" id="model-checkboxes-blue" name="Model[checkboxes][]" type="checkbox" value="blue">' . PHP_EOL .
+			'<input checked="checked" id="model-checkboxes-blue" name="checkboxes[]" type="checkbox" value="blue">' . PHP_EOL .
 			'<label for="model-checkboxes-blue">Blue</label>' . PHP_EOL
 			,
-			'<input id="model-checkboxes-green" name="Model[checkboxes][]" type="checkbox" value="green">' . PHP_EOL .
+			'<input id="model-checkboxes-green" name="checkboxes[]" type="checkbox" value="green">' . PHP_EOL .
 			'<label for="model-checkboxes-green">Green</label>' . PHP_EOL
 		], $helper->checkboxes('checkboxes', $options, ['default' => 'blue']));
 
@@ -132,12 +132,9 @@ class FormHelperTest extends TestCase {
 			,
 			'<input id="test-checkboxes-green" name="Test[checkboxes][]" type="checkbox" value="green">' . PHP_EOL .
 			'<label for="test-checkboxes-green">Green</label>' . PHP_EOL
-		], $helper->checkboxes('checkboxes', $options, ['default' => 'blue']));
+		], $helper->checkboxes('Test.checkboxes', $options, ['default' => 'blue']));
 
 		// default with multiple data
-		$helper = new FormHelper();
-		$helper->open('Test');
-
 		$this->assertEquals([
 			'<input checked="checked" id="test-checkboxesmulti-red" name="Test[checkboxes_multi][]" type="checkbox" value="red">' . PHP_EOL .
 			'<label for="test-checkboxesmulti-red">Red</label>' . PHP_EOL
@@ -147,9 +144,12 @@ class FormHelperTest extends TestCase {
 			,
 			'<input checked="checked" id="test-checkboxesmulti-green" name="Test[checkboxes_multi][]" type="checkbox" value="green">' . PHP_EOL .
 			'<label for="test-checkboxesmulti-green">Green</label>' . PHP_EOL
-		], $helper->checkboxes('checkboxes_multi', $options, ['default' => 'blue']));
+		], $helper->checkboxes('Test.checkboxes_multi', $options, ['default' => 'blue']));
 	}
 
+	/**
+	 * Test that you can close a form with close().
+	 */
 	public function testClose() {
 		$helper = new FormHelper();
 		$helper->open('Model');
@@ -180,7 +180,7 @@ class FormHelperTest extends TestCase {
 		$helper->open('Model');
 
 		$this->assertEquals(
-			'<select id="model-day" name="Model[day]">' . PHP_EOL .
+			'<select id="model-day" name="day">' . PHP_EOL .
 			'<option value="1">1</option>' . PHP_EOL .
 			'<option value="2">2</option>' . PHP_EOL .
 			'<option value="3">3</option>' . PHP_EOL .
@@ -217,7 +217,7 @@ class FormHelperTest extends TestCase {
 
 		// format
 		$this->assertEquals(
-			'<select id="model-day" name="Model[day]">' . PHP_EOL .
+			'<select id="model-day" name="day">' . PHP_EOL .
 			'<option value="1">01</option>' . PHP_EOL .
 			'<option value="2">02</option>' . PHP_EOL .
 			'<option value="3">03</option>' . PHP_EOL .
@@ -254,7 +254,7 @@ class FormHelperTest extends TestCase {
 
 		// default
 		$this->assertEquals(
-			'<select id="model-day" name="Model[day]">' . PHP_EOL .
+			'<select id="model-day" name="day">' . PHP_EOL .
 			'<option value="1">1</option>' . PHP_EOL .
 			'<option value="2">2</option>' . PHP_EOL .
 			'<option value="3">3</option>' . PHP_EOL .
@@ -327,7 +327,7 @@ class FormHelperTest extends TestCase {
 			'<option value="30">30</option>' . PHP_EOL .
 			'<option value="31">31</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->day('day'));
+		, $helper->day('Test.day'));
 	}
 
 	/**
@@ -337,7 +337,7 @@ class FormHelperTest extends TestCase {
 		$helper = new FormHelper();
 		$helper->open('Model');
 
-		$this->assertEquals('<input id="model-file" name="Model[file]" type="file">' . PHP_EOL, $helper->file('file'));
+		$this->assertEquals('<input id="model-file" name="file" type="file">' . PHP_EOL, $helper->file('file'));
 	}
 
 	/**
@@ -347,13 +347,13 @@ class FormHelperTest extends TestCase {
 		$helper = new FormHelper();
 		$helper->open('Model');
 
-		$this->assertEquals('<input id="model-hidden" name="Model[hidden]" type="hidden" value="">' . PHP_EOL, $helper->hidden('hidden'));
-		$this->assertEquals('<input id="model-hidden" name="Model[hidden]" type="hidden" value="foobar">' . PHP_EOL, $helper->hidden('hidden', ['value' => 'foobar']));
+		$this->assertEquals('<input id="model-hidden" name="hidden" type="hidden" value="">' . PHP_EOL, $helper->hidden('hidden'));
+		$this->assertEquals('<input id="model-hidden" name="hidden" type="hidden" value="foobar">' . PHP_EOL, $helper->hidden('hidden', ['value' => 'foobar']));
 
 		$helper = new FormHelper();
 		$helper->open('Test');
 
-		$this->assertEquals('<input id="test-hidden" name="Test[hidden]" type="hidden" value="yes">' . PHP_EOL, $helper->hidden('hidden'));
+		$this->assertEquals('<input id="test-hidden" name="Test[hidden]" type="hidden" value="yes">' . PHP_EOL, $helper->hidden('Test.hidden'));
 	}
 
 	/**
@@ -364,7 +364,7 @@ class FormHelperTest extends TestCase {
 		$helper->open('Model');
 
 		$this->assertEquals(
-			'<select id="model-hour" name="Model[hour]">' . PHP_EOL .
+			'<select id="model-hour" name="hour">' . PHP_EOL .
 			'<option value="01">01</option>' . PHP_EOL .
 			'<option value="02">02</option>' . PHP_EOL .
 			'<option value="03">03</option>' . PHP_EOL .
@@ -381,7 +381,7 @@ class FormHelperTest extends TestCase {
 		, $helper->hour('hour', ['defaultHour' => '']));
 
 		$this->assertEquals(
-			'<select id="model-hour" name="Model[hour]" onchange="update(this);">' . PHP_EOL .
+			'<select id="model-hour" name="hour" onchange="update(this);">' . PHP_EOL .
 			'<option value="01">01</option>' . PHP_EOL .
 			'<option value="02">02</option>' . PHP_EOL .
 			'<option value="03">03</option>' . PHP_EOL .
@@ -399,7 +399,7 @@ class FormHelperTest extends TestCase {
 
 		// 24 hour
 		$this->assertEquals(
-			'<select id="model-hour" name="Model[hour]">' . PHP_EOL .
+			'<select id="model-hour" name="hour">' . PHP_EOL .
 			'<option value="00">00</option>' . PHP_EOL .
 			'<option value="01">01</option>' . PHP_EOL .
 			'<option value="02">02</option>' . PHP_EOL .
@@ -428,7 +428,7 @@ class FormHelperTest extends TestCase {
 		, $helper->hour('hour', ['defaultHour' => '', '24hour' => true]));
 
 		$this->assertEquals(
-			'<select id="model-hour" name="Model[hour]" onchange="update(this);">' . PHP_EOL .
+			'<select id="model-hour" name="hour" onchange="update(this);">' . PHP_EOL .
 			'<option value="00">00</option>' . PHP_EOL .
 			'<option value="01">01</option>' . PHP_EOL .
 			'<option value="02">02</option>' . PHP_EOL .
@@ -475,7 +475,7 @@ class FormHelperTest extends TestCase {
 			'<option value="11">11</option>' . PHP_EOL .
 			'<option value="12">12</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->hour('hour'));
+		, $helper->hour('Test.hour'));
 
 		$this->assertEquals(
 			'<select id="test-hour24" name="Test[hour24]">' . PHP_EOL .
@@ -504,7 +504,7 @@ class FormHelperTest extends TestCase {
 			'<option selected="selected" value="22">22</option>' . PHP_EOL .
 			'<option value="23">23</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->hour('hour24', ['24hour' => true]));
+		, $helper->hour('Test.hour24', ['24hour' => true]));
 	}
 
 	/**
@@ -514,7 +514,7 @@ class FormHelperTest extends TestCase {
 		$helper = new FormHelper();
 		$helper->open('Model');
 
-		$this->assertEquals('<input id="model-image" name="Model[image]" src="image.png" type="image">' . PHP_EOL, $helper->image('image', ['src' => 'image.png']));
+		$this->assertEquals('<input id="model-image" name="image" src="image.png" type="image">' . PHP_EOL, $helper->image('image', ['src' => 'image.png']));
 	}
 
 	/**
@@ -530,10 +530,10 @@ class FormHelperTest extends TestCase {
 		$this->assertEquals('<label for="model-label">Title &quot;with&quot; quotes</label>' . PHP_EOL, $helper->label('label', 'Title "with" quotes'));
 
 		// escaping
-		$this->assertEquals('<label class="class-name" for="label-nested-input">Title</label>' . PHP_EOL, $helper->label('label.nested.input', 'Title', ['class' => 'class-name']));
+		$this->assertEquals('<label class="class-name" for="model-label-nested-input">Title</label>' . PHP_EOL, $helper->label('label.nested.input', 'Title', ['class' => 'class-name']));
 
 		// nested input
-		$this->assertEquals('<label for="model-label"><input id="model-label" name="Model[label]" type="checkbox" value="1">' . PHP_EOL . '</label>' . PHP_EOL, $helper->label('label', $helper->checkbox('label', null), ['escape' => false]));
+		$this->assertEquals('<label for="model-label"><input id="model-label" name="label" type="checkbox" value="1">' . PHP_EOL . '</label>' . PHP_EOL, $helper->label('label', $helper->checkbox('label', null), ['escape' => false]));
 	}
 
 	/**
@@ -544,14 +544,14 @@ class FormHelperTest extends TestCase {
 		$helper->open('Model');
 
 		$this->assertEquals(
-			'<select id="model-meridiem" name="Model[meridiem]">' . PHP_EOL .
+			'<select id="model-meridiem" name="meridiem">' . PHP_EOL .
 			'<option value="am">AM</option>' . PHP_EOL .
 			'<option value="pm">PM</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
 		, $helper->meridiem('meridiem', ['defaultMeridiem' => '']));
 
 		$this->assertEquals(
-			'<select id="model-meridiem" name="Model[meridiem]">' . PHP_EOL .
+			'<select id="model-meridiem" name="meridiem">' . PHP_EOL .
 			'<option value="am">AM</option>' . PHP_EOL .
 			'<option selected="selected" value="pm">PM</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
@@ -566,7 +566,7 @@ class FormHelperTest extends TestCase {
 			'<option selected="selected" value="am">AM</option>' . PHP_EOL .
 			'<option value="pm">PM</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->meridiem('meridiem'));
+		, $helper->meridiem('Test.meridiem'));
 	}
 
 	/**
@@ -577,7 +577,7 @@ class FormHelperTest extends TestCase {
 		$helper->open('Model');
 
 		$this->assertEquals(
-			'<select id="model-minute" name="Model[minute]">' . PHP_EOL .
+			'<select id="model-minute" name="minute">' . PHP_EOL .
 			'<option value="01">01</option>' . PHP_EOL .
 			'<option value="02">02</option>' . PHP_EOL .
 			'<option value="03">03</option>' . PHP_EOL .
@@ -643,7 +643,7 @@ class FormHelperTest extends TestCase {
 
 		// default
 		$this->assertEquals(
-			'<select id="model-minute" name="Model[minute]">' . PHP_EOL .
+			'<select id="model-minute" name="minute">' . PHP_EOL .
 			'<option value="01">01</option>' . PHP_EOL .
 			'<option value="02">02</option>' . PHP_EOL .
 			'<option value="03">03</option>' . PHP_EOL .
@@ -774,7 +774,7 @@ class FormHelperTest extends TestCase {
 			'<option value="59">59</option>' . PHP_EOL .
 			'<option value="60">60</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->minute('minute'));
+		, $helper->minute('Test.minute'));
 	}
 
 	/**
@@ -785,7 +785,7 @@ class FormHelperTest extends TestCase {
 		$helper->open('Model');
 
 		$this->assertEquals(
-			'<select id="model-month" name="Model[month]">' . PHP_EOL .
+			'<select id="model-month" name="month">' . PHP_EOL .
 			'<option value="1">January</option>' . PHP_EOL .
 			'<option value="2">February</option>' . PHP_EOL .
 			'<option value="3">March</option>' . PHP_EOL .
@@ -803,7 +803,7 @@ class FormHelperTest extends TestCase {
 
 		// format + default
 		$this->assertEquals(
-			'<select id="model-month" name="Model[month]">' . PHP_EOL .
+			'<select id="model-month" name="month">' . PHP_EOL .
 			'<option value="1">Jan</option>' . PHP_EOL .
 			'<option value="2">Feb</option>' . PHP_EOL .
 			'<option value="3">Mar</option>' . PHP_EOL .
@@ -838,7 +838,7 @@ class FormHelperTest extends TestCase {
 			'<option value="11">11</option>' . PHP_EOL .
 			'<option value="12">12</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->month('month', ['monthFormat' => 'm']));
+		, $helper->month('Test.month', ['monthFormat' => 'm']));
 	}
 
 	/**
@@ -854,9 +854,6 @@ class FormHelperTest extends TestCase {
 
 		// action
 		$this->assertEquals('<form action="/pages/search" enctype="application/x-www-form-urlencoded" id="model-form" method="get">' . PHP_EOL, $helper->open('model', ['method' => 'get', 'action' => ['controller' => 'search']]));
-
-		// no model
-		$this->assertEquals('<form action="" enctype="application/x-www-form-urlencoded" id="form" method="post">' . PHP_EOL, $helper->open(null));
 
 		// legend
 		$this->assertEquals(
@@ -877,35 +874,35 @@ class FormHelperTest extends TestCase {
 
 		// regular
 		$this->assertEquals([
-			'<input id="model-radio-red" name="Model[radio]" type="radio" value="red">' . PHP_EOL .
+			'<input id="model-radio-red" name="radio" type="radio" value="red">' . PHP_EOL .
 			'<label for="model-radio-red">Red</label>' . PHP_EOL
 			,
-			'<input id="model-radio-blue" name="Model[radio]" type="radio" value="blue">' . PHP_EOL .
+			'<input id="model-radio-blue" name="radio" type="radio" value="blue">' . PHP_EOL .
 			'<label for="model-radio-blue">Blue</label>' . PHP_EOL
 			,
-			'<input id="model-radio-green" name="Model[radio]" type="radio" value="green">' . PHP_EOL .
+			'<input id="model-radio-green" name="radio" type="radio" value="green">' . PHP_EOL .
 			'<label for="model-radio-green">Green</label>' . PHP_EOL
 		], $helper->radio('radio', $options));
 
 		// default
 		$this->assertEquals([
-			'<input class="radio" id="model-radio-red" name="Model[radio]" type="radio" value="red">' . PHP_EOL .
+			'<input class="radio" id="model-radio-red" name="radio" type="radio" value="red">' . PHP_EOL .
 			'<label for="model-radio-red">Red</label>' . PHP_EOL
 			,
-			'<input class="radio" id="model-radio-blue" name="Model[radio]" type="radio" value="blue">' . PHP_EOL .
+			'<input class="radio" id="model-radio-blue" name="radio" type="radio" value="blue">' . PHP_EOL .
 			'<label for="model-radio-blue">Blue</label>' . PHP_EOL
 			,
-			'<input checked="checked" class="radio" id="model-radio-green" name="Model[radio]" type="radio" value="green">' . PHP_EOL .
+			'<input checked="checked" class="radio" id="model-radio-green" name="radio" type="radio" value="green">' . PHP_EOL .
 			'<label for="model-radio-green">Green</label>' . PHP_EOL
 		], $helper->radio('radio', $options, ['default' => 'green', 'class' => 'radio']));
 
 		// no label
 		$this->assertEquals([
-			'<input id="model-radio-red" name="Model[radio]" type="radio" value="red">' . PHP_EOL
+			'<input id="model-radio-red" name="radio" type="radio" value="red">' . PHP_EOL
 			,
-			'<input id="model-radio-blue" name="Model[radio]" type="radio" value="blue">' . PHP_EOL
+			'<input id="model-radio-blue" name="radio" type="radio" value="blue">' . PHP_EOL
 			,
-			'<input id="model-radio-green" name="Model[radio]" type="radio" value="green">' . PHP_EOL
+			'<input id="model-radio-green" name="radio" type="radio" value="green">' . PHP_EOL
 		], $helper->radio('radio', $options, ['label' => false]));
 
 		// with data
@@ -921,7 +918,7 @@ class FormHelperTest extends TestCase {
 			,
 			'<input id="test-radio-green" name="Test[radio]" type="radio" value="green">' . PHP_EOL .
 			'<label for="test-radio-green">Green</label>' . PHP_EOL
-		], $helper->radio('radio', $options));
+		], $helper->radio('Test.radio', $options));
 	}
 
 	/**
@@ -948,7 +945,7 @@ class FormHelperTest extends TestCase {
 		$helper->open('Model');
 
 		$this->assertEquals(
-			'<select id="model-second" name="Model[second]">' . PHP_EOL .
+			'<select id="model-second" name="second">' . PHP_EOL .
 			'<option value="01">01</option>' . PHP_EOL .
 			'<option value="02">02</option>' . PHP_EOL .
 			'<option value="03">03</option>' . PHP_EOL .
@@ -1014,7 +1011,7 @@ class FormHelperTest extends TestCase {
 
 		// default
 		$this->assertEquals(
-			'<select id="model-second" name="Model[second]">' . PHP_EOL .
+			'<select id="model-second" name="second">' . PHP_EOL .
 			'<option value="01">01</option>' . PHP_EOL .
 			'<option value="02">02</option>' . PHP_EOL .
 			'<option value="03">03</option>' . PHP_EOL .
@@ -1145,7 +1142,7 @@ class FormHelperTest extends TestCase {
 			'<option value="59">59</option>' . PHP_EOL .
 			'<option value="60">60</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->second('second'));
+		, $helper->second('Test.second'));
 	}
 
 	/**
@@ -1158,7 +1155,7 @@ class FormHelperTest extends TestCase {
 		$options = array('warrior' => 'Warrior', 'ranger' => 'Ranger', 'mage' => 'Mage');
 
 		$this->assertEquals(
-			'<select id="model-select" name="Model[select]">' . PHP_EOL .
+			'<select id="model-select" name="select">' . PHP_EOL .
 			'<option value="warrior">Warrior</option>' . PHP_EOL .
 			'<option value="ranger">Ranger</option>' . PHP_EOL .
 			'<option value="mage">Mage</option>' . PHP_EOL .
@@ -1167,7 +1164,7 @@ class FormHelperTest extends TestCase {
 
 		// empty
 		$this->assertEquals(
-			'<select id="model-select" name="Model[select]">' . PHP_EOL .
+			'<select id="model-select" name="select">' . PHP_EOL .
 			'<option value=""></option>' . PHP_EOL .
 			'<option value="warrior">Warrior</option>' . PHP_EOL .
 			'<option value="ranger">Ranger</option>' . PHP_EOL .
@@ -1176,7 +1173,7 @@ class FormHelperTest extends TestCase {
 		, $helper->select('select', $options, ['empty' => true]));
 
 		$this->assertEquals(
-			'<select id="model-select" name="Model[select]">' . PHP_EOL .
+			'<select id="model-select" name="select">' . PHP_EOL .
 			'<option value="">-- None --</option>' . PHP_EOL .
 			'<option value="warrior">Warrior</option>' . PHP_EOL .
 			'<option value="ranger">Ranger</option>' . PHP_EOL .
@@ -1186,7 +1183,7 @@ class FormHelperTest extends TestCase {
 
 		// default
 		$this->assertEquals(
-			'<select id="model-select" name="Model[select]">' . PHP_EOL .
+			'<select id="model-select" name="select">' . PHP_EOL .
 			'<option value="warrior">Warrior</option>' . PHP_EOL .
 			'<option selected="selected" value="ranger">Ranger</option>' . PHP_EOL .
 			'<option value="mage">Mage</option>' . PHP_EOL .
@@ -1195,7 +1192,7 @@ class FormHelperTest extends TestCase {
 
 		// multiple
 		$this->assertEquals(
-			'<select id="model-select" multiple="multiple" name="Model[select]">' . PHP_EOL .
+			'<select id="model-select" multiple="multiple" name="select">' . PHP_EOL .
 			'<option value="warrior">Warrior</option>' . PHP_EOL .
 			'<option selected="selected" value="ranger">Ranger</option>' . PHP_EOL .
 			'<option selected="selected" value="mage">Mage</option>' . PHP_EOL .
@@ -1214,7 +1211,7 @@ class FormHelperTest extends TestCase {
 		);
 
 		$this->assertEquals(
-			'<select id="model-selectgroup" name="Model[select_group]">' . PHP_EOL .
+			'<select id="model-selectgroup" name="select_group">' . PHP_EOL .
 			'<optgroup label="Weapons">' . PHP_EOL .
 			'<option value="axe">Axe</option>' . PHP_EOL .
 			'<option value="sword">Sword</option>' . PHP_EOL .
@@ -1230,7 +1227,7 @@ class FormHelperTest extends TestCase {
 		, $helper->select('select_group', $optgroup));
 
 		$this->assertEquals(
-			'<select id="model-selectgroup" name="Model[select_group]">' . PHP_EOL .
+			'<select id="model-selectgroup" name="select_group">' . PHP_EOL .
 			'<optgroup label="Weapons">' . PHP_EOL .
 			'<option value="axe">Axe</option>' . PHP_EOL .
 			'<option value="sword">Sword</option>' . PHP_EOL .
@@ -1246,7 +1243,7 @@ class FormHelperTest extends TestCase {
 		, $helper->select('select_group', $optgroup, ['default' => 'bow']));
 
 		$this->assertEquals(
-			'<select id="model-selectgroup" multiple="multiple" name="Model[select_group]">' . PHP_EOL .
+			'<select id="model-selectgroup" multiple="multiple" name="select_group">' . PHP_EOL .
 			'<optgroup label="Weapons">' . PHP_EOL .
 			'<option selected="selected" value="axe">Axe</option>' . PHP_EOL .
 			'<option value="sword">Sword</option>' . PHP_EOL .
@@ -1271,7 +1268,7 @@ class FormHelperTest extends TestCase {
 			'<option value="ranger">Ranger</option>' . PHP_EOL .
 			'<option selected="selected" value="mage">Mage</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->select('select', $options));
+		, $helper->select('Test.select', $options));
 
 		$this->assertEquals(
 			'<select id="test-selectgroup" multiple="multiple" name="Test[select_group]">' . PHP_EOL .
@@ -1287,7 +1284,7 @@ class FormHelperTest extends TestCase {
 			'<option value="mage">Mage</option>' . PHP_EOL .
 			'</optgroup>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->select('select_group', $optgroup, ['multiple' => true]));
+		, $helper->select('Test.select_group', $optgroup, ['multiple' => true]));
 	}
 
 	/**
@@ -1313,8 +1310,8 @@ class FormHelperTest extends TestCase {
 		$helper = new FormHelper();
 		$helper->open('Model');
 
-		$this->assertEquals('<input id="model-text" name="Model[text]" type="text" value="">' . PHP_EOL, $helper->text('text'));
-		$this->assertEquals('<input class="input" id="model-text" name="Model[text]" placeholder="Testing &quot;quotes&quot; placeholder" readonly="readonly" type="text" value="">' . PHP_EOL, $helper->text('text', [
+		$this->assertEquals('<input id="model-text" name="text" type="text" value="">' . PHP_EOL, $helper->text('text'));
+		$this->assertEquals('<input class="input" id="model-text" name="text" placeholder="Testing &quot;quotes&quot; placeholder" readonly="readonly" type="text" value="">' . PHP_EOL, $helper->text('text', [
 			'placeholder' => 'Testing "quotes" placeholder',
 			'class' => 'input',
 			'readonly' => true
@@ -1324,7 +1321,7 @@ class FormHelperTest extends TestCase {
 		$helper = new FormHelper();
 		$helper->open('Test');
 
-		$this->assertEquals('<input id="test-text" name="Test[text]" type="text" value="Titon">' . PHP_EOL, $helper->text('text'));
+		$this->assertEquals('<input id="test-text" name="Test[text]" type="text" value="Titon">' . PHP_EOL, $helper->text('Test.text'));
 	}
 
 	/**
@@ -1334,8 +1331,8 @@ class FormHelperTest extends TestCase {
 		$helper = new FormHelper();
 		$helper->open('Model');
 
-		$this->assertEquals('<textarea cols="25" id="model-textarea" name="Model[textarea]" rows="5"></textarea>' . PHP_EOL, $helper->textarea('textarea'));
-		$this->assertEquals('<textarea class="input" cols="50" disabled="disabled" id="model-textarea" name="Model[textarea]" rows="10"></textarea>' . PHP_EOL, $helper->textarea('textarea', [
+		$this->assertEquals('<textarea cols="25" id="model-textarea" name="textarea" rows="5"></textarea>' . PHP_EOL, $helper->textarea('textarea'));
+		$this->assertEquals('<textarea class="input" cols="50" disabled="disabled" id="model-textarea" name="textarea" rows="10"></textarea>' . PHP_EOL, $helper->textarea('textarea', [
 			'class' => 'input',
 			'rows' => 10,
 			'cols' => 50,
@@ -1346,7 +1343,7 @@ class FormHelperTest extends TestCase {
 		$helper = new FormHelper();
 		$helper->open('Test');
 
-		$this->assertEquals('<textarea cols="25" id="test-textarea" name="Test[textarea]" rows="5">Titon PHP Framework</textarea>' . PHP_EOL, $helper->textarea('textarea'));
+		$this->assertEquals('<textarea cols="25" id="test-textarea" name="Test[textarea]" rows="5">Titon PHP Framework</textarea>' . PHP_EOL, $helper->textarea('Test.textarea'));
 	}
 
 	/**
@@ -1355,12 +1352,12 @@ class FormHelperTest extends TestCase {
 	public function testValue() {
 		$helper = new FormHelper();
 
-		$this->assertEquals('test', $helper->value(null, 'input'));
-		$this->assertEquals(null, $helper->value('Model', 'field'));
-		$this->assertEquals('no', $helper->value('Test', 'checkbox'));
-		$this->assertEquals(19, $helper->value('Test', 'minute'));
-		$this->assertEquals('Titon', $helper->value('Test', 'text'));
-		$this->assertEquals(['sword', 'warrior'], $helper->value('Test', 'select_group'));
+		$this->assertEquals('test', $helper->value('input'));
+		$this->assertEquals(null, $helper->value('Model.field'));
+		$this->assertEquals('no', $helper->value('Test.checkbox'));
+		$this->assertEquals(19, $helper->value('Test.minute'));
+		$this->assertEquals('Titon', $helper->value('Test.text'));
+		$this->assertEquals(['sword', 'warrior'], $helper->value('Test.select_group'));
 	}
 
 	/**
@@ -1371,7 +1368,7 @@ class FormHelperTest extends TestCase {
 		$helper->open('Model');
 
 		$this->assertEquals(
-			'<select id="model-year" name="Model[year]">' . PHP_EOL .
+			'<select id="model-year" name="year">' . PHP_EOL .
 			'<option value="2005">2005</option>' . PHP_EOL .
 			'<option value="2006">2006</option>' . PHP_EOL .
 			'<option value="2007">2007</option>' . PHP_EOL .
@@ -1383,7 +1380,7 @@ class FormHelperTest extends TestCase {
 
 		// reverse with default
 		$this->assertEquals(
-			'<select id="model-year" name="Model[year]">' . PHP_EOL .
+			'<select id="model-year" name="year">' . PHP_EOL .
 			'<option value="2010">2010</option>' . PHP_EOL .
 			'<option value="2009">2009</option>' . PHP_EOL .
 			'<option value="2008">2008</option>' . PHP_EOL .
@@ -1395,7 +1392,7 @@ class FormHelperTest extends TestCase {
 
 		// reverse with format
 		$this->assertEquals(
-			'<select id="model-year" name="Model[year]">' . PHP_EOL .
+			'<select id="model-year" name="year">' . PHP_EOL .
 			'<option value="2010">10</option>' . PHP_EOL .
 			'<option value="2009">09</option>' . PHP_EOL .
 			'<option value="2008">08</option>' . PHP_EOL .
@@ -1418,7 +1415,7 @@ class FormHelperTest extends TestCase {
 			'<option value="2006">06</option>' . PHP_EOL .
 			'<option selected="selected" value="2005">05</option>' . PHP_EOL .
 			'</select>' . PHP_EOL
-		, $helper->year('year', ['startYear' => 2005, 'endYear' => 2010, 'reverseYear' => true, 'yearFormat' => 'y']));
+		, $helper->year('Test.year', ['startYear' => 2005, 'endYear' => 2010, 'reverseYear' => true, 'yearFormat' => 'y']));
 	}
 
 }

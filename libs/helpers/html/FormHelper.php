@@ -169,7 +169,7 @@ class FormHelper extends HelperAbstract {
 			$output .= $this->submit($submit);
 		}
 
-		if (isset($this->_forms[$this->_model ? $this->_model : '_']['legend'])) {
+		if (isset($this->_forms[$this->_model]['legend'])) {
 			$output .= $this->tag('fieldset_close');
 		}
 
@@ -477,11 +477,7 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function open($model, array $attributes = []) {
-		if (!empty($model)) {
-			$this->_model = Inflector::modelize($model);
-		} else {
-			$this->_model = null;
-		}
+		$this->_model = $model;
 
 		// Form type
 		if (isset($attributes['type'])) {
@@ -527,7 +523,7 @@ class FormHelper extends HelperAbstract {
 		}
 
 		// Save its state
-		$this->_forms[$this->_model ? $this->_model : '_'] = $attributes;
+		$this->_forms[$this->_model] = $attributes;
 
 		return $output;
 	}
@@ -738,17 +734,10 @@ class FormHelper extends HelperAbstract {
 	 * Check to see if a value exists in the request data, if so return.
 	 *
 	 * @access public
-	 * @param string $model
-	 * @param string $field
+	 * @param string $key
 	 * @return string
 	 */
-	public function value($model, $field) {
-		if ($model) {
-			$key = $model . '.' . $field;
-		} else {
-			$key = $field;
-		}
-
+	public function value($key) {
 		return Hash::extract($this->request->data, $key);
 	}
 
@@ -797,7 +786,7 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	protected function _id($name) {
-		if (strpos($name, '.') === false && $this->_model) {
+		if (substr($name, 0, strlen($this->_model)) !== $this->_model) {
 			$name = $this->_model . '.' . $name;
 		}
 
@@ -874,10 +863,6 @@ class FormHelper extends HelperAbstract {
 		$attributes = $attributes + $defaults;
 		$input = $attributes['name'];
 
-		if ($this->_model) {
-			$attributes['name'] = $this->_model . '.' . $attributes['name'];
-		}
-
 		$parts = explode('.', $attributes['name']);
 		$name = array_shift($parts);
 
@@ -899,7 +884,7 @@ class FormHelper extends HelperAbstract {
 
 		$attributes = $attributes + ['id' => $this->_id($input)];
 		$attributes['name'] = $name;
-		$attributes['value'] = $this->value($this->_model, $input);
+		$attributes['value'] = $this->value($input);
 
 		return $attributes;
 	}
