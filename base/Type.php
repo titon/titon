@@ -7,22 +7,16 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\base\types;
+namespace titon\base;
+
+use \Serializable;
 
 /**
- * Acts as the base for all generic types (integers, strings, maps).
+ * Acts as the base for all generic types.
  *
- * @package	titon.base.types
+ * @package	titon.base
  */
-class Type implements \Serializable {
-
-	/**
-	 * Length of the current value.
-	 *
-	 * @access protected
-	 * @var int
-	 */
-	protected $_length;
+class Type implements Serializable {
 
 	/**
 	 * Raw unchanged value.
@@ -95,7 +89,7 @@ class Type implements \Serializable {
 	 * Return a new instance based on the raw value.
 	 *
 	 * @access public
-	 * @return titon\base\types\Type
+	 * @return titon\base\Type
 	 */
 	public function rawOf() {
 		return new self($this->_raw);
@@ -136,7 +130,7 @@ class Type implements \Serializable {
 	 * Return a new instance based on the current value.
 	 *
 	 * @access public
-	 * @return titon\base\types\Type
+	 * @return titon\base\Type
 	 */
 	public function valueOf() {
 		return new self($this->_value);

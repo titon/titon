@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\base\types;
+namespace titon\base;
 
 use titon\base\BaseException;
 use \Closure;
@@ -106,7 +106,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return titon\base\types\Object
+	 * @return titon\base\Object
 	 * @chainable
 	 */
 	public function __unset($name) {
@@ -119,7 +119,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @param Closure $method
-	 * @return titon\base\types\Object
+	 * @return titon\base\Object
 	 * @throws titon\base\BaseException
 	 * @chainable
 	 */
@@ -142,7 +142,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @param mixed $value
-	 * @return titon\base\types\Object
+	 * @return titon\base\Object
 	 * @throws titon\base\BaseException
 	 * @chainable
 	 */
@@ -223,7 +223,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return titon\base\types\Object
+	 * @return titon\base\Object
 	 * @chainable
 	 */
 	public function removeMethod($name) {
@@ -237,7 +237,7 @@ class Object {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return titon\base\types\Object
+	 * @return titon\base\Object
 	 * @chainable
 	 */
 	public function removeProperty($name) {
@@ -252,7 +252,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @param Closure $method
-	 * @return titon\base\types\Object
+	 * @return titon\base\Object
 	 * @chainable
 	 */
 	public function setMethod($name, Closure $method) {
@@ -272,7 +272,7 @@ class Object {
 	 * @access public
 	 * @param string $name
 	 * @param mixed $value
-	 * @return titon\base\types\Object
+	 * @return titon\base\Object
 	 * @chainable
 	 */
 	public function setProperty($name, $value) {
