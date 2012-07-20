@@ -10,6 +10,8 @@
 namespace titon\base\types;
 
 use titon\base\types\Type;
+use titon\utility\Inflector;
+use titon\utility\String as Str;
 
 /**
  * The String type allows for the modification and manipulation of a string as if it was an object.
@@ -78,10 +80,10 @@ class String extends Type {
 	 *
 	 * @access public
 	 * @param int $index
-	 * @return titon\base\types\String|null
+	 * @return string
 	 */
-	public function charAt($index = 0) {
-		return isset($this->_value[$index]) ? $this->_value[$index] : null;
+	public function charAt($index) {
+		return Str::charAt($this->_value, $index);
 	}
 
 	/**
@@ -109,19 +111,7 @@ class String extends Type {
 	 * @return int
 	 */
 	public function compare($value, $strict = true, $length = 0) {
-		if ($strict) {
-			if ($length > 0) {
-				return strncmp($this->_value, $value, (int) $length);
-			}
-
-			return strcmp($this->_value, $value);
-		}
-
-		if ($length > 0) {
-			return strncasecmp($this->_value, $value, (int) $length);
-		}
-
-		return strcasecmp($this->_value, $value);
+		return Str::compare($this->_value, $value, $strict, $length);
 	}
 
 	/**
@@ -150,7 +140,7 @@ class String extends Type {
 	 * @return boolean
 	 */
 	public function contains($needle, $strict = true, $offset = 0) {
-		return ($this->indexOf($needle, $strict, $offset) !== false);
+		return Str::contains($this->_value, $needle, $strict, $offset);
 	}
 
 	/**
@@ -161,7 +151,7 @@ class String extends Type {
 	 * @return boolean
 	 */
 	public function endsWith($value) {
-		return ($this->extract(-strlen($value)) === $value);
+		return Str::endsWith($this->_value, $value);
 	}
 
 	/**
@@ -195,14 +185,10 @@ class String extends Type {
 	 * @access public
 	 * @param int $offset
 	 * @param int $length
-	 * @return titon\base\types\String
+	 * @return string
 	 */
 	public function extract($offset, $length = null) {
-		if ($length !== null) {
-			return substr($this->_value, (int) $offset, $length);
-		}
-
-		return substr($this->_value, (int) $offset);
+		return Str::extract($this->_value, $offset, $length);
 	}
 
 	/**
@@ -212,14 +198,10 @@ class String extends Type {
 	 * @param string $needle
 	 * @param boolean $strict
 	 * @param int $offset
-	 * @return boolean
+	 * @return int
 	 */
 	public function indexOf($needle, $strict = true, $offset = 0) {
-		if ($strict) {
-			return strpos($this->_value, $needle, (int) $offset);
-		}
-
-		return stripos($this->_value, $needle, (int) $offset);
+		return Str::indexOf($this->_value, $needle, $strict, $offset);
 	}
 
 	/**
@@ -269,14 +251,10 @@ class String extends Type {
 	 * @param string $needle
 	 * @param boolean $strict
 	 * @param int $offset
-	 * @return boolean
+	 * @return int
 	 */
 	public function lastIndexOf($needle, $strict = true, $offset = 0) {
-		if ($strict) {
-			return strrpos($this->_value, $needle, (int) $offset);
-		}
-
-		return strripos($this->_value, $needle, (int) $offset);
+		return Str::lastIndexOf($this->_value, $needle, $strict, $offset);
 	}
 
 	/**
@@ -419,7 +397,7 @@ class String extends Type {
 	 * @return boolean
 	 */
 	public function startsWith($value) {
-		return ($this->extract(0, strlen($value)) === $value);
+		return Str::startsWith($this->_value, $value);
 	}
 
 	/**
@@ -467,7 +445,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toCamelCase() {
-		$this->_value = str_replace(' ', '', ucwords(strtolower(str_replace(['_', '-'], ' ', preg_replace('/[^-_A-Za-z0-9\s]+/', '', $this->_value)))));
+		$this->_value = Inflector::camelCase($this->_value);
 
 		return $this;
 	}
