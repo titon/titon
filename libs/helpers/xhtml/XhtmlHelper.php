@@ -42,7 +42,7 @@ class XhtmlHelper extends HtmlHelper {
 	 * @return string
 	 */
 	public function doctype($type = 'default') {
-		$type = strtolower($type);
+		$type = mb_strtolower($type);
 
 		if ($type === 'transitional') {
 			$type = 'trans';

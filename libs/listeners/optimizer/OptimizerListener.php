@@ -70,7 +70,7 @@ class OptimizerListener extends ListenerAbstract {
 			$loaded = true;
 
 			if (!extension_loaded('zlib')) {
-				if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+				if (mb_strtoupper(mb_substr(PHP_OS, 0, 3)) === 'WIN') {
 					$extension = 'php_zlib.dll';
 				} else {
 					$extension = 'zlib.so';

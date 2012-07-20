@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\tests\titon\base\types;
+namespace titon\tests\titon\base;
 
 use titon\tests\TestCase;
 use titon\tests\fixtures\EnumFixture;
 
 /**
- * Test class for titon\base\types\Enum.
+ * Test class for titon\base\Enum.
  */
 class EnumTest extends TestCase {
 

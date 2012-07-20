@@ -110,7 +110,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @param array $config
 	 */
 	public function __construct($path, array $route = [], array $config = []) {
-		if (substr($path, 0, 1) !== '/') {
+		if (mb_substr($path, 0, 1) !== '/') {
 			$path = '/' . $path;
 		}
 
@@ -268,10 +268,10 @@ abstract class RouteAbstract extends Base implements Route {
 				$parts = explode('/', trim($matches[0], '/'));
 
 				foreach ($parts as $part) {
-					if (substr($part, 0, 1) === '.') {
+					if (mb_substr($part, 0, 1) === '.') {
 						$this->_route['ext'] = trim($part, '.');
 
-					} else if (strpos($part, '.') !== false) {
+					} else if (mb_strpos($part, '.') !== false) {
 						list($arg, $ext) = explode('.', $part);
 
 						$this->_route['args'][] = $arg;

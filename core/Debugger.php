@@ -254,7 +254,7 @@ class Debugger {
 			return get_class($arg);
 
 		} else if (is_resource($arg)) {
-			return strtolower(get_resource_type($arg));
+			return mb_strtolower(get_resource_type($arg));
 
 		} else {
 			return (string) $arg;
@@ -276,9 +276,9 @@ class Debugger {
 		$path = Titon::loader()->ds($path);
 
 		foreach(['titon_app', 'titon_libs', 'titon', 'vendors'] as $constant) {
-			$location = Titon::loader()->ds(constant(strtoupper($constant)));
+			$location = Titon::loader()->ds(constant(mb_strtoupper($constant)));
 
-			if (strpos($path, $location) !== false) {
+			if (mb_strpos($path, $location) !== false) {
 				$path = str_replace($location, '[' . str_replace('titon_', '', $constant) . ']', $path);
 				break;
 			}
@@ -356,7 +356,7 @@ class Debugger {
 		if (isset($trace[0]['class'])) {
 			$method = $trace[0]['class'] . $trace[0]['type'] . $trace[0]['function'] . '()';
 
-		} else if (strpos($trace[0]['function'], 'closure') !== false) {
+		} else if (mb_strpos($trace[0]['function'], 'closure') !== false) {
 			$method = get_class($trace[0]['args'][0]) . '[Closure]';
 		}
 

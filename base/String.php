@@ -44,7 +44,7 @@ class String extends Type {
 		}
 
 		if (!empty($encoding)) {
-			$this->_encoding = strtoupper(str_replace(' ', '-', (string) $encoding));
+			$this->_encoding = mb_strtoupper(str_replace(' ', '-', (string) $encoding));
 		}
 	}
 
@@ -453,7 +453,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toLowerCase() {
-		$this->_value = strtolower($this->_value);
+		$this->_value = mb_strtolower($this->_value);
 
 		return $this;
 	}
@@ -466,7 +466,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toUpperCase() {
-		$this->_value = strtoupper($this->_value);
+		$this->_value = mb_strtoupper($this->_value);
 
 		return $this;
 	}

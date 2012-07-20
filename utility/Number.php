@@ -173,7 +173,7 @@ class Number {
 	 */
 	public static function format($number, $format) {
 		$number = (string) $number;
-		$length = strlen($format);
+		$length = mb_strlen($format);
 		$result = $format;
 		$pos = 0;
 

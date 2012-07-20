@@ -84,7 +84,7 @@ class G11n {
 	 */
 	public function canonicalize($key, $format = self::FORMAT_1) {
 		return $this->cache([__METHOD__, $key, $format], function() use ($key, $format) {
-			$parts = explode('-', str_replace('_', '-', strtolower($key)));
+			$parts = explode('-', str_replace('_', '-', mb_strtolower($key)));
 			$return = $parts[0];
 
 			if (isset($parts[1])) {
@@ -93,13 +93,13 @@ class G11n {
 						$return .= '-' . $parts[1];
 					break;
 					case self::FORMAT_2:
-						$return .= '-' . strtoupper($parts[1]);
+						$return .= '-' . mb_strtoupper($parts[1]);
 					break;
 					case self::FORMAT_3:
-						$return .= '_' . strtoupper($parts[1]);
+						$return .= '_' . mb_strtoupper($parts[1]);
 					break;
 					case self::FORMAT_4:
-						$return .= strtoupper($parts[1]);
+						$return .= mb_strtoupper($parts[1]);
 					break;
 				}
 			}
@@ -222,10 +222,10 @@ class G11n {
 			return;
 		}
 
-		$header = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		$header = mb_strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE']);
 
-		if (strpos($header, ';') !== false) {
-			$header = strstr($header, ';', true);
+		if (mb_strpos($header, ';') !== false) {
+			$header = mb_strstr($header, ';', true);
 		}
 
 		$header = explode(',', $header);

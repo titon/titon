@@ -50,7 +50,7 @@ class Hash {
 			$lines = explode("\n", $array);
 
 			foreach ($lines as $line) {
-				$indentation = (strlen($line) - strlen(ltrim($line))) / 4;
+				$indentation = (mb_strlen($line) - mb_strlen(ltrim($line))) / 4;
 
 				if ($indentation > $depth) {
 					$depth = $indentation;

@@ -46,7 +46,7 @@ class PoReader extends ReaderAbstract {
 				$value .= "\n" . self::dequote($line);
 
 			// Key
-			} else if (strpos($line, 'msgid') === 0) {
+			} else if (mb_strpos($line, 'msgid') === 0) {
 				// Save the previous value
 				if ($key !== '' && !empty($value)) {
 					$data[$key] = $value;
@@ -56,7 +56,7 @@ class PoReader extends ReaderAbstract {
 				$key = self::dequote($line);
 
 			// Message
-			} else if (strpos($line, 'msgstr') === 0) {
+			} else if (mb_strpos($line, 'msgstr') === 0) {
 				// msgstr[n]
 				if ($line[6] === '[') {
 					$val = self::dequote($line);
@@ -93,7 +93,7 @@ class PoReader extends ReaderAbstract {
 	 * @static
 	 */
 	public static function dequote($string) {
-		return substr(substr($string, strpos($string, '"')), 1, -1);
+		return mb_substr(mb_substr($string, mb_strpos($string, '"')), 1, -1);
 	}
 
 }

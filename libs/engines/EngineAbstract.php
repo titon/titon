@@ -355,8 +355,8 @@ abstract class EngineAbstract extends Base implements Engine {
 		return $this->cache([__METHOD__, $path], function() use ($path) {
 			$path = Titon::loader()->ds($path);
 
-			if (substr($path, -4) === '.tpl') {
-				$path = substr($path, 0, (strlen($path) - 4));
+			if (mb_substr($path, -4) === '.tpl') {
+				$path = mb_substr($path, 0, (mb_strlen($path) - 4));
 			}
 
 			return $path;

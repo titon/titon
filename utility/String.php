@@ -214,7 +214,7 @@ class String {
 	 * @static
 	 */
 	public static function startsWith($string, $value) {
-		return (self::extract($string, 0, strlen($value)) === $value);
+		return (self::extract($string, 0, mb_strlen($value)) === $value);
 	}
 
 	/**
@@ -228,7 +228,7 @@ class String {
 	 * @static
 	 */
 	public static function truncate($string, $limit = 25, $suffix = '&hellip;') {
-		if (strlen($string) > $limit) {
+		if (mb_strlen($string) > $limit) {
 			$string = strip_tags($string);
 			$string = self::extract($string, 0, $limit);
 			$string = self::extract($string, 0, -(mb_strlen(mb_strrchr($string, ' '))));

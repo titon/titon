@@ -68,7 +68,7 @@ class Request extends Base {
 		$contentType = (array) Http::getContentType($type);
 
 		foreach ($this->_accepts('Accept') as $aType) {
-			if (in_array(strtolower($aType['type']), $contentType)) {
+			if (in_array(mb_strtolower($aType['type']), $contentType)) {
 				return true;
 			}
 		}
@@ -89,7 +89,7 @@ class Request extends Base {
 		}
 
 		foreach ($this->_accepts('Accept-Charset') as $set) {
-			if (strtolower($charset) === strtolower($set['type'])) {
+			if (mb_strtolower($charset) === mb_strtolower($set['type'])) {
 				return true;
 			}
 		}
@@ -111,7 +111,7 @@ class Request extends Base {
 		}
 
 		foreach ($this->_accepts('Accept-Language') as $lang) {
-			if (strpos(strtolower($lang['type']), strtolower($language)) !== false) {
+			if (mb_strpos(mb_strtolower($lang['type']), mb_strtolower($language)) !== false) {
 				return true;
 			}
 		}
@@ -146,7 +146,7 @@ class Request extends Base {
 	 */
 	public function env($header) {
 		return $this->cache([__METHOD__, $header], function() use ($header) {
-			$headerAlt = 'HTTP_' . strtoupper(str_replace('-', '_', $header));
+			$headerAlt = 'HTTP_' . mb_strtoupper(str_replace('-', '_', $header));
 
 			foreach ([$_SERVER, $_ENV] as $data) {
 				if (isset($data[$header])) {
@@ -194,7 +194,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isAjax() {
-		return (strtolower($this->env('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest');
+		return (mb_strtolower($this->env('HTTP_X_REQUESTED_WITH')) === 'xmlhttprequest');
 	}
 
 	/**
@@ -204,7 +204,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isCGI() {
-		return (substr(PHP_SAPI, 0, 3) === 'cgi');
+		return (mb_substr(PHP_SAPI, 0, 3) === 'cgi');
 	}
 
 	/**
@@ -214,7 +214,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isCLI() {
-		return (substr(PHP_SAPI, 0, 3) === 'cli');
+		return (mb_substr(PHP_SAPI, 0, 3) === 'cli');
 	}
 
 	/**
@@ -256,7 +256,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isIIS() {
-		return (substr(PHP_SAPI, 0, 5) === 'isapi');
+		return (mb_substr(PHP_SAPI, 0, 5) === 'isapi');
 	}
 
 	/**
@@ -267,7 +267,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function isMethod($type = 'post') {
-		return (strtolower($type) === $this->method());
+		return (mb_strtolower($type) === $this->method());
 	}
 
 	/**
@@ -325,7 +325,7 @@ class Request extends Base {
 	 * @return string
 	 */
 	public function method() {
-		return strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
+		return mb_strtolower($this->env('HTTP_X_HTTP_METHOD_OVERRIDE') ?: $this->env('REQUEST_METHOD'));
 	}
 
 	/**
@@ -354,7 +354,7 @@ class Request extends Base {
 
 			$host = $this->env('HTTP_HOST');
 
-			if (strpos($referrer, $host) !== false) {
+			if (mb_strpos($referrer, $host) !== false) {
 				$referrer = str_replace($this->protocol() . '://' . $host, '', $referrer);
 			}
 
@@ -417,7 +417,7 @@ class Request extends Base {
 
 			if (count($accept) > 0) {
 				foreach ($accept as $type) {
-					if (strpos($type, ';') !== false) {
+					if (mb_strpos($type, ';') !== false) {
 						list($type, $quality) = explode(';', $type);
 					} else {
 						$quality = 1;

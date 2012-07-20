@@ -786,7 +786,7 @@ class FormHelper extends HelperAbstract {
 	 * @return string
 	 */
 	protected function _id($name) {
-		if (substr($name, 0, strlen($this->_model)) !== $this->_model) {
+		if (mb_substr($name, 0, mb_strlen($this->_model)) !== $this->_model) {
 			$name = $this->_model . '.' . $name;
 		}
 
@@ -862,8 +862,7 @@ class FormHelper extends HelperAbstract {
 	protected function _prepare(array $defaults = [], array $attributes = []) {
 		$attributes = $attributes + $defaults;
 		$input = $attributes['name'];
-
-		$parts = explode('.', $attributes['name']);
+		$parts = explode('.', $input);
 		$name = array_shift($parts);
 
 		if (!empty($parts)) {

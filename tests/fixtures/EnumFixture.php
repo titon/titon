@@ -9,10 +9,10 @@
 
 namespace titon\tests\fixtures;
 
-use titon\base\types\Enum;
+use titon\base\Enum;
 
 /**
- * Fixture for titon\base\types\Enum.
+ * Fixture for titon\base\Enum.
  *
  * @package	titon.tests.fixtures
  */

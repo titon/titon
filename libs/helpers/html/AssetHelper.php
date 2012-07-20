@@ -51,7 +51,7 @@ class AssetHelper extends HelperAbstract {
 	 * @return titon\libs\helpers\html\AssetHelper
 	 */
 	public function addScript($script, $location = self::FOOTER, $order = null) {
-		if (substr($script, -3) !== '.js') {
+		if (mb_substr($script, -3) !== '.js') {
 			$script .= '.js';
 		}
 
@@ -82,7 +82,7 @@ class AssetHelper extends HelperAbstract {
 	 * @return titon\libs\helpers\html\AssetHelper
 	 */
 	public function addStylesheet($sheet, $media = 'screen', $order = null) {
-		if (substr($sheet, -4) !== '.css') {
+		if (mb_substr($sheet, -4) !== '.css') {
 			$sheet .= '.css';
 		}
 

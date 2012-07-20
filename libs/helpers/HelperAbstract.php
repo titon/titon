@@ -71,7 +71,7 @@ abstract class HelperAbstract extends Base implements Helper {
 					$value = $this->escape($value, true);
 				}
 
-				$parsed .= ' ' . strtolower($key) . '="' . $value . '"';
+				$parsed .= ' ' . mb_strtolower($key) . '="' . $value . '"';
 			}
 		}
 

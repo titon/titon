@@ -156,7 +156,7 @@ class HtmlHelper extends HelperAbstract {
 				'attr' => $this->attributes($type)
 			]);
 		} else {
-			$type = strtolower($type);
+			$type = mb_strtolower($type);
 		}
 
 		if (empty($content)) {

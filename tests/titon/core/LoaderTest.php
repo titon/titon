@@ -77,8 +77,8 @@ class LoaderTest extends TestCase {
 	 * Test that file importing returns true or false if file inclusion works.
 	 */
 	public function testImport() {
-		$this->assertTrue($this->object->import('titon\base\types\Enum'));
-		$this->assertTrue($this->object->import('/titon/base/types/Float.php'));
+		$this->assertTrue($this->object->import('titon\base\Enum'));
+		$this->assertTrue($this->object->import('/titon/base/Map.php'));
 		$this->assertFalse($this->object->import('\some\fake\ClassName'));
 		$this->assertFalse($this->object->import('/some/fake/filePath.php'));
 	}

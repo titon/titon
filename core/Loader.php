@@ -75,7 +75,7 @@ class Loader {
 	 * @return string
 	 */
 	public function baseClass($class, $separator = '\\') {
-		return $this->stripExt(trim(strrchr($class, $separator), $separator));
+		return $this->stripExt(trim(mb_strrchr($class, $separator), $separator));
 	}
 
 	/**
@@ -89,7 +89,7 @@ class Loader {
 	public function baseNamespace($class, $separator = '\\') {
 		$class = $this->toNamespace($class);
 
-		return substr($class, 0, strrpos($class, $separator));
+		return mb_substr($class, 0, mb_strrpos($class, $separator));
 	}
 
 	/**
@@ -103,7 +103,7 @@ class Loader {
 	public function ds($path, $endSlash = false) {
 		$path = str_replace('\\', '/', $path);
 
-		if ($endSlash && substr($path, -1) !== '/') {
+		if ($endSlash && mb_substr($path, -1) !== '/') {
 			$path .= '/';
 		}
 
@@ -194,8 +194,8 @@ class Loader {
 	 * @return string
 	 */
 	public function stripExt($path) {
-		if (strpos($path, '.') !== false) {
-			$path = substr($path, 0, strrpos($path, '.'));
+		if (mb_strpos($path, '.') !== false) {
+			$path = mb_substr($path, 0, mb_strrpos($path, '.'));
 		}
 
 		return $path;
@@ -211,7 +211,7 @@ class Loader {
 	public function toNamespace($path) {
 		$path = $this->stripExt($path);
 
-		if (strpos($path, '/') !== false) {
+		if (mb_strpos($path, '/') !== false) {
 			$path = str_replace($this->ds(VENDORS), '', $this->ds($path));
 			$path = str_replace('/', '\\', $path);
 		}
@@ -234,7 +234,7 @@ class Loader {
 		$file = array_pop($dirs);
 		$path = implode('/', $dirs) . '/' . str_replace('_', '/', $file);
 
-		if ($ext && substr($path, -strlen($ext)) !== $ext) {
+		if ($ext && mb_substr($path, -mb_strlen($ext)) !== $ext) {
 			$path .= '.' . $ext;
 		}
 

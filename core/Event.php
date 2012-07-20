@@ -148,7 +148,7 @@ class Event {
 			$obj = $listener['object'];
 			$method = $event;
 
-			if (strpos($event, '.') !== false) {
+			if (mb_strpos($event, '.') !== false) {
 				list($scope, $method) = explode('.', $event);
 			}
 

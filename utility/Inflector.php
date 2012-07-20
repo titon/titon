@@ -39,7 +39,7 @@ class Inflector {
 	 */
 	public static function camelCase($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return str_replace(' ', '', ucwords(strtolower(str_replace(['_', '-'], ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)))));
+			return str_replace(' ', '', ucwords(mb_strtolower(str_replace(['_', '-'], ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)))));
 		});
 	}
 
@@ -54,8 +54,8 @@ class Inflector {
 	 * @static
 	 */
 	public static function filename($string, $ext = 'php', $capitalize = true) {
-		if (strpos($string, '.') !== false) {
-			$string = substr($string, 0, strrpos($string, '.'));
+		if (mb_strpos($string, '.') !== false) {
+			$string = mb_substr($string, 0, mb_strrpos($string, '.'));
 		}
 
 		$path = self::camelCase($string);
@@ -64,7 +64,7 @@ class Inflector {
 			$path = lcfirst($path);
 		}
 
-		if (substr($path, -(strlen($ext) + 1)) !== '.' . $ext) {
+		if (mb_substr($path, -(mb_strlen($ext) + 1)) !== '.' . $ext) {
 			$path .= '.' . $ext;
 		}
 
@@ -95,7 +95,7 @@ class Inflector {
 	 */
 	public static function normalCase($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return ucfirst(strtolower(str_replace('_', ' ', $string)));
+			return ucfirst(mb_strtolower(str_replace('_', ' ', $string)));
 		});
 	}
 
@@ -113,7 +113,7 @@ class Inflector {
 		}
 
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			$string = strtolower($string);
+			$string = mb_strtolower($string);
 			$result = null;
 			$inflections = Titon::g11n()->current()->getInflections();
 
@@ -171,7 +171,7 @@ class Inflector {
 		}
 
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			$string = strtolower($string);
+			$string = mb_strtolower($string);
 			$result = null;
 			$inflections = Titon::g11n()->current()->getInflections();
 
@@ -211,7 +211,7 @@ class Inflector {
 	 */
 	public static function slug($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-a-z0-9\s]+/i', '', $string))));
+			return mb_strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-a-z0-9\s]+/i', '', $string))));
 		});
 	}
 
@@ -239,7 +239,7 @@ class Inflector {
 	 */
 	public static function titleCase($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return ucwords(strtolower(str_replace('_', ' ', $string)));
+			return ucwords(mb_strtolower(str_replace('_', ' ', $string)));
 		});
 	}
 
@@ -253,7 +253,7 @@ class Inflector {
 	 */
 	public static function underscore($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return trim(strtolower(str_replace('__', '_', preg_replace('/([A-Z]{1})/', '_$1', preg_replace('/[^_a-z0-9]+/i', '', preg_replace('/[\s]+/', '_', $string))))), '_');
+			return trim(mb_strtolower(str_replace('__', '_', preg_replace('/([A-Z]{1})/', '_$1', preg_replace('/[^_a-z0-9]+/i', '', preg_replace('/[\s]+/', '_', $string))))), '_');
 		});
 	}
 

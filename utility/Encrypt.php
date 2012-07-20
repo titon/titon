@@ -26,12 +26,12 @@ class Encrypt {
 	 * @static
 	 */
 	public static function obfuscate($string) {
-		$length = strlen($string);
+		$length = mb_strlen($string);
 		$scrambled = '';
 
 		if ($length > 0) {
 			for ($i = 0; $i < $length; ++$i) {
-				$scrambled .= '&#' . ord(substr($string, $i, 1)) . ';';
+				$scrambled .= '&#' . ord($string[$i]) . ';';
 			}
 		}
 

@@ -239,7 +239,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function type($type = null) {
-		if (strpos($type, '/') === false) {
+		if (mb_strpos($type, '/') === false) {
 			$contentType = Http::getContentType($type);
 
 			if (is_array($contentType)) {
