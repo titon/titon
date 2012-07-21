@@ -132,7 +132,7 @@ class HtmlHelper extends HelperAbstract {
 			$attributes['title'] = '';
 		}
 
-		$attributes['escape'] = array('href');
+		$attributes['escape'] = ['href'];
 		$attributes['href'] = 'mailto:' . $email;
 
 		return $this->tag('anchor', [

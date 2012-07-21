@@ -16,6 +16,7 @@ use titon\libs\bundles\BundleException;
 use titon\libs\readers\Reader;
 use titon\libs\traits\Cacheable;
 use titon\utility\Inflector;
+use titon\utility\String;
 
 /**
  * Abstract class that handles the loading of Readers and file locations.
@@ -57,11 +58,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 				$this->addLocation($location);
 			}
 		} else {
-			foreach ($this->config->get() as $key => $value) {
-				$locations = str_replace('{' . $key . '}', $value, $locations);
-			}
-
-			$this->_locations[] = Titon::loader()->ds($locations, true);
+			$this->_locations[] = Titon::loader()->ds(String::insert($locations, $this->config->get()), true);
 		}
 
 		return $this;

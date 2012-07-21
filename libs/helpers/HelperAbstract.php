@@ -14,6 +14,7 @@ use titon\base\Base;
 use titon\libs\engines\Engine;
 use titon\libs\helpers\Helper;
 use titon\libs\traits\Attachable;
+use titon\utility\String;
 
 /**
  * The Helper class acts as the base for all children helpers to extend.
@@ -92,7 +93,7 @@ abstract class HelperAbstract extends Base implements Helper {
 		}
 
 		if ($escape) {
-			$value = htmlentities($value, ENT_QUOTES, Titon::config()->encoding());
+			$value = String::escape($value);
 		}
 
 		return $value;
@@ -143,13 +144,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * @return string
 	 */
 	public function tag($tag, array $params = []) {
-		$tag = $this->_tags[$tag];
-
-		foreach ($params as $param => $value) {
-			$tag = str_replace('{' . $param . '}', $value, $tag);
-		}
-
-		return $tag . "\n";
+		return String::insert($this->_tags[$tag], $params) . "\n";
 	}
 
 	/**

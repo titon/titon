@@ -79,13 +79,15 @@ class Application {
 	 * @return void
 	 */
 	public function initialize() {
-		if (file_exists(APP_MODULES)) {
-			foreach (scandir(APP_MODULES) as $module) {
-				$path = APP_MODULES . $module . '/bootstrap.php';
+		// Set encoding
+		mb_internal_encoding(Titon::config()->encoding());
 
-				if (file_exists($path)) {
-					include_once $path;
-				}
+		// Bootstrap modules
+		foreach ($this->getModules() as $module) {
+			$path = $module['path'] . 'bootstrap.php';
+
+			if (file_exists($path)) {
+				include_once $path;
 			}
 		}
 	}
