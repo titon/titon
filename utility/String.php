@@ -33,15 +33,6 @@ class String {
 	const HEX = '0123456789abcdef';
 
 	/**
-	 * UUID versions.
-	 */
-	const UUID_1 = 1;
-	const UUID_2 = 2;
-	const UUID_3 = 3;
-	const UUID_4 = 4;
-	const UUID_5 = 5;
-
-	/**
 	 * Return the character at the specified index, if not found returns null.
 	 *
 	 * @access public
@@ -337,36 +328,6 @@ class String {
 		// @todo
 
 		return $string;
-	}
-
-	/**
-	 * @todo
-	 *
-	 * @access public
-	 * @param int $version
-	 * @return string
-	 * @throws titon\utility\UtilityException
-	 * @static
-	 */
-	public static function uuid($version = self::UUID_4) {
-		switch ($version) {
-			case self::UUID_4:
-			case self::UUID_5:
-				$uuid = sprintf('%s-%s-%s%s-%s%s-%s',
-					self::generate(8, self::HEX), // 1
-					self::generate(4, self::HEX), // 2
-					$version, // 3
-					self::generate(3, self::HEX), // 3
-					self::generate(1, '89AB'), // 4
-					self::generate(3, self::HEX), // 4
-					self::generate(12, self::HEX)); // 5
-			break;
-			default:
-				throw new UtilityException('This UUID version has not been implemented yet.');
-			break;
-		}
-
-		return $uuid;
 	}
 
 }
