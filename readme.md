@@ -13,6 +13,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * intl (G11n)
 * phar
 * mbstring
+* mcrypt
 
 ### Libraries ###
 

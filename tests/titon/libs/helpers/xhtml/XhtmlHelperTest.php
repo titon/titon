@@ -11,7 +11,7 @@ namespace titon\tests\titon\libs\helpers\xhtml;
 
 use titon\tests\TestCase;
 use titon\libs\helpers\xhtml\XhtmlHelper;
-use titon\utility\Encrypt;
+use titon\utility\Crypt;
 use \Exception;
 
 /**
@@ -87,7 +87,7 @@ class XhtmlHelperTest extends TestCase {
 	 * Test that mailto() generates the correct <a> markup with mailto: href.
 	 */
 	public function testMailto() {
-		$domain = Encrypt::obfuscate('test@domain.com');
+		$domain = Crypt::obfuscate('test@domain.com');
 
 		$this->assertEquals('<a href="mailto:' . $domain . '" title="">' . $domain . '</a>' . PHP_EOL, $this->object->mailto('test@domain.com'));
 		$this->assertEquals('<a href="mailto:' . $domain . '" title="Email me!">' . $domain . '</a>' . PHP_EOL, $this->object->mailto('test@domain.com', ['title' => 'Email me!']));

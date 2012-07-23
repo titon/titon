@@ -11,7 +11,7 @@ namespace titon\libs\helpers\html;
 
 use titon\Titon;
 use titon\libs\helpers\HelperAbstract;
-use titon\utility\Encrypt;
+use titon\utility\Crypt;
 
 /**
  * The HtmlHelper is primarily used for dynamic HTML tag creation within templates.
@@ -126,7 +126,7 @@ class HtmlHelper extends HelperAbstract {
 	 * @return string
 	 */
 	public function mailto($email, array $attributes = []) {
-		$email = Encrypt::obfuscate($email);
+		$email = Crypt::obfuscate($email);
 
 		if (!isset($attributes['title'])) {
 			$attributes['title'] = '';
