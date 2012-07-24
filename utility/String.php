@@ -16,6 +16,7 @@ use titon\utility\UtilityException;
  * Specific methods that deal with string manipulation, truncation, formation, etc.
  *
  * @package	titon.utility
+ * @link	http://php.net/manual/book.mbstring.php
  */
 class String {
 
@@ -308,26 +309,111 @@ class String {
 	}
 
 	/**
-	 * Truncates a string to a certain length.
+	 * Truncates a string to a certain length. Will preserve HTML tags and words if the flags are true.
 	 *
 	 * @access public
 	 * @param string $string
 	 * @param int $limit
-	 * @param string $suffix
+	 * @param array $options
 	 * @return string
 	 * @static
 	 */
-	public static function truncate($string, $limit = 25, $suffix = '&hellip;') {
-		if (mb_strlen($string) > $limit) {
-			$string = strip_tags($string);
-			$string = self::extract($string, 0, $limit);
-			$string = self::extract($string, 0, -(mb_strlen(mb_strrchr($string, ' '))));
-			$string = $string . $suffix;
+	public static function truncate($string, $limit = 25, array $options = []) {
+		$length = mb_strlen($string);
+		$options = $options + [
+			'html' => true,
+			'word' => true,
+			'suffix' => '&hellip;'
+		];
+
+		// If string is shorten than limit
+		if ($length <= $limit) {
+			return $string;
 		}
 
-		// @todo
+		// If we should preserve HTML
+		if ($options['html']) {
+			$tokens = [];
+			$token = '';
+			$i = 0;
 
-		return $string;
+			// Generate tokens
+			while ($i < $length) {
+				$char = $string[$i];
+
+				if ($char === '<' || $char === '&') {
+					$tokens[] = $token;
+					$token = $char;
+
+				} else if ($char === '>' || $char === ';') {
+					$tokens[] = $token . $char;
+					$token = '';
+
+				} else {
+					$token .= $char;
+				}
+
+				$i++;
+			}
+
+			$tokens[] = $token;
+
+			// Determine output
+			$current = 0;
+			$inHtml = false;
+			$output = '';
+
+			foreach ($tokens as $token) {
+				// Increase limit by 1 for tokens
+				if (preg_match('/&[a-z0-9]{2,8};|&#[0-9]{1,7};/i', $token)) {
+					$current++;
+					$output .= $token;
+
+				// Increase limit by 0 for HTML tags but check for tag boundaries
+				} else if (preg_match('/\<\/?(?:.*?)\>/i', $token, $matches)) {
+					$inHtml = (mb_substr($token, 0, 2) !== '</');
+					$output .= $token;
+
+				// Regular string
+				} else {
+					$length = mb_strlen($token);
+					$total = $current + $length;
+
+					if ($current >= $limit) {
+						// Do nothing, we reached the limit
+
+					} else if (($current + $length) >= $limit) {
+						$allowed = ($total - $limit);
+						$output .= mb_substr($token, 0, $length - $allowed);
+						$current = $current + $allowed;
+
+					} else {
+						$output .= $token;
+						$current = $current + $length;
+					}
+				}
+
+				// We done?
+				if ($current > $limit && !$inHtml) {
+					break;
+				}
+			}
+
+		// Who cares about HTML
+		} else {
+			$output = mb_substr($string, 0, $limit);
+		}
+
+		// If we should preserve words
+		if ($options['word']) {
+			$lastChar = mb_substr($output, -1);
+
+			if ($lastChar !== ' ' && $lastChar !== '>' && $lastChar !== ';') {
+				$output = mb_substr($string, 0, self::lastIndexOf($output, ' '));
+			}
+		}
+
+		return trim($output) . $options['suffix'];
 	}
 
 }

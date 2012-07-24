@@ -298,7 +298,7 @@ abstract class RouteAbstract extends Base implements Route {
 	 * @return boolean
 	 */
 	public function isMethod() {
-		$method = array_map('strtolower', (array) $this->config->method);
+		$method = array_map('mb_strtolower', (array) $this->config->method);
 
 		if (!empty($method) && !in_array($this->request->method(), $method)) {
 			return false;
