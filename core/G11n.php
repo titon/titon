@@ -285,7 +285,11 @@ class G11n {
 
 			foreach ($locales as $bundle) {
 				$locale = $bundle->getLocale();
-				$loaded[] = isset($locale['parent']) ? $locale['parent'] : $locale['id'];
+				$loaded[] = $locale['id'];
+
+				if (isset($locale['parent'])) {
+					$loaded[] = $locale['parent'];
+				}
 			}
 
 			return (count(array_unique($loaded)) > 1);

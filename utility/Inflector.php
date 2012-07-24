@@ -39,7 +39,21 @@ class Inflector {
 	 */
 	public static function camelCase($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return str_replace(' ', '', ucwords(mb_strtolower(str_replace(['_', '-'], ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)))));
+			return str_replace(' ', '', mb_convert_case(str_replace(['_', '-'], ' ', preg_replace('/[^-_a-z0-9\s]+/i', '', $string)), MB_CASE_TITLE));
+		});
+	}
+
+	/**
+	 * Inflect a word to a class name. Singular camel cased form.
+	 *
+	 * @access public
+	 * @param string $string
+	 * @return string
+	 * @static
+	 */
+	public static function className($string) {
+		return self::_cache([__METHOD__, $string], function() use ($string) {
+			return self::camelCase(self::singularize($string));
 		});
 	}
 
@@ -53,7 +67,7 @@ class Inflector {
 	 * @return string
 	 * @static
 	 */
-	public static function filename($string, $ext = 'php', $capitalize = true) {
+	public static function fileName($string, $ext = 'php', $capitalize = true) {
 		if (mb_strpos($string, '.') !== false) {
 			$string = mb_substr($string, 0, mb_strrpos($string, '.'));
 		}
@@ -72,20 +86,6 @@ class Inflector {
 	}
 
 	/**
-	 * Inflect a word to a model name. Singular camel cased form.
-	 *
-	 * @access public
-	 * @param string $string
-	 * @return string
-	 * @static
-	 */
-	public static function modelize($string) {
-		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return self::camelCase(self::singularize($string));
-		});
-	}
-
-	/**
 	 * Inflect a word to a human readable string with only the first word capitalized and the rest lowercased.
 	 *
 	 * @access public
@@ -96,6 +96,52 @@ class Inflector {
 	public static function normalCase($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
 			return ucfirst(mb_strtolower(str_replace('_', ' ', $string)));
+		});
+	}
+
+	/**
+	 * Inflect a number by appending its ordinal suffix: st, nd, rd, th, etc.
+	 *
+	 * @access public
+	 * @param int $number
+	 * @return string
+	 * @static
+	 */
+	public static function ordinal($number) {
+		if (!Titon::g11n()->isEnabled()) {
+			return $number;
+		}
+
+		return self::_cache([__METHOD__, $number], function() use ($number) {
+			$inflections = Titon::g11n()->current()->getInflections();
+			$number = (int) $number;
+
+			if (empty($inflections) || empty($inflections['ordinal'])) {
+				return $number;
+			}
+
+			$ordinal = $inflections['ordinal'];
+
+			// Teens 11-13
+			if (in_array(($number % 100), range(11, 13)) && isset($ordinal['default'])) {
+				return str_replace('#', $number, $ordinal['default']);
+			}
+
+			// First, second, third
+			$modNumber = $number % 10;
+
+			foreach ($ordinal as $i => $format) {
+				if (is_numeric($i) && $modNumber === $i) {
+					return str_replace('#', $number, $ordinal[$i]);
+				}
+			}
+
+			// Fallback
+			if (isset($ordinal['default'])) {
+				return str_replace('#', $number, $ordinal['default']);
+			}
+
+			return $number;
 		});
 	}
 
@@ -123,8 +169,11 @@ class Inflector {
 			} else if (!empty($inflections['uninflected']) && in_array($string, $inflections['uninflected'])) {
 				$result = $string;
 
+			} else if (!empty($inflections['irregular']) && isset($inflections['irregular'][$string])) {
+				$result = $inflections['irregular'][$string];
+
 			} else if (!empty($inflections['irregular']) && in_array($string, $inflections['irregular'])) {
-				$result = array_search($string, $inflections['irregular']);
+				$result = $string;
 
 			} else if (!empty($inflections['plural'])) {
 				foreach ($inflections['plural'] as $pattern => $replacement) {
@@ -153,7 +202,7 @@ class Inflector {
 	 */
 	public static function route($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return str_replace([' ', '_'], '-', preg_replace('/[^-_a-z0-9\s]+/i', '', $string));
+			return str_replace([' ', '_'], '-', preg_replace('/[^-_a-z0-9\s]+/i', '', preg_replace('/\s{2,}+/', ' ', $string)));
 		});
 	}
 
@@ -184,6 +233,9 @@ class Inflector {
 			} else if (!empty($inflections['irregular']) && in_array($string, $inflections['irregular'])) {
 				$result = array_search($string, $inflections['irregular']);
 
+			} else if (!empty($inflections['irregular']) && isset($inflections['irregular'][$string])) {
+				$result = $string;
+
 			} else if (!empty($inflections['singular'])) {
 				foreach ($inflections['singular'] as $pattern => $replacement) {
 					if (preg_match($pattern, $string)) {
@@ -211,7 +263,16 @@ class Inflector {
 	 */
 	public static function slug($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return mb_strtolower(str_replace(' ', '-', str_replace('-', '_', preg_replace('/[^-a-z0-9\s]+/i', '', $string))));
+			// Revert entities
+			$string = html_entity_decode($string, ENT_QUOTES, Titon::config()->encoding());
+
+			// Remove non-ascii characters
+			$string = preg_replace('/[^-a-z0-9\s]+/i', '', self::transliterate($string));
+
+			// Replace dashes and underscores
+			$string = str_replace(' ', '-', str_replace('-', '_', $string));
+
+			return mb_strtolower($string);
 		});
 	}
 
@@ -223,7 +284,7 @@ class Inflector {
 	 * @return string
 	 * @static
 	 */
-	public static function tableize($string) {
+	public static function tableName($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
 			return lcfirst(self::camelCase(self::pluralize($string)));
 		});
@@ -239,7 +300,36 @@ class Inflector {
 	 */
 	public static function titleCase($string) {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
-			return ucwords(mb_strtolower(str_replace('_', ' ', $string)));
+			return mb_convert_case(str_replace('_', ' ', $string), MB_CASE_TITLE);
+		});
+	}
+
+	/**
+	 * Inflect a word by replacing all non-ASCII characters with there equivalents.
+	 *
+	 * @access public
+	 * @param string $string
+	 * @return string
+	 * @static
+	 */
+	public static function transliterate($string) {
+		if (!Titon::g11n()->isEnabled()) {
+			return $string;
+		}
+
+		return self::_cache([__METHOD__, $string], function() use ($string) {
+			$inflections = Titon::g11n()->current()->getInflections();
+
+			if (empty($inflections) || empty($inflections['transliteration'])) {
+				return $string;
+			}
+
+			// Replace with ASCII characters
+			$transliterations = $inflections['transliteration'];
+			$string = preg_replace(array_keys($transliterations), array_values($transliterations), $string);
+
+			// Remove any left over non 7bit ASCII
+			return preg_replace('/[^\x09\x0A\x0D\x20-\x7E]/', '', $string);
 		});
 	}
 
@@ -268,7 +358,7 @@ class Inflector {
 	public static function variable($string) {
 		$string = preg_replace('/[^_a-z0-9]+/i', '', $string);
 
-		if (is_numeric(substr($string, 0, 1))) {
+		if (is_numeric(mb_substr($string, 0, 1))) {
 			$string = '_' . $string;
 		}
 

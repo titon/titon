@@ -173,7 +173,7 @@ class Logger {
 			$message = print_r($message, true);
 		}
 
-		$file = Inflector::filename($type, 'log', false);
+		$file = Inflector::fileName($type, 'log', false);
 		$message = '[' . date('Y-m-d H:i:s') . '] ' . $message;
 
 		file_put_contents(APP_TEMP. $file, $message . "\n", FILE_APPEND | LOCK_EX);

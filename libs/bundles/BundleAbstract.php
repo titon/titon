@@ -120,7 +120,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 
 		foreach ($this->getLocations() as $location) {
 			foreach ($this->getReaders() as $ext => $reader) {
-				$path = $location . Inflector::filename($resource, $ext, false);
+				$path = $location . Inflector::fileName($resource, $ext, false);
 
 				if (file_exists($path)) {
 					if ($data = $reader->read($path)) {

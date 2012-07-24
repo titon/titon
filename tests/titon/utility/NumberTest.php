@@ -218,12 +218,12 @@ class NumberTest extends TestCase {
 	 * Test that percentage() returns a number formatted string with a % sign.
 	 */
 	public function testPercentage() {
-		$this->assertEquals('123%', Number::percentage(123));
-		$this->assertEquals('4,546%', Number::percentage(4546));
-		$this->assertEquals('92,378,453%', Number::percentage(92378453));
-		$this->assertEquals('287,349,238,432%', Number::percentage('287349238432'));
-		$this->assertEquals('3,843.45%', Number::percentage(3843.4450, 2));
-		$this->assertEquals('93,789.34%', Number::percentage(93789.34, 2));
+		$this->assertEquals('123%', Number::percentage(123, ['places' => 0]));
+		$this->assertEquals('4,546%', Number::percentage(4546, ['places' => 0]));
+		$this->assertEquals('92,378,453%', Number::percentage(92378453, ['places' => 0]));
+		$this->assertEquals('287,349,238,432%', Number::percentage('287349238432', ['places' => 0]));
+		$this->assertEquals('3,843.45%', Number::percentage(3843.4450));
+		$this->assertEquals('93,789.34%', Number::percentage(93789.34));
 
 		// options
 		$this->assertEquals('92 378 453,94%', Number::percentage(92378453.9438, [

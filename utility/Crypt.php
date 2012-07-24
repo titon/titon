@@ -186,6 +186,7 @@ class Crypt {
 
 	/**
 	 * Prepare for en/decryption by generating persistent keys and IVs.
+	 * We can't use randomization as the key/iv needs to be the same for both encrypt and decrypt.
 	 *
 	 * @access public
 	 * @param string $key

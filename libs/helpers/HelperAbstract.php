@@ -144,7 +144,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * @return string
 	 */
 	public function tag($tag, array $params = []) {
-		return String::insert($this->_tags[$tag], $params) . "\n";
+		return String::insert($this->_tags[$tag], $params, ['escape' => false]) . "\n";
 	}
 
 	/**
