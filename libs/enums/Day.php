@@ -9,14 +9,14 @@
 
 namespace titon\libs\enums;
 
-use titon\base\types\Enum;
+use titon\base\Enum;
 
 /**
  * Enum for days of the week.
  *
  * @package	titon.libs.enums
  */
-class DayEnum extends Enum {
+class Day extends Enum {
 
 	/**
 	 * Constants.

@@ -6,21 +6,13 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 ### Systems In Development ###
 
-View Rendering
+Utilities
 
-* core/Dispatch - 100%
-* libs/dispatchers - 100%
-* libs/engines - 100%
-* libs/helpers - 30%
+* base/types
+* (uri/url)
+* (validation)
 
 ### Upcoming Systems ###
-
-Dispatch Cycle
-
-* core/Dispatch - 100%
-* core/Router - 100%
-* libs/controllers - 100%
-* libs/routes - 100%
 
 Database/Datasource Layer
 
@@ -38,12 +30,6 @@ Security
 * (xss/csrf protection)
 * (firewall)
 * (persistence)
-
-Utilities
-
-* base/types
-* (uri/url)
-* (validation)
 
 Input/Ouput / Filesystem
 

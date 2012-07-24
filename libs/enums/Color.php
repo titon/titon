@@ -9,14 +9,14 @@
 
 namespace titon\libs\enums;
 
-use titon\base\types\Enum;
+use titon\base\Enum;
 
 /**
  * Enum for primary and secondary colors.
  *
  * @package	titon.libs.enums
  */
-class ColorEnum extends Enum {
+class Color extends Enum {
 
 	/**
 	 * Constants.
