@@ -206,4 +206,46 @@ class StringTest extends TestCase {
 		$this->assertFalse(String::startsWith($this->string, 'TITAN', false));
 	}
 
+	/**
+	 * Test that truncate() trims text while preserving HTML and trailing words.
+	 */
+	public function testTruncate() {
+		$string = 'This has <a href="/" class="link">anchor tags</a> &amp; entities in it. It has &quot;quotes&quot; as well.';
+
+		// Preserve HTML and word
+		$this->assertEquals('This has <a href="/" class="link">anchor</a>&hellip;', String::truncate($string, 15));
+		$this->assertEquals('This has <a href="/" class="link">anchor tags</a> &amp;&hellip;', String::truncate($string, 25));
+		$this->assertEquals('This has <a href="/" class="link">anchor tags</a> &amp; entities in&hellip;', String::truncate($string, 35));
+		$this->assertEquals('This has <a href="/" class="link">anchor tags</a> &amp; entities in it. It&hellip;', String::truncate($string, 45));
+		$this->assertEquals('This has <a href="/" class="link">anchor tags</a> &amp; entities in it. It has &quot;quotes&quot; as well.', String::truncate($string, false));
+
+		// Preserve HTML
+		$this->assertEquals('This has <a href="/" class="link">anch</a>&hellip;', String::truncate($string, 13, ['word' => false]));
+		$this->assertEquals('This has <a href="/" class="link">anchor tags</a> &amp; en&hellip;', String::truncate($string, 25, ['word' => false]));
+		$this->assertEquals('This has <a href="/" class="link">anchor tags</a> &amp; entities in&hellip;', String::truncate($string, 35, ['word' => false]));
+		$this->assertEquals('This has <a href="/" class="link">anchor tags</a> &amp; entities in it. It has&hellip;', String::truncate($string, 45, ['word' => false]));
+		$this->assertEquals('This has <a href="/" class="link">anchor tags</a> &amp; entities in it. It has &quot;quotes&quot; as well.', String::truncate($string, false, ['word' => false]));
+
+		// Preserve none
+		$this->assertEquals('This has anchor tags &amp; en&hellip;', String::truncate($string, 25, ['word' => false, 'html' => false]));
+		$this->assertEquals('This has anchor tags &amp; entities in&hellip;', String::truncate($string, 35, ['word' => false, 'html' => false]));
+		$this->assertEquals('This has anchor tags &amp; entities in it. It has&hellip;', String::truncate($string, 45, ['word' => false, 'html' => false]));
+		$this->assertEquals('This has anchor tags &amp; entities in it. It has &quot;quotes&quot; as well.', String::truncate($string, false, ['word' => false, 'html' => false]));
+
+		// Preserve none with custom suffix
+		$this->assertEquals('This has anchor tags &amp; en...', String::truncate($string, 25, ['word' => false, 'html' => false, 'suffix' => '...']));
+		$this->assertEquals('This has anchor tags &amp; entities in...', String::truncate($string, 35, ['word' => false, 'html' => false, 'suffix' => '...']));
+		$this->assertEquals('This has anchor tags &amp; entities in it. It has...', String::truncate($string, 45, ['word' => false, 'html' => false, 'suffix' => '...']));
+		$this->assertEquals('This has anchor tags &amp; entities in it. It has &quot;quotes&quot; as well.', String::truncate($string, false, ['word' => false, 'html' => false, 'suffix' => '...']));
+
+		// Custom tags (BB code)
+		$string = 'This has [url="/"]anchor tags[/url] &amp; entities in it. It has &quot;quotes&quot; as well.';
+
+		$this->assertEquals('This has [url="/"]anchor[/url]&hellip;', String::truncate($string, 15, ['open' => '[', 'close' => ']']));
+		$this->assertEquals('This has [url="/"]anchor tags[/url] &amp;&hellip;', String::truncate($string, 25, ['open' => '[', 'close' => ']']));
+		$this->assertEquals('This has [url="/"]anchor tags[/url] &amp; entities in&hellip;', String::truncate($string, 35, ['open' => '[', 'close' => ']']));
+		$this->assertEquals('This has [url="/"]anchor tags[/url] &amp; entities in it. It&hellip;', String::truncate($string, 45, ['open' => '[', 'close' => ']']));
+		$this->assertEquals('This has [url="/"]anchor tags[/url] &amp; entities in it. It has &quot;quotes&quot; as well.', String::truncate($string, false, ['open' => '[', 'close' => ']']));
+	}
+
 }

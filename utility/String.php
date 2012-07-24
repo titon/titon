@@ -315,105 +315,120 @@ class String {
 	 * @param string $string
 	 * @param int $limit
 	 * @param array $options
+	 * 		html: True to preserve HTML tags
+	 * 		word: True to preserve trailing words
+	 * 		suffix: Will be appended to the end of the output
+	 * 		prefix: Will be appended to the beginning of the out output
+	 * 		open: The opening tag (defaults to < HTML)
+	 * 		close: The closing tag (defaults to > HTML)
 	 * @return string
 	 * @static
 	 */
 	public static function truncate($string, $limit = 25, array $options = []) {
-		$length = mb_strlen($string);
 		$options = $options + [
 			'html' => true,
 			'word' => true,
-			'suffix' => '&hellip;'
+			'suffix' => '&hellip;',
+			'prefix' => '',
+			'open' => '<',
+			'close' => '>'
 		];
 
+		// If we should preserve HTML
+		if ($options['open'] !== '<' || $options['close'] !== '>') {
+			$options['html'] = false;
+		}
+
+		if (!$options['html']) {
+			$string = strip_tags($string);
+		}
+
 		// If string is shorten than limit
-		if ($length <= $limit) {
+		$length = mb_strlen($string);
+
+		if ($length <= $limit || !$limit) {
 			return $string;
 		}
 
-		// If we should preserve HTML
-		if ($options['html']) {
-			$tokens = [];
-			$token = '';
-			$i = 0;
+		// Generate tokens
+		$open = $options['open'];
+		$close = $options['close'];
+		$tokens = [];
+		$token = '';
+		$i = 0;
 
-			// Generate tokens
-			while ($i < $length) {
-				$char = $string[$i];
+		while ($i < $length) {
+			$char = $string[$i];
 
-				if ($char === '<' || $char === '&') {
-					$tokens[] = $token;
-					$token = $char;
+			if ($char === $open || $char === '&') {
+				$tokens[] = $token;
+				$token = $char;
 
-				} else if ($char === '>' || $char === ';') {
-					$tokens[] = $token . $char;
-					$token = '';
+			} else if ($char === $close || $char === ';') {
+				$tokens[] = $token . $char;
+				$token = '';
 
-				} else {
-					$token .= $char;
-				}
-
-				$i++;
+			} else {
+				$token .= $char;
 			}
 
-			$tokens[] = $token;
+			$i++;
+		}
 
-			// Determine output
-			$current = 0;
-			$inHtml = false;
-			$output = '';
+		$tokens[] = $token;
 
-			foreach ($tokens as $token) {
-				// Increase limit by 1 for tokens
-				if (preg_match('/&[a-z0-9]{2,8};|&#[0-9]{1,7};/i', $token)) {
-					$current++;
-					$output .= $token;
+		// Determine output
+		$current = 0;
+		$inHtml = false;
+		$htmlPattern = '/\\' . $open . '\/?(?:.*?)\\' . $close . '/iSu';
+		$entityPattern = '/&[a-z0-9]{2,8};|&#[0-9]{1,7};/iSu';
+		$output = '';
 
-				// Increase limit by 0 for HTML tags but check for tag boundaries
-				} else if (preg_match('/\<\/?(?:.*?)\>/i', $token, $matches)) {
-					$inHtml = (mb_substr($token, 0, 2) !== '</');
-					$output .= $token;
+		foreach ($tokens as $token) {
+			// Increase limit by 1 for tokens
+			if (preg_match($entityPattern, $token)) {
+				$current++;
+				$output .= $token;
 
-				// Regular string
+			// Increase limit by 0 for HTML tags but check for tag boundaries
+			} else if (preg_match($htmlPattern, $token, $matches)) {
+				$inHtml = (mb_substr($token, 0, 2) !== $open . '/');
+				$output .= $token;
+
+			// Regular string
+			} else {
+				$length = mb_strlen($token);
+
+				if ($current >= $limit) {
+					// Do nothing, we reached the limit
+
+				} else if (($current + $length) >= $limit) {
+					$allowed = ($limit - $current);
+					$output .= mb_substr($token, 0, $allowed);
+					$current += $allowed;
+
 				} else {
-					$length = mb_strlen($token);
-					$total = $current + $length;
-
-					if ($current >= $limit) {
-						// Do nothing, we reached the limit
-
-					} else if (($current + $length) >= $limit) {
-						$allowed = ($total - $limit);
-						$output .= mb_substr($token, 0, $length - $allowed);
-						$current = $current + $allowed;
-
-					} else {
-						$output .= $token;
-						$current = $current + $length;
-					}
-				}
-
-				// We done?
-				if ($current > $limit && !$inHtml) {
-					break;
+					$output .= $token;
+					$current += $length;
 				}
 			}
 
-		// Who cares about HTML
-		} else {
-			$output = mb_substr($string, 0, $limit);
+			// We done?
+			if ($current >= $limit && !$inHtml) {
+				break;
+			}
 		}
 
 		// If we should preserve words
 		if ($options['word']) {
 			$lastChar = mb_substr($output, -1);
 
-			if ($lastChar !== ' ' && $lastChar !== '>' && $lastChar !== ';') {
+			if ($lastChar !== ' ' && $lastChar !== $close && $lastChar !== ';') {
 				$output = mb_substr($string, 0, self::lastIndexOf($output, ' '));
 			}
 		}
 
-		return trim($output) . $options['suffix'];
+		return $options['prefix'] . trim($output) . $options['suffix'];
 	}
 
 }
