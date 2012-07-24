@@ -48,9 +48,10 @@ class AssetHelper extends HelperAbstract {
 	 * @param string $script
 	 * @param string $location
 	 * @param int $order
+	 * @param int $env
 	 * @return titon\libs\helpers\html\AssetHelper
 	 */
-	public function addScript($script, $location = self::FOOTER, $order = null) {
+	public function addScript($script, $location = self::FOOTER, $order = null, $env = null) {
 		if (mb_substr($script, -3) !== '.js') {
 			$script .= '.js';
 		}
@@ -67,7 +68,10 @@ class AssetHelper extends HelperAbstract {
 			$order++;
 		}
 
-		$this->_scripts[$location][$order] = $script;
+		$this->_scripts[$location][$order] = [
+			'path' => $script,
+			'env' => $env
+		];
 
 		return $this;
 	}
@@ -79,9 +83,10 @@ class AssetHelper extends HelperAbstract {
 	 * @param string $sheet
 	 * @param string $media
 	 * @param int $order
+	 * @param int $env
 	 * @return titon\libs\helpers\html\AssetHelper
 	 */
-	public function addStylesheet($sheet, $media = 'screen', $order = null) {
+	public function addStylesheet($sheet, $media = 'screen', $order = null, $env = null) {
 		if (mb_substr($sheet, -4) !== '.css') {
 			$sheet .= '.css';
 		}
@@ -96,7 +101,8 @@ class AssetHelper extends HelperAbstract {
 
 		$this->_stylesheets[$order] = [
 			'path' => $sheet,
-			'media' => $media
+			'media' => $media,
+			'env' => $env
 		];
 
 		return $this;
@@ -125,11 +131,15 @@ class AssetHelper extends HelperAbstract {
 		$output = null;
 
 		if (!empty($this->_scripts[$location])) {
+			$env = Titon::env()->current('type');
+
 			$scripts = $this->_scripts[$location];
 			ksort($scripts);
 
 			foreach ($scripts as $script) {
-				$output .= $this->html->script($script);
+				if ($script['env'] === null || $script['env'] === $env) {
+					$output .= $this->html->script($script['path']);
+				}
 			}
 		}
 
@@ -146,11 +156,15 @@ class AssetHelper extends HelperAbstract {
 		$output = null;
 
 		if (!empty($this->_stylesheets)) {
+			$env = Titon::env()->current('type');
+
 			$stylesheets = $this->_stylesheets;
 			ksort($stylesheets);
 
 			foreach ($stylesheets as $sheet) {
-				$output .= $this->html->link($sheet['path'], ['media' => $sheet['media']]);
+				if ($sheet['env'] === null || $sheet['env'] === $env) {
+					$output .= $this->html->link($sheet['path'], ['media' => $sheet['media']]);
+				}
 			}
 		}
 

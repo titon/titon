@@ -42,7 +42,6 @@ Security
 Utilities
 
 * base/types
-* utility
 * (uri/url)
 * (validation)
 

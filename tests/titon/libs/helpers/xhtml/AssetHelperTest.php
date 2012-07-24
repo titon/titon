@@ -9,6 +9,8 @@
 
 namespace titon\tests\titon\libs\helpers\xhtml;
 
+use titon\Titon;
+use titon\core\Environment;
 use titon\tests\TestCase;
 use titon\libs\helpers\xhtml\AssetHelper;
 
@@ -16,6 +18,13 @@ use titon\libs\helpers\xhtml\AssetHelper;
  * Test class for titon\libs\helpers\xhtml\AssetHelper.
  */
 class AssetHelperTest extends TestCase {
+
+	/**
+	 * Setup environment.
+	 */
+	protected function setUp() {
+		Titon::env()->initialize();
+	}
 
 	/**
 	 * Test that scripts are added and retrieved by location.
@@ -54,6 +63,19 @@ class AssetHelperTest extends TestCase {
 			'<script src="path/no-extension.js" type="text/javascript"></script>' . PHP_EOL .
 			'<script src="/a/really/really/deep/path/include.js" type="text/javascript"></script>' . PHP_EOL
 		, $helper->scripts(AssetHelper::FOOTER));
+
+		// environment
+		$helper = new AssetHelper();
+		$helper
+			->addScript('script.js', AssetHelper::FOOTER, null, Environment::DEVELOPMENT)
+			->addScript('path/commons.js', AssetHelper::FOOTER, null, Environment::PRODUCTION)
+			->addScript('path/no-extension', AssetHelper::FOOTER, null, Environment::STAGING)
+			->addScript('/a/really/really/deep/path/include.js', AssetHelper::FOOTER, null, Environment::DEVELOPMENT);
+
+		$this->assertEquals(
+			'<script src="script.js" type="text/javascript"></script>' . PHP_EOL .
+			'<script src="/a/really/really/deep/path/include.js" type="text/javascript"></script>' . PHP_EOL
+		, $helper->scripts(AssetHelper::FOOTER));
 	}
 
 	/**
@@ -75,15 +97,24 @@ class AssetHelperTest extends TestCase {
 		// with ordering
 		$helper = new AssetHelper();
 		$helper
-				->addStylesheet('style.css', 'handheld', 3)
-				->addStylesheet('a/really/deep/path/with/no/extension/style.css', 'screen', 1)
-				->addStylesheet('mobile.css', 'mobile', 2);
+			->addStylesheet('style.css', 'handheld', 3)
+			->addStylesheet('a/really/deep/path/with/no/extension/style.css', 'screen', 1)
+			->addStylesheet('mobile.css', 'mobile', 2);
 
 		$this->assertEquals(
 			'<link href="a/really/deep/path/with/no/extension/style.css" media="screen" rel="stylesheet" type="text/css" />' . PHP_EOL .
 			'<link href="mobile.css" media="mobile" rel="stylesheet" type="text/css" />' . PHP_EOL .
 			'<link href="style.css" media="handheld" rel="stylesheet" type="text/css" />' . PHP_EOL
 		, $helper->stylesheets());
+
+		// environment
+		$helper = new AssetHelper();
+		$helper
+			->addStylesheet('style.css', 'handheld', null, Environment::DEVELOPMENT)
+			->addStylesheet('a/really/deep/path/with/no/extension/style.css', 'screen', null, Environment::STAGING)
+			->addStylesheet('mobile.css', 'mobile', null, Environment::PRODUCTION);
+
+		$this->assertEquals('<link href="style.css" media="handheld" rel="stylesheet" type="text/css" />' . PHP_EOL, $helper->stylesheets());
 	}
 
 }
