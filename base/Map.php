@@ -12,6 +12,9 @@ namespace titon\base;
 use titon\base\Type;
 use titon\utility\Hash;
 use \Closure;
+use \ArrayAccess;
+use \Iterator;
+use \Countable;
 
 /**
  * The Map type allows for the modification, manipulation and traversal of an array through the use of an object like interface.
@@ -19,7 +22,7 @@ use \Closure;
  *
  * @package	titon.base
  */
-class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
+class Map extends Type implements ArrayAccess, Iterator, Countable {
 
 	/**
 	 * Type cast to an array.
@@ -88,12 +91,12 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * the keys must match as well as the values. A callback can be passed to
 	 * further filter down the results.
 	 *
-	 * If options:on equals "keys":
+	 * If options.on equals "keys":
 	 * Compares the current array against the passed array and returns a new array
 	 * with all the values where keys are matched in both arrays.
 	 * Only differences from the class instance is returned.
 	 *
-	 * If options:valueCallback is set:
+	 * If options.valueCallback is set:
 	 * Works exactly like default compare() except that it uses a callback to validate the values.
 	 * A second callback can be used to also compared against the array key.
 	 *
@@ -124,42 +127,47 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 		$callback = $options['callback'];
 		$valueCallback = $options['valueCallback'];
 
+		// Prepare array
+		$value = Hash::filter($this->_value, false, function($val) {
+			return !is_array($val);
+		});
+
 		// Values
 		if ($options['on'] === 'values') {
 
 			// Compare with callback
 			if ($valueCallback instanceof Closure) {
 				if ($callback instanceof Closure) {
-					return array_uintersect_uassoc($this->_value, $array, $valueCallback, $callback);
+					return array_uintersect_uassoc($value, $array, $valueCallback, $callback);
 
 				} else if ($options['strict']) {
-					return array_uintersect_assoc($this->_value, $array, $valueCallback);
+					return array_uintersect_assoc($value, $array, $valueCallback);
 
 				} else {
-					return array_uintersect($this->_value, $array, $valueCallback);
+					return array_uintersect($value, $array, $valueCallback);
 				}
 
 			// Compare regular
 			} else {
 				if ($options['strict']) {
 					if ($callback instanceof Closure) {
-						return array_intersect_uassoc($this->_value, $array, $callback);
+						return array_intersect_uassoc($value, $array, $callback);
 
 					} else {
-						return array_intersect_assoc($this->_value, $array);
+						return array_intersect_assoc($value, $array);
 					}
 				} else {
-					return array_intersect($this->_value, $array);
+					return array_intersect($value, $array);
 				}
 			}
 
 		// Keys
 		} else {
 			if ($callback instanceof Closure) {
-				return array_intersect_ukey($this->_value, $array, $callback);
+				return array_intersect_ukey($value, $array, $callback);
 
 			} else {
-				return array_intersect_key($this->_value, $array);
+				return array_intersect_key($value, $array);
 			}
 		}
 	}
@@ -172,7 +180,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return titon\base\Map
 	 */
 	public function concat(array $array) {
-		return new Map($array + $this->_value);
+		return new Map(Hash::merge($this->_value, $array));
 	}
 
 	/**
@@ -354,15 +362,12 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param Closure $callback
+	 * @param boolean $recursive
 	 * @return titon\base\Map
 	 * @chainable
 	 */
-	public function filter(Closure $callback = null) {
-		if ($callback) {
-			$this->_value = array_filter($this->_value, $callback);
-		} else {
-			$this->_value = array_filter($this->_value);
-		}
+	public function filter(Closure $callback = null, $recursive = true) {
+		$this->_value = Hash::filter($this->_value, $recursive, $callback);
 
 		return $this;
 	}
@@ -821,8 +826,6 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 		foreach ($this->_value as $key => $value) {
 			if ($i >= $offset && $l < $length) {
 				$splice[$key] = $value;
-				unset($this->_value[$key]);
-
 				$l++;
 
 			} else if ($i < $offset) {

@@ -185,10 +185,11 @@ class Hash {
 	 * @access public
 	 * @param array $set
 	 * @param boolean $recursive
+	 * @param Closure $callback
 	 * @return mixed|array
 	 * @static
 	 */
-	public static function filter($set, $recursive = true) {
+	public static function filter($set, $recursive = true, Closure $callback = null) {
 		$set = (array) $set;
 
 		if ($recursive) {
@@ -199,9 +200,13 @@ class Hash {
 			}
 		}
 
-		return array_filter($set, function($var) {
-			return ($var === 0 || $var === '0' || !empty($var));
-		});
+		if ($callback === null) {
+			$callback = function($var) {
+				return ($var === 0 || $var === '0' || !empty($var));
+			};
+		}
+
+		return array_filter($set, $callback);
 	}
 
 	/**
