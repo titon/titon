@@ -59,7 +59,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @param boolean $preserve
 	 * @return array
 	 */
-	public function chunk($size, $preserve = false) {
+	public function chunk($size, $preserve = true) {
 		return array_chunk($this->_value, (int) $size, $preserve);
 	}
 
@@ -67,14 +67,13 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Removes all empty, null, false and 0 items.
 	 *
 	 * @access public
-	 * @param boolean $removeZero
 	 * @return titon\base\Map
 	 * @chainable
 	 */
-	public function clean($removeZero = true) {
+	public function clean() {
 		if (!empty($this->_value)) {
 			foreach ($this->_value as $key => $value) {
-				if (($value == 0 && $removeZero) || empty($value)) {
+				if (empty($value) && $value !== 0) {
 					unset($this->_value[$key]);
 				}
 			}
@@ -170,17 +169,10 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param array $array
-	 * @param boolean $append
 	 * @return titon\base\Map
 	 */
-	public function concat(array $array, $append = true) {
-		if ($append) {
-			$array = $array + $this->_value;
-		} else {
-			$array = $this->_value + $array;
-		}
-
-		return new Map((array) $array);
+	public function concat(array $array) {
+		return new Map($array + $this->_value);
 	}
 
 	/**
@@ -191,7 +183,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return boolean
 	 */
 	public function contains($value) {
-		return in_array($value, $this->_value);
+		return in_array($value, array_values($this->_value), true);
 	}
 
 	/**
@@ -201,7 +193,15 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return int
 	 */
 	public function countValues() {
-		return array_count_values($this->_value);
+		$values = array_values($this->_value);
+
+		foreach ($values as $key => $value) {
+			if (!is_string($value) && !is_numeric($value)) {
+				unset($values[$key]);
+			}
+		}
+
+		return array_count_values($values);
 	}
 
 	/**
@@ -357,27 +357,30 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return titon\base\Map
 	 * @chainable
 	 */
-	public function filter(Closure $callback) {
-		$this->_value = array_filter($this->_value, $callback);
+	public function filter(Closure $callback = null) {
+		if ($callback) {
+			$this->_value = array_filter($this->_value, $callback);
+		} else {
+			$this->_value = array_filter($this->_value);
+		}
 
 		return $this;
 	}
 
 	/**
-	 * Return the first element in the array. If preserve is disabled, the array indices will be reset.
+	 * Return the first element in the array.
 	 *
 	 * @access public
-	 * @param boolean $preserve
 	 * @return mixed
 	 */
-	public function first($preserve = true) {
-		if ($preserve && $this->isNotEmpty()) {
+	public function first() {
+		if ($this->isNotEmpty()) {
 			foreach ($this->_value as $value) {
 				return $value;
 			}
 		}
 
-		return array_shift($this->_value);
+		return null;
 	}
 
 	/**
@@ -429,7 +432,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @param string $key
 	 * @return mixed
 	 */
-	public function &get($key) {
+	public function get($key) {
 		return isset($this->_value[$key]) ? $this->_value[$key] : null;
 	}
 
@@ -464,7 +467,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 			}
 		}
 
-		return false;
+		return -1;
 	}
 
 	/**
@@ -484,7 +487,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return boolean
 	 */
 	public function isNotEmpty() {
-		return !$this->isEmpty();
+		return !empty($this->_value);
 	}
 
 	/**
@@ -498,14 +501,13 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	/**
-	 * Return the last element in the array. If preserve is disabled, the array indices will be reset.
+	 * Return the last element in the array.
 	 *
 	 * @access public
-	 * @param boolean $preserve
 	 * @return mixed
 	 */
-	public function last($preserve = true) {
-		if ($preserve && $this->isNotEmpty()) {
+	public function last() {
+		if ($this->isNotEmpty()) {
 			$length = $this->length();
 			$counter = 1;
 
@@ -518,46 +520,17 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 			}
 		}
 
-		return array_pop($this->_value);
-	}
-
-	/**
-	 * Returns the last index in which the passed key exists. Validates against literal and numeric keys.
-	 *
-	 * @access public
-	 * @param mixed $key
-	 * @return int
-	 */
-	public function lastIndexOf($key) {
-		$count = 0;
-		$last = false;
-
-		if ($this->isNotEmpty()) {
-			foreach ($this->_value as $index => $value) {
-				if ($index === $key) {
-					$last = $count;
-				}
-
-				++$count;
-			}
-		}
-
-		return $last;
+		return null;
 	}
 
 	/**
 	 * Return the length of the array.
 	 *
 	 * @access public
-	 * @param boolean $reset
 	 * @return int
 	 */
-	public function length($reset = false) {
-		if ($this->_length === null || $reset) {
-			$this->_length = count($this->_value);
-		}
-
-		return $this->_length;
+	public function length() {
+		return count($this->_value);
 	}
 
 	/**
@@ -570,13 +543,17 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @chainable
 	 */
 	public function map(Closure $callback, array $data = []) {
-		$this->_value = array_map($callback, $this->_value, $data);
+		if (empty($data)) {
+			$this->_value = array_map($callback, $this->_value);
+		} else {
+			$this->_value = array_map($callback, $this->_value, $data);
+		}
 
 		return $this;
 	}
 
 	/**
-	 * Merge an array with the current array. If recursive is true, it will merge children arrays recursively.
+	 * Merge an array with the current array.
 	 *
 	 * @access public
 	 * @param array $array
@@ -599,7 +576,9 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 */
 	public function prepend($value) {
 		if (is_array($value)) {
-			$this->_value = $value + $this->_value;
+			foreach ($value as $v) {
+				$this->prepend($v);
+			}
 		} else {
 			array_unshift($this->_value, $value);
 		}
@@ -627,7 +606,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 		$values = array_values($this->_value);
 		$random = rand(0, count($values) - 1);
 
-		return $this->_value[$random];
+		return $values[$random];
 	}
 
 	/**
@@ -635,14 +614,11 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 *
 	 * @access public
 	 * @param Closure $callback
-	 * @param boolean $initial
-	 * @return titon\base\Map
-	 * @chainable
+	 * @param mixed $initial
+	 * @return int
 	 */
 	public function reduce(Closure $callback, $initial = null) {
-		$this->_value = array_reduce($this->_value, $callback, $initial);
-
-		return $this;
+		return array_reduce($this->_value, $callback, $initial);
 	}
 
 	/**
@@ -708,7 +684,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @param boolean $preserve
 	 * @return array
 	 */
-	public function slice($offset, $length = null, $preserve = false) {
+	public function slice($offset, $length = null, $preserve = true) {
 		if (!$length && $length !== 0) {
 			$length = abs($offset);
 		}
@@ -827,7 +803,7 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	}
 
 	/**
-	 * Remove a portion of the array and replace it with something else.
+	 * Remove a portion of the array and replace it with something else; will preserve keys.
 	 *
 	 * @access public
 	 * @param int $offset
@@ -836,7 +812,32 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * @return array
 	 */
 	public function splice($offset, $length, array $replacement) {
-		return array_splice($this->_value, (int) $offset, (int) $length, $replacement);
+		$before = [];
+		$after = [];
+		$splice = [];
+		$i = 0;
+		$l = 0;
+
+		foreach ($this->_value as $key => $value) {
+			if ($i >= $offset && $l < $length) {
+				$splice[$key] = $value;
+				unset($this->_value[$key]);
+
+				$l++;
+
+			} else if ($i < $offset) {
+				$before[$key] = $value;
+
+			} else {
+				$after[$key] = $value;
+			}
+
+			$i++;
+		}
+
+		$this->_value = Hash::merge($before, $replacement, $after);
+
+		return $splice;
 	}
 
 	/**
@@ -1021,11 +1022,10 @@ class Map extends Type implements \ArrayAccess, \Iterator, \Countable {
 	 * Countable: Return the length of the array.
 	 *
 	 * @access public
-	 * @param boolean $reset;
 	 * @return boolean
 	 */
-	public function count($reset = false) {
-		return $this->length($reset);
+	public function count() {
+		return $this->length();
 	}
 
 }
