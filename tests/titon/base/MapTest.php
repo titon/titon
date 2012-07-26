@@ -277,8 +277,252 @@ class MapTest extends TestCase {
 		$this->assertEquals(4, $this->object->depth());
 	}
 
+	/**
+	 * Test that difference() returns all elements not found in second array.
+	 */
 	public function testDifference() {
+		$diff = $this->object->difference([
+			'integer' => 12345,
+			'empty' => '',
+			'string' => 'Foobar',
+			'boolean' => true
+		], ['strict' => false]);
 
+		$this->assertEquals([
+			'number' => '67890',
+			'zero' => 0
+		], $diff);
+	}
+
+	/**
+	 * Test that difference() returns all elements not found in second array by comparing with a callback.
+	 */
+	public function testDifferenceWithValueCallback() {
+		$diff = $this->object->difference([
+			'integer' => 12345,
+			'empty' => '',
+			'string' => 'FOOBAR',
+			'boolean' => true
+		], [
+			'strict' => false,
+			'valueCallback' => function ($k1, $k2) {
+				return strcasecmp($k1, $k2);
+			}
+		]);
+
+		$this->assertEquals([
+			'number' => '67890',
+			'zero' => 0
+		], $diff);
+	}
+
+	/**
+	 * Test that difference() returns all elements not found in second array by comparing keys and values.
+	 */
+	public function testDifferenceStrict() {
+		$diff = $this->object->difference([
+			'integer' => 12345,
+			'empty' => '',
+			'string' => 'Barbaz',
+			'boolean' => true
+		], ['strict' => true]);
+
+		$this->assertEquals([
+			'number' => '67890',
+			'string' => 'Foobar',
+			'null' => null,
+			'zero' => 0
+		], $diff);
+	}
+
+	/**
+	 * Test that difference() returns all elements not found in second array by comparing keys and values.
+	 */
+	public function testDifferenceStrictWithCallback() {
+		$diff = $this->object->difference([
+			'integer' => 56789,
+			'empty' => '',
+			'STRING' => 'FOOBAR',
+			'boolean' => true
+		], [
+			'strict' => true
+		]);
+
+		$this->assertEquals([
+			'integer' => 12345,
+			'number' => '67890',
+			'string' => 'Foobar',
+			'null' => null,
+			'zero' => 0
+		], $diff);
+
+		$diff = $this->object->difference([
+			'integer' => 12345,
+			'empty' => '',
+			'string' => 'Barbaz',
+			'boolean' => true
+		], [
+			'strict' => true,
+			'callback' => function ($k1, $k2) {
+				return strcasecmp($k1, $k2);
+			}
+		]);
+
+		$this->assertEquals([
+			'number' => '67890',
+			'string' => 'Foobar',
+			'null' => null,
+			'zero' => 0
+		], $diff);
+	}
+
+	/**
+	 * Test that difference() returns all elements not found in second array by comparing keys, values and with a callback.
+	 */
+	public function testDifferenceStrictWithCallbackAndValueCallback() {
+		$diff = $this->object->difference([
+			'INTEGER' => 12345,
+			'fake' => '',
+			'string' => 'FOOBAR',
+			'BOOLEAN' => true
+		], [
+			'strict' => true,
+			'callback' => function ($k1, $k2) {
+				return strcasecmp($k1, $k2);
+			},
+			'valueCallback' => function ($k1, $k2) {
+				return strcasecmp($k1, $k2);
+			}
+		]);
+
+		$this->assertEquals([
+			'number' => '67890',
+			'zero' => 0,
+			'null' => null,
+			'empty' => ''
+		], $diff);
+	}
+
+	/**
+	 * Test that difference() returns all elements not found in second array by comparing keys, values and with a callback.
+	 */
+	public function testDifferenceStrictWithValueCallback() {
+		$diff = $this->object->difference([
+			'integer' => 12345,
+			'fake' => '',
+			'string' => 'FOOBAR',
+			'boolean' => true
+		], [
+			'strict' => true,
+			'valueCallback' => function ($k1, $k2) {
+				return strcasecmp($k1, $k2);
+			}
+		]);
+
+		$this->assertEquals([
+			'number' => '67890',
+			'zero' => 0,
+			'null' => null,
+			'empty' => ''
+		], $diff);
+	}
+
+	/**
+	 * Test that difference() returns all elements not found in each array by key.
+	 */
+	public function testDifferenceAgainstKeys() {
+		$diff = $this->object->difference([
+			'integer' => 12345,
+			'empty' => 'lies',
+			'string' => 'Barbaz',
+			'boolean' => false,
+			'map' => ['key' => 'value']
+		], [
+			'on' => 'keys'
+		]);
+
+		$this->assertEquals([
+			'number' => '67890',
+			'null' => null,
+			'zero' => 0
+		], $diff);
+	}
+
+	/**
+	 * Test that difference() returns all elements not found in each array by key with callback.
+	 */
+	public function testDifferenceAgainstKeysWithCallback() {
+		$diff = $this->object->difference([
+			'integer' => 12345,
+			'empty' => 'lies',
+			'string' => 'Barbaz',
+			//'boolean' => false,
+			'map' => ['key' => 'value']
+		], [
+			'on' => 'keys',
+			'callback' => function($k1, $k2) {
+				if ($k1 == $k2) {
+					return 0;
+				} else if ($k1 > $k2) {
+					return 1;
+				} else {
+					return -1;
+				}
+			}
+		]);
+
+		$this->assertEquals([
+			'number' => '67890',
+			'boolean' => true,
+			'null' => null,
+			'zero' => 0
+		], $diff);
+	}
+
+	/**
+	 * Test that each() runs a callback on every item.
+	 */
+	public function testEach() {
+		$this->object->each(function($value, $key) {
+			if (is_string($value)) {
+				return $value . '---';
+			}
+
+			return $value;
+		}, false);
+
+		$this->assertEquals([
+			'integer' => 12345,
+			'number' => '67890---',
+			'string' => 'Foobar---',
+			'boolean' => true,
+			'null' => null,
+			'zero' => 0,
+			'empty' => '---',
+			'map' => ['foo' => 'bar'],
+			'array' => ['foo', 'bar']
+		], $this->object->value());
+
+		// recursive
+		$this->object->each(function($value, $key) {
+			if (is_string($value)) {
+				return $value . '+++';
+			}
+
+			return $value;
+		}, true);
+
+		$this->assertEquals([
+			'integer' => 12345,
+			'number' => '67890---+++',
+			'string' => 'Foobar---+++',
+			'boolean' => true,
+			'null' => null,
+			'zero' => 0,
+			'empty' => '---+++',
+			'map' => ['foo' => 'bar+++'],
+			'array' => ['foo+++', 'bar+++']
+		], $this->object->value());
 	}
 
 	/**
@@ -695,12 +939,228 @@ class MapTest extends TestCase {
 		}));
 	}
 
+	/**
+	 * Test that sort() will arrange in array in order, preserving (or not) keys, and reversing.
+	 */
 	public function testSort() {
+		$map = new Map([
+			'a' => 5,
+			'b' => 3,
+			'c' => 4,
+			'd' => 1,
+			'e' => 2
+		]);
 
+		// by value
+		$map->sort();
+
+		$this->assertEquals([
+			'd' => 1,
+			'e' => 2,
+			'b' => 3,
+			'c' => 4,
+			'a' => 5
+		], $map->value());
+
+		// reverse it
+		$map->sort(true);
+
+		$this->assertEquals([
+			'a' => 5,
+			'c' => 4,
+			'b' => 3,
+			'e' => 2,
+			'd' => 1,
+		], $map->value());
+
+		// by value with no preserving
+		$map->sort(['preserve' => false]);
+
+		$this->assertEquals([1, 2, 3, 4, 5], $map->value());
+
+		// reverse it
+		$map->sort(['preserve' => false, 'reverse' => true]);
+
+		$this->assertEquals([5, 4, 3, 2, 1], $map->value());
 	}
 
-	public function testSortNatural() {
+	/**
+	 * Test that sort() will arrange in array in order, preserving (or not) keys, and reversing while checking a callback.
+	 */
+	public function testSortWithCallback() {
+		$map = new Map([
+			'a' => 5,
+			'b' => 3,
+			'c' => 4,
+			'd' => 1,
+			'e' => 2
+		]);
 
+		$callback = function($a, $b) {
+			if ($a == $b) {
+				return 0;
+			} else if ($a > $b) {
+				return 1;
+			} else {
+				return -1;
+			}
+		};
+
+		// by value with callback
+		$map->sort($callback);
+
+		$this->assertEquals([
+			'd' => 1,
+			'e' => 2,
+			'b' => 3,
+			'c' => 4,
+			'a' => 5
+		], $map->value());
+
+		// reverse it
+		$map->sort(true);
+
+		$this->assertEquals([
+			'a' => 5,
+			'c' => 4,
+			'b' => 3,
+			'e' => 2,
+			'd' => 1,
+		], $map->value());
+
+		// by value with no preserving
+		$map->sort(['preserve' => false, 'callback' => $callback]);
+
+		$this->assertEquals([1, 2, 3, 4, 5], $map->value());
+
+		// reverse it
+		$map->sort(['preserve' => false, 'reverse' => true]);
+
+		$this->assertEquals([5, 4, 3, 2, 1], $map->value());
+	}
+
+	/**
+	 * Test that sort() will arrange an array by keys.
+	 */
+	public function testSortKeys() {
+		$map = new Map([
+			'a' => 5,
+			'b' => 3,
+			'c' => 4,
+			'd' => 1,
+			'e' => 2
+		]);
+
+		// by key
+		$map->sort(['on' => 'keys']);
+
+		$this->assertEquals([
+			'a' => 5,
+			'b' => 3,
+			'c' => 4,
+			'd' => 1,
+			'e' => 2,
+		], $map->value());
+
+		// reverse it
+		$map->sort(true);
+
+		$this->assertEquals([
+			'd' => 1,
+			'e' => 2,
+			'c' => 4,
+			'b' => 3,
+			'a' => 5,
+		], $map->value());
+	}
+
+	/**
+	 * Test that sort() will arrange an array by keys while checking a callback.
+	 */
+	public function testSortKeysWithCallback() {
+		$map = new Map([
+			'a' => 5,
+			'b' => 3,
+			'c' => 4,
+			'd' => 1,
+			'e' => 2
+		]);
+
+		$callback = function($a, $b) {
+			if ($a == $b) {
+				return 0;
+			} else if ($a > $b) {
+				return 1;
+			} else {
+				return -1;
+			}
+		};
+
+		// by key
+		$map->sort(['on' => 'keys', 'callback' => $callback]);
+
+		$this->assertEquals([
+			'a' => 5,
+			'b' => 3,
+			'c' => 4,
+			'd' => 1,
+			'e' => 2,
+		], $map->value());
+
+		// reverse it
+		$map->sort(['on' => 'keys', 'reverse' => true, 'callback' => $callback]);
+
+		$this->assertEquals([
+			'd' => 1,
+			'e' => 2,
+			'c' => 4,
+			'b' => 3,
+			'a' => 5,
+		], $map->value());
+	}
+
+	/**
+	 * Test that sortNatural() arranges the items in a natural order preserving keys.
+	 */
+	public function testSortNatural() {
+		$map = new Map([
+			'item 109',
+			'apple',
+			'item 1',
+			'item 5',
+			'orange',
+			'ITEM 10',
+			'ITEM 55',
+			'banana'
+		]);
+
+		// case-insensitive
+		$map->sortNatural();
+
+		$this->assertEquals([
+			1 => 'apple',
+			7 => 'banana',
+			2 => 'item 1',
+			3 => 'item 5',
+			5 => 'ITEM 10',
+			6 => 'ITEM 55',
+			0 => 'item 109',
+			4 => 'orange'
+		], $map->value());
+
+		// case-sensitive
+		$map->sortNatural(true);
+
+		$this->assertEquals([
+			1 => 'apple',
+			7 => 'banana',
+			5 => 'ITEM 10',
+			6 => 'ITEM 55',
+			2 => 'item 1',
+			3 => 'item 5',
+			0 => 'item 109',
+			4 => 'orange'
+		], $map->value());
 	}
 
 	/**
@@ -774,10 +1234,6 @@ class MapTest extends TestCase {
 			['foo' => 'bar'],
 			['foo', 'bar']
 		], $this->object->values());
-	}
-
-	public function testWalk() {
-
 	}
 
 	/**
@@ -866,6 +1322,65 @@ class MapTest extends TestCase {
 			['foo' => 'bar'],
 			['foo', 'bar']
 		], $this->object->values());
+	}
+
+	/**
+	 * Test that chaining methods works like a boss.
+	 */
+	public function testMethodChaining() {
+		$map = new Map();
+		$map->append('append')->prepend('prepend')->set('set.nested', 'value')->append([1, 2, 3, 4, 5]);
+
+		$this->assertEquals([
+			'prepend',
+			'append',
+			'set' => ['nested' => 'value'],
+			1,
+			2,
+			3,
+			4,
+			5
+		], $map->value());
+
+		$map->prepend(['foo', 'bar'])->set('zero', '0')->set('null', null)->set('boolean', false)->each(function($value, $key) {
+			if (is_numeric($value)) {
+				return $value * 10;
+			}
+
+			return $value;
+		});
+
+		$this->assertEquals([
+			'bar',
+			'foo',
+			'prepend',
+			'append',
+			'set' => ['nested' => 'value'],
+			10,
+			20,
+			30,
+			40,
+			50,
+			'zero' => 0,
+			'null' => null,
+			'boolean' => false
+		], $map->value());
+
+		$map->filter()->reverse(false);
+
+		$this->assertEquals([
+			'zero' => 0,
+			50,
+			40,
+			30,
+			20,
+			10,
+			'set' => ['nested' => 'value'],
+			'append',
+			'prepend',
+			'foo',
+			'bar'
+		], $map->value());
 	}
 
 }

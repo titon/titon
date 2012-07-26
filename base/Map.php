@@ -30,7 +30,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * @access public
 	 * @param array $value
 	 */
-	public function __construct($value) {
+	public function __construct($value = []) {
 		parent::__construct((array) $value);
 	}
 
@@ -228,12 +228,12 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * the keys must match as well as the values. A callback can be passed to
 	 * further filter down the results.
 	 *
-	 * If options:on equals "keys":
+	 * If options.on equals "keys":
 	 * Compares the current array against the passed array and returns a new array
 	 * with all the values where keys are not matched in both arrays.
 	 * Only differences from the class instance is returned.
 	 *
-	 * If options:valueCallback is set:
+	 * If options.valueCallback is set:
 	 * Works exactly like default difference() except that it uses a callback to validate the values.
 	 * A second callback can be used to also compared against the array key.
 	 *
@@ -264,44 +264,64 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 		$callback = $options['callback'];
 		$valueCallback = $options['valueCallback'];
 
+		// Prepare array
+		$value = Hash::filter($this->_value, false, function($val) {
+			return !is_array($val);
+		});
+
 		// Values
 		if ($options['on'] === 'values') {
 
 			// Compare with callback
 			if ($valueCallback instanceof Closure) {
 				if ($callback instanceof Closure) {
-					return array_udiff_uassoc($this->_value, $array, $valueCallback, $callback);
+					return array_udiff_uassoc($value, $array, $valueCallback, $callback);
 
 				} else if ($options['strict']) {
-					return array_udiff_assoc($this->_value, $array, $valueCallback);
+					return array_udiff_assoc($value, $array, $valueCallback);
 
 				} else {
-					return array_udiff($this->_value, $array, $valueCallback);
+					return array_udiff($value, $array, $valueCallback);
 				}
 
 			// Compare regular
 			} else {
 				if ($options['strict']) {
 					if ($callback instanceof Closure) {
-						return array_diff_uassoc($this->_value, $array, $callback);
+						return array_diff_uassoc($value, $array, $callback);
 
 					} else {
-						return array_diff_assoc($this->_value, $array);
+						return array_diff_assoc($value, $array);
 					}
 				} else {
-					return array_diff($this->_value, $array);
+					return array_diff($value, $array);
 				}
 			}
 
 			// Keys
 		} else {
 			if ($callback instanceof Closure) {
-				return array_diff_ukey($this->_value, $array, $callback);
+				return array_diff_ukey($value, $array, $callback);
 
 			} else {
-				return array_diff_key($this->_value, $array);
+				return array_diff_key($value, $array);
 			}
 		}
+	}
+
+	/**
+	 * Apply a user function to every member of an array.
+	 *
+	 * @access public
+	 * @param Closure $callback
+	 * @param boolean $recursive
+	 * @return titon\base\Map
+	 * @chainable
+	 */
+	public function each(Closure $callback, $recursive = true) {
+		$this->_value = Hash::each($this->_value, $callback, $recursive);
+
+		return $this;
 	}
 
 	/**
@@ -761,28 +781,21 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 
 			// Sort by keys
 			if ($options['on'] === 'keys') {
-				if ($options['reverse']) {
-					krsort($this->_value, $flags);
-				} else {
-					ksort($this->_value, $flags);
-				}
+				ksort($this->_value, $flags);
 
 			// Sort by values
 			} else {
-				if ($options['reverse']) {
-					if ($preserve) {
-						arsort($this->_value, $flags);
-					} else {
-						rsort($this->_value, $flags);
-					}
+				if ($preserve) {
+					asort($this->_value, $flags);
 				} else {
-					if ($preserve) {
-						asort($this->_value, $flags);
-					} else {
-						sort($this->_value, $flags);
-					}
+					sort($this->_value, $flags);
 				}
 			}
+		}
+
+		// Reverse it
+		if ($options['reverse']) {
+			$this->_value = array_reverse($this->_value, $preserve);
 		}
 
 		return $this;
@@ -885,26 +898,6 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 */
 	public function values() {
 		return array_values($this->_value);
-	}
-
-	/**
-	 * Apply a user function to every member of an array.
-	 *
-	 * @access public
-	 * @param Closure $callback
-	 * @param boolean $recursive
-	 * @param mixed $data
-	 * @return titon\base\Map
-	 * @chainable
-	 */
-	public function walk(Closure $callback, $recursive = true, $data = null) {
-		if ($recursive) {
-			$this->_value = array_walk_recursive($this->_value, $callback, $data);
-		} else {
-			$this->_value = array_walk($this->_value, $callback, $data);
-		}
-
-		return $this;
 	}
 
 	/**
