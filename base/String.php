@@ -9,6 +9,7 @@
 
 namespace titon\base;
 
+use titon\Titon;
 use titon\base\Type;
 use titon\utility\Inflector;
 use titon\utility\String as Str;
@@ -22,30 +23,13 @@ use titon\utility\String as Str;
 class String extends Type {
 
 	/**
-	 * Current encoding.
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $_encoding = 'UTF-8';
-
-	/**
-	 * Set value and lengths, apply multibyte overloading.
+	 * Set string value.
 	 *
 	 * @access public
 	 * @param string $value
-	 * @param string $encoding
 	 */
-	public function __construct($value, $encoding = 'UTF-8') {
+	public function __construct($value) {
 		parent::__construct((string) $value);
-
-		if (function_exists('mb_detect_encoding') && empty($encoding)) {
-			$encoding = mb_detect_encoding($this->_value);
-		}
-
-		if (!empty($encoding)) {
-			$this->_encoding = mb_strtoupper(str_replace(' ', '-', (string) $encoding));
-		}
 	}
 
 	/**
@@ -94,7 +78,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function clean() {
-		$this->_value = preg_replace('/\s+/ig', '', $this->_value);
+		$this->_value = preg_replace('/\s{2,}+/', ' ', $this->_value);
 		$this->trim();
 
 		return $this;
@@ -124,10 +108,10 @@ class String extends Type {
 	 */
 	public function concat($string, $append = true) {
 		if ($append) {
-			return new String($this->_value . (string) $string, $this->_encoding);
+			return new String($this->_value . (string) $string);
 		}
 
-		return new String((string) $string . $this->_value, $this->_encoding);
+		return new String((string) $string . $this->_value);
 	}
 
 	/**
@@ -174,7 +158,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function escape($flags = ENT_QUOTES) {
-		$this->_value = htmlentities($this->_value, $flags, $this->_encoding);
+		$this->_value = Str::escape($this->_value, $flags);
 
 		return $this;
 	}
@@ -205,23 +189,23 @@ class String extends Type {
 	}
 
 	/**
-	 * Checks to see if the trimmed value is empty.
-	 *
-	 * @access public
-	 * @return boolean
-	 */
-	public function isBlank() {
-		return (trim($this->_value) === '');
-	}
-
-	/**
 	 * Checks to see if the value is empty.
 	 *
 	 * @access public
 	 * @return boolean
 	 */
-	public function isEmpty() {
+	public function isBlank() {
 		return ($this->_value === '');
+	}
+
+	/**
+	 * Checks to see if the trimmed value is empty.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function isEmpty() {
+		return (trim($this->_value) === '');
 	}
 
 	/**
@@ -396,6 +380,19 @@ class String extends Type {
 	}
 
 	/**
+	 * Overwrite the current value.
+	 *
+	 * @access public
+	 * @param string $value
+	 * @return String
+	 */
+	public function set($value) {
+		$this->_value = (string) $value;
+
+		return $this;
+	}
+
+	/**
 	 * Strips the string of its tags and anything in between them.
 	 *
 	 * @access public
@@ -479,7 +476,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function toUpperWords() {
-		$this->_value = ucwords($this->_value);
+		$this->_value = mb_convert_case($this->_value, MB_CASE_TITLE);
 
 		return $this;
 	}
@@ -493,7 +490,11 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function trim($char = null) {
-		$this->_value = trim($this->_value, $char);
+		if ($char) {
+			$this->_value = trim($this->_value, $char);
+		} else {
+			$this->_value = trim($this->_value);
+		}
 
 		return $this;
 	}
@@ -507,7 +508,11 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function trimLeft($char = null) {
-		$this->_value = ltrim($this->_value, $char);
+		if ($char) {
+			$this->_value = ltrim($this->_value, $char);
+		} else {
+			$this->_value = ltrim($this->_value);
+		}
 
 		return $this;
 	}
@@ -521,7 +526,11 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function trimRight($char = null) {
-		$this->_value = rtrim($this->_value, $char);
+		if ($char) {
+			$this->_value = rtrim($this->_value, $char);
+		} else {
+			$this->_value = rtrim($this->_value);
+		}
 
 		return $this;
 	}
