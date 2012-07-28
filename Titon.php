@@ -96,13 +96,13 @@ class Titon {
 	public static function initialize() {
 		self::install('loader', new Loader(), true);
 		self::install('debugger', new Debugger(), true);
+		self::install('env', new Environment(), true);
 		self::install('app', new Application(), true);
 		self::install('cache', new Cache(), true);
 		self::install('config', new Config(), true);
 		self::install('registry', new Registry(), true);
 		self::install('router', new Router(), true);
 		self::install('g11n', new G11n(), true);
-		self::install('env', new Environment(), true);
 		self::install('event', new Event(), true);
 		self::install('dispatch', new Dispatch(), true);
 	}

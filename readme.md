@@ -39,3 +39,42 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Trait - Pre-built PHP 5.4 traits.
 * Translator - Handles the translation of certain file types to be used by the G11n message system.
 * Transporter - Handles the different type of email transporting (SMTP, etc).
+
+### Execution Cycle ###
+
+* Set app constants
+* Include titon/bootstrap.php
+* Set titon constants
+* Titon.initialize()
+** Construct core classes (order important)
+*** Loader() - Set autoloader
+*** Debugger() - Set exception and error handling
+*** Environment()
+*** Application()
+*** Cache()
+*** Config()
+*** Registry()
+*** Router()
+*** G11n()
+*** Event()
+*** Dispatch()
+* Include app/setup.php
+* Titon.startup()
+** Loop through each core class and initialize
+*** Loader()
+*** Debugger()
+*** Environment() - Parse headers and enable
+*** Application() - Loop through each module and include bootstrap.php
+*** Cache()
+*** Config()
+*** Registry()
+*** Router() - Parse and determine the route
+*** G11n() - Parse headers and enable
+*** Event()
+*** Dispatch()
+* Event.notify('titon.startup')
+* Dispatch.run()
+** @todo
+* Event.notify('titon.shutdown')
+* Titon.shutdown()
+** Loop through each core class and unset to destruct
