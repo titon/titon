@@ -36,13 +36,13 @@ class Day extends Enum {
 	 * @var array
 	 */
 	protected $_enums = [
-		self::SUNDAY	=> [1, 'sunday'],
-		self::MONDAY	=> [2, 'monday'],
-		self::TUESDAY	=> [3, 'tuesday'],
-		self::WEDNESDAY => [4, 'wednesday'],
-		self::THURSDAY	=> [5, 'thursday'],
-		self::FRIDAY	=> [6, 'friday'],
-		self::SATURDAY	=> [7, 'saturday']
+		self::SUNDAY	=> ['sunday'],
+		self::MONDAY	=> ['monday'],
+		self::TUESDAY	=> ['tuesday'],
+		self::WEDNESDAY => ['wednesday'],
+		self::THURSDAY	=> ['thursday'],
+		self::FRIDAY	=> ['friday'],
+		self::SATURDAY	=> ['saturday']
 	];
 
 	/**
@@ -62,6 +62,14 @@ class Day extends Enum {
 	public $name;
 
 	/**
+	 * Localized shorthand name.
+	 *
+	 * @access public
+	 * @var string
+	 */
+	public $shortName;
+
+	/**
 	 * Day as a slug.
 	 *
 	 * @access public
@@ -70,17 +78,29 @@ class Day extends Enum {
 	public $slug;
 
 	/**
+	 * Current day of the year.
+	 *
+	 * @access public
+	 * @var int
+	 */
+	public $dayOfYear;
+
+	/**
 	 * Set variables.
 	 *
 	 * @access public
-	 * @param int $day
 	 * @param string $slug
 	 * @return void
 	 */
-	public function initialize($day, $slug) {
-		$this->day = $day;
+	public function initialize($slug) {
+		$day = $this->value() + 1;
+		$time = mktime(0, 0, 0, date('n'), $day);
+
+		$this->day = $this->value();
 		$this->slug = $slug;
-		$this->name = \titon\msg('common.' . $slug);
+		$this->name = strftime('%a', $time);
+		$this->shortName = strftime('%A', $time);
+		$this->dayOfYear = date('z', $time);
 	}
 
 }
