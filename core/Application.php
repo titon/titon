@@ -108,7 +108,7 @@ class Application {
 			throw new CoreException(sprintf('The path for the %s module is required.', $module));
 
 		} else if (!file_exists($path)) {
-			throw new CoreException(sprintf('Module directory does not exist: %s', $path));
+			throw new CoreException(sprintf('Module directory %s does not exist.', $path));
 		}
 
 		$this->_modules[$module] = [

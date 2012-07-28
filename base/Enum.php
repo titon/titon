@@ -16,7 +16,7 @@ use titon\base\BaseException;
  * with their values denoted as integers, and finally added as an argument to the $_enums property. This property also
  * accepts an array of arguments that will be triggered using initialize() when the class is instantiated.
  *
- * @package	titon.base.types
+ * @package	titon.base
  */
 class Enum {
 

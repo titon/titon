@@ -16,7 +16,7 @@ use \Closure;
  * The Object type allows for the dynamic creation of classes during runtime, with support for properties and methods.
  * This class should not be used as a replacement for standard classes, but as a way to mock up objects when needed.
  *
- * @package	titon.base.types
+ * @package	titon.base
  */
 class Object {
 
