@@ -87,7 +87,7 @@ class InfoAugment {
 	 * @return string
 	 */
 	public function className() {
-		return $this->_reflection->getName();
+		return $this->reflection()->getName();
 	}
 
 	/**
@@ -97,7 +97,7 @@ class InfoAugment {
 	 * @return string
 	 */
 	public function shortClassName() {
-		return $this->_reflection->getShortName();
+		return $this->reflection()->getShortName();
 	}
 
 	/**
@@ -107,7 +107,7 @@ class InfoAugment {
 	 * @return string
 	 */
 	public function namespaceName() {
-		return $this->_reflection->getNamespaceName();
+		return $this->reflection()->getNamespaceName();
 	}
 
 	/**
@@ -241,7 +241,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function constants() {
-		return $this->_reflection->getConstants();
+		return $this->reflection()->getConstants();
 	}
 
 	/**
@@ -251,7 +251,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function interfaces() {
-		return $this->_reflection->getInterfaceNames();
+		return $this->reflection()->getInterfaceNames();
 	}
 
 	/**
@@ -261,7 +261,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function traits() {
-		return $this->_reflection->getTraitNames();
+		return $this->reflection()->getTraitNames();
 	}
 
 	/**
@@ -271,7 +271,7 @@ class InfoAugment {
 	 * @return array
 	 */
 	public function parent() {
-		return $this->_reflection->getParentClass()->getName();
+		return $this->reflection()->getParentClass()->getName();
 	}
 
 	/**
@@ -286,7 +286,7 @@ class InfoAugment {
 		return $this->cache($key, function() use ($scope) {
 			$methods = [];
 
-			foreach ($this->_reflection->getMethods($scope) as $method) {
+			foreach ($this->reflection()->getMethods($scope) as $method) {
 				$methods[] = $method->getName();
 			}
 
@@ -306,7 +306,7 @@ class InfoAugment {
 		return $this->cache($key, function() use ($scope) {
 			$props = [];
 
-			foreach ($this->_reflection->getProperties($scope) as $prop) {
+			foreach ($this->reflection()->getProperties($scope) as $prop) {
 				$props[] = $prop->getName();
 			}
 
