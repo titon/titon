@@ -16,9 +16,9 @@ use \ReflectionMethod;
 use \ReflectionProperty;
 
 /**
- * An augment that supplies configuration options for primary classes.
- * The augment can take a optional secondary default configuration,
- * which can be used to autobox values anytime a config is written.
+ * An augment that supplies meta data about the current class.
+ * This data includes path location, method and property information,
+ * class name variants, so on and so forth.
  *
  * @package	titon.libs.augments
  */

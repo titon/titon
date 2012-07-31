@@ -24,4 +24,25 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	 */
 	protected $object;
 
+	/**
+	 * Assert that two array values are equal, disregarding the order.
+	 *
+	 * @access public
+	 * @param array $expected
+	 * @param array $actual
+	 * @param boolean $keySort
+	 * @return boolean
+	 */
+	public function assertArraysEqual(array $expected, array $actual, $keySort = false) {
+		if ($keySort) {
+			ksort($actual);
+			ksort($expected);
+		} else {
+			sort($actual);
+			sort($expected);
+		}
+
+		return $this->assertEquals($expected, $actual);
+	}
+
 }
