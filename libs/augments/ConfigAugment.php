@@ -13,6 +13,7 @@ use titon\libs\augments\AugmentException;
 use titon\utility\Hash;
 use \ArrayAccess;
 use \Iterator;
+use \Countable;
 
 /**
  * An augment that supplies configuration options for primary classes.
@@ -21,7 +22,7 @@ use \Iterator;
  *
  * @package	titon.libs.augments
  */
-class ConfigAugment implements ArrayAccess, Iterator {
+class ConfigAugment implements ArrayAccess, Iterator, Countable {
 
 	/**
 	 * Custom configuration.
@@ -149,12 +150,18 @@ class ConfigAugment implements ArrayAccess, Iterator {
 			if (($default = Hash::extract($this->_defaults, $key)) !== null) {
 				if (is_float($default)) {
 					$value = (float) $value;
+
 				} else if (is_numeric($default)) {
 					$value = (int) $value;
+
 				} else if (is_bool($default)) {
 					$value = (bool) $value;
+
 				} else if (is_string($default)) {
 					$value = (string) $value;
+
+				} else if (is_array($default)) {
+					$value = (array) $value;
 				}
 			}
 
@@ -172,7 +179,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return isset($this->_config[$key]);
+		return Hash::has($this->_config, $key);
 	}
 
 	/**
@@ -183,7 +190,7 @@ class ConfigAugment implements ArrayAccess, Iterator {
 	 * @return titon\libs\augments\ConfigAugment
 	 */
 	public function remove($key) {
-		unset($this->_config[$key]);
+		$this->_config = Hash::remove($this->_config, $key);
 
 		return $this;
 	}
@@ -281,6 +288,16 @@ class ConfigAugment implements ArrayAccess, Iterator {
 	 */
 	public function valid() {
 		return ($this->current() !== false);
+	}
+
+	/**
+	 * Return the count of the array.
+	 *
+	 * @access public
+	 * @return int
+	 */
+	public function count() {
+		return count($this->_config);
 	}
 
 }

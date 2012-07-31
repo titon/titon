@@ -209,8 +209,8 @@ class InfoAugmentTest extends TestCase {
 	 * Test that parent() returns the name of the parent class.
 	 */
 	public function testParent() {
-		$this->assertArraysEqual('titon\base\Base', $this->object->parent);
-		$this->assertArraysEqual('titon\base\Base', $this->object->parent());
+		$this->assertEquals('titon\base\Base', $this->object->parent);
+		$this->assertEquals('titon\base\Base', $this->object->parent());
 	}
 
 }
