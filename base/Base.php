@@ -91,7 +91,7 @@ class Base implements Serializable {
 	 * @return mixed|void
 	 */
 	public function unserialize($data) {
-		$this->__construct($data);
+		$this->__construct(unserialize($data));
 	}
 
 	/**
