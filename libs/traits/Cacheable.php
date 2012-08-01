@@ -31,7 +31,7 @@ trait Cacheable {
 	 * Is cache on or off?
 	 *
 	 * @access private
-	 * @var int
+	 * @var boolean
 	 */
 	private $__cacheEnabled = true;
 
@@ -110,18 +110,33 @@ trait Cacheable {
 	 * @param string|array $key
 	 * @return mixed
 	 */
-	public function getCache($key) {
+	public function getCache($key = null) {
 		if (!$this->__cacheEnabled) {
 			return null;
 		}
 
+		if ($key === null) {
+			return $this->_cache;
+		}
+
 		$key = $this->createCacheKey($key);
 
-		if (isset($this->_cache[$key])) {
+		if ($this->hasCache($key)) {
 			return $this->_cache[$key];
 		}
 
 		return null;
+	}
+
+	/**
+	 * Check to see if the cache key exists.
+	 *
+	 * @access public
+	 * @param string|array $key
+	 * @return boolean
+	 */
+	public function hasCache($key) {
+		return isset($this->_cache[$this->createCacheKey($key)]);
 	}
 
 	/**
@@ -134,7 +149,7 @@ trait Cacheable {
 	public function removeCache($key) {
 		$key = $this->createCacheKey($key);
 
-		if (isset($this->_cache[$key])) {
+		if ($this->hasCache($key)) {
 			unset($this->_cache[$key]);
 
 			return true;

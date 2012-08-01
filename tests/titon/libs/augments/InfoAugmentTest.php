@@ -71,7 +71,7 @@ class InfoAugmentTest extends TestCase {
 		$methods = [
 			'publicMethod', 'protectedMethod', 'privateMethod', 'staticPublicMethod', 'staticProtectedMethod', 'staticPrivateMethod',
 			'serialize', 'unserialize', 'initialize', 'noop', 'toString', '__toString', '__construct',
-			'getCache', 'setCache', 'toggleCache', 'removeCache', 'createCacheKey', 'flushCache', 'cache'
+			'getCache', 'setCache', 'toggleCache', 'removeCache', 'hasCache', 'createCacheKey', 'flushCache', 'cache'
 		];
 
 		$this->assertArraysEqual($methods, $this->object->methods);
@@ -85,7 +85,7 @@ class InfoAugmentTest extends TestCase {
 		$methods = [
 			'publicMethod', 'staticPublicMethod',
 			'serialize', 'unserialize', 'initialize', 'noop', 'toString', '__toString', '__construct',
-			'getCache', 'setCache', 'toggleCache', 'removeCache', 'createCacheKey', 'flushCache', 'cache'
+			'getCache', 'setCache', 'toggleCache', 'removeCache', 'hasCache', 'createCacheKey', 'flushCache', 'cache'
 		];
 
 		$this->assertArraysEqual($methods, $this->object->publicMethods);
