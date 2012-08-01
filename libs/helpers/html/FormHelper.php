@@ -248,14 +248,15 @@ class FormHelper extends HelperAbstract {
 		$attributes = $this->_prepare(['name' => $input], $attributes);
 		$format = $this->config('dayFormat', $attributes, 'j');
 		$options = [];
+		$config = $this->config->get();
 
 		for ($i = 1; $i <= 31; ++$i) {
-			$options[$i] = date($format, mktime(0, 0, 0, $this->config->month, $i, $this->config->year));
+			$options[$i] = date($format, mktime(0, 0, 0, $config['month'], $i, $config['year']));
 		}
 
 		return $this->tag('select', [
 			'attr' => $this->attributes($attributes, ['value']),
-			'body' => $this->_options($options, $this->_selected($attributes, 'defaultDay', $this->config->day))
+			'body' => $this->_options($options, $this->_selected($attributes, 'defaultDay', $config['day']))
 		]);
 	}
 
@@ -459,7 +460,7 @@ class FormHelper extends HelperAbstract {
 		$options = [];
 
 		for ($i = 1; $i <= 12; ++$i) {
-			$options[$i] = date($format, mktime(0, 0, 0, $i, $this->config->day, $this->config->year));
+			$options[$i] = date($format, mktime(0, 0, 0, $i, 1, $this->config->year));
 		}
 
 		return $this->tag('select', [
@@ -765,7 +766,7 @@ class FormHelper extends HelperAbstract {
 		$end = $this->config('endYear', $attributes, ($config['year'] + 10));
 
 		for ($i = $start; $i <= $end; ++$i) {
-			$options[$i] = date($format, mktime(0, 0, 0, $config['month'], $config['day'], $i));
+			$options[$i] = date($format, mktime(0, 0, 0, $config['month'], 1, $i));
 		}
 
 		if ($reverse) {
