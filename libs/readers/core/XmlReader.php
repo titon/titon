@@ -69,13 +69,43 @@ class XmlReader extends ReaderAbstract {
 
 			} else {
 				if ($node->count() > 0) {
-					$data = $data + $this->toArray($node);
+					$data += $this->toArray($node);
+					$children = true;
 				} else {
-					$data['value'] = (string) $node;
+					$data['value'] = trim((string) $node);
+					$children = false;
 				}
 
+				$attributes = array();
+
 				foreach ($node->attributes() as $attr => $value) {
-					$data[$attr] = (string) $value;
+					$attributes[$attr] = (string) $value;
+				}
+
+				// Autobox value if only the type attribute exists
+				if (count($attributes) === 1 && isset($attributes['type'])) {
+					switch ($attributes['type']) {
+						case 'boolean':
+							if ($data['value'] === 'true') {
+								$data = true;
+							} else if ($data['value'] === 'false') {
+								$data = false;
+							} else {
+								$data = (bool) $data['value'];
+							}
+						break;
+						case 'integer':
+							$data = (int) $data['value'];
+						break;
+						case 'array':
+							if (!$children && empty($data['value'])) {
+								$data = [];
+							}
+						break;
+					}
+
+				} else {
+					$data += $attributes;
 				}
 			}
 

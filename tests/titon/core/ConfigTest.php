@@ -33,7 +33,7 @@ class ConfigTest extends TestCase {
 	public $test = [
 		'integer' => 1234567890,
 		'number' => '1234567890',
-		'character' => 'abcdefg',
+		'string' => 'abcdefg',
 		'emptyArray' => [],
 		'array' => [
 			'one' => true,
@@ -80,7 +80,7 @@ class ConfigTest extends TestCase {
 
 		$this->assertTrue(is_integer($this->object->get('Test.integer')));
 		$this->assertTrue(is_numeric($this->object->get('Test.number')));
-		$this->assertTrue(is_string($this->object->get('Test.character')));
+		$this->assertTrue(is_string($this->object->get('Test.string')));
 		$empty = $this->object->get('Test.emptyArray');
 		$this->assertTrue(empty($empty));
 		$this->assertTrue(is_array($this->object->get('Test.array')));
@@ -90,7 +90,7 @@ class ConfigTest extends TestCase {
 		$this->assertTrue($this->object->get('Test.zero') === 0);
 		$this->assertTrue($this->object->get('Test.fakeKey') === null);
 
-		$this->assertEquals($this->object->get('Test.character'), $this->test['character']);
+		$this->assertEquals($this->object->get('Test.string'), $this->test['string']);
 	}
 
 	/**

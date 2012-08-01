@@ -3,7 +3,7 @@
 return [
 	'integer' => 1234567890,
 	'number' => '1234567890',
-	'character' => 'abcdefg',
+	'string' => 'abcdefg',
 	'emptyArray' => [],
 	'array' => [
 		'one' => true,

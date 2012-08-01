@@ -44,11 +44,21 @@ abstract class ReaderAbstract extends Base implements Reader {
 	/**
 	 * Return the file extension for the reader.
 	 *
-	 * @access protected
-	 * @return mixed
+	 * @access public
+	 * @return string
 	 */
 	public function getExtension() {
 		return static::EXT;
+	}
+
+	/**
+	 * Return the current file path.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getPath() {
+		return $this->_path;
 	}
 
 	/**
@@ -64,6 +74,10 @@ abstract class ReaderAbstract extends Base implements Reader {
 			$this->_path = $path;
 		} else {
 			$path = $this->_path;
+		}
+
+		if (!$path) {
+			throw new ReaderException(sprintf('Please provide a file path for %s.', get_class($this)));
 		}
 
 		return $this->cache([__METHOD__, $path], function() use ($path) {

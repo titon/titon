@@ -14,8 +14,11 @@ msgstr ""
 "X-Poedit-SourceCharset: utf-8\n"
 
 # GNU gettext PO file
-msgid "basic"
-msgstr "Basic message"
+msgid "string"
+msgstr "abcdefg"
+
+msgid "integer"
+msgstr "1234567890"
 
 #: Reference comment
 msgid "multiline"
@@ -28,12 +31,3 @@ msgid "plurals"
 msgid_plural "plurals"
 msgstr[0] "plural"
 msgstr[1] "plurals"
-
-# Context test (ignored)
-msgctxt context
-msgid "context"
-msgstr "Context message"
-
-# Formatted messages
-msgid "format"
-msgstr "{0,number,integer} health, {1,number,integer} energy, {2,number} damage"

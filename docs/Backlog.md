@@ -49,10 +49,11 @@ Email
 * libs/adapters
 * libs/behaviors
 * libs/models
-* libs/readers
+* libs/readers/core/YamlReader
+* libs/readers/gettext/MoReader
 * libs/shells
 * libs/storage
-* libs/translators
+* libs/transporters
 * log
 * net
 * utility/Uuid

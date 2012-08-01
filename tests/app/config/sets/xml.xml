@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<config>
+	<integer type="integer">1234567890</integer>
+	<number>1234567890</number>
+	<string key="value">abcdefg</string>
+	<emptyArray type="array">
+
+	</emptyArray>
+	<array type="array">
+		<one type="boolean">true</one>
+		<two type="boolean">false</two>
+	</array>
+	<attrArray key="value">
+		<child>Foo</child>
+		<child>Bar</child>
+	</attrArray>
+	<false type="boolean">false</false>
+	<true type="boolean">true</true>
+	<zero type="integer">0</zero>
+</config>

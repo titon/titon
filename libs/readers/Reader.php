@@ -25,6 +25,14 @@ interface Reader {
 	public function getExtension();
 
 	/**
+	 * Return the current file path.
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function getPath();
+
+	/**
 	 * Parse the file contents.
 	 *
 	 * @access public
