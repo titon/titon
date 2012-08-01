@@ -145,6 +145,10 @@ trait Attachable {
 
 		if (empty($options['alias'])) {
 			throw new TraitException('You must define an alias to reference the attached object.');
+
+		} else if ($callback === null && empty($options['class'])) {
+			throw new TraitException(sprintf('You must supply a closure or a class name for %s.', $options['alias']));
+
 		} else {
 			$options['alias'] = Inflector::variable($options['alias']);
 		}
@@ -230,7 +234,7 @@ trait Attachable {
 	 * @return boolean
 	 */
 	public function hasObject($class) {
-		return (isset($this->_attached[$class]) || isset($this->__objectMap[$class]));
+		return (isset($this->_attached[$class]) || isset($this->_classes[$class]));
 	}
 
 	/**
@@ -247,7 +251,7 @@ trait Attachable {
 				if ($options['callback']) {
 					$object = $this->getObject($options['alias']);
 
-					if (method_exists($object, $method)) {
+					if ($object && method_exists($object, $method)) {
 						$object->{$method}($this);
 					}
 				}

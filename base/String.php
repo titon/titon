@@ -28,7 +28,7 @@ class String extends Type {
 	 * @access public
 	 * @param string $value
 	 */
-	public function __construct($value) {
+	public function __construct($value = '') {
 		parent::__construct((string) $value);
 	}
 

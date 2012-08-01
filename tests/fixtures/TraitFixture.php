@@ -20,4 +20,10 @@ use titon\libs\traits\Cacheable;
 class TraitFixture {
 	use Cacheable, Attachable;
 
+	public function __construct() {
+		$this->attachObject('relation', function() {
+			return new TraitFixture();
+		});
+	}
+
 }
