@@ -133,6 +133,32 @@ class Titon {
 	}
 
 	/**
+	 * Return true if a PHP extension has been loaded. If it hasn't, attempt to load it.
+	 *
+	 * @access public
+	 * @param string $extension
+	 * @return boolean
+	 * @static
+	 */
+	public static function load($extension) {
+		if (extension_loaded($extension)) {
+			return true;
+		}
+
+		if (PHP_SHLIB_SUFFIX === 'dll') {
+			$extension = 'php_' . $extension;
+		}
+
+		$extension .= '.' . PHP_SHLIB_SUFFIX;
+
+		if (function_exists('dl') && dl($extension)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Run the framework.
 	 *
 	 * @access public

@@ -20,13 +20,38 @@ use titon\libs\engines\Engine;
  */
 class ListenerFixture extends ListenerAbstract {
 
-	public function startup() {}
-	public function shutdown() {}
-	public function preDispatch() {}
-	public function postDispatch() {}
-	public function preProcess(Controller $controller) {}
-	public function postProcess(Controller $controller) {}
-	public function preRender(Engine $engine) {}
-	public function postRender(Engine $engine) {}
+	public $executed = [];
+
+	public function startup() {
+		$this->executed[] = 'startup';
+	}
+
+	public function shutdown() {
+		$this->executed[] = 'shutdown';
+	}
+
+	public function preDispatch() {
+		$this->executed[] = 'preDispatch';
+	}
+
+	public function postDispatch() {
+		$this->executed[] = 'postDispatch';
+	}
+
+	public function preProcess(Controller $controller) {
+		$this->executed[] = 'preProcess';
+	}
+
+	public function postProcess(Controller $controller) {
+		$this->executed[] = 'postProcess';
+	}
+
+	public function preRender(Engine $engine) {
+		$this->executed[] = 'preRender';
+	}
+
+	public function postRender(Engine $engine) {
+		$this->executed[] = 'postRender';
+	}
 
 }

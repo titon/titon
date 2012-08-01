@@ -48,7 +48,6 @@ Email
 * io
 * libs/adapters
 * libs/behaviors
-* libs/listeners
 * libs/models
 * libs/readers
 * libs/shells

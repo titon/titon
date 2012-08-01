@@ -9,6 +9,7 @@
 
 namespace titon\libs\listeners\optimizer;
 
+use titon\Titon;
 use titon\libs\listeners\ListenerAbstract;
 
 /**
@@ -42,7 +43,7 @@ class OptimizerListener extends ListenerAbstract {
 	 * @return void
 	 */
 	public function disableGarbageCollection() {
-		if (gc_enabled()) {
+		if (!$this->config->gc || gc_enabled()) {
 			gc_disable();
 		}
 	}
@@ -66,25 +67,9 @@ class OptimizerListener extends ListenerAbstract {
 	 * @return void
 	 */
 	public function enableGzipCompression() {
-		if ($this->config->gzip) {
-			$loaded = true;
-
-			if (!extension_loaded('zlib')) {
-				if (mb_strtoupper(mb_substr(PHP_OS, 0, 3)) === 'WIN') {
-					$extension = 'php_zlib.dll';
-				} else {
-					$extension = 'zlib.so';
-				}
-
-				if (function_exists('dl') && !dl($extension)) {
-					$loaded = false;
-				}
-			}
-
-			if ($loaded) {
-				ini_set('zlib.output_compression', true);
-				ini_set('zlib.output_compression_level', $this->config->gzipLevel);
-			}
+		if ($this->config->gzip && Titon::load('zlib')) {
+			ini_set('zlib.output_compression', true);
+			ini_set('zlib.output_compression_level', $this->config->gzipLevel);
 		}
 	}
 
@@ -94,7 +79,7 @@ class OptimizerListener extends ListenerAbstract {
 	 * @access public
 	 * @return void
 	 */
-	public function preDispatch() {
+	public function startup() {
 		$this->enableGzipCompression();
 		$this->enableGarbageCollection();
 	}
@@ -105,7 +90,7 @@ class OptimizerListener extends ListenerAbstract {
 	 * @access public
 	 * @return void
 	 */
-	public function postDispatch() {
+	public function shutdown() {
 		$this->disableGarbageCollection();
 	}
 
