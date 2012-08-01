@@ -8,7 +8,6 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 Utilities
 
-* libs/augments - 50%
 * libs/traits - 50%
 * (uri/url)
 * (validation)

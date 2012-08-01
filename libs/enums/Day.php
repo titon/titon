@@ -51,7 +51,7 @@ class Day extends Enum {
 	 * @access public
 	 * @var int
 	 */
-	public $day;
+	public $order;
 
 	/**
 	 * Localized name.
@@ -96,10 +96,10 @@ class Day extends Enum {
 		$day = $this->value() + 1;
 		$time = mktime(0, 0, 0, date('n'), $day);
 
-		$this->day = $this->value();
+		$this->order = $this->value();
 		$this->slug = $slug;
-		$this->name = strftime('%a', $time);
-		$this->shortName = strftime('%A', $time);
+		$this->name = strftime('%A', $time);
+		$this->shortName = strftime('%a', $time);
 		$this->dayOfYear = date('z', $time);
 	}
 

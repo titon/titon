@@ -61,7 +61,7 @@ class Month extends Enum {
 	 * @access public
 	 * @var int
 	 */
-	public $month;
+	public $order;
 
 	/**
 	 * Localized name.
@@ -104,9 +104,9 @@ class Month extends Enum {
 	 */
 	public function initialize($slug) {
 		$month = $this->value() + 1;
-		$time = mktime(0, 0, 0, $month);
+		$time = mktime(0, 0, 0, $month, 1);
 
-		$this->month = $month;
+		$this->order = $month;
 		$this->slug = $slug;
 		$this->name = strftime('%B', $time);
 		$this->shortName = strftime('%b', $time);

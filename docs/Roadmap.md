@@ -4,19 +4,12 @@ Each minor version will be incremented on a monthly basis, with 2 weeks (ish) of
 
 ### Timelines ###
 
-v0.5
-
-* Globalization
-* Dispatch Cycle
-
 v0.6
 
-* View Rendering [July]
 * Database/Datasource Layer [May 13th - May 26th]
 
 v0.7
 
-* Utilities, I/O [May 27th - June 9th]
 * Email [June 10th - June 23rd]
 
 v0.8
