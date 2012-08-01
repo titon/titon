@@ -36,7 +36,7 @@ class Titon {
 	 * @var string
 	 * @static
 	 */
-	public static $version = '0.5.0';
+	public static $version = '0.6.0';
 
 	/**
 	 * Installed objects that can not be uninstalled.

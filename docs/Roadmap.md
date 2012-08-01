@@ -1,27 +1,31 @@
 # Titon Roadmap #
 
-Each minor version will be incremented on a monthly basis, with 2 weeks (ish) of development per feature. Please refer to the Backlog for all systems currently in development.
+Each minor version will be incremented on a monthly basis. Please refer to the Backlog for all systems currently in development.
 
 ### Timelines ###
 
-v0.6
+v0.7 - August
+* Utilities
+* Net
+* I/O
 
-* Database/Datasource Layer [May 13th - May 26th]
+v0.8 - September
+* Security
+* Auth
+* ACL
 
-v0.7
+v0.9 - October
+* Models
+* DAOs
+* Behaviors
 
-* Email [June 10th - June 23rd]
-
-v0.8
-
-* Security, Auth [June 23rd - July 31st]
-
-v0.9
-
-* Unit Testing [August 1st - 31st]
+v1.0 ALPHA
+* Bug fixes
+* Cleanup
+* Unit tests
 
 ### Releases ###
 
-v1.0 ALPHA
+v1.0 RC1
 
-Tentative release date for the 1.0 ALPHA September 1st.
+Tentative release date for the 1.0 RC1 December 1st.

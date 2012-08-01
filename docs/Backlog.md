@@ -7,15 +7,12 @@ Any library wrapped in parenthesis currently does not have a final location in t
 ### Systems In Development ###
 
 Utilities
-
-* libs/traits - 50%
 * (uri/url)
 * (validation)
 
 ### Upcoming Systems ###
 
 Database/Datasource Layer
-
 * core/Db
 * libs/behaviors
 * libs/daos
@@ -23,7 +20,6 @@ Database/Datasource Layer
 * (pagination)
 
 Security
-
 * (authorization)
 * (authentication)
 * (acl)
@@ -31,12 +27,10 @@ Security
 * (firewall)
 * (persistence)
 
-Input/Ouput / Filesystem
-
+Input/Ouput
 * io
 
 Email
-
 * net/Email
 * libs/transporters
 
@@ -45,3 +39,21 @@ Email
 * Command Line Support
 * REST/SOAP Support
 * Development Profiler/Debugger
+
+### Incomplete Unit Tests ###
+
+* console
+* constant
+* core/Cache
+* io
+* libs/adapters
+* libs/behaviors
+* libs/listeners
+* libs/models
+* libs/readers
+* libs/shells
+* libs/storage
+* libs/translators
+* log
+* net
+* utility/Uuid
