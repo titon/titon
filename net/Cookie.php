@@ -11,14 +11,17 @@ namespace titon\net;
 
 use titon\Titon;
 use titon\base\Base;
+use titon\libs\traits\Attachable;
+use titon\utility\Crypt;
 use \Closure;
 
 /**
- * Primary library class to manage and produce cookies with customizable encryption and decryption.
+ * Primary class to manage and produce cookies with customizable encryption and decryption.
  *
  * @package	titon.net
  */
 class Cookie extends Base {
+	use Attachable;
 
 	/**
 	 * Configuration.
@@ -28,7 +31,7 @@ class Cookie extends Base {
 	 *	path 		- Which path should the cookie only be accessible to
 	 *	secure 		- Should the cookie only be usable across an HTTPS connection
 	 *	httpOnly 	- Should the cookie only be accessible through PHP and not the Javascript layer
-	 *	encrypt 	- Should the cookies be encrypted and decrypted
+	 *	encrypt 	- Supply the Crypt cipher that you would like to use for encryption and decryption
 	 *
 	 * @access protected
 	 * @var array
@@ -39,8 +42,20 @@ class Cookie extends Base {
 		'path' => '/',
 		'secure' => false,
 		'httpOnly' => true,
-		'encrypt' => true
+		'encrypt' => Crypt::RIJNDAEL
 	];
+
+	/**
+	 * Attach the Response object.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		$this->attachObject('response', function() {
+			return Titon::registry()->factory('titon\net\Response');
+		});
+	}
 
 	/**
 	 * Get a value from a cookie depending on the given key. Will decrypt the cookie if necessary.
@@ -53,12 +68,11 @@ class Cookie extends Base {
 		if ($this->has($key)) {
 			$value = $_COOKIE[$key];
 
-			if ($this->config->encrypt) {
-				$salt = md5(Titon::config()->salt());
-				$value = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $salt, base64_decode($value), MCRYPT_MODE_CBC, $salt), "\0");
+			if ($cipher = $this->config->encrypt) {
+				$value = Crypt::decrypt($value, $key, $cipher);
 			}
 
-			return $value;
+			return unserialize(base64_decode($value));
 		}
 
 		return null;
@@ -71,18 +85,27 @@ class Cookie extends Base {
 	 * @param string $key
 	 * @param string $value
 	 * @param array $config
-	 * @return boolean
+	 * @return titon\net\Cookie
+	 * @chainable
 	 */
 	public function set($key, $value, array $config = []) {
 		$config = $config + $this->config->get();
-		$expires = is_int($config['expires']) ? $config['expires'] : strtotime($config['expires']);
 
-		if ($this->config->encrypt) {
-			$salt = md5(Titon::config()->salt());
-			$value = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_256, $salt, $value, MCRYPT_MODE_CBC, $salt));
+		if (is_string($config['expires'])) {
+			$config['expires'] = strtotime($config['expires']);
 		}
 
-		return setcookie($key, $value, $expires, $config['path'], $config['domain'], $config['secure'], $config['httpOnly']);
+		$value = base64_encode(serialize($value));
+
+		if ($cipher = $this->config->encrypt) {
+			$value = Crypt::encrypt($value, $key, $cipher);
+		}
+
+		$this->response->cookie($key, $value, $config);
+
+		$_COOKIE[$key] = $value;
+
+		return $this;
 	}
 
 	/**
@@ -101,12 +124,18 @@ class Cookie extends Base {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return boolean
+	 * @return titon\net\Cookie
+	 * @chainable
 	 */
 	public function remove($key) {
 		$config = $this->config->get();
+		$config['expires'] = time();
 
-		return setcookie($key, '', time(), $config['path'], $config['domain'], $config['secure'], $config['httpOnly']);
+		$this->response->cookie($key, '', $config);
+
+		unset($_COOKIE[$key]);
+
+		return $this;
 	}
 
 }

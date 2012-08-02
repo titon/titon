@@ -13,6 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\constant\Http;
 use titon\net\NetException;
+use titon\utility\Hash;
 
 /**
  * The Response object handles the collection and output of data to the browser. It stores a list of HTTP headers,
@@ -39,6 +40,14 @@ class Response extends Base {
 	 * @var string
 	 */
 	protected $_body = null;
+
+	/**
+	 * List of cookies to set for this response.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_cookies = [];
 
 	/**
 	 * Manually defined headers to output in the response.
@@ -95,6 +104,50 @@ class Response extends Base {
 		]);
 
 		return $this;
+	}
+
+	/**
+	 * Set a cookie into the response.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param string $value
+	 * @param array $config
+	 * @return titon\net\Response
+	 * @chainable
+	 */
+	public function cookie($key, $value, array $config) {
+		$this->_cookies[$key] = $config + [
+			'value' => $value,
+			'domain' => '',
+			'expires' => '+1 week',
+			'path' => '/',
+			'secure' => false,
+			'httpOnly' => true
+		];
+
+		return $this;
+	}
+
+	/**
+	 * Return a defined cookie or all cookies.
+	 *
+	 * @access public
+	 * @param string $cookie
+	 * @return mixed
+	 */
+	public function getCookie($cookie = null) {
+		return Hash::get($this->_cookies, $cookie);
+	}
+
+	/**
+	 * Return all defined headers.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function getHeaders() {
+		return $this->_headers;
 	}
 
 	/**
@@ -205,6 +258,13 @@ class Response extends Base {
 			}
 		}
 
+		// Cookie headers
+		if (!empty($this->_cookies)) {
+			foreach ($this->_cookies as $key => $cookie) {
+				setcookie($key, $cookie['value'], $cookie['expires'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
+			}
+		}
+
 		// Body
 		if (!empty($this->_body)) {
 			$body = str_split($this->_body, $this->config->buffer);
@@ -221,7 +281,6 @@ class Response extends Base {
 	 * @access public
 	 * @param int $code
 	 * @return titon\net\Response
-	 * @throws titon\net\NetException
 	 * @chainable
 	 */
 	public function status($code = 302) {
