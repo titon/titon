@@ -12,6 +12,7 @@ namespace titon\net;
 use titon\Titon;
 use titon\base\Base;
 use titon\libs\adapters\SessionAdapter;
+use titon\libs\traits\Attachable;
 use titon\utility\Hash;
 
 /**
@@ -21,6 +22,7 @@ use titon\utility\Hash;
  * @package	titon.net
  */
 class Session extends Base {
+	use Attachable;
 
 	/**
 	 * Storage adapter instance.
@@ -33,21 +35,25 @@ class Session extends Base {
 	/**
 	 * Configuration.
 	 *
+	 * 	name					- The name of the session cookie
+	 * 	ini						- Custom ini settings to write
 	 *	checkUserAgent 			- Validate the user agent hasn't changed between requests
 	 *	checkInactivity 		- Regenerate the client session if they are idle
 	 *	checkReferrer 			- Validate the host in the referrer
 	 *	inactivityThreshold 	- The allotted time the client can be inactive
-	 *	sessionLifetime 		- Lifetime of the session cookie
+	 *	lifetime				- Lifetime of the session cookie
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_config = [
+		'name' => 'Titon',
+		'ini' => [],
 		'checkUserAgent' => true,
 		'checkInactivity' => true,
 		'checkReferrer' => true,
 		'inactivityThreshold' => '+5 minutes',
-		'sessionLifetime' => '+10 minutes'
+		'lifetime' => '+10 minutes'
 	];
 
 	/**
@@ -59,7 +65,7 @@ class Session extends Base {
 	protected $_id;
 
 	/**
-	 * Destroy the current sesssion and all values, the session id and remove the session specific cookie.
+	 * Destroy the current session and all values, the session id and remove the session specific cookie.
 	 *
 	 * @access public
 	 * @return void
@@ -67,10 +73,12 @@ class Session extends Base {
 	public function destroy() {
 		$_SESSION = [];
 
-		if (isset($_COOKIE[session_name()])) {
+		if (isset($_COOKIE[$this->config->name])) {
 			$params = session_get_cookie_params();
+			$params['httpOnly'] = $params['httponly'];
+			$params['expires'] = time();
 
-			setcookie(session_name(), '', time(), $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+			$this->response->cookie($this->config->name, '', $params);
 		}
 
 		session_destroy();
@@ -113,7 +121,7 @@ class Session extends Base {
 	 * @return int
 	 */
 	public function id() {
-		if (!empty($this->_id)) {
+		if ($this->_id) {
 			return $this->_id;
 
 		} else if ($id = session_id()) {
@@ -132,10 +140,15 @@ class Session extends Base {
 	 * @return void
 	 */
 	public function initialize() {
+		$this->attachObject('response', function() {
+			return Titon::registry()->factory('titon\net\Response');
+		});
+
+		// Set default ini settings
 		$segments = Titon::router()->segments();
 
 		ini_set('url_rewriter.tags', '');
-		ini_set('session.name', 'TitonSession');
+		ini_set('session.name', $this->config->name);
 		ini_set('session.use_trans_sid', false);
 		ini_set('session.use_cookies', true);
 		ini_set('session.use_only_cookies', true);
@@ -149,16 +162,23 @@ class Session extends Base {
 			ini_set('session.referer_check', $segments['host']);
 		}
 
-		$lifetime = $this->config->sessionLifetime;
+		// Lifetime
+		$lifetime = $this->config->lifetime;
 
-		if (is_int($lifetime)) {
-			$timeout = $lifetime;
-		} else {
-			$timeout = strtotime($lifetime) - time();
+		if (is_string($lifetime)) {
+			$lifetime = strtotime($lifetime) - time();
 		}
 
-		ini_set('session.cookie_lifetime', $timeout);
+		ini_set('session.cookie_lifetime', $lifetime);
 
+		// Set custom ini
+		if ($ini = $this->config->ini) {
+			foreach ($ini as $key => $value) {
+				ini_set($key, $value);
+			}
+		}
+
+		// Start session
 		if (headers_sent()) {
 			$_SESSION = [];
 		} else {
@@ -207,7 +227,7 @@ class Session extends Base {
 	 * @return titon\net\Session
 	 * @chainable
 	 */
-	public function set($key, $value = null) {
+	public function set($key, $value) {
 		$_SESSION = Hash::set($_SESSION, $key, $value);
 
 		return $this;
@@ -234,7 +254,7 @@ class Session extends Base {
 	 * @return void
 	 */
 	protected function _startup() {
-		$this->set('Security', [
+		$this->set('Session', [
 			'time' => strtotime($this->config->inactivityThreshold),
 			'host' => Titon::router()->segments('host'),
 			'agent' => md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])
@@ -248,8 +268,8 @@ class Session extends Base {
 	 * @return void
 	 */
 	protected function _validate() {
-		if ($this->has('Security')) {
-			$session = $this->get('Security');
+		if ($this->has('Session')) {
+			$session = $this->get('Session');
 
 			if ($this->config->checkUserAgent && $session['agent'] !== md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])) {
 				$this->destroy();

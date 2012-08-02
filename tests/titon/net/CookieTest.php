@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\tests\titon\libs\augments;
+namespace titon\tests\titon\net;
 
 use titon\tests\TestCase;
 use titon\net\Cookie;
