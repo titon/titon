@@ -24,6 +24,8 @@ class EventTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		Titon::router()->initialize();
 		Titon::app()->setup('test', '/', [
 			'index' => 'IndexController'

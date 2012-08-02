@@ -22,6 +22,8 @@ class InflectorTest extends TestCase {
 	 * Prepare G11n.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		Titon::g11n()->setup('en')->setup('en-us')->set('en');
 	}
 

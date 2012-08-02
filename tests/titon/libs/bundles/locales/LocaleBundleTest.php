@@ -21,6 +21,8 @@ class LocaleBundleTest extends TestCase {
 	 * Setup bundles for specific conditions.
 	 */
 	public function setUp() {
+		parent::setUp();
+
 		$this->parentBundle = new LocaleBundle(['bundle' => 'ex']);
 		$this->bundleFormats = new LocaleBundle(['bundle' => 'ex_FM']);
 		$this->bundleInflections = new LocaleBundle(['bundle' => 'ex_IN']);

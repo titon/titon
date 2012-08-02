@@ -12,6 +12,7 @@ namespace titon\tests\titon\core;
 use titon\Titon;
 use titon\tests\TestCase;
 use titon\core\Environment;
+use \Exception;
 
 /**
  * Test class for titon\core\Environment.
@@ -22,6 +23,8 @@ class EnvironmentTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = Titon::env();
 		$this->object->setup('dev', Environment::DEVELOPMENT, ['dev', '123.0.0.0']);
 		$this->object->setup('prod', Environment::PRODUCTION, ['prod', '123.456.0.0']);
@@ -93,7 +96,8 @@ class EnvironmentTest extends TestCase {
 	public function testFallbackAs() {
 		try {
 			$this->object->fallbackAs('fakeEnv');
-		} catch (\Exception $e) {
+			$this->assertTrue(false);
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 
@@ -220,13 +224,15 @@ class EnvironmentTest extends TestCase {
 	public function testSetup() {
 		try {
 			$this->object->setup('noHosts', Environment::DEVELOPMENT, []);
-		} catch (\Exception $e) {
+			$this->assertTrue(false);
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 
 		try {
 			$this->object->setup('wrongType', 5, ['host']);
-		} catch (\Exception $e) {
+			$this->assertTrue(false);
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 	}

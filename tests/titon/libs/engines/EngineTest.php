@@ -40,6 +40,7 @@ class EngineTest extends TestCase {
 
 		try {
 			$this->assertInstanceOf('titon\libs\helpers\Helper', $engine->test);
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -73,6 +74,7 @@ class EngineTest extends TestCase {
 		try {
 			$engine->config->set('template.controller', 'invalidFile');
 			$engine->buildPath(EngineFixture::VIEW); // file doesn't exist
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -95,6 +97,7 @@ class EngineTest extends TestCase {
 		try {
 			$engine->config->layout = 'invalidFile';
 			$engine->buildPath(EngineFixture::LAYOUT); // file doesn't exist
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -102,6 +105,7 @@ class EngineTest extends TestCase {
 		try {
 			$engine->config->layout = null;
 			$engine->buildPath(EngineFixture::LAYOUT); // file doesn't exist
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -125,6 +129,7 @@ class EngineTest extends TestCase {
 		try {
 			$engine->config->set('template.action', 'invalidFile');
 			$engine->buildPath(EngineFixture::ERROR); // file doesn't exist
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -148,6 +153,7 @@ class EngineTest extends TestCase {
 		try {
 			$engine->config->wrapper = 'invalidFile';
 			$engine->buildPath(EngineFixture::WRAPPER); // file doesn't exist
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -155,6 +161,7 @@ class EngineTest extends TestCase {
 		try {
 			$engine->config->wrapper = null;
 			$engine->buildPath(EngineFixture::WRAPPER); // file doesn't exist
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -177,6 +184,7 @@ class EngineTest extends TestCase {
 
 		try {
 			$engine->buildPath(EngineFixture::ELEMENT, 'invalidFile');
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}

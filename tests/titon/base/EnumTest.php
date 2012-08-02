@@ -18,9 +18,18 @@ use titon\tests\fixtures\EnumFixture;
 class EnumTest extends TestCase {
 
 	/**
+	 * Enum objects.
+	 */
+	public $warrior;
+	public $ranger;
+	public $mage;
+
+	/**
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->warrior = new EnumFixture(EnumFixture::WARRIOR);
 		$this->ranger = new EnumFixture(EnumFixture::RANGER);
 		$this->mage = new EnumFixture(EnumFixture::MAGE);

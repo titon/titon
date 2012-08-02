@@ -11,6 +11,7 @@ namespace titon\tests\titon\base;
 
 use titon\tests\TestCase;
 use titon\base\Object;
+use \Exception;
 
 /**
  * Test class for titon\base\Object.
@@ -21,6 +22,8 @@ class ObjectTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = new Object([
 			'property' => 'instantiatedProperty',
 			'method' => function() {
@@ -44,14 +47,14 @@ class ObjectTest extends TestCase {
 		try {
 			$this->object->addMethod('testMethod', function() {});
 			$this->assertFalse(true);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(true, $e->getMessage());
 		}
 
 		try {
 			$this->object->addMethod(12345, function() {});
 			$this->assertFalse(true);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(true, $e->getMessage());
 		}
 
@@ -95,7 +98,7 @@ class ObjectTest extends TestCase {
 		try {
 			$this->object->testMethod();
 			$this->assertTrue(false);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(true, $e->getMessage());
 		}
 	}
@@ -112,14 +115,14 @@ class ObjectTest extends TestCase {
 		try {
 			$this->object->addProperty(12345);
 			$this->assertFalse(true);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(true, $e->getMessage());
 		}
 
 		try {
 			$this->object->addProperty('string');
 			$this->assertFalse(true);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(true, $e->getMessage());
 		}
 

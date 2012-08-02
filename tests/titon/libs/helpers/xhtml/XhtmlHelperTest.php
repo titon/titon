@@ -23,6 +23,8 @@ class XhtmlHelperTest extends TestCase {
 	 * Initialize helper.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = new XhtmlHelper();
 	}
 

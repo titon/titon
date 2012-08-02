@@ -21,6 +21,8 @@ class TypeTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = new String('Titon'); // Use String so we can use set()
 		$this->object->set('Titon Framework');
 	}

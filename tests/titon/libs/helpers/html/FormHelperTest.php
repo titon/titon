@@ -21,6 +21,8 @@ class FormHelperTest extends TestCase {
 	 * Setup live post data.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$_POST['input'] = 'test';
 		$_POST['Test'] = [
 			'checkbox' => 'no',

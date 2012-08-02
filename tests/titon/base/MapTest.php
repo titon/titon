@@ -36,6 +36,8 @@ class MapTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = new Map($this->map);
 	}
 

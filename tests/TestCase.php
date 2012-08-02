@@ -9,6 +9,8 @@
 
 namespace titon\tests;
 
+use titon\Titon;
+
 /**
  * Primary class that all test cases should extend.
  *
@@ -23,6 +25,26 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	 * @var object
 	 */
 	protected $object;
+
+	/**
+	 * Startup Titon.
+	 */
+	protected function setUp() {
+		$_POST = [];
+		$_GET = [];
+		$_COOKIE = [];
+		$_SESSION = [];
+		$_REQUEST = [];
+
+		Titon::shutdown(false);
+		Titon::initialize();
+	}
+
+	/**
+	 * Shutdown Titon.
+	 */
+	protected function tearDown() {
+	}
 
 	/**
 	 * Assert that two array values are equal, disregarding the order.

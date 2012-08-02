@@ -18,6 +18,9 @@ use titon\utility\UtilityException;
  */
 class StringTest extends TestCase {
 
+	/**
+	 * Test strings.
+	 */
 	public $string = 'Titon: A PHP 5.4 Modular Framework';
 	public $lipsum = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget tellus nibh.';
 

@@ -332,7 +332,7 @@ class Number {
 		$defaults = [
 			'thousands' => ',',
 			'decimals' => '.',
-			'places' => 0
+			'places' => 2
 		];
 
 		// Localization support

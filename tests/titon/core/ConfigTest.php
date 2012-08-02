@@ -12,12 +12,16 @@ namespace titon\tests\titon\core;
 use titon\Titon;
 use titon\tests\TestCase;
 use titon\libs\readers\core\PhpReader;
+use \Exception;
 
 /**
  * Test class for titon\core\Config.
  */
 class ConfigTest extends TestCase {
 
+	/**
+	 * App array.
+	 */
 	public $app = [
 		'name' => 'Titon',
 		'salt' => '66c63d989368170aff46040ab2353923',
@@ -25,11 +29,17 @@ class ConfigTest extends TestCase {
 		'encoding' => 'UTF-8'
 	];
 
+	/**
+	 * Debug array.
+	 */
 	public $debug = [
 		'level' => 2,
 		'email' => ''
 	];
 
+	/**
+	 * Test array.
+	 */
 	public $test = [
 		'integer' => 1234567890,
 		'number' => '1234567890',
@@ -49,6 +59,8 @@ class ConfigTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = Titon::config();
 		$this->object->set('App', $this->app);
 		$this->object->set('Debug', $this->debug);
@@ -126,7 +138,8 @@ class ConfigTest extends TestCase {
 
 		try {
 			$this->object->load('fakePhp', $reader);
-		} catch (\Exception $e) {
+			$this->assertTrue(false);
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 	}

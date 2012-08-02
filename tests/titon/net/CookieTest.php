@@ -19,13 +19,6 @@ use titon\utility\Crypt;
 class CookieTest extends TestCase {
 
 	/**
-	 * This method is called before a test is executed.
-	 */
-	protected function setUp() {
-		$_COOKIE = [];
-	}
-
-	/**
 	 * Test that set() will set cookies into the Response object.
 	 */
 	public function testSetAndResponse() {

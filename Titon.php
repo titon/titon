@@ -126,7 +126,7 @@ class Titon {
 		}
 
 		if ($lock) {
-			self::$__locked[] = $key;
+			self::$__locked[$key] = $key;
 		}
 
 		self::$__memory[$key] = $object;
@@ -191,14 +191,17 @@ class Titon {
 	 * Shutdown the framework and unset all core classes to trigger __destruct().
 	 *
 	 * @access public
+	 * @param boolean $exit
 	 * @return void
 	 */
-	public static function shutdown() {
+	public static function shutdown($exit = true) {
 		foreach (self::$__memory as $key => $object) {
-			unset(self::$__memory[$key]);
+			unset(self::$__memory[$key], self::$__locked[$key]);
 		}
 
-		exit();
+		if ($exit) {
+			exit();
+		}
 	}
 
 	/**

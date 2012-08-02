@@ -12,6 +12,7 @@ namespace titon\tests\titon;
 use titon\Titon;
 use titon\base\Base;
 use titon\tests\TestCase;
+use \Exception;
 
 /**
  * Test class for titon\Titon.
@@ -29,7 +30,8 @@ class TitonTest extends TestCase {
 
 		try {
 			Titon::get('foobar');
-		} catch (\Exception $e) {
+			$this->assertTrue(false);
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 
@@ -53,7 +55,7 @@ class TitonTest extends TestCase {
 		try {
 			Titon::base1();
 			$this->assertTrue(false);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 
@@ -62,14 +64,14 @@ class TitonTest extends TestCase {
 		try {
 			Titon::base2();
 			$this->assertTrue(true);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(false);
 		}
 
 		try {
 			Titon::install('base3', new Base());
 			$this->assertTrue(false);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 	}

@@ -23,6 +23,8 @@ class AssetHelperTest extends TestCase {
 	 * Setup environment.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		Titon::env()->initialize();
 	}
 

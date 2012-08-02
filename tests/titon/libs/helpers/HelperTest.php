@@ -22,6 +22,8 @@ class HelperTest extends TestCase {
 	 * Initialize helper.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = new HelperFixture();
 	}
 

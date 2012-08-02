@@ -46,11 +46,11 @@ class BundleTest extends TestCase {
 			'container' => 'bar'
 		]);
 		$bundle
-				->addLocation('/{module}/some/path')
-				->addLocation([
-			'\{container}\another\path',
-			'/{module}/and\{container}/another\path'
-		]);
+			->addLocation('/{module}/some/path')
+			->addLocation([
+				'\{container}\another\path',
+				'/{module}/and\{container}/another\path'
+			]);
 
 		$this->assertEquals([
 			'/foo/some/path/',

@@ -17,8 +17,15 @@ use titon\tests\TestCase;
  */
 class ApplicationTest extends TestCase {
 
+	/**
+	 * Module name and path.
+	 */
 	public $module = 'module';
-	public $path = __DIR__;
+	public $path;
+
+	/**
+	 * Mapping of test controllers.
+	 */
 	public $controllers = [
 		'index' => 'IndexController',
 		'test' => 'TestController',
@@ -30,7 +37,9 @@ class ApplicationTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
-		$this->path = Titon::loader()->ds($this->path, true);
+		parent::setUp();
+
+		$this->path = Titon::loader()->ds(__DIR__, true);
 
 		$this->object = Titon::app();
 		$this->object->setup($this->module, $this->path, $this->controllers);

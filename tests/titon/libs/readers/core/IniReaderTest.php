@@ -22,6 +22,8 @@ class IniReaderTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = new IniReader(APP_CONFIG . 'sets/ini.ini');
 	}
 

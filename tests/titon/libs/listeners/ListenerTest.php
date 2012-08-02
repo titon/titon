@@ -11,6 +11,8 @@ namespace titon\tests\titon\libs\listeners;
 
 use titon\Titon;
 use titon\tests\TestCase;
+use titon\tests\fixtures\ControllerFixture;
+use titon\tests\fixtures\EngineFixture;
 use titon\tests\fixtures\ListenerFixture;
 
 /**
@@ -22,6 +24,8 @@ class ListenerTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		Titon::event()->addListener(new ListenerFixture());
 		Titon::router()->initialize();
 	}
@@ -36,10 +40,10 @@ class ListenerTest extends TestCase {
 		Titon::event()->notify('dispatch.postDispatch');
 		$this->assertEquals(['startup', 'postDispatch'], Titon::event()->getListeners()[0]['object']->executed);
 
-		Titon::event()->notify('controller.preProcess');
+		Titon::event()->notify('controller.preProcess', new ControllerFixture());
 		$this->assertEquals(['startup', 'postDispatch', 'preProcess'], Titon::event()->getListeners()[0]['object']->executed);
 
-		Titon::event()->notify('view.postRender');
+		Titon::event()->notify('view.postRender', new EngineFixture());
 		$this->assertEquals(['startup', 'postDispatch', 'preProcess', 'postRender'], Titon::event()->getListeners()[0]['object']->executed);
 
 		Titon::event()->notify('customEvent'); // Not in the listener

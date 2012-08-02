@@ -93,8 +93,7 @@ class Day extends Enum {
 	 * @return void
 	 */
 	public function initialize($slug) {
-		$day = $this->value() + 1;
-		$time = mktime(0, 0, 0, date('n'), $day);
+		$time = strtotime($slug);
 
 		$this->order = $this->value();
 		$this->slug = $slug;

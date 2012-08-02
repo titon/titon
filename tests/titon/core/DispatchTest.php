@@ -22,6 +22,8 @@ class DispatchTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = Titon::dispatch();
 		$this->object->setup(new DispatcherFixture(['scope' => 'all']));
 		$this->object->setup(new DispatcherFixture(['scope' => 'module']), ['module' => 'users']);

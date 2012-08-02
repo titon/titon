@@ -122,11 +122,12 @@ class Cookie extends Base {
 	 *
 	 * @access public
 	 * @param string $key
+	 * @param array $config
 	 * @return titon\net\Cookie
 	 * @chainable
 	 */
-	public function remove($key) {
-		$config = $this->config->get();
+	public function remove($key, array $config = []) {
+		$config = $config + $this->config->get();
 		$config['expires'] = time();
 
 		$this->response->cookie($key, '', $config);

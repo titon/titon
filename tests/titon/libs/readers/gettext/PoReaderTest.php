@@ -22,6 +22,8 @@ class PoReaderTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = new PoReader(APP_CONFIG . 'sets/po.po');
 	}
 

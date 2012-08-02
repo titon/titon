@@ -87,7 +87,7 @@ class Application {
 			$path = $module['path'] . 'bootstrap.php';
 
 			if (file_exists($path)) {
-				include_once $path;
+				include $path;
 			}
 		}
 	}

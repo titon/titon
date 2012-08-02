@@ -119,7 +119,7 @@ class Environment {
 		$path = APP_CONFIG . 'environments/' . Inflector::fileName($this->_current, 'php', false);
 
 		if (file_exists($path)) {
-			include_once $path;
+			include $path;
 		}
 	}
 

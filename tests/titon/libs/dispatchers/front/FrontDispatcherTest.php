@@ -12,6 +12,7 @@ namespace titon\tests\titon\libs\dispatchers\front;
 use titon\Titon;
 use titon\tests\TestCase;
 use titon\libs\dispatchers\front\FrontDispatcher;
+use \Exception;
 
 /**
  * Test class for titon\libs\dispatchers\front\FrontDispatcher.
@@ -22,6 +23,8 @@ class FrontDispatcherTest extends TestCase {
 	 * Setup test app.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		Titon::app()->setup('pages', TITON_APP . 'modules/pages/', [
 			'index' => 'IndexController',
 			'missing-file' => 'MissingFileController'
@@ -47,6 +50,7 @@ class FrontDispatcherTest extends TestCase {
 
 		try {
 			$dispatcher->run();
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -63,6 +67,7 @@ class FrontDispatcherTest extends TestCase {
 
 		try {
 			$dispatcher->run();
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}

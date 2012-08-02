@@ -23,6 +23,8 @@ class AssetHelperTest extends TestCase {
 	 * Setup environment.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		Titon::env()->initialize();
 	}
 
@@ -97,9 +99,9 @@ class AssetHelperTest extends TestCase {
 		// with ordering
 		$helper = new AssetHelper();
 		$helper
-				->addStylesheet('style.css', 'handheld', 3)
-				->addStylesheet('a/really/deep/path/with/no/extension/style.css', 'screen', 1)
-				->addStylesheet('mobile.css', 'mobile', 2);
+			->addStylesheet('style.css', 'handheld', 3)
+			->addStylesheet('a/really/deep/path/with/no/extension/style.css', 'screen', 1)
+			->addStylesheet('mobile.css', 'mobile', 2);
 
 		$this->assertEquals(
 			'<link href="a/really/deep/path/with/no/extension/style.css" media="screen" rel="stylesheet" type="text/css">' . PHP_EOL .

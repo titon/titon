@@ -29,6 +29,8 @@ class MessageTranslatorTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'ex-no,ex;q=0.5';
 
 		Titon::g11n()->setup('ex')->setup('en');

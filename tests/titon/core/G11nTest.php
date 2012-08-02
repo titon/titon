@@ -24,6 +24,8 @@ class G11nTest extends TestCase {
 	 * This method is called before a test is executed.
 	 */
 	protected function setUp() {
+		parent::setUp();
+
 		$this->object = Titon::g11n();
 		$this->object->setup('ex-va');
 		$this->object->setup('ex-fm');
@@ -168,6 +170,7 @@ class G11nTest extends TestCase {
 
 		try {
 			$this->object->fallbackAs('fakeKey');
+			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
@@ -226,7 +229,8 @@ class G11nTest extends TestCase {
 
 		try {
 			$this->object->set('fakeKey');
-		} catch (\Exception $e) {
+			$this->assertTrue(false);
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 	}
