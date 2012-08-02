@@ -14,6 +14,7 @@ use titon\base\Base;
 use titon\constant\Http;
 use titon\net\NetException;
 use titon\utility\Hash;
+use titon\utility\Time;
 
 /**
  * The Response object handles the collection and output of data to the browser. It stores a list of HTTP headers,
@@ -96,7 +97,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function cache($expires = '+24 hours') {
-		$expires = is_int($expires) ? $expires : strtotime($expires);
+		$expires = Time::toUnix($expires);
 
 		$this->headers([
 			'Expires' => gmdate(Http::DATE_FORMAT, $expires) . ' GMT',

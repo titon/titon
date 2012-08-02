@@ -12,6 +12,7 @@ namespace titon\libs\storage;
 use titon\base\Base;
 use titon\libs\storage\Storage;
 use titon\libs\traits\Cacheable;
+use titon\utility\Time;
 
 /**
  * Primary class for all storage engines to extend. Provides functionality from the Base class and the Storage interface.
@@ -72,8 +73,8 @@ abstract class StorageAbstract extends Base implements Storage {
 		if ($timestamp === null) {
 			$timestamp = strtotime($this->config->expires);
 
-		} else if (is_string($timestamp)) {
-			$timestamp = strtotime($timestamp);
+		} else {
+			$timestamp = Time::toUnix($timestamp);
 		}
 
 		return (int) $timestamp;

@@ -13,6 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\libs\traits\Attachable;
 use titon\utility\Crypt;
+use titon\utility\Time;
 use \Closure;
 
 /**
@@ -90,10 +91,7 @@ class Cookie extends Base {
 	 */
 	public function set($key, $value, array $config = []) {
 		$config = $config + $this->config->get();
-
-		if (is_string($config['expires'])) {
-			$config['expires'] = strtotime($config['expires']);
-		}
+		$config['expires'] = Time::toUnix($config['expires']);
 
 		$value = base64_encode(serialize($value));
 

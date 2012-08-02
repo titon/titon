@@ -14,6 +14,7 @@ use titon\base\Base;
 use titon\libs\adapters\SessionAdapter;
 use titon\libs\traits\Attachable;
 use titon\utility\Hash;
+use titon\utility\Time;
 
 /**
  * Primary library class to manage all session data. Applies appropriate ini settings depending on the environment setting.
@@ -166,7 +167,7 @@ class Session extends Base {
 		$lifetime = $this->config->lifetime;
 
 		if (is_string($lifetime)) {
-			$lifetime = strtotime($lifetime) - time();
+			$lifetime = Time::toUnix($lifetime) - time();
 		}
 
 		ini_set('session.cookie_lifetime', $lifetime);
@@ -255,7 +256,7 @@ class Session extends Base {
 	 */
 	protected function _startup() {
 		$this->set('Session', [
-			'time' => strtotime($this->config->inactivityThreshold),
+			'time' => Time::toUnix($this->config->inactivityThreshold),
 			'host' => Titon::router()->segments('host'),
 			'agent' => md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])
 		]);
