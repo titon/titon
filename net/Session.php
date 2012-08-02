@@ -82,7 +82,9 @@ class Session extends Base {
 			$this->response->cookie($this->config->name, '', $params);
 		}
 
-		session_destroy();
+		if (session_status() === PHP_SESSION_ACTIVE) {
+			session_destroy();
+		}
 
 		if (!headers_sent()) {
 			$this->regenerate();
@@ -166,7 +168,7 @@ class Session extends Base {
 		// Lifetime
 		$lifetime = $this->config->lifetime;
 
-		if (is_string($lifetime)) {
+		if (!is_numeric($lifetime)) {
 			$lifetime = Time::toUnix($lifetime) - time();
 		}
 
@@ -187,7 +189,7 @@ class Session extends Base {
 		}
 
 		$this->_id = session_id();
-		$this->_validate();
+		$this->validate();
 	}
 
 	/**
@@ -249,26 +251,13 @@ class Session extends Base {
 	}
 
 	/**
-	 * Startup and save the session security params.
-	 *
-	 * @access protected
-	 * @return void
-	 */
-	protected function _startup() {
-		$this->set('Session', [
-			'time' => Time::toUnix($this->config->inactivityThreshold),
-			'host' => Titon::router()->segments('host'),
-			'agent' => md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])
-		]);
-	}
-
-	/**
 	 * Validate the session and regenerate or destroy if necessary.
 	 *
-	 * @access protected
-	 * @return void
+	 * @access public
+	 * @return titon\net\Session
+	 * @chainable
 	 */
-	protected function _validate() {
+	public function validate() {
 		if ($this->has('Session')) {
 			$session = $this->get('Session');
 
@@ -285,6 +274,22 @@ class Session extends Base {
 		} else {
 			$this->_startup();
 		}
+
+		return $this;
+	}
+
+	/**
+	 * Startup and save the session security params.
+	 *
+	 * @access protected
+	 * @return void
+	 */
+	protected function _startup() {
+		$this->set('Session', [
+			'time' => Time::toUnix($this->config->inactivityThreshold),
+			'host' => Titon::router()->segments('host'),
+			'agent' => md5(Titon::config()->salt() . $_SERVER['HTTP_USER_AGENT'])
+		]);
 	}
 
 }
