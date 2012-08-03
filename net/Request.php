@@ -14,6 +14,7 @@ use titon\base\Base;
 use titon\constant\Http;
 use titon\net\NetException;
 use titon\libs\traits\Cacheable;
+use titon\utility\Hash;
 
 /**
  * The Request object is the primary source of data and state management for the environment.
@@ -65,7 +66,13 @@ class Request extends Base {
 	 * @throws titon\net\NetException
 	 */
 	public function accepts($type = 'html') {
-		$contentType = (array) Http::getContentType($type);
+		if (is_array($type)) {
+			$contentType = $type;
+		} else if (mb_strpos($type, '/') !== false) {
+			$contentType = [$type];
+		} else {
+			$contentType = (array) Http::getContentType($type);
+		}
 
 		foreach ($this->_accepts('Accept') as $aType) {
 			if (in_array(mb_strtolower($aType['type']), $contentType)) {
@@ -123,17 +130,31 @@ class Request extends Base {
 	 * Get the IP address of the client, the correct way.
 	 *
 	 * @access public
+	 * @param boolean $safe
 	 * @return string
 	 */
-	public function clientIp() {
-		return $this->cache(__METHOD__, function() {
-			foreach (['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $key) {
-				if (($address = $this->env($key)) !== null) {
-					return $address;
+	public function clientIp($safe = true) {
+		return $this->cache([__METHOD__, $safe], function() use ($safe) {
+			$headers = ['HTTP_CLIENT_IP', 'REMOTE_ADDR'];
+
+			if (!$safe) {
+				array_unshift($headers, 'HTTP_X_FORWARDED_FOR');
+			}
+
+			$ip = null;
+
+			foreach ($headers as $key) {
+				if ($address = $this->env($key)) {
+					$ip = $address;
+					break;
 				}
 			}
 
-			return null;
+			if (mb_strpos($ip, ',') !== false) {
+				$ip = trim(explode(',', $ip)[0]);
+			}
+
+			return $ip;
 		});
 	}
 
@@ -162,29 +183,34 @@ class Request extends Base {
 	}
 
 	/**
-	 * Loads the $_POST, $_FILES data, configures the query params and populates the accepted headers fields.
+	 * Loads the $_POST, $_GET and $_FILES data, configures the query params and populates the accepted headers fields.
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function initialize() {
-		$get = $_GET;
-		$post = $_POST;
-		$files = [];
+		if (isset($_POST['_method'])) {
+			$_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] = $_POST['_method'];
+			unset($_POST['_method']);
+		}
 
-		if (!empty($_FILES)) {
-			foreach ($_FILES as $model => $data) {
-				foreach ($data as $key => $values) {
-					$keys = array_keys($values);
-					$files[$model][$keys[0]][$key] = $values[$keys[0]];
+		$this->get = $_GET;
+		$this->post = $_POST;
+
+		if ($_FILES) {
+			$files = Hash::flatten($_FILES);
+
+			foreach ($files as $key => $value) {
+				if (preg_match('/\.(?:name|type|tmp_name|error|size)/', $key, $matches)) {
+					$key = str_replace($matches[0], '', $key);
+					$key .= $matches[0];
 				}
+
+				$this->files = Hash::set($this->files, $key, $value);
 			}
 		}
 
-		$this->data = array_merge_recursive($post, $files);
-		$this->files = $files;
-		$this->get = $get;
-		$this->post = $post;
+		$this->data = Hash::merge($this->post, $this->files);
 	}
 
 	/**
@@ -278,7 +304,7 @@ class Request extends Base {
 	 */
 	public function isMobile() {
 		return $this->cache(__METHOD__, function() {
-			$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|';
+			$mobiles  = 'up\.browser|up\.link|mmp|symbian|smartphone|midp|wap|phone|droid|';
 			$mobiles .= 'palmaource|portalmmm|plucker|reqwirelessweb|sonyericsson|windows ce|xiino|';
 			$mobiles .= 'iphone|midp|avantgo|blackberry|j2me|opera mini|docoo|netfront|nokia|palmos';
 
@@ -314,7 +340,15 @@ class Request extends Base {
 	 */
 	public function isSecure() {
 		return $this->cache(__METHOD__, function() {
-			return ($this->env('HTTPS') === 'on' || $this->env('SERVER_PORT') === 443);
+			$https = mb_strtolower($this->env('HTTPS'));
+
+			if ($https === 'on') {
+				$https = true;
+			} else if ($https === 'off') {
+				$https = false;
+			}
+
+			return ($https || $this->env('SERVER_PORT') == 443);
 		});
 	}
 
@@ -335,7 +369,7 @@ class Request extends Base {
 	 * @return string
 	 */
 	public function protocol() {
-		return Titon::router()->segment('scheme');
+		return Titon::router()->segments('scheme');
 	}
 
 	/**
@@ -349,7 +383,7 @@ class Request extends Base {
 			$referrer = $this->env('HTTP_REFERER');
 
 			if (empty($referrer)) {
-				return '';
+				return '/';
 			}
 
 			$host = $this->env('HTTP_HOST');
@@ -417,6 +451,8 @@ class Request extends Base {
 
 			if (count($accept) > 0) {
 				foreach ($accept as $type) {
+					$type = str_replace(' ', '', $type);
+
 					if (mb_strpos($type, ';') !== false) {
 						list($type, $quality) = explode(';', $type);
 					} else {
