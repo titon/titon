@@ -30,7 +30,7 @@ class Response extends Base {
 	 * Configuration.
 	 *
 	 *	buffer	- The range in which to break up the body into chunks.
-	 * 	md5		- When enabled, will add a Content-MD5 header
+	 * 	md5		- When enabled, will add a Content-MD5 header based on the body.
 	 * 	debug	- When enabled, will return the response as a string instead of outputting.
 	 *
 	 * @access protected
@@ -75,7 +75,7 @@ class Response extends Base {
 	protected $_status = 302;
 
 	/**
-	 * Set the Accept-Ranges header.
+	 * Set the Accept-Ranges header. If a short hand notation is passed (1GB), parse it.
 	 *
 	 * @access public
 	 * @param string|int $range
@@ -83,7 +83,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function acceptRanges($range) {
-		if (!is_numeric($range) && $range !== 'none') {
+		if (!is_numeric($range) && $range !== 'none' && $range !== 'bytes') {
 			$range = Number::bytesFrom($range);
 		}
 
@@ -96,11 +96,17 @@ class Response extends Base {
 	 * Set the Age header.
 	 *
 	 * @access public
+	 * @param string|int $time
 	 * @return titon\net\Response
 	 * @chainable
 	 */
-	public function age() {
-		// @todo
+	public function age($time) {
+		if (is_string($time)) {
+			$time = Time::toUnix($time) - time();
+		}
+
+		$this->header('Age', $time);
+
 		return $this;
 	}
 
@@ -113,26 +119,13 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function allow($methods) {
-		if (is_array($methods)) {
-			$methods = implode(', ', $methods);
-		}
+		$methods = array_map('mb_strtoupper', (array) $methods);
 
-		$this->header('Allow', mb_strtoupper($methods));
+		$this->header('Allow', array_intersect($methods, Http::getMethodTypes()));
 
 		return $this;
 	}
 
-	/**
-	 * Set the Authorization header.
-	 *
-	 * @access public
-	 * @return titon\net\Response
-	 * @chainable
-	 */
-	public function authorization() {
-		// @todo
-		return $this;
-	}
 
 	/**
 	 * Set the content body for the response.
@@ -223,11 +216,26 @@ class Response extends Base {
 	public function connection($status) {
 		if ($status === true) {
 			$status = 'keep-alive';
+
 		} else if ($status === false) {
 			$status = 'close';
 		}
 
 		$this->header('Connection', $status);
+
+		return $this;
+	}
+
+	/**
+	 * Set the Content-Disposition header.
+	 *
+	 * @access public
+	 * @param string $file
+	 * @return titon\net\Response
+	 * @chainable
+	 */
+	public function contentDisposition($file) {
+		$this->header('Content-Disposition', sprintf('attachment; filename="%s"', $file));
 
 		return $this;
 	}
@@ -310,19 +318,7 @@ class Response extends Base {
 	}
 
 	/**
-	 * Set the Content-Range header.
-	 *
-	 * @access public
-	 * @return titon\net\Response
-	 * @chainable
-	 */
-	public function contentRange() {
-		// @todo
-		return $this;
-	}
-
-	/**
-	 * Set the Content-Type header.
+	 * Set the Content-Type header. If the type is text based, include the app charset.
 	 *
 	 * @access public
 	 * @param string $type
@@ -364,14 +360,21 @@ class Response extends Base {
 	}
 
 	/**
-	 * Set the ETag header.
+	 * Set the ETag header. If the tag is null, generate a hash based off the current URL.
 	 *
 	 * @access public
+	 * @param string $tag
+	 * @param boolean $weak
 	 * @return titon\net\Response
 	 * @chainable
 	 */
-	public function etag() {
-		// @todo
+	public function etag($tag = null, $weak = false) {
+		if ($tag === null) {
+			$tag = md5(Titon::router()->segments(true));
+		}
+
+		$this->header('ETag', sprintf('%s"%s"', ($weak ? 'W/' : ''), $tag));
+
 		return $this;
 	}
 
@@ -435,16 +438,8 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function headers(array $headers = []) {
-		if (is_array($headers)) {
-			foreach ($headers as $header => $value) {
-				if (is_array($value)) {
-					foreach ($value as $v) {
-						$this->header($header, $v);
-					}
-				} else {
-					$this->header($header, $value);
-				}
-			}
+		foreach ($headers as $header => $value) {
+			$this->header($header, $value);
 		}
 
 		return $this;
@@ -457,10 +452,7 @@ class Response extends Base {
 	 * @return void
 	 */
 	public function initialize() {
-		$this
-			->cacheControl('private', 0, ['must-revalidate' => true])
-			->connection(true)
-			->contentLanguage();
+		$this->connection(true)->contentLanguage()->cacheControl('private', 0, ['must-revalidate' => true]);
 	}
 
 	/**
@@ -473,6 +465,20 @@ class Response extends Base {
 	 */
 	public function lastModified($time = null) {
 		$this->header('Last-Modified', gmdate(Http::DATE_FORMAT, Time::toUnix($time)) . ' GMT');
+
+		return $this;
+	}
+
+	/**
+	 * Set the Location header.
+	 *
+	 * @access public
+	 * @param string $url
+	 * @return titon\net\Response
+	 * @chainable
+	 */
+	public function location($url) {
+		$this->header('Location', Titon::router()->detect($url));
 
 		return $this;
 	}
@@ -494,6 +500,32 @@ class Response extends Base {
 	}
 
 	/**
+	 * Set a response as 304 Not Modified and remove conflicting headers.
+	 *
+	 * @access public
+	 * @return titon\net\Response
+	 * @chainable
+	 */
+	public function notModified() {
+		$this->statusCode(304)->body(null);
+
+		foreach ([
+			'Allow',
+			'Content-Disposition',
+			'Content-Encoding',
+			'Content-Language',
+			'Content-Length',
+			'Content-MD5',
+			'Content-Type',
+			'Last-Modified'
+		] as $header) {
+			unset($this->_headers[$header]);
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Redirect to another URL with an HTTP header. Can pass along an HTTP status code.
 	 *
 	 * @access public
@@ -502,10 +534,7 @@ class Response extends Base {
 	 * @return void
 	 */
 	public function redirect($url, $code = 302) {
-		$this->status($code)
-			->location(Titon::router()->detect($url))
-			->body(null)
-			->respond();
+		$this->location($url)->statusCode($code)->body(null)->respond();
 
 		exit();
 	}
@@ -514,7 +543,7 @@ class Response extends Base {
 	 * Responds to the client by buffering out all the stored HTTP headers.
 	 *
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
 	public function respond() {
 		header(sprintf('%s %d %s',
@@ -529,31 +558,57 @@ class Response extends Base {
 		}
 
 		// HTTP headers
-		if (!empty($this->_headers)) {
+		if ($this->_headers) {
 			foreach ($this->_headers as $header) {
 				header($header['header'] . ': ' . $header['value'], $header['replace']);
 			}
 		}
 
 		// Cookie headers
-		if (!empty($this->_cookies)) {
+		if ($this->_cookies) {
 			foreach ($this->_cookies as $key => $cookie) {
 				setcookie($key, $cookie['value'], $cookie['expires'], $cookie['path'], $cookie['domain'], $cookie['secure'], $cookie['httpOnly']);
 			}
 		}
 
 		// Body
-		if (!empty($this->_body)) {
-			$body = str_split($this->_body, $this->config->buffer);
+		if ($this->_body) {
+			if ($this->config->debug) {
+				return $this->_body;
 
-			foreach ($body as $chunk) {
-				echo $chunk;
+			} else if ($this->config->buffer) {
+				$body = str_split($this->_body, $this->config->buffer);
+
+				foreach ($body as $chunk) {
+					echo $chunk;
+				}
+
+			} else {
+				echo $this->_body;
 			}
 		}
 	}
 
 	/**
-	 * Set a cookie into the response.
+	 * Set the Retry-After header.
+	 *
+	 * @access public
+	 * @param string|int $length
+	 * @return titon\net\Response
+	 * @chainable
+	 */
+	public function retryAfter($length) {
+		if (is_string($length)) {
+			$length = gmdate(Http::DATE_FORMAT, Time::toUnix($length)) . ' GMT';
+		}
+
+		$this->header('Retry-After', $length);
+
+		return $this;
+	}
+
+	/**
+	 * Set a cookie with the Set-Cookie header.
 	 *
 	 * @access public
 	 * @param string $key
@@ -583,8 +638,48 @@ class Response extends Base {
 	 * @return titon\net\Response
 	 * @chainable
 	 */
-	public function status($code = 302) {
+	public function statusCode($code = 302) {
 		$this->_status = $code;
+
+		$this->header('Status-Code', $code . ' ' . Http::getStatusCode($this->_status));
+
+		return $this;
+	}
+
+	/**
+	 * Set the Vary header.
+	 *
+	 * @access public
+	 * @param string|array $variances
+	 * @return titon\net\Response
+	 * @chainable
+	 */
+	public function vary($variances) {
+		if (is_array($variances)) {
+			$variances = implode(', ', $variances);
+		}
+
+		$this->header('Vary', $variances);
+
+		return $this;
+	}
+
+	/**
+	 * Set the WWW-Authenticate header.
+	 *
+	 * @access public
+	 * @param string|int $length
+	 * @return titon\net\Response
+	 * @chainable
+	 */
+	public function wwwAuthenticate($scheme) {
+		$scheme = mb_strtolower($scheme);
+
+		if ($scheme !== 'basic' && $scheme !== 'digest') {
+			throw new NetException(sprintf('Invalid WWW-Authenticate scheme %s.', $scheme));
+		}
+
+		$this->header('WWW-Authenticate', ucfirst($scheme));
 
 		return $this;
 	}
