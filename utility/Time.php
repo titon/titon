@@ -28,6 +28,10 @@ class Time {
 	 * @static
 	 */
 	public static function toUnix($time) {
+		if (!$time) {
+			return time();
+		}
+
 		return is_string($time) ? strtotime($time) : (int) $time;
 	}
 
