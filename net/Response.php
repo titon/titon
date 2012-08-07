@@ -38,7 +38,7 @@ class Response extends Base {
 	 */
 	protected $_config = [
 		'buffer' => 8192,
-		'md5' => true,
+		'md5' => false,
 		'debug' => false
 	];
 
@@ -75,18 +75,14 @@ class Response extends Base {
 	protected $_status = 302;
 
 	/**
-	 * Set the Accept-Ranges header. If a short hand notation is passed (1GB), parse it.
+	 * Set the Accept-Ranges header.
 	 *
 	 * @access public
-	 * @param string|int $range
+	 * @param string $range
 	 * @return titon\net\Response
 	 * @chainable
 	 */
-	public function acceptRanges($range) {
-		if (!is_numeric($range) && $range !== 'none' && $range !== 'bytes') {
-			$range = Number::bytesFrom($range);
-		}
-
+	public function acceptRanges($range = 'bytes') {
 		$this->header('Accept-Ranges', $range);
 
 		return $this;
@@ -121,7 +117,7 @@ class Response extends Base {
 	public function allow($methods) {
 		$methods = array_map('mb_strtoupper', (array) $methods);
 
-		$this->header('Allow', array_intersect($methods, Http::getMethodTypes()));
+		$this->header('Allow', implode(', ', array_intersect($methods, Http::getMethodTypes())));
 
 		return $this;
 	}
@@ -269,7 +265,7 @@ class Response extends Base {
 	public function contentLanguage($lang = null) {
 		$g11n = Titon::g11n();
 
-		if (empty($lang) && $g11n->isEnabled()) {
+		if ($lang === null && $g11n->isEnabled()) {
 			$locales = $g11n->listing();
 			array_unshift($locales, $g11n->current()->getLocale('key'));
 
@@ -354,7 +350,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function date($time) {
-		$this->header('Date', gmdate(Http::DATE_FORMAT, Time::toUnix($time)) . ' GMT');
+		$this->header('Date', gmdate(Http::DATE_FORMAT, Time::toUnix($time)));
 
 		return $this;
 	}
@@ -387,7 +383,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function expires($expires = '+24 hours') {
-		$this->header('Expires', gmdate(Http::DATE_FORMAT, Time::toUnix($expires)) . ' GMT');
+		$this->header('Expires', gmdate(Http::DATE_FORMAT, Time::toUnix($expires)));
 
 		return $this;
 	}
@@ -408,10 +404,17 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $key
+	 * @param boolean $format
 	 * @return mixed
 	 */
-	public function getHeader($key = null) {
-		return Hash::get($this->_headers, $key);
+	public function getHeader($key = null, $format = true) {
+		$value = Hash::get($this->_headers, $key);
+
+		if ($format && !is_array($value)) {
+			return sprintf('%s: %s', $key, $value);
+		} else {
+			return $value;
+		}
 	}
 
 	/**
@@ -424,7 +427,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function header($header, $value) {
-		$this->_headers[$header][] = $value;
+		$this->_headers[$header] = $value;
 
 		return $this;
 	}
@@ -464,7 +467,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function lastModified($time = null) {
-		$this->header('Last-Modified', gmdate(Http::DATE_FORMAT, Time::toUnix($time)) . ' GMT');
+		$this->header('Last-Modified', gmdate(Http::DATE_FORMAT, Time::toUnix($time)));
 
 		return $this;
 	}
@@ -546,21 +549,26 @@ class Response extends Base {
 	 * @return string
 	 */
 	public function respond() {
+		// Create an MD5 digest?
+		if ($this->config->md5) {
+			$this->header('Content-MD5', base64_encode(pack('H*', md5($this->_body))));
+		}
+
+		// Return while in debug
+		if ($this->config->debug) {
+			return $this->_body;
+		}
+
 		header(sprintf('%s %d %s',
 			Http::HTTP_11,
 			$this->_status,
 			Http::getStatusCode($this->_status)
 		));
 
-		// Create an MD5 digest?
-		if ($this->config->md5) {
-			$this->header('Content-MD5', base64_encode(pack('H*', md5($this->_body))));
-		}
-
 		// HTTP headers
 		if ($this->_headers) {
-			foreach ($this->_headers as $header) {
-				header($header['header'] . ': ' . $header['value'], $header['replace']);
+			foreach ($this->_headers as $header => $value) {
+				header($header . ': ' . $value);
 			}
 		}
 
@@ -572,20 +580,14 @@ class Response extends Base {
 		}
 
 		// Body
-		if ($this->_body) {
-			if ($this->config->debug) {
-				return $this->_body;
+		if ($this->_body && $this->config->buffer) {
+			$body = str_split($this->_body, $this->config->buffer);
 
-			} else if ($this->config->buffer) {
-				$body = str_split($this->_body, $this->config->buffer);
-
-				foreach ($body as $chunk) {
-					echo $chunk;
-				}
-
-			} else {
-				echo $this->_body;
+			foreach ($body as $chunk) {
+				echo $chunk;
 			}
+		} else {
+			echo $this->_body;
 		}
 	}
 
@@ -599,7 +601,7 @@ class Response extends Base {
 	 */
 	public function retryAfter($length) {
 		if (is_string($length)) {
-			$length = gmdate(Http::DATE_FORMAT, Time::toUnix($length)) . ' GMT';
+			$length = gmdate(Http::DATE_FORMAT, Time::toUnix($length));
 		}
 
 		$this->header('Retry-After', $length);
@@ -617,7 +619,7 @@ class Response extends Base {
 	 * @return titon\net\Response
 	 * @chainable
 	 */
-	public function setCookie($key, $value, array $config) {
+	public function setCookie($key, $value, array $config = []) {
 		$this->_cookies[$key] = $config + [
 			'value' => $value,
 			'domain' => '',

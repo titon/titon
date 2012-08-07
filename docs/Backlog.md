@@ -10,6 +10,10 @@ Utilities
 * (uri/url)
 * (validation)
 
+Email
+* net/Email
+* libs/transporters
+
 ### Upcoming Systems ###
 
 Database/Datasource Layer
@@ -29,10 +33,6 @@ Security
 
 Input/Ouput
 * io
-
-Email
-* net/Email
-* libs/transporters
 
 ### Backlogged Systems ###
 
