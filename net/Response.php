@@ -668,7 +668,7 @@ class Response extends Base {
 	 * Set the WWW-Authenticate header.
 	 *
 	 * @access public
-	 * @param string|int $length
+	 * @param string $scheme
 	 * @return titon\net\Response
 	 * @chainable
 	 */

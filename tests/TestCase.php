@@ -27,7 +27,7 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	protected $object;
 
 	/**
-	 * Startup Titon.
+	 * Startup Titon before each test.
 	 */
 	protected function setUp() {
 		$_POST = [];
@@ -41,9 +41,10 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * Shutdown Titon.
+	 * Shutdown Titon after each test.
 	 */
 	protected function tearDown() {
+		return;
 	}
 
 	/**
@@ -65,6 +66,20 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 		}
 
 		return $this->assertEquals($expected, $actual);
+	}
+
+	/**
+	 * Output a value into the console.
+	 *
+	 * @access public
+	 * @param mixed $value
+	 */
+	public function out($value = '') {
+		if (is_array($value)) {
+			$value = print_r($value, true);
+		}
+
+		echo $value . PHP_EOL;
 	}
 
 }
