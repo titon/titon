@@ -78,11 +78,11 @@ class MemcachedStorage extends MemcacheStorage {
 		} else {
 			list($host, $port, $weight) = explode(':', $config['servers']);
 
-			if (empty($port)) {
+			if (!$port) {
 				$port = self::PORT;
 			}
 
-			if (empty($weight)) {
+			if (!$weight) {
 				$weight = self::WEIGHT;
 			}
 

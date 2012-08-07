@@ -81,7 +81,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 			}
 
 			// Else check within the bundle
-			if (empty($messages)) {
+			if (!$messages) {
 				$bundleKey = $module . '.' . $locale;
 
 				if (!isset($this->_bundles[$bundleKey])) {

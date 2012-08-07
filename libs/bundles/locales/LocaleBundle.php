@@ -164,7 +164,7 @@ class LocaleBundle extends BundleAbstract {
 		$locale['key'] = Titon::g11n()->canonicalize($locale['id']);
 
 		// Apply overrides, but do not allow id
-		if (!empty($this->_override)) {
+		if ($this->_override) {
 			unset($this->_override['id']);
 
 			$locale = $this->_override + $locale;

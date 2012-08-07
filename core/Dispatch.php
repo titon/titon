@@ -48,7 +48,7 @@ class Dispatch {
 		$params = Titon::router()->current()->param();
 		$dispatcher = null;
 
-		if (!empty($this->_mapping)) {
+		if ($this->_mapping) {
 
 			// Specific controller and module
 			if (isset($this->_mapping[$params['module'] . '.' . $params['controller']])) {

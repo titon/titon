@@ -84,7 +84,7 @@ class HtmlHelper extends HelperAbstract {
 			'attr' => $this->attributes($attributes)
 		]);
 
-		if (!empty($url)) {
+		if ($url) {
 			return $this->tag('anchor', [
 				'attr' => $this->attributes(['href' => $this->url($url)]),
 				'body' => trim($image)

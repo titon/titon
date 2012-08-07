@@ -69,6 +69,28 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * Assert that a value is falsey and would NOT pass an expression.
+	 *
+	 * @access public
+	 * @param mixed $value
+	 * @return boolean
+	 */
+	public function assertFalsey($value) {
+		return $this->assertFalse(($value) ? true : false);
+	}
+
+	/**
+	 * Assert that a value is truthy and would pass an expression.
+	 *
+	 * @access public
+	 * @param mixed $value
+	 * @return boolean
+	 */
+	public function assertTruthy($value) {
+		return $this->assertTrue(($value) ? true : false);
+	}
+
+	/**
 	 * Output a value into the console.
 	 *
 	 * @access public

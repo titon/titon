@@ -30,7 +30,7 @@ class MessageTranslator extends TranslatorAbstract {
 	 * @throws titon\libs\translators\TranslatorException
 	 */
 	public function loadBundle($module, $locale) {
-		if (empty($this->_reader)) {
+		if (!$this->_reader) {
 			throw new TranslatorException('No Reader has been loaded for message translating.');
 		}
 

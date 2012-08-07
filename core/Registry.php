@@ -94,7 +94,7 @@ class Registry {
 	public function flush() {
 		$this->_configs = [];
 
-		if (!empty($this->_registered)) {
+		if ($this->_registered) {
 			foreach ($this->_registered as $key => $object) {
 				unset($this->_registered[$key]);
 			}

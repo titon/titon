@@ -38,7 +38,7 @@ class Hash {
 			throw new UtilityException('Value passed must be an array.');
 		}
 
-		if (empty($set)) {
+		if (!$set) {
 			return 0;
 		}
 
@@ -108,11 +108,9 @@ class Hash {
 	 * @static
 	 */
 	public static function every($set, Closure $callback) {
-		if (!empty($set)) {
-			foreach ((array) $set as $key => $value) {
-				if (!$callback($value, $key)) {
-					return false;
-				}
+		foreach ((array) $set as $key => $value) {
+			if (!$callback($value, $key)) {
+				return false;
 			}
 		}
 
@@ -148,7 +146,7 @@ class Hash {
 	 * @static
 	 */
 	public static function extract($set, $path) {
-		if (!is_array($set) || empty($set)) {
+		if (!is_array($set) || !$set) {
 			return null;
 		}
 
@@ -219,7 +217,7 @@ class Hash {
 	 * @static
 	 */
 	public static function flatten($set, $path = null) {
-		if (!empty($path)) {
+		if ($path) {
 			$path = $path . '.';
 		}
 
@@ -227,10 +225,10 @@ class Hash {
 
 		foreach ((array) $set as $key => $value) {
 			if (is_array($value)) {
-				if (empty($value)) {
-					$data[$path . $key] = null;
-				} else {
+				if ($value) {
 					$data += self::flatten($value, $path . $key);
+				} else {
+					$data[$path . $key] = null;
 				}
 			} else {
 				$data[$path . $key] = $value;
@@ -288,7 +286,7 @@ class Hash {
 	 * @return mixed
 	 */
 	public static function get($set, $path = null) {
-		if (empty($path)) {
+		if (!$path) {
 			return $set;
 		}
 
@@ -305,7 +303,7 @@ class Hash {
 	 * @static
 	 */
 	public static function has($set, $path) {
-		if (!is_array($set) || empty($path)) {
+		if (!is_array($set) || !$path) {
 			return false;
 		}
 
@@ -363,7 +361,7 @@ class Hash {
 	 * @static
 	 */
 	public static function insert($set, $path, $value) {
-		if (!is_array($set) || empty($path)) {
+		if (!is_array($set) || !$path) {
 			return $set;
 		}
 
@@ -455,7 +453,7 @@ class Hash {
 			}
 		}
 
-		if (empty($return) && !empty($isArray)) {
+		if (!$return && $isArray) {
 			foreach ($isArray as $key) {
 				if ($value = self::keyOf($set[$key], $match)) {
 					$return = $key . '.' . $value;
@@ -518,7 +516,7 @@ class Hash {
 		$sets = func_get_args();
 		$data = [];
 
-		if (!empty($sets)) {
+		if ($sets) {
 			foreach ($sets as $set) {
 				foreach ((array) $set as $key => $value) {
 					if (isset($data[$key])) {
@@ -557,7 +555,7 @@ class Hash {
 
 		$overwrite = array_intersect_key($set2, $set1);
 
-		if (!empty($overwrite)) {
+		if ($overwrite) {
 			foreach ($overwrite as $key => $value) {
 				if (is_array($value)) {
 					$set1[$key] = self::overwrite($set1[$key], $value);
@@ -637,7 +635,7 @@ class Hash {
 	 * @static
 	 */
 	public static function remove($set, $path) {
-		if (!is_array($set) || empty($path)) {
+		if (!is_array($set) || !$path) {
 			return $set;
 		}
 
@@ -702,7 +700,7 @@ class Hash {
 	public static function some($set, Closure $callback) {
 		$pass = false;
 
-		if (!empty($set)) {
+		if ($set) {
 			foreach ((array) $set as $key => $value) {
 				if ($callback($value, $value)) {
 					$pass = true;

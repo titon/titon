@@ -51,7 +51,7 @@ class BreadcrumbHelper extends HelperAbstract {
 	public function generate() {
 		$trail = [];
 
-		if (!empty($this->_breadcrumbs)) {
+		if ($this->_breadcrumbs) {
 			foreach ($this->_breadcrumbs as $crumb) {
 				$trail[] = $this->html->anchor($crumb[0], $crumb[1], $crumb[2]);
 			}

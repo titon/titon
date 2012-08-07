@@ -219,7 +219,7 @@ abstract class RouteAbstract extends Base implements Route {
 			$this->_url = array_shift($matches);
 
 			// Get pattern values
-			if (!empty($matches) && !empty($this->_tokens)) {
+			if ($matches && $this->_tokens) {
 				foreach ($this->_tokens as $token) {
 					$this->_route[$token] = array_shift($matches);
 				}
@@ -300,7 +300,7 @@ abstract class RouteAbstract extends Base implements Route {
 	public function isMethod() {
 		$method = array_map('mb_strtolower', (array) $this->config->method);
 
-		if (!empty($method) && !in_array($this->request->method(), $method)) {
+		if ($method && !in_array($this->request->method(), $method)) {
 			return false;
 		}
 

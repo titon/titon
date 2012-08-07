@@ -74,7 +74,7 @@ trait Cacheable {
 		if (is_array($keys)) {
 			$key = array_shift($keys);
 
-			if (!empty($keys)) {
+			if ($keys) {
 				foreach ($keys as $value) {
 					if (is_array($value)) {
 						$key .= '-' . md5(json_encode($value));

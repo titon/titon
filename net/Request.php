@@ -91,7 +91,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function acceptsCharset($charset = 'utf-8') {
-		if (empty($charset)) {
+		if (!$charset) {
 			$charset = 'utf-8';
 		}
 
@@ -113,7 +113,7 @@ class Request extends Base {
 	 * @return boolean
 	 */
 	public function acceptsLanguage($language = 'en') {
-		if (empty($language)) {
+		if (!$language) {
 			$language = 'en';
 		}
 
@@ -190,7 +190,7 @@ class Request extends Base {
 	 */
 	public function initialize() {
 		if (isset($_POST['_method'])) {
-			$_SERVER['HTTP_X_HTTP_METHOD_OVERRIDE'] = $_POST['_method'];
+			$_SERVER['REQUEST_METHOD'] = $_POST['_method'];
 			unset($_POST['_method']);
 		}
 
@@ -382,7 +382,7 @@ class Request extends Base {
 		return $this->cache(__METHOD__, function() {
 			$referrer = $this->env('HTTP_REFERER');
 
-			if (empty($referrer)) {
+			if (!$referrer) {
 				return '/';
 			}
 
@@ -446,10 +446,9 @@ class Request extends Base {
 	 */
 	protected function _accepts($header) {
 		return $this->cache([__METHOD__, $header], function() use ($header) {
-			$accept = explode(',', $this->env($header));
 			$data = [];
 
-			if (count($accept) > 0) {
+			if ($accept = explode(',', $this->env($header))) {
 				foreach ($accept as $type) {
 					$type = str_replace(' ', '', $type);
 

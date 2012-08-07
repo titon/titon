@@ -22,7 +22,7 @@ function debug() {
 		echo '<div class="titon-debug">';
 		echo '<b>' . trim(str_replace(TITON_APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
 
-		if (!empty($vars)) {
+		if ($vars) {
 			foreach ($vars as $var) {
 				echo '<pre>' . print_r($var, true) . '</pre>';
 			}
@@ -45,7 +45,7 @@ function dump() {
 		echo '<div class="titon-debug">';
 		echo '<b>' . trim(str_replace(TITON_APP, '', $calledFrom[0]['file'])) . '</b> (' . $calledFrom[0]['line'] . ')';
 
-		if (!empty($vars)) {
+		if ($vars) {
 			foreach ($vars as $var) {
 				echo '<pre>';
 				var_dump($var);

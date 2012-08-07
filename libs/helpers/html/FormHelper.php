@@ -709,15 +709,15 @@ class FormHelper extends HelperAbstract {
 	 */
 	public function time($input, array $attributes = []) {
 		$hour = $this->hour($input . '.hour',
-				['name' => $input . '.hour'] + $attributes
+			['name' => $input . '.hour'] + $attributes
 		);
 
 		$minute = $this->minute($input . '.minute',
-				['name' => $input . '.minute'] + $attributes
+			['name' => $input . '.minute'] + $attributes
 		);
 
 		$second = $this->second($input . '.second',
-				['name' => $input . '.second'] + $attributes
+			['name' => $input . '.second'] + $attributes
 		);
 
 		$output = $hour . ':' . $minute . ':' . $second;
@@ -794,7 +794,7 @@ class FormHelper extends HelperAbstract {
 		$parts = explode('.', $name);
 		$id = [];
 
-		if (!empty($parts)) {
+		if ($parts) {
 			foreach ($parts as $part) {
 				$id[] = Inflector::slug($part);
 			}
@@ -822,7 +822,7 @@ class FormHelper extends HelperAbstract {
 			]);
 		}
 
-		if (!empty($options)) {
+		if ($options) {
 			foreach ($options as $value => $option) {
 				// Optgroup
 				if (is_array($option)) {
@@ -866,7 +866,7 @@ class FormHelper extends HelperAbstract {
 		$parts = explode('.', $input);
 		$name = array_shift($parts);
 
-		if (!empty($parts)) {
+		if ($parts) {
 			foreach ($parts as $part) {
 				$name .= '[' . $part . ']';
 			}

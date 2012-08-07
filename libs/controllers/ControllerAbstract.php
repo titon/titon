@@ -68,11 +68,11 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @throws titon\libs\controllers\ControllerException
 	 */
 	public function dispatchAction($action = null, array $args = []) {
-		if (empty($action)) {
+		if (!$action) {
 			$action = $this->config->action;
 		}
 
-		if (empty($args)) {
+		if (!$args) {
 			$args = $this->config->args;
 		}
 
@@ -148,7 +148,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return void
 	 */
 	public function throwError($action, array $args = []) {
-		if (empty($action)) {
+		if (!$action) {
 			$action = 'error';
 		}
 
@@ -162,7 +162,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 
 		// Must be an HTTP code, set the status
 		if (is_numeric($action)) {
-			$this->response->status($action);
+			$this->response->statusCode($action);
 		}
 
 		$args['referrer'] = $this->request->referrer();

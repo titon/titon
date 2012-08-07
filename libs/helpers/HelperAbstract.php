@@ -59,7 +59,7 @@ abstract class HelperAbstract extends Base implements Helper {
 			unset($attributes['escape']);
 		}
 
-		if (!empty($attributes)) {
+		if ($attributes) {
 			ksort($attributes);
 
 			foreach ($attributes as $key => $value) {

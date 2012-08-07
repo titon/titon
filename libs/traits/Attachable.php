@@ -246,7 +246,7 @@ trait Attachable {
 	 * @chainable
 	 */
 	public function notifyObjects($method) {
-		if (!empty($this->_classes)) {
+		if ($this->_classes) {
 			foreach ($this->_classes as $options) {
 				if ($options['callback']) {
 					$object = $this->getObject($options['alias']);

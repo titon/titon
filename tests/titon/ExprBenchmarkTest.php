@@ -351,4 +351,42 @@ class ExprBenchmarkTest extends TestCase {
 		$this->out();
 	}
 
+	/**
+	 * Test variable truthness.
+	 */
+	public function testTruthness() {
+		$this->assertTruthy('string');
+		$this->assertTruthy('12345');
+		$this->assertTruthy(12345);
+		$this->assertTruthy(true);
+		$this->assertTruthy(['value']);
+
+		// negatives
+		$this->assertTruthy(!'');
+		$this->assertTruthy(!'0');
+		$this->assertTruthy(!0);
+		$this->assertTruthy(!false);
+		$this->assertTruthy(!null);
+		$this->assertTruthy(![]);
+	}
+
+	/**
+	 * Test variable falseness.
+	 */
+	public function testFalseness() {
+		$this->assertFalsey('');
+		$this->assertFalsey('0');
+		$this->assertFalsey(0);
+		$this->assertFalsey(false);
+		$this->assertFalsey(null);
+		$this->assertFalsey([]);
+
+		// negatives
+		$this->assertFalsey(!'string');
+		$this->assertFalsey(!'12345');
+		$this->assertFalsey(!12345);
+		$this->assertFalsey(!true);
+		$this->assertFalsey(!['value']);
+	}
+
 }

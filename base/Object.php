@@ -43,7 +43,7 @@ class Object {
 	 * @param array $params
 	 */
 	public function __construct(array $params = []) {
-		if (!empty($params)) {
+		if ($params) {
 			foreach ($params as $key => $value) {
 				if ($value instanceof Closure) {
 					$this->addMethod($key, $value);

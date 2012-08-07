@@ -155,7 +155,7 @@ class AssetHelper extends HelperAbstract {
 	public function stylesheets() {
 		$output = null;
 
-		if (!empty($this->_stylesheets)) {
+		if ($this->_stylesheets) {
 			$env = Titon::env()->current('type');
 
 			$stylesheets = $this->_stylesheets;

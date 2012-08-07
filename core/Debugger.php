@@ -175,7 +175,7 @@ class Debugger {
 		$output .= '<b><a href="#debug" onclick="' . $toggle('TitonStackTrace-' . $append) . ' return false;">' . $this->errorType($number) . '</a>:</b> ' . $message . ' ';
 		$output .= '<b><acronym title="' . $file . '">' . $this->parseFile($file) . '</acronym></b> (' . $line . ')<br><br>';
 
-		if (!empty($backtrace)) {
+		if ($backtrace) {
 			$output .= '<div id="TitonStackTrace-' . $append . '" style="display: none">';
 			$output .= '<table cellpadding="0" cellspacing="0" style="border: none">';
 
@@ -298,7 +298,7 @@ class Debugger {
 		$backtrace = debug_backtrace();
 		$response = [];
 
-		if (!empty($backtrace)) {
+		if ($backtrace) {
 			foreach ($backtrace as $trace) {
 				//if (!in_array($trace['function'], get_class_methods($this))) {
 					$current = [];

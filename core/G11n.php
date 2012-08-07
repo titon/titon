@@ -193,7 +193,7 @@ class G11n {
 	 * @throws titon\core\CoreException
 	 */
 	public function getFallback() {
-		if (empty($this->_fallback) || !isset($this->_locales[$this->_fallback])) {
+		if (!$this->_fallback || !isset($this->_locales[$this->_fallback])) {
 			throw new CoreException('Fallback locale has not been setup.');
 		}
 
@@ -249,7 +249,7 @@ class G11n {
 		$this->set($current);
 
 		// Check for a translator
-		if (empty($this->_translator)) {
+		if (!$this->_translator) {
 			throw new CoreException('A translator is required for G11n message parsing.');
 		}
 	}
@@ -277,7 +277,7 @@ class G11n {
 		return $this->cache(__METHOD__, function() {
 			$locales = $this->getLocales();
 
-			if (empty($locales)) {
+			if (!$locales) {
 				return false;
 			}
 
@@ -358,7 +358,7 @@ class G11n {
 		setlocale(LC_ALL, $options);
 		Locale::setDefault($locale['id']);
 
-		if (!empty($locale['timezone'])) {
+		if ($locale['timezone']) {
 			$this->setTimezone($locale['timezone']);
 		}
 
@@ -398,7 +398,7 @@ class G11n {
 		}
 
 		// Set fallback if none defined
-		if (empty($this->_fallback)) {
+		if (!$this->_fallback) {
 			$this->_fallback = $urlKey;
 		}
 

@@ -74,7 +74,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * @chainable
 	 */
 	public function clean() {
-		if (!empty($this->_value)) {
+		if ($this->_value) {
 			foreach ($this->_value as $key => $value) {
 				if (empty($value) && $value !== 0) {
 					unset($this->_value[$key]);
@@ -344,7 +344,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * @chainable
 	 */
 	public function erase($data) {
-		if (!empty($this->_value)) {
+		if ($this->_value) {
 			foreach ($this->_value as $key => $value) {
 				if ($value === $data) {
 					unset($this->_value[$key]);

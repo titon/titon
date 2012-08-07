@@ -116,7 +116,7 @@ class Inflector {
 			$inflections = Titon::g11n()->current()->getInflections();
 			$number = (int) $number;
 
-			if (empty($inflections) || empty($inflections['ordinal'])) {
+			if (!$inflections || empty($inflections['ordinal'])) {
 				return $number;
 			}
 
@@ -163,7 +163,7 @@ class Inflector {
 			$result = null;
 			$inflections = Titon::g11n()->current()->getInflections();
 
-			if (empty($inflections)) {
+			if (!$inflections) {
 				return $string;
 
 			} else if (!empty($inflections['uninflected']) && in_array($string, $inflections['uninflected'])) {
@@ -224,7 +224,7 @@ class Inflector {
 			$result = null;
 			$inflections = Titon::g11n()->current()->getInflections();
 
-			if (empty($inflections)) {
+			if (!$inflections) {
 				return $string;
 
 			} else if (!empty($inflections['uninflected']) && in_array($string, $inflections['uninflected'])) {
@@ -320,7 +320,7 @@ class Inflector {
 		return self::_cache([__METHOD__, $string], function() use ($string) {
 			$inflections = Titon::g11n()->current()->getInflections();
 
-			if (empty($inflections) || empty($inflections['transliteration'])) {
+			if (!$inflections || empty($inflections['transliteration'])) {
 				return $string;
 			}
 

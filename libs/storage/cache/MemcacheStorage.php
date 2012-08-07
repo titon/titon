@@ -132,11 +132,11 @@ class MemcacheStorage extends StorageAbstract {
 
 			list($host, $port, $weight) = explode(':', $server);
 
-			if (empty($port)) {
+			if (!$port) {
 				$port = self::PORT;
 			}
 
-			if (empty($weight)) {
+			if (!$weight) {
 				$weight = self::WEIGHT;
 			}
 

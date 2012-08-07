@@ -155,7 +155,7 @@ class Router {
 		unset($route);
 
 		// Action arguments
-		if (!empty($args)) {
+		if ($args) {
 			foreach ($args as $arg) {
 				$path[] = urlencode($arg);
 			}
@@ -163,15 +163,15 @@ class Router {
 
 		$path = '/' . implode('/', $path);
 
-		if (!empty($ext)) {
+		if ($ext) {
 			$path .= '.' . $ext;
 		}
 
-		if (!empty($query)) {
+		if ($query) {
 			$path .= '?' . http_build_query($query, '', '&', PHP_QUERY_RFC1738);
 		}
 
-		if (!empty($fragment)) {
+		if ($fragment) {
 			if (is_array($fragment)) {
 				$path .= '#' . http_build_query($fragment, '', '&', PHP_QUERY_RFC1738);
 			} else {
@@ -274,11 +274,11 @@ class Router {
 	public function initialize() {
 		list($base, $path) = explode('index.php', $_SERVER['PHP_SELF']);
 
-		if (empty($path)) {
+		if (!$path) {
 			$path = '/';
 		}
 
-		if (!empty($base) && $base !== '/') {
+		if ($base && $base !== '/') {
 			$this->_base = rtrim($base, '/');
 		}
 

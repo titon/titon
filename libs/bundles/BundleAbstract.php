@@ -109,7 +109,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @throws titon\libs\bundles\BundleException
 	 */
 	public function loadResource($resource) {
-		if (empty($this->_readers)) {
+		if (!$this->_readers) {
 			throw new BundleException('A Reader must be loaded to read Bundle resources.');
 
 		} else if ($cache = $this->getCache([__METHOD__, $resource])) {

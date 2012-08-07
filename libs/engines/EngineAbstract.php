@@ -191,7 +191,7 @@ abstract class EngineAbstract extends Base implements Engine {
 			break;
 		}
 
-		if (!empty($paths)) {
+		if ($paths) {
 			foreach ($paths as $path) {
 				if (file_exists($path)) {
 					return $path;

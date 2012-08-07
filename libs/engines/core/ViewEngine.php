@@ -40,7 +40,7 @@ class ViewEngine extends EngineAbstract {
 	 * @return string
 	 */
 	public function render($path, array $variables = []) {
-		if (!empty($variables)) {
+		if ($variables) {
 			extract($variables, EXTR_SKIP);
 		}
 

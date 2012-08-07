@@ -130,7 +130,7 @@ class Event {
 	public function notify($event, $object = null) {
 		$route = Titon::router()->current();
 
-		if (!$route || empty($this->_listeners)) {
+		if (!$route || !$this->_listeners) {
 			return;
 		}
 

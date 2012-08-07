@@ -148,7 +148,7 @@ class Logger {
 	 * @static
 	 */
 	public static function write($message, $level = self::DEBUG) {
-		if (empty($message)) {
+		if (!$message) {
 			return;
 		}
 

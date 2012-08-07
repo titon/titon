@@ -99,7 +99,7 @@ class Cookie extends Base {
 			$value = Crypt::encrypt($value, $key, $cipher);
 		}
 
-		$this->response->cookie($key, $value, $config);
+		$this->response->setCookie($key, $value, $config);
 
 		$_COOKIE[$key] = $value;
 
@@ -130,7 +130,7 @@ class Cookie extends Base {
 		$config = $config + $this->config->get();
 		$config['expires'] = time();
 
-		$this->response->cookie($key, '', $config);
+		$this->response->setCookie($key, '', $config);
 
 		unset($_COOKIE[$key]);
 
