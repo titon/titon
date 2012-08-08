@@ -22,6 +22,7 @@ define('APP_LIBS', TITON_APP . 'libs/');
 define('APP_RESOURCES', TITON_APP . 'resources/');
 define('APP_MODULES', TITON_APP . 'modules/');
 define('APP_TEMP', TITON_APP . 'temp/');
+define('APP_LOGS', APP_TEMP . 'logs/');
 define('APP_VIEWS', TITON_APP . 'views/');
 
 /**

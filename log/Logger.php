@@ -176,7 +176,7 @@ class Logger {
 		$file = Inflector::fileName($type, 'log', false);
 		$message = '[' . date('Y-m-d H:i:s') . '] ' . $message;
 
-		file_put_contents(APP_TEMP. $file, $message . "\n", FILE_APPEND | LOCK_EX);
+		file_put_contents(APP_LOGS . $file, $message . "\n", FILE_APPEND | LOCK_EX);
 
 		if ($level > self::WARNING) {
 			if ($email = Titon::config()->get('Debug.email')) {
