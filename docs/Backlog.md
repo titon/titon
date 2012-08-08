@@ -54,6 +54,5 @@ Input/Ouput
 * libs/shells
 * libs/storage
 * libs/transporters
-* log
 * net
 * utility/Uuid

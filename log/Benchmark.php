@@ -76,15 +76,13 @@ class Benchmark {
 	 * @return string
 	 * @static
 	 */
-	public static function output($key = null) {
-		$benchmark = self::get($key);
-
-		if ($benchmark) {
-			$result  = 'Benchmark [' . $key . '] - ';
-			$result .= 'Time: ' . number_format($benchmark['avgTime'], 4) . ' - ';
-			$result .= 'Memory: ' . $benchmark['avgMemory'] . ' (Max: ' . $benchmark['peakMemory'] . ')';
-
-			return $result;
+	public static function output($key) {
+		if ($benchmark = self::get($key)) {
+			return sprintf('Benchmark [%s] - Time: %s - Memory: %s (Max: %s)',
+				$key,
+				number_format($benchmark['avgTime'], 4),
+				$benchmark['avgMemory'],
+				$benchmark['peakMemory']);
 		}
 
 		return null;
@@ -98,7 +96,7 @@ class Benchmark {
 	 * @return void
 	 * @static
 	 */
-	public static function start($key = 'benchmark') {
+	public static function start($key) {
 		if (error_reporting() > 0) {
 			self::$_benchmarks[$key] = [
 				'startTime'		=> microtime(true),
@@ -116,16 +114,16 @@ class Benchmark {
 	 * @return mixed
 	 * @static
 	 */
-	public static function stop($key = 'benchmark', $log = false) {
+	public static function stop($key, $log = false) {
 		if (error_reporting() > 0) {
 			if (!self::$_benchmarks[$key]) {
 				return false;
 			}
 
-			self::$_benchmarks[$key] = [
+			self::$_benchmarks[$key] += [
 				'endTime'	=> microtime(true),
 				'endMemory'	=> memory_get_usage(true)
-			] + self::$_benchmarks[$key];
+			];
 
 			if ($log) {
 				Logger::debug(self::output($key));
