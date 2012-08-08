@@ -11,6 +11,7 @@ namespace titon\tests\titon;
 
 use titon\log\Benchmark;
 use titon\tests\TestCase;
+use titon\utility\Hash;
 
 /**
  * Test class for titon\Titon.
@@ -20,7 +21,7 @@ class ExprBenchmarkTest extends TestCase {
 	/**
 	 * Test string expression and evaluation to see which approach is faster.
 	 */
-	public function testStringExpr() {
+	public function testStringExprSpeed() {
 		$emptyString = '';
 		$valueString = 'Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.';
 
@@ -150,7 +151,7 @@ class ExprBenchmarkTest extends TestCase {
 	/**
 	 * Test array expression and evaluation to see which approach is faster.
 	 */
-	public function testArrayExpr() {
+	public function testArrayExprSpeed() {
 		$emptyArray = [];
 		$valueArray = ['Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet.', 'Lorem ipsum dolor sit amet.', ['Lorem ipsum dolor sit amet.']];
 
@@ -250,7 +251,7 @@ class ExprBenchmarkTest extends TestCase {
 	/**
 	 * Test which approach is faster for checking an array key.
 	 */
-	public function testArrayIndex() {
+	public function testArrayIndexCheckSpeed() {
 		$array = [
 			'key' => 'value',
 			'tier' => [
@@ -347,6 +348,133 @@ class ExprBenchmarkTest extends TestCase {
 		Benchmark::stop('ArrayIndex.key.empty');
 
 		$this->out(Benchmark::output('ArrayIndex.key.empty'));
+
+		$this->out();
+	}
+
+	/**
+	 * Test that outcome of array merges.
+	 */
+	public function testArrayMerge() {
+		$a = ['key' => 'value', 'foo' => 'bar', 'nested' => [1, 2, 3]];
+		$b = ['foo' => 'baz', 'new' => 'key', 'nested' => ['a', 'b', 'c']];
+
+		// array_merge()
+		$c = array_merge($a, $b);
+
+		$this->assertEquals([
+			'key' => 'value',
+			'foo' => 'baz',
+			'nested' => ['a', 'b', 'c'],
+			'new' => 'key'
+		], $c);
+
+		// a overwrites b
+		$c = $a + $b;
+
+		$this->assertEquals([
+			'key' => 'value',
+			'foo' => 'bar',
+			'nested' => [1, 2, 3],
+			'new' => 'key'
+		], $c);
+
+		// b overwrites a
+		$c = $b + $a;
+
+		$this->assertEquals([
+			'key' => 'value',
+			'foo' => 'baz',
+			'nested' => ['a', 'b', 'c'],
+			'new' => 'key'
+		], $c);
+
+		// a overwrites b
+		$c = $a;
+		$c += $b;
+
+		$this->assertEquals([
+			'key' => 'value',
+			'foo' => 'bar',
+			'nested' => [1, 2, 3],
+			'new' => 'key'
+		], $c);
+
+		// Hash::merge()
+		$c = Hash::merge($a, $b);
+
+		$this->assertEquals([
+			'key' => 'value',
+			'foo' => 'baz',
+			'nested' => [1, 2, 3, 'a', 'b', 'c'],
+			'new' => 'key'
+		], $c);
+	}
+
+	/**
+	 * Test array merging speeds.
+	 */
+	public function testArrayMergeSpeed() {
+
+		// Test array merging with array_merge()
+		Benchmark::start('ArrayMerge.func');
+		$array = [];
+
+		for ($i = 1; $i <= 100000; $i++) {
+			$array = array_merge($array, ['key' => $i]);
+		}
+
+		Benchmark::stop('ArrayMerge.func');
+
+		$this->out(Benchmark::output('ArrayMerge.func'));
+
+		// Test array merging with left
+		Benchmark::start('ArrayMerge.left');
+		$array = [];
+
+		for ($i = 1; $i <= 100000; $i++) {
+			$array = ['key' => $i] + $array;
+		}
+
+		Benchmark::stop('ArrayMerge.left');
+
+		$this->out(Benchmark::output('ArrayMerge.left'));
+
+		// Test array merging with right
+		Benchmark::start('ArrayMerge.right');
+		$array = [];
+
+		for ($i = 1; $i <= 100000; $i++) {
+			$array = $array + ['key' => $i];
+		}
+
+		Benchmark::stop('ArrayMerge.right');
+
+		$this->out(Benchmark::output('ArrayMerge.right'));
+
+		// Test array merging with +=
+		Benchmark::start('ArrayMerge.self');
+		$array = [];
+
+		for ($i = 1; $i <= 100000; $i++) {
+			$array += ['key' => $i];
+		}
+
+		Benchmark::stop('ArrayMerge.self');
+
+		$this->out(Benchmark::output('ArrayMerge.self'));
+
+		// Test array merging with Hash::merge()
+		Benchmark::start('ArrayMerge.hash');
+		$array = [];
+
+		for ($i = 1; $i <= 100000; $i++) {
+			$array = Hash::merge($array, ['key' => $i]);
+		}
+
+		Benchmark::stop('ArrayMerge.hash');
+
+		$this->out(Benchmark::output('ArrayMerge.hash'));
 
 		$this->out();
 	}
