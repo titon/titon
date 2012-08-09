@@ -52,67 +52,60 @@ class Email extends Base {
 	protected $_attachments = [];
 
 	public function to($email, $name = '') {
-		$this->_to = $this->_formatEmails($email, $name) + $this->_to;
+		$this->_addEmails($this->_to, $email, $name);
 	}
 
 	public function from($email, $name = '') {
-		$this->_from = $this->_formatEmails($email, $name) + $this->_from;
+		$this->_addEmails($this->_from, $email, $name);
 	}
 
 	public function cc($email, $name = '') {
-		$this->_cc = $this->_formatEmails($email, $name) + $this->_cc;
+		$this->_addEmails($this->_cc, $email, $name);
 	}
 
 	public function bcc($email, $name = '') {
-		$this->_bcc = $this->_formatEmails($email, $name) + $this->_bcc;
+		$this->_addEmails($this->_bcc, $email, $name);
 	}
 
 	public function replyTo($email, $name = '') {
-		$this->_replyTo = $this->_formatEmails($email, $name) + $this->_replyTo;
+		$this->_addEmails($this->_replyTo, $email, $name);
 	}
 
 	public function sender($email, $name = '') {
-		$this->_sender = $this->_formatEmails($email, $name) + $this->_sender;
+		$this->_addEmails($this->_sender, $email, $name);
 	}
 
 	public function body($message) {
 		$this->_body = wordwrap($message, self::CHAR_LIMIT_SHOULD);
 	}
 
-	protected function _formatEmails($email, $name = '') {
-		$emails = [];
+	protected function _addEmails(&$source, $email, $name = '') {
 		$config = $this->config->get();
 
 		if (is_array($email)) {
 			foreach ($email as $key => $value) {
+				$mail = $key;
+				$name = $value;
+
 				if (is_numeric($key)) {
 					$mail = $value;
 					$name = '';
-
-				} else if (is_string($key)) {
-					$mail = $key;
-					$name = $value;
 				}
 
 				if ($config['validEmailOnly'] && !filter_var($mail, FILTER_VALIDATE_EMAIL)) {
 					continue;
 				}
 
-				$emails[] = [
-					'email' => $mail,
-					'name' => $name
-				];
+				$source[$email] = $name;
 			}
 		} else {
-			if ($config['validEmailOnly'] && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-				$emails[] = [
-					'email' => $email,
-					'name' => $name
-				];
+			if ($config['validEmailOnly'] && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+				return;
 			}
-		}
 
-		return $emails;
+
+			$source[$email] = $name;
+		}
 	}
 
 }
