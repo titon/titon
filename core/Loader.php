@@ -111,6 +111,17 @@ class Loader {
 	}
 
 	/**
+	 * Return the extension from a file path.
+	 *
+	 * @access public
+	 * @param string $path
+	 * @return string
+	 */
+	public function ext($path) {
+		return mb_strtolower(trim(mb_strrchr($path, '.'), '.'));
+	}
+
+	/**
 	 * Attempts to include files into the application based on namespace or given path.
 	 * Relies heavily on the defined include paths.
 	 *

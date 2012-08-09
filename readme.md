@@ -39,6 +39,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Trait - Pre-built PHP 5.4 traits.
 * Translator - Handles the translation of certain file types to be used by the G11n message system.
 * Transporter - Handles the different type of email transporting (SMTP, etc).
+* Validator - Validates data against a defined schema of rules.
 
 ### Execution Cycle ###
 

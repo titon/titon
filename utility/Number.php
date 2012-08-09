@@ -37,6 +37,12 @@ class Number {
 	 * @static
 	 */
 	public static function bytesFrom($number) {
+		if (!$number) {
+			return 0;
+		} else if (is_numeric($number)) {
+			return $number;
+		}
+
 		$number = trim((string) $number);
 		$sizes = [
 			'k|kb|ki|kib' => 10,

@@ -7,8 +7,10 @@ Any library wrapped in parenthesis currently does not have a final location in t
 ### Systems In Development ###
 
 Utilities
-* (uri/url)
-* (validation)
+* Format
+* Validate
+* Uri
+* Uuid
 
 Email
 * net/Email
