@@ -97,21 +97,21 @@ class Folder {
 	 * @return boolean
 	 */
 	public function chgrp($group, $recursive = false) {
-		if ($this->exists()) {
-			if ($recursive && $this instanceof Folder) {
-				$contents = $this->read();
-
-				if ($contents['all']) {
-					foreach ($contents['all'] as $file) {
-						$file->chgrp($group, $recursive);
-					}
-				}
-			}
-
-			return chgrp($this->_path, $group);
+		if (!$this->exists()) {
+			return false;
 		}
 
-		return false;
+		if ($recursive && $this instanceof Folder) {
+			$contents = $this->read();
+
+			if ($contents['all']) {
+				foreach ($contents['all'] as $file) {
+					$file->chgrp($group, $recursive);
+				}
+			}
+		}
+
+		return chgrp($this->_path, $group);
 	}
 
 	/**
@@ -123,21 +123,21 @@ class Folder {
 	 * @return boolean
 	 */
 	public function chmod($mode, $recursive = false) {
-		if ($this->exists()) {
-			if ($recursive && $this instanceof Folder) {
-				$contents = $this->read();
-
-				if ($contents['all']) {
-					foreach ($contents['all'] as $file) {
-						$file->chmod($mode, $recursive);
-					}
-				}
-			}
-
-			return chmod($this->_path, $mode);
+		if (!$this->exists()) {
+			return false;
 		}
 
-		return false;
+		if ($recursive && $this instanceof Folder) {
+			$contents = $this->read();
+
+			if ($contents['all']) {
+				foreach ($contents['all'] as $file) {
+					$file->chmod($mode, $recursive);
+				}
+			}
+		}
+
+		return chmod($this->_path, $mode);
 	}
 
 	/**
@@ -149,21 +149,21 @@ class Folder {
 	 * @return boolean
 	 */
 	public function chown($user, $recursive = false) {
-		if ($this->exists()) {
-			if ($recursive && $this instanceof Folder) {
-				$contents = $this->read();
-
-				if ($contents['all']) {
-					foreach ($contents['all'] as $file) {
-						$file->chown($user, $recursive);
-					}
-				}
-			}
-
-			return chown($this->_path, $user);
+		if (!$this->exists()) {
+			return false;
 		}
 
-		return false;
+		if ($recursive && $this instanceof Folder) {
+			$contents = $this->read();
+
+			if ($contents['all']) {
+				foreach ($contents['all'] as $file) {
+					$file->chown($user, $recursive);
+				}
+			}
+		}
+
+		return chown($this->_path, $user);
 	}
 
 	/**
@@ -182,6 +182,39 @@ class Folder {
 	}
 
 	/**
+	 * Copies the folder and all contents to the target location and return a new Folder object.
+	 *
+	 * @access public
+	 * @param string $target
+	 * @param boolean $overwrite
+	 * @return titon\io\Folder
+	 * @throws titon\io\IoException
+	 */
+	public function copy($target, $overwrite = true) {
+		if (!$this->exists()) {
+			return false;
+		}
+
+		if (file_exists($target) && !$overwrite) {
+			throw new IoException('Cannot copy contents as the target folder already exists.');
+		}
+
+		if (mkdir($target, 0755, true)) {
+			$contents = $this->read();
+
+			if ($contents['all']) {
+				foreach ($contents['all'] as $file) {
+					$file->copy(str_replace($this->_path, $target, $file->pwd()), $overwrite);
+				}
+			}
+
+			return new Folder($target);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Remove the folder if it exists. Delete any contents recursively before hand.
 	 *
 	 * @access public
@@ -190,30 +223,30 @@ class Folder {
 	public function delete() {
 		clearstatcache();
 
-		if ($this->exists()) {
-			try {
-				$directory = new RecursiveDirectoryIterator($this->_path, RecursiveDirectoryIterator::CURRENT_AS_SELF);
-				$iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::CHILD_FIRST);
-			} catch (Exception $e) {
-				return false;
-			}
-
-			foreach ($iterator as $file) {
-				if ($file->isDot()) {
-					continue;
-
-				} else if ($file->isDir()) {
-					@rmdir($file->getPathname());
-
-				} else {
-					@unlink($file->getPathname());
-				}
-			}
-
-			return rmdir($this->_path);
+		if (!$this->exists()) {
+			return false;
 		}
 
-		return false;
+		try {
+			$directory = new RecursiveDirectoryIterator($this->_path, RecursiveDirectoryIterator::CURRENT_AS_SELF);
+			$iterator = new RecursiveIteratorIterator($directory, RecursiveIteratorIterator::CHILD_FIRST);
+		} catch (Exception $e) {
+			return false;
+		}
+
+		foreach ($iterator as $file) {
+			if ($file->isDot()) {
+				continue;
+
+			} else if ($file->isDir()) {
+				@rmdir($file->getPathname());
+
+			} else {
+				@unlink($file->getPathname());
+			}
+		}
+
+		return rmdir($this->_path);
 	}
 
 	/**
@@ -243,32 +276,32 @@ class Folder {
 	 * @param string $pattern
 	 * @return array
 	 */
-	public function find($pattern = '*') {
-		if ($this->exists()) {
-			try {
-				$iterator = new RegexIterator(new DirectoryIterator($this->_path), $pattern, RegexIterator::GET_MATCH);
-			} catch (Exception $e) {
-				return null;
-			}
-
-			$contents = [];
-
-			foreach ($iterator as $file) {
-				if ($file->isDot()) {
-					continue;
-
-				} else if ($file->isDir()) {
-					$contents[] = new Folder($file->getPathname());
-
-				} else if ($file->isFile()) {
-					$contents[] = new File($file->getPathname());
-				}
-			}
-
-			return $contents;
+	public function find($pattern) {
+		if (!$this->exists()) {
+			return null;
 		}
 
-		return null;
+		try {
+			$iterator = new RegexIterator(new DirectoryIterator($this->_path), $pattern, RegexIterator::GET_MATCH);
+		} catch (Exception $e) {
+			return null;
+		}
+
+		$contents = [];
+
+		foreach ($iterator as $file) {
+			if ($file->isDot()) {
+				continue;
+
+			} else if ($file->isDir()) {
+				$contents[] = new Folder($file->getPathname());
+
+			} else if ($file->isFile()) {
+				$contents[] = new File($file->getPathname());
+			}
+		}
+
+		return $contents;
 	}
 
 	/**
@@ -277,7 +310,7 @@ class Folder {
 	 * @access public
 	 * @return titon\io\Folder
 	 */
-	public function folder() {
+	public function &folder() {
 		if (!$this->_folder) {
 			$folder = dirname($this->_path);
 
@@ -337,7 +370,7 @@ class Folder {
 	 * Return the last modified time.
 	 *
 	 * @access public
-	 * @return int|null
+	 * @return int
 	 */
 	public function modifiedTime() {
 		if ($this->exists()) {
@@ -345,6 +378,35 @@ class Folder {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Move / rename a file.
+	 *
+	 * @access public
+	 * @param string $target
+	 * @param boolean $overwrite
+	 * @return boolean
+	 * @throws titon\io\IoException
+	 */
+	public function move($target, $overwrite = true) {
+		if (!$this->exists()) {
+			return false;
+		}
+
+		if (file_exists($target) && !$overwrite) {
+			throw new IoException('Cannot move folder as the target already exists.');
+		}
+
+		if (rename($this->_path, $target)) {
+			$this->_path = $target;
+
+			clearstatcache();
+
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -369,6 +431,16 @@ class Folder {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Alias for pwd().
+	 *
+	 * @access public
+	 * @return string
+	 */
+	public function path() {
+		return $this->pwd();
 	}
 
 	/**
@@ -402,48 +474,46 @@ class Folder {
 	 * @return array
 	 */
 	public function read() {
-		if ($this->exists()) {
-			try {
-				$iterator = new DirectoryIterator($this->_path);
-			} catch (Exception $e) {
-				return null;
-			}
-
-			$files = [];
-			$folders = [];
-			$all = [];
-			$count = 0;
-
-			foreach ($iterator as $file) {
-				if ($file->isDot()) {
-					continue;
-
-				} else if ($file->isDir()) {
-					$object = new Folder($file->getPathname());
-					$folders[] = $object;
-
-				} else if ($file->isFile()) {
-					$object = new File($file->getPathname());
-					$files[] = $object;
-				}
-
-				if (isset($object)) {
-					$all[] = $object;
-					$count++;
-				}
-			}
-
-			unset($iterator);
-
-			return [
-				'all' => $all,
-				'folders' => $folders,
-				'files' => $files,
-				'count' => $count
-			];
+		if (!$this->exists()) {
+			return null;
 		}
 
-		return null;
+		try {
+			$iterator = new DirectoryIterator($this->_path);
+		} catch (Exception $e) {
+			return null;
+		}
+
+		$files = [];
+		$folders = [];
+		$all = [];
+		$count = 0;
+
+		foreach ($iterator as $file) {
+			if ($file->isDot()) {
+				continue;
+
+			} else if ($file->isDir()) {
+				$object = new Folder($file->getPathname());
+				$folders[] = $object;
+
+			} else if ($file->isFile()) {
+				$object = new File($file->getPathname());
+				$files[] = $object;
+			}
+
+			if (isset($object)) {
+				$all[] = $object;
+				$count++;
+			}
+		}
+
+		return [
+			'all' => $all,
+			'folders' => $folders,
+			'files' => $files,
+			'count' => $count
+		];
 	}
 
 	/**
