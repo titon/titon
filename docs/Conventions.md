@@ -25,6 +25,7 @@ define('EXAMPLE_PATH', '/var/example/path/');
 /titon/libs/controllers/core/DefaultController.php
 /titon/resources/locales/en/
 /titon/utility/
+/titon/io/
 ```
 
 ### Namespaces ###
@@ -45,9 +46,9 @@ Names
 
 * Should be written in CamelCaps
 * Should be nouns when applicable (Animal)
-* Interfaces/Traits should be adjectives (Controller, not Control)
+* Interfaces/Traits should be adjectives when applicable (Controller, not Control)
 * Abstract classes that extend an interface should prefix the word abstract with the interface (ControllerAbstract)
-* Classes that extend interfaces should suffix the interface name into the classname (ExampleController)
+* Classes that extend interfaces should suffix the interface name into the class name (ExampleController)
 
 Properties and methods
 
@@ -93,6 +94,7 @@ Getters and setters should use singular words when dealing with a single record,
 * listing() - Return all data
 * has() - Checks if a key/index exists within an array
 * is() - Check to see if something matches something
+* read() - Read data from a handler
 * setup() - Sets up the object with required data
 * parse() - Extracts content out of data
 * load() - Loads data from an external source (file), can also be used to load and parse contents

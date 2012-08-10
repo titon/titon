@@ -29,3 +29,11 @@ v1.0 ALPHA
 v1.0 RC1
 
 Tentative release date for the 1.0 RC1 December 1st.
+
+### Post-Release ###
+
+* Console
+* Shells
+* Streams
+* Sockets
+* REST/SOAP

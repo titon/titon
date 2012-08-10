@@ -12,9 +12,8 @@ Utilities
 * Uri
 * Uuid
 
-Email
-* net/Email
-* libs/transporters
+Input/Ouput
+* io
 
 ### Upcoming Systems ###
 
@@ -33,8 +32,17 @@ Security
 * (firewall)
 * (persistence)
 
-Input/Ouput
-* io
+Email
+* net/Email
+* libs/transporters
+
+Streams
+* io/Stream
+* libs/streams
+
+Sockets
+* io/Socket
+* libs/sockets
 
 ### Backlogged Systems ###
 
@@ -55,6 +63,10 @@ Input/Ouput
 * libs/readers/gettext/MoReader
 * libs/shells
 * libs/storage
+* libs/streams
 * libs/transporters
-* net
+* net/Email
+* utility/Format
 * utility/Uuid
+* utility/Uri
+* utility/Validate
