@@ -53,7 +53,7 @@ class MessageBundle extends BundleAbstract {
 	 * @return titon\libs\bundles\Bundle
 	 */
 	public function addReader(Reader $reader) {
-		$ext = $reader->getExtension();
+		$ext = $reader->reader();
 
 		if (in_array($ext, ['po', 'mo']) && empty($this->_readers[$ext])) {
 			$this->_locations = [];

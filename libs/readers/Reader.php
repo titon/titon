@@ -17,20 +17,12 @@ namespace titon\libs\readers;
 interface Reader {
 
 	/**
-	 * Return the file extension for the reader.
+	 * Return the supported file extension for the reader.
 	 *
 	 * @access protected
 	 * @return mixed
 	 */
-	public function getExtension();
-
-	/**
-	 * Return the current file path.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getPath();
+	public function reader();
 
 	/**
 	 * Parse the file contents.
@@ -41,12 +33,20 @@ interface Reader {
 	public function parse();
 
 	/**
-	 * Read the file after checking for existence.
+	 * Return the current path.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function path();
+
+	/**
+	 * Load the contents of a file after checking for existence.
 	 *
 	 * @access public
 	 * @param string $path
 	 * @return array
 	 */
-	public function read($path = null);
+	public function load($path = null);
 
 }

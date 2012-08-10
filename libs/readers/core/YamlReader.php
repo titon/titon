@@ -39,7 +39,7 @@ class YamlReader extends ReaderAbstract {
 			throw new ReaderException('YAML PECL extension must be installed to use the YamlReader.');
 		}
 
-		return yaml_parse_file($this->_path);
+		return yaml_parse_file($this->path());
 	}
 
 }

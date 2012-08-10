@@ -32,7 +32,7 @@ class IniReader extends ReaderAbstract {
 	 * @return array
 	 */
 	public function parse() {
-		return parse_ini_file($this->_path, true, INI_SCANNER_NORMAL);
+		return parse_ini_file($this->path(), true, INI_SCANNER_NORMAL);
 	}
 
 }

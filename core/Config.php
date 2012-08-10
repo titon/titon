@@ -76,12 +76,12 @@ class Config {
 	 * @chainable
 	 */
 	public function load($key, Reader $reader) {
-		if ($reader->getPath() === null) {
-			$path = APP_CONFIG . 'sets/' . Inflector::fileName($key, $reader->getExtension(), false);
-			$data = $reader->read($path);
+		if (!$reader->path()) {
+			$path = APP_CONFIG . 'sets/' . Inflector::fileName($key, $reader->reader(), false);
+			$data = $reader->load($path);
 
 		} else {
-			$data = $reader->read();
+			$data = $reader->load();
 		}
 
 		$this->_config[$key] = $data;

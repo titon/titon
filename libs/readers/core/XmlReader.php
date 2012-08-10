@@ -32,7 +32,7 @@ class XmlReader extends ReaderAbstract {
 	 * @return array
 	 */
 	public function parse() {
-		return $this->toArray(@simplexml_load_file($this->_path));
+		return $this->toArray(@simplexml_load_file($this->path()));
 	}
 
 	/**

@@ -28,19 +28,19 @@ class ReaderTest extends TestCase {
 	}
 
 	/**
-	 * Test that getExtension() returns the extension.
+	 * Test that reader() returns the extension.
 	 */
-	public function testGetExtension() {
-		$this->assertEquals('exp', $this->object->getExtension());
+	public function testReader() {
+		$this->assertEquals('exp', $this->object->reader());
 	}
 
 	/**
-	 * Test that read() throws exceptions under certain conditions.
+	 * Test that load() throws exceptions under certain conditions.
 	 */
-	public function testRead() {
+	public function testLoad() {
 		// no path
 		try {
-			$this->object->read();
+			$this->object->load();
 			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
@@ -48,7 +48,7 @@ class ReaderTest extends TestCase {
 
 		// falsey value
 		try {
-			$this->object->read(false);
+			$this->object->load(false);
 			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
@@ -56,7 +56,7 @@ class ReaderTest extends TestCase {
 
 		// wrong extension
 		try {
-			$this->object->read('index.php');
+			$this->object->load('index.php');
 			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);
@@ -64,7 +64,7 @@ class ReaderTest extends TestCase {
 
 		// doesn't exist
 		try {
-			$this->object->read('index.exp');
+			$this->object->load('index.exp');
 			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);

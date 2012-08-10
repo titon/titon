@@ -10,7 +10,7 @@
 namespace titon\libs\readers;
 
 use titon\Titon;
-use titon\base\Base;
+use titon\io\File;
 use titon\libs\readers\Reader;
 use titon\libs\traits\Cacheable;
 
@@ -20,16 +20,8 @@ use titon\libs\traits\Cacheable;
  * @package	titon.libs.readers
  * @abstract
  */
-abstract class ReaderAbstract extends Base implements Reader {
+abstract class ReaderAbstract extends File implements Reader {
 	use Cacheable;
-
-	/**
-	 * Path to the current file to read.
-	 *
-	 * @access protected
-	 * @var string
-	 */
-	protected $_path;
 
 	/**
 	 * Set the path during construction.
@@ -38,40 +30,32 @@ abstract class ReaderAbstract extends Base implements Reader {
 	 * @param string $path
 	 */
 	public function __construct($path = null) {
-		$this->_path = $path;
+		if ($path) {
+			$this->_path = Titon::loader()->ds(realpath($path));;
+		}
 	}
 
 	/**
-	 * Return the file extension for the reader.
+	 * Return the supported file extension for the reader.
 	 *
 	 * @access public
 	 * @return string
 	 */
-	public function getExtension() {
+	public function reader() {
 		return static::EXT;
 	}
 
 	/**
-	 * Return the current file path.
-	 *
-	 * @access public
-	 * @return string
-	 */
-	public function getPath() {
-		return $this->_path;
-	}
-
-	/**
-	 * Read the file after checking for existence.
+	 * Load the contents of a file after checking for existence.
 	 *
 	 * @access public
 	 * @param string $path
 	 * @return array
 	 * @throws titon\libs\readers\ReaderException
 	 */
-	public function read($path = null) {
+	public function load($path = null) {
 		if ($path) {
-			$this->_path = $path;
+			$this->_path = Titon::loader()->ds($path);
 		} else {
 			$path = $this->_path;
 		}
@@ -80,14 +64,12 @@ abstract class ReaderAbstract extends Base implements Reader {
 			throw new ReaderException(sprintf('Please provide a file path for %s.', get_class($this)));
 		}
 
-		return $this->cache([__METHOD__, $path], function() use ($path) {
-			$ext = $this->getExtension();
-
-			if (mb_substr($path, -mb_strlen($ext)) !== $ext) {
-				throw new ReaderException(sprintf('Reader will only parse %s files.', $ext));
+		return $this->cache([__METHOD__, $path], function() {
+			if ($this->ext() !== $this->reader()) {
+				throw new ReaderException(sprintf('Reader will only parse %s files.', $this->reader()));
 			}
 
-			if (file_exists($path)) {
+			if ($this->exists()) {
 				$data = $this->parse();
 
 				if (is_array($data)) {
@@ -95,7 +77,7 @@ abstract class ReaderAbstract extends Base implements Reader {
 				}
 			}
 
-			throw new ReaderException(sprintf('File reader failed to parse %s.', basename($path)));
+			throw new ReaderException(sprintf('File reader failed to parse %s.', $this->name()));
 		});
 	}
 

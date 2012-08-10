@@ -33,7 +33,7 @@ class PhpReader extends ReaderAbstract {
 	 * @return array
 	 */
 	public function parse() {
-		return include $this->_path;
+		return include $this->path();
 	}
 
 }

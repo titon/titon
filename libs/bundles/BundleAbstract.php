@@ -72,7 +72,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 	 * @return titon\libs\bundles\Bundle
 	 */
 	public function addReader(Reader $reader) {
-		$this->_readers[$reader->getExtension()] = $reader;
+		$this->_readers[$reader->reader()] = $reader;
 
 		return $this;
 	}
@@ -123,7 +123,7 @@ abstract class BundleAbstract extends Base implements Bundle {
 				$path = $location . Inflector::fileName($resource, $ext, false);
 
 				if (file_exists($path)) {
-					if ($data = $reader->read($path)) {
+					if ($data = $reader->load($path)) {
 						$contents = array_merge($contents, $data);
 					}
 				}

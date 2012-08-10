@@ -71,7 +71,7 @@ class Debugger {
 	public function __construct() {
 		ini_set('log_errors', true);
 		ini_set('report_memleaks', true);
-		ini_set('error_log', APP_TEMP . 'error.log');
+		ini_set('error_log', APP_LOGS . 'error.log');
 
 		set_error_handler([$this, 'error'], E_ALL | E_STRICT);
 		set_exception_handler([$this, 'uncaught']);

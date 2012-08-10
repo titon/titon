@@ -32,7 +32,7 @@ class JsonReader extends ReaderAbstract {
 	 * @return array
 	 */
 	public function parse() {
-		return @json_decode(file_get_contents($this->_path), true);
+		return @json_decode(file_get_contents($this->path()), true);
 	}
 
 }

@@ -48,7 +48,7 @@ class Folder {
 	 * @param boolean $create
 	 * @param int $mode
 	 */
-	public function __construct($path, $create = true, $mode = 0755) {
+	public function __construct($path, $create = false, $mode = 0755) {
 		if (file_exists($path) && !is_dir($path)) {
 			throw new IoException(sprintf('Invalid folder path %s, files are not allowed.', $path));
 		}

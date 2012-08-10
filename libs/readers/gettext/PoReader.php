@@ -30,7 +30,7 @@ class PoReader extends ReaderAbstract {
 	 * @return array
 	 */
 	public function parse() {
-		$lines = file($this->_path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+		$lines = file($this->path(), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 		$data = [];
 		$key = '';
 		$value = '';

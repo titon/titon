@@ -10,6 +10,7 @@
 namespace titon\utility;
 
 use titon\Titon;
+use titon\io\File;
 use titon\utility\Number;
 use titon\utility\Time;
 use titon\utility\UtilityException;
@@ -503,8 +504,9 @@ class Validate {
 	 */
 	public static function mimeType($input, $mimes) {
 		if (self::file($input)) {
-			// @todo use io/File
-			return true;
+			$file = new File($input['tmp_name']);
+
+			return in_array($file->mimeType(), (array) $mimes);
 		}
 
 		return false;
