@@ -11,7 +11,8 @@ namespace titon\io;
 
 use titon\Titon;
 use titon\io\File;
-use \RegexIterator;
+use \GlobIterator;
+use \FilesystemIterator;
 use \DirectoryIterator;
 use \RecursiveDirectoryIterator;
 use \RecursiveIteratorIterator;
@@ -47,13 +48,14 @@ class Folder {
 	 * @param string $path
 	 * @param boolean $create
 	 * @param int $mode
+	 * @throws titon\io\IoException
 	 */
 	public function __construct($path, $create = false, $mode = 0755) {
 		if (file_exists($path) && !is_dir($path)) {
 			throw new IoException(sprintf('Invalid folder path %s, files are not allowed.', $path));
 		}
 
-		$this->_path = Titon::loader()->ds(realpath($path));
+		$this->_path = Titon::loader()->ds($path, true);
 
 		if ($create) {
 			$this->create($mode);
@@ -111,6 +113,8 @@ class Folder {
 			}
 		}
 
+		clearstatcache();
+
 		return chgrp($this->_path, $group);
 	}
 
@@ -137,6 +141,8 @@ class Folder {
 			}
 		}
 
+		clearstatcache();
+
 		return chmod($this->_path, $mode);
 	}
 
@@ -162,6 +168,8 @@ class Folder {
 				}
 			}
 		}
+
+		clearstatcache();
 
 		return chown($this->_path, $user);
 	}
@@ -192,7 +200,7 @@ class Folder {
 	 */
 	public function copy($target, $overwrite = true) {
 		if (!$this->exists()) {
-			return false;
+			return null;
 		}
 
 		if (file_exists($target) && !$overwrite) {
@@ -234,15 +242,14 @@ class Folder {
 			return false;
 		}
 
-		foreach ($iterator as $file) {
-			if ($file->isDot()) {
-				continue;
+		if ($iterator->count() > 0) {
+			foreach ($iterator as $file) {
+				if ($file->isDir()) {
+					@rmdir($file->getPathname());
 
-			} else if ($file->isDir()) {
-				@rmdir($file->getPathname());
-
-			} else {
-				@unlink($file->getPathname());
+				} else {
+					@unlink($file->getPathname());
+				}
 			}
 		}
 
@@ -282,18 +289,19 @@ class Folder {
 		}
 
 		try {
-			$iterator = new RegexIterator(new DirectoryIterator($this->_path), $pattern, RegexIterator::GET_MATCH);
+			$iterator = new GlobIterator($this->_path . $pattern, FilesystemIterator::SKIP_DOTS);
 		} catch (Exception $e) {
 			return null;
 		}
 
 		$contents = [];
 
-		foreach ($iterator as $file) {
-			if ($file->isDot()) {
-				continue;
+		if ($iterator->count() <= 0) {
+			return $contents;
+		}
 
-			} else if ($file->isDir()) {
+		foreach ($iterator as $file) {
+			if ($file->isDir()) {
 				$contents[] = new Folder($file->getPathname());
 
 			} else if ($file->isFile()) {
@@ -311,6 +319,10 @@ class Folder {
 	 * @return titon\io\Folder
 	 */
 	public function &folder() {
+		if (!$this->exists()) {
+			return $this->_folder;
+		}
+
 		if (!$this->_folder) {
 			$folder = dirname($this->_path);
 
@@ -479,7 +491,7 @@ class Folder {
 		}
 
 		try {
-			$iterator = new DirectoryIterator($this->_path);
+			$iterator = new FilesystemIterator($this->_path, FilesystemIterator::SKIP_DOTS | FilesystemIterator::UNIX_PATHS);
 		} catch (Exception $e) {
 			return null;
 		}
@@ -489,22 +501,21 @@ class Folder {
 		$all = [];
 		$count = 0;
 
-		foreach ($iterator as $file) {
-			if ($file->isDot()) {
-				continue;
+		if ($iterator->count() > 0) {
+			foreach ($iterator as $file) {
+				if ($file->isDir()) {
+					$object = new Folder($file->getPathname());
+					$folders[] = $object;
 
-			} else if ($file->isDir()) {
-				$object = new Folder($file->getPathname());
-				$folders[] = $object;
+				} else if ($file->isFile()) {
+					$object = new File($file->getPathname());
+					$files[] = $object;
+				}
 
-			} else if ($file->isFile()) {
-				$object = new File($file->getPathname());
-				$files[] = $object;
-			}
-
-			if (isset($object)) {
-				$all[] = $object;
-				$count++;
+				if (isset($object)) {
+					$all[] = $object;
+					$count++;
+				}
 			}
 		}
 

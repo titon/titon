@@ -43,6 +43,7 @@ class File extends Folder {
 	 * @param string $path
 	 * @param boolean $create
 	 * @param int $mode
+	 * @throws titon\io\IoException
 	 */
 	public function __construct($path, $create = false, $mode = 0755) {
 		if (file_exists($path) && !is_file($path)) {
@@ -104,7 +105,7 @@ class File extends Folder {
 	 */
 	public function copy($target, $overwrite = true) {
 		if (!$this->exists()) {
-			return false;
+			return null;
 		}
 
 		if (file_exists($target) && !$overwrite) {

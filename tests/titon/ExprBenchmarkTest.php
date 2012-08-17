@@ -480,6 +480,46 @@ class ExprBenchmarkTest extends TestCase {
 	}
 
 	/**
+	 * Test array shuffling speeds.
+	 */
+	public function testArrayShuffleSpeed() {
+
+		// Test array merging with 5000 rows
+		$array = range(1, 5000);
+		Benchmark::start('ArrayShuffle.5000');
+		shuffle($array);
+		Benchmark::stop('ArrayShuffle.5000');
+
+		$this->out(Benchmark::output('ArrayShuffle.5000'));
+
+		// Test array merging with 50000 rows
+		$array = range(1, 50000);
+		Benchmark::start('ArrayShuffle.50000');
+		shuffle($array);
+		Benchmark::stop('ArrayShuffle.50000');
+
+		$this->out(Benchmark::output('ArrayShuffle.50000'));
+
+		// Test array merging with 500000 rows
+		$array = range(1, 500000);
+		Benchmark::start('ArrayShuffle.500000');
+		shuffle($array);
+		Benchmark::stop('ArrayShuffle.500000');
+
+		$this->out(Benchmark::output('ArrayShuffle.500000'));
+
+		// Test array merging with 5000000 rows
+		$array = range(1, 5000000);
+		Benchmark::start('ArrayShuffle.5000000');
+		shuffle($array);
+		Benchmark::stop('ArrayShuffle.5000000');
+
+		$this->out(Benchmark::output('ArrayShuffle.5000000'));
+
+		$this->out();
+	}
+
+	/**
 	 * Test variable truthness.
 	 */
 	public function testTruthness() {
