@@ -18,9 +18,9 @@ return [
 	],
 
 	// Datetime
-	'date' => 'm/d/Y',
-	'time' => 'h:ia',
-	'datetime' => 'm/d/Y h:ia',
+	'date' => '%m/%d/%Y',
+	'time' => '%I:%M%P',
+	'datetime' => '%m/%d/%Y %I:%M%P',
 
 	// Numbers
 	'number' => [

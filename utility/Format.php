@@ -30,8 +30,8 @@ class Format {
 	 * @return string
 	 * @static
 	 */
-	public static function date($time, $format = 'm/d/Y') {
-		return date(self::get('date', $format), Time::toUnix($time));
+	public static function date($time, $format = '%Y-%m-%d') {
+		return strftime(self::get('date', $format), Time::toUnix($time));
 	}
 
 	/**
@@ -43,8 +43,8 @@ class Format {
 	 * @return string
 	 * @static
 	 */
-	public static function datetime($time, $format = 'm/d/Y h:ia') {
-		return date(self::get('datetime', $format), Time::toUnix($time));
+	public static function datetime($time, $format = '%Y-%m-%d %H:%M:%S') {
+		return strftime(self::get('datetime', $format), Time::toUnix($time));
 	}
 
 	/**
@@ -159,8 +159,8 @@ class Format {
 	 * @return string
 	 * @static
 	 */
-	public static function time($time, $format = 'h:ma') {
-		return date(self::get('time', $format), Time::toUnix($time));
+	public static function time($time, $format = '%H:%M:%S') {
+		return strftime(self::get('time', $format), Time::toUnix($time));
 	}
 
 }
