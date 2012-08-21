@@ -43,7 +43,7 @@ class LocaleBundle extends BundleAbstract {
 	 * Parent locale bundle.
 	 *
 	 * @access protected
-	 * @var titon\libs\bundles\locales\LocaleBundle
+	 * @var \titon\libs\bundles\locales\LocaleBundle
 	 */
 	protected $_parent;
 
@@ -121,7 +121,7 @@ class LocaleBundle extends BundleAbstract {
 	 * Return the parent bundle if it exists.
 	 *
 	 * @access public
-	 * @return titon\libs\bundles\locales\LocaleBundle
+	 * @return \titon\libs\bundles\locales\LocaleBundle
 	 */
 	public function getParent() {
 		return $this->_parent;

@@ -27,7 +27,7 @@ class Base implements Serializable {
 	 * The configuration object.
 	 *
 	 * @access public
-	 * @var titon\libs\augments\ConfigAugment
+	 * @var \titon\libs\augments\ConfigAugment
 	 */
 	public $config;
 
@@ -35,7 +35,7 @@ class Base implements Serializable {
 	 * The information object.
 	 *
 	 * @access public
-	 * @var titon\libs\augments\InfoAugment
+	 * @var \titon\libs\augments\InfoAugment
 	 */
 	public $info;
 

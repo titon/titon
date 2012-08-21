@@ -123,7 +123,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @param int $type
 	 * @param string|null $path
 	 * @return string|null
-	 * @throws titon\libs\engines\EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function buildPath($type = self::VIEW, $path = null) {
 		$paths = [];
@@ -242,7 +242,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
-	 * @throws titon\libs\engines\EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function open($path, array $variables = []) {
 		throw new EngineException('You must define the open() method within your engine.');
@@ -275,7 +275,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
-	 * @throws titon\libs\engines\EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function render($path, array $variables = []) {
 		throw new EngineException('You must define the render() method within your Engine.');
@@ -288,7 +288,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws titon\libs\engines\EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function run() {
 		throw new EngineException('You must define the run() method within your Engine.');
@@ -300,7 +300,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @access public
 	 * @param string|array $key
 	 * @param mixed $value
-	 * @return titon\libs\engines\Engine
+	 * @return \titon\libs\engines\Engine
 	 * @chainable
 	 */
 	public function set($key, $value = null) {

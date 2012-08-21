@@ -49,7 +49,7 @@ class GettextTranslator extends TranslatorAbstract {
 	 * @access public
 	 * @param string $key
 	 * @return string
-	 * @throws titon\libs\translators\TranslatorException
+	 * @throws \titon\libs\translators\TranslatorException
 	 */
 	public function getMessage($key) {
 		return $this->cache([__METHOD__, $key], function() use ($key) {

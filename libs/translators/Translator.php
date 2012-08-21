@@ -35,7 +35,7 @@ interface Translator {
 	 * @access public
 	 * @param string $module
 	 * @param string $locale
-	 * @return titon\libs\bundles\Bundle
+	 * @return \titon\libs\bundles\Bundle
 	 */
 	public function loadBundle($module, $locale);
 
@@ -52,8 +52,8 @@ interface Translator {
 	 * Set the file reader to use for resource parsing.
 	 *
 	 * @access public
-	 * @param titon\libs\readers\Reader $reader
-	 * @return titon\libs\translators\Translator
+	 * @param \titon\libs\readers\Reader $reader
+	 * @return \titon\libs\translators\Translator
 	 * @chainable
 	 */
 	public function setReader(Reader $reader);
@@ -62,8 +62,8 @@ interface Translator {
 	 * Set the storage engine to use for catalog caching.
 	 *
 	 * @access public
-	 * @param titon\libs\storage\Storage $storage
-	 * @return titon\libs\translators\Translator
+	 * @param \titon\libs\storage\Storage $storage
+	 * @return \titon\libs\translators\Translator
 	 * @chainable
 	 */
 	public function setStorage(Storage $storage);

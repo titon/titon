@@ -24,7 +24,7 @@ class Uuid {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function v1() {
@@ -36,7 +36,7 @@ class Uuid {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function v2() {
@@ -48,7 +48,7 @@ class Uuid {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function v3() {
@@ -60,7 +60,7 @@ class Uuid {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function v4() {
@@ -79,7 +79,7 @@ class Uuid {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function v5() {

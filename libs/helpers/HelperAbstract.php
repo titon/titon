@@ -117,7 +117,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * Triggered before a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param titon\libs\engines\Engine $engine
+	 * @param \titon\libs\engines\Engine $engine
 	 * @return void
 	 */
 	public function preRender(Engine $engine) {
@@ -128,7 +128,7 @@ abstract class HelperAbstract extends Base implements Helper {
 	 * Triggered after a template is rendered by the engine.
 	 *
 	 * @access public
-	 * @param titon\libs\engines\Engine $engine
+	 * @param \titon\libs\engines\Engine $engine
 	 * @return void
 	 */
 	public function postRender(Engine $engine) {

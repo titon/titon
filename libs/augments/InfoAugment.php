@@ -58,7 +58,7 @@ class InfoAugment {
 	 * @access public
 	 * @param string $name
 	 * @return mixed
-	 * @throws titon\libs\augments\AugmentException
+	 * @throws \titon\libs\augments\AugmentException
 	 */
 	public function __get($name) {
 		return $this->cache($name, function() use ($name) {

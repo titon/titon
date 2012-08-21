@@ -42,7 +42,7 @@ class Enum {
 	 *
 	 * @access public
 	 * @param int $type
-	 * @throws titon\base\BaseException
+	 * @throws \titon\base\BaseException
 	 * @final
 	 */
 	final public function __construct($type) {

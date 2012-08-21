@@ -23,7 +23,7 @@ interface Bundle {
 	 *
 	 * @access public
 	 * @param array|string $locations
-	 * @return titon\libs\bundles\Bundle
+	 * @return \titon\libs\bundles\Bundle
 	 */
 	public function addLocation($locations);
 
@@ -31,8 +31,8 @@ interface Bundle {
 	 * Add a file reader to use for resource parsing.
 	 *
 	 * @access public
-	 * @param titon\libs\readers\Reader $reader
-	 * @return titon\libs\bundles\Bundle
+	 * @param \titon\libs\readers\Reader $reader
+	 * @return \titon\libs\bundles\Bundle
 	 */
 	public function addReader(Reader $reader);
 
@@ -61,7 +61,7 @@ interface Bundle {
 	 * @access public
 	 * @param string $resource
 	 * @return array
-	 * @throws titon\libs\bundles\BundleException
+	 * @throws \titon\libs\bundles\BundleException
 	 */
 	public function loadResource($resource);
 

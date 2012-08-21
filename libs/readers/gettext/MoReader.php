@@ -29,7 +29,7 @@ class MoReader extends ReaderAbstract {
 	 *
 	 * @access public
 	 * @return array
-	 * @throws titon\libs\readers\ReaderException
+	 * @throws \titon\libs\readers\ReaderException
 	 */
 	public function parse() {
 		throw new ReaderException('MoReader::parse() has not yet been implemented.');

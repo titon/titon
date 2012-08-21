@@ -25,7 +25,7 @@ class ViewEngine extends EngineAbstract {
 	 * @param string $path
 	 * @param array $variables
 	 * @return string
-	 * @throws titon\libs\engines\EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function open($path, array $variables = []) {
 		return $this->render($this->buildPath(self::ELEMENT, $path), $variables + $this->get());
@@ -58,7 +58,7 @@ class ViewEngine extends EngineAbstract {
 	 *
 	 * @access public
 	 * @return string
-	 * @throws titon\libs\engines\EngineException
+	 * @throws \titon\libs\engines\EngineException
 	 */
 	public function run() {
 		$config = $this->config->get();

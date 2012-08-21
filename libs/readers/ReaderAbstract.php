@@ -51,7 +51,7 @@ abstract class ReaderAbstract extends File implements Reader {
 	 * @access public
 	 * @param string $path
 	 * @return array
-	 * @throws titon\libs\readers\ReaderException
+	 * @throws \titon\libs\readers\ReaderException
 	 */
 	public function load($path = null) {
 		if ($path) {

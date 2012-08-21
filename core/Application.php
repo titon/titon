@@ -52,7 +52,7 @@ class Application {
 	 * @access public
 	 * @param string $module
 	 * @return array
-	 * @throws titon\core\CoreException
+	 * @throws \titon\core\CoreException
 	 */
 	public function getModule($module) {
 		if (isset($this->_modules[$module])) {
@@ -99,8 +99,8 @@ class Application {
 	 * @param string $module
 	 * @param string $path
 	 * @param array $controllers
-	 * @return titon\core\Application
-	 * @throws titon\core\CoreException
+	 * @return \titon\core\Application
+	 * @throws \titon\core\CoreException
 	 * @chainable
 	 */
 	public function setup($module, $path, array $controllers) {

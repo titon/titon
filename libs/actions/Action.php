@@ -30,8 +30,8 @@ interface Action {
 	 * Store the parent Controller.
 	 *
 	 * @access public
-	 * @param titon\libs\controllers\Controller $controller
-	 * @return titon\libs\actions\Action
+	 * @param \titon\libs\controllers\Controller $controller
+	 * @return \titon\libs\actions\Action
 	 */
 	public function setController(Controller $controller);
 

@@ -89,7 +89,7 @@ class Type implements Serializable {
 	 * Return a new instance based on the raw value.
 	 *
 	 * @access public
-	 * @return titon\base\Type
+	 * @return \titon\base\Type
 	 */
 	public function rawOf() {
 		return new self($this->_raw);
@@ -130,7 +130,7 @@ class Type implements Serializable {
 	 * Return a new instance based on the current value.
 	 *
 	 * @access public
-	 * @return titon\base\Type
+	 * @return \titon\base\Type
 	 */
 	public function valueOf() {
 		return new self($this->_value);

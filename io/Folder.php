@@ -29,7 +29,7 @@ class Folder {
 	 * Parent folder.
 	 *
 	 * @access protected
-	 * @var titon\io\Folder
+	 * @var \titon\io\Folder
 	 */
 	protected $_folder;
 
@@ -48,7 +48,7 @@ class Folder {
 	 * @param string $path
 	 * @param boolean $create
 	 * @param int $mode
-	 * @throws titon\io\IoException
+	 * @throws \titon\io\IoException
 	 */
 	public function __construct($path, $create = false, $mode = 0755) {
 		if (file_exists($path) && !is_dir($path)) {
@@ -195,8 +195,8 @@ class Folder {
 	 * @access public
 	 * @param string $target
 	 * @param boolean $overwrite
-	 * @return titon\io\Folder
-	 * @throws titon\io\IoException
+	 * @return \titon\io\Folder
+	 * @throws \titon\io\IoException
 	 */
 	public function copy($target, $overwrite = true) {
 		if (!$this->exists()) {
@@ -314,7 +314,7 @@ class Folder {
 	 * Return the parent folder as a Folder object.
 	 *
 	 * @access public
-	 * @return titon\io\Folder
+	 * @return \titon\io\Folder
 	 */
 	public function &folder() {
 		if (!$this->exists()) {
@@ -397,7 +397,7 @@ class Folder {
 	 * @param string $target
 	 * @param boolean $overwrite
 	 * @return boolean
-	 * @throws titon\io\IoException
+	 * @throws \titon\io\IoException
 	 */
 	public function move($target, $overwrite = true) {
 		if (!$this->exists()) {

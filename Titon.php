@@ -75,7 +75,7 @@ class Titon {
 	 * @access public
 	 * @param string $key
 	 * @return object
-	 * @throws titon\Exception
+	 * @throws \titon\Exception
 	 * @static
 	 */
 	public static function get($key) {
@@ -115,7 +115,7 @@ class Titon {
 	 * @param object $object
 	 * @param boolean $lock
 	 * @return void
-	 * @throws titon\Exception
+	 * @throws \titon\Exception
 	 * @static
 	 */
 	public static function install($key, $object, $lock = false) {

@@ -43,7 +43,7 @@ class Registry {
 	 * @access public
 	 * @param string $key
 	 * @param array $config
-	 * @return titon\core\Registry
+	 * @return \titon\core\Registry
 	 * @chainable
 	 */
 	public function configure($key, array $config = []) {
@@ -88,7 +88,7 @@ class Registry {
 	 * Flush the registry by removing all stored objects.
 	 *
 	 * @access public
-	 * @return titon\core\Registry
+	 * @return \titon\core\Registry
 	 * @chainable
 	 */
 	public function flush() {
@@ -109,7 +109,7 @@ class Registry {
 	 * @access public
 	 * @param string $key
 	 * @return object
-	 * @throws titon\core\CoreException
+	 * @throws \titon\core\CoreException
 	 */
 	public function &get($key) {
 		if ($this->has($key)) {
@@ -164,7 +164,7 @@ class Registry {
 	 * @param object $object
 	 * @param string|null $key
 	 * @return object
-	 * @throws titon\core\CoreException
+	 * @throws \titon\core\CoreException
 	 */
 	public function set($object, $key = null) {
 		if (!is_object($object)) {

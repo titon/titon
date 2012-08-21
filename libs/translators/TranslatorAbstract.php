@@ -40,7 +40,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * File reader used for parsing.
 	 *
 	 * @access protected
-	 * @var titon\libs\readers\Reader
+	 * @var \titon\libs\readers\Reader
 	 */
 	protected $_reader;
 
@@ -48,7 +48,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * Storage engine for caching.
 	 *
 	 * @access protected
-	 * @var titon\libs\storage\Storage
+	 * @var \titon\libs\storage\Storage
 	 */
 	protected $_storage;
 
@@ -59,7 +59,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @access public
 	 * @param string $key
 	 * @return string
-	 * @throws titon\libs\translators\TranslatorException
+	 * @throws \titon\libs\translators\TranslatorException
 	 */
 	public function getMessage($key) {
 		if ($cache = $this->getCache($key)) {
@@ -115,7 +115,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @access public
 	 * @param string $module
 	 * @param string $locale
-	 * @return titon\libs\bundles\Bundle
+	 * @return \titon\libs\bundles\Bundle
 	 */
 	public function loadBundle($module, $locale) {
 		throw new TranslatorException(sprintf('You must define the loadBundle() method within your %s.', get_class($this)));
@@ -127,7 +127,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @access public
 	 * @param string $key
 	 * @return array
-	 * @throws titon\libs\translators\TranslatorException
+	 * @throws \titon\libs\translators\TranslatorException
 	 * @final
 	 */
 	final public function parseKey($key) {
@@ -158,8 +158,8 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * Set the file reader to use for resource parsing.
 	 *
 	 * @access public
-	 * @param titon\libs\readers\Reader $reader
-	 * @return titon\libs\translators\Translator
+	 * @param \titon\libs\readers\Reader $reader
+	 * @return \titon\libs\translators\Translator
 	 * @chainable
 	 */
 	public function setReader(Reader $reader) {
@@ -172,8 +172,8 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * Set the storage engine to use for catalog caching.
 	 *
 	 * @access public
-	 * @param titon\libs\storage\Storage $storage
-	 * @return titon\libs\translators\Translator
+	 * @param \titon\libs\storage\Storage $storage
+	 * @return \titon\libs\translators\Translator
 	 * @chainable
 	 */
 	public function setStorage(Storage $storage) {

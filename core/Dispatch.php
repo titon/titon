@@ -42,7 +42,7 @@ class Dispatch {
 	 *
 	 * @access public
 	 * @param boolean $return
-	 * @return titon\libs\dispatchers\Dispatcher
+	 * @return \titon\libs\dispatchers\Dispatcher
 	 */
 	public function run($return = false) {
 		$params = Titon::router()->current()->param();
@@ -92,9 +92,9 @@ class Dispatch {
 	 * Apply custom dispatchers to a specific module or controller scope.
 	 *
 	 * @access public
-	 * @param titon\libs\dispatchers\Dispatcher $dispatcher
+	 * @param \titon\libs\dispatchers\Dispatcher $dispatcher
 	 * @param array $scope
-	 * @return titon\core\Dispatch
+	 * @return \titon\core\Dispatch
 	 */
 	public function setup(Dispatcher $dispatcher, array $scope = []) {
 		$scope = $scope + [

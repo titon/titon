@@ -128,8 +128,8 @@ class Cache {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @param titon\libs\storage\Storage $storage
-	 * @return titon\core\Cache
+	 * @param \titon\libs\storage\Storage $storage
+	 * @return \titon\core\Cache
 	 * @chainable
 	 */
 	public function setup($name, Storage $storage) {
@@ -145,8 +145,8 @@ class Cache {
 	 *
 	 * @access public
 	 * @param string $name
-	 * @return titon\libs\storage\Storage
-	 * @throws titon\core\CoreException
+	 * @return \titon\libs\storage\Storage
+	 * @throws \titon\core\CoreException
 	 */
 	public function storage($name) {
 		if (isset($this->_storage[$name])) {

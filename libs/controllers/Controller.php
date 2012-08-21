@@ -43,7 +43,7 @@ interface Controller {
 	 * Trigger a custom Action class.
 	 *
 	 * @access public
-	 * @param titon\libs\actions\Action $action
+	 * @param \titon\libs\actions\Action $action
 	 * @return void
 	 */
 	public function runAction(Action $action);

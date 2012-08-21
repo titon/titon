@@ -94,7 +94,7 @@ trait Cacheable {
 	 * Empty the cache.
 	 *
 	 * @access public
-	 * @return titon\libs\traits\Cacheable
+	 * @return \titon\libs\traits\Cacheable
 	 * @chainable
 	 */
 	public function flushCache() {
@@ -179,7 +179,7 @@ trait Cacheable {
 	 *
 	 * @access public
 	 * @param boolean $on
-	 * @return titon\libs\traits\Cacheable
+	 * @return \titon\libs\traits\Cacheable
 	 * @chainable
 	 */
 	public function toggleCache($on = true) {

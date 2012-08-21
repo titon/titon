@@ -117,7 +117,7 @@ class ConfigAugment implements ArrayAccess, Iterator, Countable {
 	 * @access public
 	 * @param string|null $key
 	 * @return mixed
-	 * @throws titon\libs\augments\AugmentException
+	 * @throws \titon\libs\augments\AugmentException
 	 */
 	public function get($key = null) {
 		if (!$key) {
@@ -139,7 +139,7 @@ class ConfigAugment implements ArrayAccess, Iterator, Countable {
 	 * @access public
 	 * @param string|array $key
 	 * @param mixed $value
-	 * @return titon\libs\augments\ConfigAugment
+	 * @return \titon\libs\augments\ConfigAugment
 	 */
 	public function set($key, $value = null) {
 		if (is_array($key)) {
@@ -187,7 +187,7 @@ class ConfigAugment implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return titon\libs\augments\ConfigAugment
+	 * @return \titon\libs\augments\ConfigAugment
 	 */
 	public function remove($key) {
 		$this->_config = Hash::remove($this->_config, $key);

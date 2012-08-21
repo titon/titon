@@ -70,7 +70,7 @@ class G11n {
 	 * Translator used for string fetching and parsing.
 	 *
 	 * @access protected
-	 * @var titon\libs\translators\Translator
+	 * @var \titon\libs\translators\Translator
 	 */
 	protected $_translator;
 
@@ -145,7 +145,7 @@ class G11n {
 	 * Return the current locale config, or a certain value.
 	 *
 	 * @access public
-	 * @return titon\libs\bundles\locales\LocaleBundle
+	 * @return \titon\libs\bundles\locales\LocaleBundle
 	 */
 	public function current() {
 		return $this->_current;
@@ -167,8 +167,8 @@ class G11n {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return titon\core\G11n
-	 * @throws titon\core\CoreException
+	 * @return \titon\core\G11n
+	 * @throws \titon\core\CoreException
 	 * @chainable
 	 */
 	public function fallbackAs($key) {
@@ -189,8 +189,8 @@ class G11n {
 	 * Return the fallback locale bundle.
 	 *
 	 * @access public
-	 * @return titon\libs\bundles\locales\LocaleBundle
-	 * @throws titon\core\CoreException
+	 * @return \titon\libs\bundles\locales\LocaleBundle
+	 * @throws \titon\core\CoreException
 	 */
 	public function getFallback() {
 		if (!$this->_fallback || !isset($this->_locales[$this->_fallback])) {
@@ -215,7 +215,7 @@ class G11n {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws titon\core\CoreException
+	 * @throws \titon\core\CoreException
 	 */
 	public function initialize() {
 		if (!$this->isEnabled()) {
@@ -314,8 +314,8 @@ class G11n {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return titon\core\G11n
-	 * @throws titon\core\CoreException
+	 * @return \titon\core\G11n
+	 * @throws \titon\core\CoreException
 	 * @chainable
 	 */
 	public function set($key) {
@@ -374,7 +374,7 @@ class G11n {
 	 * @access public
 	 * @param string $key
 	 * @param array $config
-	 * @return titon\core\G11n
+	 * @return \titon\core\G11n
 	 * @chainable
 	 */
 	public function setup($key, array $config = []) {
@@ -410,7 +410,7 @@ class G11n {
 	 *
 	 * @access public
 	 * @param string $timezone
-	 * @return titon\core\G11n
+	 * @return \titon\core\G11n
 	 * @chainable
 	 */
 	public function setTimezone($timezone) {
@@ -423,8 +423,8 @@ class G11n {
 	 * Sets the translator to use in the string locating and translating process.
 	 *
 	 * @access public
-	 * @param titon\libs\translators\Translator $translator
-	 * @return titon\core\G11n
+	 * @param \titon\libs\translators\Translator $translator
+	 * @return \titon\core\G11n
 	 * @chainable
 	 */
 	public function setTranslator(Translator $translator) {

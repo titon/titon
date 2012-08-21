@@ -63,7 +63,7 @@ class Request extends Base {
 	 * @access public
 	 * @param string $type
 	 * @return boolean
-	 * @throws titon\net\NetException
+	 * @throws \titon\net\NetException
 	 */
 	public function accepts($type = 'html') {
 		if (is_array($type)) {

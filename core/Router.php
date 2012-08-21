@@ -309,8 +309,8 @@ class Router {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @param titon\libs\routes\Route $route
-	 * @return titon\core\Router
+	 * @param \titon\libs\routes\Route $route
+	 * @return \titon\core\Router
 	 * @chainable
 	 */
 	public function map($key, Route $route) {
@@ -327,7 +327,7 @@ class Router {
 	 * @access public
 	 * @param string $key
 	 * @param string|array $route
-	 * @return titon\core\Router
+	 * @return \titon\core\Router
 	 * @chainable
 	 */
 	public function mapSlug($key, $route = []) {
@@ -345,7 +345,7 @@ class Router {
 	 *
 	 * @access public
 	 * @param string $url
-	 * @return titon\libs\routes\Route
+	 * @return \titon\libs\routes\Route
 	 */
 	public function match($url) {
 		$routes = array_reverse($this->_routes);

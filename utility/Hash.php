@@ -27,7 +27,7 @@ class Hash {
 	 * @param array|object $set
 	 * @param boolean $recursive
 	 * @return int
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function depth($set, $recursive = false) {
@@ -719,7 +719,7 @@ class Hash {
 	 * @access public
 	 * @param object $object
 	 * @return array
-	 * @throws titon\libs\utility\UtilityException
+	 * @throws \titon\libs\utility\UtilityException
 	 * @static
 	 */
 	public static function toArray($object) {
@@ -747,7 +747,7 @@ class Hash {
 	 * @access public
 	 * @param array $array
 	 * @return object
-	 * @throws titon\libs\utility\UtilityException
+	 * @throws \titon\libs\utility\UtilityException
 	 * @static
 	 */
 	public static function toObject($array) {

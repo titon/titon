@@ -91,7 +91,7 @@ class Validate {
 	 * @param int $check
 	 * @param string $mode
 	 * @return boolean
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function comparison($input, $check, $mode) {
@@ -138,7 +138,7 @@ class Validate {
 	 * @param string $input
 	 * @param string|array $types
 	 * @return boolean
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function creditCard($input, $types = null) {
@@ -384,7 +384,7 @@ class Validate {
 	 * @param string $key
 	 * @param string $fallback
 	 * @return boolean
-	 * @throws titon\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function format($input, $key, $fallback = null) {

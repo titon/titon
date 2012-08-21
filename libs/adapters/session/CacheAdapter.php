@@ -33,7 +33,7 @@ class CacheAdapter extends SessionAdapterAbstract {
 	 * Inject the storage engine.
 	 *
 	 * @access public
-	 * @param titon\libs\storage\Storage $storage
+	 * @param \titon\libs\storage\Storage $storage
 	 */
 	final public function __construct(Storage $storage) {
 		parent::__construct();

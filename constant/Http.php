@@ -203,7 +203,7 @@ class Http {
 	 * @access public
 	 * @param string|array $type
 	 * @return string
-	 * @throws titon\constant\ConstantException
+	 * @throws \titon\constant\ConstantException
 	 * @static
 	 */
 	public static function getContentType($type) {
@@ -253,7 +253,7 @@ class Http {
 	 * @access public
 	 * @param int $code
 	 * @return string
-	 * @throws titon\constant\ConstantException
+	 * @throws \titon\constant\ConstantException
 	 * @static
 	 */
 	public static function getStatusCode($code) {

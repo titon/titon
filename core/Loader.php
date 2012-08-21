@@ -148,7 +148,7 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string|array $paths
-	 * @return titon\core\Loader
+	 * @return \titon\core\Loader
 	 * @chainable
 	 */
 	public function includePath($paths) {
@@ -172,7 +172,7 @@ class Loader {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return titon\core\Loader
+	 * @return \titon\core\Loader
 	 * @chainable
 	 */
 	public function remove($key) {
@@ -188,7 +188,7 @@ class Loader {
 	 * @access public
 	 * @param string $key
 	 * @param Closure $loader
-	 * @return titon\core\Loader
+	 * @return \titon\core\Loader
 	 * @chainable
 	 */
 	public function setup($key, Closure $loader) {

@@ -49,7 +49,7 @@ class AssetHelper extends HelperAbstract {
 	 * @param string $location
 	 * @param int $order
 	 * @param int $env
-	 * @return titon\libs\helpers\html\AssetHelper
+	 * @return \titon\libs\helpers\html\AssetHelper
 	 */
 	public function addScript($script, $location = self::FOOTER, $order = null, $env = null) {
 		if (mb_substr($script, -3) !== '.js') {
@@ -84,7 +84,7 @@ class AssetHelper extends HelperAbstract {
 	 * @param string $media
 	 * @param int $order
 	 * @param int $env
-	 * @return titon\libs\helpers\html\AssetHelper
+	 * @return \titon\libs\helpers\html\AssetHelper
 	 */
 	public function addStylesheet($sheet, $media = 'screen', $order = null, $env = null) {
 		if (mb_substr($sheet, -4) !== '.css') {

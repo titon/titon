@@ -26,8 +26,8 @@ class MessageTranslator extends TranslatorAbstract {
 	 * @access public
 	 * @param string $module
 	 * @param string $locale
-	 * @return titon\libs\bundles\Bundle
-	 * @throws titon\libs\translators\TranslatorException
+	 * @return \titon\libs\bundles\Bundle
+	 * @throws \titon\libs\translators\TranslatorException
 	 */
 	public function loadBundle($module, $locale) {
 		if (!$this->_reader) {

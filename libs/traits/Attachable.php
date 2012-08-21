@@ -109,7 +109,7 @@ trait Attachable {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return titon\libs\traits\Attachable
+	 * @return \titon\libs\traits\Attachable
 	 * @chainable
 	 */
 	public function allowObject($classes) {
@@ -126,8 +126,8 @@ trait Attachable {
 	 * @access public
 	 * @param array|string $options
 	 * @param Closure $callback
-	 * @return titon\libs\traits\Attachable
-	 * @throws titon\libs\traits\TraitException
+	 * @return \titon\libs\traits\Attachable
+	 * @throws \titon\libs\traits\TraitException
 	 * @chainable
 	 */
 	public function attachObject($options, Closure $callback = null) {
@@ -167,7 +167,7 @@ trait Attachable {
 	 *
 	 * @access public
 	 * @param string $class
-	 * @return titon\libs\traits\Attachable
+	 * @return \titon\libs\traits\Attachable
 	 * @chainable
 	 */
 	public function detachObject($class) {
@@ -185,7 +185,7 @@ trait Attachable {
 	 * @access public
 	 * @param string $class
 	 * @return object|null
-	 * @throws titon\libs\traits\TraitException
+	 * @throws \titon\libs\traits\TraitException
 	 */
 	public function getObject($class) {
 		if (in_array($class, $this->_restricted)) {
@@ -242,7 +242,7 @@ trait Attachable {
 	 *
 	 * @access public
 	 * @param string $method
-	 * @return titon\libs\traits\Attachable
+	 * @return \titon\libs\traits\Attachable
 	 * @chainable
 	 */
 	public function notifyObjects($method) {
@@ -266,7 +266,7 @@ trait Attachable {
 	 *
 	 * @access public
 	 * @param string|array $classes
-	 * @return titon\libs\traits\Attachable
+	 * @return \titon\libs\traits\Attachable
 	 * @chainable
 	 */
 	public function restrictObject($classes) {

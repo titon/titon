@@ -118,7 +118,7 @@ abstract class ModelAbstract implements Model {
 	 * @access public
 	 * @param string $field
 	 * @return mixed
-	 * @throws titon\libs\models\ModelException
+	 * @throws \titon\libs\models\ModelException
 	 */
 	public function get($field) {
 		if (!$this->hasField($field)) {
@@ -167,7 +167,7 @@ abstract class ModelAbstract implements Model {
 	 * @param string $field
 	 * @param mixed $value
 	 * @return void
-	 * @throws titon\libs\models\ModelException
+	 * @throws \titon\libs\models\ModelException
 	 */
 	public function set($field, $value) {
 		if (!$this->hasField($field)) {

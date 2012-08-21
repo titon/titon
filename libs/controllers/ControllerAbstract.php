@@ -65,7 +65,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @param string $action
 	 * @param array $args
 	 * @return mixed
-	 * @throws titon\libs\controllers\ControllerException
+	 * @throws \titon\libs\controllers\ControllerException
 	 */
 	public function dispatchAction($action = null, array $args = []) {
 		if (!$action) {
@@ -130,8 +130,8 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * Trigger a custom Action class.
 	 *
 	 * @access public
-	 * @param titon\libs\actions\Action $action
-	 * @return titon\libs\actions\Action
+	 * @param \titon\libs\actions\Action $action
+	 * @return \titon\libs\actions\Action
 	 */
 	public function runAction(Action $action) {
 		$action->setController($this)->run();
@@ -200,7 +200,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 *
 	 * @access public
 	 * @param Closure $engine
-	 * @return titon\libs\controllers\Controller
+	 * @return \titon\libs\controllers\Controller
 	 * @final
 	 */
 	final public function setEngine(Closure $engine) {

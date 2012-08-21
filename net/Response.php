@@ -79,7 +79,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $range
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function acceptRanges($range = 'bytes') {
@@ -93,7 +93,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|int $time
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function age($time) {
@@ -111,7 +111,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|array $methods
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function allow($methods) {
@@ -128,7 +128,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $body
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function body($body = null) {
@@ -142,7 +142,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param int|string $expires
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function cache($expires = '+24 hours') {
@@ -158,7 +158,7 @@ class Response extends Base {
 	 * @param string $scope
 	 * @param int $time
 	 * @param array $options
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function cacheControl($scope, $time = 0, array $options = []) {
@@ -206,7 +206,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param boolean $status
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function connection($status) {
@@ -227,7 +227,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $file
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function contentDisposition($file) {
@@ -241,7 +241,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|array $encoding
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function contentEncoding($encoding) {
@@ -259,7 +259,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|array $lang
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function contentLanguage($lang = null) {
@@ -286,7 +286,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|int $length
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function contentLength($length) {
@@ -304,7 +304,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param boolean $enabled
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function contentMD5($enabled) {
@@ -318,7 +318,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $type
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function contentType($type) {
@@ -346,7 +346,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|int $time
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function date($time) {
@@ -361,7 +361,7 @@ class Response extends Base {
 	 * @access public
 	 * @param string $tag
 	 * @param boolean $weak
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function etag($tag = null, $weak = false) {
@@ -379,7 +379,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|int $expires
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function expires($expires = '+24 hours') {
@@ -423,7 +423,7 @@ class Response extends Base {
 	 * @access public
 	 * @param string $header
 	 * @param string $value
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function header($header, $value) {
@@ -437,7 +437,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param array $headers
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function headers(array $headers = []) {
@@ -463,7 +463,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param mixed $time
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function lastModified($time = null) {
@@ -477,7 +477,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $url
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function location($url) {
@@ -490,7 +490,7 @@ class Response extends Base {
 	 * Forces the clients browser not to cache the results of the current request.
 	 *
 	 * @access public
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function noCache() {
@@ -506,7 +506,7 @@ class Response extends Base {
 	 * Set a response as 304 Not Modified and remove conflicting headers.
 	 *
 	 * @access public
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function notModified() {
@@ -596,7 +596,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|int $length
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function retryAfter($length) {
@@ -616,7 +616,7 @@ class Response extends Base {
 	 * @param string $key
 	 * @param string $value
 	 * @param array $config
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function setCookie($key, $value, array $config = []) {
@@ -637,7 +637,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param int $code
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function statusCode($code = 302) {
@@ -653,7 +653,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string|array $variances
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function vary($variances) {
@@ -671,7 +671,7 @@ class Response extends Base {
 	 *
 	 * @access public
 	 * @param string $scheme
-	 * @return titon\net\Response
+	 * @return \titon\net\Response
 	 * @chainable
 	 */
 	public function wwwAuthenticate($scheme) {

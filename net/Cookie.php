@@ -86,7 +86,7 @@ class Cookie extends Base {
 	 * @param string $key
 	 * @param string $value
 	 * @param array $config
-	 * @return titon\net\Cookie
+	 * @return \titon\net\Cookie
 	 * @chainable
 	 */
 	public function set($key, $value, array $config = []) {
@@ -123,7 +123,7 @@ class Cookie extends Base {
 	 * @access public
 	 * @param string $key
 	 * @param array $config
-	 * @return titon\net\Cookie
+	 * @return \titon\net\Cookie
 	 * @chainable
 	 */
 	public function remove($key, array $config = []) {

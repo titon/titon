@@ -39,7 +39,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param mixed $value
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function append($value) {
@@ -70,7 +70,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * Removes all empty, null, false and 0 items.
 	 *
 	 * @access public
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function clean() {
@@ -177,7 +177,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param array $array
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 */
 	public function concat(array $array) {
 		return new Map(Hash::merge($this->_value, $array));
@@ -315,7 +315,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * @access public
 	 * @param Closure $callback
 	 * @param boolean $recursive
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function each(Closure $callback, $recursive = true) {
@@ -340,7 +340,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param mixed $data
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function erase($data) {
@@ -383,7 +383,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * @access public
 	 * @param Closure $callback
 	 * @param boolean $recursive
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function filter(Closure $callback = null, $recursive = true) {
@@ -412,7 +412,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * Flattens a multidimensional array into a single array.
 	 *
 	 * @access public
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function flatten() {
@@ -427,7 +427,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * @access public
 	 * @param boolean $recursive
 	 * @param boolean $truncate
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function flip($recursive = true, $truncate = true) {
@@ -440,7 +440,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * Empty the array.
 	 *
 	 * @access public
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function flush() {
@@ -564,7 +564,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * @access public
 	 * @param Closure $callback
 	 * @param array $data
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function map(Closure $callback, array $data = []) {
@@ -582,7 +582,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param array $array
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function merge(array $array) {
@@ -596,7 +596,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param mixed $value
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function prepend($value) {
@@ -651,7 +651,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param string $key
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function remove($key) {
@@ -664,7 +664,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * Alias for rewind(), however returns the chainable object.
 	 *
 	 * @access public
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function reset() {
@@ -678,7 +678,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param boolean $preserve
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function reverse($preserve = true) {
@@ -691,7 +691,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * Randomize the order of elements in the array.
 	 *
 	 * @access public
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function shuffle() {
@@ -738,7 +738,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * 		- flags: Sorting flags
 	 * 		- callback: Closure callback to sort with
 	 * 		- on: Either "keys" or "values"
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function sort($options = []) {
@@ -807,7 +807,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param boolean $strict
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function sortNatural($strict = false) {
@@ -881,7 +881,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 *
 	 * @access public
 	 * @param int $flags
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function unique($flags = SORT_REGULAR) {
@@ -906,7 +906,7 @@ class Map extends Type implements ArrayAccess, Iterator, Countable {
 	 * @access public
 	 * @param string $key
 	 * @param mixed $value
-	 * @return titon\base\Map
+	 * @return \titon\base\Map
 	 * @chainable
 	 */
 	public function set($key, $value) {

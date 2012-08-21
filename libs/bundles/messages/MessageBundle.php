@@ -49,8 +49,8 @@ class MessageBundle extends BundleAbstract {
 	 * If PoReader or MoReader is passed, use alternate lookup locations.
 	 *
 	 * @access public
-	 * @param titon\libs\readers\Reader $reader
-	 * @return titon\libs\bundles\Bundle
+	 * @param \titon\libs\readers\Reader $reader
+	 * @return \titon\libs\bundles\Bundle
 	 */
 	public function addReader(Reader $reader) {
 		$ext = $reader->reader();

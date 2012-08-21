@@ -43,7 +43,7 @@ class File extends Folder {
 	 * @param string $path
 	 * @param boolean $create
 	 * @param int $mode
-	 * @throws titon\io\IoException
+	 * @throws \titon\io\IoException
 	 */
 	public function __construct($path, $create = false, $mode = 0755) {
 		if (file_exists($path) && !is_file($path)) {
@@ -100,8 +100,8 @@ class File extends Folder {
 	 * @access public
 	 * @param string $target
 	 * @param boolean $overwrite
-	 * @return titon\io\File
-	 * @throws titon\io\IoException
+	 * @return \titon\io\File
+	 * @throws \titon\io\IoException
 	 */
 	public function copy($target, $overwrite = true) {
 		if (!$this->exists()) {
@@ -182,7 +182,7 @@ class File extends Folder {
 	 * @access public
 	 * @param string $pattern
 	 * @return void
-	 * @throws titon\io\IoException
+	 * @throws \titon\io\IoException
 	 * @final
 	 */
 	final public function find($pattern) {
