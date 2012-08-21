@@ -196,7 +196,7 @@ class Validate {
 	 * @static
 	 */
 	public static function currency($input) {
-		return self::format($input, 'currency');
+		return self::custom($input, self::get('currency'));
 	}
 
 	/**
@@ -209,7 +209,7 @@ class Validate {
 	 * @static
 	 */
 	public static function custom($input, $expression) {
-		return preg_match($expression, $input);
+		return (bool) preg_match($expression, $input);
 	}
 
 	/**
@@ -377,28 +377,27 @@ class Validate {
 	}
 
 	/**
-	 * Validate input against a specific format. Attempt to grab the format from the G11n current locale.
+	 * Get a validation rule from G11n, else use the fallback.
 	 *
 	 * @access public
-	 * @param string $input
 	 * @param string $key
 	 * @param string $fallback
-	 * @return boolean
+	 * @return string
 	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
-	public static function format($input, $key, $fallback = null) {
+	public static function get($key, $fallback = null) {
+		$pattern = $fallback;
+
 		if (Titon::g11n()->isEnabled()) {
-			$pattern = Titon::g11n()->current()->getValidations($key);
-		} else {
-			$pattern = $fallback;
+			$pattern = Titon::g11n()->current()->getValidations($key) ?: $fallback;
 		}
 
 		if (!$pattern) {
 			throw new UtilityException(sprintf('Validation pattern %s does not exist.', $key));
 		}
 
-		return (bool) preg_match($pattern, $input);
+		return $pattern;
 	}
 
 	/**
@@ -657,7 +656,7 @@ class Validate {
 	 * @static
 	 */
 	public static function phone($input) {
-		return self::format($input, 'phone');
+		return self::custom($input, self::get('phone'));
 	}
 
 	/**
@@ -669,7 +668,7 @@ class Validate {
 	 * @static
 	 */
 	public static function postalCode($input) {
-		return self::format($input, 'postalCode');
+		return self::custom($input, self::get('postalCode'));
 	}
 
 	/**
@@ -681,7 +680,7 @@ class Validate {
 	 * @static
 	 */
 	public static function ssn($input) {
-		return self::format($input, 'ssn');
+		return self::custom($input, self::get('ssn'));
 	}
 
 	/**

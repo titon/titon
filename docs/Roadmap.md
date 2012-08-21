@@ -7,7 +7,6 @@ Each minor version will be incremented on a monthly basis. Please refer to the B
 v0.7 - August
 * Utilities
 * Net
-* I/O
 
 v0.8 - September
 * Security

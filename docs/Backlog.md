@@ -9,11 +9,9 @@ Any library wrapped in parenthesis currently does not have a final location in t
 Utilities
 * Format
 * Validate
+* Time
 * Uri
 * Uuid
-
-Input/Ouput
-* io
 
 ### Upcoming Systems ###
 
@@ -55,7 +53,8 @@ Sockets
 * console
 * constant
 * core/Cache
-* io
+* io/Stream
+* io/Socket
 * libs/adapters
 * libs/behaviors
 * libs/models

@@ -163,40 +163,6 @@ class Number {
 	}
 
 	/**
-	 * Format a number to a certain string sequence. All #'s in the format will be replaced by the number in the same position within the sequence.
-	 * All *'s will mask the number in the sequence. Large numbers should be passed as strings.
-	 *
-	 * {{{
-	 * 		Number::format(1234567890, '(###) ###-####');				(123) 456-7890
-	 * 		Number::format(1234567890123456, '****-****-####-####');	****-****-9012-3456
-	 * }}}
-	 *
-	 * @access public
-	 * @param int|string $number
-	 * @param string $format
-	 * @return mixed
-	 * @static
-	 */
-	public static function format($number, $format) {
-		$number = (string) $number;
-		$length = mb_strlen($format);
-		$result = $format;
-		$pos = 0;
-
-		for ($i = 0; $i < $length; $i++) {
-			$char = $format[$i];
-
-			if (($char === '#' || $char === '*') && isset($number[$pos])) {
-				$replace = ($char === '*') ? '*' : $number[$pos];
-				$result = substr_replace($result, $replace, $i, 1);
-				$pos++;
-			}
-		}
-
-		return $result;
-	}
-
-	/**
 	 * Return true if the number is within the min and max.
 	 *
 	 * @access public
