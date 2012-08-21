@@ -109,28 +109,6 @@ class NumberTest extends TestCase {
 	}
 
 	/**
-	 * Test that format() creates strings and masks with the passed number.
-	 */
-	public function testFormat() {
-		$this->assertEquals('(123) 456', Number::format(1234567890, '(###) ###'));
-		$this->assertEquals('(123) 456-7890', Number::format(1234567890, '(###) ###-####'));
-		$this->assertEquals('(123) 456-####', Number::format(123456, '(###) ###-####'));
-
-		$this->assertEquals('123.456', Number::format(1234567890, '###.###'));
-		$this->assertEquals('123.456.7890', Number::format(1234567890, '###.###.####'));
-		$this->assertEquals('123.456.####', Number::format(123456, '###.###.####'));
-
-		// credit card
-		$this->assertEquals('3772-3483-0461-4543', Number::format('3772348304614543', '####-####-####-####'));
-
-		// credit card with mask
-		$this->assertEquals('****-****-****-4543', Number::format('3772348304614543', '****-****-****-####'));
-
-		// longer number
-		$this->assertEquals('3772-3483-0461-4543', Number::format('377234830461454313', '####-####-####-####'));
-	}
-
-	/**
 	 * Test that in() returns true if the number is within the range.
 	 */
 	public function testIn() {

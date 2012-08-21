@@ -43,7 +43,7 @@ class Format {
 	 * @return string
 	 * @static
 	 */
-	public static function datetime($time, $format = 'm/d/Y h:ma') {
+	public static function datetime($time, $format = 'm/d/Y h:ia') {
 		return date(self::get('datetime', $format), Time::toUnix($time));
 	}
 
@@ -95,7 +95,8 @@ class Format {
 		$pattern = $fallback;
 
 		if (Titon::g11n()->isEnabled()) {
-			$pattern = Titon::g11n()->current()->getValidations($key) ?: $fallback;
+
+			$pattern = Titon::g11n()->current()->getFormats($key) ?: $fallback;
 		}
 
 		if (!$pattern) {

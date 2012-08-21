@@ -7,7 +7,6 @@ Any library wrapped in parenthesis currently does not have a final location in t
 ### Systems In Development ###
 
 Utilities
-* Format
 * Validate
 * Time
 * Uri
@@ -65,7 +64,7 @@ Sockets
 * libs/streams
 * libs/transporters
 * net/Email
-* utility/Format
+* utility/Time
 * utility/Uuid
 * utility/Uri
 * utility/Validate

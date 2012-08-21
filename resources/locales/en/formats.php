@@ -14,13 +14,13 @@ return [
 	'phone' => [
 		7 => '###-####',
 		10 => '(###) ###-####',
-		11 => '# (###) ###-###'
+		11 => '# (###) ###-####'
 	],
 
 	// Datetime
 	'date' => 'm/d/Y',
-	'time' => 'h:ma',
-	'datetime' => 'm/d/Y h:ma',
+	'time' => 'h:ia',
+	'datetime' => 'm/d/Y h:ia',
 
 	// Numbers
 	'number' => [
