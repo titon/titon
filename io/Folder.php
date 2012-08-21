@@ -242,14 +242,12 @@ class Folder {
 			return false;
 		}
 
-		if ($iterator->count() > 0) {
-			foreach ($iterator as $file) {
-				if ($file->isDir()) {
-					@rmdir($file->getPathname());
+		foreach ($iterator as $file) {
+			if ($file->isDir()) {
+				@rmdir($file->getPathname());
 
-				} else {
-					@unlink($file->getPathname());
-				}
+			} else {
+				@unlink($file->getPathname());
 			}
 		}
 
@@ -375,7 +373,7 @@ class Folder {
 	 * @return boolean
 	 */
 	public function isWindows() {
-		return (preg_match('/^[A-Z]:/i', $this->_path) || substr($this->_path, 0, 2) == '//');
+		return (preg_match('/^[A-Z]:/i', $this->_path) || substr($this->_path, 0, 2) === '//');
 	}
 
 	/**
@@ -501,21 +499,19 @@ class Folder {
 		$all = [];
 		$count = 0;
 
-		if ($iterator->count() > 0) {
-			foreach ($iterator as $file) {
-				if ($file->isDir()) {
-					$object = new Folder($file->getPathname());
-					$folders[] = $object;
+		foreach ($iterator as $file) {
+			if ($file->isDir()) {
+				$object = new Folder($file->getPathname());
+				$folders[] = $object;
 
-				} else if ($file->isFile()) {
-					$object = new File($file->getPathname());
-					$files[] = $object;
-				}
+			} else if ($file->isFile()) {
+				$object = new File($file->getPathname());
+				$files[] = $object;
+			}
 
-				if (isset($object)) {
-					$all[] = $object;
-					$count++;
-				}
+			if (isset($object)) {
+				$all[] = $object;
+				$count++;
 			}
 		}
 

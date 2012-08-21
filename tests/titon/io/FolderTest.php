@@ -49,6 +49,18 @@ class FolderTest extends TestCase {
 	}
 
 	/**
+	 * Test that __construct() throws exceptions.
+	 */
+	public function testConstruct() {
+		try {
+			$folder = new Folder(APP_TEMP . 'io/foo.php');
+			$this->assertTrue(false);
+		} catch (Exception $e) {
+			$this->assertTrue(true);
+		}
+	}
+
+	/**
 	 * Test that accessTime() returns the last access time.
 	 */
 	public function testAccessTime() {
