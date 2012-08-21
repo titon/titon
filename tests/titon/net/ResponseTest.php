@@ -14,6 +14,7 @@ use titon\constant\Http;
 use titon\libs\translators\messages\MessageTranslator;
 use titon\tests\TestCase;
 use titon\net\Response;
+use titon\utility\Format;
 use \Exception;
 
 /**
@@ -73,7 +74,7 @@ class ResponseTest extends TestCase {
 	 */
 	public function testCache() {
 		$this->object->cache('+12 hours');
-		$this->assertEquals('Expires: ' . gmdate(Http::DATE_FORMAT, strtotime('+12 hours')), $this->object->getHeader('Expires'));
+		$this->assertEquals('Expires: ' . Format::http('+12 hours'), $this->object->getHeader('Expires'));
 		$this->assertEquals('Cache-Control: private, max-age=43200, post-check=43200, pre-check=0', $this->object->getHeader('Cache-Control'));
 	}
 
@@ -190,7 +191,7 @@ class ResponseTest extends TestCase {
 	 */
 	public function testDate() {
 		$this->object->date('+12 hours');
-		$this->assertEquals('Date: ' . gmdate(Http::DATE_FORMAT, strtotime('+12 hours')), $this->object->getHeader('Date'));
+		$this->assertEquals('Date: ' . Format::http('+12 hours'), $this->object->getHeader('Date'));
 	}
 
 	/**
@@ -209,7 +210,7 @@ class ResponseTest extends TestCase {
 	 */
 	public function testExpires() {
 		$this->object->expires('+12 hours');
-		$this->assertEquals('Expires: ' . gmdate(Http::DATE_FORMAT, strtotime('+12 hours')), $this->object->getHeader('Expires'));
+		$this->assertEquals('Expires: ' . Format::http('+12 hours'), $this->object->getHeader('Expires'));
 	}
 
 	/**
@@ -288,7 +289,7 @@ class ResponseTest extends TestCase {
 	 */
 	public function testLastModified() {
 		$this->object->lastModified('+12 hours');
-		$this->assertEquals('Last-Modified: ' . gmdate(Http::DATE_FORMAT, strtotime('+12 hours')), $this->object->getHeader('Last-Modified'));
+		$this->assertEquals('Last-Modified: ' . Format::http('+12 hours'), $this->object->getHeader('Last-Modified'));
 	}
 
 	/**
@@ -310,8 +311,8 @@ class ResponseTest extends TestCase {
 	 */
 	public function testNoCache() {
 		$this->object->noCache();
-		$this->assertEquals('Expires: ' . gmdate(Http::DATE_FORMAT, strtotime('-1 year')), $this->object->getHeader('Expires'));
-		$this->assertEquals('Last-Modified: ' . gmdate(Http::DATE_FORMAT), $this->object->getHeader('Last-Modified'));
+		$this->assertEquals('Expires: ' . Format::http('-1 year'), $this->object->getHeader('Expires'));
+		$this->assertEquals('Last-Modified: ' . Format::http(time()), $this->object->getHeader('Last-Modified'));
 		$this->assertEquals('Cache-Control: no-cache, must-revalidate, proxy-revalidate, no-store, max-age=0, post-check=0, pre-check=0', $this->object->getHeader('Cache-Control'));
 	}
 
@@ -343,7 +344,7 @@ class ResponseTest extends TestCase {
 		$this->assertEquals('Retry-After: 120', $this->object->getHeader('Retry-After'));
 
 		$this->object->retryAfter('+1 hour');
-		$this->assertEquals('Retry-After: ' . gmdate(Http::DATE_FORMAT, strtotime('+1 hour')), $this->object->getHeader('Retry-After'));
+		$this->assertEquals('Retry-After: ' . Format::http('+1 hour'), $this->object->getHeader('Retry-After'));
 	}
 
 	/**

@@ -13,6 +13,7 @@ use titon\Titon;
 use titon\base\Base;
 use titon\constant\Http;
 use titon\net\NetException;
+use titon\utility\Format;
 use titon\utility\Number;
 use titon\utility\Hash;
 use titon\utility\String;
@@ -350,7 +351,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function date($time) {
-		$this->header('Date', gmdate(Http::DATE_FORMAT, Time::toUnix($time)));
+		$this->header('Date', Format::http($time));
 
 		return $this;
 	}
@@ -383,7 +384,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function expires($expires = '+24 hours') {
-		$this->header('Expires', gmdate(Http::DATE_FORMAT, Time::toUnix($expires)));
+		$this->header('Expires', Format::http($expires));
 
 		return $this;
 	}
@@ -467,7 +468,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function lastModified($time = null) {
-		$this->header('Last-Modified', gmdate(Http::DATE_FORMAT, Time::toUnix($time)));
+		$this->header('Last-Modified', Format::http($time));
 
 		return $this;
 	}
@@ -601,7 +602,7 @@ class Response extends Base {
 	 */
 	public function retryAfter($length) {
 		if (is_string($length)) {
-			$length = gmdate(Http::DATE_FORMAT, Time::toUnix($length));
+			$length = Format::http($length);
 		}
 
 		$this->header('Retry-After', $length);

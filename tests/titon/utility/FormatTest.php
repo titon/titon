@@ -40,7 +40,7 @@ class FormatTest extends TestCase {
 
 		// now try with no locale, will use fallback
 		Titon::g11n()->set('no');
-		$this->assertEquals('Feb 26th 1988', Format::date($time, 'M jS Y'));
+		$this->assertEquals('Feb 26 1988', Format::date($time, '%b %d %Y'));
 	}
 
 	/**

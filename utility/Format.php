@@ -10,9 +10,11 @@
 namespace titon\utility;
 
 use titon\Titon;
+use titon\constant\Http;
 use titon\utility\Number;
 use titon\utility\Time;
 use titon\utility\UtilityException;
+use \DateTime;
 
 /**
  * Format provides utility methods for converting raw data to specific visual formats.
@@ -20,6 +22,18 @@ use titon\utility\UtilityException;
  * @package	titon.utility
  */
 class Format {
+
+	/**
+	 * Format a date string to an Atom feed format.
+	 *
+	 * @access public
+	 * @param string|int $time
+	 * @return string
+	 * @static
+	 */
+	public static function atom($time) {
+		return date(DateTime::ATOM, Time::toUnix($time));
+	}
 
 	/**
 	 * Format a date string. If G11n is enabled, grab the format from the locale.
@@ -107,6 +121,18 @@ class Format {
 	}
 
 	/**
+	 * Format a date string to an HTTP header format.
+	 *
+	 * @access public
+	 * @param string|int $time
+	 * @return string
+	 * @static
+	 */
+	public static function http($time) {
+		return gmdate(Http::DATE_FORMAT, Time::toUnix($time));
+	}
+
+	/**
 	 * Format a phone number. If G11n is enabled, grab the format from the locale.
 	 * A phone number can support multiple variations, depending on how many numbers are present.
 	 *
@@ -135,6 +161,18 @@ class Format {
 		}
 
 		return self::format($value, $format);
+	}
+
+	/**
+	 * Format a date string to an RSS feed format.
+	 *
+	 * @access public
+	 * @param string|int $time
+	 * @return string
+	 * @static
+	 */
+	public static function rss($time) {
+		return date(DateTime::RSS, Time::toUnix($time));
 	}
 
 	/**
