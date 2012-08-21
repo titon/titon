@@ -50,7 +50,7 @@ class File extends Folder {
 			throw new IoException(sprintf('Invalid file path %s, folders are not allowed.', $path));
 		}
 
-		$this->_path = Titon::loader()->ds(realpath($path));
+		$this->_path = Titon::loader()->ds($path);
 
 		if ($create) {
 			$this->create($mode);
@@ -127,11 +127,13 @@ class File extends Folder {
 	 * @return boolean
 	 */
 	public function create($mode = 0755) {
-		if (!$this->folder()->exists()) {
-			$this->folder()->create();
+		$folder = $this->folder();
+
+		if (!$folder->exists()) {
+			$folder->create();
 		}
 
-		if (!$this->exists() && $this->folder()->writable()) {
+		if (!$this->exists() && $folder->writable()) {
 			if (touch($this->_path)) {
 				if ($mode) {
 					$this->chmod($mode);
@@ -170,7 +172,7 @@ class File extends Folder {
 	 */
 	public function ext() {
 		if ($ext = pathinfo($this->_path, PATHINFO_EXTENSION)) {
-			return $ext;
+			return mb_strtolower($ext);
 		}
 
 		return Titon::loader()->ext($this->_path);
@@ -212,7 +214,11 @@ class File extends Folder {
 	 * @return string
 	 */
 	public function md5($raw = false) {
-		return md5_file($this->_path, $raw);
+		if ($this->exists()) {
+			return md5_file($this->_path, $raw);
+		}
+
+		return null;
 	}
 
 	/**
@@ -243,6 +249,10 @@ class File extends Folder {
 	 * @return boolean
 	 */
 	public function open($mode) {
+		if (!$this->exists()) {
+			return false;
+		}
+
 		if (is_resource($this->_handle)) {
 			if ($mode === $this->_mode) {
 				return true;
@@ -267,7 +277,9 @@ class File extends Folder {
 	 * @return boolean
 	 */
 	public function prepend($data) {
-		return $this->write($data, 'c');
+		$content = $this->read();
+
+		return $this->write($data . $content);
 	}
 
 	/**
@@ -284,7 +296,11 @@ class File extends Folder {
 		}
 
 		if ($this->lock()) {
-			$content = fread($this->_handle, $length ?: $this->size());
+			if (!$length) {
+				$length = $this->size() ?: 1;
+			}
+
+			$content = fread($this->_handle, $length);
 
 			$this->close();
 

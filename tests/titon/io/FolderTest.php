@@ -37,11 +37,8 @@ class FolderTest extends TestCase {
 	 * Reset folder state after each test.
 	 */
 	protected function tearDown() {
-		chmod(APP_TEMP . 'io/', 0777);
-
-		if (file_exists(APP_TEMP . 'io_temp/')) {
-			rmdir(APP_TEMP . 'io_temp/');
-		}
+		$this->object->chmod(0777);
+		$this->temp->delete();
 
 		if (file_exists(APP_TEMP . 'io/.DS_Store')) {
 			@unlink(APP_TEMP . 'io/.DS_Store');
@@ -148,8 +145,6 @@ class FolderTest extends TestCase {
 		$parent =& $this->object->folder();
 		$this->assertInstanceOf('titon\io\Folder', $parent);
 		$this->assertEquals(APP_TEMP, $parent->path());
-
-		$this->assertEquals(null, $this->temp->folder());
 	}
 
 	/**

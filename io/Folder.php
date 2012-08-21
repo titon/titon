@@ -317,16 +317,14 @@ class Folder {
 	 * @return \titon\io\Folder
 	 */
 	public function &folder() {
-		if (!$this->exists()) {
+		if ($this->_folder) {
 			return $this->_folder;
 		}
 
-		if (!$this->_folder) {
-			$folder = dirname($this->_path);
+		$folder = dirname($this->_path);
 
-			if ($folder !== '.' && $folder !== '/') {
-				$this->_folder = new Folder($folder);
-			}
+		if ($folder !== '.' && $folder !== '/') {
+			$this->_folder = new Folder($folder);
 		}
 
 		return $this->_folder;
