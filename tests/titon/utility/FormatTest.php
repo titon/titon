@@ -29,6 +29,15 @@ class FormatTest extends TestCase {
 	}
 
 	/**
+	 * Test that atom() formats a timestamp to an Atom feed format.
+	 */
+	public function testAtom() {
+		$time = mktime(16, 35, 0, 2, 26, 1988);
+
+		$this->assertEquals('1988-02-26T16:35:00-05:00', Format::atom($time));
+	}
+
+	/**
 	 * Test that date() formats a timestamp to a date.
 	 */
 	public function testDate() {
@@ -50,12 +59,12 @@ class FormatTest extends TestCase {
 		$time = mktime(16, 35, 0, 2, 26, 1988);
 
 		// uses en locale
-		$this->assertEquals('02/26/1988 04:35pm', Format::datetime($time));
-		$this->assertEquals('02/26/1988 04:35pm', Format::datetime('1988-02-26 16:35:00'));
+		$this->assertEquals('02/26/1988 04:35PM', Format::datetime($time));
+		$this->assertEquals('02/26/1988 04:35PM', Format::datetime('1988-02-26 16:35:00'));
 
 		// now try with no locale, will use fallback
 		Titon::g11n()->set('no');
-		$this->assertEquals('Feb 26th 1988, 04:35pm', Format::datetime($time, 'M jS Y, h:ia'));
+		$this->assertEquals('Feb 26 1988, 04:35PM', Format::datetime($time, '%h %d %Y, %I:%M%p'));
 	}
 
 	/**
@@ -78,6 +87,15 @@ class FormatTest extends TestCase {
 
 		// longer number
 		$this->assertEquals('3772-3483-0461-4543', Format::format('377234830461454313', '####-####-####-####'));
+	}
+
+	/**
+	 * Test that http() formats a timestamp to an HTTP format.
+	 */
+	public function testHttp() {
+		$time = mktime(16, 35, 0, 2, 26, 1988);
+
+		$this->assertEquals('Fri, 26 Feb 1988 21:35:00 GMT', Format::http($time));
 	}
 
 	/**
@@ -105,6 +123,15 @@ class FormatTest extends TestCase {
 	}
 
 	/**
+	 * Test that rss() formats a timestamp to an RSS feed format.
+	 */
+	public function testRss() {
+		$time = mktime(16, 35, 0, 2, 26, 1988);
+
+		$this->assertEquals('Fri, 26 Feb 1988 16:35:00 -0500', Format::rss($time));
+	}
+
+	/**
 	 * Test that ssn() formats a number to a social security number.
 	 */
 	public function testSsn() {
@@ -125,12 +152,12 @@ class FormatTest extends TestCase {
 		$time = mktime(16, 35, 0, 2, 26, 1988);
 
 		// uses en locale
-		$this->assertEquals('04:35pm', Format::time($time));
-		$this->assertEquals('04:35pm', Format::time('1988-02-26 16:35:00'));
+		$this->assertEquals('04:35PM', Format::time($time));
+		$this->assertEquals('04:35PM', Format::time('1988-02-26 16:35:00'));
 
 		// now try with no locale, will use fallback
 		Titon::g11n()->set('no');
-		$this->assertEquals('16:35:00', Format::time($time, 'H:i:s'));
+		$this->assertEquals('04:35:00 PM', Format::time($time, '%r'));
 	}
 
 }

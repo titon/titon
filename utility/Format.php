@@ -109,7 +109,6 @@ class Format {
 		$pattern = $fallback;
 
 		if (Titon::g11n()->isEnabled()) {
-
 			$pattern = Titon::g11n()->current()->getFormats($key) ?: $fallback;
 		}
 
@@ -161,6 +160,18 @@ class Format {
 		}
 
 		return self::format($value, $format);
+	}
+
+	/**
+	 * Format a timestamp as a date relative human readable string; also known as time ago in words.
+	 *
+	 * @access public
+	 * @param string|int $time
+	 * @return string
+	 * @static
+	 */
+	public static function relativeTime($time) {
+		// @todo
 	}
 
 	/**
