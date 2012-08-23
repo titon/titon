@@ -188,7 +188,14 @@ class ValidateTest extends TestCase {
 	 * Test that currency() validates against the locales currency rule.
 	 */
 	public function testCurrency() {
+		$this->assertTrue(Validate::currency('$1,000.00'));
+		$this->assertTrue(Validate::currency('$343'));
+		$this->assertTrue(Validate::currency('$193,482.33'));
 
+		$this->assertFalse(Validate::currency('2,392.23'));
+		$this->assertFalse(Validate::currency('2325'));
+		$this->assertFalse(Validate::currency('$ten'));
+		$this->assertFalse(Validate::currency('$1923.2'));
 	}
 
 	/**
@@ -242,7 +249,19 @@ class ValidateTest extends TestCase {
 	 * Test that email() returns true for a valid email.
 	 */
 	public function testEmail() {
+		$this->assertTrue(Validate::email('email@titon.com', false));
+		$this->assertTrue(Validate::email('email@sub.titon.com', false));
+		$this->assertTrue(Validate::email('email+group@titon.com', false));
+		$this->assertTrue(Validate::email('email+group@titon.co.uk', false));
+		$this->assertTrue(Validate::email('email.dot@go-titon.com', false));
+		$this->assertTrue(Validate::email('example@gmail.com', true));
 
+		$this->assertFalse(Validate::email('email@titon', false));
+		$this->assertFalse(Validate::email('email@titon.com.', false));
+		$this->assertFalse(Validate::email('email@sub/titon.com', false));
+		$this->assertFalse(Validate::email('email@sub:titon.com', false));
+		$this->assertFalse(Validate::email('email@sub_titon.com', false));
+		$this->assertFalse(Validate::email('email@somereallyfakedomain.com', true));
 	}
 
 	/**
@@ -310,7 +329,19 @@ class ValidateTest extends TestCase {
 	 * Test that get() returns locale Validate rules.
 	 */
 	public function testGet() {
+		try {
+			Validate::get('phone');
+			$this->assertTrue(true);
+		} catch (Exception $e) {
+			$this->assertTrue(false);
+		}
 
+		try {
+			Validate::get('fakeKey');
+			$this->assertTrue(false);
+		} catch (Exception $e) {
+			$this->assertTrue(true);
+		}
 	}
 
 	/**
@@ -542,35 +573,76 @@ class ValidateTest extends TestCase {
 	 * Test that phone() validates against the locales phone rule.
 	 */
 	public function testPhone() {
+		$this->assertTrue(Validate::phone('666-1337'));
+		$this->assertTrue(Validate::phone('(888)666-1337'));
+		$this->assertTrue(Validate::phone('(888) 666-1337'));
+		$this->assertTrue(Validate::phone('1 (888) 666-1337'));
+		$this->assertTrue(Validate::phone('+1 (888) 666-1337'));
 
+		$this->assertFalse(Validate::phone('666.1337'));
+		$this->assertFalse(Validate::phone('888-666.1337'));
+		$this->assertFalse(Validate::phone('1 888.666.1337'));
+		$this->assertFalse(Validate::phone('666-ABMS'));
 	}
 
 	/**
 	 * Test that postalCode() validates against the locales postal code rule.
 	 */
 	public function testPostalCode() {
+		$this->assertTrue(Validate::postalCode('38842'));
+		$this->assertTrue(Validate::postalCode('38842-0384'));
 
+		$this->assertFalse(Validate::postalCode('3842'));
+		$this->assertFalse(Validate::postalCode('38842.0384'));
+		$this->assertFalse(Validate::postalCode('AksiS-0384'));
 	}
 
 	/**
 	 * Test that ssn() validates against the locales ssn rule.
 	 */
 	public function testSsn() {
+		$this->assertTrue(Validate::ssn('666-10-1337'));
+		$this->assertTrue(Validate::ssn('384-29-3481'));
 
+		$this->assertFalse(Validate::ssn('66-10-1337'));
+		$this->assertFalse(Validate::ssn('384-29-341'));
+		$this->assertFalse(Validate::ssn('666.10.1337'));
+		$this->assertFalse(Validate::ssn('AHE-29-34P1'));
 	}
 
 	/**
 	 * Test that uuid() validates a v4 UUID.
 	 */
 	public function testUuid() {
+		$this->assertTrue(Validate::uuid('a8293fde-ce92-9abe-83de-7294ab29cd03'));
 
+		$this->assertFalse(Validate::uuid('a8293fde-ce92-83de-7294ab29cd03'));
+		$this->assertFalse(Validate::uuid('a8293de-ce92-9abe-83de-7294ab29cd'));
+		$this->assertFalse(Validate::uuid('a8293kq-ce92-9abe-83de-729pdu29cd03'));
 	}
 
 	/**
-	 * Test that website() returns true for valid website URLs.
+	 * Test that url() returns true for valid website URLs.
 	 */
-	public function testWebsite() {
+	public function testUrl() {
+		$this->assertTrue(Validate::url('http://titon'));
+		$this->assertTrue(Validate::url('http://titon.com'));
+		$this->assertTrue(Validate::url('http://titon.com?query=string'));
+		$this->assertTrue(Validate::url('http://titon.com?query=string&key=value'));
+		$this->assertTrue(Validate::url('http://titon.com?query=string&key=value#fragment'));
+		$this->assertTrue(Validate::url('http://titon.com:8080?query=string&key=value#fragment'));
+		$this->assertTrue(Validate::url('http://sub.titon.com:8080?query=string&key=value#fragment'));
+		$this->assertTrue(Validate::url('https://sub.titon.com:8080?query=string&key=value#fragment'));
+		$this->assertTrue(Validate::url('http://titon.com/some/path'));
+		$this->assertTrue(Validate::url('http://go-titon.com'));
+		$this->assertTrue(Validate::url('http://127.29.12.34/some/path'));
+		$this->assertTrue(Validate::url('ftp://user:password@titon.com:22'));
+		$this->assertTrue(Validate::url('ftp://127.29.12.34'));
+		$this->assertTrue(Validate::url('ftp://127.29.12.34/some/path'));
 
+		$this->assertFalse(Validate::url('http://go_titon.com'));
+		$this->assertFalse(Validate::url('titon.com'));
+		$this->assertFalse(Validate::url('www.titon.com'));
 	}
 
 	/**

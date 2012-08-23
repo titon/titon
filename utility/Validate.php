@@ -56,7 +56,7 @@ class Validate {
 	 * @static
 	 */
 	public static function alpha($input, $exceptions = []) {
-		return (bool) preg_match('/^[\p{L}\s' . self::escape($exceptions) . ']+$/imU', $input);
+		return self::custom($input, '/^[\p{L}\s' . self::escape($exceptions) . ']+$/imU');
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Validate {
 	 * @static
 	 */
 	public static function alphaNumeric($input, $exceptions = []) {
-		return (bool) preg_match('/^[\p{L}\p{N}\p{Nd}\s' . self::escape($exceptions) . ']+$/imU', $input);
+		return self::custom($input, '/^[\p{L}\p{N}\p{Nd}\s' . self::escape($exceptions) . ']+$/imU');
 	}
 
 	/**
@@ -483,7 +483,7 @@ class Validate {
 	 * @static
 	 */
 	public static function ip($input, $flags = 0) {
-		return (bool) filter_var($input, FILTER_VALIDATE_IP, ['flags' => $flags]);
+		return (bool) filter_var($input, FILTER_VALIDATE_IP, $flags);
 	}
 
 	/**
@@ -733,7 +733,7 @@ class Validate {
 	 * @static
 	 */
 	public static function uuid($input) {
-		return preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i', $input);
+		return self::custom($input, '/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i');
 	}
 
 	/**
@@ -744,7 +744,7 @@ class Validate {
 	 * @return boolean
 	 * @static
 	 */
-	public static function website($input) {
+	public static function url($input) {
 		return (bool) filter_var($input, FILTER_VALIDATE_URL);
 	}
 

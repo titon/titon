@@ -13,6 +13,7 @@ use titon\Titon;
 use titon\tests\TestCase;
 use titon\utility\Format;
 use titon\utility\UtilityException;
+use \Exception;
 
 /**
  * Test class for titon\utility\Format.
@@ -87,6 +88,25 @@ class FormatTest extends TestCase {
 
 		// longer number
 		$this->assertEquals('3772-3483-0461-4543', Format::format('377234830461454313', '####-####-####-####'));
+	}
+
+	/**
+	 * Test that get() returns locale Validate rules.
+	 */
+	public function testGet() {
+		try {
+			Format::get('phone', null);
+			$this->assertTrue(true);
+		} catch (Exception $e) {
+			$this->assertTrue(false);
+		}
+
+		try {
+			Format::get('fakeKey', null);
+			$this->assertTrue(false);
+		} catch (Exception $e) {
+			$this->assertTrue(true);
+		}
 	}
 
 	/**
