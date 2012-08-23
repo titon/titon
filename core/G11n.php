@@ -358,10 +358,6 @@ class G11n {
 		setlocale(LC_ALL, $options);
 		Locale::setDefault($locale['id']);
 
-		if ($locale['timezone']) {
-			$this->setTimezone($locale['timezone']);
-		}
-
 		$this->_current = $bundle;
 
 		return $this;
@@ -401,20 +397,6 @@ class G11n {
 		if (!$this->_fallback) {
 			$this->_fallback = $urlKey;
 		}
-
-		return $this;
-	}
-
-	/**
-	 * Set the timezone.
-	 *
-	 * @access public
-	 * @param string $timezone
-	 * @return \titon\core\G11n
-	 * @chainable
-	 */
-	public function setTimezone($timezone) {
-		date_default_timezone_set($timezone);
 
 		return $this;
 	}

@@ -94,6 +94,8 @@ class Titon {
 	 * @static
 	 */
 	public static function initialize() {
+		date_default_timezone_set('UTC'); // Always use UTC
+
 		self::install('loader', new Loader(), true);
 		self::install('debugger', new Debugger(), true);
 		self::install('env', new Environment(), true);
