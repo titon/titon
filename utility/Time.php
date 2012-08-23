@@ -30,6 +30,19 @@ class Time {
 	const MINUTE = 60;
 
 	/**
+	 * Calculate the difference in seconds between 2 dates.
+	 *
+	 * @access public
+	 * @param string|int $time1
+	 * @param string|int $time2
+	 * @return int
+	 * @static
+	 */
+	public static function difference($time1, $time2) {
+		return self::toUnix($time1) - self::toUnix($time2);
+	}
+
+	/**
 	 * Return a DateTime object based on the current time and timezone.
 	 *
 	 * @access public
@@ -39,7 +52,7 @@ class Time {
 	 * @static
 	 */
 	public static function factory($time = null, $timezone = null) {
-		return new DateTime(self::toUnix($time), self::timezone($timezone));
+		return new DateTime($time, self::timezone($timezone));
 	}
 
 	/**
@@ -147,7 +160,7 @@ class Time {
 			return time();
 
 		} else if ($time instanceof DateTime) {
-			$time = $time->format('U');
+			return $time->format('U');
 		}
 
 		return is_string($time) ? strtotime($time) : (int) $time;
