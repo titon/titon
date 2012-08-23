@@ -673,6 +673,7 @@ class Response extends Base {
 	 * @access public
 	 * @param string $scheme
 	 * @return \titon\net\Response
+	 * @throws \titon\net\NetException
 	 * @chainable
 	 */
 	public function wwwAuthenticate($scheme) {

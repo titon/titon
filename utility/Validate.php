@@ -24,10 +24,27 @@ use titon\utility\UtilityException;
 class Validate {
 
 	/**
-	 * Validation constants.
+	 * IP version constants.
 	 */
-	const IPV4 = 'ipv4';
-	const IPV6 = 'ipv6';
+	const IPV4 = FILTER_FLAG_IPV4;
+	const IPV6 = FILTER_FLAG_IPV6;
+
+	/**
+	 * Credit card constants.
+	 */
+	const AMERICAN_EXPRESS = 'americanExpress';
+	const BANKCARD = 'bankcard';
+	const DINERS_CLUB = 'diners';
+	const DISCOVER = 'discover';
+	const ENROUTE = 'enroute';
+	const JCB = 'jcb';
+	const MAESTRO = 'maestro';
+	const MASTERCARD = 'mastercard';
+	const SOLO_DEBIT = 'solo';
+	const SWITCH_DEBIT = 'switch';
+	const VISA = 'visa';
+	const VISA_ELECTRON = 'electron';
+	const VOYAGER = 'voyager';
 
 	/**
 	 * Validate input is alphabetical.
@@ -80,7 +97,7 @@ class Validate {
 	 * @static
 	 */
 	public static function boolean($input) {
-		return (bool) filter_var($input, FILTER_VALIDATE_BOOLEAN);
+		return in_array($input, [true, false, 1, 0, '1', '0', 'on', 'off', 'yes', 'no'], true);
 	}
 
 	/**
@@ -117,11 +134,14 @@ class Validate {
 				return ($input <= $check);
 			break;
 			case 'equal':
+			case 'eq':
 			case '==':
 			case '=':
 				return ($input == $check);
 			break;
 			case 'notequal':
+			case 'neq':
+			case 'ne':
 			case '!=':
 				return ($input != $check);
 			break;
@@ -149,19 +169,19 @@ class Validate {
 		}
 
 		$cards = [
-			'amex'		=> '/^3[4|7]\\d{13}$/',
-			'bankcard'	=> '/^56(10\\d\\d|022[1-5])\\d{10}$/',
-			'diners'	=> '/^(?:3(0[0-5]|[68]\\d)\\d{11})|(?:5[1-5]\\d{14})$/',
-			'disc'		=> '/^(?:6011|650\\d)\\d{12}$/',
-			'electron'	=> '/^(?:417500|4917\\d{2}|4913\\d{2})\\d{10}$/',
-			'enroute'	=> '/^2(?:014|149)\\d{11}$/',
-			'jcb'		=> '/^(3\\d{4}|2100|1800)\\d{11}$/',
-			'maestro'	=> '/^(?:5020|6\\d{3})\\d{12}$/',
-			'mc'		=> '/^5[1-5]\\d{14}$/',
-			'solo'		=> '/^(6334[5-9][0-9]|6767[0-9]{2})\\d{10}(\\d{2,3})?$/',
-			'switch'	=> '/^(?:49(03(0[2-9]|3[5-9])|11(0[1-2]|7[4-9]|8[1-2])|36[0-9]{2})\\d{10}(\\d{2,3})?)|(?:564182\\d{10}(\\d{2,3})?)|(6(3(33[0-4][0-9])|759[0-9]{2})\\d{10}(\\d{2,3})?)$/',
-			'visa'		=> '/^4\\d{12}(\\d{3})?$/',
-			'voyager'	=> '/^8699[0-9]{11}$/'
+			self::AMERICAN_EXPRESS 	=> '/^3[4|7]\\d{13}$/',
+			self::BANKCARD			=> '/^56(10\\d\\d|022[1-5])\\d{10}$/',
+			self::DINERS_CLUB		=> '/^(?:3(0[0-5]|[68]\\d)\\d{11})|(?:5[1-5]\\d{14})$/',
+			self::DISCOVER			=> '/^(?:6011|650\\d)\\d{12}$/',
+			self::ENROUTE			=> '/^2(?:014|149)\\d{11}$/',
+			self::JCB				=> '/^(3\\d{4}|2100|1800)\\d{11}$/',
+			self::MAESTRO			=> '/^(?:5020|6\\d{3})\\d{12}$/',
+			self::MASTERCARD		=> '/^5[1-5]\\d{14}$/',
+			self::SOLO_DEBIT		=> '/^(6334[5-9][0-9]|6767[0-9]{2})\\d{10}(\\d{2,3})?$/',
+			self::SWITCH_DEBIT		=> '/^(?:49(03(0[2-9]|3[5-9])|11(0[1-2]|7[4-9]|8[1-2])|36[0-9]{2})\\d{10}(\\d{2,3})?)|(?:564182\\d{10}(\\d{2,3})?)|(6(3(33[0-4][0-9])|759[0-9]{2})\\d{10}(\\d{2,3})?)$/',
+			self::VISA				=> '/^4\\d{12}(\\d{3})?$/',
+			self::VISA_ELECTRON		=> '/^(?:417500|4917\\d{2}|4913\\d{2})\\d{10}$/',
+			self::VOYAGER			=> '/^8699[0-9]{11}$/'
 		];
 
 		if ($types) {
@@ -221,7 +241,13 @@ class Validate {
 	 * @static
 	 */
 	public static function date($input) {
-		list($m, $d, $y) = explode('/', date('m/d/Y', Time::toUnix($input)));
+		$time = Time::toUnix($input);
+
+		if (!$time) {
+			return false;
+		}
+
+		list($m, $d, $y) = explode('/', date('m/d/Y', $time));
 
 		return checkdate($m, $d, $y);
 	}
@@ -231,15 +257,18 @@ class Validate {
 	 *
 	 * @access public
 	 * @param string $input
-	 * @param int $decimals
+	 * @param int $places
 	 * @return boolean
 	 * @static
 	 */
-	public static function decimal($input, $decimals = 2) {
-		return (filter_var($input, FILTER_VALIDATE_FLOAT, [
-			'options' => ['decimals' => $decimals],
-			'flags' => FILTER_FLAG_ALLOW_THOUSAND
-		]) !== false);
+	public static function decimal($input, $places = 2) {
+		if (!$places) {
+			$regex = '/^[-+]?[0-9]*\.{1}[0-9]+(?:[eE][-+]?[0-9]+)?$/';
+		} else {
+			$regex = '/^[-+]?[0-9]*\.{1}[0-9]{' . $places . '}$/';
+		}
+
+		return self::custom($input, $regex);
 	}
 
 	/**
@@ -254,12 +283,16 @@ class Validate {
 	 */
 	public static function dimensions($input, $type, $size) {
 		if (self::file($input)) {
-			$file = getimagesize($input['tmp_name']);
+			$path = $input['tmp_name'];
 
-			if (!$file) {
-				return false;
-			}
+		} else if (file_exists($input)) {
+			$path = $input;
 
+		} else {
+			return false;
+		}
+
+		if ($file = getimagesize($path)) {
 			$width = $file[0];
 			$height = $file[1];
 
@@ -445,21 +478,11 @@ class Validate {
 	 *
 	 * @access public
 	 * @param string $input
-	 * @param string $mode
+	 * @param int $flags
 	 * @return boolean
 	 * @static
 	 */
-	public static function ip($input, $mode = null) {
-		if ($mode === self::IPV4) {
-			$flags = FILTER_FLAG_IPV4;
-
-		} else if ($mode === self::IPV6) {
-			$flags = FILTER_FLAG_IPV6;
-
-		} else {
-			$flags = 0;
-		}
-
+	public static function ip($input, $flags = 0) {
 		return (bool) filter_var($input, FILTER_VALIDATE_IP, ['flags' => $flags]);
 	}
 
@@ -503,12 +526,18 @@ class Validate {
 	 */
 	public static function mimeType($input, $mimes) {
 		if (self::file($input)) {
-			$file = new File($input['tmp_name']);
+			$path = $input['tmp_name'];
 
-			return in_array($file->mimeType(), (array) $mimes);
+		} else if (file_exists($input)) {
+			$path = $input;
+
+		} else {
+			return false;
 		}
 
-		return false;
+		$file = new File($path);
+
+		return in_array($file->mimeType(), (array) $mimes);
 	}
 
 	/**
@@ -516,16 +545,22 @@ class Validate {
 	 *
 	 * @access public
 	 * @param array $input
-	 * @param int $size
+	 * @param int $min
 	 * @return boolean
 	 * @static
 	 */
-	public static function minFilesize($input, $size) {
+	public static function minFilesize($input, $min) {
 		if (self::file($input)) {
-			return ($input['size'] > Number::bytesFrom($size));
+			$size = $input['size'];
+
+		} else if (file_exists($input)) {
+			$size = filesize($input);
+
+		} else {
+			return false;
 		}
 
-		return false;
+		return ($size >= Number::bytesFrom($min));
 	}
 
 	/**
@@ -533,12 +568,12 @@ class Validate {
 	 *
 	 * @access public
 	 * @param array $input
-	 * @param int $size
+	 * @param int $min
 	 * @return boolean
 	 * @static
 	 */
-	public static function minHeight($input, $size) {
-		return self::dimensions($input, 'minHeight', $size);
+	public static function minHeight($input, $min) {
+		return self::dimensions($input, 'minHeight', $min);
 	}
 
 	/**
@@ -559,12 +594,12 @@ class Validate {
 	 *
 	 * @access public
 	 * @param array $input
-	 * @param int $size
+	 * @param int $min
 	 * @return boolean
 	 * @static
 	 */
-	public static function minWidth($input, $size) {
-		return self::dimensions($input, 'minWidth', $size);
+	public static function minWidth($input, $min) {
+		return self::dimensions($input, 'minWidth', $min);
 	}
 
 	/**
@@ -572,16 +607,22 @@ class Validate {
 	 *
 	 * @access public
 	 * @param array $input
-	 * @param int $size
+	 * @param int $max
 	 * @return boolean
 	 * @static
 	 */
-	public static function maxFilesize($input, $size) {
+	public static function maxFilesize($input, $max) {
 		if (self::file($input)) {
-			return ($input['size'] <= Number::bytesFrom($size));
+			$size = $input['size'];
+
+		} else if (file_exists($input)) {
+			$size = filesize($input);
+
+		} else {
+			return false;
 		}
 
-		return false;
+		return ($size <= Number::bytesFrom($max));
 	}
 
 	/**
@@ -589,12 +630,12 @@ class Validate {
 	 *
 	 * @access public
 	 * @param array $input
-	 * @param int $size
+	 * @param int $max
 	 * @return boolean
 	 * @static
 	 */
-	public static function maxHeight($input, $size) {
-		return self::dimensions($input, 'maxHeight', $size);
+	public static function maxHeight($input, $max) {
+		return self::dimensions($input, 'maxHeight', $max);
 	}
 
 	/**
@@ -615,12 +656,12 @@ class Validate {
 	 *
 	 * @access public
 	 * @param array $input
-	 * @param int $size
+	 * @param int $max
 	 * @return boolean
 	 * @static
 	 */
-	public static function maxWidth($input, $size) {
-		return self::dimensions($input, 'maxWidth', $size);
+	public static function maxWidth($input, $max) {
+		return self::dimensions($input, 'maxWidth', $max);
 	}
 
 	/**
@@ -632,7 +673,7 @@ class Validate {
 	 * @static
 	 */
 	public static function notEmpty($input) {
-		return (!empty($input) && $input != 0);
+		return (!empty($input) || $input === 0 || $input === '0');
 	}
 
 	/**
