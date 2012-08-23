@@ -10,6 +10,7 @@
 namespace titon\log;
 
 use titon\Titon;
+use titon\io\File;
 use titon\utility\Inflector;
 
 /**
@@ -25,14 +26,14 @@ class Logger {
 	 *
 	 * @link http://en.wikipedia.org/wiki/Syslog#Severity_levels
 	 */
-	const EMERGENCY = 0;
-	const ALERT = 1;
-	const CRITICAL = 2;
-	const ERROR = 3;
-	const WARNING = 4;
-	const NOTICE = 5;
-	const INFO = 6;
-	const DEBUG = 7;
+	const EMERGENCY = LOG_EMERG;
+	const ALERT = LOG_ALERT;
+	const CRITICAL = LOG_CRIT;
+	const ERROR = LOG_ERR;
+	const WARNING = LOG_WARNING;
+	const NOTICE = LOG_NOTICE;
+	const INFO = LOG_INFO;
+	const DEBUG = LOG_DEBUG;
 
 	/**
 	 * Disable the class to enforce static methods.
@@ -173,10 +174,11 @@ class Logger {
 			$message = print_r($message, true);
 		}
 
-		$file = Inflector::fileName($type, 'log', false);
+		$filename = Inflector::fileName($type, 'log', false);
 		$message = '[' . date('Y-m-d H:i:s') . '] ' . $message;
 
-		file_put_contents(APP_LOGS . $file, $message . "\n", FILE_APPEND | LOCK_EX);
+		$file = new File(APP_LOGS . $filename, true);
+		$file->append($message . "\n");
 
 		if ($level > self::WARNING) {
 			if ($email = Titon::config()->get('Debug.email')) {
