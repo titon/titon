@@ -77,12 +77,12 @@ class Validate {
 	 *
 	 * @access public
 	 * @param string $input
-	 * @param int $max
 	 * @param int $min
+	 * @param int $max
 	 * @return boolean
 	 * @static
 	 */
-	public static function between($input, $max = 2500, $min = 1) {
+	public static function between($input, $min, $max) {
 		$length = mb_strlen($input);
 
 		return ($length <= $max && $length >= $min);
@@ -464,12 +464,12 @@ class Validate {
 	 *
 	 * @access public
 	 * @param string $input
-	 * @param int $max
 	 * @param int $min
+	 * @param int $max
 	 * @return boolean
 	 * @static
 	 */
-	public static function inRange($input, $max, $min = 1) {
+	public static function inRange($input, $min, $max) {
 		return ($input <= $max && $input >= $min);
 	}
 

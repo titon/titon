@@ -16,4 +16,12 @@ namespace titon\libs\validators;
  */
 interface Validator {
 
+	/**
+	 * Validate the data against the rules schema. Return true if all fields passed validation.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function validate();
+
 }

@@ -64,10 +64,10 @@ class ValidateTest extends TestCase {
 	 * Test that between() returns true if a string length is within the boundaries.
 	 */
 	public function testBetween() {
-		$this->assertTrue(Validate::between('This is just the right length', 30, 10));
+		$this->assertTrue(Validate::between('This is just the right length', 10, 30));
 
-		$this->assertFalse(Validate::between('This is far too long because its more than 30 characters', 30, 10));
-		$this->assertFalse(Validate::between('Too short', 30, 10));
+		$this->assertFalse(Validate::between('This is far too long because its more than 30 characters', 10, 30));
+		$this->assertFalse(Validate::between('Too short', 10, 30));
 	}
 
 	/**
@@ -367,10 +367,10 @@ class ValidateTest extends TestCase {
 	 * Test that inRange() returns true if the number is within the defined range.
 	 */
 	public function testInRange() {
-		$this->assertTrue(Validate::inRange(20, 30, 10));
+		$this->assertTrue(Validate::inRange(20, 10, 30));
 
-		$this->assertFalse(Validate::inRange(35, 30, 10));
-		$this->assertFalse(Validate::inRange(5, 30, 10));
+		$this->assertFalse(Validate::inRange(35, 10, 30));
+		$this->assertFalse(Validate::inRange(5, 10, 30));
 	}
 
 	/**
