@@ -6,8 +6,9 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 ### Systems In Development ###
 
-Validation
-* libs/validators
+Email
+* net/Email
+* libs/transporters
 
 ### Upcoming Systems ###
 
@@ -25,10 +26,6 @@ Security
 * (xss/csrf protection)
 * (firewall)
 * (persistence)
-
-Email
-* net/Email
-* libs/transporters
 
 Streams
 * io/Stream
