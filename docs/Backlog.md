@@ -6,11 +6,8 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 ### Systems In Development ###
 
-Utilities
-* Validate
-* Time
-* Uri
-* Uuid
+Validation
+* libs/validators
 
 ### Upcoming Systems ###
 
@@ -64,7 +61,4 @@ Sockets
 * libs/streams
 * libs/transporters
 * net/Email
-* utility/Time
 * utility/Uuid
-* utility/Uri
-* utility/Validate

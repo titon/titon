@@ -67,7 +67,7 @@ class Uuid {
 		return sprintf('%s-%s-%s%s-%s%s-%s',
 			String::generate(8, String::HEX), // 1
 			String::generate(4, String::HEX), // 2
-			3, // 3
+			4, // 3
 			String::generate(3, String::HEX), // 3
 			String::generate(1, '89AB'), // 4
 			String::generate(3, String::HEX), // 4
