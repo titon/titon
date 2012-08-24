@@ -50,6 +50,14 @@ class Request extends Base {
 	public $get = [];
 
 	/**
+	 * Data that has been generated internally via the framework during the request.
+	 *
+	 * @access public
+	 * @var array
+	 */
+	public $internal = [];
+
+	/**
 	 * The cleaned $_POST global.
 	 *
 	 * @access public
@@ -180,6 +188,28 @@ class Request extends Base {
 
 			return null;
 		});
+	}
+
+	/**
+	 * Return a value from the internal request.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function get($key = null) {
+		return Hash::get($this->internal, $key);
+	}
+
+	/**
+	 * Return true if the key exists in the internal request.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function has($key) {
+		return Hash::has($this->internal, $key);
 	}
 
 	/**
@@ -404,6 +434,20 @@ class Request extends Base {
 	 */
 	public function serverIp() {
 		return $this->env('SERVER_ADDR');
+	}
+
+	/**
+	 * Set a value into the internal request.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param mixed $value
+	 * @return \titon\net\Request
+	 */
+	public function set($key, $value) {
+		$this->internal = Hash::set($this->internal, $key, $value);
+
+		return $this;
 	}
 
 	/**

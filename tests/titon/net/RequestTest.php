@@ -399,4 +399,17 @@ class RequestTest extends TestCase {
 		$this->assertEquals('Mozilla/5.0 (X11; Linux x86_64; rv:12.0) Gecko/20100101 Firefox/12.0', $this->object->userAgent());
 	}
 
+	/**
+	 * Test that get(), set(), has() interact with internal request data.
+	 */
+	public function testGetSetHas() {
+		$this->assertFalse($this->object->has('key'));
+		$this->assertEquals(null, $this->object->get('key'));
+
+		$this->object->set('key', 'value');
+
+		$this->assertTrue($this->object->has('key'));
+		$this->assertEquals('value', $this->object->get('key'));
+	}
+
 }
