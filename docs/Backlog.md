@@ -50,6 +50,7 @@ Sockets
 * io/Socket
 * libs/adapters
 * libs/behaviors
+* libs/daos
 * libs/models
 * libs/readers/core/YamlReader
 * libs/readers/gettext/MoReader

@@ -223,44 +223,6 @@ abstract class RouteAbstract extends Base implements Route {
 				foreach ($this->_tokens as $token) {
 					$this->_route[$token] = array_shift($matches);
 				}
-
-				/* Should we validate it anymore? If so, we can't do error checking later on.
-
-				$locales = Titon::g11n()->listing();
-				$modules = Titon::app()->getModules();
-				$controllers = Titon::app()->getControllers();
-
-				foreach ($this->_tokens as $token) {
-					switch ($token) {
-						case 'locale':
-							// Is their a locale? Has it been setup?
-							if (in_array($matches[0], $locales)) {
-								$this->_route['locale'] = array_shift($matches);
-							} else {
-								array_shift($matches);
-							}
-						break;
-						case 'module':
-							// Is it a module? Check against the installed modules.
-							if (isset($modules[$matches[0]])) {
-								$this->_route['module'] = array_shift($matches);
-							} else {
-								array_shift($matches);
-							}
-						break;
-						case 'controller':
-							// Is it a controller? Check within the modules controllers.
-							if (isset($controllers[$this->_route['module']][$matches[0]])) {
-								$this->_route['controller'] = array_shift($matches);
-							} else {
-								array_shift($matches);
-							}
-						break;
-						default:
-							$this->_route[$token] = array_shift($matches);
-						break;
-					}
-				}*/
 			}
 
 			// Detect query string and parameters

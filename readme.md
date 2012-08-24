@@ -52,29 +52,29 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
     * Construct core classes (order important)
         * Loader() - Set autoloader
         * Debugger() - Set exception and error handling
+        * Config()
         * Environment()
         * Application()
-        * Cache()
-        * Config()
         * Registry()
-        * Router()
         * G11n()
+        * Router()
         * Event()
         * Dispatch()
-* Include app/setup.php
+        * Cache()
+* Include app/config/ files
 * Titon.startup()
     * Loop through each core class and initialize
         * Loader()
         * Debugger()
+        * Config()
         * Environment() - Parse headers and enable
         * Application() - Loop through each module and include bootstrap.php
-        * Cache()
-        * Config()
         * Registry()
-        * Router() - Parse and determine the route
         * G11n() - Parse headers and enable
+        * Router() - Parse and determine the route
         * Event()
         * Dispatch()
+        * Cache()
 * Event.notify('titon.startup')
 * Dispatch.run()
     * Load Dispatcher

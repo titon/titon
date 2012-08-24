@@ -24,7 +24,7 @@ function debug() {
 
 		if ($vars) {
 			foreach ($vars as $var) {
-				echo '<pre>' . print_r($var, true) . '</pre>';
+				echo '<pre>' . print_r($var, true) . '</pre>' . PHP_EOL;
 			}
 		}
 
@@ -49,7 +49,7 @@ function dump() {
 			foreach ($vars as $var) {
 				echo '<pre>';
 				var_dump($var);
-				echo '</pre>';
+				echo '</pre>' . PHP_EOL;
 			}
 		}
 

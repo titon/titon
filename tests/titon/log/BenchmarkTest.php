@@ -36,7 +36,7 @@ class BenchmarkTest extends TestCase {
 		// getting
 		$this->assertEquals(null, Benchmark::get('fake'));
 		$this->assertTrue(is_array(Benchmark::get('test')));
-		$this->assertTrue(count(Benchmark::get()) === 1);
+		$this->assertTrue(count(Benchmark::get()) == 1);
 
 		// output
 		$test = Benchmark::get('test');

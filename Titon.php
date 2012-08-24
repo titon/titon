@@ -97,16 +97,16 @@ class Titon {
 		date_default_timezone_set('UTC'); // Always use UTC
 
 		self::install('loader', new Loader(), true);
-		self::install('debugger', new Debugger(), true);
+		self::install('debugger', new Debugger(), true);	// Requires Loader
+		self::install('config', new Config(), true);		// Requires Debugger
 		self::install('env', new Environment(), true);
-		self::install('app', new Application(), true);
+		self::install('app', new Application(), true); 		// Requires Config, Loader
+		self::install('registry', new Registry(), true); 	// Requires Loader
+		self::install('g11n', new G11n(), true); 			// Requires Registry
+		self::install('router', new Router(), true); 		// Requires G11n
+		self::install('event', new Event(), true); 			// Requires Router
+		self::install('dispatch', new Dispatch(), true); 	// Requires Router, Environment; Dispatchers require Event
 		self::install('cache', new Cache(), true);
-		self::install('config', new Config(), true);
-		self::install('registry', new Registry(), true);
-		self::install('router', new Router(), true);
-		self::install('g11n', new G11n(), true);
-		self::install('event', new Event(), true);
-		self::install('dispatch', new Dispatch(), true);
 	}
 
 	/**

@@ -26,30 +26,6 @@ define('APP_LOGS', APP_TEMP . 'logs/');
 define('APP_VIEWS', TITON_APP . 'views/');
 
 /**
- * Library directory constants.
- */
-define('LIB_ACTIONS', TITON_LIBS . 'actions/');
-define('LIB_ADAPTERS', TITON_LIBS . 'adapters/');
-define('LIB_BEHAVIORS', TITON_LIBS . 'behaviors/');
-define('LIB_CONTROLLERS', TITON_LIBS . 'controllers/');
-define('LIB_DISPATCHERS', TITON_LIBS . 'dispatchers/');
-define('LIB_DRIVERS', TITON_LIBS . 'drivers/');
-define('LIB_ENGINES', TITON_LIBS . 'engines/');
-define('LIB_ENUMS', TITON_LIBS . 'enums/');
-define('LIB_EXCEPTIONS', TITON_LIBS . 'exceptions/');
-define('LIB_HELPERS', TITON_LIBS . 'helpers/');
-define('LIB_LISTENERS', TITON_LIBS . 'listeners/');
-define('LIB_MODELS', TITON_LIBS . 'models/');
-define('LIB_PACKAGES', TITON_LIBS . 'packages/');
-define('LIB_READERS', TITON_LIBS . 'readers/');
-define('LIB_ROUTES', TITON_LIBS . 'routes/');
-define('LIB_SHELLS', TITON_LIBS . 'shells/');
-define('LIB_STORAGE', TITON_LIBS . 'storage/');
-define('LIB_TRAITS', TITON_LIBS . 'traits/');
-define('LIB_TRANSLATORS', TITON_LIBS . 'translators/');
-define('LIB_TRANSPORTERS', TITON_LIBS . 'transporters/');
-
-/**
  * Include the necessary classes to initialize the framework.
  */
 include_once TITON . 'functions.php';
@@ -64,6 +40,12 @@ include_once TITON . 'core/Loader.php';
 /**
  * Include custom configuration and settings from the application.
  */
-if (file_exists(APP_CONFIG . 'setup.php')) {
-	include_once APP_CONFIG . 'setup.php';
+$configs = array('bootstrap', 'loader', 'config', 'env', 'registry', 'g11n', 'router', 'event', 'dispatch', 'cache');
+
+foreach ($configs as $config) {
+	if (file_exists(APP_CONFIG . $config . '.php')) {
+		include_once APP_CONFIG . $config . '.php';
+	}
 }
+
+unset($configs);
