@@ -35,7 +35,7 @@ class FormatTest extends TestCase {
 	public function testAtom() {
 		$time = mktime(16, 35, 0, 2, 26, 1988);
 
-		$this->assertEquals('1988-02-26T16:35:00-05:00', Format::atom($time));
+		$this->assertEquals('1988-02-26T16:35:00+00:00', Format::atom($time));
 	}
 
 	/**
@@ -115,7 +115,7 @@ class FormatTest extends TestCase {
 	public function testHttp() {
 		$time = mktime(16, 35, 0, 2, 26, 1988);
 
-		$this->assertEquals('Fri, 26 Feb 1988 21:35:00 GMT', Format::http($time));
+		$this->assertEquals('Fri, 26 Feb 1988 16:35:00 GMT', Format::http($time));
 	}
 
 	/**
@@ -148,7 +148,7 @@ class FormatTest extends TestCase {
 	public function testRss() {
 		$time = mktime(16, 35, 0, 2, 26, 1988);
 
-		$this->assertEquals('Fri, 26 Feb 1988 16:35:00 -0500', Format::rss($time));
+		$this->assertEquals('Fri, 26 Feb 1988 16:35:00 +0000', Format::rss($time));
 	}
 
 	/**
