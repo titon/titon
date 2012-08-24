@@ -10,6 +10,7 @@
 namespace titon\libs\listeners;
 
 use titon\libs\controllers\Controller;
+use titon\libs\dispatchers\Dispatcher;
 use titon\libs\engines\Engine;
 
 /**
@@ -39,17 +40,19 @@ interface Listener {
 	 * Executed at the beginning of the dispatch cycle.
 	 *
 	 * @access public
+	 * @param \titon\libs\dispatchers\Dispatcher $dispatcher
 	 * @return void
 	 */
-	public function preDispatch();
+	public function preDispatch(Dispatcher $dispatcher);
 
 	/**
 	 * Executed at the very end of the dispatch cycle.
 	 *
 	 * @access public
+	 * @param \titon\libs\dispatchers\Dispatcher $dispatcher
 	 * @return void
 	 */
-	public function postDispatch();
+	public function postDispatch(Dispatcher $dispatcher);
 
 	/**
 	 * Executed before the action gets processed.

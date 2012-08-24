@@ -33,7 +33,7 @@ class FrontDispatcher extends DispatcherAbstract {
 		$controller = $this->controller;
 		$event = $this->event;
 
-		$event->notify('dispatch.preDispatch');
+		$event->notify('dispatch.preDispatch', $this);
 
 			$controller->preProcess();
 			$event->notify('controller.preProcess', $controller);
@@ -55,7 +55,7 @@ class FrontDispatcher extends DispatcherAbstract {
 				$event->notify('view.postRender', $engine);
 			}
 
-		$event->notify('dispatch.postDispatch');
+		$event->notify('dispatch.postDispatch', $this);
 	}
 
 }

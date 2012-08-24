@@ -35,7 +35,7 @@ class FrontDevDispatcher extends DispatcherAbstract {
 		$event = $this->event;
 
 		Benchmark::start('Dispatcher');
-		$event->notify('dispatch.preDispatch');
+		$event->notify('dispatch.preDispatch', $this);
 
 			Benchmark::start('Controller');
 			$controller->preProcess();
@@ -63,7 +63,7 @@ class FrontDevDispatcher extends DispatcherAbstract {
 				Benchmark::stop('View');
 			}
 
-		$event->notify('dispatch.postDispatch');
+		$event->notify('dispatch.postDispatch', $this);
 		Benchmark::stop('Dispatcher');
 	}
 

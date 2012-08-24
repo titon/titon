@@ -11,6 +11,7 @@ namespace titon\libs\listeners;
 
 use titon\base\Base;
 use titon\libs\controllers\Controller;
+use titon\libs\dispatchers\Dispatcher;
 use titon\libs\engines\Engine;
 use titon\libs\listeners\Listener;
 
@@ -46,9 +47,10 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * Executed at the beginning of the dispatch cycle.
 	 *
 	 * @access public
+	 * @param \titon\libs\dispatchers\Dispatcher $dispatcher
 	 * @return void
 	 */
-	public function preDispatch() {
+	public function preDispatch(Dispatcher $dispatcher) {
 		return;
 	}
 
@@ -56,9 +58,10 @@ abstract class ListenerAbstract extends Base implements Listener {
 	 * Executed at the very end of the dispatch cycle.
 	 *
 	 * @access public
+	 * @param \titon\libs\dispatchers\Dispatcher $dispatcher
 	 * @return void
 	 */
-	public function postDispatch() {
+	public function postDispatch(Dispatcher $dispatcher) {
 		return;
 	}
 

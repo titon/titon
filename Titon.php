@@ -105,7 +105,7 @@ class Titon {
 		self::install('g11n', new G11n(), true); 			// Requires Registry
 		self::install('router', new Router(), true); 		// Requires G11n
 		self::install('event', new Event(), true); 			// Requires Router
-		self::install('dispatch', new Dispatch(), true); 	// Requires Router, Environment; Dispatchers require Event
+		self::install('dispatch', new Dispatch(), true); 	// Requires Router, Environment; Dispatchers require Event, App, Registry
 		self::install('cache', new Cache(), true);
 	}
 
