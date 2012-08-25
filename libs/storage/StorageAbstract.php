@@ -77,7 +77,7 @@ abstract class StorageAbstract extends Base implements Storage {
 			$timestamp = Time::toUnix($timestamp);
 		}
 
-		return (int) $timestamp;
+		return $timestamp;
 	}
 
 	/**
@@ -102,7 +102,7 @@ abstract class StorageAbstract extends Base implements Storage {
 	 * @param mixed $value
 	 * @return string
 	 */
-	public function serialize($value) {
+	public function encode($value) {
 		if ($this->config->serialize) {
 			$value = serialize($value);
 		}
@@ -111,13 +111,13 @@ abstract class StorageAbstract extends Base implements Storage {
 	}
 
 	/**
-	 * Unerialize the data if it is valid and the configuration is true.
+	 * Unserialize the data if it is valid and the configuration is true.
 	 *
 	 * @access public
 	 * @param mixed $value
 	 * @return mixed
 	 */
-	public function unserialize($value) {
+	public function decode($value) {
 		if ($value && $this->config->serialize) {
 			$value = @unserialize($value);
 		}

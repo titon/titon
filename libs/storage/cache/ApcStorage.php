@@ -9,6 +9,7 @@
 
 namespace titon\libs\storage\cache;
 
+use titon\Titon;
 use titon\libs\storage\StorageAbstract;
 use titon\libs\storage\StorageException;
 
@@ -30,7 +31,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		return apc_dec($this->key($key), (int) $step);
+		return apc_dec($this->key($key), $step);
 	}
 
 	/**
@@ -51,7 +52,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return mixed
 	 */
 	public function get($key) {
-		return $this->unserialize(apc_fetch($this->key($key)));
+		return $this->decode(apc_fetch($this->key($key)));
 	}
 
 	/**
@@ -74,7 +75,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function increment($key, $step = 1) {
-		return apc_inc($this->key($key), (int) $step);
+		return apc_inc($this->key($key), $step);
 	}
 
 	/**
@@ -85,7 +86,7 @@ class ApcStorage extends StorageAbstract {
 	 * @throws StorageException
 	 */
 	public function initialize() {
-		if (!extension_loaded('apc')) {
+		if (!Titon::load('apc')) {
 			throw new StorageException('APC extension does not exist.');
 		}
 
@@ -114,9 +115,7 @@ class ApcStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		$expires = ($this->expires($expires) - time()) / 60;
-
-		return apc_store($this->key($key), $this->serialize($value), $expires);
+		return apc_store($this->key($key), $this->encode($value), $this->expires($expires) - time());
 	}
 
 }

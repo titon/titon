@@ -330,9 +330,10 @@ class File extends Folder {
 	 * @access public
 	 * @param string $data
 	 * @param string $mode
+	 * @param boolean $close
 	 * @return boolean
 	 */
-	public function write($data, $mode = 'w') {
+	public function write($data, $mode = 'w', $close = false) {
 		if (!$this->open($mode)) {
 			return false;
 		}
@@ -341,6 +342,10 @@ class File extends Folder {
 			$result = fwrite($this->_handle, $data);
 
 			$this->unlock();
+
+			if ($close) {
+				$this->close();
+			}
 
 			return (bool) $result;
 		}

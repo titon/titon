@@ -479,9 +479,10 @@ class Folder {
 	 * Scan the folder and return an array of File and Folder objects.
 	 *
 	 * @access public
+	 * @param string $type
 	 * @return array
 	 */
-	public function read() {
+	public function read($type = null) {
 		if (!$this->exists()) {
 			return null;
 		}
@@ -513,12 +514,18 @@ class Folder {
 			}
 		}
 
-		return [
+		$types = [
 			'all' => $all,
 			'folders' => $folders,
 			'files' => $files,
 			'count' => $count
 		];
+
+		if ($type && isset($types[$type])) {
+			return $types[$type];
+		}
+
+		return $types;
 	}
 
 	/**

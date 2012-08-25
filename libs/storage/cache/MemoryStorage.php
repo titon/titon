@@ -28,9 +28,9 @@ class MemoryStorage extends StorageAbstract {
 	 */
 	public function decrement($key, $step = 1) {
 		if ($data = $this->getCache($key)) {
-			$this->setCache($key, ($data - (int) $step));
+			$this->setCache($key, ($data - $step));
 		} else {
-			$this->setCache($key, (0 - (int) $step));
+			$this->setCache($key, (0 - $step));
 		}
 
 		return true;
@@ -55,7 +55,7 @@ class MemoryStorage extends StorageAbstract {
 	 */
 	public function get($key) {
 		if ($value = $this->getCache($key)) {
-			return $this->unserialize($value);
+			return $this->decode($value);
 		}
 
 		return null;
@@ -69,7 +69,7 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return (bool) $this->getCache($key);
+		return $this->hasCache($key);
 	}
 
 	/**
@@ -82,9 +82,9 @@ class MemoryStorage extends StorageAbstract {
 	 */
 	public function increment($key, $step = 1) {
 		if ($data = $this->getCache($key)) {
-			$this->setCache($key, ($data + (int) $step));
+			$this->setCache($key, ($data + $step));
 		} else {
-			$this->setCache($key, (0 + (int) $step));
+			$this->setCache($key, (0 + $step));
 		}
 
 		return $this;
@@ -111,7 +111,7 @@ class MemoryStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		$this->setCache($key, $this->serialize($value));
+		$this->setCache($key, $this->encode($value));
 
 		return $this;
 	}

@@ -9,6 +9,7 @@
 
 namespace titon\libs\storage\cache;
 
+use titon\Titon;
 use titon\libs\storage\StorageAbstract;
 use titon\libs\storage\StorageException;
 
@@ -16,16 +17,19 @@ use titon\libs\storage\StorageException;
  * A storage engine that uses the Xcache extension for a cache store.
  * This engine can be installed using the Cache::setup() method.
  *
+ * {{{
  *		new XcacheStorage(array(
  *			'username' => 'admin',
  *			'password' => md5('pass')
  *		));
+ * }}}
  *
  * A sample configuration can be found above, and the following options are available:
  * serialize, compress, username/password (for flush()), expires.
  *
  * @package	titon.libs.storage.cache
- * @link	http://xcache.lighttpd.net/
+ *
+ * @link	http://xcache.lighttpd.net
  */
 class XcacheStorage extends StorageAbstract {
 
@@ -38,7 +42,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		return xcache_dec($this->key($key), (int) $step);
+		return xcache_dec($this->key($key), $step);
 	}
 
 	/**
@@ -82,7 +86,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return mixed
 	 */
 	public function get($key) {
-		return $this->unserialize(xcache_get($this->key($key)));
+		return $this->decode(xcache_get($this->key($key)));
 	}
 
 	/**
@@ -105,7 +109,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function increment($key, $step = 1) {
-		return xcache_inc($this->key($key), (int) $step);
+		return xcache_inc($this->key($key), $step);
 	}
 
 	/**
@@ -116,7 +120,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @throws StorageException
 	 */
 	public function initialize() {
-		if (!extension_loaded('xcache')) {
+		if (!Titon::load('xcache')) {
 			throw new StorageException('Xcache extension does not exist.');
 		}
 
@@ -149,9 +153,7 @@ class XcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		$expires = ($this->expires($expires) - time()) / 60;
-
-		return xcache_set($this->key($key), $this->serialize($value), $expires);
+		return xcache_set($this->key($key), $this->encode($value), $this->expires($expires) - time());
 	}
 
 }

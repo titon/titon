@@ -9,38 +9,31 @@
 
 namespace titon\libs\storage\cache;
 
-use \Memcached;
+use titon\Titon;
 use titon\libs\storage\cache\MemcacheStorage;
 use titon\libs\storage\StorageException;
+use \Memcached;
 
 /**
  * A storage engine for the Memcache module, using the Memcached class; requires pecl/memcached.
  * This engine can be installed using the Cache::setup() method.
  *
+ * {{{
  *		new MemcachedStorage(array(
  *			'id' => 'default',
  *			'servers' => 'localhost:11211',
  *			'compress' => true
  *		));
+ * }}}
  *
  * A sample configuration can be found above, and the following options are available:
  * id, servers (array or string), compress, serialize, prefix, expires.
  *
  * @package	titon.libs.storage.cache
+ *
  * @link	http://pecl.php.net/package/memcached
  */
 class MemcachedStorage extends MemcacheStorage {
-
-	/**
-	 * Get data from the cache if it exists.
-	 *
-	 * @access public
-	 * @param string|array $key
-	 * @return mixed
-	 */
-	public function get($key) {
-		return $this->unserialize($this->connection->get($this->key($key)));
-	}
 
 	/**
 	 * Initialize the Memcached instance and set all relevant options.
@@ -50,7 +43,7 @@ class MemcachedStorage extends MemcacheStorage {
 	 * @throws StorageException
 	 */
 	public function initialize() {
-		if (!extension_loaded('memcache')) {
+		if (!Titon::load('memcache')) {
 			throw new StorageException('Memcache extension does not exist.');
 		}
 
@@ -78,15 +71,7 @@ class MemcachedStorage extends MemcacheStorage {
 		} else {
 			list($host, $port, $weight) = explode(':', $config['servers']);
 
-			if (!$port) {
-				$port = self::PORT;
-			}
-
-			if (!$weight) {
-				$weight = self::WEIGHT;
-			}
-
-			$this->connection->addServer($host, (int) $port, (int) $weight);
+			$this->connection->addServer($host, $port ?: self::PORT, $weight ?: self::WEIGHT);
 		}
 	}
 
@@ -100,7 +85,7 @@ class MemcachedStorage extends MemcacheStorage {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		return $this->connection->set($this->key($key), $this->serialize($value), $this->expires($expires));
+		return $this->connection->set($this->key($key), $this->encode($value), $this->expires($expires));
 	}
 
 }

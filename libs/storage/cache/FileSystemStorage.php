@@ -9,6 +9,8 @@
 
 namespace titon\libs\storage\cache;
 
+use titon\io\File;
+use titon\io\Folder;
 use titon\libs\storage\StorageAbstract;
 use titon\libs\storage\StorageException;
 
@@ -30,12 +32,36 @@ use titon\libs\storage\StorageException;
 class FileSystemStorage extends StorageAbstract {
 
 	/**
-	 * Is the cache folder ready for writing?
+	 * List of cache File objects.
 	 *
 	 * @access protected
-	 * @var bool
+	 * @var array
 	 */
-	protected $_ready = false;
+	protected $_files;
+
+	/**
+	 * Folder object for the cache folder.
+	 *
+	 * @access protected
+	 * @var \titon\io\Folder
+	 */
+	protected $_folder;
+
+	/**
+	 * File object for the groups mapping.
+	 *
+	 * @access protected
+	 * @var \titon\io\File
+	 */
+	protected $_groups;
+
+	/**
+	 * File object for the expires mapping.
+	 *
+	 * @access protected
+	 * @var \titon\io\File
+	 */
+	protected $_times;
 
 	/**
 	 * Decrement a value within the cache.
@@ -47,7 +73,7 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function decrement($key, $step = 1) {
 		if ($value = $this->get($key)) {
-			return $this->set($key, ((int) $value - (int) $step));
+			return $this->set($key, ($value - $step));
 		}
 
 		return false;
@@ -61,31 +87,21 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function flush($expires = null) {
-		$dir = dir($this->_getPath());
-
 		if ($expires !== null) {
 			$expires = $this->expires($expires);
 		}
 
-		while (($file = $dir->read()) !== false) {
-			if ($file === '.' || $file === '..') {
-				continue;
-			}
+		$files = $this->_folder->read('files');
 
-			$path = $this->_getPath() . $file;
-
-			if (file_exists($path)) {
-				if ($expires) {
-					if (filemtime($path) >= $expires) {
-						unlink($path);
-					}
-				} else {
-					unlink($path);
+		foreach ($files as $file) {
+			if ($expires) {
+				if ($file->modifiedTime() >= $expires) {
+					$file->delete();
 				}
+			} else {
+				$file->delete();
 			}
 		}
-
-		$dir->close();
 
 		clearstatcache();
 	}
@@ -99,15 +115,17 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function get($key) {
 		if ($this->has($key)) {
-			$value = file_get_contents($this->_getPath($key));
+			return $this->load($key)->read();
+
+			/*$value = $this->load($key)->read();
 			$pipe = mb_strpos($value, '|');
 			$timestamp = mb_substr($value, 0, $pipe);
 
 			if ($timestamp >= time()) {
-				return $this->unserialize(mb_substr($value, ($pipe + 1), mb_strlen($value)));
+				return $this->decode(mb_substr($value, ($pipe + 1), mb_strlen($value)));
 			} else {
 				$this->remove($key);
-			}
+			}*/
 		}
 
 		return null;
@@ -121,7 +139,7 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return file_exists($this->_getPath($key));
+		return file_exists($this->_folder->path() . $this->key($key) . '.cache');
 	}
 
 	/**
@@ -134,7 +152,7 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function increment($key, $step = 1) {
 		if ($value = $this->get($key)) {
-			return $this->set($key, ((int) $value + (int) $step));
+			return $this->set($key, ($value + $step));
 		}
 
 		return false;
@@ -148,6 +166,31 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function initialize() {
 		$this->config->serialize = true;
+
+		$path = APP_TEMP . 'cache/' . $this->config->storage . '/';
+
+		$this->_folder = new Folder($path, true);
+		$this->_groups = new File($path . '.groups', true);
+		$this->_times = new File($path . '.times', true);
+	}
+
+	/**
+	 * Return the File object for the cache entry.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return string
+	 */
+	public function load($key = null) {
+		if ($this->has($key)) {
+			return $this->_files[$key];
+		}
+
+		$path = $this->_folder->path() . $this->key($key) . '.cache';
+
+		$this->_files[$key] = new File($path, true);
+
+		return $this->_files[$key];
 	}
 
 	/**
@@ -159,10 +202,12 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function remove($key) {
 		if ($this->has($key)) {
-			return unlink($this->_getPath($key));
-		}
+			$this->load($key)->delete();
 
-		clearstatcache();
+			unset($this->_files[$key]);
+
+			return true;
+		}
 
 		return false;
 	}
@@ -177,51 +222,7 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		$value = $this->expires($expires) . '|' . $this->serialize($value);
-
-		return file_put_contents($this->_getPath($key), $value, LOCK_EX);
-	}
-
-	/**
-	 * Return the full path to the cache directory.
-	 *
-	 * @access protected
-	 * @param string $key
-	 * @return string
-	 */
-	protected function _getPath($key = null) {
-		if (!$this->_ready) {
-			$this->_checkPath();
-		}
-
-		$path = APP_TEMP . 'cache/' . $this->config->storage . '/';
-
-		if ($key) {
-			$path .= $this->key($key) . '.cache';
-		}
-
-		return $path;
-	}
-
-	/**
-	 * Verify the cache directories exist and are writable.
-	 *
-	 * @access protected
-	 * @return void
-	 */
-	protected function _checkPath() {
-		$path = $this->_getPath();
-
-		// Does folder exist?
-		if (!file_exists($path)) {
-			mkdir($path, 0777, true);
-
-		// Is folder writable?
-		} else if (!is_writable($path)) {
-			chmod($path, 0777);
-		}
-
-		$this->_ready = true;
+		return $this->load($key)->write($this->encode($value), 'w', true);
 	}
 
 }

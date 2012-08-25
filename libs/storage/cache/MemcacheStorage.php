@@ -9,24 +9,28 @@
 
 namespace titon\libs\storage\cache;
 
-use \Memcache;
+use titon\Titon;
 use titon\libs\storage\StorageAbstract;
 use titon\libs\storage\StorageException;
+use \Memcache;
 
 /**
  * A storage engine for the Memcache module, using the Memcache class; requires pecl/memcached.
  * This engine can be installed using the Cache::setup() method.
  *
+ * {{{
  *		new MemcacheStorage(array(
  *			'servers' => 'localhost:11211',
  *			'persistent' => true,
  *			'compress' => true
  *		));
+ * }}}
  *
  * A sample configuration can be found above, and the following options are available:
  * servers (array or string), compress, persistent, serialize, expires.
  *
  * @package	titon.libs.storage.cache
+ *
  * @link	http://pecl.php.net/package/memcached
  */
 class MemcacheStorage extends StorageAbstract {
@@ -50,7 +54,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		return $this->connection->decrement($this->key($key), (int) $step);
+		return $this->connection->decrement($this->key($key), $step);
 	}
 
 	/**
@@ -71,7 +75,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return mixed
 	 */
 	public function get($key) {
-		return $this->unserialize($this->connection->get($this->key($key)));
+		return $this->decode($this->connection->get($this->key($key)));
 	}
 
 	/**
@@ -94,7 +98,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function increment($key, $step = 1) {
-		return $this->connection->increment($this->key($key), (int) $step);
+		return $this->connection->increment($this->key($key), $step);
 	}
 
 	/**
@@ -105,7 +109,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @throws StorageException
 	 */
 	public function initialize() {
-		if (!extension_loaded('memcache')) {
+		if (!Titon::load('memcache')) {
 			throw new StorageException('Memcache extension does not exist.');
 		}
 
@@ -119,28 +123,16 @@ class MemcacheStorage extends StorageAbstract {
 			$this->config->compress = MEMCACHE_COMPRESSED;
 		}
 
-		if (!is_array($config['servers'])) {
-			$config['servers'] = [$config['servers']];
-		}
-
 		$this->connection = $this->connection ?: new Memcache();
 
-		foreach ($config['servers'] as $server) {
+		foreach ((array) $config['servers'] as $server) {
 			if (is_array($server)) {
 				$server = implode(':', $server);
 			}
 
 			list($host, $port, $weight) = explode(':', $server);
 
-			if (!$port) {
-				$port = self::PORT;
-			}
-
-			if (!$weight) {
-				$weight = self::WEIGHT;
-			}
-
-			$this->connection->addServer($host, (int) $port, $this->config->persistent, (int) $weight);
+			$this->connection->addServer($host, $port ?: self::PORT, $this->config->persistent, $weight ?: self::WEIGHT);
 		}
 	}
 
@@ -165,7 +157,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		return $this->connection->set($this->key($key), $this->serialize($value), $this->config->compress, $this->expires($expires));
+		return $this->connection->set($this->key($key), $this->encode($value), $this->config->compress, $this->expires($expires));
 	}
 
 }
