@@ -36,6 +36,17 @@ use \Memcached;
 class MemcachedStorage extends MemcacheStorage {
 
 	/**
+	 * Check if the item exists within the cache.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return boolean
+	 */
+	public function has($key) {
+		return (bool) ($this->get($this->key($key)) && $this->connection->getResultCode() === Memcached::RES_SUCCESS);
+	}
+
+	/**
 	 * Initialize the Memcached instance and set all relevant options.
 	 *
 	 * @access public
@@ -57,6 +68,7 @@ class MemcachedStorage extends MemcacheStorage {
 		$this->connection->setOption(Memcached::OPT_COMPRESSION, (bool) $config['compress']);
 		$this->connection->setOption(Memcached::OPT_DISTRIBUTION, Memcached::DISTRIBUTION_CONSISTENT);
 		$this->connection->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
+		$this->connection->setOption(Memcached::OPT_BUFFER_WRITES, true);
 
 		if (Memcached::HAVE_IGBINARY) {
 			$this->connection->setOption(Memcached::OPT_SERIALIZER, Memcached::SERIALIZER_IGBINARY);
