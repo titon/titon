@@ -44,7 +44,6 @@ Email
 ### Incomplete Unit Tests ###
 
 * console
-* constant
 * io/Stream
 * io/Socket
 * libs/adapters
