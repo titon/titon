@@ -6,10 +6,6 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 ### Systems In Development ###
 
-Email
-* net/Email
-* libs/transporters
-
 ### Upcoming Systems ###
 
 Database/Datasource Layer
@@ -34,6 +30,10 @@ Streams
 Sockets
 * io/Socket
 * libs/sockets
+
+Email
+* net/Email
+* libs/transporters
 
 ### Backlogged Systems ###
 
