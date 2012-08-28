@@ -15,12 +15,12 @@ use titon\libs\storage\StorageException;
 use \Memcache;
 
 /**
- * A storage engine for the Memcache module, using the Memcache class; requires pecl/memcached.
+ * A storage engine for the Memcache key-value store; requires pecl/memcached.
  * This engine can be installed using the Cache::setup() method.
  *
  * {{{
  *		new MemcacheStorage(array(
- *			'servers' => 'localhost:11211',
+ *			'server' => 'localhost:11211',
  *			'persistent' => true,
  *			'compress' => true
  *		));
@@ -106,7 +106,7 @@ class MemcacheStorage extends StorageAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws StorageException
+	 * @throws \titon\libs\storage\StorageException
 	 */
 	public function initialize() {
 		if (!Titon::load('memcache')) {
@@ -115,8 +115,8 @@ class MemcacheStorage extends StorageAbstract {
 
 		$config = $this->config->get();
 
-		if (empty($config['servers'])) {
-			return;
+		if (!$config['server']) {
+			throw new StorageException(sprintf('No server has been defined for %s.', $this->info->className()));
 		}
 
 		if ($config['compress']) {
@@ -125,7 +125,7 @@ class MemcacheStorage extends StorageAbstract {
 
 		$this->connection = $this->connection ?: new Memcache();
 
-		foreach ((array) $config['servers'] as $server) {
+		foreach ((array) $config['server'] as $server) {
 			if (is_array($server)) {
 				$server = implode(':', $server);
 			}

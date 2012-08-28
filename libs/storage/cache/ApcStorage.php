@@ -18,6 +18,7 @@ use titon\libs\storage\StorageException;
  * This engine can be installed using the Cache::setup() method. No configuration options are available for this engine.
  *
  * @package	titon.libs.storage.cache
+ *
  * @link	http://pecl.php.net/package/apc
  */
 class ApcStorage extends StorageAbstract {
@@ -83,7 +84,7 @@ class ApcStorage extends StorageAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws StorageException
+	 * @throws \titon\libs\storage\StorageException
 	 */
 	public function initialize() {
 		if (!Titon::load('apc')) {

@@ -117,7 +117,7 @@ class XcacheStorage extends StorageAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws StorageException
+	 * @throws \titon\libs\storage\StorageException
 	 */
 	public function initialize() {
 		if (!Titon::load('xcache')) {

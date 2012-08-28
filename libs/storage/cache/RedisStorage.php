@@ -100,7 +100,7 @@ class RedisStorage extends StorageAbstract {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws StorageException
+	 * @throws \titon\libs\storage\StorageException
 	 */
 	public function initialize() {
 		if (!Titon::load('redis')) {
@@ -109,7 +109,7 @@ class RedisStorage extends StorageAbstract {
 
 		$config = $this->config->get();
 
-		if (empty($config['server'])) {
+		if (!$config['server']) {
 			throw new StorageException(sprintf('No server has been defined for %s.', $this->info->className()));
 		}
 

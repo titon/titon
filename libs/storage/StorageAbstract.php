@@ -35,8 +35,7 @@ abstract class StorageAbstract extends Base implements Storage {
 	 * Configuration.
 	 *
 	 *	id 			- Unique ID for specific engines
-	 * 	server		- Singular server to store data in
-	 *	servers 	- List of servers to store data in
+	 * 	server		- Server(s) to connect and store data in
 	 *	serialize 	- Toggle data serialization
 	 *	compress 	- Toggle data compression
 	 *	persistent 	- Toggle persistent server connections

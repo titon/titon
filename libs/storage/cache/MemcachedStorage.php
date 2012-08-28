@@ -15,19 +15,19 @@ use titon\libs\storage\StorageException;
 use \Memcached;
 
 /**
- * A storage engine for the Memcache module, using the Memcached class; requires pecl/memcached.
+ * A storage engine for the Memcache key-value store; requires pecl/memcached module.
  * This engine can be installed using the Cache::setup() method.
  *
  * {{{
  *		new MemcachedStorage(array(
  *			'id' => 'default',
- *			'servers' => 'localhost:11211',
+ *			'server' => 'localhost:11211',
  *			'compress' => true
  *		));
  * }}}
  *
  * A sample configuration can be found above, and the following options are available:
- * id, servers (array or string), compress, serialize, prefix, expires.
+ * id, server (array or string), compress, serialize, prefix, expires.
  *
  * @package	titon.libs.storage.cache
  *
@@ -51,7 +51,7 @@ class MemcachedStorage extends MemcacheStorage {
 	 *
 	 * @access public
 	 * @return void
-	 * @throws StorageException
+	 * @throws \titon\libs\storage\StorageException
 	 */
 	public function initialize() {
 		if (!Titon::load('memcache')) {
@@ -60,8 +60,8 @@ class MemcachedStorage extends MemcacheStorage {
 
 		$config = $this->config->get();
 
-		if (empty($config['servers'])) {
-			return;
+		if (!$config['server']) {
+			throw new StorageException(sprintf('No server has been defined for %s.', $this->info->className()));
 		}
 
 		$this->connection = $this->connection ?: new Memcached($config['id']);
@@ -74,14 +74,14 @@ class MemcachedStorage extends MemcacheStorage {
 			$this->connection->setOption(Memcached::OPT_SERIALIZER, Memcached::SERIALIZER_IGBINARY);
 		}
 
-		if (is_array($config['servers'])) {
+		if (is_array($config['server'])) {
 			$serverList = $this->connection->getServerList();
 
 			if (empty($serverList)) {
-				$this->connection->addServers($config['servers']);
+				$this->connection->addServers($config['server']);
 			}
 		} else {
-			list($host, $port, $weight) = explode(':', $config['servers']);
+			list($host, $port, $weight) = explode(':', $config['server']);
 
 			$this->connection->addServer($host, $port ?: self::PORT, $weight ?: self::WEIGHT);
 		}
