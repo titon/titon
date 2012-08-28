@@ -113,7 +113,7 @@ class RedisStorage extends StorageAbstract {
 			throw new StorageException(sprintf('No server has been defined for %s.', $this->info->className()));
 		}
 
-		$this->connection = $this->connection ?: new Redis();
+		$this->connection = new Redis();
 		$this->connection->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_IGBINARY);
 
 		list($host, $port, $timeout) = explode(':', $config['server']);

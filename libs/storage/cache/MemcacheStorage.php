@@ -12,7 +12,7 @@ namespace titon\libs\storage\cache;
 use titon\Titon;
 use titon\libs\storage\StorageAbstract;
 use titon\libs\storage\StorageException;
-use \Memcache;
+use \Memcached;
 
 /**
  * A storage engine for the Memcache key-value store; requires pecl/memcached.
@@ -27,7 +27,7 @@ use \Memcache;
  * }}}
  *
  * A sample configuration can be found above, and the following options are available:
- * servers (array or string), compress, persistent, serialize, expires.
+ * server (array or string), compress, persistent, serialize, expires, prefix.
  *
  * @package	titon.libs.storage.cache
  *
@@ -86,7 +86,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return (bool) $this->get($this->key($key));
+		return (bool) ($this->get($key) && $this->connection->getResultCode() === Memcached::RES_SUCCESS);
 	}
 
 	/**
@@ -119,20 +119,26 @@ class MemcacheStorage extends StorageAbstract {
 			throw new StorageException(sprintf('No server has been defined for %s.', $this->info->className()));
 		}
 
-		if ($config['compress']) {
-			$this->config->compress = MEMCACHE_COMPRESSED;
+		$this->connection = new Memcached($config['id']);
+		$this->connection->setOption(Memcached::OPT_COMPRESSION, (bool) $config['compress']);
+		$this->connection->setOption(Memcached::OPT_DISTRIBUTION, Memcached::DISTRIBUTION_CONSISTENT);
+		$this->connection->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
+		$this->connection->setOption(Memcached::OPT_BUFFER_WRITES, true);
+
+		if (Memcached::HAVE_IGBINARY) {
+			$this->connection->setOption(Memcached::OPT_SERIALIZER, Memcached::SERIALIZER_IGBINARY);
 		}
 
-		$this->connection = $this->connection ?: new Memcache();
+		if (is_array($config['server'])) {
+			$serverList = $this->connection->getServerList();
 
-		foreach ((array) $config['server'] as $server) {
-			if (is_array($server)) {
-				$server = implode(':', $server);
+			if (empty($serverList)) {
+				$this->connection->addServers($config['server']);
 			}
+		} else {
+			list($host, $port, $weight) = explode(':', $config['server']);
 
-			list($host, $port, $weight) = explode(':', $server);
-
-			$this->connection->addServer($host, $port ?: self::PORT, $this->config->persistent, $weight ?: self::WEIGHT);
+			$this->connection->addServer($host, $port ?: self::PORT, $weight ?: self::WEIGHT);
 		}
 	}
 
@@ -157,7 +163,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
-		return $this->connection->set($this->key($key), $this->encode($value), $this->config->compress, $this->expires($expires));
+		return $this->connection->set($this->key($key), $this->encode($value), $this->expires($expires));
 	}
 
 }

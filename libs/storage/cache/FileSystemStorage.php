@@ -147,7 +147,7 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return $this->_getPath($key);
+		return file_exists($this->_getPath($key));
 	}
 
 	/**
