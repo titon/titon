@@ -10,22 +10,22 @@
 namespace titon\tests\titon\libs\storage\cache;
 
 use titon\Titon;
-use titon\libs\storage\cache\XcacheStorage;
+use titon\libs\storage\cache\WincacheStorage;
 use titon\tests\TestCase;
 
 /**
- * Test class for titon\libs\storage\cache\XcacheStorage.
+ * Test class for titon\libs\storage\cache\WincacheStorage.
  */
-class XcacheStorageTest extends TestCase {
+class WincacheStorageTest extends TestCase {
 
 	/**
 	 * Initialize storage and create fake cache items.
 	 */
 	public function setUp() {
 		parent::setUp();
-		$this->skipIf(!Titon::load('xcache'), 'Xcache is not installed or configured properly.');
+		$this->skipIf(!Titon::load('wincache'), 'Wincache is not installed or configured properly.');
 
-		$this->object = new XcacheStorage(); // @todo
+		$this->object = new WincacheStorage(); // @todo
 		$this->object->set('User::getById-1337', ['username' => 'Titon']);
 		$this->object->set('Topic::getAll', [['id' => 1], ['id' => 2]], '-1 day'); // expired
 		$this->object->set('Comment::count', 1);
