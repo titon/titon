@@ -35,6 +35,7 @@ abstract class StorageAbstract extends Base implements Storage {
 	 * Configuration.
 	 *
 	 *	id 			- Unique ID for specific engines
+	 * 	server		- Singular server to store data in
 	 *	servers 	- List of servers to store data in
 	 *	serialize 	- Toggle data serialization
 	 *	compress 	- Toggle data compression
@@ -50,6 +51,7 @@ abstract class StorageAbstract extends Base implements Storage {
 	 */
 	protected $_config = [
 		'id' => '',
+		'server' => '',
 		'servers' => [],
 		'serialize' => false,
 		'compress' => false,
