@@ -16,6 +16,7 @@ use titon\libs\readers\core\IniReader;
 use titon\libs\readers\core\JsonReader;
 use titon\libs\readers\core\XmlReader;
 use titon\libs\readers\gettext\PoReader;
+use \Exception;
 
 /**
  * Test class for titon\libs\bundles\messages\MessageBundle.
@@ -27,11 +28,11 @@ class MessageBundleTest extends TestCase {
 	 */
 	public function testBundleDetection() {
 		try {
-			$fakeBundle = new MessageBundle(['bundle' => 'en']);
-			$fakeBundle = new MessageBundle(['bundle' => 'doesntExist']);
+			new MessageBundle(['bundle' => 'en']);
+			new MessageBundle(['bundle' => 'doesntExist']);
 
 			$this->assertTrue(false);
-		} catch (\Exception $e) {
+		} catch (Exception $e) {
 			$this->assertTrue(true);
 		}
 	}

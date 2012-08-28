@@ -590,6 +590,8 @@ class Response extends Base {
 		} else {
 			echo $this->_body;
 		}
+
+		return $this->_body;
 	}
 
 	/**

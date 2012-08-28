@@ -11,8 +11,6 @@ namespace titon;
 
 /**
  * Outputs multiple variables in an easily readable format.
- *
- * @param mixed $var, $var, $var...
  */
 function debug() {
 	if (error_reporting() > 0) {
@@ -34,8 +32,6 @@ function debug() {
 
 /**
  * Works exactly like debug() except uses var_dump() in place of print_r().
- *
- * @param mixed $var, $var, $var...
  */
 function dump() {
 	if (error_reporting() > 0) {

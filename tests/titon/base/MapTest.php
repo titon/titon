@@ -1304,12 +1304,12 @@ class MapTest extends TestCase {
 	}
 
 	/**
-	 * Test that Map can be interated over like a normal array.
+	 * Test that Map can be iterated over like a normal array.
 	 */
 	public function testIterator() {
 		$values = [];
 
-		foreach ($this->object as $key => $value) {
+		foreach ($this->object as $value) {
 			$values[] = $value;
 		}
 

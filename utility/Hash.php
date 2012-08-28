@@ -701,7 +701,7 @@ class Hash {
 		$pass = false;
 
 		if ($set) {
-			foreach ((array) $set as $key => $value) {
+			foreach ((array) $set as $value) {
 				if ($callback($value, $value)) {
 					$pass = true;
 					break;
@@ -719,7 +719,7 @@ class Hash {
 	 * @access public
 	 * @param object $object
 	 * @return array
-	 * @throws \titon\libs\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function toArray($object) {
@@ -747,7 +747,7 @@ class Hash {
 	 * @access public
 	 * @param array $array
 	 * @return object
-	 * @throws \titon\libs\utility\UtilityException
+	 * @throws \titon\utility\UtilityException
 	 * @static
 	 */
 	public static function toObject($array) {

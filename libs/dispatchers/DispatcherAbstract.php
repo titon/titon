@@ -14,6 +14,7 @@ use titon\base\Base;
 use titon\libs\controllers\core\ErrorController;
 use titon\libs\dispatchers\Dispatcher;
 use titon\libs\dispatchers\DispatcherException;
+use titon\libs\exceptions\HttpException;
 use titon\libs\traits\Attachable;
 use \Exception;
 

@@ -54,7 +54,7 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	 * @param array $expected
 	 * @param array $actual
 	 * @param boolean $keySort
-	 * @return boolean
+	 * @return void
 	 */
 	public function assertArraysEqual(array $expected, array $actual, $keySort = false) {
 		if ($keySort) {
@@ -65,7 +65,7 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 			sort($expected);
 		}
 
-		return $this->assertEquals($expected, $actual);
+		$this->assertEquals($expected, $actual);
 	}
 
 	/**
@@ -73,10 +73,10 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @access public
 	 * @param mixed $value
-	 * @return boolean
+	 * @return void
 	 */
 	public function assertFalsey($value) {
-		return $this->assertFalse(($value) ? true : false);
+		$this->assertFalse(($value) ? true : false);
 	}
 
 	/**
@@ -84,10 +84,10 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 	 *
 	 * @access public
 	 * @param mixed $value
-	 * @return boolean
+	 * @return void
 	 */
 	public function assertTruthy($value) {
-		return $this->assertTrue(($value) ? true : false);
+		$this->assertTrue(($value) ? true : false);
 	}
 
 	/**

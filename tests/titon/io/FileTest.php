@@ -48,7 +48,7 @@ class FileTest extends TestCase {
 	 */
 	public function testConstruct() {
 		try {
-			$file = new File(APP_TEMP);
+			new File(APP_TEMP);
 			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);

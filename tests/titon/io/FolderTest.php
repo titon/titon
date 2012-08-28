@@ -50,7 +50,7 @@ class FolderTest extends TestCase {
 	 */
 	public function testConstruct() {
 		try {
-			$folder = new Folder(APP_TEMP . 'io/foo.php');
+			new Folder(APP_TEMP . 'io/foo.php');
 			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);

@@ -116,6 +116,7 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	 * @param string $module
 	 * @param string $locale
 	 * @return \titon\libs\bundles\Bundle
+	 * @throws \titon\libs\translators\TranslatorException
 	 */
 	public function loadBundle($module, $locale) {
 		throw new TranslatorException(sprintf('You must define the loadBundle() method within your %s.', get_class($this)));

@@ -9,6 +9,7 @@
 
 namespace titon\tests\fixtures;
 
+use titon\libs\dispatchers\Dispatcher;
 use titon\libs\listeners\ListenerAbstract;
 use titon\libs\controllers\Controller;
 use titon\libs\engines\Engine;
@@ -30,11 +31,11 @@ class ListenerFixture extends ListenerAbstract {
 		$this->executed[] = 'shutdown';
 	}
 
-	public function preDispatch() {
+	public function preDispatch(Dispatcher $dispatcher) {
 		$this->executed[] = 'preDispatch';
 	}
 
-	public function postDispatch() {
+	public function postDispatch(Dispatcher $dispatcher) {
 		$this->executed[] = 'postDispatch';
 	}
 
