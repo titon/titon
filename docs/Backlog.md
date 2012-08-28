@@ -45,7 +45,6 @@ Email
 
 * console
 * constant
-* core/Cache
 * io/Stream
 * io/Socket
 * libs/adapters
@@ -55,7 +54,6 @@ Email
 * libs/readers/core/YamlReader
 * libs/readers/gettext/MoReader
 * libs/shells
-* libs/storage
 * libs/streams
 * libs/transporters
 * net/Email
