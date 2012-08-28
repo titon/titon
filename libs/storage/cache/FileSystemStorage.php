@@ -80,11 +80,9 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		if (($value = $this->get($key)) !== null) {
-			return $this->set($key, ($value - $step));
-		}
+		$value = $this->get($key) ?: 0;
 
-		return false;
+		return $this->set($key, ($value - $step));
 	}
 
 	/**
@@ -161,11 +159,9 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function increment($key, $step = 1) {
-		if (($value = $this->get($key)) !== null) {
-			return $this->set($key, ($value + $step));
-		}
+		$value = $this->get($key) ?: 0;
 
-		return false;
+		return $this->set($key, ($value + $step));
 	}
 
 	/**
@@ -235,7 +231,7 @@ class FileSystemStorage extends StorageAbstract {
 	public function set($key, $value, $expires = null) {
 		$this->_setExpires($key, $expires);
 
-		return $this->load($key)->write($this->encode($value), 'w', true);
+		return $this->load($key)->write($this->encode($value));
 	}
 
 	/**
@@ -271,7 +267,7 @@ class FileSystemStorage extends StorageAbstract {
 	protected function _setExpires($key, $expires) {
 		$this->_expiresMap[$key] = $this->expires($expires);
 
-		$this->_expires->write(serialize($this->_expiresMap), 'w', true);
+		$this->_expires->write(serialize($this->_expiresMap));
 
 		return $this;
 	}
@@ -286,7 +282,7 @@ class FileSystemStorage extends StorageAbstract {
 	protected function _removeExpires($key) {
 		unset($this->_expiresMap[$key]);
 
-		$this->_expires->write(serialize($this->_expiresMap), 'w', true);
+		$this->_expires->write(serialize($this->_expiresMap));
 
 		return $this;
 	}

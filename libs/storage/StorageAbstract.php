@@ -51,7 +51,6 @@ abstract class StorageAbstract extends Base implements Storage {
 	protected $_config = [
 		'id' => '',
 		'server' => '',
-		'servers' => [],
 		'serialize' => false,
 		'compress' => false,
 		'persistent' => true,
