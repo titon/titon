@@ -12,6 +12,7 @@ namespace titon\net;
 use titon\Titon;
 use titon\base\Base;
 use titon\constant\Http;
+use titon\constant\Mime;
 use titon\net\NetException;
 use titon\libs\traits\Cacheable;
 use titon\utility\Hash;
@@ -79,7 +80,7 @@ class Request extends Base {
 		} else if (mb_strpos($type, '/') !== false) {
 			$contentType = [$type];
 		} else {
-			$contentType = (array) Http::getContentType($type);
+			$contentType = (array) Mime::getAll($type);
 		}
 
 		foreach ($this->_accepts('Accept') as $aType) {

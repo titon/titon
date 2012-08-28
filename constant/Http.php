@@ -34,39 +34,6 @@ class Http {
 	const HTTP_11 = 'HTTP/1.1';
 
 	/**
-	 * List of content types to parse the request as.
-	 *
-	 * @access public
-	 * @var array
-	 * @static
-	 */
-	public static $contentTypes = [
-		'ai'			=> 'application/postscript',
-		'amf'			=> 'application/x-amf',
-		'atom'			=> 'application/atom+xml',
-		'css'			=> 'text/css',
-		'csv'			=> ['application/csv', 'application/vnd.ms-excel', 'text/plain'],
-		'file'			=> 'multipart/form-data',
-		'form'			=> 'application/x-www-form-urlencoded',
-		'htm'			=> 'text/html',
-		'html'			=> ['text/html', '*/*'],
-		'javascript'	=> 'text/javascript',
-		'js'			=> 'text/javascript',
-		'json'			=> 'application/json',
-		'pdf'			=> 'application/pdf',
-		'rss'			=> 'application/rss+xml',
-		'swf'			=> 'application/x-shockwave-flash',
-		'tar'			=> 'application/x-tar',
-		'text'			=> 'text/plain',
-		'txt'			=> 'text/plain',
-		'vcf'			=> 'text/x-vcard',
-		'xhtml'			=> ['application/xhtml+xml', 'application/xhtml', 'text/xhtml'],
-		'xhtml-mobile'	=> 'application/vnd.wap.xhtml+xml',
-		'xml'			=> ['application/xml', 'text/xml'],
-		'zip'			=> 'application/x-zip'
-	];
-
-	/**
 	 * List of acceptable header types.
 	 *
 	 * @access public
@@ -196,34 +163,6 @@ class Http {
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported'
 	];
-
-	/**
-	 * Get a single content type.
-	 *
-	 * @access public
-	 * @param string|array $type
-	 * @return string
-	 * @throws \titon\constant\ConstantException
-	 * @static
-	 */
-	public static function getContentType($type) {
-		if (isset(self::$contentTypes[$type])) {
-			return self::$contentTypes[$type];
-		}
-
-		throw new ConstantException(sprintf('Content type %s is not supported.', $type));
-	}
-
-	/**
-	 * Get all content types.
-	 *
-	 * @access public
-	 * @return array
-	 * @static
-	 */
-	public static function getContentTypes() {
-		return self::$contentTypes;
-	}
 
 	/**
 	 * Return all the standard types of HTTP headers.

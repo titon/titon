@@ -12,6 +12,7 @@ namespace titon\net;
 use titon\Titon;
 use titon\base\Base;
 use titon\constant\Http;
+use titon\constant\Mime;
 use titon\net\NetException;
 use titon\utility\Format;
 use titon\utility\Number;
@@ -324,7 +325,11 @@ class Response extends Base {
 	 */
 	public function contentType($type) {
 		if (mb_strpos($type, '/') === false) {
-			$contentType = Http::getContentType($type);
+			$contentType = Mime::getAll($type);
+
+			if (!$contentType) {
+				throw new NetException(sprintf('Invalid content type %s.', $type));
+			}
 
 			if (is_array($contentType)) {
 				$type = $contentType[0];
@@ -333,7 +338,7 @@ class Response extends Base {
 			}
 		}
 
-		if (String::startsWith($type, 'text/')) {
+		if (String::startsWith($type, Mime::TEXT)) {
 			$type .= '; charset=' . Titon::config()->encoding();
 		}
 
