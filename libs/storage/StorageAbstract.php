@@ -91,7 +91,7 @@ abstract class StorageAbstract extends Base implements Storage {
 		return $this->cache([__METHOD__, $key], function() use ($key) {
 			$key = $this->config->prefix . (string) $this->createCacheKey($key);
 
-			return trim(preg_replace('/[^a-z0-9\-_\.]+/is', '', str_replace(['\\', '::'], '.', $key)), '.');
+			return trim(preg_replace('/[^a-z0-9\.]+/is', '', str_replace(['\\', '::', '/', '-', '_'], '.', $key)), '.');
 		});
 	}
 

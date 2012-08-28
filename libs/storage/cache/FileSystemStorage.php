@@ -32,6 +32,22 @@ use titon\libs\storage\StorageException;
 class FileSystemStorage extends StorageAbstract {
 
 	/**
+	 * File object for the expiration mapping.
+	 *
+	 * @access protected
+	 * @var \titon\io\File
+	 */
+	protected $_expires;
+
+	/**
+	 * Mapping of keys and expiration times.
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_expiresMap = [];
+
+	/**
 	 * List of cache File objects.
 	 *
 	 * @access protected
@@ -56,14 +72,6 @@ class FileSystemStorage extends StorageAbstract {
 	protected $_groups;
 
 	/**
-	 * File object for the expires mapping.
-	 *
-	 * @access protected
-	 * @var \titon\io\File
-	 */
-	protected $_times;
-
-	/**
 	 * Decrement a value within the cache.
 	 *
 	 * @access public
@@ -72,7 +80,7 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function decrement($key, $step = 1) {
-		if ($value = $this->get($key)) {
+		if (($value = $this->get($key)) !== null) {
 			return $this->set($key, ($value - $step));
 		}
 
@@ -103,7 +111,13 @@ class FileSystemStorage extends StorageAbstract {
 			}
 		}
 
+		$this->_files = [];
+		$this->_expires = [];
+		$this->_expiresMap = [];
+
 		clearstatcache();
+
+		return true;
 	}
 
 	/**
@@ -115,17 +129,13 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function get($key) {
 		if ($this->has($key)) {
-			return $this->load($key)->read();
+			$expires = $this->_getExpires($key);
 
-			/*$value = $this->load($key)->read();
-			$pipe = mb_strpos($value, '|');
-			$timestamp = mb_substr($value, 0, $pipe);
-
-			if ($timestamp >= time()) {
-				return $this->decode(mb_substr($value, ($pipe + 1), mb_strlen($value)));
+			if ($expires && $expires >= time()) {
+				return $this->decode($this->load($key)->read());
 			} else {
 				$this->remove($key);
-			}*/
+			}
 		}
 
 		return null;
@@ -139,7 +149,7 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function has($key) {
-		return file_exists($this->_folder->path() . $this->key($key) . '.cache');
+		return $this->_getPath($key);
 	}
 
 	/**
@@ -151,7 +161,7 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function increment($key, $step = 1) {
-		if ($value = $this->get($key)) {
+		if (($value = $this->get($key)) !== null) {
 			return $this->set($key, ($value + $step));
 		}
 
@@ -170,8 +180,11 @@ class FileSystemStorage extends StorageAbstract {
 		$path = APP_TEMP . 'cache/' . $this->config->storage . '/';
 
 		$this->_folder = new Folder($path, true);
-		$this->_groups = new File($path . '.groups', true);
-		$this->_times = new File($path . '.times', true);
+		$this->_expires = new File($path . '.expires', true);
+
+		if ($map = $this->_expires->read()) {
+			$this->_expiresMap = unserialize($map);
+		}
 	}
 
 	/**
@@ -182,13 +195,11 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return string
 	 */
 	public function load($key = null) {
-		if ($this->has($key)) {
+		if (isset($this->_files[$key])) {
 			return $this->_files[$key];
 		}
 
-		$path = $this->_folder->path() . $this->key($key) . '.cache';
-
-		$this->_files[$key] = new File($path, true);
+		$this->_files[$key] = new File($this->_getPath($key), true);
 
 		return $this->_files[$key];
 	}
@@ -202,7 +213,7 @@ class FileSystemStorage extends StorageAbstract {
 	 */
 	public function remove($key) {
 		if ($this->has($key)) {
-			$this->load($key)->delete();
+			$this->_removeExpires($key)->load($key)->delete();
 
 			unset($this->_files[$key]);
 
@@ -222,7 +233,62 @@ class FileSystemStorage extends StorageAbstract {
 	 * @return boolean
 	 */
 	public function set($key, $value, $expires = null) {
+		$this->_setExpires($key, $expires);
+
 		return $this->load($key)->write($this->encode($value), 'w', true);
+	}
+
+	/**
+	 * Return the file system path for a cache key.
+	 *
+	 * @access protected
+	 * @param string $key
+	 * @return string
+	 */
+	protected function _getPath($key) {
+		return $this->_folder->path() . $this->key($key) . '.cache';
+	}
+
+	/**
+	 * Get the expiration time for a key.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return mixed
+	 */
+	protected function _getExpires($key) {
+		return isset($this->_expiresMap[$key]) ? $this->_expiresMap[$key] : null;
+	}
+
+	/**
+	 * Set the expiration time for a key.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param mixed $expires
+	 * @return \titon\libs\storage\cache\FileSystemStorage
+	 */
+	protected function _setExpires($key, $expires) {
+		$this->_expiresMap[$key] = $this->expires($expires);
+
+		$this->_expires->write(serialize($this->_expiresMap), 'w', true);
+
+		return $this;
+	}
+
+	/**
+	 * Remove the expiration time for a key.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return \titon\libs\storage\cache\FileSystemStorage
+	 */
+	protected function _removeExpires($key) {
+		unset($this->_expiresMap[$key]);
+
+		$this->_expires->write(serialize($this->_expiresMap), 'w', true);
+
+		return $this;
 	}
 
 }
