@@ -10,13 +10,13 @@
 namespace titon\tests\titon\libs\storage\cache;
 
 use titon\Titon;
-use titon\libs\storage\cache\FileSystemStorage;
+use titon\libs\storage\cache\MemoryStorage;
 use titon\tests\TestCase;
 
 /**
- * Test class for titon\libs\storage\cache\FileSystemStorage.
+ * Test class for titon\libs\storage\cache\MemoryStorage.
  */
-class FileSystemStorageTest extends TestCase {
+class MemoryStorageTest extends TestCase {
 
 	/**
 	 * Initialize storage and create fake cache items.
@@ -24,7 +24,7 @@ class FileSystemStorageTest extends TestCase {
 	public function setUp() {
 		parent::setUp();
 
-		$this->object = new FileSystemStorage(array('storage' => 'file_system'));
+		$this->object = new MemoryStorage();
 		$this->object->set('User::getById-1337', ['username' => 'Titon']);
 		$this->object->set('Topic::getAll', [['id' => 1], ['id' => 2]], '-1 day'); // expired
 		$this->object->set('Comment::count', 1);
@@ -36,7 +36,6 @@ class FileSystemStorageTest extends TestCase {
 	protected function tearDown() {
 		$this->object->flush();
 		unset($this->object);
-		rmdir(APP_TEMP . 'cache/file_system/');
 	}
 
 	/**
@@ -53,27 +52,27 @@ class FileSystemStorageTest extends TestCase {
 	}
 
 	/**
-	 * Test that flush() deletes all files in the folder.
+	 * Test that flush() deletes all cache.
 	 */
 	public function testFlush() {
-		$this->assertTrue(file_exists(APP_TEMP . 'cache/file_system/User.getById.1337.cache'));
+		$this->assertTrue($this->object->has('User::getById-1337'));
 		$this->object->flush();
-		$this->assertFalse(file_exists(APP_TEMP . 'cache/file_system/User.getById.1337.cache'));
+		$this->assertFalse($this->object->has('User::getById-1337'));
 	}
 
 	/**
-	 * Test that get() returns the contents of a cache while respecting expiration times.
+	 * Test that get() returns the contents of a cache.
 	 */
 	public function testGet() {
 		$this->assertEquals(['username' => 'Titon'], $this->object->get('User::getById-1337'));
 		$this->assertEquals(1, $this->object->get('Comment::count'));
+		$this->assertEquals([['id' => 1], ['id' => 2]], $this->object->get('Topic::getAll'));
 
-		$this->assertEquals(null, $this->object->get('Topic::getAll')); // Expired
 		$this->assertEquals(null, $this->object->get('Post::getById-666'));
 	}
 
 	/**
-	 * Test that has() returns true if the cache file exists.
+	 * Test that has() returns true if the cache exists.
 	 */
 	public function testHas() {
 		$this->assertTrue($this->object->has('User::getById-1337'));
@@ -94,19 +93,16 @@ class FileSystemStorageTest extends TestCase {
 	}
 
 	/**
-	 * Test that remove() deletes the cache file.
+	 * Test that remove() deletes the cache.
 	 */
 	public function testRemove() {
 		$this->assertTrue($this->object->has('User::getById-1337'));
-		$this->assertTrue(file_exists(APP_TEMP . 'cache/file_system/User.getById.1337.cache'));
-
 		$this->object->remove('User::getById-1337');
 		$this->assertFalse($this->object->has('User::getById-1337'));
-		$this->assertFalse(file_exists(APP_TEMP . 'cache/file_system/User.getById.1337.cache'));
 	}
 
 	/**
-	 * Test that set() writes data to the cache file.
+	 * Test that set() writes data to the cache.
 	 */
 	public function testSet() {
 		$this->assertEquals(['username' => 'Titon'], $this->object->get('User::getById-1337'));

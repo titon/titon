@@ -104,4 +104,20 @@ class TestCase extends \PHPUnit_Framework_TestCase {
 		echo $value . PHP_EOL;
 	}
 
+	/**
+	 * Convenience function for skipping a test if the boolean is true.
+	 *
+	 * @access public
+	 * @param boolean $skip
+	 * @param string $message
+	 * @return boolean
+	 */
+	public function skipIf($skip, $message = '') {
+		if ($skip) {
+			$this->markTestSkipped($message);
+		}
+
+		return $skip;
+	}
+
 }
