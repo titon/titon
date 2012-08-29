@@ -24,14 +24,6 @@ abstract class StorageAbstract extends Base implements Storage {
 	use Cacheable;
 
 	/**
-	 * The third-party class instance.
-	 *
-	 * @access public
-	 * @var object
-	 */
-	public $connection;
-
-	/**
 	 * Configuration.
 	 *
 	 *	id 			- Unique ID for specific engines
@@ -102,7 +94,11 @@ abstract class StorageAbstract extends Base implements Storage {
 	 */
 	public function encode($value) {
 		if ($this->config->serialize) {
-			$value = serialize($value);
+			if (function_exists('igbinary_serialize')) {
+				$value = igbinary_serialize($value);
+			} else {
+				$value = serialize($value);
+			}
 		}
 
 		return $value;
@@ -117,7 +113,11 @@ abstract class StorageAbstract extends Base implements Storage {
 	 */
 	public function decode($value) {
 		if ($value && $this->config->serialize) {
-			$value = @unserialize($value);
+			if (function_exists('igbinary_unserialize')) {
+				$value = @igbinary_unserialize($value);
+			} else {
+				$value = @unserialize($value);
+			}
 		}
 
 		return $value;

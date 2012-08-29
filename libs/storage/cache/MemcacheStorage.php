@@ -46,6 +46,14 @@ class MemcacheStorage extends StorageAbstract {
 	const WEIGHT = 0;
 
 	/**
+	 * The third-party class instance.
+	 *
+	 * @access public
+	 * @var \Memcached
+	 */
+	public $connection;
+
+	/**
 	 * Decrement a value within the cache.
 	 *
 	 * @access public
@@ -109,7 +117,7 @@ class MemcacheStorage extends StorageAbstract {
 	 * @throws \titon\libs\storage\StorageException
 	 */
 	public function initialize() {
-		if (!Titon::load('memcache')) {
+		if (!Titon::load('memcached')) {
 			throw new StorageException('Memcache extension does not exist.');
 		}
 
@@ -125,7 +133,7 @@ class MemcacheStorage extends StorageAbstract {
 		$this->connection->setOption(Memcached::OPT_LIBKETAMA_COMPATIBLE, true);
 		$this->connection->setOption(Memcached::OPT_BUFFER_WRITES, true);
 
-		if (Memcached::HAVE_IGBINARY) {
+		if (Titon::load('igbinary')) {
 			$this->connection->setOption(Memcached::OPT_SERIALIZER, Memcached::SERIALIZER_IGBINARY);
 		}
 

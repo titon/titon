@@ -6,14 +6,27 @@ A PHP 5.4 modular framework that attempts to be extremely lightweight and fast, 
 
 Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, Decorator, Factory, Memoization), Design Principles (DRY, KISS, YAGNI), Dependency Injection and Management, Events and Listeners, Benchmarks, Inline Callbacks.
 
-### Requirements ###
+### Required Modules ###
 
 * curl
-* gettext (G11n)
-* intl (G11n)
+* intl
 * phar
 * mbstring
-* mcrypt
+
+### Optional Modules ###
+
+* fileinfo		- titon\io\File
+* mcrypt		- titon\utility\Crypt
+* uuid			- titon\utility\Uuid
+* zlid			- titon\libs\listeners\optimizer\OptimizerListener (gzip)
+* yaml			- titon\libs\readers\core\YamlReader
+* apc			- titon\libs\storage\cache\ApcStorage
+* memcached		- titon\libs\storage\cache\MemcacheStorage
+* redis			- titon\libs\storage\cache\RedisStorage
+* wincache		- titon\libs\storage\cache\WincacheStorage
+* xcache		- titon\libs\storage\cache\XcacheStorage
+* gettext		- titon\libs\translators\messages\GettextTranslator
+* igbinary		- Serialization improvements during caching
 
 ### Libraries ###
 

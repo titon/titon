@@ -23,7 +23,7 @@ class MemcacheStorageTest extends TestCase {
 	 */
 	public function setUp() {
 		parent::setUp();
-		$this->skipIf(!Titon::load('memcache'), 'Memcache is not installed or configured properly.');
+		$this->skipIf(!Titon::load('memcached'), 'Memcache is not installed or configured properly.');
 
 		$this->object = new MemcacheStorage(); // @todo
 		$this->object->set('User::getById-1337', ['username' => 'Titon']);

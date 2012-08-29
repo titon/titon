@@ -40,6 +40,14 @@ class RedisStorage extends StorageAbstract {
 	const PORT = 6379;
 
 	/**
+	 * The third-party class instance.
+	 *
+	 * @access public
+	 * @var \Redis
+	 */
+	public $connection;
+
+	/**
 	 * Decrement a value within the cache.
 	 *
 	 * @access public
@@ -114,7 +122,10 @@ class RedisStorage extends StorageAbstract {
 		}
 
 		$this->connection = new Redis();
-		$this->connection->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_IGBINARY);
+
+		if (Titon::load('igbinary')) {
+			$this->connection->setOption(Redis::OPT_SERIALIZER, Redis::SERIALIZER_IGBINARY);
+		}
 
 		list($host, $port, $timeout) = explode(':', $config['server']);
 
