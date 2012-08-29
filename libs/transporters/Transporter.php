@@ -16,6 +16,14 @@ namespace titon\libs\transporters;
  */
 interface Transporter {
 
+	/**
+	 * Dispatch an email using the pre-processed headers and body.
+	 *
+	 * @access public
+	 * @param array $headers
+	 * @param string $body
+	 * @return array
+	 */
 	public function send(array $headers, $body);
 
 }

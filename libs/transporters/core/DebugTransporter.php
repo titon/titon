@@ -11,15 +11,23 @@ namespace titon\libs\transporters\core;
 
 use titon\Titon;
 use titon\libs\transporters\TransporterAbstract;
-use titon\libs\transporters\TransporterException;
 
 /**
- * @todo
+ * A transporter that does nothing expect return the current headers and body.
+ * Used primarily for easy debugging.
  *
  * @package	titon.libs.transporters.core
  */
 class DebugTransporter extends TransporterAbstract {
 
+	/**
+	 * Dispatch an email using the pre-processed headers and body.
+	 *
+	 * @access public
+	 * @param array $headers
+	 * @param string $body
+	 * @return array
+	 */
 	public function send(array $headers, $body) {
 		return [
 			'headers' => $headers,

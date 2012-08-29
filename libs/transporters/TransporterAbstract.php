@@ -14,21 +14,31 @@ use titon\base\Base;
 use titon\libs\transporters\TransporterException;
 
 /**
- * @todo
+ * Provides convenience methods for Transporters.
  *
  * @package	titon.libs.transporters
  * @abstract
  */
 abstract class TransporterAbstract extends Base implements Transporter {
 
-	public function formatHeaders($headers, $eol = "\n") {
-		$string = '';
+	/**
+	 * Format an array of headers into a newline separate string.
+	 *
+	 * @access public
+	 * @param array $headers
+	 * @param string $eol
+	 * @return string
+	 */
+	public function formatHeaders($headers, $eol = "\r\n") {
+		$out = [];
 
-		foreach ($headers as $header => $value) {
-			$string .= $header .': ' . $value . $eol;
+		if ($headers) {
+			foreach ($headers as $header => $value) {
+				$out[] =  $header . ': ' . $value ;
+			}
 		}
 
-		return trim($string);
+		return implode($eol, $out);
 	}
 
 }
