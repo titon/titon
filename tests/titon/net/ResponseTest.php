@@ -269,13 +269,8 @@ class ResponseTest extends TestCase {
 	public function testHeader() {
 		$this->object->header('X-Framework', 'Titon');
 		$this->assertEquals('X-Framework: Titon', $this->object->getHeader('X-Framework'));
-	}
 
-	/**
-	 * Test that headers() sets headers.
-	 */
-	public function testHeaders() {
-		$this->object->headers([
+		$this->object->header([
 			'X-Framework' => 'Titon',
 			'X-Version' => '1.2.3'
 		]);

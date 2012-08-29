@@ -427,28 +427,18 @@ class Response extends Base {
 	 * Add an HTTP header into the list awaiting to be written in the response.
 	 *
 	 * @access public
-	 * @param string $header
+	 * @param string|array $headers
 	 * @param string $value
 	 * @return \titon\net\Response
 	 * @chainable
 	 */
-	public function header($header, $value) {
-		$this->_headers[$header] = $value;
-
-		return $this;
-	}
-
-	/**
-	 * Pass an array to set multiple headers. Allows for basic support.
-	 *
-	 * @access public
-	 * @param array $headers
-	 * @return \titon\net\Response
-	 * @chainable
-	 */
-	public function headers(array $headers = []) {
-		foreach ($headers as $header => $value) {
-			$this->header($header, $value);
+	public function header($headers, $value = null) {
+		if (is_array($headers)) {
+			foreach ($headers as $header => $value) {
+				$this->header($header, $value);
+			}
+		} else {
+			$this->_headers[$headers] = $value;
 		}
 
 		return $this;
