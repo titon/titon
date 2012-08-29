@@ -7,7 +7,7 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\tests\titon;
+namespace titon\tests\titon\io;
 
 use titon\io\Folder;
 use titon\tests\TestCase;
