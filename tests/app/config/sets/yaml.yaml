@@ -1,0 +1,10 @@
+integer: 1234567890
+number: 1234567890
+string: abcdefg
+object:
+    one: true
+    two: false
+array:
+    - foo
+    - bar
+zero: 0

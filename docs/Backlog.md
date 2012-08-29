@@ -50,7 +50,6 @@ Email
 * libs/behaviors
 * libs/daos
 * libs/models
-* libs/readers/core/YamlReader
 * libs/readers/gettext/MoReader
 * libs/shells
 * libs/streams
