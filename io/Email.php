@@ -194,80 +194,6 @@ class Email extends Base {
 	protected $_transporter;
 
 	/**
-	 * Return the Engine.
-	 *
-	 * @access public
-	 * @return \titon\libs\engines\Engine
-	 */
-	public function getEngine() {
-		return $this->_engine;
-	}
-
-	/**
-	 * Return the Transporter.
-	 *
-	 * @access public
-	 * @return \titon\libs\transporters\Transporter
-	 */
-	public function getTransporter() {
-		return $this->_transporter;
-	}
-
-	/**
-	 * Convert all combinations of newlines to the format specified in the config.
-	 *
-	 * @access public
-	 * @param string $string
-	 * @param string $newline
-	 * @return string
-	 */
-	public function nl($string, $newline = null) {
-		$string = str_replace(["\r\n", "\n\r", "\r"], "\n", $string);
-		$string = str_replace("\n", $newline ?: $this->config->newline, $string);
-
-		return $string;
-	}
-
-	/**
-	 * Add To header emails.
-	 *
-	 * @access public
-	 * @param string|array $email
-	 * @param string $name
-	 * @return \titon\io\Email
-	 * @chainable
-	 */
-	public function to($email, $name = '') {
-		return $this->_addEmails($this->_to, $email, $name);
-	}
-
-	/**
-	 * Add From header emails.
-	 *
-	 * @access public
-	 * @param string|array $email
-	 * @param string $name
-	 * @return \titon\io\Email
-	 * @chainable
-	 */
-	public function from($email, $name = '') {
-		return $this->_addEmails($this->_from, $email, $name, true);
-	}
-
-	/**
-	 * Add CC header emails.
-	 *
-	 * @access public
-	 * @param string|array $email
-	 * @param string $name
-	 * @return \titon\io\Email
-	 * @chainable
-	 */
-	public function cc($email, $name = '') {
-		return $this->_addEmails($this->_cc, $email, $name);
-	}
-
-	/**
 	 * Add BCC header emails.
 	 *
 	 * @access public
@@ -278,58 +204,6 @@ class Email extends Base {
 	 */
 	public function bcc($email, $name = '') {
 		return $this->_addEmails($this->_bcc, $email, $name);
-	}
-
-	/**
-	 * Add Sender header emails.
-	 *
-	 * @access public
-	 * @param string|array $email
-	 * @param string $name
-	 * @return \titon\io\Email
-	 * @chainable
-	 */
-	public function sender($email, $name = '') {
-		return $this->_addEmails($this->_sender, $email, $name, true);
-	}
-
-	/**
-	 * Add Reply-To header emails.
-	 *
-	 * @access public
-	 * @param string|array $email
-	 * @param string $name
-	 * @return \titon\io\Email
-	 * @chainable
-	 */
-	public function replyTo($email, $name = '') {
-		return $this->_addEmails($this->_replyTo, $email, $name, true);
-	}
-
-	/**
-	 * Add Disposition-Notification-To header emails.
-	 *
-	 * @access public
-	 * @param string|array $email
-	 * @param string $name
-	 * @return \titon\io\Email
-	 * @chainable
-	 */
-	public function readReceipt($email, $name = '') {
-		return $this->_addEmails($this->_readReceipt, $email, $name, true);
-	}
-
-	/**
-	 * Add Return-Path header emails.
-	 *
-	 * @access public
-	 * @param string|array $email
-	 * @param string $name
-	 * @return \titon\io\Email
-	 * @chainable
-	 */
-	public function returnPath($email, $name = '') {
-		return $this->_addEmails($this->_returnPath, $email, $name, true);
 	}
 
 	/**
@@ -352,29 +226,49 @@ class Email extends Base {
 	}
 
 	/**
-	 * Set the subject field.
+	 * Add CC header emails.
 	 *
 	 * @access public
-	 * @param string $subject
+	 * @param string|array $email
+	 * @param string $name
 	 * @return \titon\io\Email
 	 * @chainable
 	 */
-	public function subject($subject) {
-		$this->_subject = $this->_encode($subject);
-
-		return $this;
+	public function cc($email, $name = '') {
+		return $this->_addEmails($this->_cc, $email, $name);
 	}
 
 	/**
-	 * Set the priority level.
+	 * Add From header emails.
 	 *
 	 * @access public
-	 * @param string $priority
+	 * @param string|array $email
+	 * @param string $name
 	 * @return \titon\io\Email
-	 * @throws \titon\io\IoException
+	 * @chainable
 	 */
-	public function priority($priority) {
-		return $this->header('X-Priority', $priority);
+	public function from($email, $name = '') {
+		return $this->_addEmails($this->_from, $email, $name, true);
+	}
+
+	/**
+	 * Return the Engine.
+	 *
+	 * @access public
+	 * @return \titon\libs\engines\Engine
+	 */
+	public function getEngine() {
+		return $this->_engine;
+	}
+
+	/**
+	 * Return the Transporter.
+	 *
+	 * @access public
+	 * @return \titon\libs\transporters\Transporter
+	 */
+	public function getTransporter() {
+		return $this->_transporter;
 	}
 
 	/**
@@ -396,6 +290,46 @@ class Email extends Base {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Convert all combinations of newlines to the format specified in the config.
+	 *
+	 * @access public
+	 * @param string $string
+	 * @param string $newline
+	 * @return string
+	 */
+	public function nl($string, $newline = null) {
+		$string = str_replace(["\r\n", "\n\r", "\r"], "\n", $string);
+		$string = str_replace("\n", $newline ?: $this->config->newline, $string);
+
+		return $string;
+	}
+
+	/**
+	 * Set the priority level.
+	 *
+	 * @access public
+	 * @param string $priority
+	 * @return \titon\io\Email
+	 * @throws \titon\io\IoException
+	 */
+	public function priority($priority) {
+		return $this->header('X-Priority', $priority);
+	}
+
+	/**
+	 * Add Disposition-Notification-To header emails.
+	 *
+	 * @access public
+	 * @param string|array $email
+	 * @param string $name
+	 * @return \titon\io\Email
+	 * @chainable
+	 */
+	public function readReceipt($email, $name = '') {
+		return $this->_addEmails($this->_readReceipt, $email, $name, true);
 	}
 
 	/**
@@ -441,10 +375,24 @@ class Email extends Base {
 	}
 
 	/**
+	 * Add Reply-To header emails.
+	 *
+	 * @access public
+	 * @param string|array $email
+	 * @param string $name
+	 * @return \titon\io\Email
+	 * @chainable
+	 */
+	public function replyTo($email, $name = '') {
+		return $this->_addEmails($this->_replyTo, $email, $name, true);
+	}
+
+	/**
 	 * Reset the object and all properties.
 	 *
 	 * @access public
-	 * @return void
+	 * @return \titon\io\Email
+	 * @chainable
 	 */
 	public function reset() {
 		$this->_to = [];
@@ -460,6 +408,21 @@ class Email extends Base {
 		$this->_subject = '';
 		$this->_body = '';
 		$this->config->set($this->_config);
+
+		return $this;
+	}
+
+	/**
+	 * Add Return-Path header emails.
+	 *
+	 * @access public
+	 * @param string|array $email
+	 * @param string $name
+	 * @return \titon\io\Email
+	 * @chainable
+	 */
+	public function returnPath($email, $name = '') {
+		return $this->_addEmails($this->_returnPath, $email, $name, true);
 	}
 
 	/**
@@ -501,6 +464,19 @@ class Email extends Base {
 	}
 
 	/**
+	 * Add Sender header emails.
+	 *
+	 * @access public
+	 * @param string|array $email
+	 * @param string $name
+	 * @return \titon\io\Email
+	 * @chainable
+	 */
+	public function sender($email, $name = '') {
+		return $this->_addEmails($this->_sender, $email, $name, true);
+	}
+
+	/**
 	 * Set the Engine object.
 	 *
 	 * @access public
@@ -525,6 +501,33 @@ class Email extends Base {
 		$this->_transporter = $transporter;
 
 		return $this;
+	}
+
+	/**
+	 * Set the subject field.
+	 *
+	 * @access public
+	 * @param string $subject
+	 * @return \titon\io\Email
+	 * @chainable
+	 */
+	public function subject($subject) {
+		$this->_subject = $this->_encode($subject);
+
+		return $this;
+	}
+
+	/**
+	 * Add To header emails.
+	 *
+	 * @access public
+	 * @param string|array $email
+	 * @param string $name
+	 * @return \titon\io\Email
+	 * @chainable
+	 */
+	public function to($email, $name = '') {
+		return $this->_addEmails($this->_to, $email, $name);
 	}
 
 	/**
