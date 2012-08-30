@@ -22,21 +22,33 @@ use titon\utility\Validate;
  *
  * @package	titon.io
  *
+ * @link	http://tools.ietf.org/html/rfc5322 - RFC 5322
  * @link	http://www.faqs.org/rfcs/rfc2822.html
  */
 class Email extends Base {
 
 	/**
-	 * Client name.
-	 */
-	const EMAIL_CLIENT = 'Titon Framework: Email';
-
-	/**
 	 * Template rendering types.
 	 */
+	const NONE = 'none';
 	const TEXT = 'text';
 	const HTML = 'html';
 	const BOTH = 'both';
+
+	/**
+	 * Priority levels.
+	 */
+	const PRIORITY_LOW = 'Low';
+	const PRIORITY_NORMAL = 'Normal';
+	const PRIORITY_HIGH = 'High';
+
+	/**
+	 * Encoding types.
+	 */
+	const ENCODING_7BIT = '7bit';
+	const ENCODING_8BIT = '8bit';
+	const ENCODING_BASE64 = 'base64';
+	const ENCODING_QUOTED_PRINTABLE = 'quoted-printable';
 
 	/**
 	 * Max character limits for body and header lengths.
@@ -47,16 +59,21 @@ class Email extends Base {
 	/**
 	 * Configuration.
 	 *
+	 * 	type			- The type of email to send: none, text, html, both
 	 * 	validate		- Validate the email before adding it to the list
 	 * 	charset			- Charset to use for email encoding
+	 * 	encoding		- Transfer encoding scheme
+	 * 	template		- Template location when rendering with views
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_config = [
-		'type' => null,
+		'type' => self::NONE,
 		'validate' => true,
 		'charset' => 'UTF-8',
+		'newline' => "\r\n",
+		'encoding' => self::ENCODING_BASE64,
 		'template' => [
 			'module' => null,
 			'action' => null,
@@ -177,6 +194,41 @@ class Email extends Base {
 	protected $_transporter;
 
 	/**
+	 * Return the Engine.
+	 *
+	 * @access public
+	 * @return \titon\libs\engines\Engine
+	 */
+	public function getEngine() {
+		return $this->_engine;
+	}
+
+	/**
+	 * Return the Transporter.
+	 *
+	 * @access public
+	 * @return \titon\libs\transporters\Transporter
+	 */
+	public function getTransporter() {
+		return $this->_transporter;
+	}
+
+	/**
+	 * Convert all combinations of newlines to the format specified in the config.
+	 *
+	 * @access public
+	 * @param string $string
+	 * @param string $newline
+	 * @return string
+	 */
+	public function nl($string, $newline = null) {
+		$string = str_replace(["\r\n", "\n\r", "\r"], "\n", $string);
+		$string = str_replace("\n", $newline ?: $this->config->newline, $string);
+
+		return $string;
+	}
+
+	/**
 	 * Add To header emails.
 	 *
 	 * @access public
@@ -293,9 +345,8 @@ class Email extends Base {
 			$message = implode("\n", $message);
 		}
 
-		$message = str_replace(["\r\n", "\r"], "\n", $message);
-
-		$this->_body = wordwrap((string) $message, self::CHAR_LIMIT_SHOULD);
+		// http://tools.ietf.org/html/rfc5322#section-2.3
+		$this->_body = wordwrap($this->nl($message), self::CHAR_LIMIT_SHOULD);
 
 		return $this;
 	}
@@ -312,6 +363,18 @@ class Email extends Base {
 		$this->_subject = $this->_encode($subject);
 
 		return $this;
+	}
+
+	/**
+	 * Set the priority level.
+	 *
+	 * @access public
+	 * @param string $priority
+	 * @return \titon\io\Email
+	 * @throws \titon\io\IoException
+	 */
+	public function priority($priority) {
+		return $this->header('X-Priority', $priority);
 	}
 
 	/**
@@ -346,8 +409,8 @@ class Email extends Base {
 	 * @throws \titon\io\IoException
 	 */
 	public function renderAs($type, $action = null, $module = null) {
-		if ($type === null || $type === false) {
-			$this->config->type = null;
+		if ($type === self::NONE) {
+			$this->config->type = self::NONE;
 
 			return $this;
 
@@ -368,12 +431,10 @@ class Email extends Base {
 		$this->config->type = $type;
 		$this->config->template = $template;
 
-		if ($type) {
-			if (!$this->_engine) {
-				throw new IoException('A view engine must be set to render custom templates.');
-			}
-
-			$this->_engine->override('emails', $template, 'email');
+		if ($this->getEngine()) {
+			$this->getEngine()->override('emails', $template, 'email');
+		} else {
+			throw new IoException('A view engine must be set to render custom templates.');
 		}
 
 		return $this;
@@ -427,16 +488,16 @@ class Email extends Base {
 		}
 
 		// If engine is set use it for rendering
-		if ($this->_engine && $this->config->type) {
-			$this->body($this->_engine->run());
+		if ($this->getEngine() && $this->config->type !== self::NONE) {
+			$this->body($this->getEngine()->run());
 		}
 
 		// Set default transporter
-		if (!$this->_transporter) {
+		if (!$this->getTransporter()) {
 			$this->setTransporter(new MailTransporter());
 		}
 
-		return $this->_transporter->send($this->_getHeaders(), $this->_body);
+		return $this->getTransporter()->send($this->_getHeaders(), $this->_body);
 	}
 
 	/**
@@ -498,7 +559,7 @@ class Email extends Base {
 				continue;
 			}
 
-			$source[$email] = $name;
+			$source[$email] = $this->_encode($name);
 
 			if ($single) {
 				break;
@@ -517,12 +578,40 @@ class Email extends Base {
 	 */
 	protected function _encode($string) {
 		$charset = Titon::config()->encoding();
+		$encoding = ($this->config->encoding === self::ENCODING_QUOTED_PRINTABLE) ? 'Q' : 'B';
 
 		if (strtolower($this->config->charset) !== strtolower($charset)) {
 			$string = mb_convert_encoding($string, $this->config->charset, $charset);
 		}
 
-		return mb_encode_mimeheader($string, $this->config->charset, 'B');
+		return mb_encode_mimeheader($string, $this->config->charset, $encoding);
+	}
+
+	/**
+	 * Encode a string to the given format.
+	 *
+	 * @access protected
+	 * @param string $string
+	 * @param string $encoding
+	 * @return string
+	 * @throws \titon\io\IoException
+	 */
+	protected function _encodeData($string, $encoding) {
+		switch ($encoding) {
+			case self::ENCODING_7BIT:
+			case self::ENCODING_8BIT:
+				return $this->nl(rtrim($string));
+			break;
+			case self::ENCODING_BASE64:
+				return chunk_split(base64_encode($string), 76, $this->config->newline);
+			break;
+			case self::ENCODING_QUOTED_PRINTABLE:
+				return quoted_printable_encode($string);
+			break;
+			default:
+				throw new IoException(sprintf('Invalid encoding type %s.', $encoding));
+			break;
+		}
 	}
 
 	/**
@@ -540,7 +629,7 @@ class Email extends Base {
 				if (!$name) {
 					$emails[] = $email;
 				} else {
-					$emails[] = sprintf('%s <%s>', $this->_encode($name), $email);
+					$emails[] = sprintf('%s <%s>', $name, $email);
 				}
 			}
 		}
@@ -581,16 +670,15 @@ class Email extends Base {
 		}
 
 		// Check for missing headers
-		if (!isset($headers['X-Mailer'])) {
-			$headers['X-Mailer'] = self::EMAIL_CLIENT;
+		$headers['MIME-Version'] = '1.0';
+		$headers['Message-ID'] = sprintf('<%s@%s>', Uuid::v4(), php_uname('n'));
+
+		if (empty($headers['X-Mailer'])) {
+			$headers['X-Mailer'] = sprintf('Titon %s, A PHP 5.4 Modular Framework', Titon::VERSION);
 		}
 
-		if (!isset($headers['Date'])) {
+		if (empty($headers['Date'])) {
 			$headers['Date'] = date(DATE_RFC2822);
-		}
-
-		if (!isset($headers['Message-ID'])) {
-			$headers['Message-ID'] = sprintf('<%s@%s>', Uuid::v4(), php_uname('n'));
 		}
 
 		// @todo attachment headers

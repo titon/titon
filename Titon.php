@@ -31,12 +31,8 @@ class Titon {
 
 	/**
 	 * Current framework version.
-	 *
-	 * @access public
-	 * @var string
-	 * @static
 	 */
-	public static $version = '0.6.0';
+	const VERSION = '0.6.0';
 
 	/**
 	 * Installed objects that can not be uninstalled.

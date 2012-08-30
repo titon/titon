@@ -11,6 +11,7 @@ namespace titon\libs\transporters;
 
 use titon\Titon;
 use titon\base\Base;
+use titon\io\Email;
 use titon\libs\transporters\TransporterException;
 
 /**
@@ -29,12 +30,12 @@ abstract class TransporterAbstract extends Base implements Transporter {
 	 * @param string $eol
 	 * @return string
 	 */
-	public function formatHeaders($headers, $eol = PHP_EOL) {
+	public function formatHeaders($headers, $eol = "\r\n") {
 		$out = [];
 
 		if ($headers) {
 			foreach ($headers as $header => $value) {
-				$out[] = trim($header) . ': ' . trim($value);
+				$out[] = wordwrap(trim($header) . ': ' . trim($value), Email::CHAR_LIMIT_SHOULD, " ");
 			}
 		}
 
