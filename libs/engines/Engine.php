@@ -66,8 +66,9 @@ interface Engine {
 	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
+	 * @param boolean $cache
 	 * @return string
 	 */
-	public function run();
+	public function run($cache = true);
 
 }

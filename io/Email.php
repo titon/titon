@@ -23,7 +23,6 @@ use titon\utility\Validate;
  * @package	titon.io
  *
  * @link	http://tools.ietf.org/html/rfc5322 - RFC 5322
- * @link	http://www.faqs.org/rfcs/rfc2822.html
  */
 class Email extends Base {
 
@@ -59,11 +58,12 @@ class Email extends Base {
 	/**
 	 * Configuration.
 	 *
-	 * 	type			- The type of email to send: none, text, html, both
-	 * 	validate		- Validate the email before adding it to the list
-	 * 	charset			- Charset to use for email encoding
-	 * 	encoding		- Transfer encoding scheme
-	 * 	template		- Template location when rendering with views
+	 * 	type		- The type of email to send: none, text, html, both
+	 * 	validate	- Validate the email before adding it to the list
+	 * 	charset		- Charset to use for email encoding
+	 * 	newline		- The newline combination to parse the fields and body with
+	 * 	encoding	- Transfer encoding scheme
+	 * 	template	- Template location when rendering with views
 	 *
 	 * @access protected
 	 * @var array
@@ -220,7 +220,7 @@ class Email extends Base {
 		}
 
 		// http://tools.ietf.org/html/rfc5322#section-2.3
-		$this->_body = wordwrap($this->nl($message), self::CHAR_LIMIT_SHOULD);
+		$this->_body = wordwrap($this->nl($message), self::CHAR_LIMIT_SHOULD, $this->config->newline);
 
 		return $this;
 	}
@@ -352,8 +352,13 @@ class Email extends Base {
 			throw new IoException(sprintf('Invalid rendering type %s.', $type));
 		}
 
+		if (!$action) {
+			throw new IoException('A template name is required for rendering.');
+		}
+
 		$template = [
 			'action' => $action,
+			'controller' => null,
 			'module' => $module,
 			'ext' => null
 		];
@@ -452,7 +457,7 @@ class Email extends Base {
 
 		// If engine is set use it for rendering
 		if ($this->getEngine() && $this->config->type !== self::NONE) {
-			$this->body($this->getEngine()->run());
+			$this->body($this->getEngine()->run(false));
 		}
 
 		// Set default transporter
@@ -682,6 +687,12 @@ class Email extends Base {
 
 		if (empty($headers['Date'])) {
 			$headers['Date'] = date(DATE_RFC2822);
+		}
+
+		if ($this->config->type === self::TEXT) {
+			$headers['Content-Type'] = 'text/plain; charset=' . $this->config->charset;
+		} else if ($this->config->type === self::HTML) {
+			$headers['Content-Type'] = 'text/html; charset=' . $this->config->charset;
 		}
 
 		// @todo attachment headers

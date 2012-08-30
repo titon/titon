@@ -57,13 +57,14 @@ class ViewEngine extends EngineAbstract {
 	 * wrap the current template output with the layout. Return the final result.
 	 *
 	 * @access public
+	 * @param boolean $cache
 	 * @return string
 	 * @throws \titon\libs\engines\EngineException
 	 */
-	public function run() {
+	public function run($cache = true) {
 		$config = $this->config->get();
 
-		if (!$config['render'] || $this->_rendered) {
+		if (!$config['render'] || ($cache && $this->_rendered)) {
 			return $this->_content;
 		}
 

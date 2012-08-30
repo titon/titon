@@ -20,6 +20,6 @@ class EngineFixture extends EngineAbstract {
 
 	public function open($path, array $variables = []) {}
 	public function render($path, array $variables = []) {}
-	public function run() {}
+	public function run($cache = true) {}
 
 }

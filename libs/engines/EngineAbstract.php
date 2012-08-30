@@ -52,6 +52,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 *	layout 		- The layout template to use
 	 *	wrapper 	- The wrapper template to use
 	 *	folder 		- The folder name to user when templates are overridden (emails, errors, etc)
+	 * 	ext			- The view template file extension
 	 *
 	 * @access protected
 	 * @var array
@@ -67,7 +68,8 @@ abstract class EngineAbstract extends Base implements Engine {
 		'render'	=> true,
 		'layout'	=> 'default',
 		'wrapper'	=> null,
-		'folder'	=> null
+		'folder'	=> null,
+		'ext'		=> 'tpl'
 	];
 
 	/**
@@ -182,13 +184,13 @@ abstract class EngineAbstract extends Base implements Engine {
 		if ($view) {
 			if ($folder) {
 				if ($template['module']) {
-					$paths[] = APP_MODULES . sprintf('%s/views/private/%s/%s.tpl', $template['module'], $folder, $view);
+					$paths[] = APP_MODULES . sprintf('%s/views/private/%s/%s.%s', $template['module'], $folder, $view, $this->config->ext);
 				}
 
-				$paths[] = APP_VIEWS . sprintf('%s/%s.tpl', $folder, $view);
+				$paths[] = APP_VIEWS . sprintf('%s/%s.%s', $folder, $view, $this->config->ext);
 
 			} else {
-				$paths[] = APP_MODULES . sprintf('%s/views/public/%s/%s.tpl', $template['module'], $template['controller'], $view);
+				$paths[] = APP_MODULES . sprintf('%s/views/public/%s/%s.%s', $template['module'], $template['controller'], $view, $this->config->ext);
 			}
 		}
 
@@ -338,7 +340,7 @@ abstract class EngineAbstract extends Base implements Engine {
 		return $this->cache([__METHOD__, $path], function() use ($path) {
 			$path = Titon::loader()->ds($path);
 
-			if (mb_substr($path, -4) === '.tpl') {
+			if (mb_substr($path, -4) === '.' . $this->config->ext) {
 				$path = mb_substr($path, 0, (mb_strlen($path) - 4));
 			}
 
