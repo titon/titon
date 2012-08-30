@@ -55,7 +55,13 @@ class Base implements Serializable {
 	 * @param array $config
 	 */
 	public function __construct(array $config = []) {
-		$this->config = new ConfigAugment($config, $this->_config + ['initialize' => true]);
+		$defaults = $this->_config + ['initialize' => true];
+
+		if ($registry = Titon::registry()->config($this->info->className)) {
+			$defaults = $registry + $defaults;
+		}
+
+		$this->config = new ConfigAugment($config, $defaults);
 		$this->info = new InfoAugment($this);
 
 		if ($this->config->initialize) {

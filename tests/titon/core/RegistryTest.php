@@ -28,6 +28,16 @@ class RegistryTest extends TestCase {
 	}
 
 	/**
+	 * Test that config() returns a configuration set.
+	 */
+	public function testConfig() {
+		$this->assertEquals(null, $this->object->config('titon\base\Base'));
+
+		$this->object->configure('titon\base\Base', ['foo' => 'bar']);
+		$this->assertEquals(['foo' => 'bar'], $this->object->config('titon\base\Base'));
+	}
+
+	/**
 	 * Test that defining config sets get applied to the correct classes.
 	 */
 	public function testConfigure() {

@@ -38,6 +38,17 @@ class Registry {
 	protected $_registered = [];
 
 	/**
+	 * Return a configuration set if it has been set.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return array
+	 */
+	public function config($key) {
+		return isset($this->_configs[$key]) ? $this->_configs[$key] : null;
+	}
+
+	/**
 	 * Defines an array of configuration that should be loaded into a class when its instantiated.
 	 *
 	 * @access public
@@ -70,8 +81,8 @@ class Registry {
 			return $this->get($key);
 		}
 
-		if (isset($this->_configs[$key])) {
-			$config = $config + $this->_configs[$key];
+		if ($defaults = $this->config($key)) {
+			$config = $config + $defaults;
 		}
 
 		$namespace = Titon::loader()->toNamespace($key);
