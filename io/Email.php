@@ -52,9 +52,14 @@ class Email extends Base {
 	 * @var array
 	 */
 	protected $_config = [
+		'type' => null,
 		'validate' => true,
 		'charset' => 'UTF-8',
-		'template' => ''
+		'template' => [
+			'module' => null,
+			'action' => null,
+			'ext' => null
+		]
 	];
 
 	/**
@@ -327,6 +332,45 @@ class Email extends Base {
 	}
 
 	/**
+	 * Set the rendering type, the module location and the action template.
+	 *
+	 * @access public
+	 * @param string $type
+	 * @param string $action
+	 * @param string $module
+	 * @returns \titon\io\Email
+	 * @throws \titon\io\IoException
+	 */
+	public function renderAs($type, $action = null, $module = null) {
+		if ($type !== self::TEXT && $type !== self::HTML) {
+			throw new IoException(sprintf('Invalid rendering type %s.', $type));
+		}
+
+		$template = [
+			'action' => $action,
+			'module' => $module,
+			'ext' => null
+		];
+
+		if ($type === self::HTML) {
+			$template['ext'] = self::HTML;
+		}
+
+		$this->config->type = $type;
+		$this->config->template = $template;
+
+		if ($type) {
+			if (!$this->_engine) {
+				throw new IoException('A view engine must be set to render custom templates.');
+			}
+
+			$this->_engine->override('emails', $this->config->template);
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Send a message using a Transporter. Can optionally pass the body message through an argument.
 	 *
 	 * @access public
@@ -347,12 +391,17 @@ class Email extends Base {
 			$this->body($message);
 		}
 
+		// If engine is set use it for rendering
+		if ($this->_engine && $this->config->type) {
+			$this->body($this->_engine->run());
+		}
+
 		// Set default transporter
 		if (!$this->_transporter) {
 			$this->setTransporter(new MailTransporter());
 		}
 
-		return $this->_transporter->send($this->_getHeaders(), $this->_getBody());
+		return $this->_transporter->send($this->_getHeaders(), $this->_body);
 	}
 
 	/**
@@ -364,6 +413,7 @@ class Email extends Base {
 	 */
 	public function setEngine(Engine $engine) {
 		$this->_engine = $engine;
+		$this->_engine->config->folder = 'emails';
 
 		return $this;
 	}
@@ -461,14 +511,6 @@ class Email extends Base {
 		}
 
 		return $emails;
-	}
-
-	protected function _getBody() {
-		$body = $this->_body;
-
-		// @todo - engine rendering
-
-		return $body;
 	}
 
 	/**

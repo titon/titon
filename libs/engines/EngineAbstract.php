@@ -58,7 +58,12 @@ abstract class EngineAbstract extends Base implements Engine {
 	 */
 	protected $_config = [
 		'type'		=> 'html',
-		'template'	=> [],
+		'template'	=> [
+			'module' => null,
+			'controller' => null,
+			'action' => null,
+			'ext' => null
+		],
 		'render'	=> true,
 		'layout'	=> 'default',
 		'wrapper'	=> null,
@@ -161,17 +166,20 @@ abstract class EngineAbstract extends Base implements Engine {
 				// Else determine full path based off module, controller, action
 				} else {
 					$view = $this->_preparePath($template['action']);
+				}
 
-					if ($template['ext']) {
-						$view .= '.' . $template['ext'];
-					}
+				if ($template['ext']) {
+					$view .= '.' . $template['ext'];
 				}
 			break;
 		}
 
 		// Build array of paths
 		if ($folder) {
-			$paths[] = APP_MODULES . sprintf('%s/views/private/%s/%s.tpl', $template['module'], $folder, $view);
+			if ($template['module']) {
+				$paths[] = APP_MODULES . sprintf('%s/views/private/%s/%s.tpl', $template['module'], $folder, $view);
+			}
+
 			$paths[] = APP_VIEWS . sprintf('%s/%s.tpl', $folder, $view);
 
 		} else {
@@ -284,19 +292,6 @@ abstract class EngineAbstract extends Base implements Engine {
 	 */
 	public function render($path, array $variables = []) {
 		throw new EngineException('You must define the render() method within your Engine.');
-	}
-
-	/**
-	 * Begins the staged rendering process. First stage, the system must render the template based on the module,
-	 * controller and action path. Second stage, wrap the first template in any wrappers. Third stage,
-	 * wrap the current template output with the layout. Return the final result.
-	 *
-	 * @access public
-	 * @return string
-	 * @throws \titon\libs\engines\EngineException
-	 */
-	public function run() {
-		throw new EngineException('You must define the run() method within your Engine.');
 	}
 
 	/**
