@@ -29,12 +29,12 @@ abstract class TransporterAbstract extends Base implements Transporter {
 	 * @param string $eol
 	 * @return string
 	 */
-	public function formatHeaders($headers, $eol = "\r\n") {
+	public function formatHeaders($headers, $eol = PHP_EOL) {
 		$out = [];
 
 		if ($headers) {
 			foreach ($headers as $header => $value) {
-				$out[] =  $header . ': ' . $value ;
+				$out[] = trim($header) . ': ' . trim($value);
 			}
 		}
 

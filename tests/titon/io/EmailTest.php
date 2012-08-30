@@ -28,6 +28,7 @@ class EmailTest extends TestCase {
 		$this->object = new Email();
 		$this->object->setTransporter(new DebugTransporter());
 		$this->object->from('from@domain.com');
+		$this->object->subject('Email Test');
 	}
 
 	/**
@@ -37,7 +38,7 @@ class EmailTest extends TestCase {
 		$this->object->to('email1@domain.com');
 		$this->object->to('email2@domain.com', 'Name #2');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing to()')['headers'];
 		$this->assertEquals('email1@domain.com, Name #2 <email2@domain.com>', $headers['To']);
 
 		$this->object->to([
@@ -46,7 +47,7 @@ class EmailTest extends TestCase {
 			'email4@domain.com' => 'Name #4'
 		]);
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing to()')['headers'];
 		$this->assertEquals('email1@domain.com, Name #2 <email2@domain.com>, email3@domain.com, Name #4 <email4@domain.com>', $headers['To']);
 	}
 
@@ -57,13 +58,13 @@ class EmailTest extends TestCase {
 		$this->object->to('to@domain.com'); // for send()
 		$this->object->from('from@domain.com');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing from()')['headers'];
 		$this->assertEquals('from@domain.com', $headers['From']);
 
 		// With a name
 		$this->object->from('from@domain.com', 'With Name');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing from()')['headers'];
 		$this->assertEquals('With Name <from@domain.com>', $headers['From']);
 
 		// If multiple is passed, only use the first
@@ -72,7 +73,7 @@ class EmailTest extends TestCase {
 			'from2@domain.com'
 		]);
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing from()')['headers'];
 		$this->assertEquals('From Name <from@domain.com>', $headers['From']);
 	}
 
@@ -83,7 +84,7 @@ class EmailTest extends TestCase {
 		$this->object->cc('email1@domain.com');
 		$this->object->cc('email2@domain.com', 'Name #2');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing cc()')['headers'];
 		$this->assertEquals('email1@domain.com, Name #2 <email2@domain.com>', $headers['Cc']);
 
 		$this->object->cc([
@@ -92,7 +93,7 @@ class EmailTest extends TestCase {
 			'email4@domain.com' => 'Name #4'
 		]);
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing cc()')['headers'];
 		$this->assertEquals('email1@domain.com, Name #2 <email2@domain.com>, email3@domain.com, Name #4 <email4@domain.com>', $headers['Cc']);
 	}
 
@@ -103,7 +104,7 @@ class EmailTest extends TestCase {
 		$this->object->bcc('email1@domain.com');
 		$this->object->bcc('email2@domain.com', 'Name #2');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing bcc()')['headers'];
 		$this->assertEquals('email1@domain.com, Name #2 <email2@domain.com>', $headers['Bcc']);
 
 		$this->object->bcc([
@@ -112,7 +113,7 @@ class EmailTest extends TestCase {
 			'email4@domain.com' => 'Name #4'
 		]);
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing bcc()')['headers'];
 		$this->assertEquals('email1@domain.com, Name #2 <email2@domain.com>, email3@domain.com, Name #4 <email4@domain.com>', $headers['Bcc']);
 	}
 
@@ -123,7 +124,7 @@ class EmailTest extends TestCase {
 		$this->object->to('to@domain.com'); // for send()
 		$this->object->sender('email@domain.com', 'Name');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing sender()')['headers'];
 		$this->assertEquals('Name <email@domain.com>', $headers['Sender']);
 	}
 
@@ -134,7 +135,7 @@ class EmailTest extends TestCase {
 		$this->object->to('to@domain.com'); // for send()
 		$this->object->readReceipt('email@domain.com', 'Name');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing readReceipt()')['headers'];
 		$this->assertEquals('Name <email@domain.com>', $headers['Disposition-Notification-To']);
 	}
 
@@ -145,7 +146,7 @@ class EmailTest extends TestCase {
 		$this->object->to('to@domain.com'); // for send()
 		$this->object->replyTo('email@domain.com', 'Name');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing replyTo()')['headers'];
 		$this->assertEquals('Name <email@domain.com>', $headers['Reply-To']);
 	}
 
@@ -156,7 +157,7 @@ class EmailTest extends TestCase {
 		$this->object->to('to@domain.com'); // for send()
 		$this->object->returnPath('email@domain.com', 'Name');
 
-		$headers = $this->object->send()['headers'];
+		$headers = $this->object->send('Testing returnPath()')['headers'];
 		$this->assertEquals('Name <email@domain.com>', $headers['Return-Path']);
 	}
 

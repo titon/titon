@@ -20,7 +20,8 @@ use titon\utility\Validate;
 /**
  * @todo
  *
- * @package	titon.net
+ * @package	titon.io
+ *
  * @link	http://www.faqs.org/rfcs/rfc2822.html
  */
 class Email extends Base {
@@ -35,6 +36,7 @@ class Email extends Base {
 	 */
 	const TEXT = 'text';
 	const HTML = 'html';
+	const BOTH = 'both';
 
 	/**
 	 * Max character limits for body and header lengths.
@@ -291,6 +293,8 @@ class Email extends Base {
 			$message = implode("\n", $message);
 		}
 
+		$message = str_replace(["\r\n", "\r"], "\n", $message);
+
 		$this->_body = wordwrap((string) $message, self::CHAR_LIMIT_SHOULD);
 
 		return $this;
@@ -338,11 +342,16 @@ class Email extends Base {
 	 * @param string $type
 	 * @param string $action
 	 * @param string $module
-	 * @returns \titon\io\Email
+	 * @return \titon\io\Email
 	 * @throws \titon\io\IoException
 	 */
 	public function renderAs($type, $action = null, $module = null) {
-		if ($type !== self::TEXT && $type !== self::HTML) {
+		if ($type === null || $type === false) {
+			$this->config->type = null;
+
+			return $this;
+
+		} else if ($type !== self::TEXT && $type !== self::HTML) {
 			throw new IoException(sprintf('Invalid rendering type %s.', $type));
 		}
 
@@ -364,10 +373,32 @@ class Email extends Base {
 				throw new IoException('A view engine must be set to render custom templates.');
 			}
 
-			$this->_engine->override('emails', $this->config->template);
+			$this->_engine->override('emails', $template, 'email');
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Reset the object and all properties.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function reset() {
+		$this->_to = [];
+		$this->_from = [];
+		$this->_cc = [];
+		$this->_bcc = [];
+		$this->_headers = [];
+		$this->_readReceipt = [];
+		$this->_replyTo = [];
+		$this->_returnPath = [];
+		$this->_sender = [];
+		$this->_attachments = [];
+		$this->_subject = '';
+		$this->_body = '';
+		$this->config->set($this->_config);
 	}
 
 	/**
@@ -385,6 +416,10 @@ class Email extends Base {
 
 		if (!$this->_to && !$this->_cc && !$this->_bcc) {
 			throw new IoException('A recipient (to, cc, bcc) is not specified.');
+		}
+
+		if (!$this->_subject) {
+			throw new IoException('Subject field is not specified.');
 		}
 
 		if ($message) {

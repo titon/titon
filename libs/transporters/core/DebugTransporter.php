@@ -10,6 +10,7 @@
 namespace titon\libs\transporters\core;
 
 use titon\Titon;
+use titon\log\Logger;
 use titon\libs\transporters\TransporterAbstract;
 
 /**
@@ -21,6 +22,18 @@ use titon\libs\transporters\TransporterAbstract;
 class DebugTransporter extends TransporterAbstract {
 
 	/**
+	 * Configuration.
+	 *
+	 * 	logger	- Log level to write to
+	 *
+	 * @access protected
+	 * @var array
+	 */
+	protected $_config = [
+		'logger' => Logger::DEBUG
+	];
+
+	/**
 	 * Dispatch an email using the pre-processed headers and body.
 	 *
 	 * @access public
@@ -29,6 +42,19 @@ class DebugTransporter extends TransporterAbstract {
 	 * @return array
 	 */
 	public function send(array $headers, $body) {
+		if ($this->config->logger >= 0) {
+			$message = $this->formatHeaders($headers, "\n") . "\n";
+			$message .= $body;
+
+			$output = "Email output:\n";
+
+			foreach (explode("\n", $message) as $line) {
+				$output .= '# ' . $line . "\n";
+			}
+
+			Logger::write(trim($output), $this->config->logger);
+		}
+
 		return [
 			'headers' => $headers,
 			'body' => $body

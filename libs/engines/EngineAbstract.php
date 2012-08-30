@@ -231,19 +231,6 @@ abstract class EngineAbstract extends Base implements Engine {
 	}
 
 	/**
-	 * Opens and renders a partial view element within the current document.
-	 *
-	 * @access public
-	 * @param string $path
-	 * @param array $variables
-	 * @return string
-	 * @throws \titon\libs\engines\EngineException
-	 */
-	public function open($path, array $variables = []) {
-		throw new EngineException('You must define the open() method within your engine.');
-	}
-
-	/**
 	 * Override the template locations by providing a folder and view name.
 	 *
 	 * @access public
@@ -279,19 +266,6 @@ abstract class EngineAbstract extends Base implements Engine {
 	 */
 	public function postRender() {
 		$this->notifyObjects('postRender');
-	}
-
-	/**
-	 * Primary method to render a single view template.
-	 *
-	 * @access public
-	 * @param string $path
-	 * @param array $variables
-	 * @return string
-	 * @throws \titon\libs\engines\EngineException
-	 */
-	public function render($path, array $variables = []) {
-		throw new EngineException('You must define the render() method within your Engine.');
 	}
 
 	/**
