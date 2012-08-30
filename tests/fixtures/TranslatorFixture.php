@@ -18,4 +18,6 @@ use titon\libs\translators\TranslatorAbstract;
  */
 class TranslatorFixture extends TranslatorAbstract {
 
+	public function loadBundle($module, $locale) {}
+
 }

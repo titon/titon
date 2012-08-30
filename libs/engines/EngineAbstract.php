@@ -141,6 +141,10 @@ abstract class EngineAbstract extends Base implements Engine {
 				if ($config['layout']) {
 					$view = $this->_preparePath($config['layout']);
 					$folder = 'layouts';
+
+					if ($template['ext']) {
+						$view .= '.' . $template['ext'];
+					}
 				}
 			break;
 
@@ -175,15 +179,17 @@ abstract class EngineAbstract extends Base implements Engine {
 		}
 
 		// Build array of paths
-		if ($folder) {
-			if ($template['module']) {
-				$paths[] = APP_MODULES . sprintf('%s/views/private/%s/%s.tpl', $template['module'], $folder, $view);
+		if ($view) {
+			if ($folder) {
+				if ($template['module']) {
+					$paths[] = APP_MODULES . sprintf('%s/views/private/%s/%s.tpl', $template['module'], $folder, $view);
+				}
+
+				$paths[] = APP_VIEWS . sprintf('%s/%s.tpl', $folder, $view);
+
+			} else {
+				$paths[] = APP_MODULES . sprintf('%s/views/public/%s/%s.tpl', $template['module'], $template['controller'], $view);
 			}
-
-			$paths[] = APP_VIEWS . sprintf('%s/%s.tpl', $folder, $view);
-
-		} else {
-			$paths[] = APP_MODULES . sprintf('%s/views/public/%s/%s.tpl', $template['module'], $template['controller'], $view);
 		}
 
 		if ($paths) {

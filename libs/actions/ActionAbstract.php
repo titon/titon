@@ -35,17 +35,6 @@ abstract class ActionAbstract extends Base implements Action {
 	protected $_controller;
 
 	/**
-	 * Method that is executed to trigger the actions logic.
-	 *
-	 * @access public
-	 * @return void
-	 * @throws \titon\libs\actions\ActionException
-	 */
-	public function run() {
-		throw new ActionException(sprintf('You must define the run() method within your %s Action.', get_class($this)));
-	}
-
-	/**
 	 * Store the parent Controller.
 	 *
 	 * @access public

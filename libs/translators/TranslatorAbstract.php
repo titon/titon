@@ -110,19 +110,6 @@ abstract class TranslatorAbstract extends Base implements Translator {
 	}
 
 	/**
-	 * Load the correct resource bundle for the associated file type.
-	 *
-	 * @access public
-	 * @param string $module
-	 * @param string $locale
-	 * @return \titon\libs\bundles\Bundle
-	 * @throws \titon\libs\translators\TranslatorException
-	 */
-	public function loadBundle($module, $locale) {
-		throw new TranslatorException(sprintf('You must define the loadBundle() method within your %s.', get_class($this)));
-	}
-
-	/**
 	 * Parse out the module, catalog and key for string lookup.
 	 *
 	 * @access public

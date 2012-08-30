@@ -35,6 +35,10 @@ abstract class TransporterAbstract extends Base implements Transporter {
 
 		if ($headers) {
 			foreach ($headers as $header => $value) {
+				if (empty($value)) {
+					continue;
+				}
+
 				$out[] = wordwrap(trim($header) . ': ' . trim($value), Email::CHAR_LIMIT_SHOULD, " ");
 			}
 		}

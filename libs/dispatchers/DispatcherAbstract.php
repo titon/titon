@@ -131,15 +131,4 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 		}
 	}
 
-	/**
-	 * Primary method to run the dispatcher and its process its logic.
-	 *
-	 * @access public
-	 * @return void
-	 * @throws \titon\libs\dispatchers\DispatcherException
-	 */
-	public function run() {
-		throw new DispatcherException('You must define your own run() method to dispatch the current request.');
-	}
-
 }
