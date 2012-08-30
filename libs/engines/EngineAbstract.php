@@ -42,7 +42,6 @@ abstract class EngineAbstract extends Base implements Engine {
 	const LAYOUT = 2;
 	const WRAPPER = 3;
 	const ELEMENT = 4;
-	const ERROR = 5;
 
 	/**
 	 * Configuration. Can be overwritten in the Controller.
@@ -52,18 +51,18 @@ abstract class EngineAbstract extends Base implements Engine {
 	 *	render 		- Toggle the rendering process
 	 *	layout 		- The layout template to use
 	 *	wrapper 	- The wrapper template to use
-	 *	error 		- The name of the error view to render
+	 *	folder 		- The folder name to user when templates are overridden (emails, errors, etc)
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_config = [
-		'type'		=> null,
+		'type'		=> 'html',
 		'template'	=> [],
 		'render'	=> true,
 		'layout'	=> 'default',
 		'wrapper'	=> null,
-		'error'		=> null
+		'folder'	=> null
 	];
 
 	/**
@@ -129,66 +128,54 @@ abstract class EngineAbstract extends Base implements Engine {
 		$paths = [];
 		$config = $this->config->get();
 		$template = $config['template'];
-		$ext = $template['ext'];
+		$folder = null;
+		$view = null;
 
 		switch ($type) {
 			case self::LAYOUT:
-				if (!empty($config['layout'])) {
-					$layout = $this->_preparePath($config['layout']);
-
-					$paths = [
-						APP_MODULES . $template['module'] . '/views/private/layouts/' . $layout . '.tpl',
-						APP_VIEWS . 'layouts/' . $layout . '.tpl'
-					];
+				if ($config['layout']) {
+					$view = $this->_preparePath($config['layout']);
+					$folder = 'layouts';
 				}
 			break;
 
 			case self::WRAPPER:
-				if (!empty($config['wrapper'])) {
-					$wrapper = $this->_preparePath($config['wrapper']);
-
-					$paths = [
-						APP_MODULES . $template['module'] . '/views/private/wrappers/' . $wrapper . '.tpl',
-						APP_VIEWS . 'wrappers/' . $wrapper . '.tpl'
-					];
+				if ($config['wrapper']) {
+					$view = $this->_preparePath($config['wrapper']);
+					$folder = 'wrappers';
 				}
 			break;
 
 			case self::ELEMENT:
-				$path = $this->_preparePath($path);
-
-				$paths = [
-					APP_MODULES . $template['module'] . '/views/private/includes/' . $path . '.tpl',
-					APP_VIEWS . 'includes/' . $path . '.tpl'
-				];
-			break;
-
-			case self::ERROR:
-				if (!empty($config['error'])) {
-					$error = $this->_preparePath($config['error']);
-
-					$paths = [
-						APP_MODULES . $template['module'] . '/views/private/errors/' . $error . '.tpl',
-						APP_VIEWS . 'errors/' . $error . '.tpl'
-					];
-				}
+				$view = $this->_preparePath($path);
+				$folder = 'includes';
 			break;
 
 			case self::VIEW:
 			default:
-				$parts = [
-					$template['module'],
-					'views',
-					'public',
-					$template['controller'],
-					Titon::loader()->ds($template['action'])
-				];
+				// If overridden use the folder path
+				if ($config['folder']) {
+					$view = $this->_preparePath($template['action']);
+					$folder = $config['folder'];
 
-				$path  = APP_MODULES . implode('/', $parts);
-				$path .= empty($ext) ? '.tpl' : '.' . $ext . '.tpl';
+				// Else determine full path based off module, controller, action
+				} else {
+					$view = $this->_preparePath($template['action']);
 
-				$paths = [$path];
+					if ($template['ext']) {
+						$view .= '.' . $template['ext'];
+					}
+				}
 			break;
+		}
+
+		// Build array of paths
+		if ($folder) {
+			$paths[] = APP_MODULES . sprintf('%s/views/private/%s/%s.tpl', $template['module'], $folder, $view);
+			$paths[] = APP_VIEWS . sprintf('%s/%s.tpl', $folder, $view);
+
+		} else {
+			$paths[] = APP_MODULES . sprintf('%s/views/public/%s/%s.tpl', $template['module'], $template['controller'], $view);
 		}
 
 		if ($paths) {
@@ -246,6 +233,24 @@ abstract class EngineAbstract extends Base implements Engine {
 	 */
 	public function open($path, array $variables = []) {
 		throw new EngineException('You must define the open() method within your engine.');
+	}
+
+	/**
+	 * Override the template locations by providing a folder and view name.
+	 *
+	 * @access public
+	 * @param string $folder
+	 * @param string $view
+	 * @param string $layout
+	 * @return \titon\libs\engines\Engine
+	 * @chainable
+	 */
+	public function override($folder, $view, $layout = null) {
+		return $this->setup([
+			'folder' => $folder,
+			'template' => $view,
+			'layout' => $layout
+		]);
 	}
 
 	/**
@@ -320,7 +325,8 @@ abstract class EngineAbstract extends Base implements Engine {
 	 *
 	 * @access public
 	 * @param mixed $options
-	 * @return void
+	 * @return \titon\libs\engines\Engine
+	 * @chainable
 	 */
 	public function setup($options) {
 		if ($options === false || $options === true || $options === null) {
@@ -342,6 +348,8 @@ abstract class EngineAbstract extends Base implements Engine {
 				}
 			}
 		}
+
+		return $this;
 	}
 
 	/**

@@ -145,10 +145,10 @@ class ViewEngineTest extends TestCase {
 			'template' => [
 				'module' => 'pages',
 				'controller' => 'index',
-				'action' => 'index',
+				'action' => 'error',
 				'ext' => null
 			],
-			'error' => 'error',
+			'folder' => 'errors',
 			'layout' => 'error'
 		]);
 
@@ -161,10 +161,10 @@ class ViewEngineTest extends TestCase {
 			'template' => [
 				'module' => 'pages',
 				'controller' => 'index',
-				'action' => 'index',
+				'action' => '404',
 				'ext' => null
 			],
-			'error' => '404',
+			'folder' => 'errors',
 			'layout' => 'error'
 		]);
 

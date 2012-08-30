@@ -112,24 +112,24 @@ class ControllerTest extends TestCase {
 		$this->object->throwError(404);
 
 		$this->assertEquals('404 - Not Found', $this->object->engine->get('pageTitle'));
-		$this->assertEquals('404', $this->object->engine->config->error);
+		$this->assertEquals('404', $this->object->engine->config->get('template.action'));
 		$this->assertEquals('error', $this->object->engine->config->layout);
-		$this->assertNotEmpty($this->object->engine->config->error);
+		$this->assertNotEmpty($this->object->engine->config->get('template.action'));
 
 		$this->object->throwError(500);
 
 		$this->assertEquals('500 - Internal Server Error', $this->object->engine->get('pageTitle'));
-		$this->assertEquals('500', $this->object->engine->config->error);
+		$this->assertEquals('500', $this->object->engine->config->get('template.action'));
 
 		$this->object->throwError('customError', ['pageTitle' => 'Custom Error']);
 
 		$this->assertEquals('Custom Error', $this->object->engine->get('pageTitle'));
-		$this->assertEquals('customError', $this->object->engine->config->error);
+		$this->assertEquals('customError', $this->object->engine->config->get('template.action'));
 
 		$this->object->throwError('another_error');
 
 		$this->assertEquals('Another Error', $this->object->engine->get('pageTitle'));
-		$this->assertEquals('another_error', $this->object->engine->config->error);
+		$this->assertEquals('another_error', $this->object->engine->config->get('template.action'));
 	}
 
 }

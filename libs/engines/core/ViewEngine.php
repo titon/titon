@@ -69,15 +69,11 @@ class ViewEngine extends EngineAbstract {
 
 		// Render the template, layout and wrappers
 		$data = $this->get();
-
-		if (!empty($config['error'])) {
-			$renders = [self::ERROR => 'error'];
-		} else {
-			$renders = [self::VIEW => 'template'];
-		}
-
-		$renders[self::WRAPPER] = 'wrapper';
-		$renders[self::LAYOUT] = 'layout';
+		$renders = [
+			self::VIEW => 'template',
+			self::WRAPPER => 'wrapper',
+			self::LAYOUT => 'layout'
+		];
 
 		foreach ($renders as $type => $render) {
 			if (empty($config[$render])) {

@@ -118,17 +118,17 @@ class EngineTest extends TestCase {
 				'action' => 'error',
 				'ext' => null
 			],
-			'error' => 'error'
+			'folder' => 'errors'
 		]);
 
-		$this->assertEquals(APP_MODULES . 'pages/views/private/errors/error.tpl', $engine->buildPath(EngineFixture::ERROR));
+		$this->assertEquals(APP_MODULES . 'pages/views/private/errors/error.tpl', $engine->buildPath(EngineFixture::VIEW));
 
-		$engine->config->error = 404;
-		$this->assertEquals(APP_MODULES . 'pages/views/private/errors/404.tpl', $engine->buildPath(EngineFixture::ERROR));
+		$engine->override('errors', 404);
+		$this->assertEquals(APP_MODULES . 'pages/views/private/errors/404.tpl', $engine->buildPath(EngineFixture::VIEW));
 
 		try {
 			$engine->config->set('template.action', 'invalidFile');
-			$engine->buildPath(EngineFixture::ERROR); // file doesn't exist
+			$engine->buildPath(EngineFixture::VIEW); // file doesn't exist
 			$this->assertTrue(false);
 		} catch (Exception $e) {
 			$this->assertTrue(true);

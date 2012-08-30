@@ -169,10 +169,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 		$args['url'] = Titon::router()->current()->url();
 
 		$this->engine->set($args);
-		$this->engine->setup([
-			'error' => $action,
-			'layout' => 'error'
-		]);
+		$this->engine->override('errors', $action, 'error');
 	}
 
 	/**
