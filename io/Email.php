@@ -210,17 +210,35 @@ class Email extends Base {
 	 * Set the body message.
 	 *
 	 * @access public
-	 * @param string $message
+	 * @param string|array $message
 	 * @return \titon\io\Email
 	 * @chainable
 	 */
 	public function body($message) {
+
+		// If message is an array, we are sending a multipart message
 		if (is_array($message)) {
-			$message = implode("\n", $message);
+			$body = '';
+			$boundary = str_replace('-', '', Uuid::v4());
+			$newline = $this->config->newline;
+			$encoding = $this->config->encoding;
+
+			$this->header('Content-Type', 'multipart/alternative; boundary=' . $boundary);
+
+			foreach ($message as $type => $msg) {
+				$body .= '--' . $boundary;
+				$body .= 'Content-type: ' . $this->_getType($type) . $newline;
+				$body .= 'Content-Transfer-Encoding: ' . $this->config->encoding . $newline . $newline;
+				$body .= $this->_encodeData($this->nl($msg), $encoding);
+			}
+
+			$body .= '--' . $boundary . '--';
+		} else {
+			$body = $this->nl($message);
 		}
 
 		// http://tools.ietf.org/html/rfc5322#section-2.3
-		$this->_body = wordwrap($this->nl($message), self::CHAR_LIMIT_SHOULD, $this->config->newline);
+		$this->_body = wordwrap($body, self::CHAR_LIMIT_SHOULD, $this->config->newline);
 
 		return $this;
 	}
@@ -455,17 +473,12 @@ class Email extends Base {
 			$this->body($message);
 		}
 
-		// If engine is set use it for rendering
-		if ($this->getEngine() && $this->config->type !== self::NONE) {
-			$this->body($this->getEngine()->run(false));
-		}
-
 		// Set default transporter
 		if (!$this->getTransporter()) {
 			$this->setTransporter(new MailTransporter());
 		}
 
-		return $this->getTransporter()->send($this->_getHeaders(), $this->_body);
+		return $this->getTransporter()->send($this->_getHeaders(), $this->_getBody());
 	}
 
 	/**
@@ -629,7 +642,7 @@ class Email extends Base {
 	 * @param array $source
 	 * @return array
 	 */
-	protected function _formatEmails($source) {
+	protected function _formatEmails(array $source) {
 		$emails = [];
 
 		if ($source) {
@@ -643,6 +656,44 @@ class Email extends Base {
 		}
 
 		return $emails;
+	}
+
+	/**
+	 * Get the body by calculating boundaries and attachments.
+	 *
+	 * @access protected
+	 * @return string
+	 */
+	protected function _getBody() {
+		$type = $this->config->type;
+		$template = $this->config->template;
+
+		// If engine is set use it for rendering
+		if ($this->getEngine() && $type !== self::NONE) {
+			if ($type === self::BOTH) {
+				$modes = [self::HTML, self::TEXT];
+			} else {
+				$modes = (array) $type;
+			}
+
+			// Gather a body from each type
+			$body = [];
+
+			foreach ($modes as $mode) {
+				$this->renderAs($mode, $template['action'], $template['module']);
+
+				$body[$mode] = $this->getEngine()->run(false);
+			}
+
+			$this->body($body);
+
+			// Reset back to base type
+			$this->config->type = $type;
+		}
+
+		// @todo attachments
+
+		return $this->_body;
 	}
 
 	/**
@@ -698,6 +749,25 @@ class Email extends Base {
 		// @todo attachment headers
 
 		return $headers;
+	}
+
+	/**
+	 * Return the email mime type and charset.
+	 *
+	 * @access protected
+	 * @param string $type
+	 * @return string
+	 */
+	protected function _getType($type) {
+		switch ($type) {
+			default:
+			case self::TEXT:	$mime = 'text/plain'; break;
+			case self::HTML:	$mime = 'text/html'; break;
+		}
+
+		$mime .= '; charset=' . $this->config->charset;
+
+		return $mime;
 	}
 
 }
