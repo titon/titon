@@ -18,7 +18,8 @@ use titon\utility\Uuid;
 use titon\utility\Validate;
 
 /**
- * @todo
+ * http://msdn.microsoft.com/en-us/library/ms527355(v=exchg.10).aspx
+ * http://www.w3.org/Protocols/rfc1341/7_2_Multipart.html
  *
  * @package	titon.io
  *
@@ -80,6 +81,14 @@ class Email extends Base {
 			'ext' => null
 		]
 	];
+
+	/**
+	 * Current boundary string.
+	 *
+	 * @access protected
+	 * @var string
+	 */
+	protected $_boundary;
 
 	/**
 	 * To emails.
@@ -219,7 +228,7 @@ class Email extends Base {
 		// If message is an array, we are sending a multipart message
 		if (is_array($message)) {
 			$body = '';
-			$boundary = str_replace('-', '', Uuid::v4());
+			$boundary = $this->_boundary();
 			$newline = $this->config->newline;
 			$encoding = $this->config->encoding;
 
@@ -588,6 +597,22 @@ class Email extends Base {
 		}
 
 		return $this;
+	}
+
+	/**
+	 * Get the content boundary. If it does not exist, generate it.
+	 *
+	 * @access protected
+	 * @return string
+	 */
+	protected function _boundary() {
+		if ($this->_boundary) {
+			return $this->_boundary;
+		}
+
+		$this->_boundary = str_replace('-', '', Uuid::v4());
+
+		return $this->_boundary;
 	}
 
 	/**
