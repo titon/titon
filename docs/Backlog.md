@@ -6,6 +6,14 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 ### Systems In Development ###
 
+Security
+* (authorization)
+* (authentication)
+* (acl)
+* (xss/csrf protection)
+* (firewall)
+* (persistence)
+
 ### Upcoming Systems ###
 
 Database/Datasource Layer
@@ -14,14 +22,6 @@ Database/Datasource Layer
 * libs/daos
 * libs/models
 * (pagination)
-
-Security
-* (authorization)
-* (authentication)
-* (acl)
-* (xss/csrf protection)
-* (firewall)
-* (persistence)
 
 Streams
 * io/Stream
@@ -32,7 +32,7 @@ Sockets
 * libs/sockets
 
 Email
-* net/Email
+* io/Email
 * libs/transporters
 
 ### Backlogged Systems ###
@@ -54,5 +54,8 @@ Email
 * libs/shells
 * libs/streams
 * libs/transporters
-* net/Email
 * utility/Uuid
+
+### Incomplete Classes ###
+
+* io/Email

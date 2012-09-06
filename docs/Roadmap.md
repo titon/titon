@@ -4,10 +4,6 @@ Each minor version will be incremented on a monthly basis. Please refer to the B
 
 ### Timelines ###
 
-v0.7 - August
-* Utilities
-* Net
-
 v0.8 - September
 * Security
 * Auth
