@@ -26,7 +26,7 @@ class InternalErrorException extends HttpException {
 	 * @param int $code
 	 * @param mixed $previous
 	 */
-	public function __construct($message, $code = 500, $previous) {
+	public function __construct($message, $code = 500, $previous = null) {
 		parent::__construct($message, $code, $previous);
 	}
 

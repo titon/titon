@@ -26,7 +26,7 @@ class ServiceUnavailableException extends HttpException {
 	 * @param int $code
 	 * @param mixed $previous
 	 */
-	public function __construct($message, $code = 503, $previous) {
+	public function __construct($message, $code = 503, $previous = null) {
 		parent::__construct($message, $code, $previous);
 	}
 

@@ -26,7 +26,7 @@ class UnauthorizedException extends HttpException {
 	 * @param int $code
 	 * @param mixed $previous
 	 */
-	public function __construct($message, $code = 401, $previous) {
+	public function __construct($message, $code = 401, $previous = null) {
 		parent::__construct($message, $code, $previous);
 	}
 
