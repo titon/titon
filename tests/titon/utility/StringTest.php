@@ -64,29 +64,6 @@ class StringTest extends TestCase {
 	}
 
 	/**
-	 * Test that escape() works with different flags.
-	 */
-	public function testEscape() {
-		$this->assertEquals('"Double" quotes', String::escape('"Double" quotes', ENT_NOQUOTES));
-		$this->assertEquals('&quot;Double&quot; quotes', String::escape('"Double" quotes', ENT_COMPAT));
-		$this->assertEquals('&quot;Double&quot; quotes', String::escape('"Double" quotes', ENT_QUOTES));
-		$this->assertEquals('&quot;Double&quot; quotes', String::escape('"Double" quotes', ENT_QUOTES | ENT_HTML5));
-		$this->assertEquals('&quot;Double&quot; quotes', String::escape('"Double" quotes', ENT_QUOTES | ENT_XHTML));
-
-		$this->assertEquals("'Single' quotes", String::escape("'Single' quotes", ENT_NOQUOTES));
-		$this->assertEquals("'Single' quotes", String::escape("'Single' quotes", ENT_COMPAT));
-		$this->assertEquals("&#039;Single&#039; quotes", String::escape("'Single' quotes", ENT_QUOTES));
-		$this->assertEquals("&apos;Single&apos; quotes", String::escape("'Single' quotes", ENT_QUOTES | ENT_HTML5));
-		$this->assertEquals("&apos;Single&apos; quotes", String::escape("'Single' quotes", ENT_QUOTES | ENT_XHTML));
-
-		$this->assertEquals('&lt;Html&gt; tags', String::escape('<Html> tags', ENT_NOQUOTES));
-		$this->assertEquals('&lt;Html&gt; tags', String::escape('<Html> tags', ENT_COMPAT));
-		$this->assertEquals('&lt;Html&gt; tags', String::escape('<Html> tags', ENT_QUOTES));
-		$this->assertEquals('&lt;Html&gt; tags', String::escape('<Html> tags', ENT_QUOTES | ENT_HTML5));
-		$this->assertEquals('&lt;Html&gt; tags', String::escape('<Html> tags', ENT_QUOTES | ENT_XHTML));
-	}
-
-	/**
 	 * Test that extract() returns certain sections of a string.
 	 */
 	public function testExtract() {

@@ -37,7 +37,7 @@ class XhtmlHelperTest extends TestCase {
 
 		// test escaping
 		$this->assertEquals('<a href="/">Double &quot;quotes&quot;</a>' . PHP_EOL, $this->object->anchor('Double "quotes"', '/'));
-		$this->assertEquals('<a href="/">Single &apos;quotes&apos;</a>' . PHP_EOL, $this->object->anchor("Single 'quotes'", '/'));
+		$this->assertEquals('<a href="/">Single &#039;quotes&#039;</a>' . PHP_EOL, $this->object->anchor("Single 'quotes'", '/'));
 
 		// attributes
 		$this->assertEquals('<a href="/" title="Test &quot;title&quot; here">Anchor</a>' . PHP_EOL, $this->object->anchor('Anchor', '/', ['title' => 'Test "title" here']));

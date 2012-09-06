@@ -12,6 +12,7 @@ namespace titon\tests\titon\libs\listeners;
 use titon\Titon;
 use titon\tests\TestCase;
 use titon\tests\fixtures\ControllerFixture;
+use titon\tests\fixtures\DispatcherFixture;
 use titon\tests\fixtures\EngineFixture;
 use titon\tests\fixtures\ListenerFixture;
 
@@ -37,7 +38,7 @@ class ListenerTest extends TestCase {
 		Titon::event()->notify('titon.startup');
 		$this->assertEquals(['startup'], Titon::event()->getListeners()[0]['object']->executed);
 
-		Titon::event()->notify('dispatch.postDispatch');
+		Titon::event()->notify('dispatch.postDispatch', new DispatcherFixture());
 		$this->assertEquals(['startup', 'postDispatch'], Titon::event()->getListeners()[0]['object']->executed);
 
 		Titon::event()->notify('controller.preProcess', new ControllerFixture());

@@ -9,6 +9,7 @@
 
 namespace titon\tests\titon\libs\helpers\xhtml;
 
+use titon\Titon;
 use titon\tests\TestCase;
 use titon\libs\helpers\xhtml\FormHelper;
 
@@ -22,6 +23,9 @@ class FormHelperTest extends TestCase {
 	 */
 	protected function setUp() {
 		parent::setUp();
+
+		$_SERVER['HTTP_USER_AGENT'] = 'browser';
+		Titon::router()->initialize();
 
 		$_POST['input'] = 'test';
 		$_POST['Test'] = [

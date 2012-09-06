@@ -11,7 +11,7 @@ namespace titon\libs\helpers\xhtml;
 
 use titon\Titon;
 use titon\libs\helpers\html\HtmlHelper;
-use titon\utility\String;
+use titon\utility\Sanitize;
 
 /**
  * The HtmlHelper is primarily used for dynamic HTML tag creation within templates.
@@ -77,7 +77,9 @@ class XhtmlHelper extends HtmlHelper {
 		}
 
 		if ($escape) {
-			$value = String::escape($value, ENT_QUOTES | ENT_XHTML);
+			$value = Sanitize::escape($value, [
+				'flags' => ENT_QUOTES | ENT_XHTML
+			]);
 		}
 
 		return $value;

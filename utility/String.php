@@ -112,19 +112,6 @@ class String {
 	}
 
 	/**
-	 * Escape a string using the apps encoding.
-	 *
-	 * @access public
-	 * @param string $string
-	 * @param int $flags
-	 * @return string
-	 * @static
-	 */
-	public static function escape($string, $flags = ENT_QUOTES) {
-		return htmlspecialchars($string, $flags, Titon::config()->encoding());
-	}
-
-	/**
 	 * Extracts a portion of a string.
 	 *
 	 * @access public
@@ -204,7 +191,7 @@ class String {
 		}
 
 		if ($options['escape']) {
-			$string = self::escape($string);
+			$string = Sanitize::escape($string);
 		}
 
 		return $string;

@@ -13,6 +13,7 @@ use titon\Titon;
 use titon\base\Type;
 use titon\utility\Inflector;
 use titon\utility\String as Str;
+use titon\utility\Sanitize;
 
 /**
  * The String type allows for the modification and manipulation of a string as if it was an object.
@@ -158,7 +159,7 @@ class String extends Type {
 	 * @chainable
 	 */
 	public function escape($flags = ENT_QUOTES) {
-		$this->_value = Str::escape($this->_value, $flags);
+		$this->_value = Sanitize::escape($this->_value, ['flags' => $flags]);
 
 		return $this;
 	}

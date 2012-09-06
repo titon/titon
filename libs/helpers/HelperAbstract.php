@@ -14,6 +14,7 @@ use titon\base\Base;
 use titon\libs\engines\Engine;
 use titon\libs\helpers\Helper;
 use titon\libs\traits\Attachable;
+use titon\utility\Sanitize;
 use titon\utility\String;
 
 /**
@@ -93,7 +94,7 @@ abstract class HelperAbstract extends Base implements Helper {
 		}
 
 		if ($escape) {
-			$value = String::escape($value);
+			$value = Sanitize::escape($value);
 		}
 
 		return $value;

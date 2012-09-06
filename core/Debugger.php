@@ -11,7 +11,7 @@ namespace titon\core;
 
 use titon\Titon;
 use titon\log\Logger;
-use titon\utility\String;
+use titon\utility\Sanitize;
 use \Exception;
 
 /**
@@ -233,7 +233,7 @@ class Debugger {
 			return $arg ? 'true' : 'false';
 
 		} else if (is_string($arg)) {
-			return "'" . String::escape($arg) . "'";
+			return "'" . Sanitize::escape($arg) . "'";
 
 		} else if (is_array($arg)) {
 			if ($end === true) {

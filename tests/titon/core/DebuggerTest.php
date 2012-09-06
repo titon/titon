@@ -11,7 +11,7 @@ namespace titon\tests\titon\core;
 
 use titon\Titon;
 use titon\tests\TestCase;
-use titon\utility\String;
+use titon\utility\Sanitize;
 
 /**
  * Test class for titon\core\Debugger.
@@ -60,7 +60,7 @@ class DebuggerTest extends TestCase {
 		$this->assertEquals('null', $this->object->parseArg(null));
 		$this->assertEquals('titon\core\Debugger', $this->object->parseArg($this->object));
 		$this->assertEquals("'string'", $this->object->parseArg('string'));
-		$this->assertEquals("'" . String::escape('<b>string</b>') . "'", $this->object->parseArg('<b>string</b>'));
+		$this->assertEquals("'" . Sanitize::escape('<b>string</b>') . "'", $this->object->parseArg('<b>string</b>'));
 		$this->assertEquals('[]', $this->object->parseArg([]));
 		$this->assertEquals("[123, 'foo', null, true]", $this->object->parseArg([123, 'foo', null, true]));
 		$this->assertEquals("[truncated]", $this->object->parseArg([123, 'foo', null, true], true));
