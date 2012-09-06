@@ -40,7 +40,9 @@ class EmailTest extends TestCase {
 	protected function tearDown() {
 		parent::tearDown();
 
-		@unlink(APP_LOGS . 'debug.log');
+		if (file_exists(APP_LOGS . 'debug.log')) {
+			unlink(APP_LOGS . 'debug.log');
+		}
 	}
 
 	/**
@@ -71,12 +73,6 @@ class EmailTest extends TestCase {
 
 		$body = $this->object->send()['body'];
 		$this->assertEquals('This is a simple body!', $body);
-
-		// array
-		$this->object->body(['This is a simple body!', 'With an additional body via array.']);
-
-		$body = $this->object->send()['body'];
-		$this->assertEquals("This is a simple body!\r\nWith an additional body via array.", $body);
 
 		// new line
 		$this->object->body("This ia line\rAnd this is another line\nCan't stop this");
@@ -207,7 +203,7 @@ class EmailTest extends TestCase {
 	/**
 	 * Test that renderAs() will render an email template using a rendering engine.
 	 */
-	public function testRenderAs() {
+	public function testRenderAsText() {
 		try {
 			$this->object->renderAs(Email::HTML, 'example');
 			$this->assertTrue(false);
@@ -217,26 +213,70 @@ class EmailTest extends TestCase {
 
 		$this->object->setEngine(new ViewEngine());
 
-		// text
 		$this->object->renderAs(Email::TEXT, 'example');
 		$this->assertEquals(Email::TEXT, $this->object->config->type);
 
 		$body = $this->object->send('Testing renderAs()')['body'];
 		$this->assertEquals("This is an example email template.\r\nIt is also a plain text email.\r\n- Titon", $body);
+	}
 
-		// html
+	/**
+	 * Test that renderAs() renders an HTML template.
+	 */
+	public function testRenderAsHtml() {
+		$this->object->setEngine(new ViewEngine());
+
 		$this->object->renderAs(Email::HTML, 'example');
 		$this->assertEquals(Email::HTML, $this->object->config->type);
 
 		$body = $this->object->send('Testing renderAs()')['body'];
-		$this->assertEquals("<!DOCTYPE html>\r\n<html>\r\n<body>\r\n\tThis is an example email template.\r\nIt is an <b>HTML</b> specific <i>template</i>.\t<br>- Titon\r\n</body>\r\n</html>", $body);
+		$this->assertEquals("<!DOCTYPE html>\r\n<html>\r\n<body>\r\n\tThis is an example email template.<br>\r\n\tIt is an <b>HTML</b> specific <i>template</i>.<br>\r\n\t- Titon\r\n</body>\r\n</html>", $body);
+	}
 
-		// none
+	/**
+	 * Test that renderAs() renders with no template.
+	 */
+	public function testRenderAsNone() {
+		$this->object->setEngine(new ViewEngine());
+
 		$this->object->renderAs(Email::NONE);
 		$this->assertEquals(Email::NONE, $this->object->config->type);
 
 		$body = $this->object->send('Testing renderAs()')['body'];
 		$this->assertEquals("Testing renderAs()", $body);
+	}
+
+	/**
+	 * Test that renderAs() renders as both an HTML and text template.
+	 */
+	public function testRenderAsBoth() {
+		$this->object->setEngine(new ViewEngine());
+
+		$this->object->renderAs(Email::BOTH, 'example');
+		$this->assertEquals(Email::BOTH, $this->object->config->type);
+
+		$response = $this->object->send('Testing renderAs()');
+		$boundary = $response['headers']['X-Boundary'];
+		$expected = <<<EMAIL
+--$boundary
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+
+VGhpcyBpcyBhbiBleGFtcGxlIGVtYWlsIHRlbXBsYXRlLg0KSXQgaXMgYWxzbyBhIHBsYWluIHRl
+eHQgZW1haWwuDQotIFRpdG9u
+--$boundary
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: base64
+
+PCFET0NUWVBFIGh0bWw+DQo8aHRtbD4NCjxib2R5Pg0KCVRoaXMgaXMgYW4gZXhhbXBsZSBlbWFp
+bCB0ZW1wbGF0ZS48YnI+DQoJSXQgaXMgYW4gPGI+SFRNTDwvYj4gc3BlY2lmaWMgPGk+dGVtcGxh
+dGU8L2k+Ljxicj4NCgktIFRpdG9uDQo8L2JvZHk+DQo8L2h0bWw+
+--$boundary--
+EMAIL;
+
+		$this->out($response);
+		$this->assertEquals('multipart/alternative; charset=UTF-8', $response['headers']['Content-Type']);
+		$this->assertEquals(str_replace("\n", "\r\n", $expected), $response['body']);
 	}
 
 	/**

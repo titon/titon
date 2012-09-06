@@ -216,7 +216,7 @@ class Email extends Base {
 	}
 
 	/**
-	 * Set the body message.
+	 * Set the body message. If message is an array, we are sending a multipart message.
 	 *
 	 * @access public
 	 * @param string|array $message
@@ -224,24 +224,43 @@ class Email extends Base {
 	 * @chainable
 	 */
 	public function body($message) {
-
-		// If message is an array, we are sending a multipart message
 		if (is_array($message)) {
 			$body = '';
 			$boundary = $this->_boundary();
 			$newline = $this->config->newline;
 			$encoding = $this->config->encoding;
 
-			$this->header('Content-Type', 'multipart/alternative; boundary=' . $boundary);
+			// Multipart
+			if (count($message) > 1) {
+				foreach ([self::TEXT, self::HTML] as $type) {
+					if (isset($message[$type])) {
+						$body .= '--' . $boundary . $newline;
+						$body .= 'Content-Type: ' . $this->_getType($type) . $newline;
+						$body .= 'Content-Transfer-Encoding: ' . $this->config->encoding . $newline . $newline;
+						$body .= $this->_encodeData($this->nl($message[$type]), $encoding);
+					}
+				}
 
-			foreach ($message as $type => $msg) {
-				$body .= '--' . $boundary;
-				$body .= 'Content-type: ' . $this->_getType($type) . $newline;
-				$body .= 'Content-Transfer-Encoding: ' . $this->config->encoding . $newline . $newline;
-				$body .= $this->_encodeData($this->nl($msg), $encoding);
+				$body .= '--' . $boundary . '--';
+				$contentType = 'multipart/alternative; boundary=' . $boundary;
+
+			// Single
+			} else {
+				if (isset($message[self::TEXT])) {
+					$contentType = $this->_getType(self::TEXT);
+					$message = $message[self::TEXT];
+
+				} else {
+					$contentType = $this->_getType(self::HTML);
+					$message = $message[self::HTML];
+				}
+
+				$body = $this->nl($message);
 			}
 
-			$body .= '--' . $boundary . '--';
+			$this->header('Content-Type', $contentType);
+
+		// Single
 		} else {
 			$body = $this->nl($message);
 		}
@@ -375,7 +394,7 @@ class Email extends Base {
 
 			return $this;
 
-		} else if ($type !== self::TEXT && $type !== self::HTML) {
+		} else if ($type !== self::TEXT && $type !== self::HTML && $type !== self::BOTH) {
 			throw new IoException(sprintf('Invalid rendering type %s.', $type));
 		}
 
@@ -398,7 +417,7 @@ class Email extends Base {
 		$this->config->template = $template;
 
 		if ($this->getEngine()) {
-			$this->getEngine()->override('emails', $template, 'email');
+			$this->getEngine()->override('emails', $template);
 		} else {
 			throw new IoException('A view engine must be set to render custom templates.');
 		}
@@ -612,6 +631,8 @@ class Email extends Base {
 
 		$this->_boundary = str_replace('-', '', Uuid::v4());
 
+		$this->header('X-Boundary', $this->_boundary);
+
 		return $this->_boundary;
 	}
 
@@ -763,12 +784,6 @@ class Email extends Base {
 
 		if (empty($headers['Date'])) {
 			$headers['Date'] = date(DATE_RFC2822);
-		}
-
-		if ($this->config->type === self::TEXT) {
-			$headers['Content-Type'] = 'text/plain; charset=' . $this->config->charset;
-		} else if ($this->config->type === self::HTML) {
-			$headers['Content-Type'] = 'text/html; charset=' . $this->config->charset;
 		}
 
 		// @todo attachment headers
