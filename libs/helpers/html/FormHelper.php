@@ -367,6 +367,10 @@ class FormHelper extends HelperAbstract {
 			return Titon::registry()->factory('titon\net\Request');
 		});
 
+		$this->attachObject('session', function() {
+			return Titon::registry()->factory('titon\net\Session');
+		});
+
 		$this->config->set(array_diff_key([
 			'day' => date('j'),
 			'dayFormat' => 'j',
@@ -525,6 +529,13 @@ class FormHelper extends HelperAbstract {
 
 		// Save its state
 		$this->_forms[$this->_model] = $attributes;
+
+		// If CSRF protection is enabled, include a hidden field
+		$csrf = $this->session->get('Security.csrf');
+
+		if ($csrf && !empty($csrf['token'])) {
+			$output .= $this->hidden($csrf['field'], ['value' => $csrf['token']]);
+		}
 
 		return $output;
 	}
