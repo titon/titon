@@ -7,12 +7,11 @@ Any library wrapped in parenthesis currently does not have a final location in t
 ### Systems In Development ###
 
 Security
-* (authorization)
-* (authentication)
-* (acl)
-* (xss/csrf protection)
-* (firewall)
-* (persistence)
+* security/Auth
+* security/Acl
+* libs/listeners/security/CsrfProtectionListener
+* libs/listeners/security/InputFilterListener
+* libs/listeners/security/OutputFilterListener
 
 ### Upcoming Systems ###
 
@@ -49,6 +48,9 @@ Email
 * libs/adapters
 * libs/behaviors
 * libs/daos
+* libs/listeners/security/CsrfProtectionListener
+* libs/listeners/security/InputFilterListener
+* libs/listeners/security/OutputFilterListener
 * libs/models
 * libs/readers/gettext/MoReader
 * libs/shells

@@ -107,4 +107,27 @@ class SanitizeTest extends TestCase {
 		$this->assertEquals("TestingTabs", Sanitize::whitespace("Testing\tTabs", ['tab' => true, 'limit' => 0]));
 	}
 
+	/**
+	 * Test that xss() removes any XSS attack vectors and escapes content.
+	 */
+	public function testXss() {
+		$test = 'Test string <script>alert("XSS!");</script> with attack <div onclick="javascript:alert(\'XSS!\')">vectors</div>';
+
+		// remove HTML tags and escape
+		$this->assertEquals('Test string alert(&quot;XSS!&quot;); with attack vectors', Sanitize::xss($test));
+
+		// remove on attributes and escape
+		$this->assertEquals('Test string alert(&quot;XSS!&quot;); with attack &lt;div&gt;vectors&lt;/div&gt;', Sanitize::xss($test, ['strip' => false]));
+
+		// remove xmlns and escape
+		$this->assertEquals('&lt;html&gt;', Sanitize::xss('<html xmlns="http://www.w3.org/1999/xhtml">', ['strip' => false]));
+
+		// remove namespaced tags and escape
+		$this->assertEquals('Content', Sanitize::xss('<ns:tag>Content</ns:tag>', ['strip' => false]));
+		$this->assertEquals('Content', Sanitize::xss('<ns:tag attr="foo">Content</ns:tag>', ['strip' => false]));
+
+		// remove unwanted tags
+		$this->assertEquals('A string full of unwanted tags.', Sanitize::xss('<audio>A</audio> <script type="text/javascript">string</script> <iframe>full</iframe> <applet>of</applet> <object>unwanted</object> <style>tags</style>.', ['strip' => false]));
+	}
+
 }

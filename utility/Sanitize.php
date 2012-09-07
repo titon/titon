@@ -214,6 +214,7 @@ class Sanitize {
 
 	/**
 	 * Sanitize a string by removing any XSS attack vectors.
+	 * Will bubble up to html() and escape().
 	 *
 	 * @access public
 	 * @param string $value
@@ -222,20 +223,22 @@ class Sanitize {
 	 * @static
 	 */
 	public static function xss($value, array $options = []) {
+		$options = $options + ['strip' => true];
+
 		$value = str_replace("\0", '', $value);
 
 		if (!$options['strip']) {
 
-			// Remove any attribute starting with "on" or xmlns
-			$value = preg_replace('/(?:on[a-z]+|xmlns)\s?=\s?["\'](.*?)["\']/isu', '', $value);
+			// Remove any attribute starting with on or xmlns
+			$value = preg_replace('/\s?(?:on[a-z]+|xmlns)\s?=\s?"(?:.*?)"/isu', '', $value);
 
 			// Remove namespaced elements
-			$value = preg_replace('/<\/?\w+:\w+>/isu', '', $value);
+			$value = preg_replace('/<\/?\w+:\w+(?:.*?)>/isu', '', $value);
 
 			// Remove really unwanted tags
 			do {
 				$old = $value;
-				$value = preg_replace('/<\/?(?:applet|base|bgsound|embed|frame|frameset|iframe|layer|link|meta|object|script|style|title|xml|audio|video)>/isu', '', $value);
+				$value = preg_replace('/<\/?(?:applet|base|bgsound|embed|frame|frameset|iframe|layer|link|meta|object|script|style|title|xml|audio|video)(?:.*?)>/isu', '', $value);
 			} while ($old !== $value);
 		}
 
