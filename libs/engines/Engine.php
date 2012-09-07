@@ -25,6 +25,15 @@ interface Engine {
 	public function content();
 
 	/**
+	 * Return the data based on the given key, or return all data.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return string
+	 */
+	public function get($key = null);
+
+	/**
 	 * Opens and renders a partial view element within the current document.
 	 *
 	 * @access public
@@ -70,5 +79,16 @@ interface Engine {
 	 * @return string
 	 */
 	public function run($cache = true);
+
+	/**
+	 * Set a variable to the view. The variable name will be inflected if it is invalid.
+	 *
+	 * @access public
+	 * @param string|array $key
+	 * @param mixed $value
+	 * @return \titon\libs\engines\Engine
+	 * @chainable
+	 */
+	public function set($key, $value = null);
 
 }
