@@ -43,6 +43,7 @@ class InputFilterListener extends ListenerAbstract {
 
 	/**
 	 * Executed after kernel startup.
+	 * Loop over each global and clean it.
 	 *
 	 * @access public
 	 * @return void

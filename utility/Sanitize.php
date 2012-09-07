@@ -212,4 +212,18 @@ class Sanitize {
 		return $value;
 	}
 
+	/**
+	 * Sanitize a string by removing any XSS attack vectors.
+	 *
+	 * @todo
+	 * @access public
+	 * @param string $value
+	 * @param array $options
+	 * @return string
+	 * @static
+	 */
+	public static function xss($value, array $options = []) {
+		return $value;
+	}
+
 }
