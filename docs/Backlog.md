@@ -10,7 +10,6 @@ Security
 * security/Auth
 * security/Acl
 * libs/listeners/security/CsrfProtectionListener
-* libs/listeners/security/OutputFilterListener
 
 ### Upcoming Systems ###
 
@@ -48,7 +47,6 @@ Email
 * libs/behaviors
 * libs/daos
 * libs/listeners/security/CsrfProtectionListener
-* libs/listeners/security/OutputFilterListener
 * libs/models
 * libs/readers/gettext/MoReader
 * libs/shells

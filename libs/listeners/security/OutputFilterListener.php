@@ -16,7 +16,7 @@ use titon\utility\Sanitize;
 
 /**
  * OutputFilter is an event listener that cleans view data before it is rendered in the template.
- * Provides filters for HTML/entity escaping and XSS prevention.
+ * Provides filters for HTML/entity escaping and XSS prevention (which also escapes).
  *
  * @package	titon.libs.listeners.security
  */
@@ -61,12 +61,11 @@ class OutputFilterListener extends ListenerAbstract {
 				$data[$key] = $this->clean($value);
 
 			} else if (is_string($value)) {
-				if ($this->config->escape) {
-					$data[$key] = Sanitize::escape($value);
-				}
-
 				if ($this->config->xss) {
-					$data[$key] = Sanitize::xss($value);
+					$data[$key] = Sanitize::xss($value, ['strip' => false]);
+
+				} else if ($this->config->escape) {
+					$data[$key] = Sanitize::escape($value);
 				}
 			}
 		}
