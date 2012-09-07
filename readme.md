@@ -75,6 +75,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
         * Dispatch()
         * Cache()
 * Include app/config/ files
+* Event.notify('titon.startup')
 * Titon.startup()
     * Loop through each core class and initialize
         * Loader()
@@ -88,7 +89,6 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
         * Event()
         * Dispatch()
         * Cache()
-* Event.notify('titon.startup')
 * Dispatch.run()
     * Load Dispatcher
     * Event.notify('dispatch.preDispatch')
