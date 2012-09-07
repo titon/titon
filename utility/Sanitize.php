@@ -27,14 +27,14 @@ class Sanitize {
 	 * @static
 	 */
 	public static function email($value) {
-		return filter_var($value, FILTER_SANITIZE_EMAIL);
+		return (string) filter_var($value, FILTER_SANITIZE_EMAIL);
 	}
 
 	/**
 	 * Escape a string using the apps encoding.
 	 *
 	 * @access public
-	 * @param string $string
+	 * @param string $value
 	 * @param array $options
 	 * 		encoding	- (string) Character encoding set; defaults to UTF-8
 	 * 		flags		- (int) Encoding flags; defaults to ENT_QUOTES
@@ -46,7 +46,7 @@ class Sanitize {
 		$options = $options + [
 			'encoding' => Titon::config()->encoding(),
 			'flags' => ENT_QUOTES,
-			'double' => true
+			'double' => false
 		];
 
 		return htmlentities($value, $options['flags'], $options['encoding'], $options['double']);
@@ -61,7 +61,7 @@ class Sanitize {
 	 * @static
 	 */
 	public static function float($value) {
-		return filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND | FILTER_FLAG_ALLOW_SCIENTIFIC);
+		return (float) filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND | FILTER_FLAG_ALLOW_SCIENTIFIC);
 	}
 
 	/**
@@ -97,7 +97,7 @@ class Sanitize {
 	 * @static
 	 */
 	public static function integer($value) {
-		return filter_var($value, FILTER_SANITIZE_NUMBER_INT);
+		return (int) filter_var($value, FILTER_SANITIZE_NUMBER_INT);
 	}
 
 	/**
@@ -106,9 +106,11 @@ class Sanitize {
 	 * @access public
 	 * @param string $value
 	 * @param array $options
-	 * 		cr		- (bool) Will remove carriage returns
-	 * 		lf		- (bool) Will remove line feeds
+	 * 		cr		- (bool) Will remove carriage returns \r
+	 * 		lf		- (bool) Will remove line feeds \n
+	 * 		crlf	- (bool) Will remove CRLF \r\n
 	 * 		limit	- (int) The start limit to remove extraneous characters
+	 * 		trim	- (bool) Will remove whitespace and newlines around the edges
 	 * @return string
 	 * @static
 	 */
@@ -116,30 +118,36 @@ class Sanitize {
 		$options = $options + [
 			'cr' => true,
 			'lf' => true,
-			'limit' => 2
+			'crlf' => true,
+			'limit' => 2,
+			'trim' => true
 		];
 
-		if (!$options['cr'] && !$options['lf']) {
-			return $value;
+		if ($options['limit']) {
+			$pattern = '/(?:%s){' . $options['limit'] . ',}/u';
+
+		} else {
+			$pattern = '/(?:%s)+/u';
+			$replace = '';
 		}
 
-		$newlines = '';
+		if ($options['crlf']) {
+			$value = preg_replace(sprintf($pattern, '\r\n'), (isset($replace) ? $replace : "\r\n"), $value);
+		}
 
 		if ($options['cr']) {
-			$newlines .= '\r';
+			$value = preg_replace(sprintf($pattern, '\r'), (isset($replace) ? $replace : "\r"), $value);
 		}
 
 		if ($options['lf']) {
-			$newlines .= '\n';
+			$value = preg_replace(sprintf($pattern, '\n'), (isset($replace) ? $replace : "\n"), $value);
 		}
 
-		if ($options['limit']) {
-			$pattern = sprintf('/[%s]{%s,}/u', $newlines, $options['limit']);
-		} else {
-			$pattern = sprintf('/[%s]+/u', $newlines);
+		if ($options['trim']) {
+			$value = trim($value);
 		}
 
-		return preg_replace($pattern, '', $value);
+		return $value;
 	}
 
 	/**
@@ -164,6 +172,7 @@ class Sanitize {
 	 * 		tab		- (bool) Will remove tabs
 	 * 		limit	- (int) The start limit to remove extraneous characters
 	 * 		strip	- (bool) Will remove non-standard white space character
+	 * 		trim	- (bool) Will remove whitespace and newlines around the edges
 	 * @return string
 	 * @static
 	 */
@@ -172,34 +181,35 @@ class Sanitize {
 			'space' => true,
 			'tab' => false,
 			'limit' => 2,
-			'strip' => true
+			'strip' => true,
+			'trim' => true
 		];
 
-		if (!$options['space'] && !$options['tab']) {
-			return $value;
-		}
+		if ($options['limit']) {
+			$pattern = '/%s{' . $options['limit'] . ',}/u';
 
-		$newlines = '';
-
-		if ($options['space']) {
-			$newlines .= '\s';
+		} else {
+			$pattern = '/%s+/u';
+			$replace = '';
 		}
 
 		if ($options['tab']) {
-			$newlines .= '\t';
+			$value = preg_replace(sprintf($pattern, '\t'), (isset($replace) ? $replace : "\t"), $value);
+		}
+
+		if ($options['space']) {
+			$value = preg_replace(sprintf($pattern, '\s'), (isset($replace) ? $replace : ' '), $value);
 		}
 
 		if ($options['strip']) {
-			$value = str_replace(chr(0xCA), '', $value);
+			$value = str_replace(chr(0xCA), ' ', $value);
 		}
 
-		if ($options['limit']) {
-			$pattern = sprintf('/[%s]{%s,}/u', $newlines, $options['limit']);
-		} else {
-			$pattern = sprintf('/[%s]+/u', $newlines);
+		if ($options['trim']) {
+			$value = trim($value);
 		}
 
-		return preg_replace($pattern, '', $value);
+		return $value;
 	}
 
 }
