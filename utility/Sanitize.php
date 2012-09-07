@@ -179,7 +179,7 @@ class Sanitize {
 	public static function whitespace($value, array $options = []) {
 		$options = $options + [
 			'space' => true,
-			'tab' => false,
+			'tab' => true,
 			'limit' => 2,
 			'strip' => true,
 			'trim' => true
@@ -198,7 +198,7 @@ class Sanitize {
 		}
 
 		if ($options['space']) {
-			$value = preg_replace(sprintf($pattern, '\s'), (isset($replace) ? $replace : ' '), $value);
+			$value = preg_replace(sprintf($pattern, ' '), (isset($replace) ? $replace : ' '), $value); // \s replaces other whitespace characters
 		}
 
 		if ($options['strip']) {

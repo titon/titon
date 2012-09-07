@@ -76,24 +76,26 @@ class InputFilterListener extends ListenerAbstract {
 			if (is_array($value)) {
 				$data[$key] = $this->clean($value);
 
-			} else if (is_string($value)) {
+			} else {
 				if ($this->config->escape) {
-					$data[$key] = Sanitize::escape($value);
+					$value = Sanitize::escape($value);
 				}
 
 				if ($this->config->newlines) {
-					$data[$key] = Sanitize::newlines($value);
+					$value = Sanitize::newlines($value);
 				}
 
 				if ($this->config->whitespace) {
-					$data[$key] = Sanitize::whitespace($value);
+					$value = Sanitize::whitespace($value);
 				}
 
 				if ($callback = $this->config->callback) {
 					if (is_callable($callback)) {
-						$data[$key] = call_user_func($callback, $value);
+						$value = call_user_func($callback, $value);
 					}
 				}
+
+				$data[$key] = $value;
 			}
 		}
 
