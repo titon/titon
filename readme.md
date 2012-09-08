@@ -26,7 +26,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * wincache		- titon\libs\storage\cache\WincacheStorage
 * xcache		- titon\libs\storage\cache\XcacheStorage
 * gettext		- titon\libs\translators\messages\GettextTranslator
-* igbinary		- Serialization improvements during caching
+* igbinary		- Serialization improvements for Storage libs
 
 ### Libraries ###
 
@@ -42,6 +42,7 @@ Modularity, Loose Coupling, Lazy-Loading, Design Patterns (Template, Observer, D
 * Enum - Pre-built convenience enums.
 * Exception - Pre-built exceptions.
 * Helper - Provides additional functionality to the view layer.
+* Identifier - Handles the authorization and authentication of users.
 * Listener - Objects that listen and wait to be triggered at specific events in the system.
 * Model - Represents a single entities data schema.
 * Package - A combination of library types into a single related entity.

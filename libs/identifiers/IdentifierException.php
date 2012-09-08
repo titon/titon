@@ -7,13 +7,13 @@
  * @license		http://opensource.org/licenses/bsd-license.php (BSD License)
  */
 
-namespace titon\security;
+namespace titon\libs\identifiers;
 
 /**
- * @todo
+ * Exception for the identifiers library.
  *
- * @package	titon.security
+ * @package	titon.libs.identifiers
  */
-class Authentication {
+class IdentifierException extends \titon\Exception {
 
 }

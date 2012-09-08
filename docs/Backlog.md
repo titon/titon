@@ -37,11 +37,12 @@ Email
 * REST/SOAP Support
 * Development Profiler/Debugger
 
-### Incomplete Unit Tests ###
+### Incomplete Classes / Unit Tests ###
 
 * console
 * io/Stream
 * io/Socket
+* io/Email
 * libs/adapters
 * libs/behaviors
 * libs/daos
@@ -51,7 +52,3 @@ Email
 * libs/streams
 * libs/transporters
 * utility/Uuid
-
-### Incomplete Classes ###
-
-* io/Email
