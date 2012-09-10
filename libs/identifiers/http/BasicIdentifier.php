@@ -22,14 +22,14 @@ class BasicIdentifier extends IdentifierAbstract {
 	/**
 	 * Configuration.
 	 *
-	 * 	realm	- (string) The realm name to display within the login prompt
+	 * 	realm	- (string) The authentication realm name
 	 * 	secure	- (boolean) Will hash all passwords while validating
 	 *
 	 * @access protected
 	 * @var array
 	 */
 	protected $_config = [
-		'realm' => 'Authentication Login',
+		'realm' => '',
 		'secure' => true
 	];
 
@@ -49,6 +49,10 @@ class BasicIdentifier extends IdentifierAbstract {
 	 */
 	public function __construct(array $config = [], array $logins) {
 		parent::__construct($config);
+
+		if (!$this->config->realm) {
+			$this->config->realm = $this->request->env('SERVER_NAME');
+		}
 
 		if ($this->config->secure) {
 			foreach ($logins as $user => $pass) {
