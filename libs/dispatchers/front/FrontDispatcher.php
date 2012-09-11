@@ -24,26 +24,26 @@ use \Exception;
 class FrontDispatcher extends DispatcherAbstract {
 
 	/**
-	 * Dispatches the request internally with magic!
+	 * Dispatch the Controller action, render the view and notify events.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function run() {
-		$controller = $this->controller;
-		$event = $this->event;
+	public function dispatch() {
+		$controller = $this->_controller;
+		$event = $this->_event;
 
 		$event->notify('dispatch.preDispatch', $this);
 
 			$controller->preProcess();
 			$event->notify('controller.preProcess', $controller);
 
-				$this->process();
+				$controller->dispatchAction();
 
 			$controller->postProcess();
 			$event->notify('controller.postProcess', $controller);
 
-			if ($controller->hasObject('engine') && $controller->engine->config->render) {
+			if ($controller->engine->config->render) {
 				$engine = $controller->engine;
 
 				$engine->preRender();

@@ -18,4 +18,11 @@ use titon\libs\controllers\ControllerAbstract;
  */
 class ErrorController extends ControllerAbstract {
 
+	/**
+	 * Default action.
+	 */
+	public function index() {
+		return;
+	}
+
 }

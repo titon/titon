@@ -18,6 +18,7 @@ use titon\libs\dispatchers\DispatcherAbstract;
  */
 class DispatcherFixture extends DispatcherAbstract {
 
+	public function dispatch() {}
 	public function run() {}
 
 }

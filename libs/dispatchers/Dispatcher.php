@@ -17,15 +17,15 @@ namespace titon\libs\dispatchers;
 interface Dispatcher {
 
 	/**
-	 * The final result from the controller action and the rending engine.
+	 * Dispatch the Controller action, render the view and notify events.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function output();
+	public function dispatch();
 
 	/**
-	 * Primary method to run the dispatcher and process its logic.
+	 * Run the dispatcher by processing the controller, handling exceptions and outputting the response.
 	 *
 	 * @access public
 	 * @return void

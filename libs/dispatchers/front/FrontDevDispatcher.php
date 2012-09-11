@@ -25,14 +25,14 @@ use \Exception;
 class FrontDevDispatcher extends DispatcherAbstract {
 
 	/**
-	 * Dispatches the request internally with magic!
+	 * Dispatch the Controller action, render the view and notify events.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function run() {
-		$controller = $this->controller;
-		$event = $this->event;
+	public function dispatch() {
+		$controller = $this->_controller;
+		$event = $this->_event;
 
 		Benchmark::start('Dispatcher');
 		$event->notify('dispatch.preDispatch', $this);
@@ -42,25 +42,27 @@ class FrontDevDispatcher extends DispatcherAbstract {
 			$event->notify('controller.preProcess', $controller);
 
 				Benchmark::start('Action');
-				$this->process();
+				$controller->dispatchAction();
 				Benchmark::stop('Action');
 
 			$controller->postProcess();
 			$event->notify('controller.postProcess', $controller);
 			Benchmark::stop('Controller');
 
-			if ($controller->hasObject('engine') && $controller->engine->config->render) {
+			if ($controller->engine->config->render) {
 				$engine = $controller->engine;
 
-				Benchmark::start('View');
+				Benchmark::start('Engine');
 				$engine->preRender();
 				$event->notify('view.preRender', $engine);
 
+					Benchmark::start('View');
 					$engine->run();
+					Benchmark::stop('View');
 
 				$engine->postRender();
 				$event->notify('view.postRender', $engine);
-				Benchmark::stop('View');
+				Benchmark::stop('Engine');
 			}
 
 		$event->notify('dispatch.postDispatch', $this);

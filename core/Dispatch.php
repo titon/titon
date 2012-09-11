@@ -13,6 +13,7 @@ use titon\Titon;
 use titon\libs\dispatchers\Dispatcher;
 use titon\libs\dispatchers\front\FrontDispatcher;
 use titon\libs\dispatchers\front\FrontDevDispatcher;
+use titon\libs\exceptions\HttpException;
 use titon\utility\Inflector;
 use \Exception;
 
@@ -83,7 +84,6 @@ class Dispatch {
 		}
 
 		$dispatcher->run();
-		$dispatcher->output();
 
 		return null;
 	}

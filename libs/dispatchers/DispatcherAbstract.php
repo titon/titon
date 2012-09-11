@@ -30,35 +30,28 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 	use Attachable;
 
 	/**
+	 * Controller instance.
+	 *
+	 * @access protected
+	 * @var \titon\libs\controllers\Controller
+	 */
+	protected $_controller;
+
+	/**
+	 * Event instance.
+	 *
+	 * @access protected
+	 * @var \titon\core\Event
+	 */
+	protected $_event;
+
+	/**
 	 * Lazy load the controller object. Do not allow overrides.
 	 *
 	 * @access public
 	 * @return void
-	 * @final
 	 */
-	final public function initialize() {
-		$this->attachObject([
-			'alias' => 'controller',
-			'interface' => 'titon\libs\controllers\Controller'
-		], function() {
-			try {
-				return $this->loadController();
-
-			} catch (Exception $e) {
-				$controller = new ErrorController($this->config->get());
-				$controller->throwError('error', [
-					'message' => $e->getMessage()
-				]);
-
-				return $controller;
-			}
-		});
-
-		$this->attachObject('event', function() {
-			return Titon::event();
-		});
-
-		// Set dispatching events
+	public function initialize() {
 		$self = $this;
 
 		Titon::event()->addCallback(function() use ($self) {
@@ -68,6 +61,8 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 		Titon::event()->addCallback(function() use ($self) {
 			$self->notifyObjects('postDispatch');
 		}, ['dispatch.postDispatch']);
+
+		$this->_event = Titon::event();
 	}
 
 	/**
@@ -97,13 +92,51 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 	}
 
 	/**
-	 * The final result from the action and the rending engine.
+	 * Run the dispatcher by processing the controller, handling exceptions and outputting the response.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function output() {
-		$controller = $this->controller;
+	public function run() {
+		$error = null;
+		$template = null;
+
+		// Load the controller
+		try {
+			$controller = $this->loadController();
+
+		} catch (Exception $e) {
+			$controller = new ErrorController($this->config->get());
+			$controller->forwardAction('index');
+
+			$error = $e->getMessage();
+		}
+
+		$this->_controller = $controller;
+
+		// Dispatch the action and catch exceptions
+		if (!$error) {
+			try {
+				$this->dispatch();
+
+			} catch (HttpException $e) {
+				$error = $e->getMessage();
+				$template = $e->getCode();
+
+			} catch (Exception $e) {
+				$error = $e->getMessage();
+			}
+		}
+
+		// Render the exception
+		if ($error) {
+			$this->_controller->throwError($template, [
+				'message' => $error
+			]);
+		}
+
+		// Output the response
+		$controller = $this->_controller;
 
 		if ($controller->hasObject('response')) {
 			if ($type = $controller->config->ext) {
@@ -115,30 +148,6 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 			}
 
 			$controller->response->respond();
-		}
-	}
-
-	/**
-	 * Dispatch the controller action and process any exceptions thrown.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function process() {
-		$controller = $this->controller;
-
-		try {
-			$controller->dispatchAction();
-
-		} catch (HttpException $e) {
-			$controller->throwError($e->getCode(), [
-				'message' => $e->getMessage()
-			]);
-
-		} catch (Exception $e) {
-			$controller->throwError('error', [
-				'message' => $e->getMessage()
-			]);
 		}
 	}
 

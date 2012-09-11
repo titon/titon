@@ -22,20 +22,18 @@ use \Exception;
 class FrontLightDispatcher extends DispatcherAbstract {
 
 	/**
-	 * Dispatches the request internally with magic!
+	 * Dispatch the Controller action, render the view and notify events.
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function run() {
-		$controller = $this->controller;
+	public function dispatch() {
+		$controller = $this->_controller;
 		$controller->preProcess();
-
-		$this->process();
-
+		$controller->dispatchAction();
 		$controller->postProcess();
 
-		if ($controller->hasObject('engine') && $controller->engine->config->render) {
+		if ($controller->engine->config->render) {
 			$engine = $controller->engine;
 			$engine->preRender();
 			$engine->run();
