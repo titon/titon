@@ -67,14 +67,14 @@ class BasicIdentifier extends IdentifierAbstract {
 	 * Authenticate a user using HTTP Basic authentication.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return array
 	 */
 	public function authenticate() {
 		$user = $this->request->env('PHP_AUTH_USER');
 		$pass = $this->request->env('PHP_AUTH_PW');
 
 		if (!$user || !$pass || empty($this->_logins[$user])) {
-			return $this->login();
+			return null;
 		}
 
 		if ($this->config->secure) {
@@ -82,10 +82,13 @@ class BasicIdentifier extends IdentifierAbstract {
 		}
 
 		if ($this->_logins[$user] !== $pass) {
-			return $this->login();
+			return null;
 		}
 
-		return true;
+		return array(
+			'username' => $user,
+			'password' => $pass
+		);
 	}
 
 	/**

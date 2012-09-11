@@ -62,19 +62,19 @@ class DigestIdentifier extends IdentifierAbstract {
 	 * Authenticate a user using HTTP Digest authentication.
 	 *
 	 * @access public
-	 * @return boolean
+	 * @return array
 	 */
 	public function authenticate() {
 		$digest = $this->request->env('PHP_AUTH_DIGEST');
 
 		if (!$digest) {
-			return $this->login();
+			return null;
 		}
 
 		$digest = $this->parseDigest($digest);
 
 		if (!$digest || empty($this->_logins[$digest['username']])) {
-			return $this->login();
+			return null;
 		}
 
 		$ha1 = md5($digest['username'] . ':' . $this->config->realm . ':' . $this->_logins[$digest['username']]);
@@ -82,10 +82,13 @@ class DigestIdentifier extends IdentifierAbstract {
 		$response = md5($ha1 . ':' . $digest['nonce'] . ':' . $digest['nc'] . ':' . $digest['cnonce'] . ':' . $digest['qop'] . ':' . $ha2);
 
 		if ($response !== $digest['response']) {
-			return $this->login();
+			return null;
 		}
 
-		return true;
+		return array(
+			'username' => $digest['username'],
+			'password' => $this->_logins[$digest['username']]
+		);
 	}
 
 	/**
