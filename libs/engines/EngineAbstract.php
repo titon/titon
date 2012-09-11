@@ -249,11 +249,11 @@ abstract class EngineAbstract extends Base implements Engine {
 
 		Titon::event()->addCallback(function() use ($self) {
 			$self->notifyObjects('preRender');
-		}, ['view.preRender']);
+		}, 'view.preRender');
 
 		Titon::event()->addCallback(function() use ($self) {
 			$self->notifyObjects('postRender');
-		}, ['view.postRender']);
+		}, 'view.postRender');
 	}
 
 	/**

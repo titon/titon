@@ -49,12 +49,12 @@ class Event {
 	 *
 	 * @access public
 	 * @param mixed $callback
-	 * @param array $events
+	 * @param array|string $events
 	 * @param array $scope
 	 * @return \titon\core\Event
 	 * @chainable
 	 */
-	public function addCallback($callback, array $events = [], array $scope = []) {
+	public function addCallback($callback, $events = [], array $scope = []) {
 		if (!$events) {
 			$events = $this->_events;
 		}
@@ -62,7 +62,7 @@ class Event {
 		$this->_listeners[] = [
 			'object' => $callback,
 			'executed' => [],
-			'events' => $events,
+			'events' => (array) $events,
 			'scope' => $scope + [
 				'module' => '*',
 				'controller' => '*',

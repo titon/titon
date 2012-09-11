@@ -131,11 +131,11 @@ abstract class ControllerAbstract extends Base implements Controller {
 
 		Titon::event()->addCallback(function() use ($self) {
 			$self->notifyObjects('preProcess');
-		}, ['controller.preProcess']);
+		}, 'controller.preProcess');
 
 		Titon::event()->addCallback(function() use ($self) {
 			$self->notifyObjects('postProcess');
-		}, ['controller.postProcess']);
+		}, 'controller.postProcess');
 	}
 
 	/**

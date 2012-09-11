@@ -56,11 +56,11 @@ abstract class DispatcherAbstract extends Base implements Dispatcher {
 
 		Titon::event()->addCallback(function() use ($self) {
 			$self->notifyObjects('preDispatch');
-		}, ['dispatch.preDispatch']);
+		}, 'dispatch.preDispatch');
 
 		Titon::event()->addCallback(function() use ($self) {
 			$self->notifyObjects('postDispatch');
-		}, ['dispatch.postDispatch']);
+		}, 'dispatch.postDispatch');
 
 		$this->_event = Titon::event();
 	}
