@@ -239,6 +239,24 @@ abstract class EngineAbstract extends Base implements Engine {
 	}
 
 	/**
+	 * Add rendering events.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize() {
+		$self = $this;
+
+		Titon::event()->addCallback(function() use ($self) {
+			$self->notifyObjects('preRender');
+		}, ['view.preRender']);
+
+		Titon::event()->addCallback(function() use ($self) {
+			$self->notifyObjects('postRender');
+		}, ['view.postRender']);
+	}
+
+	/**
 	 * Override the template locations by providing a folder and view name.
 	 *
 	 * @access public
@@ -263,7 +281,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return void
 	 */
 	public function preRender() {
-		$this->notifyObjects('preRender');
+		return;
 	}
 
 	/**
@@ -273,7 +291,7 @@ abstract class EngineAbstract extends Base implements Engine {
 	 * @return void
 	 */
 	public function postRender() {
-		$this->notifyObjects('postRender');
+		return;
 	}
 
 	/**

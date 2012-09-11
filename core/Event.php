@@ -44,18 +44,18 @@ class Event {
 	protected $_listeners = [];
 
 	/**
-	 * Register a basic callback using a Closure. This callback can be restricted in scope and a per event basis.
+	 * Register a basic callback using a Closure, or array syntax. This callback can be restricted in scope and a per event basis.
 	 * Can drill down the event to only execute during a certain scope.
 	 *
 	 * @access public
-	 * @param Closure $callback
+	 * @param mixed $callback
 	 * @param array $events
 	 * @param array $scope
 	 * @return \titon\core\Event
 	 * @chainable
 	 */
-	public function addCallback(Closure $callback, array $events = [], array $scope = []) {
-		if (empty($events)) {
+	public function addCallback($callback, array $events = [], array $scope = []) {
+		if (!$events) {
 			$events = $this->_events;
 		}
 
@@ -145,18 +145,18 @@ class Event {
 				}
 			}
 
-			$obj = $listener['object'];
+			$callback = $listener['object'];
 			$method = $event;
 
 			if (mb_strpos($event, '.') !== false) {
 				list($scope, $method) = explode('.', $event);
 			}
 
-			if ($obj instanceof Closure && in_array($event, $listener['events'])) {
-				$obj($event, $object);
+			if (is_callable($callback) && in_array($event, $listener['events'])) {
+				call_user_func($callback, $object);
 
-			} else if (method_exists($obj, $method)) {
-				$obj->{$method}($object);
+			} else if (method_exists($callback, $method)) {
+				$callback->{$method}($object);
 
 			} else {
 				continue;

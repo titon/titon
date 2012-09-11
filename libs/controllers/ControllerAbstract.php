@@ -115,6 +115,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 			return Titon::registry()->factory('titon\net\Response');
 		});
 
+		// Set default engine
 		$this->setEngine(function() {
 			$config = $this->config->get();
 			unset($config['args']);
@@ -124,6 +125,17 @@ abstract class ControllerAbstract extends Base implements Controller {
 
 			return $engine;
 		});
+
+		// Add process events
+		$self = $this;
+
+		Titon::event()->addCallback(function() use ($self) {
+			$self->notifyObjects('preProcess');
+		}, ['controller.preProcess']);
+
+		Titon::event()->addCallback(function() use ($self) {
+			$self->notifyObjects('postProcess');
+		}, ['controller.postProcess']);
 	}
 
 	/**
@@ -179,7 +191,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return void
 	 */
 	public function preProcess() {
-		$this->notifyObjects('preProcess');
+		return;
 	}
 
 	/**
@@ -189,7 +201,7 @@ abstract class ControllerAbstract extends Base implements Controller {
 	 * @return void
 	 */
 	public function postProcess() {
-		$this->notifyObjects('postProcess');
+		return;
 	}
 
 	/**
