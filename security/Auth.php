@@ -19,7 +19,8 @@ use titon\libs\storage\Storage;
 use titon\libs\traits\Attachable;
 
 /**
- * @todo
+ * Allows for user authentication and authorization through the use of identifiers.
+ * Authed users will be stored in the session or in cache using a storage engine.
  *
  * @package	titon.security
  */
@@ -71,7 +72,7 @@ class Auth extends Base {
 	 */
 	public function getIdentifier() {
 		if (!$this->_identifier) {
-			throw new SecurityException('Auth requires an Identifier library.');
+			throw new SecurityException('An identifier is required for authorization.');
 		}
 
 		return $this->_identifier;
@@ -86,7 +87,7 @@ class Auth extends Base {
 	 */
 	public function getStorage() {
 		if (!$this->_storage) {
-			throw new SecurityException('Auth requires a Storage library.');
+			throw new SecurityException('A storage engine is required for authorization.');
 		}
 
 		return $this->_storage;
