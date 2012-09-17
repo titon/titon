@@ -24,8 +24,20 @@ interface Identifier {
 	 */
 	public function authenticate();
 
+	/**
+	 * Login a user.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
 	public function login();
 
+	/**
+	 * Logout a user.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
 	public function logout();
 
 }

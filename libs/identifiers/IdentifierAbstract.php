@@ -15,7 +15,7 @@ use titon\libs\identifiers\Identifier;
 use titon\libs\traits\Attachable;
 
 /**
- * @todo
+ * Base class for all Identifiers to extend.
  *
  * @package	titon.libs.identifiers
  * @abstract
