@@ -15,12 +15,11 @@ use titon\libs\controllers\Controller;
 use titon\libs\exceptions\http\ForbiddenException;
 use titon\libs\exceptions\http\UnauthorizedException;
 use titon\libs\identifiers\Identifier;
-use titon\libs\storage\Storage;
 use titon\libs\traits\Attachable;
+use titon\net\Session;
 
 /**
  * Allows for user authentication and authorization through the use of identifiers.
- * Authed users will be stored in the session or in cache using a storage engine.
  *
  * @package	titon.security
  */
@@ -34,7 +33,7 @@ class Auth extends Base {
 	 * 	autoRedirect	- (boolean) Will automatically redirect to the login page if auth fails, instead of throwing exceptions
 	 * 	loginRedirect	- (array) The login URL route to redirect to
 	 * 	logoutRedirect	- (array) The logout URL route to redirect to
-	 * 	storageKey		- (string) The namespace to use for session / storage
+	 * 	sessionKey		- (string) The session namespace
 	 *
 	 * @access protected
 	 * @var array
@@ -44,7 +43,7 @@ class Auth extends Base {
 		'autoRedirect' => false,
 		'loginRedirect' => array('module' => 'users', 'controller' => 'dashboard', 'action' => 'login'),
 		'logoutRedirect' => array('module' => 'users', 'controller' => 'dashboard', 'action' => 'logout'),
-		'storageKey' => 'User'
+		'sessionKey' => 'User'
 	];
 
 	/**
@@ -56,12 +55,12 @@ class Auth extends Base {
 	protected $_identifier;
 
 	/**
-	 * Storage instance.
+	 * Session instance.
 	 *
 	 * @access protected
-	 * @var \titon\libs\storage\Storage
+	 * @var \titon\net\Session
 	 */
-	protected $_storage;
+	protected $_session;
 
 	/**
 	 * Return the Identifier instance. If no instance exists, throw an exception.
@@ -79,18 +78,18 @@ class Auth extends Base {
 	}
 
 	/**
-	 * Return the Storage instance. If no instance exists, throw an exception.
+	 * Return the Session instance. If no instance exists, throw an exception.
 	 *
 	 * @access public
-	 * @return \titon\libs\storage\Storage
+	 * @return \titon\net\Session
 	 * @throws \titon\security\SecurityException
 	 */
-	public function getStorage() {
-		if (!$this->_storage) {
-			throw new SecurityException('A storage engine is required for authorization.');
+	public function getSession() {
+		if (!$this->_session) {
+			throw new SecurityException('A session instance is required for authorization.');
 		}
 
-		return $this->_storage;
+		return $this->_session;
 	}
 
 	/**
@@ -111,14 +110,13 @@ class Auth extends Base {
 
 	/**
 	 * Check to see if the user is authenticated.
-	 * First check the storage for a record, else execute authentication.
 	 *
 	 * @access public
 	 * @return boolean
 	 * @throws \titon\security\SecurityException
 	 */
 	public function isAuthenticated() {
-		return $this->getStorage()->has($this->config->storageKey);
+		return $this->getSession()->has($this->config->sessionKey);
 	}
 
 	/**
@@ -144,7 +142,7 @@ class Auth extends Base {
 	 */
 	public function login() {
 		if ($user = $this->getIdentifier()->authenticate()) {
-			$this->getStorage()->set($this->config->storageKey, $user);
+			$this->getSession()->set($this->config->sessionKey, $user);
 
 			return $user;
 		} else {
@@ -161,7 +159,7 @@ class Auth extends Base {
 	 * @return void
 	 */
 	public function logout() {
-		$this->getStorage()->remove($this->config->storageKey);
+		$this->getSession()->remove($this->config->sessionKey);
 		$this->getIdentifier()->logout();
 
 		$this->response->redirect($this->config->loginAction);
@@ -213,15 +211,15 @@ class Auth extends Base {
 	}
 
 	/**
-	 * Set the Storage instance.
+	 * Set the Session object.
 	 *
 	 * @access public
-	 * @param \titon\libs\storage\Storage $storage
+	 * @param \titon\net\Session $session
 	 * @return \titon\security\Auth
 	 * @chainable
 	 */
-	public function setStorage(Storage $storage) {
-		$this->_storage = $storage;
+	public function setSession(Session $session) {
+		$this->_session = $session;
 
 		return $this;
 	}
@@ -234,13 +232,13 @@ class Auth extends Base {
 	 * @return mixed
 	 */
 	public function user($key = null) {
-		$baseKey = $this->config->storageKey;
+		$baseKey = $this->config->sessionKey;
 
 		if ($key) {
 			$baseKey .= '.' . $key;
 		}
 
-		return $this->_storage->get($baseKey);
+		return $this->getSession()->get($baseKey);
 	}
 
 }
