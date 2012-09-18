@@ -56,6 +56,8 @@ class DigestIdentifier extends IdentifierAbstract {
 		if (!$this->config->realm) {
 			$this->config->realm = $this->request->env('SERVER_NAME');
 		}
+
+		$this->_logins = $logins;
 	}
 
 	/**
@@ -150,7 +152,7 @@ class DigestIdentifier extends IdentifierAbstract {
 			unset($parts[$m[1]]);
 		}
 
-		return $parts ? false : $data;
+		return $parts ? null : $data;
 	}
 
 }

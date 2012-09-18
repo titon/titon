@@ -25,6 +25,7 @@ class BasicIdentifierTest extends TestCase {
 		parent::setUp();
 
 		$this->object = new BasicIdentifier(['realm' => 'Test Realm'], ['user' => 'pass']);
+		$this->object->response->config->debug = true;
 	}
 
 	/**
@@ -41,6 +42,25 @@ class BasicIdentifierTest extends TestCase {
 			'username' => 'user',
 			'password' => '08190fa3f21905adf96d01567c31cdd8'
 		], $this->object->authenticate());
+	}
+
+	/**
+	 * Test that login() sets the correct WWW-Authenticate header.
+	 */
+	public function testLogin() {
+		$this->object->login();
+		$this->assertEquals('Basic realm="Test Realm"', $this->object->response->getHeader('WWW-Authenticate', false));
+	}
+
+	/**
+	 * Test that logout() removes the env global.
+	 */
+	public function testLogout() {
+		$_SERVER['PHP_AUTH_USER'] = 'user';
+		$this->assertTrue(isset($_SERVER['PHP_AUTH_USER']));
+
+		$this->object->logout();
+		$this->assertFalse(isset($_SERVER['PHP_AUTH_USER']));
 	}
 
 }

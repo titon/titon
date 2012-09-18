@@ -674,13 +674,7 @@ class Response extends Base {
 	 * @chainable
 	 */
 	public function wwwAuthenticate($scheme) {
-		$scheme = mb_strtolower($scheme);
-
-		if ($scheme !== 'basic' && $scheme !== 'digest') {
-			throw new NetException(sprintf('Invalid WWW-Authenticate scheme %s.', $scheme));
-		}
-
-		$this->header('WWW-Authenticate', ucfirst($scheme));
+		$this->header('WWW-Authenticate', $scheme);
 
 		return $this;
 	}
