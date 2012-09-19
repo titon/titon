@@ -63,6 +63,21 @@ class Auth extends Base {
 	protected $_session;
 
 	/**
+	 * Return a value from the auth session.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function get($key) {
+		if ($this->isAuthenticated()) {
+			return $this->getSession()->get($this->config->sessionKey . '.' . $key);
+		}
+
+		return null;
+	}
+
+	/**
 	 * Return the Identifier instance. If no instance exists, throw an exception.
 	 *
 	 * @access public
@@ -162,7 +177,9 @@ class Auth extends Base {
 		$this->getSession()->remove($this->config->sessionKey);
 		$this->getIdentifier()->logout();
 
-		$this->response->redirect($this->config->loginAction);
+		if ($this->config->autoRedirect) {
+			$this->response->redirect($this->config->loginAction);
+		}
 	}
 
 	/**
@@ -197,6 +214,23 @@ class Auth extends Base {
 	}
 
 	/**
+	 * Set a value into the auth session.
+	 *
+	 * @access public
+	 * @param string $key
+	 * @param mixed $value
+	 * @return \titon\security\Auth
+	 * @chainable
+	 */
+	public function set($key, $value) {
+		if ($this->isAuthenticated()) {
+			$this->getSession()->set($this->config->sessionKey . '.' . $key, $value);
+		}
+
+		return $this;
+	}
+
+	/**
 	 * Set the Identifier instance.
 	 *
 	 * @access public
@@ -225,20 +259,13 @@ class Auth extends Base {
 	}
 
 	/**
-	 * Grab information from the currently authenticated user.
+	 * Return the currently authenticated user.
 	 *
 	 * @access public
-	 * @param string $key
-	 * @return mixed
+	 * @return array
 	 */
-	public function user($key = null) {
-		$baseKey = $this->config->sessionKey;
-
-		if ($key) {
-			$baseKey .= '.' . $key;
-		}
-
-		return $this->getSession()->get($baseKey);
+	public function user() {
+		return $this->getSession()->get($this->config->sessionKey);
 	}
 
 }

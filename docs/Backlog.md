@@ -8,7 +8,6 @@ Any library wrapped in parenthesis currently does not have a final location in t
 
 Security
 * security/Acl
-* security/Auth
 
 ### Upcoming Systems ###
 
@@ -52,5 +51,4 @@ Email
 * libs/streams
 * libs/transporters
 * security/Acl
-* security/Auth
 * utility/Uuid

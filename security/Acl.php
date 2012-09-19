@@ -9,11 +9,35 @@
 
 namespace titon\security;
 
+use titon\base\Base;
+
 /**
  * @todo
  *
  * @package	titon.security
  */
-class Acl {
+class Acl extends Base {
+
+	protected $_roles = [];
+
+	public function addRole($role, $parent = null) {
+
+	}
+
+	public function allow($role, array $permissions) {
+
+	}
+
+	public function deny($role, array $permissions) {
+
+	}
+
+	public function isAllowed() {
+
+	}
+
+	public function isRole() {
+
+	}
 
 }

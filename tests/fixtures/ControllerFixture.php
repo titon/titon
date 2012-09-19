@@ -10,6 +10,7 @@
 namespace titon\tests\fixtures;
 
 use titon\libs\controllers\ControllerAbstract;
+use titon\security\Auth;
 
 /**
  * Fixture for titon\libs\controllers\Controller.
@@ -36,6 +37,11 @@ class ControllerFixture extends ControllerAbstract {
 
 	private function actionPrivate() {
 		return 'wontBeCalled';
+	}
+
+	// Used by titon\security\Auth
+	public function isAuthorized(Auth $auth) {
+		return false;
 	}
 
 }
